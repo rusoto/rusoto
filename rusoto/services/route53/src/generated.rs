@@ -11816,11 +11816,8 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &AssociateVPCWithHostedZoneRequest)
          -> Result<AssociateVPCWithHostedZoneResponse, AssociateVPCWithHostedZoneError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone/{Id}/associatevpc".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.hosted_zone_id.to_string());
+        let request_uri = format!("/2013-04-01/hostedzone/{id}/associatevpc",
+                                  id = input.hosted_zone_id);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -11828,7 +11825,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11864,11 +11860,8 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &ChangeResourceRecordSetsRequest)
          -> Result<ChangeResourceRecordSetsResponse, ChangeResourceRecordSetsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone/{Id}/rrset/".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.hosted_zone_id.to_string());
+        let request_uri = format!("/2013-04-01/hostedzone/{id}/rrset/",
+                                  id = input.hosted_zone_id);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -11876,7 +11869,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11912,12 +11904,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &ChangeTagsForResourceRequest)
          -> Result<ChangeTagsForResourceResponse, ChangeTagsForResourceError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/tags/{ResourceType}/{ResourceId}".to_string();
-
-
-        request_uri = request_uri.replace("{ResourceId}", &input.resource_id.to_string());
-        request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_string());
+        let request_uri = format!("/2013-04-01/tags/{resource_type}/{resource_id}",
+                                  resource_id = input.resource_id,
+                                  resource_type = input.resource_type);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -11925,7 +11914,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11963,11 +11951,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn create_health_check(&self,
                            input: &CreateHealthCheckRequest)
                            -> Result<CreateHealthCheckResponse, CreateHealthCheckError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/healthcheck".to_string();
-
-
-
+        let request_uri = "/2013-04-01/healthcheck";
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -11975,7 +11959,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12016,11 +11999,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn create_hosted_zone(&self,
                           input: &CreateHostedZoneRequest)
                           -> Result<CreateHostedZoneResponse, CreateHostedZoneError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone".to_string();
-
-
-
+        let request_uri = "/2013-04-01/hostedzone";
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -12028,7 +12007,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12070,11 +12048,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &CreateReusableDelegationSetRequest)
          -> Result<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/delegationset".to_string();
-
-
-
+        let request_uri = "/2013-04-01/delegationset";
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -12082,7 +12056,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12118,11 +12091,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn create_traffic_policy(&self,
                              input: &CreateTrafficPolicyRequest)
                              -> Result<CreateTrafficPolicyResponse, CreateTrafficPolicyError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicy".to_string();
-
-
-
+        let request_uri = "/2013-04-01/trafficpolicy";
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -12130,7 +12099,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12170,11 +12138,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &CreateTrafficPolicyInstanceRequest)
          -> Result<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicyinstance".to_string();
-
-
-
+        let request_uri = "/2013-04-01/trafficpolicyinstance";
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -12182,7 +12146,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12219,11 +12182,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &CreateTrafficPolicyVersionRequest)
          -> Result<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicy/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/trafficpolicy/{id}", id = input.id);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -12231,7 +12190,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12269,11 +12227,8 @@ impl<P, D> Route53 for Route53Client<P, D>
          input: &CreateVPCAssociationAuthorizationRequest)
          -> Result<CreateVPCAssociationAuthorizationResponse,
                    CreateVPCAssociationAuthorizationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone/{Id}/authorizevpcassociation".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.hosted_zone_id.to_string());
+        let request_uri = format!("/2013-04-01/hostedzone/{id}/authorizevpcassociation",
+                                  id = input.hosted_zone_id);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -12281,7 +12236,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12316,11 +12270,8 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn delete_health_check(&self,
                            input: &DeleteHealthCheckRequest)
                            -> Result<DeleteHealthCheckResponse, DeleteHealthCheckError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/healthcheck/{HealthCheckId}".to_string();
-
-
-        request_uri = request_uri.replace("{HealthCheckId}", &input.health_check_id.to_string());
+        let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}",
+                                  health_check_id = input.health_check_id);
 
         let mut request = SignedRequest::new("DELETE", "route53", self.region, &request_uri);
 
@@ -12328,7 +12279,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12368,11 +12318,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn delete_hosted_zone(&self,
                           input: &DeleteHostedZoneRequest)
                           -> Result<DeleteHostedZoneResponse, DeleteHostedZoneError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "route53", self.region, &request_uri);
 
@@ -12380,7 +12326,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12421,11 +12366,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &DeleteReusableDelegationSetRequest)
          -> Result<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/delegationset/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/delegationset/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "route53", self.region, &request_uri);
 
@@ -12433,7 +12374,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12468,12 +12408,9 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn delete_traffic_policy(&self,
                              input: &DeleteTrafficPolicyRequest)
                              -> Result<DeleteTrafficPolicyResponse, DeleteTrafficPolicyError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicy/{Id}/{Version}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
-        request_uri = request_uri.replace("{Version}", &input.version.to_string());
+        let request_uri = format!("/2013-04-01/trafficpolicy/{id}/{version}",
+                                  id = input.id,
+                                  version = input.version);
 
         let mut request = SignedRequest::new("DELETE", "route53", self.region, &request_uri);
 
@@ -12481,7 +12418,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12520,11 +12456,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &DeleteTrafficPolicyInstanceRequest)
          -> Result<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicyinstance/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "route53", self.region, &request_uri);
 
@@ -12532,7 +12464,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12569,11 +12500,8 @@ impl<P, D> Route53 for Route53Client<P, D>
          input: &DeleteVPCAssociationAuthorizationRequest)
          -> Result<DeleteVPCAssociationAuthorizationResponse,
                    DeleteVPCAssociationAuthorizationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone/{Id}/deauthorizevpcassociation".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.hosted_zone_id.to_string());
+        let request_uri = format!("/2013-04-01/hostedzone/{id}/deauthorizevpcassociation",
+                                  id = input.hosted_zone_id);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -12581,7 +12509,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12617,11 +12544,8 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &DisassociateVPCFromHostedZoneRequest)
          -> Result<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone/{Id}/disassociatevpc".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.hosted_zone_id.to_string());
+        let request_uri = format!("/2013-04-01/hostedzone/{id}/disassociatevpc",
+                                  id = input.hosted_zone_id);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -12629,7 +12553,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12662,11 +12585,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     #[doc="<p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not propagated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have propagated to all Amazon Route 53 DNS servers. </p> </li> </ul>"]
     #[allow(unused_variables, warnings)]
     fn get_change(&self, input: &GetChangeRequest) -> Result<GetChangeResponse, GetChangeError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/change/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/change/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -12674,7 +12593,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12710,11 +12628,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_checker_ip_ranges(&self,
                              input: &GetCheckerIpRangesRequest)
                              -> Result<GetCheckerIpRangesResponse, GetCheckerIpRangesError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/checkeripranges".to_string();
-
-
-
+        let request_uri = "/2013-04-01/checkeripranges";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -12722,7 +12636,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12762,30 +12675,24 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_geo_location(&self,
                         input: &GetGeoLocationRequest)
                         -> Result<GetGeoLocationResponse, GetGeoLocationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/geolocation".to_string();
-
-
-
+        let request_uri = "/2013-04-01/geolocation";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref continent_code) = input.continent_code {
-            params.put("continentcode", continent_code);
+        let mut params = Params::new();
+        if let Some(ref x) = input.continent_code {
+            params.put("continentcode", x);
         }
-
-        if let Some(ref country_code) = input.country_code {
-            params.put("countrycode", country_code);
+        if let Some(ref x) = input.country_code {
+            params.put("countrycode", x);
         }
-
-        if let Some(ref subdivision_code) = input.subdivision_code {
-            params.put("subdivisioncode", subdivision_code);
+        if let Some(ref x) = input.subdivision_code {
+            params.put("subdivisioncode", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12825,11 +12732,8 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_health_check(&self,
                         input: &GetHealthCheckRequest)
                         -> Result<GetHealthCheckResponse, GetHealthCheckError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/healthcheck/{HealthCheckId}".to_string();
-
-
-        request_uri = request_uri.replace("{HealthCheckId}", &input.health_check_id.to_string());
+        let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}",
+                                  health_check_id = input.health_check_id);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -12837,7 +12741,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12877,11 +12780,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_health_check_count(&self,
                               input: &GetHealthCheckCountRequest)
                               -> Result<GetHealthCheckCountResponse, GetHealthCheckCountError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/healthcheckcount".to_string();
-
-
-
+        let request_uri = "/2013-04-01/healthcheckcount";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -12889,7 +12788,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12928,12 +12826,8 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &GetHealthCheckLastFailureReasonRequest)
          -> Result<GetHealthCheckLastFailureReasonResponse, GetHealthCheckLastFailureReasonError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/healthcheck/{HealthCheckId}/lastfailurereason"
-            .to_string();
-
-
-        request_uri = request_uri.replace("{HealthCheckId}", &input.health_check_id.to_string());
+        let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}/lastfailurereason",
+                                  health_check_id = input.health_check_id);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -12941,7 +12835,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -12977,11 +12870,8 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &GetHealthCheckStatusRequest)
          -> Result<GetHealthCheckStatusResponse, GetHealthCheckStatusError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/healthcheck/{HealthCheckId}/status".to_string();
-
-
-        request_uri = request_uri.replace("{HealthCheckId}", &input.health_check_id.to_string());
+        let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}/status",
+                                  health_check_id = input.health_check_id);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -12989,7 +12879,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13027,11 +12916,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_hosted_zone(&self,
                        input: &GetHostedZoneRequest)
                        -> Result<GetHostedZoneResponse, GetHostedZoneError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -13039,7 +12924,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13077,11 +12961,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_hosted_zone_count(&self,
                              input: &GetHostedZoneCountRequest)
                              -> Result<GetHostedZoneCountResponse, GetHostedZoneCountError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzonecount".to_string();
-
-
-
+        let request_uri = "/2013-04-01/hostedzonecount";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -13089,7 +12969,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13130,11 +13009,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &GetReusableDelegationSetRequest)
          -> Result<GetReusableDelegationSetResponse, GetReusableDelegationSetError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/delegationset/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/delegationset/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -13142,7 +13017,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13177,12 +13051,9 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_traffic_policy(&self,
                           input: &GetTrafficPolicyRequest)
                           -> Result<GetTrafficPolicyResponse, GetTrafficPolicyError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicy/{Id}/{Version}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
-        request_uri = request_uri.replace("{Version}", &input.version.to_string());
+        let request_uri = format!("/2013-04-01/trafficpolicy/{id}/{version}",
+                                  id = input.id,
+                                  version = input.version);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -13190,7 +13061,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13231,11 +13101,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &GetTrafficPolicyInstanceRequest)
          -> Result<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicyinstance/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -13243,7 +13109,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13279,11 +13144,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &GetTrafficPolicyInstanceCountRequest)
          -> Result<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicyinstancecount".to_string();
-
-
-
+        let request_uri = "/2013-04-01/trafficpolicyinstancecount";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -13291,7 +13152,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13326,34 +13186,27 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn list_geo_locations(&self,
                           input: &ListGeoLocationsRequest)
                           -> Result<ListGeoLocationsResponse, ListGeoLocationsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/geolocations".to_string();
-
-
-
+        let request_uri = "/2013-04-01/geolocations";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
-
-        if let Some(ref start_continent_code) = input.start_continent_code {
-            params.put("startcontinentcode", start_continent_code);
+        if let Some(ref x) = input.start_continent_code {
+            params.put("startcontinentcode", x);
         }
-
-        if let Some(ref start_country_code) = input.start_country_code {
-            params.put("startcountrycode", start_country_code);
+        if let Some(ref x) = input.start_country_code {
+            params.put("startcountrycode", x);
         }
-
-        if let Some(ref start_subdivision_code) = input.start_subdivision_code {
-            params.put("startsubdivisioncode", start_subdivision_code);
+        if let Some(ref x) = input.start_subdivision_code {
+            params.put("startsubdivisioncode", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13393,26 +13246,21 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn list_health_checks(&self,
                           input: &ListHealthChecksRequest)
                           -> Result<ListHealthChecksResponse, ListHealthChecksError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/healthcheck".to_string();
-
-
-
+        let request_uri = "/2013-04-01/healthcheck";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref marker) = input.marker {
-            params.put("marker", marker);
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13452,30 +13300,24 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn list_hosted_zones(&self,
                          input: &ListHostedZonesRequest)
                          -> Result<ListHostedZonesResponse, ListHostedZonesError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone".to_string();
-
-
-
+        let request_uri = "/2013-04-01/hostedzone";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref delegation_set_id) = input.delegation_set_id {
-            params.put("delegationsetid", delegation_set_id);
+        let mut params = Params::new();
+        if let Some(ref x) = input.delegation_set_id {
+            params.put("delegationsetid", x);
         }
-
-        if let Some(ref marker) = input.marker {
-            params.put("marker", marker);
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13516,30 +13358,24 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &ListHostedZonesByNameRequest)
          -> Result<ListHostedZonesByNameResponse, ListHostedZonesByNameError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzonesbyname".to_string();
-
-
-
+        let request_uri = "/2013-04-01/hostedzonesbyname";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref dns_name) = input.dns_name {
-            params.put("dnsname", dns_name);
+        let mut params = Params::new();
+        if let Some(ref x) = input.dns_name {
+            params.put("dnsname", x);
         }
-
-        if let Some(ref hosted_zone_id) = input.hosted_zone_id {
-            params.put("hostedzoneid", hosted_zone_id);
+        if let Some(ref x) = input.hosted_zone_id {
+            params.put("hostedzoneid", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13578,34 +13414,28 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &ListResourceRecordSetsRequest)
          -> Result<ListResourceRecordSetsResponse, ListResourceRecordSetsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone/{Id}/rrset".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.hosted_zone_id.to_string());
+        let request_uri = format!("/2013-04-01/hostedzone/{id}/rrset",
+                                  id = input.hosted_zone_id);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
-
-        if let Some(ref start_record_identifier) = input.start_record_identifier {
-            params.put("identifier", start_record_identifier);
+        if let Some(ref x) = input.start_record_identifier {
+            params.put("identifier", x);
         }
-
-        if let Some(ref start_record_name) = input.start_record_name {
-            params.put("name", start_record_name);
+        if let Some(ref x) = input.start_record_name {
+            params.put("name", x);
         }
-
-        if let Some(ref start_record_type) = input.start_record_type {
-            params.put("type", start_record_type);
+        if let Some(ref x) = input.start_record_type {
+            params.put("type", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13644,26 +13474,21 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &ListReusableDelegationSetsRequest)
          -> Result<ListReusableDelegationSetsResponse, ListReusableDelegationSetsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/delegationset".to_string();
-
-
-
+        let request_uri = "/2013-04-01/delegationset";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref marker) = input.marker {
-            params.put("marker", marker);
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13698,12 +13523,9 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceRequest)
                               -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/tags/{ResourceType}/{ResourceId}".to_string();
-
-
-        request_uri = request_uri.replace("{ResourceId}", &input.resource_id.to_string());
-        request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_string());
+        let request_uri = format!("/2013-04-01/tags/{resource_type}/{resource_id}",
+                                  resource_id = input.resource_id,
+                                  resource_type = input.resource_type);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
@@ -13711,7 +13533,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13750,11 +13571,8 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &ListTagsForResourcesRequest)
          -> Result<ListTagsForResourcesResponse, ListTagsForResourcesError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/tags/{ResourceType}".to_string();
-
-
-        request_uri = request_uri.replace("{ResourceType}", &input.resource_type.to_string());
+        let request_uri = format!("/2013-04-01/tags/{resource_type}",
+                                  resource_type = input.resource_type);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -13762,7 +13580,6 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13800,26 +13617,21 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn list_traffic_policies(&self,
                              input: &ListTrafficPoliciesRequest)
                              -> Result<ListTrafficPoliciesResponse, ListTrafficPoliciesError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicies".to_string();
-
-
-
+        let request_uri = "/2013-04-01/trafficpolicies";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
-
-        if let Some(ref traffic_policy_id_marker) = input.traffic_policy_id_marker {
-            params.put("trafficpolicyid", traffic_policy_id_marker);
+        if let Some(ref x) = input.traffic_policy_id_marker {
+            params.put("trafficpolicyid", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13858,38 +13670,27 @@ impl<P, D> Route53 for Route53Client<P, D>
         (&self,
          input: &ListTrafficPolicyInstancesRequest)
          -> Result<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicyinstances".to_string();
-
-
-
+        let request_uri = "/2013-04-01/trafficpolicyinstances";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref hosted_zone_id_marker) = input.hosted_zone_id_marker {
-            params.put("hostedzoneid", hosted_zone_id_marker);
+        let mut params = Params::new();
+        if let Some(ref x) = input.hosted_zone_id_marker {
+            params.put("hostedzoneid", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
-
-        if let Some(ref traffic_policy_instance_name_marker) =
-            input.traffic_policy_instance_name_marker {
-            params.put("trafficpolicyinstancename",
-                       traffic_policy_instance_name_marker);
+        if let Some(ref x) = input.traffic_policy_instance_name_marker {
+            params.put("trafficpolicyinstancename", x);
         }
-
-        if let Some(ref traffic_policy_instance_type_marker) =
-            input.traffic_policy_instance_type_marker {
-            params.put("trafficpolicyinstancetype",
-                       traffic_policy_instance_type_marker);
+        if let Some(ref x) = input.traffic_policy_instance_type_marker {
+            params.put("trafficpolicyinstancetype", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13922,35 +13723,25 @@ impl<P, D> Route53 for Route53Client<P, D>
     #[doc="<p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
     #[allow(unused_variables, warnings)]
 fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> Result<ListTrafficPolicyInstancesByHostedZoneResponse, ListTrafficPolicyInstancesByHostedZoneError>{
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicyinstances/hostedzone".to_string();
-
-
-
+        let request_uri = "/2013-04-01/trafficpolicyinstances/hostedzone";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("id", &input.hosted_zone_id);
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
-
-        if let Some(ref traffic_policy_instance_name_marker) =
-            input.traffic_policy_instance_name_marker {
-            params.put("trafficpolicyinstancename",
-                       traffic_policy_instance_name_marker);
+        if let Some(ref x) = input.traffic_policy_instance_name_marker {
+            params.put("trafficpolicyinstancename", x);
         }
-
-        if let Some(ref traffic_policy_instance_type_marker) =
-            input.traffic_policy_instance_type_marker {
-            params.put("trafficpolicyinstancetype",
-                       traffic_policy_instance_type_marker);
+        if let Some(ref x) = input.traffic_policy_instance_type_marker {
+            params.put("trafficpolicyinstancetype", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -13987,40 +13778,29 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
          input: &ListTrafficPolicyInstancesByPolicyRequest)
          -> Result<ListTrafficPolicyInstancesByPolicyResponse,
                    ListTrafficPolicyInstancesByPolicyError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicyinstances/trafficpolicy".to_string();
-
-
-
+        let request_uri = "/2013-04-01/trafficpolicyinstances/trafficpolicy";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref hosted_zone_id_marker) = input.hosted_zone_id_marker {
-            params.put("hostedzoneid", hosted_zone_id_marker);
+        let mut params = Params::new();
+        if let Some(ref x) = input.hosted_zone_id_marker {
+            params.put("hostedzoneid", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
         params.put("id", &input.traffic_policy_id);
-
-        if let Some(ref traffic_policy_instance_name_marker) =
-            input.traffic_policy_instance_name_marker {
-            params.put("trafficpolicyinstancename",
-                       traffic_policy_instance_name_marker);
+        if let Some(ref x) = input.traffic_policy_instance_name_marker {
+            params.put("trafficpolicyinstancename", x);
         }
-
-        if let Some(ref traffic_policy_instance_type_marker) =
-            input.traffic_policy_instance_type_marker {
-            params.put("trafficpolicyinstancetype",
-                       traffic_policy_instance_type_marker);
+        if let Some(ref x) = input.traffic_policy_instance_type_marker {
+            params.put("trafficpolicyinstancetype", x);
         }
         params.put("version", &input.traffic_policy_version);
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -14056,26 +13836,21 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         (&self,
          input: &ListTrafficPolicyVersionsRequest)
          -> Result<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicies/{Id}/versions".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/trafficpolicies/{id}/versions", id = input.id);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", max_items);
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
         }
-
-        if let Some(ref traffic_policy_version_marker) = input.traffic_policy_version_marker {
-            params.put("trafficpolicyversion", traffic_policy_version_marker);
+        if let Some(ref x) = input.traffic_policy_version_marker {
+            params.put("trafficpolicyversion", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -14111,26 +13886,22 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         (&self,
          input: &ListVPCAssociationAuthorizationsRequest)
          -> Result<ListVPCAssociationAuthorizationsResponse, ListVPCAssociationAuthorizationsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone/{Id}/authorizevpcassociation".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.hosted_zone_id.to_string());
+        let request_uri = format!("/2013-04-01/hostedzone/{id}/authorizevpcassociation",
+                                  id = input.hosted_zone_id);
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref max_results) = input.max_results {
-            params.put("maxresults", max_results);
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxresults", x);
         }
-
-        if let Some(ref next_token) = input.next_token {
-            params.put("nexttoken", next_token);
+        if let Some(ref x) = input.next_token {
+            params.put("nexttoken", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -14165,33 +13936,27 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
     fn test_dns_answer(&self,
                        input: &TestDNSAnswerRequest)
                        -> Result<TestDNSAnswerResponse, TestDNSAnswerError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/testdnsanswer".to_string();
-
-
-
+        let request_uri = "/2013-04-01/testdnsanswer";
 
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-
-        if let Some(ref edns0_client_subnet_ip) = input.edns0_client_subnet_ip {
-            params.put("edns0clientsubnetip", edns0_client_subnet_ip);
+        let mut params = Params::new();
+        if let Some(ref x) = input.edns0_client_subnet_ip {
+            params.put("edns0clientsubnetip", x);
         }
-
-        if let Some(ref edns0_client_subnet_mask) = input.edns0_client_subnet_mask {
-            params.put("edns0clientsubnetmask", edns0_client_subnet_mask);
+        if let Some(ref x) = input.edns0_client_subnet_mask {
+            params.put("edns0clientsubnetmask", x);
         }
         params.put("hostedzoneid", &input.hosted_zone_id);
         params.put("recordname", &input.record_name);
         params.put("recordtype", &input.record_type);
-
-        if let Some(ref resolver_ip) = input.resolver_ip {
-            params.put("resolverip", resolver_ip);
+        if let Some(ref x) = input.resolver_ip {
+            params.put("resolverip", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -14229,11 +13994,8 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
     fn update_health_check(&self,
                            input: &UpdateHealthCheckRequest)
                            -> Result<UpdateHealthCheckResponse, UpdateHealthCheckError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/healthcheck/{HealthCheckId}".to_string();
-
-
-        request_uri = request_uri.replace("{HealthCheckId}", &input.health_check_id.to_string());
+        let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}",
+                                  health_check_id = input.health_check_id);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -14241,7 +14003,6 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -14282,11 +14043,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         (&self,
          input: &UpdateHostedZoneCommentRequest)
          -> Result<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/hostedzone/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -14294,7 +14051,6 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -14330,12 +14086,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         (&self,
          input: &UpdateTrafficPolicyCommentRequest)
          -> Result<UpdateTrafficPolicyCommentResponse, UpdateTrafficPolicyCommentError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicy/{Id}/{Version}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
-        request_uri = request_uri.replace("{Version}", &input.version.to_string());
+        let request_uri = format!("/2013-04-01/trafficpolicy/{id}/{version}",
+                                  id = input.id,
+                                  version = input.version);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -14343,7 +14096,6 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -14379,11 +14131,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         (&self,
          input: &UpdateTrafficPolicyInstanceRequest)
          -> Result<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2013-04-01/trafficpolicyinstance/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id);
 
         let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
 
@@ -14391,7 +14139,6 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));

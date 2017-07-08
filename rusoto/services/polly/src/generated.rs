@@ -828,12 +828,11 @@ impl<P, D> Polly for PollyClient<P, D>
     fn delete_lexicon(&self,
                       input: &DeleteLexiconInput)
                       -> Result<DeleteLexiconOutput, DeleteLexiconError> {
-
-
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "polly", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -871,12 +870,11 @@ impl<P, D> Polly for PollyClient<P, D>
     fn describe_voices(&self,
                        input: &DescribeVoicesInput)
                        -> Result<DescribeVoicesOutput, DescribeVoicesError> {
-
-
         let request_uri = "/v1/voices";
 
         let mut request = SignedRequest::new("GET", "polly", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -920,12 +918,11 @@ impl<P, D> Polly for PollyClient<P, D>
 
     #[doc="<p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
     fn get_lexicon(&self, input: &GetLexiconInput) -> Result<GetLexiconOutput, GetLexiconError> {
-
-
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("GET", "polly", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -961,12 +958,11 @@ impl<P, D> Polly for PollyClient<P, D>
     fn list_lexicons(&self,
                      input: &ListLexiconsInput)
                      -> Result<ListLexiconsOutput, ListLexiconsError> {
-
-
         let request_uri = "/v1/lexicons";
 
         let mut request = SignedRequest::new("GET", "polly", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -1006,15 +1002,15 @@ impl<P, D> Polly for PollyClient<P, D>
 
     #[doc="<p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
     fn put_lexicon(&self, input: &PutLexiconInput) -> Result<PutLexiconOutput, PutLexiconError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("PUT", "polly", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -1047,15 +1043,15 @@ impl<P, D> Polly for PollyClient<P, D>
     fn synthesize_speech(&self,
                          input: &SynthesizeSpeechInput)
                          -> Result<SynthesizeSpeechOutput, SynthesizeSpeechError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/speech";
 
         let mut request = SignedRequest::new("POST", "polly", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);

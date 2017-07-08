@@ -10126,11 +10126,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
          input: &CreateCloudFrontOriginAccessIdentityRequest)
          -> Result<CreateCloudFrontOriginAccessIdentityResult,
                    CreateCloudFrontOriginAccessIdentityError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront".to_string();
-
-
-
+        let request_uri = "/2017-03-25/origin-access-identity/cloudfront";
 
         let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
@@ -10141,7 +10137,6 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10183,11 +10178,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
     fn create_distribution(&self,
                            input: &CreateDistributionRequest)
                            -> Result<CreateDistributionResult, CreateDistributionError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distribution".to_string();
-
-
-
+        let request_uri = "/2017-03-25/distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
@@ -10200,7 +10191,6 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10248,22 +10238,19 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         (&self,
          input: &CreateDistributionWithTagsRequest)
          -> Result<CreateDistributionWithTagsResult, CreateDistributionWithTagsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distribution".to_string();
-
-        params.put_key("WithTags");
-
+        let request_uri = "/2017-03-25/distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
-
+        let mut params = Params::new();
+        params.put_key("WithTags");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = DistributionConfigWithTagsSerializer::serialize("DistributionConfigWithTags", &input.distribution_config_with_tags).into_bytes();
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10305,11 +10292,8 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
     fn create_invalidation(&self,
                            input: &CreateInvalidationRequest)
                            -> Result<CreateInvalidationResult, CreateInvalidationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distribution/{DistributionId}/invalidation".to_string();
-
-
-        request_uri = request_uri.replace("{DistributionId}", &input.distribution_id.to_string());
+        let request_uri = format!("/2017-03-25/distribution/{distribution_id}/invalidation",
+                                  distribution_id = input.distribution_id);
 
         let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
@@ -10322,7 +10306,6 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10366,11 +10349,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         (&self,
          input: &CreateStreamingDistributionRequest)
          -> Result<CreateStreamingDistributionResult, CreateStreamingDistributionError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/streaming-distribution".to_string();
-
-
-
+        let request_uri = "/2017-03-25/streaming-distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
@@ -10381,7 +10360,6 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10425,22 +10403,19 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
          input: &CreateStreamingDistributionWithTagsRequest)
          -> Result<CreateStreamingDistributionWithTagsResult,
                    CreateStreamingDistributionWithTagsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/streaming-distribution".to_string();
-
-        params.put_key("WithTags");
-
+        let request_uri = "/2017-03-25/streaming-distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
-
+        let mut params = Params::new();
+        params.put_key("WithTags");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = StreamingDistributionConfigWithTagsSerializer::serialize("StreamingDistributionConfigWithTags", &input.streaming_distribution_config_with_tags).into_bytes();
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10483,11 +10458,8 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         (&self,
          input: &DeleteCloudFrontOriginAccessIdentityRequest)
          -> Result<(), DeleteCloudFrontOriginAccessIdentityError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}",
+                                  id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", self.region, &request_uri);
 
@@ -10498,7 +10470,6 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10520,11 +10491,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
     fn delete_distribution(&self,
                            input: &DeleteDistributionRequest)
                            -> Result<(), DeleteDistributionError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distribution/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", self.region, &request_uri);
 
@@ -10535,7 +10502,6 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10560,11 +10526,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
     fn delete_streaming_distribution(&self,
                                      input: &DeleteStreamingDistributionRequest)
                                      -> Result<(), DeleteStreamingDistributionError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/streaming-distribution/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/streaming-distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", self.region, &request_uri);
 
@@ -10575,7 +10537,6 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10598,11 +10559,8 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         (&self,
          input: &GetCloudFrontOriginAccessIdentityRequest)
          -> Result<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}",
+                                  id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
@@ -10610,7 +10568,6 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10646,12 +10603,8 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
     #[doc="<p>Get the configuration information about an origin access identity. </p>"]
     #[allow(unused_variables, warnings)]
 fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOriginAccessIdentityConfigRequest) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, GetCloudFrontOriginAccessIdentityConfigError>{
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront/{Id}/config"
-            .to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}/config",
+                                  id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
@@ -10659,7 +10612,6 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10697,11 +10649,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     fn get_distribution(&self,
                         input: &GetDistributionRequest)
                         -> Result<GetDistributionResult, GetDistributionError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distribution/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
@@ -10709,7 +10657,6 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10752,11 +10699,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         (&self,
          input: &GetDistributionConfigRequest)
          -> Result<GetDistributionConfigResult, GetDistributionConfigError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distribution/{Id}/config".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/distribution/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
@@ -10764,7 +10707,6 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10805,13 +10747,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     fn get_invalidation(&self,
                         input: &GetInvalidationRequest)
                         -> Result<GetInvalidationResult, GetInvalidationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distribution/{DistributionId}/invalidation/{Id}"
-            .to_string();
-
-
-        request_uri = request_uri.replace("{DistributionId}", &input.distribution_id.to_string());
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/distribution/{distribution_id}/invalidation/{id}",
+                                  distribution_id = input.distribution_id,
+                                  id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
@@ -10819,7 +10757,6 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10859,11 +10796,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         (&self,
          input: &GetStreamingDistributionRequest)
          -> Result<GetStreamingDistributionResult, GetStreamingDistributionError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/streaming-distribution/{Id}".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/streaming-distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
@@ -10871,7 +10804,6 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10910,11 +10842,8 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         (&self,
          input: &GetStreamingDistributionConfigRequest)
          -> Result<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/streaming-distribution/{Id}/config".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/streaming-distribution/{id}/config",
+                                  id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
@@ -10922,7 +10851,6 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -10962,26 +10890,21 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          input: &ListCloudFrontOriginAccessIdentitiesRequest)
          -> Result<ListCloudFrontOriginAccessIdentitiesResult,
                    ListCloudFrontOriginAccessIdentitiesError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront".to_string();
-
-
-
+        let request_uri = "/2017-03-25/origin-access-identity/cloudfront";
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
-
-        if let Some(ref marker) = input.marker {
-            params.put("Marker", marker);
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("MaxItems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11016,26 +10939,21 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     fn list_distributions(&self,
                           input: &ListDistributionsRequest)
                           -> Result<ListDistributionsResult, ListDistributionsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distribution".to_string();
-
-
-
+        let request_uri = "/2017-03-25/distribution";
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
-
-        if let Some(ref marker) = input.marker {
-            params.put("Marker", marker);
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("MaxItems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11076,26 +10994,22 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         (&self,
          input: &ListDistributionsByWebACLIdRequest)
          -> Result<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distributionsByWebACLId/{WebACLId}".to_string();
-
-
-        request_uri = request_uri.replace("{WebACLId}", &input.web_acl_id.to_string());
+        let request_uri = format!("/2017-03-25/distributionsByWebACLId/{web_acl_id}",
+                                  web_acl_id = input.web_acl_id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
-
-        if let Some(ref marker) = input.marker {
-            params.put("Marker", marker);
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("MaxItems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11130,26 +11044,22 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     fn list_invalidations(&self,
                           input: &ListInvalidationsRequest)
                           -> Result<ListInvalidationsResult, ListInvalidationsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distribution/{DistributionId}/invalidation".to_string();
-
-
-        request_uri = request_uri.replace("{DistributionId}", &input.distribution_id.to_string());
+        let request_uri = format!("/2017-03-25/distribution/{distribution_id}/invalidation",
+                                  distribution_id = input.distribution_id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
-
-        if let Some(ref marker) = input.marker {
-            params.put("Marker", marker);
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("MaxItems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11190,26 +11100,21 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         (&self,
          input: &ListStreamingDistributionsRequest)
          -> Result<ListStreamingDistributionsResult, ListStreamingDistributionsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/streaming-distribution".to_string();
-
-
-
+        let request_uri = "/2017-03-25/streaming-distribution";
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
-
-        if let Some(ref marker) = input.marker {
-            params.put("Marker", marker);
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
         }
-
-        if let Some(ref max_items) = input.max_items {
-            params.put("MaxItems", max_items);
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11244,19 +11149,16 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceRequest)
                               -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/tagging".to_string();
-
-
-
+        let request_uri = "/2017-03-25/tagging";
 
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("Resource", &input.resource);
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11294,22 +11196,20 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     #[doc="<p>Add tags to a CloudFront resource.</p>"]
     #[allow(unused_variables, warnings)]
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/tagging".to_string();
-
-        params.put("Operation", "Tag");
-
+        let request_uri = "/2017-03-25/tagging";
 
         let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("Resource", &input.resource);
+        params.put("Operation", "Tag");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = TagsSerializer::serialize("Tags", &input.tags).into_bytes();
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11329,22 +11229,20 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     #[doc="<p>Remove tags from a CloudFront resource.</p>"]
     #[allow(unused_variables, warnings)]
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/tagging".to_string();
-
-        params.put("Operation", "Untag");
-
+        let request_uri = "/2017-03-25/tagging";
 
         let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("Resource", &input.resource);
+        params.put("Operation", "Untag");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = TagKeysSerializer::serialize("TagKeys", &input.tag_keys).into_bytes();
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11370,12 +11268,8 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          input: &UpdateCloudFrontOriginAccessIdentityRequest)
          -> Result<UpdateCloudFrontOriginAccessIdentityResult,
                    UpdateCloudFrontOriginAccessIdentityError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront/{Id}/config"
-            .to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}/config",
+                                  id = input.id);
 
         let mut request = SignedRequest::new("PUT", "cloudfront", self.region, &request_uri);
 
@@ -11389,7 +11283,6 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11427,11 +11320,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     fn update_distribution(&self,
                            input: &UpdateDistributionRequest)
                            -> Result<UpdateDistributionResult, UpdateDistributionError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/distribution/{Id}/config".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/distribution/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "cloudfront", self.region, &request_uri);
 
@@ -11447,7 +11336,6 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -11491,11 +11379,8 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         (&self,
          input: &UpdateStreamingDistributionRequest)
          -> Result<UpdateStreamingDistributionResult, UpdateStreamingDistributionError> {
-        let mut params = Params::new();
-        let mut request_uri = "/2017-03-25/streaming-distribution/{Id}/config".to_string();
-
-
-        request_uri = request_uri.replace("{Id}", &input.id.to_string());
+        let request_uri = format!("/2017-03-25/streaming-distribution/{id}/config",
+                                  id = input.id);
 
         let mut request = SignedRequest::new("PUT", "cloudfront", self.region, &request_uri);
 
@@ -11509,7 +11394,6 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));

@@ -3098,13 +3098,12 @@ impl<P, D> Ets for EtsClient<P, D>
 {
     #[doc="<p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you're getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note>"]
     fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError> {
-
-
         let request_uri = format!("/2012-09-25/jobs/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("DELETE", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3138,8 +3137,6 @@ impl<P, D> Ets for EtsClient<P, D>
 
     #[doc="<p>When you create a job, Elastic Transcoder returns JSON data that includes the values that you specified plus information about the job that is created.</p> <p>If you have specified more than one output for your jobs (for example, one output for the Kindle Fire and another output for the Apple iPhone 4s), you currently must use the Elastic Transcoder API to list the jobs (as opposed to the AWS Console).</p>"]
     fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/2012-09-25/jobs";
 
         let mut request =
@@ -3147,7 +3144,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -3180,8 +3179,6 @@ impl<P, D> Ets for EtsClient<P, D>
     fn create_pipeline(&self,
                        input: &CreatePipelineRequest)
                        -> Result<CreatePipelineResponse, CreatePipelineError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/2012-09-25/pipelines";
 
         let mut request =
@@ -3189,7 +3186,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -3225,8 +3224,6 @@ impl<P, D> Ets for EtsClient<P, D>
     fn create_preset(&self,
                      input: &CreatePresetRequest)
                      -> Result<CreatePresetResponse, CreatePresetError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/2012-09-25/presets";
 
         let mut request =
@@ -3234,7 +3231,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -3269,13 +3268,12 @@ impl<P, D> Ets for EtsClient<P, D>
     fn delete_pipeline(&self,
                        input: &DeletePipelineRequest)
                        -> Result<DeletePipelineResponse, DeletePipelineError> {
-
-
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("DELETE", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3314,13 +3312,12 @@ impl<P, D> Ets for EtsClient<P, D>
     fn delete_preset(&self,
                      input: &DeletePresetRequest)
                      -> Result<DeletePresetResponse, DeletePresetError> {
-
-
         let request_uri = format!("/2012-09-25/presets/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("DELETE", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3358,13 +3355,12 @@ impl<P, D> Ets for EtsClient<P, D>
     fn list_jobs_by_pipeline(&self,
                              input: &ListJobsByPipelineRequest)
                              -> Result<ListJobsByPipelineResponse, ListJobsByPipelineError> {
-
-
         let request_uri = format!("/2012-09-25/jobsByPipeline/{pipeline_id}",
                                   pipeline_id = input.pipeline_id);
 
         let mut request = SignedRequest::new("GET", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3410,12 +3406,11 @@ impl<P, D> Ets for EtsClient<P, D>
     fn list_jobs_by_status(&self,
                            input: &ListJobsByStatusRequest)
                            -> Result<ListJobsByStatusResponse, ListJobsByStatusError> {
-
-
         let request_uri = format!("/2012-09-25/jobsByStatus/{status}", status = input.status);
 
         let mut request = SignedRequest::new("GET", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3461,12 +3456,11 @@ impl<P, D> Ets for EtsClient<P, D>
     fn list_pipelines(&self,
                       input: &ListPipelinesRequest)
                       -> Result<ListPipelinesResponse, ListPipelinesError> {
-
-
         let request_uri = "/2012-09-25/pipelines";
 
         let mut request = SignedRequest::new("GET", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3511,12 +3505,11 @@ impl<P, D> Ets for EtsClient<P, D>
     fn list_presets(&self,
                     input: &ListPresetsRequest)
                     -> Result<ListPresetsResponse, ListPresetsError> {
-
-
         let request_uri = "/2012-09-25/presets";
 
         let mut request = SignedRequest::new("GET", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3557,12 +3550,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
     #[doc="<p>The ReadJob operation returns detailed information about a job.</p>"]
     fn read_job(&self, input: &ReadJobRequest) -> Result<ReadJobResponse, ReadJobError> {
-
-
         let request_uri = format!("/2012-09-25/jobs/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3598,12 +3590,11 @@ impl<P, D> Ets for EtsClient<P, D>
     fn read_pipeline(&self,
                      input: &ReadPipelineRequest)
                      -> Result<ReadPipelineResponse, ReadPipelineError> {
-
-
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3641,12 +3632,11 @@ impl<P, D> Ets for EtsClient<P, D>
     fn read_preset(&self,
                    input: &ReadPresetRequest)
                    -> Result<ReadPresetResponse, ReadPresetError> {
-
-
         let request_uri = format!("/2012-09-25/presets/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3680,8 +3670,6 @@ impl<P, D> Ets for EtsClient<P, D>
 
     #[doc="<p>The TestRole operation tests the IAM role used to create the pipeline.</p> <p>The <code>TestRole</code> action lets you determine whether the IAM role you are using has sufficient permissions to let Elastic Transcoder perform tasks associated with the transcoding process. The action attempts to assume the specified IAM role, checks read access to the input and output buckets, and tries to send a test notification to Amazon SNS topics that you specify.</p>"]
     fn test_role(&self, input: &TestRoleRequest) -> Result<TestRoleResponse, TestRoleError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/2012-09-25/roleTests";
 
         let mut request =
@@ -3689,7 +3677,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -3722,15 +3712,15 @@ impl<P, D> Ets for EtsClient<P, D>
     fn update_pipeline(&self,
                        input: &UpdatePipelineRequest)
                        -> Result<UpdatePipelineResponse, UpdatePipelineError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -3767,8 +3757,6 @@ impl<P, D> Ets for EtsClient<P, D>
         (&self,
          input: &UpdatePipelineNotificationsRequest)
          -> Result<UpdatePipelineNotificationsResponse, UpdatePipelineNotificationsError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2012-09-25/pipelines/{id}/notifications", id = input.id);
 
         let mut request =
@@ -3776,7 +3764,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -3811,8 +3801,6 @@ impl<P, D> Ets for EtsClient<P, D>
         (&self,
          input: &UpdatePipelineStatusRequest)
          -> Result<UpdatePipelineStatusResponse, UpdatePipelineStatusError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2012-09-25/pipelines/{id}/status", id = input.id);
 
         let mut request =
@@ -3820,7 +3808,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);

@@ -16951,12 +16951,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn abort_multipart_upload(&self,
                               input: &AbortMultipartUploadRequest)
                               -> Result<AbortMultipartUploadOutput, AbortMultipartUploadError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
@@ -16964,10 +16959,11 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
+        let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17011,12 +17007,7 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &CompleteMultipartUploadRequest)
          -> Result<CompleteMultipartUploadOutput, CompleteMultipartUploadError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("POST", "s3", self.region, &request_uri);
 
@@ -17024,7 +17015,9 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
+        let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
+        request.set_params(params);
         let mut payload: Vec<u8>;
         if input.multipart_upload.is_some() {
             payload = CompletedMultipartUploadSerializer::serialize("CompletedMultipartUpload",
@@ -17039,7 +17032,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17095,12 +17087,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="Creates a copy of an object that is already stored in Amazon S3."]
     #[allow(unused_variables, warnings)]
     fn copy_object(&self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, CopyObjectError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -17238,7 +17225,6 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17316,11 +17302,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn create_bucket(&self,
                      input: &CreateBucketRequest)
                      -> Result<CreateBucketOutput, CreateBucketError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -17358,7 +17340,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17400,12 +17381,7 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &CreateMultipartUploadRequest)
          -> Result<CreateMultipartUploadOutput, CreateMultipartUploadError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-        params.put_key("uploads");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("POST", "s3", self.region, &request_uri);
 
@@ -17491,10 +17467,11 @@ impl<P, D> S3 for S3Client<P, D>
             request.add_header("x-amz-website-redirect-location",
                                &website_redirect_location.to_string());
         }
-
-
-
+        let mut params = Params::new();
+        params.put_key("uploads");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17567,11 +17544,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted."]
     #[allow(unused_variables, warnings)]
     fn delete_bucket(&self, input: &DeleteBucketRequest) -> Result<(), DeleteBucketError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
@@ -17579,7 +17552,6 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17604,19 +17576,17 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &DeleteBucketAnalyticsConfigurationRequest)
          -> Result<(), DeleteBucketAnalyticsConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("analytics");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("id", &input.id);
-
-
+        params.put_key("analytics");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17638,19 +17608,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_bucket_cors(&self,
                           input: &DeleteBucketCorsRequest)
                           -> Result<(), DeleteBucketCorsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("cors");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("cors");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17676,19 +17643,17 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &DeleteBucketInventoryConfigurationRequest)
          -> Result<(), DeleteBucketInventoryConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("inventory");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("id", &input.id);
-
-
+        params.put_key("inventory");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17710,19 +17675,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_bucket_lifecycle(&self,
                                input: &DeleteBucketLifecycleRequest)
                                -> Result<(), DeleteBucketLifecycleError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("lifecycle");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("lifecycle");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17747,19 +17709,17 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_bucket_metrics_configuration(&self,
                                            input: &DeleteBucketMetricsConfigurationRequest)
                                            -> Result<(), DeleteBucketMetricsConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("metrics");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("id", &input.id);
-
-
+        params.put_key("metrics");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17781,19 +17741,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_bucket_policy(&self,
                             input: &DeleteBucketPolicyRequest)
                             -> Result<(), DeleteBucketPolicyError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("policy");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("policy");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17818,19 +17775,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_bucket_replication(&self,
                                  input: &DeleteBucketReplicationRequest)
                                  -> Result<(), DeleteBucketReplicationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("replication");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("replication");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17852,19 +17806,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_bucket_tagging(&self,
                              input: &DeleteBucketTaggingRequest)
                              -> Result<(), DeleteBucketTaggingError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("tagging");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("tagging");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17889,19 +17840,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_bucket_website(&self,
                              input: &DeleteBucketWebsiteRequest)
                              -> Result<(), DeleteBucketWebsiteError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("website");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("website");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17926,12 +17874,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_object(&self,
                      input: &DeleteObjectRequest)
                      -> Result<DeleteObjectOutput, DeleteObjectError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
@@ -17943,13 +17886,13 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-
-        if let Some(ref version_id) = input.version_id {
-            params.put("versionId", version_id);
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -17998,23 +17941,19 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_object_tagging(&self,
                              input: &DeleteObjectTaggingRequest)
                              -> Result<DeleteObjectTaggingOutput, DeleteObjectTaggingError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-        params.put_key("tagging");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
-
-        if let Some(ref version_id) = input.version_id {
-            params.put("versionId", version_id);
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
         }
-
-
+        params.put_key("tagging");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18057,11 +17996,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_objects(&self,
                       input: &DeleteObjectsRequest)
                       -> Result<DeleteObjectsOutput, DeleteObjectsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("delete");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("POST", "s3", self.region, &request_uri);
 
@@ -18073,7 +18008,9 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("delete");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = DeleteSerializer::serialize("Delete", &input.delete).into_bytes();
         let digest = md5::compute(&payload);
@@ -18086,7 +18023,6 @@ impl<P, D> S3 for S3Client<P, D>
                                             }));
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18128,19 +18064,16 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &GetBucketAccelerateConfigurationRequest)
          -> Result<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("accelerate");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("accelerate");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18175,19 +18108,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_acl(&self,
                       input: &GetBucketAclRequest)
                       -> Result<GetBucketAclOutput, GetBucketAclError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("acl");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("acl");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18226,19 +18156,17 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &GetBucketAnalyticsConfigurationRequest)
          -> Result<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("analytics");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("id", &input.id);
-
-
+        params.put_key("analytics");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18273,19 +18201,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_cors(&self,
                        input: &GetBucketCorsRequest)
                        -> Result<GetBucketCorsOutput, GetBucketCorsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("cors");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("cors");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18324,19 +18249,17 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &GetBucketInventoryConfigurationRequest)
          -> Result<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("inventory");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("id", &input.id);
-
-
+        params.put_key("inventory");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18371,19 +18294,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_lifecycle(&self,
                             input: &GetBucketLifecycleRequest)
                             -> Result<GetBucketLifecycleOutput, GetBucketLifecycleError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("lifecycle");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("lifecycle");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18424,19 +18344,16 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &GetBucketLifecycleConfigurationRequest)
          -> Result<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("lifecycle");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("lifecycle");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18471,19 +18388,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_location(&self,
                            input: &GetBucketLocationRequest)
                            -> Result<GetBucketLocationOutput, GetBucketLocationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("location");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("location");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18523,19 +18437,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_logging(&self,
                           input: &GetBucketLoggingRequest)
                           -> Result<GetBucketLoggingOutput, GetBucketLoggingError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("logging");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("logging");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18576,19 +18487,17 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &GetBucketMetricsConfigurationRequest)
          -> Result<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("metrics");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("id", &input.id);
-
-
+        params.put_key("metrics");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18624,19 +18533,16 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &GetBucketNotificationConfigurationRequest)
          -> Result<NotificationConfigurationDeprecated, GetBucketNotificationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("notification");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("notification");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18675,19 +18581,16 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &GetBucketNotificationConfigurationRequest)
          -> Result<NotificationConfiguration, GetBucketNotificationConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("notification");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("notification");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18724,19 +18627,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_policy(&self,
                          input: &GetBucketPolicyRequest)
                          -> Result<GetBucketPolicyOutput, GetBucketPolicyError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("policy");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("policy");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18764,19 +18664,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_replication(&self,
                               input: &GetBucketReplicationRequest)
                               -> Result<GetBucketReplicationOutput, GetBucketReplicationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("replication");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("replication");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18817,19 +18714,16 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &GetBucketRequestPaymentRequest)
          -> Result<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("requestPayment");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("requestPayment");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18864,19 +18758,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_tagging(&self,
                           input: &GetBucketTaggingRequest)
                           -> Result<GetBucketTaggingOutput, GetBucketTaggingError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("tagging");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("tagging");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18916,19 +18807,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_versioning(&self,
                              input: &GetBucketVersioningRequest)
                              -> Result<GetBucketVersioningOutput, GetBucketVersioningError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("versioning");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("versioning");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -18968,19 +18856,16 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_website(&self,
                           input: &GetBucketWebsiteRequest)
                           -> Result<GetBucketWebsiteOutput, GetBucketWebsiteError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("website");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-
-
+        let mut params = Params::new();
+        params.put_key("website");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19018,12 +18903,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="Retrieves objects from Amazon S3."]
     #[allow(unused_variables, warnings)]
     fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, GetObjectError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
@@ -19066,41 +18946,34 @@ impl<P, D> S3 for S3Client<P, D>
             request.add_header("x-amz-server-side-encryption-customer-key-MD5",
                                &sse_customer_key_md5.to_string());
         }
-
-        if let Some(ref part_number) = input.part_number {
-            params.put("partNumber", part_number);
+        let mut params = Params::new();
+        if let Some(ref x) = input.part_number {
+            params.put("partNumber", x);
         }
-
-        if let Some(ref response_cache_control) = input.response_cache_control {
-            params.put("response-cache-control", response_cache_control);
+        if let Some(ref x) = input.response_cache_control {
+            params.put("response-cache-control", x);
         }
-
-        if let Some(ref response_content_disposition) = input.response_content_disposition {
-            params.put("response-content-disposition", response_content_disposition);
+        if let Some(ref x) = input.response_content_disposition {
+            params.put("response-content-disposition", x);
         }
-
-        if let Some(ref response_content_encoding) = input.response_content_encoding {
-            params.put("response-content-encoding", response_content_encoding);
+        if let Some(ref x) = input.response_content_encoding {
+            params.put("response-content-encoding", x);
         }
-
-        if let Some(ref response_content_language) = input.response_content_language {
-            params.put("response-content-language", response_content_language);
+        if let Some(ref x) = input.response_content_language {
+            params.put("response-content-language", x);
         }
-
-        if let Some(ref response_content_type) = input.response_content_type {
-            params.put("response-content-type", response_content_type);
+        if let Some(ref x) = input.response_content_type {
+            params.put("response-content-type", x);
         }
-
-        if let Some(ref response_expires) = input.response_expires {
-            params.put("response-expires", response_expires);
+        if let Some(ref x) = input.response_expires {
+            params.put("response-expires", x);
         }
-
-        if let Some(ref version_id) = input.version_id {
-            params.put("versionId", version_id);
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19247,12 +19120,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_object_acl(&self,
                       input: &GetObjectAclRequest)
                       -> Result<GetObjectAclOutput, GetObjectAclError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-        params.put_key("acl");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
@@ -19260,13 +19128,14 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-
-        if let Some(ref version_id) = input.version_id {
-            params.put("versionId", version_id);
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
         }
-
-
+        params.put_key("acl");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19307,23 +19176,19 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_object_tagging(&self,
                           input: &GetObjectTaggingRequest)
                           -> Result<GetObjectTaggingOutput, GetObjectTaggingError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-        params.put_key("tagging");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-        if let Some(ref version_id) = input.version_id {
-            params.put("versionId", version_id);
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
         }
-
-
+        params.put_key("tagging");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19366,12 +19231,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_object_torrent(&self,
                           input: &GetObjectTorrentRequest)
                           -> Result<GetObjectTorrentOutput, GetObjectTorrentError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-        params.put_key("torrent");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
@@ -19379,10 +19239,11 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-
-
-
+        let mut params = Params::new();
+        params.put_key("torrent");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19411,11 +19272,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="This operation is useful to determine if a bucket exists and you have permission to access it."]
     #[allow(unused_variables, warnings)]
     fn head_bucket(&self, input: &HeadBucketRequest) -> Result<(), HeadBucketError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("HEAD", "s3", self.region, &request_uri);
 
@@ -19423,7 +19280,6 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19443,12 +19299,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object."]
     #[allow(unused_variables, warnings)]
     fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, HeadObjectError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("HEAD", "s3", self.region, &request_uri);
 
@@ -19491,17 +19342,16 @@ impl<P, D> S3 for S3Client<P, D>
             request.add_header("x-amz-server-side-encryption-customer-key-MD5",
                                &sse_customer_key_md5.to_string());
         }
-
-        if let Some(ref part_number) = input.part_number {
-            params.put("partNumber", part_number);
+        let mut params = Params::new();
+        if let Some(ref x) = input.part_number {
+            params.put("partNumber", x);
         }
-
-        if let Some(ref version_id) = input.version_id {
-            params.put("versionId", version_id);
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19652,22 +19502,19 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &ListBucketAnalyticsConfigurationsRequest)
          -> Result<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("analytics");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-        if let Some(ref continuation_token) = input.continuation_token {
-            params.put("continuation-token", continuation_token);
+        let mut params = Params::new();
+        if let Some(ref x) = input.continuation_token {
+            params.put("continuation-token", x);
         }
-
-
+        params.put_key("analytics");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19703,22 +19550,19 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &ListBucketInventoryConfigurationsRequest)
          -> Result<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("inventory");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-        if let Some(ref continuation_token) = input.continuation_token {
-            params.put("continuation-token", continuation_token);
+        let mut params = Params::new();
+        if let Some(ref x) = input.continuation_token {
+            params.put("continuation-token", x);
         }
-
-
+        params.put_key("inventory");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19754,22 +19598,19 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &ListBucketMetricsConfigurationsRequest)
          -> Result<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("metrics");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-        if let Some(ref continuation_token) = input.continuation_token {
-            params.put("continuation-token", continuation_token);
+        let mut params = Params::new();
+        if let Some(ref x) = input.continuation_token {
+            params.put("continuation-token", x);
         }
-
-
+        params.put_key("metrics");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19802,11 +19643,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="Returns a list of all buckets owned by the authenticated sender of the request."]
     #[allow(unused_variables, warnings)]
     fn list_buckets(&self) -> Result<ListBucketsOutput, ListBucketsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/".to_string();
-
-
-
+        let request_uri = "/";
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
@@ -19814,7 +19651,6 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19850,42 +19686,34 @@ impl<P, D> S3 for S3Client<P, D>
     fn list_multipart_uploads(&self,
                               input: &ListMultipartUploadsRequest)
                               -> Result<ListMultipartUploadsOutput, ListMultipartUploadsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("uploads");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-        if let Some(ref delimiter) = input.delimiter {
-            params.put("delimiter", delimiter);
+        let mut params = Params::new();
+        if let Some(ref x) = input.delimiter {
+            params.put("delimiter", x);
         }
-
-        if let Some(ref encoding_type) = input.encoding_type {
-            params.put("encoding-type", encoding_type);
+        if let Some(ref x) = input.encoding_type {
+            params.put("encoding-type", x);
         }
-
-        if let Some(ref key_marker) = input.key_marker {
-            params.put("key-marker", key_marker);
+        if let Some(ref x) = input.key_marker {
+            params.put("key-marker", x);
         }
-
-        if let Some(ref max_uploads) = input.max_uploads {
-            params.put("max-uploads", max_uploads);
+        if let Some(ref x) = input.max_uploads {
+            params.put("max-uploads", x);
         }
-
-        if let Some(ref prefix) = input.prefix {
-            params.put("prefix", prefix);
+        if let Some(ref x) = input.prefix {
+            params.put("prefix", x);
         }
-
-        if let Some(ref upload_id_marker) = input.upload_id_marker {
-            params.put("upload-id-marker", upload_id_marker);
+        if let Some(ref x) = input.upload_id_marker {
+            params.put("upload-id-marker", x);
         }
-
-
+        params.put_key("uploads");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -19925,42 +19753,34 @@ impl<P, D> S3 for S3Client<P, D>
     fn list_object_versions(&self,
                             input: &ListObjectVersionsRequest)
                             -> Result<ListObjectVersionsOutput, ListObjectVersionsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("versions");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-
-        if let Some(ref delimiter) = input.delimiter {
-            params.put("delimiter", delimiter);
+        let mut params = Params::new();
+        if let Some(ref x) = input.delimiter {
+            params.put("delimiter", x);
         }
-
-        if let Some(ref encoding_type) = input.encoding_type {
-            params.put("encoding-type", encoding_type);
+        if let Some(ref x) = input.encoding_type {
+            params.put("encoding-type", x);
         }
-
-        if let Some(ref key_marker) = input.key_marker {
-            params.put("key-marker", key_marker);
+        if let Some(ref x) = input.key_marker {
+            params.put("key-marker", x);
         }
-
-        if let Some(ref max_keys) = input.max_keys {
-            params.put("max-keys", max_keys);
+        if let Some(ref x) = input.max_keys {
+            params.put("max-keys", x);
         }
-
-        if let Some(ref prefix) = input.prefix {
-            params.put("prefix", prefix);
+        if let Some(ref x) = input.prefix {
+            params.put("prefix", x);
         }
-
-        if let Some(ref version_id_marker) = input.version_id_marker {
-            params.put("version-id-marker", version_id_marker);
+        if let Some(ref x) = input.version_id_marker {
+            params.put("version-id-marker", x);
         }
-
-
+        params.put_key("versions");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20000,11 +19820,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn list_objects(&self,
                     input: &ListObjectsRequest)
                     -> Result<ListObjectsOutput, ListObjectsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
@@ -20012,29 +19828,25 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-
-        if let Some(ref delimiter) = input.delimiter {
-            params.put("delimiter", delimiter);
+        let mut params = Params::new();
+        if let Some(ref x) = input.delimiter {
+            params.put("delimiter", x);
         }
-
-        if let Some(ref encoding_type) = input.encoding_type {
-            params.put("encoding-type", encoding_type);
+        if let Some(ref x) = input.encoding_type {
+            params.put("encoding-type", x);
         }
-
-        if let Some(ref marker) = input.marker {
-            params.put("marker", marker);
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-
-        if let Some(ref max_keys) = input.max_keys {
-            params.put("max-keys", max_keys);
+        if let Some(ref x) = input.max_keys {
+            params.put("max-keys", x);
         }
-
-        if let Some(ref prefix) = input.prefix {
-            params.put("prefix", prefix);
+        if let Some(ref x) = input.prefix {
+            params.put("prefix", x);
         }
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20070,11 +19882,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn list_objects_v2(&self,
                        input: &ListObjectsV2Request)
                        -> Result<ListObjectsV2Output, ListObjectsV2Error> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put("list-type", "2");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
@@ -20082,37 +19890,32 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-
-        if let Some(ref continuation_token) = input.continuation_token {
-            params.put("continuation-token", continuation_token);
+        let mut params = Params::new();
+        if let Some(ref x) = input.continuation_token {
+            params.put("continuation-token", x);
         }
-
-        if let Some(ref delimiter) = input.delimiter {
-            params.put("delimiter", delimiter);
+        if let Some(ref x) = input.delimiter {
+            params.put("delimiter", x);
         }
-
-        if let Some(ref encoding_type) = input.encoding_type {
-            params.put("encoding-type", encoding_type);
+        if let Some(ref x) = input.encoding_type {
+            params.put("encoding-type", x);
         }
-
-        if let Some(ref fetch_owner) = input.fetch_owner {
-            params.put("fetch-owner", fetch_owner);
+        if let Some(ref x) = input.fetch_owner {
+            params.put("fetch-owner", x);
         }
-
-        if let Some(ref max_keys) = input.max_keys {
-            params.put("max-keys", max_keys);
+        if let Some(ref x) = input.max_keys {
+            params.put("max-keys", x);
         }
-
-        if let Some(ref prefix) = input.prefix {
-            params.put("prefix", prefix);
+        if let Some(ref x) = input.prefix {
+            params.put("prefix", x);
         }
-
-        if let Some(ref start_after) = input.start_after {
-            params.put("start-after", start_after);
+        if let Some(ref x) = input.start_after {
+            params.put("start-after", x);
         }
-
-
+        params.put("list-type", "2");
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20148,12 +19951,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="Lists the parts that have been uploaded for a specific multipart upload."]
     #[allow(unused_variables, warnings)]
     fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, ListPartsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
@@ -20161,18 +19959,17 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-
-        if let Some(ref max_parts) = input.max_parts {
-            params.put("max-parts", max_parts);
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_parts {
+            params.put("max-parts", x);
         }
-
-        if let Some(ref part_number_marker) = input.part_number_marker {
-            params.put("part-number-marker", part_number_marker);
+        if let Some(ref x) = input.part_number_marker {
+            params.put("part-number-marker", x);
         }
         params.put("uploadId", &input.upload_id);
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20219,16 +20016,14 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_accelerate_configuration(&self,
                                            input: &PutBucketAccelerateConfigurationRequest)
                                            -> Result<(), PutBucketAccelerateConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("accelerate");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
 
-
+        let mut params = Params::new();
+        params.put_key("accelerate");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = AccelerateConfigurationSerializer::serialize("AccelerateConfiguration",
                                                                &input.accelerate_configuration)
@@ -20236,7 +20031,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20256,11 +20050,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="Sets the permissions on a bucket using access control lists (ACL)."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), PutBucketAclError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("acl");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20292,7 +20082,9 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref grant_write_acp) = input.grant_write_acp {
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("acl");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         if input.access_control_policy.is_some() {
             payload = AccessControlPolicySerializer::serialize("AccessControlPolicy",
@@ -20307,7 +20099,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20331,16 +20122,15 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_analytics_configuration(&self,
                                           input: &PutBucketAnalyticsConfigurationRequest)
                                           -> Result<(), PutBucketAnalyticsConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("analytics");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("id", &input.id);
+        params.put_key("analytics");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = AnalyticsConfigurationSerializer::serialize("AnalyticsConfiguration",
                                                               &input.analytics_configuration)
@@ -20348,7 +20138,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20368,11 +20157,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="Sets the cors configuration for a bucket."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Result<(), PutBucketCorsError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("cors");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20380,7 +20165,9 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref content_md5) = input.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("cors");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = CORSConfigurationSerializer::serialize("CORSConfiguration",
                                                          &input.cors_configuration)
@@ -20395,7 +20182,6 @@ impl<P, D> S3 for S3Client<P, D>
                                             }));
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20419,16 +20205,15 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_inventory_configuration(&self,
                                           input: &PutBucketInventoryConfigurationRequest)
                                           -> Result<(), PutBucketInventoryConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("inventory");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("id", &input.id);
+        params.put_key("inventory");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = InventoryConfigurationSerializer::serialize("InventoryConfiguration",
                                                               &input.inventory_configuration)
@@ -20436,7 +20221,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20458,11 +20242,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_lifecycle(&self,
                             input: &PutBucketLifecycleRequest)
                             -> Result<(), PutBucketLifecycleError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("lifecycle");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20470,7 +20250,9 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref content_md5) = input.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("lifecycle");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         if input.lifecycle_configuration.is_some() {
             payload = LifecycleConfigurationSerializer::serialize("LifecycleConfiguration",
@@ -20492,7 +20274,6 @@ impl<P, D> S3 for S3Client<P, D>
                                             }));
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20517,16 +20298,14 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_lifecycle_configuration(&self,
                                           input: &PutBucketLifecycleConfigurationRequest)
                                           -> Result<(), PutBucketLifecycleConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("lifecycle");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
 
-
+        let mut params = Params::new();
+        params.put_key("lifecycle");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         if input.lifecycle_configuration.is_some() {
             payload =
@@ -20549,7 +20328,6 @@ impl<P, D> S3 for S3Client<P, D>
                                             }));
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20571,11 +20349,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_logging(&self,
                           input: &PutBucketLoggingRequest)
                           -> Result<(), PutBucketLoggingError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("logging");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20583,7 +20357,9 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref content_md5) = input.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("logging");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = BucketLoggingStatusSerializer::serialize("BucketLoggingStatus",
                                                            &input.bucket_logging_status)
@@ -20591,7 +20367,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20616,16 +20391,15 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_metrics_configuration(&self,
                                         input: &PutBucketMetricsConfigurationRequest)
                                         -> Result<(), PutBucketMetricsConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("metrics");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
 
+        let mut params = Params::new();
         params.put("id", &input.id);
+        params.put_key("metrics");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = MetricsConfigurationSerializer::serialize("MetricsConfiguration",
                                                             &input.metrics_configuration)
@@ -20633,7 +20407,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20655,11 +20428,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_notification(&self,
                                input: &PutBucketNotificationRequest)
                                -> Result<(), PutBucketNotificationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("notification");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20667,13 +20436,14 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref content_md5) = input.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("notification");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = NotificationConfigurationDeprecatedSerializer::serialize("NotificationConfigurationDeprecated", &input.notification_configuration).into_bytes();
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20699,16 +20469,14 @@ impl<P, D> S3 for S3Client<P, D>
         (&self,
          input: &PutBucketNotificationConfigurationRequest)
          -> Result<(), PutBucketNotificationConfigurationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("notification");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
 
-
+        let mut params = Params::new();
+        params.put_key("notification");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload =
             NotificationConfigurationSerializer::serialize("NotificationConfiguration",
@@ -20717,7 +20485,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20739,11 +20506,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_policy(&self,
                          input: &PutBucketPolicyRequest)
                          -> Result<(), PutBucketPolicyError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("policy");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20751,13 +20514,14 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref content_md5) = input.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("policy");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = PolicySerializer::serialize("Policy", &input.policy).into_bytes();
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20782,11 +20546,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_replication(&self,
                               input: &PutBucketReplicationRequest)
                               -> Result<(), PutBucketReplicationError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("replication");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20794,7 +20554,9 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref content_md5) = input.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("replication");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload =
             ReplicationConfigurationSerializer::serialize("ReplicationConfiguration",
@@ -20810,7 +20572,6 @@ impl<P, D> S3 for S3Client<P, D>
                                             }));
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20835,11 +20596,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_request_payment(&self,
                                   input: &PutBucketRequestPaymentRequest)
                                   -> Result<(), PutBucketRequestPaymentError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("requestPayment");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20847,13 +20604,14 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref content_md5) = input.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("requestPayment");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = RequestPaymentConfigurationSerializer::serialize("RequestPaymentConfiguration", &input.request_payment_configuration).into_bytes();
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20875,11 +20633,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_tagging(&self,
                           input: &PutBucketTaggingRequest)
                           -> Result<(), PutBucketTaggingError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("tagging");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20887,7 +20641,9 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref content_md5) = input.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("tagging");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = TaggingSerializer::serialize("Tagging", &input.tagging).into_bytes();
         let digest = md5::compute(&payload);
@@ -20900,7 +20656,6 @@ impl<P, D> S3 for S3Client<P, D>
                                             }));
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20925,11 +20680,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_versioning(&self,
                              input: &PutBucketVersioningRequest)
                              -> Result<(), PutBucketVersioningError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("versioning");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20941,7 +20692,9 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref mfa) = input.mfa {
             request.add_header("x-amz-mfa", &mfa.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("versioning");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = VersioningConfigurationSerializer::serialize("VersioningConfiguration",
                                                                &input.versioning_configuration)
@@ -20949,7 +20702,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -20974,11 +20726,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_website(&self,
                           input: &PutBucketWebsiteRequest)
                           -> Result<(), PutBucketWebsiteError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}".to_string();
-
-        params.put_key("website");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -20986,7 +20734,9 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref content_md5) = input.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
-
+        let mut params = Params::new();
+        params.put_key("website");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = WebsiteConfigurationSerializer::serialize("WebsiteConfiguration",
                                                             &input.website_configuration)
@@ -20994,7 +20744,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -21017,12 +20766,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="Adds an object to a bucket."]
     #[allow(unused_variables, warnings)]
     fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, PutObjectError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -21126,7 +20870,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -21203,12 +20946,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_object_acl(&self,
                       input: &PutObjectAclRequest)
                       -> Result<PutObjectAclOutput, PutObjectAclError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-        params.put_key("acl");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -21244,10 +20982,12 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-
-        if let Some(ref version_id) = input.version_id {
-            params.put("versionId", version_id);
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
         }
+        params.put_key("acl");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         if input.access_control_policy.is_some() {
             payload = AccessControlPolicySerializer::serialize("AccessControlPolicy",
@@ -21262,7 +21002,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -21303,12 +21042,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_object_tagging(&self,
                           input: &PutObjectTaggingRequest)
                           -> Result<PutObjectTaggingOutput, PutObjectTaggingError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-        params.put_key("tagging");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -21316,16 +21050,17 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref content_md5) = input.content_md5 {
             request.add_header("Content-MD5", &content_md5.to_string());
         }
-
-        if let Some(ref version_id) = input.version_id {
-            params.put("versionId", version_id);
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
         }
+        params.put_key("tagging");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = TaggingSerializer::serialize("Tagging", &input.tagging).into_bytes();
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -21368,12 +21103,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn restore_object(&self,
                       input: &RestoreObjectRequest)
                       -> Result<RestoreObjectOutput, RestoreObjectError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-        params.put_key("restore");
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("POST", "s3", self.region, &request_uri);
 
@@ -21381,10 +21111,12 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-
-        if let Some(ref version_id) = input.version_id {
-            params.put("versionId", version_id);
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
         }
+        params.put_key("restore");
+        request.set_params(params);
         let mut payload: Vec<u8>;
         if input.restore_request.is_some() {
             payload = RestoreRequestSerializer::serialize("RestoreRequest",
@@ -21396,7 +21128,6 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -21435,12 +21166,7 @@ impl<P, D> S3 for S3Client<P, D>
     #[doc="<p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
     #[allow(unused_variables, warnings)]
     fn upload_part(&self, input: &UploadPartRequest) -> Result<UploadPartOutput, UploadPartError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -21471,14 +21197,15 @@ impl<P, D> S3 for S3Client<P, D>
             request.add_header("x-amz-server-side-encryption-customer-key-MD5",
                                &sse_customer_key_md5.to_string());
         }
+        let mut params = Params::new();
         params.put("partNumber", &input.part_number);
         params.put("uploadId", &input.upload_id);
+        request.set_params(params);
         let mut payload: Vec<u8>;
         payload = input.body.clone().unwrap();
 
         request.set_payload(Some(payload));
 
-        request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
@@ -21547,12 +21274,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn upload_part_copy(&self,
                         input: &UploadPartCopyRequest)
                         -> Result<UploadPartCopyOutput, UploadPartCopyError> {
-        let mut params = Params::new();
-        let mut request_uri = "/{Bucket}/{Key}".to_string();
-
-
-        request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
-        request_uri = request_uri.replace("{Key}", &input.key.to_string());
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
@@ -21616,11 +21338,12 @@ impl<P, D> S3 for S3Client<P, D>
             request.add_header("x-amz-server-side-encryption-customer-key-MD5",
                                &sse_customer_key_md5.to_string());
         }
+        let mut params = Params::new();
         params.put("partNumber", &input.part_number);
         params.put("uploadId", &input.upload_id);
-
-
         request.set_params(params);
+
+
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let response = try!(self.dispatcher.dispatch(&request));
