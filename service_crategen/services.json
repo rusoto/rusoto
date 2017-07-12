@@ -452,7 +452,7 @@
     "coreVersion": "0.27.0",
     "protocolVersion": "2011-06-15",
     "customDependencies": {
-      "chrono": "0.2.25"
+      "chrono": "0.4.0"
     },
     "baseTypeName": "Sts"
   },

@@ -10,7 +10,7 @@ use std::collections::HashMap;
 
 use rusoto_core::{DispatchSignedRequest, HttpResponse, HttpDispatchError, SignedRequest};
 use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
-use chrono::{Duration, UTC};
+use chrono::{Duration, Utc};
 use hyper::status::StatusCode;
 
 const ONE_DAY: i64 = 86400;
@@ -22,7 +22,7 @@ impl ProvideAwsCredentials for MockCredentialsProvider {
         Ok(AwsCredentials::new("mock_key",
                                "mock_secret",
                                None,
-                               UTC::now() + Duration::seconds(ONE_DAY)))
+                               Utc::now() + Duration::seconds(ONE_DAY)))
     }
 }
 
