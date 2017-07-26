@@ -180,13 +180,9 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
                     token = Some(v[1].trim_matches(' ').to_string());
                 }
             }
-        } else if lower_case_line.contains("region") ||
-            lower_case_line.contains("output")
-        {
-            // Not Supported here, but valid according to: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files
-            continue;
         } else {
-            return Err(CredentialsError::new(format!("Invalid AWS Config line: [ {} ]", lower_case_line)))
+            // Ignore unrecognized fields
+            continue;
         }
 
     }
@@ -326,8 +322,15 @@ mod tests {
     }
 
     #[test]
-    fn parse_credentials_invalid() {
-        let result = super::parse_credentials_file(Path::new("tests/sample-data/invalid_profile_credentials"));
-        assert_eq!(result.err(), Some(CredentialsError::new("Invalid AWS Config line: [ some_super_awesome_value = baz ]")));
+    fn parse_credentials_unrecognized_field() {
+        let result = super::parse_credentials_file(Path::new("tests/sample-data/unrecognized_field_profile_credentials"));
+        assert!(result.is_ok());
+
+        let profiles = result.ok().unwrap();
+        assert_eq!(profiles.len(), 1);
+
+        let default_profile = profiles.get("default").expect("No default profile in full_profile_credentials");
+        assert_eq!(default_profile.aws_access_key_id(), "foo");
+        assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
 }
