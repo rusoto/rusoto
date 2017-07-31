@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2129,6 +2131,11 @@ impl From<HttpDispatchError> for CreateAliasError {
         CreateAliasError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateAliasError {
+    fn from(err: io::Error) -> CreateAliasError {
+        CreateAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2218,6 +2225,11 @@ impl From<CredentialsError> for CreateBuildError {
 impl From<HttpDispatchError> for CreateBuildError {
     fn from(err: HttpDispatchError) -> CreateBuildError {
         CreateBuildError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateBuildError {
+    fn from(err: io::Error) -> CreateBuildError {
+        CreateBuildError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateBuildError {
@@ -2316,6 +2328,11 @@ impl From<CredentialsError> for CreateFleetError {
 impl From<HttpDispatchError> for CreateFleetError {
     fn from(err: HttpDispatchError) -> CreateFleetError {
         CreateFleetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateFleetError {
+    fn from(err: io::Error) -> CreateFleetError {
+        CreateFleetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateFleetError {
@@ -2440,6 +2457,11 @@ impl From<HttpDispatchError> for CreateGameSessionError {
         CreateGameSessionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateGameSessionError {
+    fn from(err: io::Error) -> CreateGameSessionError {
+        CreateGameSessionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateGameSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2538,6 +2560,11 @@ impl From<CredentialsError> for CreateGameSessionQueueError {
 impl From<HttpDispatchError> for CreateGameSessionQueueError {
     fn from(err: HttpDispatchError) -> CreateGameSessionQueueError {
         CreateGameSessionQueueError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateGameSessionQueueError {
+    fn from(err: io::Error) -> CreateGameSessionQueueError {
+        CreateGameSessionQueueError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateGameSessionQueueError {
@@ -2643,6 +2670,11 @@ impl From<CredentialsError> for CreatePlayerSessionError {
 impl From<HttpDispatchError> for CreatePlayerSessionError {
     fn from(err: HttpDispatchError) -> CreatePlayerSessionError {
         CreatePlayerSessionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePlayerSessionError {
+    fn from(err: io::Error) -> CreatePlayerSessionError {
+        CreatePlayerSessionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePlayerSessionError {
@@ -2753,6 +2785,11 @@ impl From<HttpDispatchError> for CreatePlayerSessionsError {
         CreatePlayerSessionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreatePlayerSessionsError {
+    fn from(err: io::Error) -> CreatePlayerSessionsError {
+        CreatePlayerSessionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreatePlayerSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2848,6 +2885,11 @@ impl From<HttpDispatchError> for DeleteAliasError {
         DeleteAliasError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAliasError {
+    fn from(err: io::Error) -> DeleteAliasError {
+        DeleteAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2936,6 +2978,11 @@ impl From<CredentialsError> for DeleteBuildError {
 impl From<HttpDispatchError> for DeleteBuildError {
     fn from(err: HttpDispatchError) -> DeleteBuildError {
         DeleteBuildError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBuildError {
+    fn from(err: io::Error) -> DeleteBuildError {
+        DeleteBuildError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBuildError {
@@ -3033,6 +3080,11 @@ impl From<HttpDispatchError> for DeleteFleetError {
         DeleteFleetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteFleetError {
+    fn from(err: io::Error) -> DeleteFleetError {
+        DeleteFleetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3124,6 +3176,11 @@ impl From<CredentialsError> for DeleteGameSessionQueueError {
 impl From<HttpDispatchError> for DeleteGameSessionQueueError {
     fn from(err: HttpDispatchError) -> DeleteGameSessionQueueError {
         DeleteGameSessionQueueError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteGameSessionQueueError {
+    fn from(err: io::Error) -> DeleteGameSessionQueueError {
+        DeleteGameSessionQueueError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteGameSessionQueueError {
@@ -3220,6 +3277,11 @@ impl From<HttpDispatchError> for DeleteScalingPolicyError {
         DeleteScalingPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteScalingPolicyError {
+    fn from(err: io::Error) -> DeleteScalingPolicyError {
+        DeleteScalingPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3314,6 +3376,11 @@ impl From<HttpDispatchError> for DescribeAliasError {
         DescribeAliasError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAliasError {
+    fn from(err: io::Error) -> DescribeAliasError {
+        DescribeAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3406,6 +3473,11 @@ impl From<HttpDispatchError> for DescribeBuildError {
         DescribeBuildError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeBuildError {
+    fn from(err: io::Error) -> DescribeBuildError {
+        DescribeBuildError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3491,6 +3563,11 @@ impl From<CredentialsError> for DescribeEC2InstanceLimitsError {
 impl From<HttpDispatchError> for DescribeEC2InstanceLimitsError {
     fn from(err: HttpDispatchError) -> DescribeEC2InstanceLimitsError {
         DescribeEC2InstanceLimitsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEC2InstanceLimitsError {
+    fn from(err: io::Error) -> DescribeEC2InstanceLimitsError {
+        DescribeEC2InstanceLimitsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEC2InstanceLimitsError {
@@ -3584,6 +3661,11 @@ impl From<CredentialsError> for DescribeFleetAttributesError {
 impl From<HttpDispatchError> for DescribeFleetAttributesError {
     fn from(err: HttpDispatchError) -> DescribeFleetAttributesError {
         DescribeFleetAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeFleetAttributesError {
+    fn from(err: io::Error) -> DescribeFleetAttributesError {
+        DescribeFleetAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeFleetAttributesError {
@@ -3680,6 +3762,11 @@ impl From<HttpDispatchError> for DescribeFleetCapacityError {
         DescribeFleetCapacityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeFleetCapacityError {
+    fn from(err: io::Error) -> DescribeFleetCapacityError {
+        DescribeFleetCapacityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeFleetCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3772,6 +3859,11 @@ impl From<CredentialsError> for DescribeFleetEventsError {
 impl From<HttpDispatchError> for DescribeFleetEventsError {
     fn from(err: HttpDispatchError) -> DescribeFleetEventsError {
         DescribeFleetEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeFleetEventsError {
+    fn from(err: io::Error) -> DescribeFleetEventsError {
+        DescribeFleetEventsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeFleetEventsError {
@@ -3868,6 +3960,11 @@ impl From<HttpDispatchError> for DescribeFleetPortSettingsError {
         DescribeFleetPortSettingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeFleetPortSettingsError {
+    fn from(err: io::Error) -> DescribeFleetPortSettingsError {
+        DescribeFleetPortSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeFleetPortSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3960,6 +4057,11 @@ impl From<CredentialsError> for DescribeFleetUtilizationError {
 impl From<HttpDispatchError> for DescribeFleetUtilizationError {
     fn from(err: HttpDispatchError) -> DescribeFleetUtilizationError {
         DescribeFleetUtilizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeFleetUtilizationError {
+    fn from(err: io::Error) -> DescribeFleetUtilizationError {
+        DescribeFleetUtilizationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeFleetUtilizationError {
@@ -4057,6 +4159,11 @@ impl From<HttpDispatchError> for DescribeGameSessionDetailsError {
         DescribeGameSessionDetailsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeGameSessionDetailsError {
+    fn from(err: io::Error) -> DescribeGameSessionDetailsError {
+        DescribeGameSessionDetailsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeGameSessionDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4146,6 +4253,11 @@ impl From<CredentialsError> for DescribeGameSessionPlacementError {
 impl From<HttpDispatchError> for DescribeGameSessionPlacementError {
     fn from(err: HttpDispatchError) -> DescribeGameSessionPlacementError {
         DescribeGameSessionPlacementError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeGameSessionPlacementError {
+    fn from(err: io::Error) -> DescribeGameSessionPlacementError {
+        DescribeGameSessionPlacementError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeGameSessionPlacementError {
@@ -4240,6 +4352,11 @@ impl From<CredentialsError> for DescribeGameSessionQueuesError {
 impl From<HttpDispatchError> for DescribeGameSessionQueuesError {
     fn from(err: HttpDispatchError) -> DescribeGameSessionQueuesError {
         DescribeGameSessionQueuesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeGameSessionQueuesError {
+    fn from(err: io::Error) -> DescribeGameSessionQueuesError {
+        DescribeGameSessionQueuesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeGameSessionQueuesError {
@@ -4339,6 +4456,11 @@ impl From<HttpDispatchError> for DescribeGameSessionsError {
         DescribeGameSessionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeGameSessionsError {
+    fn from(err: io::Error) -> DescribeGameSessionsError {
+        DescribeGameSessionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeGameSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4432,6 +4554,11 @@ impl From<CredentialsError> for DescribeInstancesError {
 impl From<HttpDispatchError> for DescribeInstancesError {
     fn from(err: HttpDispatchError) -> DescribeInstancesError {
         DescribeInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeInstancesError {
+    fn from(err: io::Error) -> DescribeInstancesError {
+        DescribeInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeInstancesError {
@@ -4528,6 +4655,11 @@ impl From<HttpDispatchError> for DescribePlayerSessionsError {
         DescribePlayerSessionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribePlayerSessionsError {
+    fn from(err: io::Error) -> DescribePlayerSessionsError {
+        DescribePlayerSessionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribePlayerSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4616,6 +4748,11 @@ impl From<CredentialsError> for DescribeRuntimeConfigurationError {
 impl From<HttpDispatchError> for DescribeRuntimeConfigurationError {
     fn from(err: HttpDispatchError) -> DescribeRuntimeConfigurationError {
         DescribeRuntimeConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeRuntimeConfigurationError {
+    fn from(err: io::Error) -> DescribeRuntimeConfigurationError {
+        DescribeRuntimeConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeRuntimeConfigurationError {
@@ -4712,6 +4849,11 @@ impl From<HttpDispatchError> for DescribeScalingPoliciesError {
         DescribeScalingPoliciesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeScalingPoliciesError {
+    fn from(err: io::Error) -> DescribeScalingPoliciesError {
+        DescribeScalingPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeScalingPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4804,6 +4946,11 @@ impl From<CredentialsError> for GetGameSessionLogUrlError {
 impl From<HttpDispatchError> for GetGameSessionLogUrlError {
     fn from(err: HttpDispatchError) -> GetGameSessionLogUrlError {
         GetGameSessionLogUrlError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetGameSessionLogUrlError {
+    fn from(err: io::Error) -> GetGameSessionLogUrlError {
+        GetGameSessionLogUrlError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetGameSessionLogUrlError {
@@ -4900,6 +5047,11 @@ impl From<HttpDispatchError> for GetInstanceAccessError {
         GetInstanceAccessError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetInstanceAccessError {
+    fn from(err: io::Error) -> GetInstanceAccessError {
+        GetInstanceAccessError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetInstanceAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4989,6 +5141,11 @@ impl From<HttpDispatchError> for ListAliasesError {
         ListAliasesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListAliasesError {
+    fn from(err: io::Error) -> ListAliasesError {
+        ListAliasesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5071,6 +5228,11 @@ impl From<CredentialsError> for ListBuildsError {
 impl From<HttpDispatchError> for ListBuildsError {
     fn from(err: HttpDispatchError) -> ListBuildsError {
         ListBuildsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListBuildsError {
+    fn from(err: io::Error) -> ListBuildsError {
+        ListBuildsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListBuildsError {
@@ -5158,6 +5320,11 @@ impl From<CredentialsError> for ListFleetsError {
 impl From<HttpDispatchError> for ListFleetsError {
     fn from(err: HttpDispatchError) -> ListFleetsError {
         ListFleetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListFleetsError {
+    fn from(err: io::Error) -> ListFleetsError {
+        ListFleetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListFleetsError {
@@ -5252,6 +5419,11 @@ impl From<HttpDispatchError> for PutScalingPolicyError {
         PutScalingPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutScalingPolicyError {
+    fn from(err: io::Error) -> PutScalingPolicyError {
+        PutScalingPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5342,6 +5514,11 @@ impl From<CredentialsError> for RequestUploadCredentialsError {
 impl From<HttpDispatchError> for RequestUploadCredentialsError {
     fn from(err: HttpDispatchError) -> RequestUploadCredentialsError {
         RequestUploadCredentialsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RequestUploadCredentialsError {
+    fn from(err: io::Error) -> RequestUploadCredentialsError {
+        RequestUploadCredentialsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RequestUploadCredentialsError {
@@ -5441,6 +5618,11 @@ impl From<HttpDispatchError> for ResolveAliasError {
         ResolveAliasError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ResolveAliasError {
+    fn from(err: io::Error) -> ResolveAliasError {
+        ResolveAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ResolveAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5535,6 +5717,11 @@ impl From<CredentialsError> for SearchGameSessionsError {
 impl From<HttpDispatchError> for SearchGameSessionsError {
     fn from(err: HttpDispatchError) -> SearchGameSessionsError {
         SearchGameSessionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SearchGameSessionsError {
+    fn from(err: io::Error) -> SearchGameSessionsError {
+        SearchGameSessionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SearchGameSessionsError {
@@ -5632,6 +5819,11 @@ impl From<HttpDispatchError> for StartGameSessionPlacementError {
         StartGameSessionPlacementError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartGameSessionPlacementError {
+    fn from(err: io::Error) -> StartGameSessionPlacementError {
+        StartGameSessionPlacementError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartGameSessionPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5726,6 +5918,11 @@ impl From<HttpDispatchError> for StopGameSessionPlacementError {
         StopGameSessionPlacementError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StopGameSessionPlacementError {
+    fn from(err: io::Error) -> StopGameSessionPlacementError {
+        StopGameSessionPlacementError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StopGameSessionPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5818,6 +6015,11 @@ impl From<HttpDispatchError> for UpdateAliasError {
         UpdateAliasError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateAliasError {
+    fn from(err: io::Error) -> UpdateAliasError {
+        UpdateAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5906,6 +6108,11 @@ impl From<CredentialsError> for UpdateBuildError {
 impl From<HttpDispatchError> for UpdateBuildError {
     fn from(err: HttpDispatchError) -> UpdateBuildError {
         UpdateBuildError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateBuildError {
+    fn from(err: io::Error) -> UpdateBuildError {
+        UpdateBuildError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateBuildError {
@@ -6013,6 +6220,11 @@ impl From<CredentialsError> for UpdateFleetAttributesError {
 impl From<HttpDispatchError> for UpdateFleetAttributesError {
     fn from(err: HttpDispatchError) -> UpdateFleetAttributesError {
         UpdateFleetAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateFleetAttributesError {
+    fn from(err: io::Error) -> UpdateFleetAttributesError {
+        UpdateFleetAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateFleetAttributesError {
@@ -6127,6 +6339,11 @@ impl From<HttpDispatchError> for UpdateFleetCapacityError {
         UpdateFleetCapacityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateFleetCapacityError {
+    fn from(err: io::Error) -> UpdateFleetCapacityError {
+        UpdateFleetCapacityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateFleetCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6237,6 +6454,11 @@ impl From<HttpDispatchError> for UpdateFleetPortSettingsError {
         UpdateFleetPortSettingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateFleetPortSettingsError {
+    fn from(err: io::Error) -> UpdateFleetPortSettingsError {
+        UpdateFleetPortSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateFleetPortSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6342,6 +6564,11 @@ impl From<HttpDispatchError> for UpdateGameSessionError {
         UpdateGameSessionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateGameSessionError {
+    fn from(err: io::Error) -> UpdateGameSessionError {
+        UpdateGameSessionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateGameSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6438,6 +6665,11 @@ impl From<HttpDispatchError> for UpdateGameSessionQueueError {
         UpdateGameSessionQueueError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateGameSessionQueueError {
+    fn from(err: io::Error) -> UpdateGameSessionQueueError {
+        UpdateGameSessionQueueError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateGameSessionQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6531,6 +6763,11 @@ impl From<CredentialsError> for UpdateRuntimeConfigurationError {
 impl From<HttpDispatchError> for UpdateRuntimeConfigurationError {
     fn from(err: HttpDispatchError) -> UpdateRuntimeConfigurationError {
         UpdateRuntimeConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRuntimeConfigurationError {
+    fn from(err: io::Error) -> UpdateRuntimeConfigurationError {
+        UpdateRuntimeConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateRuntimeConfigurationError {
@@ -6889,13 +7126,21 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAliasOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateAliasOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6913,13 +7158,21 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateBuildOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateBuildError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateBuildOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6937,13 +7190,21 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateFleetOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateFleetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateFleetOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6961,15 +7222,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateGameSessionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateGameSessionOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateGameSessionError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateGameSessionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6989,15 +7255,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateGameSessionQueueOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateGameSessionQueueOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateGameSessionQueueError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateGameSessionQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7016,15 +7285,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePlayerSessionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreatePlayerSessionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreatePlayerSessionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePlayerSessionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7043,15 +7315,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePlayerSessionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreatePlayerSessionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreatePlayerSessionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePlayerSessionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7068,11 +7343,15 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeleteAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7088,11 +7367,15 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeleteBuildError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7108,11 +7391,15 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeleteFleetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7131,15 +7418,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteGameSessionQueueOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteGameSessionQueueOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteGameSessionQueueError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteGameSessionQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7158,13 +7448,14 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteScalingPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteScalingPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7183,14 +7474,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAliasOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAliasOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7209,14 +7506,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeBuildOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeBuildOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeBuildError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7236,13 +7539,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEC2InstanceLimitsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeEC2InstanceLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEC2InstanceLimitsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEC2InstanceLimitsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -7261,13 +7571,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeFleetAttributesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeFleetAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeFleetAttributesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeFleetAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -7286,15 +7603,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeFleetCapacityOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeFleetCapacityOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeFleetCapacityError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeFleetCapacityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7313,15 +7633,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeFleetEventsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeFleetEventsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeFleetEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeFleetEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7341,13 +7664,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeFleetPortSettingsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeFleetPortSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeFleetPortSettingsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeFleetPortSettingsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -7366,13 +7696,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeFleetUtilizationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeFleetUtilizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeFleetUtilizationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeFleetUtilizationError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -7391,13 +7728,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeGameSessionDetailsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeGameSessionDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeGameSessionDetailsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeGameSessionDetailsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -7416,13 +7760,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeGameSessionPlacementOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeGameSessionPlacementError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeGameSessionPlacementOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeGameSessionPlacementError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -7441,13 +7792,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeGameSessionQueuesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeGameSessionQueuesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeGameSessionQueuesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeGameSessionQueuesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -7465,15 +7823,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeGameSessionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeGameSessionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeGameSessionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeGameSessionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7492,15 +7853,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeInstancesOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7520,15 +7886,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePlayerSessionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribePlayerSessionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribePlayerSessionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePlayerSessionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7548,13 +7917,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeRuntimeConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeRuntimeConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeRuntimeConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRuntimeConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -7573,13 +7949,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeScalingPoliciesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeScalingPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeScalingPoliciesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeScalingPoliciesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -7598,15 +7981,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetGameSessionLogUrlOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetGameSessionLogUrlOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetGameSessionLogUrlError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetGameSessionLogUrlError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7625,15 +8011,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInstanceAccessOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInstanceAccessOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetInstanceAccessError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInstanceAccessError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7652,13 +8043,21 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAliasesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListAliasesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAliasesOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAliasesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7674,13 +8073,21 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListBuildsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListBuildsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListBuildsOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBuildsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7696,13 +8103,21 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListFleetsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListFleetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListFleetsOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListFleetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7720,15 +8135,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutScalingPolicyOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PutScalingPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutScalingPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7748,13 +8168,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RequestUploadCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RequestUploadCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RequestUploadCredentialsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RequestUploadCredentialsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -7772,14 +8199,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ResolveAliasOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ResolveAliasOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ResolveAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResolveAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7798,15 +8231,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SearchGameSessionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SearchGameSessionsOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(SearchGameSessionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SearchGameSessionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7826,13 +8264,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartGameSessionPlacementOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StartGameSessionPlacementError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartGameSessionPlacementOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartGameSessionPlacementError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -7851,13 +8296,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopGameSessionPlacementOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StopGameSessionPlacementError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopGameSessionPlacementOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopGameSessionPlacementError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -7875,13 +8327,21 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateAliasOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateAliasOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7899,13 +8359,21 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateBuildOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateBuildError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateBuildOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7924,15 +8392,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateFleetAttributesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateFleetAttributesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateFleetAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateFleetAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7951,15 +8422,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateFleetCapacityOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateFleetCapacityOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateFleetCapacityError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateFleetCapacityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7979,13 +8453,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateFleetPortSettingsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateFleetPortSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateFleetPortSettingsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateFleetPortSettingsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -8003,15 +8484,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateGameSessionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateGameSessionOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateGameSessionError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateGameSessionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8031,15 +8517,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateGameSessionQueueOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateGameSessionQueueOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateGameSessionQueueError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateGameSessionQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8059,13 +8548,20 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateRuntimeConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateRuntimeConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateRuntimeConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRuntimeConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 }

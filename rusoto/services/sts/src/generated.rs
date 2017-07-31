@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1226,6 +1228,11 @@ impl From<HttpDispatchError> for AssumeRoleError {
         AssumeRoleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssumeRoleError {
+    fn from(err: io::Error) -> AssumeRoleError {
+        AssumeRoleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssumeRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1311,6 +1318,11 @@ impl From<CredentialsError> for AssumeRoleWithSAMLError {
 impl From<HttpDispatchError> for AssumeRoleWithSAMLError {
     fn from(err: HttpDispatchError) -> AssumeRoleWithSAMLError {
         AssumeRoleWithSAMLError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssumeRoleWithSAMLError {
+    fn from(err: io::Error) -> AssumeRoleWithSAMLError {
+        AssumeRoleWithSAMLError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssumeRoleWithSAMLError {
@@ -1404,6 +1416,11 @@ impl From<HttpDispatchError> for AssumeRoleWithWebIdentityError {
         AssumeRoleWithWebIdentityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssumeRoleWithWebIdentityError {
+    fn from(err: io::Error) -> AssumeRoleWithWebIdentityError {
+        AssumeRoleWithWebIdentityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssumeRoleWithWebIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1478,6 +1495,11 @@ impl From<HttpDispatchError> for DecodeAuthorizationMessageError {
         DecodeAuthorizationMessageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DecodeAuthorizationMessageError {
+    fn from(err: io::Error) -> DecodeAuthorizationMessageError {
+        DecodeAuthorizationMessageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DecodeAuthorizationMessageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1541,6 +1563,11 @@ impl From<CredentialsError> for GetCallerIdentityError {
 impl From<HttpDispatchError> for GetCallerIdentityError {
     fn from(err: HttpDispatchError) -> GetCallerIdentityError {
         GetCallerIdentityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCallerIdentityError {
+    fn from(err: io::Error) -> GetCallerIdentityError {
+        GetCallerIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetCallerIdentityError {
@@ -1618,6 +1645,11 @@ impl From<HttpDispatchError> for GetFederationTokenError {
         GetFederationTokenError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetFederationTokenError {
+    fn from(err: io::Error) -> GetFederationTokenError {
+        GetFederationTokenError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetFederationTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1688,6 +1720,11 @@ impl From<CredentialsError> for GetSessionTokenError {
 impl From<HttpDispatchError> for GetSessionTokenError {
     fn from(err: HttpDispatchError) -> GetSessionTokenError {
         GetSessionTokenError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSessionTokenError {
+    fn from(err: io::Error) -> GetSessionTokenError {
+        GetSessionTokenError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSessionTokenError {
@@ -1791,16 +1828,18 @@ impl<P, D> Sts for StsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AssumeRoleResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1814,7 +1853,11 @@ impl<P, D> Sts for StsClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(AssumeRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssumeRoleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1832,16 +1875,18 @@ impl<P, D> Sts for StsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AssumeRoleWithSAMLResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1856,8 +1901,9 @@ impl<P, D> Sts for StsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AssumeRoleWithSAMLError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssumeRoleWithSAMLError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1877,16 +1923,18 @@ impl<P, D> Sts for StsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AssumeRoleWithWebIdentityResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1900,8 +1948,11 @@ impl<P, D> Sts for StsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AssumeRoleWithWebIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssumeRoleWithWebIdentityError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -1920,16 +1971,18 @@ impl<P, D> Sts for StsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DecodeAuthorizationMessageResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1943,8 +1996,11 @@ impl<P, D> Sts for StsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DecodeAuthorizationMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DecodeAuthorizationMessageError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -1962,16 +2018,18 @@ impl<P, D> Sts for StsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetCallerIdentityResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1986,8 +2044,9 @@ impl<P, D> Sts for StsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetCallerIdentityError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCallerIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2006,16 +2065,18 @@ impl<P, D> Sts for StsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetFederationTokenResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2030,8 +2091,9 @@ impl<P, D> Sts for StsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetFederationTokenError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetFederationTokenError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2050,16 +2112,18 @@ impl<P, D> Sts for StsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetSessionTokenResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2074,8 +2138,9 @@ impl<P, D> Sts for StsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetSessionTokenError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSessionTokenError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

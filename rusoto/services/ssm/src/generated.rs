@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -4243,6 +4245,11 @@ impl From<HttpDispatchError> for AddTagsToResourceError {
         AddTagsToResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsToResourceError {
+    fn from(err: io::Error) -> AddTagsToResourceError {
+        AddTagsToResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4337,6 +4344,11 @@ impl From<HttpDispatchError> for CancelCommandError {
         CancelCommandError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelCommandError {
+    fn from(err: io::Error) -> CancelCommandError {
+        CancelCommandError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelCommandError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4412,6 +4424,11 @@ impl From<CredentialsError> for CreateActivationError {
 impl From<HttpDispatchError> for CreateActivationError {
     fn from(err: HttpDispatchError) -> CreateActivationError {
         CreateActivationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateActivationError {
+    fn from(err: io::Error) -> CreateActivationError {
+        CreateActivationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateActivationError {
@@ -4532,6 +4549,11 @@ impl From<CredentialsError> for CreateAssociationError {
 impl From<HttpDispatchError> for CreateAssociationError {
     fn from(err: HttpDispatchError) -> CreateAssociationError {
         CreateAssociationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateAssociationError {
+    fn from(err: io::Error) -> CreateAssociationError {
+        CreateAssociationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAssociationError {
@@ -4658,6 +4680,11 @@ impl From<HttpDispatchError> for CreateAssociationBatchError {
         CreateAssociationBatchError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateAssociationBatchError {
+    fn from(err: io::Error) -> CreateAssociationBatchError {
+        CreateAssociationBatchError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateAssociationBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4767,6 +4794,11 @@ impl From<HttpDispatchError> for CreateDocumentError {
         CreateDocumentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDocumentError {
+    fn from(err: io::Error) -> CreateDocumentError {
+        CreateDocumentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4848,6 +4880,11 @@ impl From<CredentialsError> for CreateMaintenanceWindowError {
 impl From<HttpDispatchError> for CreateMaintenanceWindowError {
     fn from(err: HttpDispatchError) -> CreateMaintenanceWindowError {
         CreateMaintenanceWindowError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateMaintenanceWindowError {
+    fn from(err: io::Error) -> CreateMaintenanceWindowError {
+        CreateMaintenanceWindowError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateMaintenanceWindowError {
@@ -4936,6 +4973,11 @@ impl From<HttpDispatchError> for CreatePatchBaselineError {
         CreatePatchBaselineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreatePatchBaselineError {
+    fn from(err: io::Error) -> CreatePatchBaselineError {
+        CreatePatchBaselineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreatePatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5022,6 +5064,11 @@ impl From<CredentialsError> for DeleteActivationError {
 impl From<HttpDispatchError> for DeleteActivationError {
     fn from(err: HttpDispatchError) -> DeleteActivationError {
         DeleteActivationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteActivationError {
+    fn from(err: io::Error) -> DeleteActivationError {
+        DeleteActivationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteActivationError {
@@ -5120,6 +5167,11 @@ impl From<HttpDispatchError> for DeleteAssociationError {
         DeleteAssociationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAssociationError {
+    fn from(err: io::Error) -> DeleteAssociationError {
+        DeleteAssociationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5215,6 +5267,11 @@ impl From<HttpDispatchError> for DeleteDocumentError {
         DeleteDocumentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDocumentError {
+    fn from(err: io::Error) -> DeleteDocumentError {
+        DeleteDocumentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5288,6 +5345,11 @@ impl From<CredentialsError> for DeleteMaintenanceWindowError {
 impl From<HttpDispatchError> for DeleteMaintenanceWindowError {
     fn from(err: HttpDispatchError) -> DeleteMaintenanceWindowError {
         DeleteMaintenanceWindowError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteMaintenanceWindowError {
+    fn from(err: io::Error) -> DeleteMaintenanceWindowError {
+        DeleteMaintenanceWindowError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteMaintenanceWindowError {
@@ -5371,6 +5433,11 @@ impl From<HttpDispatchError> for DeleteParameterError {
         DeleteParameterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteParameterError {
+    fn from(err: io::Error) -> DeleteParameterError {
+        DeleteParameterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5444,6 +5511,11 @@ impl From<CredentialsError> for DeleteParametersError {
 impl From<HttpDispatchError> for DeleteParametersError {
     fn from(err: HttpDispatchError) -> DeleteParametersError {
         DeleteParametersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteParametersError {
+    fn from(err: io::Error) -> DeleteParametersError {
+        DeleteParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteParametersError {
@@ -5525,6 +5597,11 @@ impl From<HttpDispatchError> for DeletePatchBaselineError {
         DeletePatchBaselineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeletePatchBaselineError {
+    fn from(err: io::Error) -> DeletePatchBaselineError {
+        DeletePatchBaselineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeletePatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5601,6 +5678,11 @@ impl From<CredentialsError> for DeregisterManagedInstanceError {
 impl From<HttpDispatchError> for DeregisterManagedInstanceError {
     fn from(err: HttpDispatchError) -> DeregisterManagedInstanceError {
         DeregisterManagedInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeregisterManagedInstanceError {
+    fn from(err: io::Error) -> DeregisterManagedInstanceError {
+        DeregisterManagedInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeregisterManagedInstanceError {
@@ -5682,6 +5764,11 @@ impl From<HttpDispatchError> for DeregisterPatchBaselineForPatchGroupError {
         DeregisterPatchBaselineForPatchGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeregisterPatchBaselineForPatchGroupError {
+    fn from(err: io::Error) -> DeregisterPatchBaselineForPatchGroupError {
+        DeregisterPatchBaselineForPatchGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeregisterPatchBaselineForPatchGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5761,6 +5848,11 @@ impl From<HttpDispatchError> for DeregisterTargetFromMaintenanceWindowError {
         DeregisterTargetFromMaintenanceWindowError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeregisterTargetFromMaintenanceWindowError {
+    fn from(err: io::Error) -> DeregisterTargetFromMaintenanceWindowError {
+        DeregisterTargetFromMaintenanceWindowError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeregisterTargetFromMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5838,6 +5930,11 @@ impl From<CredentialsError> for DeregisterTaskFromMaintenanceWindowError {
 impl From<HttpDispatchError> for DeregisterTaskFromMaintenanceWindowError {
     fn from(err: HttpDispatchError) -> DeregisterTaskFromMaintenanceWindowError {
         DeregisterTaskFromMaintenanceWindowError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeregisterTaskFromMaintenanceWindowError {
+    fn from(err: io::Error) -> DeregisterTaskFromMaintenanceWindowError {
+        DeregisterTaskFromMaintenanceWindowError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeregisterTaskFromMaintenanceWindowError {
@@ -5925,6 +6022,11 @@ impl From<CredentialsError> for DescribeActivationsError {
 impl From<HttpDispatchError> for DescribeActivationsError {
     fn from(err: HttpDispatchError) -> DescribeActivationsError {
         DescribeActivationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeActivationsError {
+    fn from(err: io::Error) -> DescribeActivationsError {
+        DescribeActivationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeActivationsError {
@@ -6018,6 +6120,11 @@ impl From<HttpDispatchError> for DescribeAssociationError {
         DescribeAssociationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAssociationError {
+    fn from(err: io::Error) -> DescribeAssociationError {
+        DescribeAssociationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6098,6 +6205,11 @@ impl From<HttpDispatchError> for DescribeAutomationExecutionsError {
         DescribeAutomationExecutionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAutomationExecutionsError {
+    fn from(err: io::Error) -> DescribeAutomationExecutionsError {
+        DescribeAutomationExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAutomationExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6171,6 +6283,11 @@ impl From<CredentialsError> for DescribeAvailablePatchesError {
 impl From<HttpDispatchError> for DescribeAvailablePatchesError {
     fn from(err: HttpDispatchError) -> DescribeAvailablePatchesError {
         DescribeAvailablePatchesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAvailablePatchesError {
+    fn from(err: io::Error) -> DescribeAvailablePatchesError {
+        DescribeAvailablePatchesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAvailablePatchesError {
@@ -6259,6 +6376,11 @@ impl From<HttpDispatchError> for DescribeDocumentError {
         DescribeDocumentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDocumentError {
+    fn from(err: io::Error) -> DescribeDocumentError {
+        DescribeDocumentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6337,6 +6459,11 @@ impl From<CredentialsError> for DescribeDocumentPermissionError {
 impl From<HttpDispatchError> for DescribeDocumentPermissionError {
     fn from(err: HttpDispatchError) -> DescribeDocumentPermissionError {
         DescribeDocumentPermissionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDocumentPermissionError {
+    fn from(err: io::Error) -> DescribeDocumentPermissionError {
+        DescribeDocumentPermissionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDocumentPermissionError {
@@ -6422,6 +6549,11 @@ impl From<HttpDispatchError> for DescribeEffectiveInstanceAssociationsError {
         DescribeEffectiveInstanceAssociationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEffectiveInstanceAssociationsError {
+    fn from(err: io::Error) -> DescribeEffectiveInstanceAssociationsError {
+        DescribeEffectiveInstanceAssociationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEffectiveInstanceAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6500,6 +6632,11 @@ impl From<CredentialsError> for DescribeEffectivePatchesForPatchBaselineError {
 impl From<HttpDispatchError> for DescribeEffectivePatchesForPatchBaselineError {
     fn from(err: HttpDispatchError) -> DescribeEffectivePatchesForPatchBaselineError {
         DescribeEffectivePatchesForPatchBaselineError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEffectivePatchesForPatchBaselineError {
+    fn from(err: io::Error) -> DescribeEffectivePatchesForPatchBaselineError {
+        DescribeEffectivePatchesForPatchBaselineError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEffectivePatchesForPatchBaselineError {
@@ -6585,6 +6722,11 @@ impl From<CredentialsError> for DescribeInstanceAssociationsStatusError {
 impl From<HttpDispatchError> for DescribeInstanceAssociationsStatusError {
     fn from(err: HttpDispatchError) -> DescribeInstanceAssociationsStatusError {
         DescribeInstanceAssociationsStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeInstanceAssociationsStatusError {
+    fn from(err: io::Error) -> DescribeInstanceAssociationsStatusError {
+        DescribeInstanceAssociationsStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeInstanceAssociationsStatusError {
@@ -6675,6 +6817,11 @@ impl From<HttpDispatchError> for DescribeInstanceInformationError {
         DescribeInstanceInformationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeInstanceInformationError {
+    fn from(err: io::Error) -> DescribeInstanceInformationError {
+        DescribeInstanceInformationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeInstanceInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6758,6 +6905,11 @@ impl From<HttpDispatchError> for DescribeInstancePatchStatesError {
         DescribeInstancePatchStatesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeInstancePatchStatesError {
+    fn from(err: io::Error) -> DescribeInstancePatchStatesError {
+        DescribeInstancePatchStatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeInstancePatchStatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6835,6 +6987,11 @@ impl From<CredentialsError> for DescribeInstancePatchStatesForPatchGroupError {
 impl From<HttpDispatchError> for DescribeInstancePatchStatesForPatchGroupError {
     fn from(err: HttpDispatchError) -> DescribeInstancePatchStatesForPatchGroupError {
         DescribeInstancePatchStatesForPatchGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeInstancePatchStatesForPatchGroupError {
+    fn from(err: io::Error) -> DescribeInstancePatchStatesForPatchGroupError {
+        DescribeInstancePatchStatesForPatchGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeInstancePatchStatesForPatchGroupError {
@@ -6930,6 +7087,11 @@ impl From<HttpDispatchError> for DescribeInstancePatchesError {
         DescribeInstancePatchesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeInstancePatchesError {
+    fn from(err: io::Error) -> DescribeInstancePatchesError {
+        DescribeInstancePatchesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeInstancePatchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7012,6 +7174,11 @@ impl From<HttpDispatchError> for DescribeMaintenanceWindowExecutionTaskInvocatio
         DescribeMaintenanceWindowExecutionTaskInvocationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeMaintenanceWindowExecutionTaskInvocationsError {
+    fn from(err: io::Error) -> DescribeMaintenanceWindowExecutionTaskInvocationsError {
+        DescribeMaintenanceWindowExecutionTaskInvocationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeMaintenanceWindowExecutionTaskInvocationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7090,6 +7257,11 @@ impl From<HttpDispatchError> for DescribeMaintenanceWindowExecutionTasksError {
         DescribeMaintenanceWindowExecutionTasksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeMaintenanceWindowExecutionTasksError {
+    fn from(err: io::Error) -> DescribeMaintenanceWindowExecutionTasksError {
+        DescribeMaintenanceWindowExecutionTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeMaintenanceWindowExecutionTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7164,6 +7336,11 @@ impl From<CredentialsError> for DescribeMaintenanceWindowExecutionsError {
 impl From<HttpDispatchError> for DescribeMaintenanceWindowExecutionsError {
     fn from(err: HttpDispatchError) -> DescribeMaintenanceWindowExecutionsError {
         DescribeMaintenanceWindowExecutionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeMaintenanceWindowExecutionsError {
+    fn from(err: io::Error) -> DescribeMaintenanceWindowExecutionsError {
+        DescribeMaintenanceWindowExecutionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeMaintenanceWindowExecutionsError {
@@ -7241,6 +7418,11 @@ impl From<CredentialsError> for DescribeMaintenanceWindowTargetsError {
 impl From<HttpDispatchError> for DescribeMaintenanceWindowTargetsError {
     fn from(err: HttpDispatchError) -> DescribeMaintenanceWindowTargetsError {
         DescribeMaintenanceWindowTargetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeMaintenanceWindowTargetsError {
+    fn from(err: io::Error) -> DescribeMaintenanceWindowTargetsError {
+        DescribeMaintenanceWindowTargetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeMaintenanceWindowTargetsError {
@@ -7321,6 +7503,11 @@ impl From<HttpDispatchError> for DescribeMaintenanceWindowTasksError {
         DescribeMaintenanceWindowTasksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeMaintenanceWindowTasksError {
+    fn from(err: io::Error) -> DescribeMaintenanceWindowTasksError {
+        DescribeMaintenanceWindowTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeMaintenanceWindowTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7394,6 +7581,11 @@ impl From<CredentialsError> for DescribeMaintenanceWindowsError {
 impl From<HttpDispatchError> for DescribeMaintenanceWindowsError {
     fn from(err: HttpDispatchError) -> DescribeMaintenanceWindowsError {
         DescribeMaintenanceWindowsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeMaintenanceWindowsError {
+    fn from(err: io::Error) -> DescribeMaintenanceWindowsError {
+        DescribeMaintenanceWindowsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeMaintenanceWindowsError {
@@ -7492,6 +7684,11 @@ impl From<HttpDispatchError> for DescribeParametersError {
         DescribeParametersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeParametersError {
+    fn from(err: io::Error) -> DescribeParametersError {
+        DescribeParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7568,6 +7765,11 @@ impl From<CredentialsError> for DescribePatchBaselinesError {
 impl From<HttpDispatchError> for DescribePatchBaselinesError {
     fn from(err: HttpDispatchError) -> DescribePatchBaselinesError {
         DescribePatchBaselinesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribePatchBaselinesError {
+    fn from(err: io::Error) -> DescribePatchBaselinesError {
+        DescribePatchBaselinesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribePatchBaselinesError {
@@ -7649,6 +7851,11 @@ impl From<HttpDispatchError> for DescribePatchGroupStateError {
         DescribePatchGroupStateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribePatchGroupStateError {
+    fn from(err: io::Error) -> DescribePatchGroupStateError {
+        DescribePatchGroupStateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribePatchGroupStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7726,6 +7933,11 @@ impl From<HttpDispatchError> for DescribePatchGroupsError {
         DescribePatchGroupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribePatchGroupsError {
+    fn from(err: io::Error) -> DescribePatchGroupsError {
+        DescribePatchGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribePatchGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7801,6 +8013,11 @@ impl From<CredentialsError> for GetAutomationExecutionError {
 impl From<HttpDispatchError> for GetAutomationExecutionError {
     fn from(err: HttpDispatchError) -> GetAutomationExecutionError {
         GetAutomationExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAutomationExecutionError {
+    fn from(err: io::Error) -> GetAutomationExecutionError {
+        GetAutomationExecutionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAutomationExecutionError {
@@ -7898,6 +8115,11 @@ impl From<HttpDispatchError> for GetCommandInvocationError {
         GetCommandInvocationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetCommandInvocationError {
+    fn from(err: io::Error) -> GetCommandInvocationError {
+        GetCommandInvocationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetCommandInvocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7976,6 +8198,11 @@ impl From<HttpDispatchError> for GetDefaultPatchBaselineError {
         GetDefaultPatchBaselineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDefaultPatchBaselineError {
+    fn from(err: io::Error) -> GetDefaultPatchBaselineError {
+        GetDefaultPatchBaselineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDefaultPatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8049,6 +8276,11 @@ impl From<CredentialsError> for GetDeployablePatchSnapshotForInstanceError {
 impl From<HttpDispatchError> for GetDeployablePatchSnapshotForInstanceError {
     fn from(err: HttpDispatchError) -> GetDeployablePatchSnapshotForInstanceError {
         GetDeployablePatchSnapshotForInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDeployablePatchSnapshotForInstanceError {
+    fn from(err: io::Error) -> GetDeployablePatchSnapshotForInstanceError {
+        GetDeployablePatchSnapshotForInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDeployablePatchSnapshotForInstanceError {
@@ -8135,6 +8367,11 @@ impl From<CredentialsError> for GetDocumentError {
 impl From<HttpDispatchError> for GetDocumentError {
     fn from(err: HttpDispatchError) -> GetDocumentError {
         GetDocumentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDocumentError {
+    fn from(err: io::Error) -> GetDocumentError {
+        GetDocumentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDocumentError {
@@ -8233,6 +8470,11 @@ impl From<HttpDispatchError> for GetInventoryError {
         GetInventoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetInventoryError {
+    fn from(err: io::Error) -> GetInventoryError {
+        GetInventoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetInventoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8321,6 +8563,11 @@ impl From<HttpDispatchError> for GetInventorySchemaError {
         GetInventorySchemaError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetInventorySchemaError {
+    fn from(err: io::Error) -> GetInventorySchemaError {
+        GetInventorySchemaError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetInventorySchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8404,6 +8651,11 @@ impl From<HttpDispatchError> for GetMaintenanceWindowError {
         GetMaintenanceWindowError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetMaintenanceWindowError {
+    fn from(err: io::Error) -> GetMaintenanceWindowError {
+        GetMaintenanceWindowError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8480,6 +8732,11 @@ impl From<CredentialsError> for GetMaintenanceWindowExecutionError {
 impl From<HttpDispatchError> for GetMaintenanceWindowExecutionError {
     fn from(err: HttpDispatchError) -> GetMaintenanceWindowExecutionError {
         GetMaintenanceWindowExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMaintenanceWindowExecutionError {
+    fn from(err: io::Error) -> GetMaintenanceWindowExecutionError {
+        GetMaintenanceWindowExecutionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetMaintenanceWindowExecutionError {
@@ -8559,6 +8816,11 @@ impl From<CredentialsError> for GetMaintenanceWindowExecutionTaskError {
 impl From<HttpDispatchError> for GetMaintenanceWindowExecutionTaskError {
     fn from(err: HttpDispatchError) -> GetMaintenanceWindowExecutionTaskError {
         GetMaintenanceWindowExecutionTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMaintenanceWindowExecutionTaskError {
+    fn from(err: io::Error) -> GetMaintenanceWindowExecutionTaskError {
+        GetMaintenanceWindowExecutionTaskError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetMaintenanceWindowExecutionTaskError {
@@ -8644,6 +8906,11 @@ impl From<CredentialsError> for GetParameterError {
 impl From<HttpDispatchError> for GetParameterError {
     fn from(err: HttpDispatchError) -> GetParameterError {
         GetParameterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetParameterError {
+    fn from(err: io::Error) -> GetParameterError {
+        GetParameterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetParameterError {
@@ -8737,6 +9004,11 @@ impl From<HttpDispatchError> for GetParameterHistoryError {
         GetParameterHistoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetParameterHistoryError {
+    fn from(err: io::Error) -> GetParameterHistoryError {
+        GetParameterHistoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetParameterHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8817,6 +9089,11 @@ impl From<CredentialsError> for GetParametersError {
 impl From<HttpDispatchError> for GetParametersError {
     fn from(err: HttpDispatchError) -> GetParametersError {
         GetParametersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetParametersError {
+    fn from(err: io::Error) -> GetParametersError {
+        GetParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetParametersError {
@@ -8919,6 +9196,11 @@ impl From<HttpDispatchError> for GetParametersByPathError {
         GetParametersByPathError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetParametersByPathError {
+    fn from(err: io::Error) -> GetParametersByPathError {
+        GetParametersByPathError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetParametersByPathError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9010,6 +9292,11 @@ impl From<HttpDispatchError> for GetPatchBaselineError {
         GetPatchBaselineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetPatchBaselineError {
+    fn from(err: io::Error) -> GetPatchBaselineError {
+        GetPatchBaselineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetPatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9082,6 +9369,11 @@ impl From<CredentialsError> for GetPatchBaselineForPatchGroupError {
 impl From<HttpDispatchError> for GetPatchBaselineForPatchGroupError {
     fn from(err: HttpDispatchError) -> GetPatchBaselineForPatchGroupError {
         GetPatchBaselineForPatchGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetPatchBaselineForPatchGroupError {
+    fn from(err: io::Error) -> GetPatchBaselineForPatchGroupError {
+        GetPatchBaselineForPatchGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetPatchBaselineForPatchGroupError {
@@ -9163,6 +9455,11 @@ impl From<CredentialsError> for ListAssociationsError {
 impl From<HttpDispatchError> for ListAssociationsError {
     fn from(err: HttpDispatchError) -> ListAssociationsError {
         ListAssociationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAssociationsError {
+    fn from(err: io::Error) -> ListAssociationsError {
+        ListAssociationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAssociationsError {
@@ -9256,6 +9553,11 @@ impl From<CredentialsError> for ListCommandInvocationsError {
 impl From<HttpDispatchError> for ListCommandInvocationsError {
     fn from(err: HttpDispatchError) -> ListCommandInvocationsError {
         ListCommandInvocationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListCommandInvocationsError {
+    fn from(err: io::Error) -> ListCommandInvocationsError {
+        ListCommandInvocationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListCommandInvocationsError {
@@ -9358,6 +9660,11 @@ impl From<HttpDispatchError> for ListCommandsError {
         ListCommandsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListCommandsError {
+    fn from(err: io::Error) -> ListCommandsError {
+        ListCommandsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListCommandsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9446,6 +9753,11 @@ impl From<HttpDispatchError> for ListDocumentVersionsError {
         ListDocumentVersionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListDocumentVersionsError {
+    fn from(err: io::Error) -> ListDocumentVersionsError {
+        ListDocumentVersionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListDocumentVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9532,6 +9844,11 @@ impl From<CredentialsError> for ListDocumentsError {
 impl From<HttpDispatchError> for ListDocumentsError {
     fn from(err: HttpDispatchError) -> ListDocumentsError {
         ListDocumentsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDocumentsError {
+    fn from(err: io::Error) -> ListDocumentsError {
+        ListDocumentsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDocumentsError {
@@ -9630,6 +9947,11 @@ impl From<HttpDispatchError> for ListInventoryEntriesError {
         ListInventoryEntriesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListInventoryEntriesError {
+    fn from(err: io::Error) -> ListInventoryEntriesError {
+        ListInventoryEntriesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListInventoryEntriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9720,6 +10042,11 @@ impl From<HttpDispatchError> for ListTagsForResourceError {
         ListTagsForResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9808,6 +10135,11 @@ impl From<CredentialsError> for ModifyDocumentPermissionError {
 impl From<HttpDispatchError> for ModifyDocumentPermissionError {
     fn from(err: HttpDispatchError) -> ModifyDocumentPermissionError {
         ModifyDocumentPermissionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyDocumentPermissionError {
+    fn from(err: io::Error) -> ModifyDocumentPermissionError {
+        ModifyDocumentPermissionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDocumentPermissionError {
@@ -9924,6 +10256,11 @@ impl From<CredentialsError> for PutInventoryError {
 impl From<HttpDispatchError> for PutInventoryError {
     fn from(err: HttpDispatchError) -> PutInventoryError {
         PutInventoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutInventoryError {
+    fn from(err: io::Error) -> PutInventoryError {
+        PutInventoryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutInventoryError {
@@ -10051,6 +10388,11 @@ impl From<HttpDispatchError> for PutParameterError {
         PutParameterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutParameterError {
+    fn from(err: io::Error) -> PutParameterError {
+        PutParameterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10138,6 +10480,11 @@ impl From<CredentialsError> for RegisterDefaultPatchBaselineError {
 impl From<HttpDispatchError> for RegisterDefaultPatchBaselineError {
     fn from(err: HttpDispatchError) -> RegisterDefaultPatchBaselineError {
         RegisterDefaultPatchBaselineError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterDefaultPatchBaselineError {
+    fn from(err: io::Error) -> RegisterDefaultPatchBaselineError {
+        RegisterDefaultPatchBaselineError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterDefaultPatchBaselineError {
@@ -10229,6 +10576,11 @@ impl From<HttpDispatchError> for RegisterPatchBaselineForPatchGroupError {
         RegisterPatchBaselineForPatchGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterPatchBaselineForPatchGroupError {
+    fn from(err: io::Error) -> RegisterPatchBaselineForPatchGroupError {
+        RegisterPatchBaselineForPatchGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterPatchBaselineForPatchGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10315,6 +10667,11 @@ impl From<CredentialsError> for RegisterTargetWithMaintenanceWindowError {
 impl From<HttpDispatchError> for RegisterTargetWithMaintenanceWindowError {
     fn from(err: HttpDispatchError) -> RegisterTargetWithMaintenanceWindowError {
         RegisterTargetWithMaintenanceWindowError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterTargetWithMaintenanceWindowError {
+    fn from(err: io::Error) -> RegisterTargetWithMaintenanceWindowError {
+        RegisterTargetWithMaintenanceWindowError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterTargetWithMaintenanceWindowError {
@@ -10406,6 +10763,11 @@ impl From<HttpDispatchError> for RegisterTaskWithMaintenanceWindowError {
         RegisterTaskWithMaintenanceWindowError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterTaskWithMaintenanceWindowError {
+    fn from(err: io::Error) -> RegisterTaskWithMaintenanceWindowError {
+        RegisterTaskWithMaintenanceWindowError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterTaskWithMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10489,6 +10851,11 @@ impl From<CredentialsError> for RemoveTagsFromResourceError {
 impl From<HttpDispatchError> for RemoveTagsFromResourceError {
     fn from(err: HttpDispatchError) -> RemoveTagsFromResourceError {
         RemoveTagsFromResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveTagsFromResourceError {
+    fn from(err: io::Error) -> RemoveTagsFromResourceError {
+        RemoveTagsFromResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -10612,6 +10979,11 @@ impl From<HttpDispatchError> for SendCommandError {
         SendCommandError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SendCommandError {
+    fn from(err: io::Error) -> SendCommandError {
+        SendCommandError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SendCommandError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10705,6 +11077,11 @@ impl From<HttpDispatchError> for StartAutomationExecutionError {
         StartAutomationExecutionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartAutomationExecutionError {
+    fn from(err: io::Error) -> StartAutomationExecutionError {
+        StartAutomationExecutionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartAutomationExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10784,6 +11161,11 @@ impl From<CredentialsError> for StopAutomationExecutionError {
 impl From<HttpDispatchError> for StopAutomationExecutionError {
     fn from(err: HttpDispatchError) -> StopAutomationExecutionError {
         StopAutomationExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopAutomationExecutionError {
+    fn from(err: io::Error) -> StopAutomationExecutionError {
+        StopAutomationExecutionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopAutomationExecutionError {
@@ -10908,6 +11290,11 @@ impl From<HttpDispatchError> for UpdateAssociationError {
         UpdateAssociationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateAssociationError {
+    fn from(err: io::Error) -> UpdateAssociationError {
+        UpdateAssociationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11012,6 +11399,11 @@ impl From<CredentialsError> for UpdateAssociationStatusError {
 impl From<HttpDispatchError> for UpdateAssociationStatusError {
     fn from(err: HttpDispatchError) -> UpdateAssociationStatusError {
         UpdateAssociationStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAssociationStatusError {
+    fn from(err: io::Error) -> UpdateAssociationStatusError {
+        UpdateAssociationStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAssociationStatusError {
@@ -11126,6 +11518,11 @@ impl From<HttpDispatchError> for UpdateDocumentError {
         UpdateDocumentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateDocumentError {
+    fn from(err: io::Error) -> UpdateDocumentError {
+        UpdateDocumentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11214,6 +11611,11 @@ impl From<HttpDispatchError> for UpdateDocumentDefaultVersionError {
         UpdateDocumentDefaultVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateDocumentDefaultVersionError {
+    fn from(err: io::Error) -> UpdateDocumentDefaultVersionError {
+        UpdateDocumentDefaultVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateDocumentDefaultVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11296,6 +11698,11 @@ impl From<HttpDispatchError> for UpdateMaintenanceWindowError {
         UpdateMaintenanceWindowError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateMaintenanceWindowError {
+    fn from(err: io::Error) -> UpdateMaintenanceWindowError {
+        UpdateMaintenanceWindowError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11372,6 +11779,11 @@ impl From<CredentialsError> for UpdateManagedInstanceRoleError {
 impl From<HttpDispatchError> for UpdateManagedInstanceRoleError {
     fn from(err: HttpDispatchError) -> UpdateManagedInstanceRoleError {
         UpdateManagedInstanceRoleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateManagedInstanceRoleError {
+    fn from(err: io::Error) -> UpdateManagedInstanceRoleError {
+        UpdateManagedInstanceRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateManagedInstanceRoleError {
@@ -11454,6 +11866,11 @@ impl From<CredentialsError> for UpdatePatchBaselineError {
 impl From<HttpDispatchError> for UpdatePatchBaselineError {
     fn from(err: HttpDispatchError) -> UpdatePatchBaselineError {
         UpdatePatchBaselineError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdatePatchBaselineError {
+    fn from(err: io::Error) -> UpdatePatchBaselineError {
+        UpdatePatchBaselineError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdatePatchBaselineError {
@@ -12042,15 +12459,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12069,14 +12491,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelCommandResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CancelCommandResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CancelCommandError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelCommandError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12095,15 +12523,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateActivationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateActivationResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateActivationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateActivationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12122,15 +12555,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateAssociationResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateAssociationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAssociationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12150,15 +12588,18 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAssociationBatchResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateAssociationBatchResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateAssociationBatchError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAssociationBatchError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12177,15 +12618,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDocumentResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateDocumentError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12205,13 +12651,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateMaintenanceWindowError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -12229,15 +12682,18 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreatePatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreatePatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12256,15 +12712,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteActivationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteActivationResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteActivationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteActivationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12283,15 +12744,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteAssociationResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteAssociationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAssociationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12310,15 +12776,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDocumentResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteDocumentError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12338,13 +12809,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteMaintenanceWindowError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -12362,15 +12840,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteParameterResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteParameterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteParameterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12389,15 +12872,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteParametersResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteParametersError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12416,15 +12904,18 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeletePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeletePatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeletePatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12444,13 +12935,20 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterManagedInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeregisterManagedInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeregisterManagedInstanceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterManagedInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -12471,13 +12969,19 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeregisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12494,13 +12998,19 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeregisterTargetFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterTargetFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12521,13 +13031,19 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeregisterTaskFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterTaskFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12545,15 +13061,18 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeActivationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeActivationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeActivationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeActivationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12572,15 +13091,18 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAssociationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeAssociationError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAssociationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12600,13 +13122,20 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAutomationExecutionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeAutomationExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAutomationExecutionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAutomationExecutionsError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -12625,13 +13154,20 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAvailablePatchesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeAvailablePatchesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAvailablePatchesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAvailablePatchesError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -12649,15 +13185,20 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDocumentResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeDocumentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12677,13 +13218,20 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDocumentPermissionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeDocumentPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDocumentPermissionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDocumentPermissionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -12700,13 +13248,19 @@ fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInst
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeEffectiveInstanceAssociationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEffectiveInstanceAssociationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12723,13 +13277,19 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeEffectivePatchesForPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEffectivePatchesForPatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12750,13 +13310,19 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInstanceAssociationsStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstanceAssociationsStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12775,13 +13341,20 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstanceInformationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInstanceInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeInstanceInformationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstanceInformationError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -12800,13 +13373,20 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancePatchStatesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInstancePatchStatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeInstancePatchStatesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstancePatchStatesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -12823,13 +13403,19 @@ fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInstancePatchStatesForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstancePatchStatesForPatchGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12848,13 +13434,20 @@ fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancePatchesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInstancePatchesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeInstancePatchesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstancePatchesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -12871,13 +13464,19 @@ fn describe_maintenance_window_execution_task_invocations(&self, input: &Describ
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12894,13 +13493,19 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowExecutionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMaintenanceWindowExecutionTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12921,13 +13526,19 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMaintenanceWindowExecutionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12946,13 +13557,19 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMaintenanceWindowTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12971,13 +13588,20 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMaintenanceWindowTasksError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -12996,13 +13620,20 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeMaintenanceWindowsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMaintenanceWindowsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -13020,15 +13651,20 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeParametersResult>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeParametersError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13048,15 +13684,18 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePatchBaselinesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribePatchBaselinesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribePatchBaselinesError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePatchBaselinesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13076,13 +13715,20 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePatchGroupStateResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribePatchGroupStateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribePatchGroupStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePatchGroupStateError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -13100,15 +13746,18 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePatchGroupsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribePatchGroupsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribePatchGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePatchGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13128,15 +13777,18 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetAutomationExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAutomationExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13155,15 +13807,18 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetCommandInvocationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetCommandInvocationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetCommandInvocationError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCommandInvocationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13181,13 +13836,20 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDefaultPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDefaultPatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -13204,13 +13866,19 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetDeployablePatchSnapshotForInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDeployablePatchSnapshotForInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13228,13 +13896,21 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDocumentResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13252,14 +13928,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInventoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInventoryResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetInventoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInventoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13278,15 +13960,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInventorySchemaResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInventorySchemaResult>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetInventorySchemaError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInventorySchemaError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13305,15 +13992,18 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetMaintenanceWindowError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13333,13 +14023,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMaintenanceWindowExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetMaintenanceWindowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetMaintenanceWindowExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetMaintenanceWindowExecutionError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -13359,13 +14056,19 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetMaintenanceWindowExecutionTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetMaintenanceWindowExecutionTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13383,14 +14086,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetParameterResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetParameterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetParameterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13409,15 +14118,18 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetParameterHistoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetParameterHistoryResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetParameterHistoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetParameterHistoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13436,14 +14148,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetParametersResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13462,15 +14180,18 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetParametersByPathResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetParametersByPathResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetParametersByPathError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetParametersByPathError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13489,15 +14210,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetPatchBaselineResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetPatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13517,13 +14243,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -13541,15 +14274,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAssociationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAssociationsResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListAssociationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAssociationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13569,15 +14307,18 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCommandInvocationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListCommandInvocationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListCommandInvocationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCommandInvocationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13596,14 +14337,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCommandsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListCommandsResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListCommandsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCommandsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13622,15 +14369,18 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDocumentVersionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDocumentVersionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListDocumentVersionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDocumentVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13649,14 +14399,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDocumentsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDocumentsResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListDocumentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDocumentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13675,15 +14431,18 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInventoryEntriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListInventoryEntriesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListInventoryEntriesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListInventoryEntriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13702,15 +14461,18 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13730,13 +14492,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyDocumentPermissionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ModifyDocumentPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ModifyDocumentPermissionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyDocumentPermissionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -13754,14 +14523,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutInventoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutInventoryResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PutInventoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutInventoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13780,14 +14555,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutParameterResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PutParameterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutParameterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13807,13 +14588,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterDefaultPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RegisterDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RegisterDefaultPatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -13834,13 +14622,19 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RegisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13861,13 +14655,19 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RegisterTargetWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterTargetWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13887,13 +14687,19 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RegisterTaskWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterTaskWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13912,15 +14718,18 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13939,13 +14748,21 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SendCommandResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(SendCommandError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SendCommandResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendCommandError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13964,13 +14781,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StartAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartAutomationExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartAutomationExecutionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -13989,13 +14813,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StopAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopAutomationExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopAutomationExecutionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -14013,15 +14844,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateAssociationResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateAssociationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAssociationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14041,13 +14877,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateAssociationStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateAssociationStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateAssociationStatusResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAssociationStatusError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -14065,15 +14908,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDocumentResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateDocumentError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14093,13 +14941,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDocumentDefaultVersionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateDocumentDefaultVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDocumentDefaultVersionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDocumentDefaultVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -14118,13 +14973,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateMaintenanceWindowError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -14143,13 +15005,20 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateManagedInstanceRoleResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateManagedInstanceRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateManagedInstanceRoleResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateManagedInstanceRoleError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -14167,15 +15036,18 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdatePatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdatePatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdatePatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

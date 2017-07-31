@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -625,6 +627,11 @@ impl From<HttpDispatchError> for AddTagsToStreamError {
         AddTagsToStreamError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsToStreamError {
+    fn from(err: io::Error) -> AddTagsToStreamError {
+        AddTagsToStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsToStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -712,6 +719,11 @@ impl From<HttpDispatchError> for CreateStreamError {
         CreateStreamError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateStreamError {
+    fn from(err: io::Error) -> CreateStreamError {
+        CreateStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -790,6 +802,11 @@ impl From<CredentialsError> for DecreaseStreamRetentionPeriodError {
 impl From<HttpDispatchError> for DecreaseStreamRetentionPeriodError {
     fn from(err: HttpDispatchError) -> DecreaseStreamRetentionPeriodError {
         DecreaseStreamRetentionPeriodError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DecreaseStreamRetentionPeriodError {
+    fn from(err: io::Error) -> DecreaseStreamRetentionPeriodError {
+        DecreaseStreamRetentionPeriodError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DecreaseStreamRetentionPeriodError {
@@ -875,6 +892,11 @@ impl From<HttpDispatchError> for DeleteStreamError {
         DeleteStreamError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteStreamError {
+    fn from(err: io::Error) -> DeleteStreamError {
+        DeleteStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -948,6 +970,11 @@ impl From<CredentialsError> for DescribeLimitsError {
 impl From<HttpDispatchError> for DescribeLimitsError {
     fn from(err: HttpDispatchError) -> DescribeLimitsError {
         DescribeLimitsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLimitsError {
+    fn from(err: io::Error) -> DescribeLimitsError {
+        DescribeLimitsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLimitsError {
@@ -1027,6 +1054,11 @@ impl From<CredentialsError> for DescribeStreamError {
 impl From<HttpDispatchError> for DescribeStreamError {
     fn from(err: HttpDispatchError) -> DescribeStreamError {
         DescribeStreamError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeStreamError {
+    fn from(err: io::Error) -> DescribeStreamError {
+        DescribeStreamError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeStreamError {
@@ -1115,6 +1147,11 @@ impl From<CredentialsError> for DisableEnhancedMonitoringError {
 impl From<HttpDispatchError> for DisableEnhancedMonitoringError {
     fn from(err: HttpDispatchError) -> DisableEnhancedMonitoringError {
         DisableEnhancedMonitoringError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableEnhancedMonitoringError {
+    fn from(err: io::Error) -> DisableEnhancedMonitoringError {
+        DisableEnhancedMonitoringError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableEnhancedMonitoringError {
@@ -1211,6 +1248,11 @@ impl From<HttpDispatchError> for EnableEnhancedMonitoringError {
         EnableEnhancedMonitoringError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableEnhancedMonitoringError {
+    fn from(err: io::Error) -> EnableEnhancedMonitoringError {
+        EnableEnhancedMonitoringError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableEnhancedMonitoringError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1303,6 +1345,11 @@ impl From<HttpDispatchError> for GetRecordsError {
         GetRecordsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRecordsError {
+    fn from(err: io::Error) -> GetRecordsError {
+        GetRecordsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1388,6 +1435,11 @@ impl From<HttpDispatchError> for GetShardIteratorError {
         GetShardIteratorError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetShardIteratorError {
+    fn from(err: io::Error) -> GetShardIteratorError {
+        GetShardIteratorError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetShardIteratorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1468,6 +1520,11 @@ impl From<HttpDispatchError> for IncreaseStreamRetentionPeriodError {
         IncreaseStreamRetentionPeriodError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for IncreaseStreamRetentionPeriodError {
+    fn from(err: io::Error) -> IncreaseStreamRetentionPeriodError {
+        IncreaseStreamRetentionPeriodError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for IncreaseStreamRetentionPeriodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1544,6 +1601,11 @@ impl From<CredentialsError> for ListStreamsError {
 impl From<HttpDispatchError> for ListStreamsError {
     fn from(err: HttpDispatchError) -> ListStreamsError {
         ListStreamsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListStreamsError {
+    fn from(err: io::Error) -> ListStreamsError {
+        ListStreamsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListStreamsError {
@@ -1628,6 +1690,11 @@ impl From<CredentialsError> for ListTagsForStreamError {
 impl From<HttpDispatchError> for ListTagsForStreamError {
     fn from(err: HttpDispatchError) -> ListTagsForStreamError {
         ListTagsForStreamError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForStreamError {
+    fn from(err: io::Error) -> ListTagsForStreamError {
+        ListTagsForStreamError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForStreamError {
@@ -1723,6 +1790,11 @@ impl From<HttpDispatchError> for MergeShardsError {
         MergeShardsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for MergeShardsError {
+    fn from(err: io::Error) -> MergeShardsError {
+        MergeShardsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for MergeShardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1808,6 +1880,11 @@ impl From<HttpDispatchError> for PutRecordError {
         PutRecordError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutRecordError {
+    fn from(err: io::Error) -> PutRecordError {
+        PutRecordError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutRecordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1890,6 +1967,11 @@ impl From<CredentialsError> for PutRecordsError {
 impl From<HttpDispatchError> for PutRecordsError {
     fn from(err: HttpDispatchError) -> PutRecordsError {
         PutRecordsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutRecordsError {
+    fn from(err: io::Error) -> PutRecordsError {
+        PutRecordsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutRecordsError {
@@ -1981,6 +2063,11 @@ impl From<CredentialsError> for RemoveTagsFromStreamError {
 impl From<HttpDispatchError> for RemoveTagsFromStreamError {
     fn from(err: HttpDispatchError) -> RemoveTagsFromStreamError {
         RemoveTagsFromStreamError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveTagsFromStreamError {
+    fn from(err: io::Error) -> RemoveTagsFromStreamError {
+        RemoveTagsFromStreamError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsFromStreamError {
@@ -2075,6 +2162,11 @@ impl From<HttpDispatchError> for SplitShardError {
         SplitShardError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SplitShardError {
+    fn from(err: io::Error) -> SplitShardError {
+        SplitShardError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SplitShardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2165,6 +2257,11 @@ impl From<CredentialsError> for UpdateShardCountError {
 impl From<HttpDispatchError> for UpdateShardCountError {
     fn from(err: HttpDispatchError) -> UpdateShardCountError {
         UpdateShardCountError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateShardCountError {
+    fn from(err: io::Error) -> UpdateShardCountError {
+        UpdateShardCountError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateShardCountError {
@@ -2323,13 +2420,14 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(AddTagsToStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2346,12 +2444,14 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(CreateStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2371,11 +2471,16 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DecreaseStreamRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DecreaseStreamRetentionPeriodError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -2391,12 +2496,14 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2412,15 +2519,20 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLimitsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeLimitsOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2439,15 +2551,20 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeStreamOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2467,13 +2584,22 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnhancedMonitoringOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DisableEnhancedMonitoringError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<EnhancedMonitoringOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableEnhancedMonitoringError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -2492,13 +2618,22 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnhancedMonitoringOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(EnableEnhancedMonitoringError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<EnhancedMonitoringOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableEnhancedMonitoringError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -2514,13 +2649,21 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRecordsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetRecordsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRecordsOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRecordsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2538,15 +2681,20 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetShardIteratorOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetShardIteratorOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetShardIteratorError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetShardIteratorError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2566,11 +2714,16 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(IncreaseStreamRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(IncreaseStreamRetentionPeriodError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -2588,13 +2741,21 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListStreamsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListStreamsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListStreamsOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListStreamsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2612,15 +2773,20 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForStreamOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListTagsForStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2637,11 +2803,15 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(MergeShardsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(MergeShardsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2657,15 +2827,20 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<PutRecordOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutRecordOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(PutRecordError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutRecordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2681,13 +2856,21 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutRecordsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(PutRecordsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutRecordsOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutRecordsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2705,13 +2888,14 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(RemoveTagsFromStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2728,11 +2912,15 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(SplitShardError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SplitShardError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2750,15 +2938,20 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateShardCountOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateShardCountOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateShardCountError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateShardCountError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -759,6 +761,11 @@ impl From<HttpDispatchError> for BatchCheckLayerAvailabilityError {
         BatchCheckLayerAvailabilityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchCheckLayerAvailabilityError {
+    fn from(err: io::Error) -> BatchCheckLayerAvailabilityError {
+        BatchCheckLayerAvailabilityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchCheckLayerAvailabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -845,6 +852,11 @@ impl From<HttpDispatchError> for BatchDeleteImageError {
         BatchDeleteImageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchDeleteImageError {
+    fn from(err: io::Error) -> BatchDeleteImageError {
+        BatchDeleteImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchDeleteImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -927,6 +939,11 @@ impl From<CredentialsError> for BatchGetImageError {
 impl From<HttpDispatchError> for BatchGetImageError {
     fn from(err: HttpDispatchError) -> BatchGetImageError {
         BatchGetImageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchGetImageError {
+    fn from(err: io::Error) -> BatchGetImageError {
+        BatchGetImageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for BatchGetImageError {
@@ -1040,6 +1057,11 @@ impl From<HttpDispatchError> for CompleteLayerUploadError {
         CompleteLayerUploadError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CompleteLayerUploadError {
+    fn from(err: io::Error) -> CompleteLayerUploadError {
+        CompleteLayerUploadError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CompleteLayerUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1136,6 +1158,11 @@ impl From<HttpDispatchError> for CreateRepositoryError {
         CreateRepositoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateRepositoryError {
+    fn from(err: io::Error) -> CreateRepositoryError {
+        CreateRepositoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1226,6 +1253,11 @@ impl From<HttpDispatchError> for DeleteRepositoryError {
         DeleteRepositoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRepositoryError {
+    fn from(err: io::Error) -> DeleteRepositoryError {
+        DeleteRepositoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1314,6 +1346,11 @@ impl From<CredentialsError> for DeleteRepositoryPolicyError {
 impl From<HttpDispatchError> for DeleteRepositoryPolicyError {
     fn from(err: HttpDispatchError) -> DeleteRepositoryPolicyError {
         DeleteRepositoryPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRepositoryPolicyError {
+    fn from(err: io::Error) -> DeleteRepositoryPolicyError {
+        DeleteRepositoryPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRepositoryPolicyError {
@@ -1408,6 +1445,11 @@ impl From<HttpDispatchError> for DescribeImagesError {
         DescribeImagesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeImagesError {
+    fn from(err: io::Error) -> DescribeImagesError {
+        DescribeImagesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1495,6 +1537,11 @@ impl From<HttpDispatchError> for DescribeRepositoriesError {
         DescribeRepositoriesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeRepositoriesError {
+    fn from(err: io::Error) -> DescribeRepositoriesError {
+        DescribeRepositoriesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1576,6 +1623,11 @@ impl From<CredentialsError> for GetAuthorizationTokenError {
 impl From<HttpDispatchError> for GetAuthorizationTokenError {
     fn from(err: HttpDispatchError) -> GetAuthorizationTokenError {
         GetAuthorizationTokenError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAuthorizationTokenError {
+    fn from(err: io::Error) -> GetAuthorizationTokenError {
+        GetAuthorizationTokenError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAuthorizationTokenError {
@@ -1675,6 +1727,11 @@ impl From<HttpDispatchError> for GetDownloadUrlForLayerError {
         GetDownloadUrlForLayerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDownloadUrlForLayerError {
+    fn from(err: io::Error) -> GetDownloadUrlForLayerError {
+        GetDownloadUrlForLayerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDownloadUrlForLayerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1768,6 +1825,11 @@ impl From<HttpDispatchError> for GetRepositoryPolicyError {
         GetRepositoryPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRepositoryPolicyError {
+    fn from(err: io::Error) -> GetRepositoryPolicyError {
+        GetRepositoryPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRepositoryPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1857,6 +1919,11 @@ impl From<HttpDispatchError> for InitiateLayerUploadError {
         InitiateLayerUploadError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for InitiateLayerUploadError {
+    fn from(err: io::Error) -> InitiateLayerUploadError {
+        InitiateLayerUploadError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for InitiateLayerUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1939,6 +2006,11 @@ impl From<CredentialsError> for ListImagesError {
 impl From<HttpDispatchError> for ListImagesError {
     fn from(err: HttpDispatchError) -> ListImagesError {
         ListImagesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListImagesError {
+    fn from(err: io::Error) -> ListImagesError {
+        ListImagesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListImagesError {
@@ -2038,6 +2110,11 @@ impl From<HttpDispatchError> for PutImageError {
         PutImageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutImageError {
+    fn from(err: io::Error) -> PutImageError {
+        PutImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2125,6 +2202,11 @@ impl From<CredentialsError> for SetRepositoryPolicyError {
 impl From<HttpDispatchError> for SetRepositoryPolicyError {
     fn from(err: HttpDispatchError) -> SetRepositoryPolicyError {
         SetRepositoryPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetRepositoryPolicyError {
+    fn from(err: io::Error) -> SetRepositoryPolicyError {
+        SetRepositoryPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetRepositoryPolicyError {
@@ -2226,6 +2308,11 @@ impl From<CredentialsError> for UploadLayerPartError {
 impl From<HttpDispatchError> for UploadLayerPartError {
     fn from(err: HttpDispatchError) -> UploadLayerPartError {
         UploadLayerPartError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UploadLayerPartError {
+    fn from(err: io::Error) -> UploadLayerPartError {
+        UploadLayerPartError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UploadLayerPartError {
@@ -2396,13 +2483,20 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchCheckLayerAvailabilityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(BatchCheckLayerAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchCheckLayerAvailabilityResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchCheckLayerAvailabilityError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -2421,15 +2515,20 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchDeleteImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchDeleteImageResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(BatchDeleteImageError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchDeleteImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2449,14 +2548,20 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetImageResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(BatchGetImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2476,15 +2581,18 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CompleteLayerUploadResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CompleteLayerUploadResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CompleteLayerUploadError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CompleteLayerUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2504,15 +2612,20 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRepositoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateRepositoryResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateRepositoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRepositoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2532,15 +2645,20 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRepositoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRepositoryResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2561,15 +2679,18 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRepositoryPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteRepositoryPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRepositoryPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2589,15 +2710,20 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeImagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeImagesResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeImagesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeImagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2617,15 +2743,18 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeRepositoriesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeRepositoriesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeRepositoriesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRepositoriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2646,15 +2775,18 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAuthorizationTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetAuthorizationTokenResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetAuthorizationTokenError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAuthorizationTokenError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2675,15 +2807,18 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDownloadUrlForLayerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDownloadUrlForLayerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetDownloadUrlForLayerError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDownloadUrlForLayerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2703,15 +2838,18 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRepositoryPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetRepositoryPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRepositoryPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2731,15 +2869,18 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<InitiateLayerUploadResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<InitiateLayerUploadResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(InitiateLayerUploadError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(InitiateLayerUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2759,13 +2900,21 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListImagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListImagesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListImagesResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListImagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2782,13 +2931,21 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(PutImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutImageResponse>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2807,15 +2964,18 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SetRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SetRepositoryPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(SetRepositoryPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetRepositoryPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2835,15 +2995,20 @@ impl<P, D> Ecr for EcrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UploadLayerPartResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UploadLayerPartResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UploadLayerPartError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UploadLayerPartError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

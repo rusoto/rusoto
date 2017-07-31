@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -439,6 +441,11 @@ impl From<HttpDispatchError> for AddTagsToCertificateError {
         AddTagsToCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsToCertificateError {
+    fn from(err: io::Error) -> AddTagsToCertificateError {
+        AddTagsToCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsToCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -528,6 +535,11 @@ impl From<HttpDispatchError> for DeleteCertificateError {
         DeleteCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteCertificateError {
+    fn from(err: io::Error) -> DeleteCertificateError {
+        DeleteCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -609,6 +621,11 @@ impl From<CredentialsError> for DescribeCertificateError {
 impl From<HttpDispatchError> for DescribeCertificateError {
     fn from(err: HttpDispatchError) -> DescribeCertificateError {
         DescribeCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCertificateError {
+    fn from(err: io::Error) -> DescribeCertificateError {
+        DescribeCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCertificateError {
@@ -698,6 +715,11 @@ impl From<HttpDispatchError> for GetCertificateError {
         GetCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetCertificateError {
+    fn from(err: io::Error) -> GetCertificateError {
+        GetCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -779,6 +801,11 @@ impl From<HttpDispatchError> for ImportCertificateError {
         ImportCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ImportCertificateError {
+    fn from(err: io::Error) -> ImportCertificateError {
+        ImportCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ImportCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -849,6 +876,11 @@ impl From<CredentialsError> for ListCertificatesError {
 impl From<HttpDispatchError> for ListCertificatesError {
     fn from(err: HttpDispatchError) -> ListCertificatesError {
         ListCertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListCertificatesError {
+    fn from(err: io::Error) -> ListCertificatesError {
+        ListCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListCertificatesError {
@@ -927,6 +959,11 @@ impl From<CredentialsError> for ListTagsForCertificateError {
 impl From<HttpDispatchError> for ListTagsForCertificateError {
     fn from(err: HttpDispatchError) -> ListTagsForCertificateError {
         ListTagsForCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForCertificateError {
+    fn from(err: io::Error) -> ListTagsForCertificateError {
+        ListTagsForCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForCertificateError {
@@ -1014,6 +1051,11 @@ impl From<HttpDispatchError> for RemoveTagsFromCertificateError {
         RemoveTagsFromCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveTagsFromCertificateError {
+    fn from(err: io::Error) -> RemoveTagsFromCertificateError {
+        RemoveTagsFromCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveTagsFromCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1093,6 +1135,11 @@ impl From<CredentialsError> for RequestCertificateError {
 impl From<HttpDispatchError> for RequestCertificateError {
     fn from(err: HttpDispatchError) -> RequestCertificateError {
         RequestCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RequestCertificateError {
+    fn from(err: io::Error) -> RequestCertificateError {
+        RequestCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RequestCertificateError {
@@ -1183,6 +1230,11 @@ impl From<CredentialsError> for ResendValidationEmailError {
 impl From<HttpDispatchError> for ResendValidationEmailError {
     fn from(err: HttpDispatchError) -> ResendValidationEmailError {
         ResendValidationEmailError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResendValidationEmailError {
+    fn from(err: io::Error) -> ResendValidationEmailError {
+        ResendValidationEmailError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResendValidationEmailError {
@@ -1308,13 +1360,14 @@ impl<P, D> Acm for AcmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(AddTagsToCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1333,13 +1386,14 @@ impl<P, D> Acm for AcmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1358,15 +1412,18 @@ impl<P, D> Acm for AcmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1385,15 +1442,20 @@ impl<P, D> Acm for AcmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetCertificateResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1412,15 +1474,18 @@ impl<P, D> Acm for AcmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ImportCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ImportCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ImportCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1439,15 +1504,20 @@ impl<P, D> Acm for AcmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCertificatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListCertificatesResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListCertificatesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1467,15 +1537,18 @@ impl<P, D> Acm for AcmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTagsForCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1495,11 +1568,16 @@ impl<P, D> Acm for AcmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RemoveTagsFromCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -1517,15 +1595,18 @@ impl<P, D> Acm for AcmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RequestCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RequestCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RequestCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RequestCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1544,13 +1625,14 @@ impl<P, D> Acm for AcmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(ResendValidationEmailError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResendValidationEmailError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

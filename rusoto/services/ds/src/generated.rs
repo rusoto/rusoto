@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1393,6 +1395,11 @@ impl From<HttpDispatchError> for AddIpRoutesError {
         AddIpRoutesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddIpRoutesError {
+    fn from(err: io::Error) -> AddIpRoutesError {
+        AddIpRoutesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddIpRoutesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1493,6 +1500,11 @@ impl From<HttpDispatchError> for AddTagsToResourceError {
         AddTagsToResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsToResourceError {
+    fn from(err: io::Error) -> AddTagsToResourceError {
+        AddTagsToResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1581,6 +1593,11 @@ impl From<CredentialsError> for CancelSchemaExtensionError {
 impl From<HttpDispatchError> for CancelSchemaExtensionError {
     fn from(err: HttpDispatchError) -> CancelSchemaExtensionError {
         CancelSchemaExtensionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CancelSchemaExtensionError {
+    fn from(err: io::Error) -> CancelSchemaExtensionError {
+        CancelSchemaExtensionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CancelSchemaExtensionError {
@@ -1674,6 +1691,11 @@ impl From<HttpDispatchError> for ConnectDirectoryError {
         ConnectDirectoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ConnectDirectoryError {
+    fn from(err: io::Error) -> ConnectDirectoryError {
+        ConnectDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ConnectDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1765,6 +1787,11 @@ impl From<CredentialsError> for CreateAliasError {
 impl From<HttpDispatchError> for CreateAliasError {
     fn from(err: HttpDispatchError) -> CreateAliasError {
         CreateAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateAliasError {
+    fn from(err: io::Error) -> CreateAliasError {
+        CreateAliasError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAliasError {
@@ -1876,6 +1903,11 @@ impl From<HttpDispatchError> for CreateComputerError {
         CreateComputerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateComputerError {
+    fn from(err: io::Error) -> CreateComputerError {
+        CreateComputerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateComputerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1977,6 +2009,11 @@ impl From<HttpDispatchError> for CreateConditionalForwarderError {
         CreateConditionalForwarderError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateConditionalForwarderError {
+    fn from(err: io::Error) -> CreateConditionalForwarderError {
+        CreateConditionalForwarderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateConditionalForwarderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2070,6 +2107,11 @@ impl From<CredentialsError> for CreateDirectoryError {
 impl From<HttpDispatchError> for CreateDirectoryError {
     fn from(err: HttpDispatchError) -> CreateDirectoryError {
         CreateDirectoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDirectoryError {
+    fn from(err: io::Error) -> CreateDirectoryError {
+        CreateDirectoryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDirectoryError {
@@ -2169,6 +2211,11 @@ impl From<HttpDispatchError> for CreateMicrosoftADError {
         CreateMicrosoftADError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateMicrosoftADError {
+    fn from(err: io::Error) -> CreateMicrosoftADError {
+        CreateMicrosoftADError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateMicrosoftADError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2263,6 +2310,11 @@ impl From<CredentialsError> for CreateSnapshotError {
 impl From<HttpDispatchError> for CreateSnapshotError {
     fn from(err: HttpDispatchError) -> CreateSnapshotError {
         CreateSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSnapshotError {
+    fn from(err: io::Error) -> CreateSnapshotError {
+        CreateSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateSnapshotError {
@@ -2364,6 +2416,11 @@ impl From<HttpDispatchError> for CreateTrustError {
         CreateTrustError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateTrustError {
+    fn from(err: io::Error) -> CreateTrustError {
+        CreateTrustError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateTrustError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2460,6 +2517,11 @@ impl From<HttpDispatchError> for DeleteConditionalForwarderError {
         DeleteConditionalForwarderError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteConditionalForwarderError {
+    fn from(err: io::Error) -> DeleteConditionalForwarderError {
+        DeleteConditionalForwarderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteConditionalForwarderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2549,6 +2611,11 @@ impl From<HttpDispatchError> for DeleteDirectoryError {
         DeleteDirectoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDirectoryError {
+    fn from(err: io::Error) -> DeleteDirectoryError {
+        DeleteDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2634,6 +2701,11 @@ impl From<CredentialsError> for DeleteSnapshotError {
 impl From<HttpDispatchError> for DeleteSnapshotError {
     fn from(err: HttpDispatchError) -> DeleteSnapshotError {
         DeleteSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSnapshotError {
+    fn from(err: io::Error) -> DeleteSnapshotError {
+        DeleteSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSnapshotError {
@@ -2729,6 +2801,11 @@ impl From<HttpDispatchError> for DeleteTrustError {
         DeleteTrustError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTrustError {
+    fn from(err: io::Error) -> DeleteTrustError {
+        DeleteTrustError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTrustError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2820,6 +2897,11 @@ impl From<CredentialsError> for DeregisterEventTopicError {
 impl From<HttpDispatchError> for DeregisterEventTopicError {
     fn from(err: HttpDispatchError) -> DeregisterEventTopicError {
         DeregisterEventTopicError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeregisterEventTopicError {
+    fn from(err: io::Error) -> DeregisterEventTopicError {
+        DeregisterEventTopicError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeregisterEventTopicError {
@@ -2916,6 +2998,11 @@ impl From<CredentialsError> for DescribeConditionalForwardersError {
 impl From<HttpDispatchError> for DescribeConditionalForwardersError {
     fn from(err: HttpDispatchError) -> DescribeConditionalForwardersError {
         DescribeConditionalForwardersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeConditionalForwardersError {
+    fn from(err: io::Error) -> DescribeConditionalForwardersError {
+        DescribeConditionalForwardersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeConditionalForwardersError {
@@ -3019,6 +3106,11 @@ impl From<HttpDispatchError> for DescribeDirectoriesError {
         DescribeDirectoriesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDirectoriesError {
+    fn from(err: io::Error) -> DescribeDirectoriesError {
+        DescribeDirectoriesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDirectoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3112,6 +3204,11 @@ impl From<CredentialsError> for DescribeEventTopicsError {
 impl From<HttpDispatchError> for DescribeEventTopicsError {
     fn from(err: HttpDispatchError) -> DescribeEventTopicsError {
         DescribeEventTopicsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventTopicsError {
+    fn from(err: io::Error) -> DescribeEventTopicsError {
+        DescribeEventTopicsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventTopicsError {
@@ -3211,6 +3308,11 @@ impl From<CredentialsError> for DescribeSnapshotsError {
 impl From<HttpDispatchError> for DescribeSnapshotsError {
     fn from(err: HttpDispatchError) -> DescribeSnapshotsError {
         DescribeSnapshotsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSnapshotsError {
+    fn from(err: io::Error) -> DescribeSnapshotsError {
+        DescribeSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSnapshotsError {
@@ -3314,6 +3416,11 @@ impl From<HttpDispatchError> for DescribeTrustsError {
         DescribeTrustsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTrustsError {
+    fn from(err: io::Error) -> DescribeTrustsError {
+        DescribeTrustsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTrustsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3397,6 +3504,11 @@ impl From<CredentialsError> for DisableRadiusError {
 impl From<HttpDispatchError> for DisableRadiusError {
     fn from(err: HttpDispatchError) -> DisableRadiusError {
         DisableRadiusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableRadiusError {
+    fn from(err: io::Error) -> DisableRadiusError {
+        DisableRadiusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableRadiusError {
@@ -3487,6 +3599,11 @@ impl From<CredentialsError> for DisableSsoError {
 impl From<HttpDispatchError> for DisableSsoError {
     fn from(err: HttpDispatchError) -> DisableSsoError {
         DisableSsoError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableSsoError {
+    fn from(err: io::Error) -> DisableSsoError {
+        DisableSsoError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableSsoError {
@@ -3583,6 +3700,11 @@ impl From<HttpDispatchError> for EnableRadiusError {
         EnableRadiusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableRadiusError {
+    fn from(err: io::Error) -> EnableRadiusError {
+        EnableRadiusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableRadiusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3675,6 +3797,11 @@ impl From<HttpDispatchError> for EnableSsoError {
         EnableSsoError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableSsoError {
+    fn from(err: io::Error) -> EnableSsoError {
+        EnableSsoError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableSsoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3763,6 +3890,11 @@ impl From<HttpDispatchError> for GetDirectoryLimitsError {
         GetDirectoryLimitsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDirectoryLimitsError {
+    fn from(err: io::Error) -> GetDirectoryLimitsError {
+        GetDirectoryLimitsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDirectoryLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3849,6 +3981,11 @@ impl From<CredentialsError> for GetSnapshotLimitsError {
 impl From<HttpDispatchError> for GetSnapshotLimitsError {
     fn from(err: HttpDispatchError) -> GetSnapshotLimitsError {
         GetSnapshotLimitsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSnapshotLimitsError {
+    fn from(err: io::Error) -> GetSnapshotLimitsError {
+        GetSnapshotLimitsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSnapshotLimitsError {
@@ -3945,6 +4082,11 @@ impl From<HttpDispatchError> for ListIpRoutesError {
         ListIpRoutesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListIpRoutesError {
+    fn from(err: io::Error) -> ListIpRoutesError {
+        ListIpRoutesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListIpRoutesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4036,6 +4178,11 @@ impl From<CredentialsError> for ListSchemaExtensionsError {
 impl From<HttpDispatchError> for ListSchemaExtensionsError {
     fn from(err: HttpDispatchError) -> ListSchemaExtensionsError {
         ListSchemaExtensionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSchemaExtensionsError {
+    fn from(err: io::Error) -> ListSchemaExtensionsError {
+        ListSchemaExtensionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListSchemaExtensionsError {
@@ -4137,6 +4284,11 @@ impl From<HttpDispatchError> for ListTagsForResourceError {
         ListTagsForResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4230,6 +4382,11 @@ impl From<CredentialsError> for RegisterEventTopicError {
 impl From<HttpDispatchError> for RegisterEventTopicError {
     fn from(err: HttpDispatchError) -> RegisterEventTopicError {
         RegisterEventTopicError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterEventTopicError {
+    fn from(err: io::Error) -> RegisterEventTopicError {
+        RegisterEventTopicError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterEventTopicError {
@@ -4327,6 +4484,11 @@ impl From<HttpDispatchError> for RemoveIpRoutesError {
         RemoveIpRoutesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveIpRoutesError {
+    fn from(err: io::Error) -> RemoveIpRoutesError {
+        RemoveIpRoutesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveIpRoutesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4418,6 +4580,11 @@ impl From<CredentialsError> for RemoveTagsFromResourceError {
 impl From<HttpDispatchError> for RemoveTagsFromResourceError {
     fn from(err: HttpDispatchError) -> RemoveTagsFromResourceError {
         RemoveTagsFromResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveTagsFromResourceError {
+    fn from(err: io::Error) -> RemoveTagsFromResourceError {
+        RemoveTagsFromResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -4512,6 +4679,11 @@ impl From<CredentialsError> for RestoreFromSnapshotError {
 impl From<HttpDispatchError> for RestoreFromSnapshotError {
     fn from(err: HttpDispatchError) -> RestoreFromSnapshotError {
         RestoreFromSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RestoreFromSnapshotError {
+    fn from(err: io::Error) -> RestoreFromSnapshotError {
+        RestoreFromSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreFromSnapshotError {
@@ -4616,6 +4788,11 @@ impl From<HttpDispatchError> for StartSchemaExtensionError {
         StartSchemaExtensionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartSchemaExtensionError {
+    fn from(err: io::Error) -> StartSchemaExtensionError {
+        StartSchemaExtensionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartSchemaExtensionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4714,6 +4891,11 @@ impl From<HttpDispatchError> for UpdateConditionalForwarderError {
         UpdateConditionalForwarderError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateConditionalForwarderError {
+    fn from(err: io::Error) -> UpdateConditionalForwarderError {
+        UpdateConditionalForwarderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateConditionalForwarderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4804,6 +4986,11 @@ impl From<CredentialsError> for UpdateRadiusError {
 impl From<HttpDispatchError> for UpdateRadiusError {
     fn from(err: HttpDispatchError) -> UpdateRadiusError {
         UpdateRadiusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRadiusError {
+    fn from(err: io::Error) -> UpdateRadiusError {
+        UpdateRadiusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateRadiusError {
@@ -4897,6 +5084,11 @@ impl From<CredentialsError> for VerifyTrustError {
 impl From<HttpDispatchError> for VerifyTrustError {
     fn from(err: HttpDispatchError) -> VerifyTrustError {
         VerifyTrustError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for VerifyTrustError {
+    fn from(err: io::Error) -> VerifyTrustError {
+        VerifyTrustError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for VerifyTrustError {
@@ -5188,13 +5380,21 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AddIpRoutesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddIpRoutesResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddIpRoutesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5213,15 +5413,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5242,15 +5447,18 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelSchemaExtensionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CancelSchemaExtensionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CancelSchemaExtensionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelSchemaExtensionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5269,15 +5477,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConnectDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ConnectDirectoryResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ConnectDirectoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ConnectDirectoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5296,13 +5509,21 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAliasResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateAliasResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5320,15 +5541,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateComputerResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateComputerResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateComputerError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateComputerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5349,13 +5575,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateConditionalForwarderResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateConditionalForwarderError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -5373,15 +5606,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDirectoryResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateDirectoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDirectoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5401,15 +5639,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateMicrosoftADResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateMicrosoftADResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateMicrosoftADError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateMicrosoftADError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5428,15 +5671,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateSnapshotResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5455,13 +5703,21 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateTrustResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTrustError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5481,13 +5737,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteConditionalForwarderResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteConditionalForwarderError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -5505,15 +5768,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDirectoryResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteDirectoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDirectoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5532,15 +5800,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteSnapshotResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5559,13 +5832,21 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteTrustResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTrustError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5584,15 +5865,18 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterEventTopicResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeregisterEventTopicResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeregisterEventTopicError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterEventTopicError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5613,13 +5897,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConditionalForwardersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeConditionalForwardersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeConditionalForwardersResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConditionalForwardersError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -5638,15 +5929,18 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDirectoriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDirectoriesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeDirectoriesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDirectoriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5666,15 +5960,18 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEventTopicsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEventTopicsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeEventTopicsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventTopicsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5694,15 +5991,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSnapshotsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeSnapshotsResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5721,15 +6023,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTrustsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTrustsResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeTrustsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTrustsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5748,14 +6055,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisableRadiusResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DisableRadiusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableRadiusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5772,13 +6085,21 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableSsoResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DisableSsoError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisableSsoResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableSsoError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5796,14 +6117,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnableRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<EnableRadiusResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(EnableRadiusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableRadiusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5820,15 +6147,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<EnableSsoResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<EnableSsoResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(EnableSsoError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableSsoError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5844,15 +6176,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDirectoryLimitsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDirectoryLimitsResult>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetDirectoryLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDirectoryLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5872,15 +6209,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetSnapshotLimitsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetSnapshotLimitsResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetSnapshotLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSnapshotLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5899,14 +6241,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListIpRoutesResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListIpRoutesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListIpRoutesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5926,15 +6274,18 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSchemaExtensionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListSchemaExtensionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListSchemaExtensionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSchemaExtensionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5954,15 +6305,18 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5982,15 +6336,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterEventTopicResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RegisterEventTopicResult>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RegisterEventTopicError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterEventTopicError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6009,15 +6368,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveIpRoutesResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RemoveIpRoutesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveIpRoutesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6038,15 +6402,18 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6066,15 +6433,18 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RestoreFromSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RestoreFromSnapshotResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RestoreFromSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreFromSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6094,15 +6464,18 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartSchemaExtensionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartSchemaExtensionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(StartSchemaExtensionError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartSchemaExtensionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6123,13 +6496,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateConditionalForwarderResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateConditionalForwarderError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -6147,14 +6527,20 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateRadiusResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateRadiusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRadiusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6173,13 +6559,21 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VerifyTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(VerifyTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<VerifyTrustResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(VerifyTrustError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -41563,6 +41565,11 @@ impl From<HttpDispatchError> for AcceptReservedInstancesExchangeQuoteError {
         AcceptReservedInstancesExchangeQuoteError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AcceptReservedInstancesExchangeQuoteError {
+    fn from(err: io::Error) -> AcceptReservedInstancesExchangeQuoteError {
+        AcceptReservedInstancesExchangeQuoteError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AcceptReservedInstancesExchangeQuoteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -41625,6 +41632,11 @@ impl From<CredentialsError> for AcceptVpcPeeringConnectionError {
 impl From<HttpDispatchError> for AcceptVpcPeeringConnectionError {
     fn from(err: HttpDispatchError) -> AcceptVpcPeeringConnectionError {
         AcceptVpcPeeringConnectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AcceptVpcPeeringConnectionError {
+    fn from(err: io::Error) -> AcceptVpcPeeringConnectionError {
+        AcceptVpcPeeringConnectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AcceptVpcPeeringConnectionError {
@@ -41691,6 +41703,11 @@ impl From<HttpDispatchError> for AllocateAddressError {
         AllocateAddressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AllocateAddressError {
+    fn from(err: io::Error) -> AllocateAddressError {
+        AllocateAddressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AllocateAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -41753,6 +41770,11 @@ impl From<HttpDispatchError> for AllocateHostsError {
         AllocateHostsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AllocateHostsError {
+    fn from(err: io::Error) -> AllocateHostsError {
+        AllocateHostsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AllocateHostsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -41813,6 +41835,11 @@ impl From<CredentialsError> for AssignIpv6AddressesError {
 impl From<HttpDispatchError> for AssignIpv6AddressesError {
     fn from(err: HttpDispatchError) -> AssignIpv6AddressesError {
         AssignIpv6AddressesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssignIpv6AddressesError {
+    fn from(err: io::Error) -> AssignIpv6AddressesError {
+        AssignIpv6AddressesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssignIpv6AddressesError {
@@ -41879,6 +41906,11 @@ impl From<HttpDispatchError> for AssignPrivateIpAddressesError {
         AssignPrivateIpAddressesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssignPrivateIpAddressesError {
+    fn from(err: io::Error) -> AssignPrivateIpAddressesError {
+        AssignPrivateIpAddressesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssignPrivateIpAddressesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -41943,6 +41975,11 @@ impl From<HttpDispatchError> for AssociateAddressError {
         AssociateAddressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssociateAddressError {
+    fn from(err: io::Error) -> AssociateAddressError {
+        AssociateAddressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssociateAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -42003,6 +42040,11 @@ impl From<CredentialsError> for AssociateDhcpOptionsError {
 impl From<HttpDispatchError> for AssociateDhcpOptionsError {
     fn from(err: HttpDispatchError) -> AssociateDhcpOptionsError {
         AssociateDhcpOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateDhcpOptionsError {
+    fn from(err: io::Error) -> AssociateDhcpOptionsError {
+        AssociateDhcpOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssociateDhcpOptionsError {
@@ -42069,6 +42111,11 @@ impl From<HttpDispatchError> for AssociateIamInstanceProfileError {
         AssociateIamInstanceProfileError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssociateIamInstanceProfileError {
+    fn from(err: io::Error) -> AssociateIamInstanceProfileError {
+        AssociateIamInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssociateIamInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -42131,6 +42178,11 @@ impl From<CredentialsError> for AssociateRouteTableError {
 impl From<HttpDispatchError> for AssociateRouteTableError {
     fn from(err: HttpDispatchError) -> AssociateRouteTableError {
         AssociateRouteTableError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateRouteTableError {
+    fn from(err: io::Error) -> AssociateRouteTableError {
+        AssociateRouteTableError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssociateRouteTableError {
@@ -42197,6 +42249,11 @@ impl From<HttpDispatchError> for AssociateSubnetCidrBlockError {
         AssociateSubnetCidrBlockError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssociateSubnetCidrBlockError {
+    fn from(err: io::Error) -> AssociateSubnetCidrBlockError {
+        AssociateSubnetCidrBlockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssociateSubnetCidrBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -42259,6 +42316,11 @@ impl From<CredentialsError> for AssociateVpcCidrBlockError {
 impl From<HttpDispatchError> for AssociateVpcCidrBlockError {
     fn from(err: HttpDispatchError) -> AssociateVpcCidrBlockError {
         AssociateVpcCidrBlockError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateVpcCidrBlockError {
+    fn from(err: io::Error) -> AssociateVpcCidrBlockError {
+        AssociateVpcCidrBlockError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssociateVpcCidrBlockError {
@@ -42325,6 +42387,11 @@ impl From<HttpDispatchError> for AttachClassicLinkVpcError {
         AttachClassicLinkVpcError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachClassicLinkVpcError {
+    fn from(err: io::Error) -> AttachClassicLinkVpcError {
+        AttachClassicLinkVpcError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachClassicLinkVpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -42387,6 +42454,11 @@ impl From<CredentialsError> for AttachInternetGatewayError {
 impl From<HttpDispatchError> for AttachInternetGatewayError {
     fn from(err: HttpDispatchError) -> AttachInternetGatewayError {
         AttachInternetGatewayError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachInternetGatewayError {
+    fn from(err: io::Error) -> AttachInternetGatewayError {
+        AttachInternetGatewayError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AttachInternetGatewayError {
@@ -42453,6 +42525,11 @@ impl From<HttpDispatchError> for AttachNetworkInterfaceError {
         AttachNetworkInterfaceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachNetworkInterfaceError {
+    fn from(err: io::Error) -> AttachNetworkInterfaceError {
+        AttachNetworkInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachNetworkInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -42517,6 +42594,11 @@ impl From<HttpDispatchError> for AttachVolumeError {
         AttachVolumeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachVolumeError {
+    fn from(err: io::Error) -> AttachVolumeError {
+        AttachVolumeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -42579,6 +42661,11 @@ impl From<HttpDispatchError> for AttachVpnGatewayError {
         AttachVpnGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachVpnGatewayError {
+    fn from(err: io::Error) -> AttachVpnGatewayError {
+        AttachVpnGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachVpnGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -42639,6 +42726,11 @@ impl From<CredentialsError> for AuthorizeSecurityGroupEgressError {
 impl From<HttpDispatchError> for AuthorizeSecurityGroupEgressError {
     fn from(err: HttpDispatchError) -> AuthorizeSecurityGroupEgressError {
         AuthorizeSecurityGroupEgressError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AuthorizeSecurityGroupEgressError {
+    fn from(err: io::Error) -> AuthorizeSecurityGroupEgressError {
+        AuthorizeSecurityGroupEgressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AuthorizeSecurityGroupEgressError {
@@ -42705,6 +42797,11 @@ impl From<HttpDispatchError> for AuthorizeSecurityGroupIngressError {
         AuthorizeSecurityGroupIngressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AuthorizeSecurityGroupIngressError {
+    fn from(err: io::Error) -> AuthorizeSecurityGroupIngressError {
+        AuthorizeSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AuthorizeSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -42769,6 +42866,11 @@ impl From<HttpDispatchError> for BundleInstanceError {
         BundleInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BundleInstanceError {
+    fn from(err: io::Error) -> BundleInstanceError {
+        BundleInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BundleInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -42831,6 +42933,11 @@ impl From<HttpDispatchError> for CancelBundleTaskError {
         CancelBundleTaskError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelBundleTaskError {
+    fn from(err: io::Error) -> CancelBundleTaskError {
+        CancelBundleTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelBundleTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -42891,6 +42998,11 @@ impl From<CredentialsError> for CancelConversionTaskError {
 impl From<HttpDispatchError> for CancelConversionTaskError {
     fn from(err: HttpDispatchError) -> CancelConversionTaskError {
         CancelConversionTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CancelConversionTaskError {
+    fn from(err: io::Error) -> CancelConversionTaskError {
+        CancelConversionTaskError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CancelConversionTaskError {
@@ -42957,6 +43069,11 @@ impl From<HttpDispatchError> for CancelExportTaskError {
         CancelExportTaskError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelExportTaskError {
+    fn from(err: io::Error) -> CancelExportTaskError {
+        CancelExportTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelExportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -43019,6 +43136,11 @@ impl From<HttpDispatchError> for CancelImportTaskError {
         CancelImportTaskError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelImportTaskError {
+    fn from(err: io::Error) -> CancelImportTaskError {
+        CancelImportTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelImportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -43079,6 +43201,11 @@ impl From<CredentialsError> for CancelReservedInstancesListingError {
 impl From<HttpDispatchError> for CancelReservedInstancesListingError {
     fn from(err: HttpDispatchError) -> CancelReservedInstancesListingError {
         CancelReservedInstancesListingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CancelReservedInstancesListingError {
+    fn from(err: io::Error) -> CancelReservedInstancesListingError {
+        CancelReservedInstancesListingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CancelReservedInstancesListingError {
@@ -43145,6 +43272,11 @@ impl From<HttpDispatchError> for EC2CancelSpotFleetRequestsError {
         EC2CancelSpotFleetRequestsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EC2CancelSpotFleetRequestsError {
+    fn from(err: io::Error) -> EC2CancelSpotFleetRequestsError {
+        EC2CancelSpotFleetRequestsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EC2CancelSpotFleetRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -43207,6 +43339,11 @@ impl From<CredentialsError> for CancelSpotInstanceRequestsError {
 impl From<HttpDispatchError> for CancelSpotInstanceRequestsError {
     fn from(err: HttpDispatchError) -> CancelSpotInstanceRequestsError {
         CancelSpotInstanceRequestsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CancelSpotInstanceRequestsError {
+    fn from(err: io::Error) -> CancelSpotInstanceRequestsError {
+        CancelSpotInstanceRequestsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CancelSpotInstanceRequestsError {
@@ -43273,6 +43410,11 @@ impl From<HttpDispatchError> for ConfirmProductInstanceError {
         ConfirmProductInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ConfirmProductInstanceError {
+    fn from(err: io::Error) -> ConfirmProductInstanceError {
+        ConfirmProductInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ConfirmProductInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -43337,6 +43479,11 @@ impl From<HttpDispatchError> for CopyImageError {
         CopyImageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CopyImageError {
+    fn from(err: io::Error) -> CopyImageError {
+        CopyImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CopyImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -43399,6 +43546,11 @@ impl From<HttpDispatchError> for CopySnapshotError {
         CopySnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CopySnapshotError {
+    fn from(err: io::Error) -> CopySnapshotError {
+        CopySnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CopySnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -43459,6 +43611,11 @@ impl From<CredentialsError> for CreateCustomerGatewayError {
 impl From<HttpDispatchError> for CreateCustomerGatewayError {
     fn from(err: HttpDispatchError) -> CreateCustomerGatewayError {
         CreateCustomerGatewayError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateCustomerGatewayError {
+    fn from(err: io::Error) -> CreateCustomerGatewayError {
+        CreateCustomerGatewayError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateCustomerGatewayError {
@@ -43525,6 +43682,11 @@ impl From<HttpDispatchError> for CreateDhcpOptionsError {
         CreateDhcpOptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDhcpOptionsError {
+    fn from(err: io::Error) -> CreateDhcpOptionsError {
+        CreateDhcpOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDhcpOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -43587,6 +43749,11 @@ impl From<CredentialsError> for CreateEgressOnlyInternetGatewayError {
 impl From<HttpDispatchError> for CreateEgressOnlyInternetGatewayError {
     fn from(err: HttpDispatchError) -> CreateEgressOnlyInternetGatewayError {
         CreateEgressOnlyInternetGatewayError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateEgressOnlyInternetGatewayError {
+    fn from(err: io::Error) -> CreateEgressOnlyInternetGatewayError {
+        CreateEgressOnlyInternetGatewayError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateEgressOnlyInternetGatewayError {
@@ -43653,6 +43820,11 @@ impl From<HttpDispatchError> for CreateFlowLogsError {
         CreateFlowLogsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateFlowLogsError {
+    fn from(err: io::Error) -> CreateFlowLogsError {
+        CreateFlowLogsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateFlowLogsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -43713,6 +43885,11 @@ impl From<CredentialsError> for CreateFpgaImageError {
 impl From<HttpDispatchError> for CreateFpgaImageError {
     fn from(err: HttpDispatchError) -> CreateFpgaImageError {
         CreateFpgaImageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateFpgaImageError {
+    fn from(err: io::Error) -> CreateFpgaImageError {
+        CreateFpgaImageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateFpgaImageError {
@@ -43777,6 +43954,11 @@ impl From<HttpDispatchError> for CreateImageError {
         CreateImageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateImageError {
+    fn from(err: io::Error) -> CreateImageError {
+        CreateImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -43837,6 +44019,11 @@ impl From<CredentialsError> for CreateInstanceExportTaskError {
 impl From<HttpDispatchError> for CreateInstanceExportTaskError {
     fn from(err: HttpDispatchError) -> CreateInstanceExportTaskError {
         CreateInstanceExportTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateInstanceExportTaskError {
+    fn from(err: io::Error) -> CreateInstanceExportTaskError {
+        CreateInstanceExportTaskError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateInstanceExportTaskError {
@@ -43903,6 +44090,11 @@ impl From<HttpDispatchError> for CreateInternetGatewayError {
         CreateInternetGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateInternetGatewayError {
+    fn from(err: io::Error) -> CreateInternetGatewayError {
+        CreateInternetGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateInternetGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -43967,6 +44159,11 @@ impl From<HttpDispatchError> for CreateKeyPairError {
         CreateKeyPairError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateKeyPairError {
+    fn from(err: io::Error) -> CreateKeyPairError {
+        CreateKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -44027,6 +44224,11 @@ impl From<CredentialsError> for CreateNatGatewayError {
 impl From<HttpDispatchError> for CreateNatGatewayError {
     fn from(err: HttpDispatchError) -> CreateNatGatewayError {
         CreateNatGatewayError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateNatGatewayError {
+    fn from(err: io::Error) -> CreateNatGatewayError {
+        CreateNatGatewayError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateNatGatewayError {
@@ -44091,6 +44293,11 @@ impl From<HttpDispatchError> for CreateNetworkAclError {
         CreateNetworkAclError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateNetworkAclError {
+    fn from(err: io::Error) -> CreateNetworkAclError {
+        CreateNetworkAclError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateNetworkAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -44151,6 +44358,11 @@ impl From<CredentialsError> for CreateNetworkAclEntryError {
 impl From<HttpDispatchError> for CreateNetworkAclEntryError {
     fn from(err: HttpDispatchError) -> CreateNetworkAclEntryError {
         CreateNetworkAclEntryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateNetworkAclEntryError {
+    fn from(err: io::Error) -> CreateNetworkAclEntryError {
+        CreateNetworkAclEntryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateNetworkAclEntryError {
@@ -44217,6 +44429,11 @@ impl From<HttpDispatchError> for CreateNetworkInterfaceError {
         CreateNetworkInterfaceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateNetworkInterfaceError {
+    fn from(err: io::Error) -> CreateNetworkInterfaceError {
+        CreateNetworkInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateNetworkInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -44279,6 +44496,11 @@ impl From<CredentialsError> for CreatePlacementGroupError {
 impl From<HttpDispatchError> for CreatePlacementGroupError {
     fn from(err: HttpDispatchError) -> CreatePlacementGroupError {
         CreatePlacementGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePlacementGroupError {
+    fn from(err: io::Error) -> CreatePlacementGroupError {
+        CreatePlacementGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePlacementGroupError {
@@ -44345,6 +44567,11 @@ impl From<HttpDispatchError> for CreateReservedInstancesListingError {
         CreateReservedInstancesListingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateReservedInstancesListingError {
+    fn from(err: io::Error) -> CreateReservedInstancesListingError {
+        CreateReservedInstancesListingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateReservedInstancesListingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -44409,6 +44636,11 @@ impl From<HttpDispatchError> for CreateRouteError {
         CreateRouteError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateRouteError {
+    fn from(err: io::Error) -> CreateRouteError {
+        CreateRouteError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -44471,6 +44703,11 @@ impl From<HttpDispatchError> for CreateRouteTableError {
         CreateRouteTableError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateRouteTableError {
+    fn from(err: io::Error) -> CreateRouteTableError {
+        CreateRouteTableError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateRouteTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -44531,6 +44768,11 @@ impl From<CredentialsError> for CreateSecurityGroupError {
 impl From<HttpDispatchError> for CreateSecurityGroupError {
     fn from(err: HttpDispatchError) -> CreateSecurityGroupError {
         CreateSecurityGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSecurityGroupError {
+    fn from(err: io::Error) -> CreateSecurityGroupError {
+        CreateSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateSecurityGroupError {
@@ -44597,6 +44839,11 @@ impl From<HttpDispatchError> for CreateSnapshotError {
         CreateSnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateSnapshotError {
+    fn from(err: io::Error) -> CreateSnapshotError {
+        CreateSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -44657,6 +44904,11 @@ impl From<CredentialsError> for CreateSpotDatafeedSubscriptionError {
 impl From<HttpDispatchError> for CreateSpotDatafeedSubscriptionError {
     fn from(err: HttpDispatchError) -> CreateSpotDatafeedSubscriptionError {
         CreateSpotDatafeedSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSpotDatafeedSubscriptionError {
+    fn from(err: io::Error) -> CreateSpotDatafeedSubscriptionError {
+        CreateSpotDatafeedSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateSpotDatafeedSubscriptionError {
@@ -44723,6 +44975,11 @@ impl From<HttpDispatchError> for CreateSubnetError {
         CreateSubnetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateSubnetError {
+    fn from(err: io::Error) -> CreateSubnetError {
+        CreateSubnetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateSubnetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -44783,6 +45040,11 @@ impl From<CredentialsError> for CreateTagsError {
 impl From<HttpDispatchError> for CreateTagsError {
     fn from(err: HttpDispatchError) -> CreateTagsError {
         CreateTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateTagsError {
+    fn from(err: io::Error) -> CreateTagsError {
+        CreateTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTagsError {
@@ -44847,6 +45109,11 @@ impl From<HttpDispatchError> for CreateVolumeError {
         CreateVolumeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateVolumeError {
+    fn from(err: io::Error) -> CreateVolumeError {
+        CreateVolumeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -44909,6 +45176,11 @@ impl From<HttpDispatchError> for CreateVpcError {
         CreateVpcError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateVpcError {
+    fn from(err: io::Error) -> CreateVpcError {
+        CreateVpcError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateVpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -44969,6 +45241,11 @@ impl From<CredentialsError> for CreateVpcEndpointError {
 impl From<HttpDispatchError> for CreateVpcEndpointError {
     fn from(err: HttpDispatchError) -> CreateVpcEndpointError {
         CreateVpcEndpointError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateVpcEndpointError {
+    fn from(err: io::Error) -> CreateVpcEndpointError {
+        CreateVpcEndpointError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateVpcEndpointError {
@@ -45035,6 +45312,11 @@ impl From<HttpDispatchError> for CreateVpcPeeringConnectionError {
         CreateVpcPeeringConnectionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateVpcPeeringConnectionError {
+    fn from(err: io::Error) -> CreateVpcPeeringConnectionError {
+        CreateVpcPeeringConnectionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateVpcPeeringConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -45097,6 +45379,11 @@ impl From<CredentialsError> for CreateVpnConnectionError {
 impl From<HttpDispatchError> for CreateVpnConnectionError {
     fn from(err: HttpDispatchError) -> CreateVpnConnectionError {
         CreateVpnConnectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateVpnConnectionError {
+    fn from(err: io::Error) -> CreateVpnConnectionError {
+        CreateVpnConnectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateVpnConnectionError {
@@ -45163,6 +45450,11 @@ impl From<HttpDispatchError> for CreateVpnConnectionRouteError {
         CreateVpnConnectionRouteError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateVpnConnectionRouteError {
+    fn from(err: io::Error) -> CreateVpnConnectionRouteError {
+        CreateVpnConnectionRouteError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateVpnConnectionRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -45227,6 +45519,11 @@ impl From<HttpDispatchError> for CreateVpnGatewayError {
         CreateVpnGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateVpnGatewayError {
+    fn from(err: io::Error) -> CreateVpnGatewayError {
+        CreateVpnGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateVpnGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -45287,6 +45584,11 @@ impl From<CredentialsError> for DeleteCustomerGatewayError {
 impl From<HttpDispatchError> for DeleteCustomerGatewayError {
     fn from(err: HttpDispatchError) -> DeleteCustomerGatewayError {
         DeleteCustomerGatewayError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteCustomerGatewayError {
+    fn from(err: io::Error) -> DeleteCustomerGatewayError {
+        DeleteCustomerGatewayError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteCustomerGatewayError {
@@ -45353,6 +45655,11 @@ impl From<HttpDispatchError> for DeleteDhcpOptionsError {
         DeleteDhcpOptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDhcpOptionsError {
+    fn from(err: io::Error) -> DeleteDhcpOptionsError {
+        DeleteDhcpOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDhcpOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -45415,6 +45722,11 @@ impl From<CredentialsError> for DeleteEgressOnlyInternetGatewayError {
 impl From<HttpDispatchError> for DeleteEgressOnlyInternetGatewayError {
     fn from(err: HttpDispatchError) -> DeleteEgressOnlyInternetGatewayError {
         DeleteEgressOnlyInternetGatewayError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteEgressOnlyInternetGatewayError {
+    fn from(err: io::Error) -> DeleteEgressOnlyInternetGatewayError {
+        DeleteEgressOnlyInternetGatewayError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteEgressOnlyInternetGatewayError {
@@ -45481,6 +45793,11 @@ impl From<HttpDispatchError> for DeleteFlowLogsError {
         DeleteFlowLogsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteFlowLogsError {
+    fn from(err: io::Error) -> DeleteFlowLogsError {
+        DeleteFlowLogsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteFlowLogsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -45541,6 +45858,11 @@ impl From<CredentialsError> for DeleteInternetGatewayError {
 impl From<HttpDispatchError> for DeleteInternetGatewayError {
     fn from(err: HttpDispatchError) -> DeleteInternetGatewayError {
         DeleteInternetGatewayError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteInternetGatewayError {
+    fn from(err: io::Error) -> DeleteInternetGatewayError {
+        DeleteInternetGatewayError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteInternetGatewayError {
@@ -45607,6 +45929,11 @@ impl From<HttpDispatchError> for DeleteKeyPairError {
         DeleteKeyPairError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteKeyPairError {
+    fn from(err: io::Error) -> DeleteKeyPairError {
+        DeleteKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -45667,6 +45994,11 @@ impl From<CredentialsError> for DeleteNatGatewayError {
 impl From<HttpDispatchError> for DeleteNatGatewayError {
     fn from(err: HttpDispatchError) -> DeleteNatGatewayError {
         DeleteNatGatewayError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteNatGatewayError {
+    fn from(err: io::Error) -> DeleteNatGatewayError {
+        DeleteNatGatewayError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteNatGatewayError {
@@ -45731,6 +46063,11 @@ impl From<HttpDispatchError> for DeleteNetworkAclError {
         DeleteNetworkAclError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteNetworkAclError {
+    fn from(err: io::Error) -> DeleteNetworkAclError {
+        DeleteNetworkAclError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteNetworkAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -45791,6 +46128,11 @@ impl From<CredentialsError> for DeleteNetworkAclEntryError {
 impl From<HttpDispatchError> for DeleteNetworkAclEntryError {
     fn from(err: HttpDispatchError) -> DeleteNetworkAclEntryError {
         DeleteNetworkAclEntryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteNetworkAclEntryError {
+    fn from(err: io::Error) -> DeleteNetworkAclEntryError {
+        DeleteNetworkAclEntryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteNetworkAclEntryError {
@@ -45857,6 +46199,11 @@ impl From<HttpDispatchError> for DeleteNetworkInterfaceError {
         DeleteNetworkInterfaceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteNetworkInterfaceError {
+    fn from(err: io::Error) -> DeleteNetworkInterfaceError {
+        DeleteNetworkInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteNetworkInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -45919,6 +46266,11 @@ impl From<CredentialsError> for DeletePlacementGroupError {
 impl From<HttpDispatchError> for DeletePlacementGroupError {
     fn from(err: HttpDispatchError) -> DeletePlacementGroupError {
         DeletePlacementGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeletePlacementGroupError {
+    fn from(err: io::Error) -> DeletePlacementGroupError {
+        DeletePlacementGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeletePlacementGroupError {
@@ -45985,6 +46337,11 @@ impl From<HttpDispatchError> for DeleteRouteError {
         DeleteRouteError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRouteError {
+    fn from(err: io::Error) -> DeleteRouteError {
+        DeleteRouteError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -46047,6 +46404,11 @@ impl From<HttpDispatchError> for DeleteRouteTableError {
         DeleteRouteTableError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRouteTableError {
+    fn from(err: io::Error) -> DeleteRouteTableError {
+        DeleteRouteTableError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRouteTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -46107,6 +46469,11 @@ impl From<CredentialsError> for DeleteSecurityGroupError {
 impl From<HttpDispatchError> for DeleteSecurityGroupError {
     fn from(err: HttpDispatchError) -> DeleteSecurityGroupError {
         DeleteSecurityGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSecurityGroupError {
+    fn from(err: io::Error) -> DeleteSecurityGroupError {
+        DeleteSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSecurityGroupError {
@@ -46173,6 +46540,11 @@ impl From<HttpDispatchError> for DeleteSnapshotError {
         DeleteSnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteSnapshotError {
+    fn from(err: io::Error) -> DeleteSnapshotError {
+        DeleteSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -46233,6 +46605,11 @@ impl From<CredentialsError> for DeleteSpotDatafeedSubscriptionError {
 impl From<HttpDispatchError> for DeleteSpotDatafeedSubscriptionError {
     fn from(err: HttpDispatchError) -> DeleteSpotDatafeedSubscriptionError {
         DeleteSpotDatafeedSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSpotDatafeedSubscriptionError {
+    fn from(err: io::Error) -> DeleteSpotDatafeedSubscriptionError {
+        DeleteSpotDatafeedSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSpotDatafeedSubscriptionError {
@@ -46299,6 +46676,11 @@ impl From<HttpDispatchError> for DeleteSubnetError {
         DeleteSubnetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteSubnetError {
+    fn from(err: io::Error) -> DeleteSubnetError {
+        DeleteSubnetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteSubnetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -46359,6 +46741,11 @@ impl From<CredentialsError> for DeleteTagsError {
 impl From<HttpDispatchError> for DeleteTagsError {
     fn from(err: HttpDispatchError) -> DeleteTagsError {
         DeleteTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTagsError {
+    fn from(err: io::Error) -> DeleteTagsError {
+        DeleteTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteTagsError {
@@ -46423,6 +46810,11 @@ impl From<HttpDispatchError> for DeleteVolumeError {
         DeleteVolumeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteVolumeError {
+    fn from(err: io::Error) -> DeleteVolumeError {
+        DeleteVolumeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -46485,6 +46877,11 @@ impl From<HttpDispatchError> for DeleteVpcError {
         DeleteVpcError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteVpcError {
+    fn from(err: io::Error) -> DeleteVpcError {
+        DeleteVpcError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteVpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -46545,6 +46942,11 @@ impl From<CredentialsError> for DeleteVpcEndpointsError {
 impl From<HttpDispatchError> for DeleteVpcEndpointsError {
     fn from(err: HttpDispatchError) -> DeleteVpcEndpointsError {
         DeleteVpcEndpointsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVpcEndpointsError {
+    fn from(err: io::Error) -> DeleteVpcEndpointsError {
+        DeleteVpcEndpointsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteVpcEndpointsError {
@@ -46611,6 +47013,11 @@ impl From<HttpDispatchError> for DeleteVpcPeeringConnectionError {
         DeleteVpcPeeringConnectionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteVpcPeeringConnectionError {
+    fn from(err: io::Error) -> DeleteVpcPeeringConnectionError {
+        DeleteVpcPeeringConnectionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteVpcPeeringConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -46673,6 +47080,11 @@ impl From<CredentialsError> for DeleteVpnConnectionError {
 impl From<HttpDispatchError> for DeleteVpnConnectionError {
     fn from(err: HttpDispatchError) -> DeleteVpnConnectionError {
         DeleteVpnConnectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVpnConnectionError {
+    fn from(err: io::Error) -> DeleteVpnConnectionError {
+        DeleteVpnConnectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteVpnConnectionError {
@@ -46739,6 +47151,11 @@ impl From<HttpDispatchError> for DeleteVpnConnectionRouteError {
         DeleteVpnConnectionRouteError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteVpnConnectionRouteError {
+    fn from(err: io::Error) -> DeleteVpnConnectionRouteError {
+        DeleteVpnConnectionRouteError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteVpnConnectionRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -46803,6 +47220,11 @@ impl From<HttpDispatchError> for DeleteVpnGatewayError {
         DeleteVpnGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteVpnGatewayError {
+    fn from(err: io::Error) -> DeleteVpnGatewayError {
+        DeleteVpnGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteVpnGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -46865,6 +47287,11 @@ impl From<HttpDispatchError> for DeregisterImageError {
         DeregisterImageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeregisterImageError {
+    fn from(err: io::Error) -> DeregisterImageError {
+        DeregisterImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeregisterImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -46925,6 +47352,11 @@ impl From<CredentialsError> for DescribeAccountAttributesError {
 impl From<HttpDispatchError> for DescribeAccountAttributesError {
     fn from(err: HttpDispatchError) -> DescribeAccountAttributesError {
         DescribeAccountAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountAttributesError {
+    fn from(err: io::Error) -> DescribeAccountAttributesError {
+        DescribeAccountAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountAttributesError {
@@ -46991,6 +47423,11 @@ impl From<HttpDispatchError> for DescribeAddressesError {
         DescribeAddressesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAddressesError {
+    fn from(err: io::Error) -> DescribeAddressesError {
+        DescribeAddressesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAddressesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -47053,6 +47490,11 @@ impl From<CredentialsError> for DescribeAvailabilityZonesError {
 impl From<HttpDispatchError> for DescribeAvailabilityZonesError {
     fn from(err: HttpDispatchError) -> DescribeAvailabilityZonesError {
         DescribeAvailabilityZonesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAvailabilityZonesError {
+    fn from(err: io::Error) -> DescribeAvailabilityZonesError {
+        DescribeAvailabilityZonesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAvailabilityZonesError {
@@ -47119,6 +47561,11 @@ impl From<HttpDispatchError> for DescribeBundleTasksError {
         DescribeBundleTasksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeBundleTasksError {
+    fn from(err: io::Error) -> DescribeBundleTasksError {
+        DescribeBundleTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeBundleTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -47181,6 +47628,11 @@ impl From<CredentialsError> for DescribeClassicLinkInstancesError {
 impl From<HttpDispatchError> for DescribeClassicLinkInstancesError {
     fn from(err: HttpDispatchError) -> DescribeClassicLinkInstancesError {
         DescribeClassicLinkInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeClassicLinkInstancesError {
+    fn from(err: io::Error) -> DescribeClassicLinkInstancesError {
+        DescribeClassicLinkInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClassicLinkInstancesError {
@@ -47247,6 +47699,11 @@ impl From<HttpDispatchError> for DescribeConversionTasksError {
         DescribeConversionTasksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeConversionTasksError {
+    fn from(err: io::Error) -> DescribeConversionTasksError {
+        DescribeConversionTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeConversionTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -47309,6 +47766,11 @@ impl From<CredentialsError> for DescribeCustomerGatewaysError {
 impl From<HttpDispatchError> for DescribeCustomerGatewaysError {
     fn from(err: HttpDispatchError) -> DescribeCustomerGatewaysError {
         DescribeCustomerGatewaysError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCustomerGatewaysError {
+    fn from(err: io::Error) -> DescribeCustomerGatewaysError {
+        DescribeCustomerGatewaysError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCustomerGatewaysError {
@@ -47375,6 +47837,11 @@ impl From<HttpDispatchError> for DescribeDhcpOptionsError {
         DescribeDhcpOptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDhcpOptionsError {
+    fn from(err: io::Error) -> DescribeDhcpOptionsError {
+        DescribeDhcpOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDhcpOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -47437,6 +47904,11 @@ impl From<CredentialsError> for DescribeEgressOnlyInternetGatewaysError {
 impl From<HttpDispatchError> for DescribeEgressOnlyInternetGatewaysError {
     fn from(err: HttpDispatchError) -> DescribeEgressOnlyInternetGatewaysError {
         DescribeEgressOnlyInternetGatewaysError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEgressOnlyInternetGatewaysError {
+    fn from(err: io::Error) -> DescribeEgressOnlyInternetGatewaysError {
+        DescribeEgressOnlyInternetGatewaysError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEgressOnlyInternetGatewaysError {
@@ -47503,6 +47975,11 @@ impl From<HttpDispatchError> for DescribeExportTasksError {
         DescribeExportTasksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeExportTasksError {
+    fn from(err: io::Error) -> DescribeExportTasksError {
+        DescribeExportTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeExportTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -47567,6 +48044,11 @@ impl From<HttpDispatchError> for DescribeFlowLogsError {
         DescribeFlowLogsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeFlowLogsError {
+    fn from(err: io::Error) -> DescribeFlowLogsError {
+        DescribeFlowLogsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeFlowLogsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -47627,6 +48109,11 @@ impl From<CredentialsError> for DescribeFpgaImagesError {
 impl From<HttpDispatchError> for DescribeFpgaImagesError {
     fn from(err: HttpDispatchError) -> DescribeFpgaImagesError {
         DescribeFpgaImagesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeFpgaImagesError {
+    fn from(err: io::Error) -> DescribeFpgaImagesError {
+        DescribeFpgaImagesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeFpgaImagesError {
@@ -47693,6 +48180,11 @@ impl From<HttpDispatchError> for DescribeHostReservationOfferingsError {
         DescribeHostReservationOfferingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeHostReservationOfferingsError {
+    fn from(err: io::Error) -> DescribeHostReservationOfferingsError {
+        DescribeHostReservationOfferingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeHostReservationOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -47755,6 +48247,11 @@ impl From<CredentialsError> for DescribeHostReservationsError {
 impl From<HttpDispatchError> for DescribeHostReservationsError {
     fn from(err: HttpDispatchError) -> DescribeHostReservationsError {
         DescribeHostReservationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeHostReservationsError {
+    fn from(err: io::Error) -> DescribeHostReservationsError {
+        DescribeHostReservationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeHostReservationsError {
@@ -47821,6 +48318,11 @@ impl From<HttpDispatchError> for DescribeHostsError {
         DescribeHostsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeHostsError {
+    fn from(err: io::Error) -> DescribeHostsError {
+        DescribeHostsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeHostsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -47881,6 +48383,11 @@ impl From<CredentialsError> for DescribeIamInstanceProfileAssociationsError {
 impl From<HttpDispatchError> for DescribeIamInstanceProfileAssociationsError {
     fn from(err: HttpDispatchError) -> DescribeIamInstanceProfileAssociationsError {
         DescribeIamInstanceProfileAssociationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeIamInstanceProfileAssociationsError {
+    fn from(err: io::Error) -> DescribeIamInstanceProfileAssociationsError {
+        DescribeIamInstanceProfileAssociationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeIamInstanceProfileAssociationsError {
@@ -47947,6 +48454,11 @@ impl From<HttpDispatchError> for DescribeIdFormatError {
         DescribeIdFormatError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeIdFormatError {
+    fn from(err: io::Error) -> DescribeIdFormatError {
+        DescribeIdFormatError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeIdFormatError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -48007,6 +48519,11 @@ impl From<CredentialsError> for DescribeIdentityIdFormatError {
 impl From<HttpDispatchError> for DescribeIdentityIdFormatError {
     fn from(err: HttpDispatchError) -> DescribeIdentityIdFormatError {
         DescribeIdentityIdFormatError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeIdentityIdFormatError {
+    fn from(err: io::Error) -> DescribeIdentityIdFormatError {
+        DescribeIdentityIdFormatError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeIdentityIdFormatError {
@@ -48073,6 +48590,11 @@ impl From<HttpDispatchError> for DescribeImageAttributeError {
         DescribeImageAttributeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeImageAttributeError {
+    fn from(err: io::Error) -> DescribeImageAttributeError {
+        DescribeImageAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeImageAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -48137,6 +48659,11 @@ impl From<HttpDispatchError> for DescribeImagesError {
         DescribeImagesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeImagesError {
+    fn from(err: io::Error) -> DescribeImagesError {
+        DescribeImagesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -48197,6 +48724,11 @@ impl From<CredentialsError> for DescribeImportImageTasksError {
 impl From<HttpDispatchError> for DescribeImportImageTasksError {
     fn from(err: HttpDispatchError) -> DescribeImportImageTasksError {
         DescribeImportImageTasksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeImportImageTasksError {
+    fn from(err: io::Error) -> DescribeImportImageTasksError {
+        DescribeImportImageTasksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeImportImageTasksError {
@@ -48263,6 +48795,11 @@ impl From<HttpDispatchError> for DescribeImportSnapshotTasksError {
         DescribeImportSnapshotTasksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeImportSnapshotTasksError {
+    fn from(err: io::Error) -> DescribeImportSnapshotTasksError {
+        DescribeImportSnapshotTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeImportSnapshotTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -48325,6 +48862,11 @@ impl From<CredentialsError> for DescribeInstanceAttributeError {
 impl From<HttpDispatchError> for DescribeInstanceAttributeError {
     fn from(err: HttpDispatchError) -> DescribeInstanceAttributeError {
         DescribeInstanceAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeInstanceAttributeError {
+    fn from(err: io::Error) -> DescribeInstanceAttributeError {
+        DescribeInstanceAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeInstanceAttributeError {
@@ -48391,6 +48933,11 @@ impl From<HttpDispatchError> for DescribeInstanceStatusError {
         DescribeInstanceStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeInstanceStatusError {
+    fn from(err: io::Error) -> DescribeInstanceStatusError {
+        DescribeInstanceStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeInstanceStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -48453,6 +49000,11 @@ impl From<CredentialsError> for DescribeInstancesError {
 impl From<HttpDispatchError> for DescribeInstancesError {
     fn from(err: HttpDispatchError) -> DescribeInstancesError {
         DescribeInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeInstancesError {
+    fn from(err: io::Error) -> DescribeInstancesError {
+        DescribeInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeInstancesError {
@@ -48519,6 +49071,11 @@ impl From<HttpDispatchError> for DescribeInternetGatewaysError {
         DescribeInternetGatewaysError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeInternetGatewaysError {
+    fn from(err: io::Error) -> DescribeInternetGatewaysError {
+        DescribeInternetGatewaysError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeInternetGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -48583,6 +49140,11 @@ impl From<HttpDispatchError> for DescribeKeyPairsError {
         DescribeKeyPairsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeKeyPairsError {
+    fn from(err: io::Error) -> DescribeKeyPairsError {
+        DescribeKeyPairsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeKeyPairsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -48643,6 +49205,11 @@ impl From<CredentialsError> for DescribeMovingAddressesError {
 impl From<HttpDispatchError> for DescribeMovingAddressesError {
     fn from(err: HttpDispatchError) -> DescribeMovingAddressesError {
         DescribeMovingAddressesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeMovingAddressesError {
+    fn from(err: io::Error) -> DescribeMovingAddressesError {
+        DescribeMovingAddressesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeMovingAddressesError {
@@ -48709,6 +49276,11 @@ impl From<HttpDispatchError> for DescribeNatGatewaysError {
         DescribeNatGatewaysError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeNatGatewaysError {
+    fn from(err: io::Error) -> DescribeNatGatewaysError {
+        DescribeNatGatewaysError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeNatGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -48771,6 +49343,11 @@ impl From<CredentialsError> for DescribeNetworkAclsError {
 impl From<HttpDispatchError> for DescribeNetworkAclsError {
     fn from(err: HttpDispatchError) -> DescribeNetworkAclsError {
         DescribeNetworkAclsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeNetworkAclsError {
+    fn from(err: io::Error) -> DescribeNetworkAclsError {
+        DescribeNetworkAclsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeNetworkAclsError {
@@ -48837,6 +49414,11 @@ impl From<HttpDispatchError> for DescribeNetworkInterfaceAttributeError {
         DescribeNetworkInterfaceAttributeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeNetworkInterfaceAttributeError {
+    fn from(err: io::Error) -> DescribeNetworkInterfaceAttributeError {
+        DescribeNetworkInterfaceAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeNetworkInterfaceAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -48899,6 +49481,11 @@ impl From<CredentialsError> for DescribeNetworkInterfacesError {
 impl From<HttpDispatchError> for DescribeNetworkInterfacesError {
     fn from(err: HttpDispatchError) -> DescribeNetworkInterfacesError {
         DescribeNetworkInterfacesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeNetworkInterfacesError {
+    fn from(err: io::Error) -> DescribeNetworkInterfacesError {
+        DescribeNetworkInterfacesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeNetworkInterfacesError {
@@ -48965,6 +49552,11 @@ impl From<HttpDispatchError> for DescribePlacementGroupsError {
         DescribePlacementGroupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribePlacementGroupsError {
+    fn from(err: io::Error) -> DescribePlacementGroupsError {
+        DescribePlacementGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribePlacementGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -49027,6 +49619,11 @@ impl From<CredentialsError> for DescribePrefixListsError {
 impl From<HttpDispatchError> for DescribePrefixListsError {
     fn from(err: HttpDispatchError) -> DescribePrefixListsError {
         DescribePrefixListsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribePrefixListsError {
+    fn from(err: io::Error) -> DescribePrefixListsError {
+        DescribePrefixListsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribePrefixListsError {
@@ -49093,6 +49690,11 @@ impl From<HttpDispatchError> for DescribeRegionsError {
         DescribeRegionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeRegionsError {
+    fn from(err: io::Error) -> DescribeRegionsError {
+        DescribeRegionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeRegionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -49153,6 +49755,11 @@ impl From<CredentialsError> for DescribeReservedInstancesError {
 impl From<HttpDispatchError> for DescribeReservedInstancesError {
     fn from(err: HttpDispatchError) -> DescribeReservedInstancesError {
         DescribeReservedInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeReservedInstancesError {
+    fn from(err: io::Error) -> DescribeReservedInstancesError {
+        DescribeReservedInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReservedInstancesError {
@@ -49219,6 +49826,11 @@ impl From<HttpDispatchError> for DescribeReservedInstancesListingsError {
         DescribeReservedInstancesListingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeReservedInstancesListingsError {
+    fn from(err: io::Error) -> DescribeReservedInstancesListingsError {
+        DescribeReservedInstancesListingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeReservedInstancesListingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -49281,6 +49893,11 @@ impl From<CredentialsError> for DescribeReservedInstancesModificationsError {
 impl From<HttpDispatchError> for DescribeReservedInstancesModificationsError {
     fn from(err: HttpDispatchError) -> DescribeReservedInstancesModificationsError {
         DescribeReservedInstancesModificationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeReservedInstancesModificationsError {
+    fn from(err: io::Error) -> DescribeReservedInstancesModificationsError {
+        DescribeReservedInstancesModificationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReservedInstancesModificationsError {
@@ -49347,6 +49964,11 @@ impl From<HttpDispatchError> for DescribeReservedInstancesOfferingsError {
         DescribeReservedInstancesOfferingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeReservedInstancesOfferingsError {
+    fn from(err: io::Error) -> DescribeReservedInstancesOfferingsError {
+        DescribeReservedInstancesOfferingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeReservedInstancesOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -49409,6 +50031,11 @@ impl From<CredentialsError> for DescribeRouteTablesError {
 impl From<HttpDispatchError> for DescribeRouteTablesError {
     fn from(err: HttpDispatchError) -> DescribeRouteTablesError {
         DescribeRouteTablesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeRouteTablesError {
+    fn from(err: io::Error) -> DescribeRouteTablesError {
+        DescribeRouteTablesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeRouteTablesError {
@@ -49475,6 +50102,11 @@ impl From<HttpDispatchError> for DescribeScheduledInstanceAvailabilityError {
         DescribeScheduledInstanceAvailabilityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeScheduledInstanceAvailabilityError {
+    fn from(err: io::Error) -> DescribeScheduledInstanceAvailabilityError {
+        DescribeScheduledInstanceAvailabilityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeScheduledInstanceAvailabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -49537,6 +50169,11 @@ impl From<CredentialsError> for DescribeScheduledInstancesError {
 impl From<HttpDispatchError> for DescribeScheduledInstancesError {
     fn from(err: HttpDispatchError) -> DescribeScheduledInstancesError {
         DescribeScheduledInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeScheduledInstancesError {
+    fn from(err: io::Error) -> DescribeScheduledInstancesError {
+        DescribeScheduledInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeScheduledInstancesError {
@@ -49603,6 +50240,11 @@ impl From<HttpDispatchError> for DescribeSecurityGroupReferencesError {
         DescribeSecurityGroupReferencesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeSecurityGroupReferencesError {
+    fn from(err: io::Error) -> DescribeSecurityGroupReferencesError {
+        DescribeSecurityGroupReferencesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeSecurityGroupReferencesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -49665,6 +50307,11 @@ impl From<CredentialsError> for DescribeSecurityGroupsError {
 impl From<HttpDispatchError> for DescribeSecurityGroupsError {
     fn from(err: HttpDispatchError) -> DescribeSecurityGroupsError {
         DescribeSecurityGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSecurityGroupsError {
+    fn from(err: io::Error) -> DescribeSecurityGroupsError {
+        DescribeSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSecurityGroupsError {
@@ -49731,6 +50378,11 @@ impl From<HttpDispatchError> for DescribeSnapshotAttributeError {
         DescribeSnapshotAttributeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeSnapshotAttributeError {
+    fn from(err: io::Error) -> DescribeSnapshotAttributeError {
+        DescribeSnapshotAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeSnapshotAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -49793,6 +50445,11 @@ impl From<CredentialsError> for DescribeSnapshotsError {
 impl From<HttpDispatchError> for DescribeSnapshotsError {
     fn from(err: HttpDispatchError) -> DescribeSnapshotsError {
         DescribeSnapshotsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSnapshotsError {
+    fn from(err: io::Error) -> DescribeSnapshotsError {
+        DescribeSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSnapshotsError {
@@ -49859,6 +50516,11 @@ impl From<HttpDispatchError> for DescribeSpotDatafeedSubscriptionError {
         DescribeSpotDatafeedSubscriptionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeSpotDatafeedSubscriptionError {
+    fn from(err: io::Error) -> DescribeSpotDatafeedSubscriptionError {
+        DescribeSpotDatafeedSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeSpotDatafeedSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -49921,6 +50583,11 @@ impl From<CredentialsError> for DescribeSpotFleetInstancesError {
 impl From<HttpDispatchError> for DescribeSpotFleetInstancesError {
     fn from(err: HttpDispatchError) -> DescribeSpotFleetInstancesError {
         DescribeSpotFleetInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSpotFleetInstancesError {
+    fn from(err: io::Error) -> DescribeSpotFleetInstancesError {
+        DescribeSpotFleetInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSpotFleetInstancesError {
@@ -49987,6 +50654,11 @@ impl From<HttpDispatchError> for DescribeSpotFleetRequestHistoryError {
         DescribeSpotFleetRequestHistoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeSpotFleetRequestHistoryError {
+    fn from(err: io::Error) -> DescribeSpotFleetRequestHistoryError {
+        DescribeSpotFleetRequestHistoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeSpotFleetRequestHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -50049,6 +50721,11 @@ impl From<CredentialsError> for DescribeSpotFleetRequestsError {
 impl From<HttpDispatchError> for DescribeSpotFleetRequestsError {
     fn from(err: HttpDispatchError) -> DescribeSpotFleetRequestsError {
         DescribeSpotFleetRequestsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSpotFleetRequestsError {
+    fn from(err: io::Error) -> DescribeSpotFleetRequestsError {
+        DescribeSpotFleetRequestsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSpotFleetRequestsError {
@@ -50115,6 +50792,11 @@ impl From<HttpDispatchError> for DescribeSpotInstanceRequestsError {
         DescribeSpotInstanceRequestsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeSpotInstanceRequestsError {
+    fn from(err: io::Error) -> DescribeSpotInstanceRequestsError {
+        DescribeSpotInstanceRequestsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeSpotInstanceRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -50177,6 +50859,11 @@ impl From<CredentialsError> for DescribeSpotPriceHistoryError {
 impl From<HttpDispatchError> for DescribeSpotPriceHistoryError {
     fn from(err: HttpDispatchError) -> DescribeSpotPriceHistoryError {
         DescribeSpotPriceHistoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSpotPriceHistoryError {
+    fn from(err: io::Error) -> DescribeSpotPriceHistoryError {
+        DescribeSpotPriceHistoryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSpotPriceHistoryError {
@@ -50243,6 +50930,11 @@ impl From<HttpDispatchError> for DescribeStaleSecurityGroupsError {
         DescribeStaleSecurityGroupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeStaleSecurityGroupsError {
+    fn from(err: io::Error) -> DescribeStaleSecurityGroupsError {
+        DescribeStaleSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeStaleSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -50307,6 +50999,11 @@ impl From<HttpDispatchError> for DescribeSubnetsError {
         DescribeSubnetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeSubnetsError {
+    fn from(err: io::Error) -> DescribeSubnetsError {
+        DescribeSubnetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeSubnetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -50369,6 +51066,11 @@ impl From<HttpDispatchError> for DescribeTagsError {
         DescribeTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTagsError {
+    fn from(err: io::Error) -> DescribeTagsError {
+        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -50429,6 +51131,11 @@ impl From<CredentialsError> for DescribeVolumeAttributeError {
 impl From<HttpDispatchError> for DescribeVolumeAttributeError {
     fn from(err: HttpDispatchError) -> DescribeVolumeAttributeError {
         DescribeVolumeAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVolumeAttributeError {
+    fn from(err: io::Error) -> DescribeVolumeAttributeError {
+        DescribeVolumeAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeVolumeAttributeError {
@@ -50495,6 +51202,11 @@ impl From<HttpDispatchError> for DescribeVolumeStatusError {
         DescribeVolumeStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVolumeStatusError {
+    fn from(err: io::Error) -> DescribeVolumeStatusError {
+        DescribeVolumeStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVolumeStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -50559,6 +51271,11 @@ impl From<HttpDispatchError> for DescribeVolumesError {
         DescribeVolumesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVolumesError {
+    fn from(err: io::Error) -> DescribeVolumesError {
+        DescribeVolumesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -50619,6 +51336,11 @@ impl From<CredentialsError> for DescribeVolumesModificationsError {
 impl From<HttpDispatchError> for DescribeVolumesModificationsError {
     fn from(err: HttpDispatchError) -> DescribeVolumesModificationsError {
         DescribeVolumesModificationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVolumesModificationsError {
+    fn from(err: io::Error) -> DescribeVolumesModificationsError {
+        DescribeVolumesModificationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeVolumesModificationsError {
@@ -50685,6 +51407,11 @@ impl From<HttpDispatchError> for DescribeVpcAttributeError {
         DescribeVpcAttributeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVpcAttributeError {
+    fn from(err: io::Error) -> DescribeVpcAttributeError {
+        DescribeVpcAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVpcAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -50747,6 +51474,11 @@ impl From<CredentialsError> for DescribeVpcClassicLinkError {
 impl From<HttpDispatchError> for DescribeVpcClassicLinkError {
     fn from(err: HttpDispatchError) -> DescribeVpcClassicLinkError {
         DescribeVpcClassicLinkError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVpcClassicLinkError {
+    fn from(err: io::Error) -> DescribeVpcClassicLinkError {
+        DescribeVpcClassicLinkError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeVpcClassicLinkError {
@@ -50813,6 +51545,11 @@ impl From<HttpDispatchError> for DescribeVpcClassicLinkDnsSupportError {
         DescribeVpcClassicLinkDnsSupportError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVpcClassicLinkDnsSupportError {
+    fn from(err: io::Error) -> DescribeVpcClassicLinkDnsSupportError {
+        DescribeVpcClassicLinkDnsSupportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVpcClassicLinkDnsSupportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -50875,6 +51612,11 @@ impl From<CredentialsError> for DescribeVpcEndpointServicesError {
 impl From<HttpDispatchError> for DescribeVpcEndpointServicesError {
     fn from(err: HttpDispatchError) -> DescribeVpcEndpointServicesError {
         DescribeVpcEndpointServicesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVpcEndpointServicesError {
+    fn from(err: io::Error) -> DescribeVpcEndpointServicesError {
+        DescribeVpcEndpointServicesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeVpcEndpointServicesError {
@@ -50941,6 +51683,11 @@ impl From<HttpDispatchError> for DescribeVpcEndpointsError {
         DescribeVpcEndpointsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVpcEndpointsError {
+    fn from(err: io::Error) -> DescribeVpcEndpointsError {
+        DescribeVpcEndpointsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVpcEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -51003,6 +51750,11 @@ impl From<CredentialsError> for DescribeVpcPeeringConnectionsError {
 impl From<HttpDispatchError> for DescribeVpcPeeringConnectionsError {
     fn from(err: HttpDispatchError) -> DescribeVpcPeeringConnectionsError {
         DescribeVpcPeeringConnectionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVpcPeeringConnectionsError {
+    fn from(err: io::Error) -> DescribeVpcPeeringConnectionsError {
+        DescribeVpcPeeringConnectionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeVpcPeeringConnectionsError {
@@ -51069,6 +51821,11 @@ impl From<HttpDispatchError> for DescribeVpcsError {
         DescribeVpcsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVpcsError {
+    fn from(err: io::Error) -> DescribeVpcsError {
+        DescribeVpcsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVpcsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -51129,6 +51886,11 @@ impl From<CredentialsError> for DescribeVpnConnectionsError {
 impl From<HttpDispatchError> for DescribeVpnConnectionsError {
     fn from(err: HttpDispatchError) -> DescribeVpnConnectionsError {
         DescribeVpnConnectionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVpnConnectionsError {
+    fn from(err: io::Error) -> DescribeVpnConnectionsError {
+        DescribeVpnConnectionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeVpnConnectionsError {
@@ -51195,6 +51957,11 @@ impl From<HttpDispatchError> for DescribeVpnGatewaysError {
         DescribeVpnGatewaysError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVpnGatewaysError {
+    fn from(err: io::Error) -> DescribeVpnGatewaysError {
+        DescribeVpnGatewaysError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVpnGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -51257,6 +52024,11 @@ impl From<CredentialsError> for DetachClassicLinkVpcError {
 impl From<HttpDispatchError> for DetachClassicLinkVpcError {
     fn from(err: HttpDispatchError) -> DetachClassicLinkVpcError {
         DetachClassicLinkVpcError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachClassicLinkVpcError {
+    fn from(err: io::Error) -> DetachClassicLinkVpcError {
+        DetachClassicLinkVpcError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DetachClassicLinkVpcError {
@@ -51323,6 +52095,11 @@ impl From<HttpDispatchError> for DetachInternetGatewayError {
         DetachInternetGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetachInternetGatewayError {
+    fn from(err: io::Error) -> DetachInternetGatewayError {
+        DetachInternetGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetachInternetGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -51385,6 +52162,11 @@ impl From<CredentialsError> for DetachNetworkInterfaceError {
 impl From<HttpDispatchError> for DetachNetworkInterfaceError {
     fn from(err: HttpDispatchError) -> DetachNetworkInterfaceError {
         DetachNetworkInterfaceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachNetworkInterfaceError {
+    fn from(err: io::Error) -> DetachNetworkInterfaceError {
+        DetachNetworkInterfaceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DetachNetworkInterfaceError {
@@ -51451,6 +52233,11 @@ impl From<HttpDispatchError> for DetachVolumeError {
         DetachVolumeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetachVolumeError {
+    fn from(err: io::Error) -> DetachVolumeError {
+        DetachVolumeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetachVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -51513,6 +52300,11 @@ impl From<HttpDispatchError> for DetachVpnGatewayError {
         DetachVpnGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetachVpnGatewayError {
+    fn from(err: io::Error) -> DetachVpnGatewayError {
+        DetachVpnGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetachVpnGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -51573,6 +52365,11 @@ impl From<CredentialsError> for DisableVgwRoutePropagationError {
 impl From<HttpDispatchError> for DisableVgwRoutePropagationError {
     fn from(err: HttpDispatchError) -> DisableVgwRoutePropagationError {
         DisableVgwRoutePropagationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableVgwRoutePropagationError {
+    fn from(err: io::Error) -> DisableVgwRoutePropagationError {
+        DisableVgwRoutePropagationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableVgwRoutePropagationError {
@@ -51639,6 +52436,11 @@ impl From<HttpDispatchError> for DisableVpcClassicLinkError {
         DisableVpcClassicLinkError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisableVpcClassicLinkError {
+    fn from(err: io::Error) -> DisableVpcClassicLinkError {
+        DisableVpcClassicLinkError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisableVpcClassicLinkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -51701,6 +52503,11 @@ impl From<CredentialsError> for DisableVpcClassicLinkDnsSupportError {
 impl From<HttpDispatchError> for DisableVpcClassicLinkDnsSupportError {
     fn from(err: HttpDispatchError) -> DisableVpcClassicLinkDnsSupportError {
         DisableVpcClassicLinkDnsSupportError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableVpcClassicLinkDnsSupportError {
+    fn from(err: io::Error) -> DisableVpcClassicLinkDnsSupportError {
+        DisableVpcClassicLinkDnsSupportError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableVpcClassicLinkDnsSupportError {
@@ -51767,6 +52574,11 @@ impl From<HttpDispatchError> for DisassociateAddressError {
         DisassociateAddressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisassociateAddressError {
+    fn from(err: io::Error) -> DisassociateAddressError {
+        DisassociateAddressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisassociateAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -51829,6 +52641,11 @@ impl From<CredentialsError> for DisassociateIamInstanceProfileError {
 impl From<HttpDispatchError> for DisassociateIamInstanceProfileError {
     fn from(err: HttpDispatchError) -> DisassociateIamInstanceProfileError {
         DisassociateIamInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateIamInstanceProfileError {
+    fn from(err: io::Error) -> DisassociateIamInstanceProfileError {
+        DisassociateIamInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisassociateIamInstanceProfileError {
@@ -51895,6 +52712,11 @@ impl From<HttpDispatchError> for DisassociateRouteTableError {
         DisassociateRouteTableError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisassociateRouteTableError {
+    fn from(err: io::Error) -> DisassociateRouteTableError {
+        DisassociateRouteTableError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisassociateRouteTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -51957,6 +52779,11 @@ impl From<CredentialsError> for DisassociateSubnetCidrBlockError {
 impl From<HttpDispatchError> for DisassociateSubnetCidrBlockError {
     fn from(err: HttpDispatchError) -> DisassociateSubnetCidrBlockError {
         DisassociateSubnetCidrBlockError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateSubnetCidrBlockError {
+    fn from(err: io::Error) -> DisassociateSubnetCidrBlockError {
+        DisassociateSubnetCidrBlockError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisassociateSubnetCidrBlockError {
@@ -52023,6 +52850,11 @@ impl From<HttpDispatchError> for DisassociateVpcCidrBlockError {
         DisassociateVpcCidrBlockError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisassociateVpcCidrBlockError {
+    fn from(err: io::Error) -> DisassociateVpcCidrBlockError {
+        DisassociateVpcCidrBlockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisassociateVpcCidrBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -52085,6 +52917,11 @@ impl From<CredentialsError> for EnableVgwRoutePropagationError {
 impl From<HttpDispatchError> for EnableVgwRoutePropagationError {
     fn from(err: HttpDispatchError) -> EnableVgwRoutePropagationError {
         EnableVgwRoutePropagationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EnableVgwRoutePropagationError {
+    fn from(err: io::Error) -> EnableVgwRoutePropagationError {
+        EnableVgwRoutePropagationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableVgwRoutePropagationError {
@@ -52151,6 +52988,11 @@ impl From<HttpDispatchError> for EnableVolumeIOError {
         EnableVolumeIOError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableVolumeIOError {
+    fn from(err: io::Error) -> EnableVolumeIOError {
+        EnableVolumeIOError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableVolumeIOError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -52211,6 +53053,11 @@ impl From<CredentialsError> for EnableVpcClassicLinkError {
 impl From<HttpDispatchError> for EnableVpcClassicLinkError {
     fn from(err: HttpDispatchError) -> EnableVpcClassicLinkError {
         EnableVpcClassicLinkError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EnableVpcClassicLinkError {
+    fn from(err: io::Error) -> EnableVpcClassicLinkError {
+        EnableVpcClassicLinkError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableVpcClassicLinkError {
@@ -52277,6 +53124,11 @@ impl From<HttpDispatchError> for EnableVpcClassicLinkDnsSupportError {
         EnableVpcClassicLinkDnsSupportError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableVpcClassicLinkDnsSupportError {
+    fn from(err: io::Error) -> EnableVpcClassicLinkDnsSupportError {
+        EnableVpcClassicLinkDnsSupportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableVpcClassicLinkDnsSupportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -52341,6 +53193,11 @@ impl From<HttpDispatchError> for GetConsoleOutputError {
         GetConsoleOutputError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetConsoleOutputError {
+    fn from(err: io::Error) -> GetConsoleOutputError {
+        GetConsoleOutputError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetConsoleOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -52401,6 +53258,11 @@ impl From<CredentialsError> for GetConsoleScreenshotError {
 impl From<HttpDispatchError> for GetConsoleScreenshotError {
     fn from(err: HttpDispatchError) -> GetConsoleScreenshotError {
         GetConsoleScreenshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetConsoleScreenshotError {
+    fn from(err: io::Error) -> GetConsoleScreenshotError {
+        GetConsoleScreenshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetConsoleScreenshotError {
@@ -52467,6 +53329,11 @@ impl From<HttpDispatchError> for GetHostReservationPurchasePreviewError {
         GetHostReservationPurchasePreviewError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetHostReservationPurchasePreviewError {
+    fn from(err: io::Error) -> GetHostReservationPurchasePreviewError {
+        GetHostReservationPurchasePreviewError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetHostReservationPurchasePreviewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -52531,6 +53398,11 @@ impl From<HttpDispatchError> for GetPasswordDataError {
         GetPasswordDataError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetPasswordDataError {
+    fn from(err: io::Error) -> GetPasswordDataError {
+        GetPasswordDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetPasswordDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -52591,6 +53463,11 @@ impl From<CredentialsError> for GetReservedInstancesExchangeQuoteError {
 impl From<HttpDispatchError> for GetReservedInstancesExchangeQuoteError {
     fn from(err: HttpDispatchError) -> GetReservedInstancesExchangeQuoteError {
         GetReservedInstancesExchangeQuoteError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetReservedInstancesExchangeQuoteError {
+    fn from(err: io::Error) -> GetReservedInstancesExchangeQuoteError {
+        GetReservedInstancesExchangeQuoteError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetReservedInstancesExchangeQuoteError {
@@ -52657,6 +53534,11 @@ impl From<HttpDispatchError> for ImportImageError {
         ImportImageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ImportImageError {
+    fn from(err: io::Error) -> ImportImageError {
+        ImportImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ImportImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -52717,6 +53599,11 @@ impl From<CredentialsError> for ImportInstanceError {
 impl From<HttpDispatchError> for ImportInstanceError {
     fn from(err: HttpDispatchError) -> ImportInstanceError {
         ImportInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ImportInstanceError {
+    fn from(err: io::Error) -> ImportInstanceError {
+        ImportInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ImportInstanceError {
@@ -52781,6 +53668,11 @@ impl From<HttpDispatchError> for ImportKeyPairError {
         ImportKeyPairError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ImportKeyPairError {
+    fn from(err: io::Error) -> ImportKeyPairError {
+        ImportKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ImportKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -52841,6 +53733,11 @@ impl From<CredentialsError> for ImportSnapshotError {
 impl From<HttpDispatchError> for ImportSnapshotError {
     fn from(err: HttpDispatchError) -> ImportSnapshotError {
         ImportSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ImportSnapshotError {
+    fn from(err: io::Error) -> ImportSnapshotError {
+        ImportSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ImportSnapshotError {
@@ -52905,6 +53802,11 @@ impl From<HttpDispatchError> for ImportVolumeError {
         ImportVolumeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ImportVolumeError {
+    fn from(err: io::Error) -> ImportVolumeError {
+        ImportVolumeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ImportVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -52965,6 +53867,11 @@ impl From<CredentialsError> for ModifyHostsError {
 impl From<HttpDispatchError> for ModifyHostsError {
     fn from(err: HttpDispatchError) -> ModifyHostsError {
         ModifyHostsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyHostsError {
+    fn from(err: io::Error) -> ModifyHostsError {
+        ModifyHostsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyHostsError {
@@ -53029,6 +53936,11 @@ impl From<HttpDispatchError> for ModifyIdFormatError {
         ModifyIdFormatError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyIdFormatError {
+    fn from(err: io::Error) -> ModifyIdFormatError {
+        ModifyIdFormatError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyIdFormatError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -53089,6 +54001,11 @@ impl From<CredentialsError> for ModifyIdentityIdFormatError {
 impl From<HttpDispatchError> for ModifyIdentityIdFormatError {
     fn from(err: HttpDispatchError) -> ModifyIdentityIdFormatError {
         ModifyIdentityIdFormatError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyIdentityIdFormatError {
+    fn from(err: io::Error) -> ModifyIdentityIdFormatError {
+        ModifyIdentityIdFormatError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyIdentityIdFormatError {
@@ -53155,6 +54072,11 @@ impl From<HttpDispatchError> for ModifyImageAttributeError {
         ModifyImageAttributeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyImageAttributeError {
+    fn from(err: io::Error) -> ModifyImageAttributeError {
+        ModifyImageAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyImageAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -53217,6 +54139,11 @@ impl From<CredentialsError> for ModifyInstanceAttributeError {
 impl From<HttpDispatchError> for ModifyInstanceAttributeError {
     fn from(err: HttpDispatchError) -> ModifyInstanceAttributeError {
         ModifyInstanceAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyInstanceAttributeError {
+    fn from(err: io::Error) -> ModifyInstanceAttributeError {
+        ModifyInstanceAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyInstanceAttributeError {
@@ -53283,6 +54210,11 @@ impl From<HttpDispatchError> for ModifyInstancePlacementError {
         ModifyInstancePlacementError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyInstancePlacementError {
+    fn from(err: io::Error) -> ModifyInstancePlacementError {
+        ModifyInstancePlacementError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyInstancePlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -53345,6 +54277,11 @@ impl From<CredentialsError> for ModifyNetworkInterfaceAttributeError {
 impl From<HttpDispatchError> for ModifyNetworkInterfaceAttributeError {
     fn from(err: HttpDispatchError) -> ModifyNetworkInterfaceAttributeError {
         ModifyNetworkInterfaceAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyNetworkInterfaceAttributeError {
+    fn from(err: io::Error) -> ModifyNetworkInterfaceAttributeError {
+        ModifyNetworkInterfaceAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyNetworkInterfaceAttributeError {
@@ -53411,6 +54348,11 @@ impl From<HttpDispatchError> for ModifyReservedInstancesError {
         ModifyReservedInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyReservedInstancesError {
+    fn from(err: io::Error) -> ModifyReservedInstancesError {
+        ModifyReservedInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyReservedInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -53473,6 +54415,11 @@ impl From<CredentialsError> for ModifySnapshotAttributeError {
 impl From<HttpDispatchError> for ModifySnapshotAttributeError {
     fn from(err: HttpDispatchError) -> ModifySnapshotAttributeError {
         ModifySnapshotAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifySnapshotAttributeError {
+    fn from(err: io::Error) -> ModifySnapshotAttributeError {
+        ModifySnapshotAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifySnapshotAttributeError {
@@ -53539,6 +54486,11 @@ impl From<HttpDispatchError> for ModifySpotFleetRequestError {
         ModifySpotFleetRequestError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifySpotFleetRequestError {
+    fn from(err: io::Error) -> ModifySpotFleetRequestError {
+        ModifySpotFleetRequestError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifySpotFleetRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -53601,6 +54553,11 @@ impl From<CredentialsError> for ModifySubnetAttributeError {
 impl From<HttpDispatchError> for ModifySubnetAttributeError {
     fn from(err: HttpDispatchError) -> ModifySubnetAttributeError {
         ModifySubnetAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifySubnetAttributeError {
+    fn from(err: io::Error) -> ModifySubnetAttributeError {
+        ModifySubnetAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifySubnetAttributeError {
@@ -53667,6 +54624,11 @@ impl From<HttpDispatchError> for ModifyVolumeError {
         ModifyVolumeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyVolumeError {
+    fn from(err: io::Error) -> ModifyVolumeError {
+        ModifyVolumeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -53727,6 +54689,11 @@ impl From<CredentialsError> for ModifyVolumeAttributeError {
 impl From<HttpDispatchError> for ModifyVolumeAttributeError {
     fn from(err: HttpDispatchError) -> ModifyVolumeAttributeError {
         ModifyVolumeAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyVolumeAttributeError {
+    fn from(err: io::Error) -> ModifyVolumeAttributeError {
+        ModifyVolumeAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyVolumeAttributeError {
@@ -53793,6 +54760,11 @@ impl From<HttpDispatchError> for ModifyVpcAttributeError {
         ModifyVpcAttributeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyVpcAttributeError {
+    fn from(err: io::Error) -> ModifyVpcAttributeError {
+        ModifyVpcAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyVpcAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -53855,6 +54827,11 @@ impl From<CredentialsError> for ModifyVpcEndpointError {
 impl From<HttpDispatchError> for ModifyVpcEndpointError {
     fn from(err: HttpDispatchError) -> ModifyVpcEndpointError {
         ModifyVpcEndpointError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyVpcEndpointError {
+    fn from(err: io::Error) -> ModifyVpcEndpointError {
+        ModifyVpcEndpointError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyVpcEndpointError {
@@ -53921,6 +54898,11 @@ impl From<HttpDispatchError> for ModifyVpcPeeringConnectionOptionsError {
         ModifyVpcPeeringConnectionOptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyVpcPeeringConnectionOptionsError {
+    fn from(err: io::Error) -> ModifyVpcPeeringConnectionOptionsError {
+        ModifyVpcPeeringConnectionOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyVpcPeeringConnectionOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -53985,6 +54967,11 @@ impl From<HttpDispatchError> for MonitorInstancesError {
         MonitorInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for MonitorInstancesError {
+    fn from(err: io::Error) -> MonitorInstancesError {
+        MonitorInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for MonitorInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -54047,6 +55034,11 @@ impl From<HttpDispatchError> for MoveAddressToVpcError {
         MoveAddressToVpcError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for MoveAddressToVpcError {
+    fn from(err: io::Error) -> MoveAddressToVpcError {
+        MoveAddressToVpcError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for MoveAddressToVpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -54107,6 +55099,11 @@ impl From<CredentialsError> for PurchaseHostReservationError {
 impl From<HttpDispatchError> for PurchaseHostReservationError {
     fn from(err: HttpDispatchError) -> PurchaseHostReservationError {
         PurchaseHostReservationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PurchaseHostReservationError {
+    fn from(err: io::Error) -> PurchaseHostReservationError {
+        PurchaseHostReservationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PurchaseHostReservationError {
@@ -54173,6 +55170,11 @@ impl From<HttpDispatchError> for PurchaseReservedInstancesOfferingError {
         PurchaseReservedInstancesOfferingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PurchaseReservedInstancesOfferingError {
+    fn from(err: io::Error) -> PurchaseReservedInstancesOfferingError {
+        PurchaseReservedInstancesOfferingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PurchaseReservedInstancesOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -54235,6 +55237,11 @@ impl From<CredentialsError> for PurchaseScheduledInstancesError {
 impl From<HttpDispatchError> for PurchaseScheduledInstancesError {
     fn from(err: HttpDispatchError) -> PurchaseScheduledInstancesError {
         PurchaseScheduledInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PurchaseScheduledInstancesError {
+    fn from(err: io::Error) -> PurchaseScheduledInstancesError {
+        PurchaseScheduledInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PurchaseScheduledInstancesError {
@@ -54301,6 +55308,11 @@ impl From<HttpDispatchError> for RebootInstancesError {
         RebootInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RebootInstancesError {
+    fn from(err: io::Error) -> RebootInstancesError {
+        RebootInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RebootInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -54363,6 +55375,11 @@ impl From<HttpDispatchError> for RegisterImageError {
         RegisterImageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterImageError {
+    fn from(err: io::Error) -> RegisterImageError {
+        RegisterImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -54423,6 +55440,11 @@ impl From<CredentialsError> for RejectVpcPeeringConnectionError {
 impl From<HttpDispatchError> for RejectVpcPeeringConnectionError {
     fn from(err: HttpDispatchError) -> RejectVpcPeeringConnectionError {
         RejectVpcPeeringConnectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RejectVpcPeeringConnectionError {
+    fn from(err: io::Error) -> RejectVpcPeeringConnectionError {
+        RejectVpcPeeringConnectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RejectVpcPeeringConnectionError {
@@ -54489,6 +55511,11 @@ impl From<HttpDispatchError> for ReleaseAddressError {
         ReleaseAddressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReleaseAddressError {
+    fn from(err: io::Error) -> ReleaseAddressError {
+        ReleaseAddressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReleaseAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -54551,6 +55578,11 @@ impl From<HttpDispatchError> for ReleaseHostsError {
         ReleaseHostsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReleaseHostsError {
+    fn from(err: io::Error) -> ReleaseHostsError {
+        ReleaseHostsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReleaseHostsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -54611,6 +55643,11 @@ impl From<CredentialsError> for ReplaceIamInstanceProfileAssociationError {
 impl From<HttpDispatchError> for ReplaceIamInstanceProfileAssociationError {
     fn from(err: HttpDispatchError) -> ReplaceIamInstanceProfileAssociationError {
         ReplaceIamInstanceProfileAssociationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ReplaceIamInstanceProfileAssociationError {
+    fn from(err: io::Error) -> ReplaceIamInstanceProfileAssociationError {
+        ReplaceIamInstanceProfileAssociationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ReplaceIamInstanceProfileAssociationError {
@@ -54677,6 +55714,11 @@ impl From<HttpDispatchError> for ReplaceNetworkAclAssociationError {
         ReplaceNetworkAclAssociationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReplaceNetworkAclAssociationError {
+    fn from(err: io::Error) -> ReplaceNetworkAclAssociationError {
+        ReplaceNetworkAclAssociationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReplaceNetworkAclAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -54739,6 +55781,11 @@ impl From<CredentialsError> for ReplaceNetworkAclEntryError {
 impl From<HttpDispatchError> for ReplaceNetworkAclEntryError {
     fn from(err: HttpDispatchError) -> ReplaceNetworkAclEntryError {
         ReplaceNetworkAclEntryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ReplaceNetworkAclEntryError {
+    fn from(err: io::Error) -> ReplaceNetworkAclEntryError {
+        ReplaceNetworkAclEntryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ReplaceNetworkAclEntryError {
@@ -54805,6 +55852,11 @@ impl From<HttpDispatchError> for ReplaceRouteError {
         ReplaceRouteError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReplaceRouteError {
+    fn from(err: io::Error) -> ReplaceRouteError {
+        ReplaceRouteError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReplaceRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -54865,6 +55917,11 @@ impl From<CredentialsError> for ReplaceRouteTableAssociationError {
 impl From<HttpDispatchError> for ReplaceRouteTableAssociationError {
     fn from(err: HttpDispatchError) -> ReplaceRouteTableAssociationError {
         ReplaceRouteTableAssociationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ReplaceRouteTableAssociationError {
+    fn from(err: io::Error) -> ReplaceRouteTableAssociationError {
+        ReplaceRouteTableAssociationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ReplaceRouteTableAssociationError {
@@ -54931,6 +55988,11 @@ impl From<HttpDispatchError> for ReportInstanceStatusError {
         ReportInstanceStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReportInstanceStatusError {
+    fn from(err: io::Error) -> ReportInstanceStatusError {
+        ReportInstanceStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReportInstanceStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -54995,6 +56057,11 @@ impl From<HttpDispatchError> for RequestSpotFleetError {
         RequestSpotFleetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RequestSpotFleetError {
+    fn from(err: io::Error) -> RequestSpotFleetError {
+        RequestSpotFleetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RequestSpotFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -55055,6 +56122,11 @@ impl From<CredentialsError> for RequestSpotInstancesError {
 impl From<HttpDispatchError> for RequestSpotInstancesError {
     fn from(err: HttpDispatchError) -> RequestSpotInstancesError {
         RequestSpotInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RequestSpotInstancesError {
+    fn from(err: io::Error) -> RequestSpotInstancesError {
+        RequestSpotInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RequestSpotInstancesError {
@@ -55121,6 +56193,11 @@ impl From<HttpDispatchError> for ResetImageAttributeError {
         ResetImageAttributeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ResetImageAttributeError {
+    fn from(err: io::Error) -> ResetImageAttributeError {
+        ResetImageAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ResetImageAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -55183,6 +56260,11 @@ impl From<CredentialsError> for ResetInstanceAttributeError {
 impl From<HttpDispatchError> for ResetInstanceAttributeError {
     fn from(err: HttpDispatchError) -> ResetInstanceAttributeError {
         ResetInstanceAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResetInstanceAttributeError {
+    fn from(err: io::Error) -> ResetInstanceAttributeError {
+        ResetInstanceAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetInstanceAttributeError {
@@ -55249,6 +56331,11 @@ impl From<HttpDispatchError> for ResetNetworkInterfaceAttributeError {
         ResetNetworkInterfaceAttributeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ResetNetworkInterfaceAttributeError {
+    fn from(err: io::Error) -> ResetNetworkInterfaceAttributeError {
+        ResetNetworkInterfaceAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ResetNetworkInterfaceAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -55311,6 +56398,11 @@ impl From<CredentialsError> for ResetSnapshotAttributeError {
 impl From<HttpDispatchError> for ResetSnapshotAttributeError {
     fn from(err: HttpDispatchError) -> ResetSnapshotAttributeError {
         ResetSnapshotAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResetSnapshotAttributeError {
+    fn from(err: io::Error) -> ResetSnapshotAttributeError {
+        ResetSnapshotAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetSnapshotAttributeError {
@@ -55377,6 +56469,11 @@ impl From<HttpDispatchError> for RestoreAddressToClassicError {
         RestoreAddressToClassicError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RestoreAddressToClassicError {
+    fn from(err: io::Error) -> RestoreAddressToClassicError {
+        RestoreAddressToClassicError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RestoreAddressToClassicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -55439,6 +56536,11 @@ impl From<CredentialsError> for RevokeSecurityGroupEgressError {
 impl From<HttpDispatchError> for RevokeSecurityGroupEgressError {
     fn from(err: HttpDispatchError) -> RevokeSecurityGroupEgressError {
         RevokeSecurityGroupEgressError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RevokeSecurityGroupEgressError {
+    fn from(err: io::Error) -> RevokeSecurityGroupEgressError {
+        RevokeSecurityGroupEgressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RevokeSecurityGroupEgressError {
@@ -55505,6 +56607,11 @@ impl From<HttpDispatchError> for RevokeSecurityGroupIngressError {
         RevokeSecurityGroupIngressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RevokeSecurityGroupIngressError {
+    fn from(err: io::Error) -> RevokeSecurityGroupIngressError {
+        RevokeSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RevokeSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -55569,6 +56676,11 @@ impl From<HttpDispatchError> for RunInstancesError {
         RunInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RunInstancesError {
+    fn from(err: io::Error) -> RunInstancesError {
+        RunInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RunInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -55629,6 +56741,11 @@ impl From<CredentialsError> for RunScheduledInstancesError {
 impl From<HttpDispatchError> for RunScheduledInstancesError {
     fn from(err: HttpDispatchError) -> RunScheduledInstancesError {
         RunScheduledInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RunScheduledInstancesError {
+    fn from(err: io::Error) -> RunScheduledInstancesError {
+        RunScheduledInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RunScheduledInstancesError {
@@ -55695,6 +56812,11 @@ impl From<HttpDispatchError> for StartInstancesError {
         StartInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartInstancesError {
+    fn from(err: io::Error) -> StartInstancesError {
+        StartInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -55757,6 +56879,11 @@ impl From<HttpDispatchError> for StopInstancesError {
         StopInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StopInstancesError {
+    fn from(err: io::Error) -> StopInstancesError {
+        StopInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StopInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -55817,6 +56944,11 @@ impl From<CredentialsError> for TerminateInstancesError {
 impl From<HttpDispatchError> for TerminateInstancesError {
     fn from(err: HttpDispatchError) -> TerminateInstancesError {
         TerminateInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TerminateInstancesError {
+    fn from(err: io::Error) -> TerminateInstancesError {
+        TerminateInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TerminateInstancesError {
@@ -55883,6 +57015,11 @@ impl From<HttpDispatchError> for UnassignIpv6AddressesError {
         UnassignIpv6AddressesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UnassignIpv6AddressesError {
+    fn from(err: io::Error) -> UnassignIpv6AddressesError {
+        UnassignIpv6AddressesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UnassignIpv6AddressesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -55947,6 +57084,11 @@ impl From<HttpDispatchError> for UnassignPrivateIpAddressesError {
         UnassignPrivateIpAddressesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UnassignPrivateIpAddressesError {
+    fn from(err: io::Error) -> UnassignPrivateIpAddressesError {
+        UnassignPrivateIpAddressesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UnassignPrivateIpAddressesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -56009,6 +57151,11 @@ impl From<CredentialsError> for UnmonitorInstancesError {
 impl From<HttpDispatchError> for UnmonitorInstancesError {
     fn from(err: HttpDispatchError) -> UnmonitorInstancesError {
         UnmonitorInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UnmonitorInstancesError {
+    fn from(err: io::Error) -> UnmonitorInstancesError {
+        UnmonitorInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UnmonitorInstancesError {
@@ -57485,16 +58632,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AcceptReservedInstancesExchangeQuoteResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57505,8 +58654,10 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AcceptReservedInstancesExchangeQuoteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AcceptReservedInstancesExchangeQuoteError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -57525,16 +58676,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AcceptVpcPeeringConnectionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57545,8 +58698,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AcceptVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AcceptVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -57564,16 +58720,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AllocateAddressResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57585,8 +58743,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AllocateAddressError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AllocateAddressError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -57605,16 +58764,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AllocateHostsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57626,7 +58787,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AllocateHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AllocateHostsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -57645,16 +58808,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AssignIpv6AddressesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57667,8 +58832,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AssignIpv6AddressesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssignIpv6AddressesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -57687,15 +58853,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(AssignPrivateIpAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssignPrivateIpAddressesError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -57713,16 +58882,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AssociateAddressResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57735,8 +58906,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AssociateAddressError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateAddressError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -57755,15 +58927,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AssociateDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateDhcpOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -57783,16 +58956,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AssociateIamInstanceProfileResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57803,8 +58978,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AssociateIamInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateIamInstanceProfileError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -57822,16 +59000,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AssociateRouteTableResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57844,8 +59024,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AssociateRouteTableError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateRouteTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -57865,16 +59046,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AssociateSubnetCidrBlockResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57885,8 +59068,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AssociateSubnetCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateSubnetCidrBlockError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -57905,16 +59091,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AssociateVpcCidrBlockResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57925,8 +59113,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AssociateVpcCidrBlockError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateVpcCidrBlockError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -57945,16 +59134,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AttachClassicLinkVpcResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -57967,8 +59158,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AttachClassicLinkVpcError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachClassicLinkVpcError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -57987,15 +59179,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AttachInternetGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachInternetGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58015,16 +59208,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AttachNetworkInterfaceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58035,8 +59230,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AttachNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachNetworkInterfaceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58055,16 +59251,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = VolumeAttachment::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58076,7 +59274,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AttachVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58095,16 +59295,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AttachVpnGatewayResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58117,8 +59319,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AttachVpnGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachVpnGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58137,15 +59340,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(AuthorizeSecurityGroupEgressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AuthorizeSecurityGroupEgressError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -58163,15 +59369,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(AuthorizeSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AuthorizeSecurityGroupIngressError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -58189,16 +59398,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = BundleInstanceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58210,8 +59421,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(BundleInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BundleInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58230,16 +59442,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CancelBundleTaskResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58252,8 +59466,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CancelBundleTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelBundleTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58272,15 +59487,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(CancelConversionTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelConversionTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58299,15 +59515,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(CancelExportTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelExportTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58326,16 +59543,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CancelImportTaskResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58348,8 +59567,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CancelImportTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelImportTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58369,16 +59589,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CancelReservedInstancesListingResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58389,8 +59611,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CancelReservedInstancesListingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelReservedInstancesListingError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -58409,16 +59634,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CancelSpotFleetRequestsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58429,8 +59656,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(EC2CancelSpotFleetRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EC2CancelSpotFleetRequestsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -58449,16 +59679,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CancelSpotInstanceRequestsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58469,8 +59701,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CancelSpotInstanceRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelSpotInstanceRequestsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -58489,16 +59724,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ConfirmProductInstanceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58509,8 +59746,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ConfirmProductInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ConfirmProductInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58527,16 +59765,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CopyImageResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58547,7 +59787,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CopyImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopyImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -58565,16 +59809,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CopySnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58586,7 +59832,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CopySnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopySnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58606,16 +59854,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateCustomerGatewayResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58626,8 +59876,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateCustomerGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCustomerGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58646,16 +59897,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDhcpOptionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58668,8 +59921,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDhcpOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58689,16 +59943,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateEgressOnlyInternetGatewayResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58709,8 +59965,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateEgressOnlyInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateEgressOnlyInternetGatewayError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -58728,16 +59987,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateFlowLogsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58749,8 +60010,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateFlowLogsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateFlowLogsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58769,16 +60031,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateFpgaImageResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58790,8 +60054,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateFpgaImageError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateFpgaImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58810,16 +60075,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateImageResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58830,7 +60097,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -58849,16 +60120,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateInstanceExportTaskResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58869,8 +60142,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateInstanceExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateInstanceExportTaskError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -58889,16 +60165,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateInternetGatewayResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58909,8 +60187,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateInternetGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateInternetGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58927,16 +60206,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = KeyPair::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58947,7 +60228,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateKeyPairError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -58966,16 +60249,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateNatGatewayResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -58988,8 +60273,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateNatGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateNatGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59008,16 +60294,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateNetworkAclResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59030,8 +60318,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateNetworkAclError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateNetworkAclError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59050,15 +60339,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(CreateNetworkAclEntryError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateNetworkAclEntryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59078,16 +60368,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateNetworkInterfaceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59098,8 +60390,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateNetworkInterfaceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59118,15 +60411,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(CreatePlacementGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePlacementGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59146,16 +60440,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateReservedInstancesListingResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59166,8 +60462,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateReservedInstancesListingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateReservedInstancesListingError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -59185,16 +60484,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateRouteResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59205,7 +60506,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRouteError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -59223,16 +60528,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateRouteTableResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59245,8 +60552,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateRouteTableError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRouteTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59265,16 +60573,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateSecurityGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59287,8 +60597,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateSecurityGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSecurityGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59307,16 +60618,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = Snapshot::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59327,8 +60640,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59348,16 +60662,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateSpotDatafeedSubscriptionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59368,8 +60684,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -59387,16 +60706,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateSubnetResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59408,7 +60729,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateSubnetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSubnetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59425,13 +60748,17 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -59447,16 +60774,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = Volume::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59467,7 +60796,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59484,16 +60815,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateVpcResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59504,7 +60837,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpcError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -59522,16 +60859,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateVpcEndpointResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59544,8 +60883,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateVpcEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpcEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59565,16 +60905,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateVpcPeeringConnectionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59585,8 +60927,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -59604,16 +60949,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateVpnConnectionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59626,8 +60973,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateVpnConnectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpnConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59646,15 +60994,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(CreateVpnConnectionRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpnConnectionRouteError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -59672,16 +61023,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateVpnGatewayResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59694,8 +61047,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateVpnGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpnGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59714,15 +61068,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteCustomerGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCustomerGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59741,15 +61096,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDhcpOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59769,16 +61125,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteEgressOnlyInternetGatewayResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59789,8 +61147,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DeleteEgressOnlyInternetGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteEgressOnlyInternetGatewayError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -59808,16 +61169,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteFlowLogsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59829,8 +61192,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteFlowLogsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteFlowLogsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59849,15 +61213,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteInternetGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteInternetGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59874,14 +61239,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteKeyPairError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59900,16 +61267,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteNatGatewayResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -59922,8 +61291,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteNatGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteNatGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59942,15 +61312,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteNetworkAclError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteNetworkAclError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59969,15 +61340,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteNetworkAclEntryError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteNetworkAclEntryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -59996,15 +61368,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteNetworkInterfaceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60023,15 +61396,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeletePlacementGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePlacementGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60048,13 +61422,17 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRouteError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -60072,15 +61450,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteRouteTableError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRouteTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60099,15 +61478,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteSecurityGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSecurityGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60124,15 +61504,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60151,15 +61532,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -60175,14 +61559,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteSubnetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSubnetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60199,13 +61585,17 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -60221,14 +61611,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60245,13 +61637,17 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpcError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -60269,16 +61665,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteVpcEndpointsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60291,8 +61689,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteVpcEndpointsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpcEndpointsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60312,16 +61711,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteVpcPeeringConnectionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60332,8 +61733,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DeleteVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -60351,15 +61755,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteVpnConnectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpnConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60378,15 +61783,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteVpnConnectionRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpnConnectionRouteError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -60404,15 +61812,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteVpnGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpnGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60429,15 +61838,16 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeregisterImageError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60457,16 +61867,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAccountAttributesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60477,8 +61889,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -60496,16 +61911,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAddressesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60518,8 +61935,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeAddressesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAddressesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60539,16 +61957,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAvailabilityZonesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60559,8 +61979,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeAvailabilityZonesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAvailabilityZonesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -60578,16 +62001,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeBundleTasksResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60600,8 +62025,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeBundleTasksError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeBundleTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60621,16 +62047,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeClassicLinkInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60641,8 +62069,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeClassicLinkInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClassicLinkInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -60661,16 +62092,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeConversionTasksResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60681,8 +62114,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeConversionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConversionTasksError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -60701,16 +62137,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeCustomerGatewaysResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60721,8 +62159,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeCustomerGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCustomerGatewaysError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -60740,16 +62181,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeDhcpOptionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60762,8 +62205,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDhcpOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60784,16 +62228,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeEgressOnlyInternetGatewaysResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60804,8 +62250,10 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEgressOnlyInternetGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEgressOnlyInternetGatewaysError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -60823,16 +62271,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeExportTasksResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60845,8 +62295,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60865,16 +62316,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeFlowLogsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60887,8 +62340,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeFlowLogsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeFlowLogsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60907,16 +62361,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeFpgaImagesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60929,8 +62385,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeFpgaImagesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeFpgaImagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -60950,16 +62407,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeHostReservationOfferingsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -60970,8 +62429,10 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeHostReservationOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeHostReservationOfferingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -60990,16 +62451,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeHostReservationsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61010,8 +62473,11 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeHostReservationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeHostReservationsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -61029,16 +62495,18 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeHostsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61050,7 +62518,9 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeHostsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61067,16 +62537,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeIamInstanceProfileAssociationsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61087,8 +62559,10 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeIamInstanceProfileAssociationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeIamInstanceProfileAssociationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -61106,16 +62580,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeIdFormatResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61128,8 +62604,9 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                Err(DescribeIdFormatError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeIdFormatError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61149,16 +62626,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeIdentityIdFormatResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61169,8 +62648,11 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeIdentityIdFormatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeIdentityIdFormatError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -61188,16 +62670,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ImageAttribute::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61209,8 +62693,9 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                Err(DescribeImageAttributeError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeImageAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61229,16 +62714,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeImagesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61250,8 +62737,9 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                Err(DescribeImagesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeImagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61271,16 +62759,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeImportImageTasksResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61291,8 +62781,11 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeImportImageTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeImportImageTasksError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -61311,16 +62804,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeImportSnapshotTasksResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61331,8 +62826,11 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeImportSnapshotTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeImportSnapshotTasksError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -61350,16 +62848,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = InstanceAttribute::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61371,8 +62871,11 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeInstanceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstanceAttributeError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -61391,16 +62894,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeInstanceStatusResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61411,8 +62916,9 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                Err(DescribeInstanceStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstanceStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61431,16 +62937,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61453,8 +62961,9 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                Err(DescribeInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61474,16 +62983,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeInternetGatewaysResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61494,8 +63005,11 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeInternetGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInternetGatewaysError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -61513,16 +63027,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeKeyPairsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61535,8 +63051,9 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                Err(DescribeKeyPairsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeKeyPairsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61556,16 +63073,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeMovingAddressesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61576,8 +63095,11 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeMovingAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMovingAddressesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -61595,16 +63117,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeNatGatewaysResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61617,8 +63141,9 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                Err(DescribeNatGatewaysError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeNatGatewaysError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61637,16 +63162,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeNetworkAclsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61659,8 +63186,9 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                Err(DescribeNetworkAclsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeNetworkAclsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61680,16 +63208,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeNetworkInterfaceAttributeResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61700,8 +63230,10 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -61720,16 +63252,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeNetworkInterfacesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61740,8 +63274,11 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeNetworkInterfacesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeNetworkInterfacesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -61760,16 +63297,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribePlacementGroupsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61780,8 +63319,11 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribePlacementGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePlacementGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -61799,16 +63341,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribePrefixListsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61821,8 +63365,9 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                Err(DescribePrefixListsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePrefixListsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61841,16 +63386,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeRegionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61862,8 +63409,9 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                Err(DescribeRegionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRegionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61883,16 +63431,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeReservedInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61903,8 +63453,11 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeReservedInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReservedInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -61923,16 +63476,18 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeReservedInstancesListingsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61943,8 +63498,10 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 Ok(result)
             }
             _ => {
-                            Err(DescribeReservedInstancesListingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReservedInstancesListingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -61960,16 +63517,18 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeReservedInstancesModificationsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -61980,8 +63539,10 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeReservedInstancesModificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReservedInstancesModificationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -62001,16 +63562,18 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeReservedInstancesOfferingsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62021,8 +63584,10 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeReservedInstancesOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReservedInstancesOfferingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -62040,16 +63605,18 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeRouteTablesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62062,8 +63629,9 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeRouteTablesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRouteTablesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -62080,16 +63648,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeScheduledInstanceAvailabilityResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62100,8 +63670,10 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeScheduledInstanceAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeScheduledInstanceAvailabilityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -62120,16 +63692,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeScheduledInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62140,8 +63714,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeScheduledInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeScheduledInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -62160,16 +63737,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSecurityGroupReferencesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62180,8 +63759,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeSecurityGroupReferencesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSecurityGroupReferencesError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -62200,16 +63782,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSecurityGroupsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62220,8 +63804,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSecurityGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -62241,16 +63826,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSnapshotAttributeResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62261,8 +63848,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSnapshotAttributeError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -62280,16 +63870,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSnapshotsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62302,8 +63894,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -62323,16 +63916,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSpotDatafeedSubscriptionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62343,8 +63938,10 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSpotDatafeedSubscriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -62363,16 +63960,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSpotFleetInstancesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62383,8 +63982,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeSpotFleetInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSpotFleetInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -62403,16 +64005,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSpotFleetRequestHistoryResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62423,8 +64027,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeSpotFleetRequestHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSpotFleetRequestHistoryError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -62443,16 +64050,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSpotFleetRequestsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62463,8 +64072,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeSpotFleetRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSpotFleetRequestsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -62483,16 +64095,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSpotInstanceRequestsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62503,8 +64117,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeSpotInstanceRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSpotInstanceRequestsError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -62523,16 +64140,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSpotPriceHistoryResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62543,8 +64162,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeSpotPriceHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSpotPriceHistoryError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -62563,16 +64185,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeStaleSecurityGroupsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62583,8 +64207,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeStaleSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStaleSecurityGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -62602,16 +64229,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSubnetsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62623,8 +64252,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeSubnetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSubnetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -62643,16 +64273,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeTagsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62664,7 +64296,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -62684,16 +64318,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVolumeAttributeResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62704,8 +64340,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeVolumeAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVolumeAttributeError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -62723,16 +64362,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVolumeStatusResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62745,8 +64386,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeVolumeStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVolumeStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -62765,16 +64407,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVolumesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62786,8 +64430,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeVolumesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVolumesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -62807,16 +64452,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVolumesModificationsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62827,8 +64474,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeVolumesModificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVolumesModificationsError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -62846,16 +64496,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVpcAttributeResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62868,8 +64520,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeVpcAttributeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -62889,16 +64542,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVpcClassicLinkResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62909,8 +64564,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeVpcClassicLinkError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcClassicLinkError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -62930,16 +64586,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVpcClassicLinkDnsSupportResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62950,8 +64608,10 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -62970,16 +64630,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVpcEndpointServicesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -62990,8 +64652,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeVpcEndpointServicesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcEndpointServicesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -63009,16 +64674,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVpcEndpointsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63031,8 +64698,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeVpcEndpointsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcEndpointsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63052,16 +64720,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVpcPeeringConnectionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63072,8 +64742,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DescribeVpcPeeringConnectionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcPeeringConnectionsError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -63091,16 +64764,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVpcsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63112,7 +64787,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeVpcsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63132,16 +64809,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVpnConnectionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63152,8 +64831,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeVpnConnectionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpnConnectionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63172,16 +64852,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeVpnGatewaysResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63194,8 +64876,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DescribeVpnGatewaysError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpnGatewaysError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63214,16 +64897,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DetachClassicLinkVpcResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63236,8 +64921,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DetachClassicLinkVpcError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachClassicLinkVpcError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63256,15 +64942,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DetachInternetGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachInternetGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63283,15 +64970,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DetachNetworkInterfaceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachNetworkInterfaceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63310,16 +64998,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = VolumeAttachment::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63331,7 +65021,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DetachVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63350,15 +65042,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DetachVpnGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachVpnGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63377,15 +65070,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DisableVgwRoutePropagationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableVgwRoutePropagationError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -63404,16 +65100,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DisableVpcClassicLinkResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63424,8 +65122,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(DisableVpcClassicLinkError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableVpcClassicLinkError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63445,16 +65144,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DisableVpcClassicLinkDnsSupportResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63465,8 +65166,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DisableVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -63484,15 +65188,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DisassociateAddressError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateAddressError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63512,16 +65217,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DisassociateIamInstanceProfileResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63532,8 +65239,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DisassociateIamInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateIamInstanceProfileError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -63551,15 +65261,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DisassociateRouteTableError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateRouteTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63579,16 +65290,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DisassociateSubnetCidrBlockResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63599,8 +65312,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DisassociateSubnetCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateSubnetCidrBlockError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -63619,16 +65335,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DisassociateVpcCidrBlockResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63639,8 +65357,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(DisassociateVpcCidrBlockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateVpcCidrBlockError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -63658,15 +65379,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(EnableVgwRoutePropagationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableVgwRoutePropagationError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -63682,15 +65406,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(EnableVolumeIOError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableVolumeIOError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63709,16 +65434,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EnableVpcClassicLinkResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63731,8 +65458,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(EnableVpcClassicLinkError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableVpcClassicLinkError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63752,16 +65480,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EnableVpcClassicLinkDnsSupportResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63772,8 +65502,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(EnableVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableVpcClassicLinkDnsSupportError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -63791,16 +65524,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetConsoleOutputResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63813,8 +65548,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(GetConsoleOutputError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetConsoleOutputError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63833,16 +65569,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetConsoleScreenshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63855,8 +65593,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(GetConsoleScreenshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetConsoleScreenshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63876,16 +65615,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetHostReservationPurchasePreviewResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63896,8 +65637,10 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(GetHostReservationPurchasePreviewError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetHostReservationPurchasePreviewError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -63915,16 +65658,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetPasswordDataResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63936,8 +65681,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(GetPasswordDataError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPasswordDataError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -63957,16 +65703,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetReservedInstancesExchangeQuoteResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -63977,8 +65725,10 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(GetReservedInstancesExchangeQuoteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetReservedInstancesExchangeQuoteError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -63996,16 +65746,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ImportImageResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64016,7 +65768,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 }
                 Ok(result)
             }
-            _ => Err(ImportImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -64034,16 +65790,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ImportInstanceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64055,8 +65813,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(ImportInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64075,16 +65834,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ImportKeyPairResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64096,7 +65857,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(ImportKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportKeyPairError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64115,16 +65878,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ImportSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64136,8 +65901,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(ImportSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64156,16 +65922,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ImportVolumeResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64177,7 +65945,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(ImportVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64196,16 +65966,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyHostsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64216,7 +65988,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 }
                 Ok(result)
             }
-            _ => Err(ModifyHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyHostsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -64232,15 +66008,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ModifyIdFormatError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyIdFormatError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64259,15 +66036,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ModifyIdentityIdFormatError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyIdentityIdFormatError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64286,15 +66064,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ModifyImageAttributeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyImageAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64313,15 +66092,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(ModifyInstanceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyInstanceAttributeError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -64340,16 +66122,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyInstancePlacementResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64360,8 +66144,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(ModifyInstancePlacementError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyInstancePlacementError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -64379,15 +66166,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(ModifyNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -64406,16 +66196,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyReservedInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64426,8 +66218,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(ModifyReservedInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyReservedInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -64445,15 +66240,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(ModifySnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifySnapshotAttributeError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -64472,16 +66270,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifySpotFleetRequestResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64492,8 +66292,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(ModifySpotFleetRequestError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifySpotFleetRequestError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64512,15 +66313,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ModifySubnetAttributeError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifySubnetAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64539,16 +66341,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyVolumeResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64560,7 +66364,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(ModifyVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64579,15 +66385,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ModifyVolumeAttributeError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyVolumeAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64606,15 +66413,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ModifyVpcAttributeError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyVpcAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64633,16 +66441,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyVpcEndpointResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64655,8 +66465,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(ModifyVpcEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyVpcEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64676,16 +66487,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyVpcPeeringConnectionOptionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64696,8 +66509,10 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(ModifyVpcPeeringConnectionOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyVpcPeeringConnectionOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -64715,16 +66530,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = MonitorInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64737,8 +66554,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(MonitorInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(MonitorInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64757,16 +66575,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = MoveAddressToVpcResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64779,8 +66599,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(MoveAddressToVpcError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(MoveAddressToVpcError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64800,16 +66621,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PurchaseHostReservationResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64820,8 +66643,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(PurchaseHostReservationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PurchaseHostReservationError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -64840,16 +66666,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PurchaseReservedInstancesOfferingResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64860,8 +66688,10 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(PurchaseReservedInstancesOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PurchaseReservedInstancesOfferingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -64880,16 +66710,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PurchaseScheduledInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64900,8 +66732,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(PurchaseScheduledInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PurchaseScheduledInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -64917,15 +66752,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(RebootInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RebootInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64944,16 +66780,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RegisterImageResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -64965,7 +66803,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(RegisterImageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -64985,16 +66825,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RejectVpcPeeringConnectionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65005,8 +66847,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(RejectVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RejectVpcPeeringConnectionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -65022,15 +66867,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ReleaseAddressError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReleaseAddressError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65049,16 +66895,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReleaseHostsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65070,7 +66918,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(ReleaseHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReleaseHostsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65091,16 +66941,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReplaceIamInstanceProfileAssociationResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65111,8 +66963,10 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(ReplaceIamInstanceProfileAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReplaceIamInstanceProfileAssociationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -65131,16 +66985,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReplaceNetworkAclAssociationResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65151,8 +67007,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(ReplaceNetworkAclAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReplaceNetworkAclAssociationError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -65170,15 +67029,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ReplaceNetworkAclEntryError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReplaceNetworkAclEntryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65195,14 +67055,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ReplaceRouteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReplaceRouteError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65222,16 +67084,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReplaceRouteTableAssociationResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65242,8 +67106,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(ReplaceRouteTableAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReplaceRouteTableAssociationError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -65261,15 +67128,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ReportInstanceStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReportInstanceStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65288,16 +67156,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RequestSpotFleetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65310,8 +67180,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(RequestSpotFleetError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RequestSpotFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65330,16 +67201,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RequestSpotInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65352,8 +67225,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(RequestSpotInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RequestSpotInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65372,15 +67246,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ResetImageAttributeError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetImageAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65399,15 +67274,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ResetInstanceAttributeError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetInstanceAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65426,15 +67302,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(ResetNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -65452,15 +67331,16 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ResetSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetSnapshotAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65480,16 +67360,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RestoreAddressToClassicResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65500,8 +67382,11 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                            Err(RestoreAddressToClassicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreAddressToClassicError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -65519,15 +67404,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(RevokeSecurityGroupEgressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RevokeSecurityGroupEgressError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -65545,15 +67433,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(RevokeSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RevokeSecurityGroupIngressError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -65569,16 +67460,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = Reservation::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65590,7 +67483,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(RunInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RunInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65610,16 +67505,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RunScheduledInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65630,8 +67527,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(RunScheduledInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RunScheduledInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65650,16 +67548,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = StartInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65671,8 +67571,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(StartInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65691,16 +67592,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = StopInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65712,7 +67615,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(StopInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65731,16 +67636,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = TerminateInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65753,8 +67660,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(TerminateInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TerminateInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65774,16 +67682,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UnassignIpv6AddressesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65794,8 +67704,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(UnassignIpv6AddressesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UnassignIpv6AddressesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -65814,15 +67725,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(UnassignPrivateIpAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UnassignPrivateIpAddressesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -65840,16 +67754,18 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UnmonitorInstancesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -65862,8 +67778,9 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Ok(result)
             }
             _ => {
-                Err(UnmonitorInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UnmonitorInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

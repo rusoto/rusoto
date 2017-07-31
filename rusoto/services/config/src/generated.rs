@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1195,6 +1197,11 @@ impl From<HttpDispatchError> for DeleteConfigRuleError {
         DeleteConfigRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteConfigRuleError {
+    fn from(err: io::Error) -> DeleteConfigRuleError {
+        DeleteConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1266,6 +1273,11 @@ impl From<CredentialsError> for DeleteConfigurationRecorderError {
 impl From<HttpDispatchError> for DeleteConfigurationRecorderError {
     fn from(err: HttpDispatchError) -> DeleteConfigurationRecorderError {
         DeleteConfigurationRecorderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteConfigurationRecorderError {
+    fn from(err: io::Error) -> DeleteConfigurationRecorderError {
+        DeleteConfigurationRecorderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteConfigurationRecorderError {
@@ -1343,6 +1355,11 @@ impl From<CredentialsError> for DeleteDeliveryChannelError {
 impl From<HttpDispatchError> for DeleteDeliveryChannelError {
     fn from(err: HttpDispatchError) -> DeleteDeliveryChannelError {
         DeleteDeliveryChannelError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDeliveryChannelError {
+    fn from(err: io::Error) -> DeleteDeliveryChannelError {
+        DeleteDeliveryChannelError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDeliveryChannelError {
@@ -1427,6 +1444,11 @@ impl From<HttpDispatchError> for DeleteEvaluationResultsError {
         DeleteEvaluationResultsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteEvaluationResultsError {
+    fn from(err: io::Error) -> DeleteEvaluationResultsError {
+        DeleteEvaluationResultsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteEvaluationResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1506,6 +1528,11 @@ impl From<CredentialsError> for DeliverConfigSnapshotError {
 impl From<HttpDispatchError> for DeliverConfigSnapshotError {
     fn from(err: HttpDispatchError) -> DeliverConfigSnapshotError {
         DeliverConfigSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeliverConfigSnapshotError {
+    fn from(err: io::Error) -> DeliverConfigSnapshotError {
+        DeliverConfigSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeliverConfigSnapshotError {
@@ -1590,6 +1617,11 @@ impl From<HttpDispatchError> for DescribeComplianceByConfigRuleError {
         DescribeComplianceByConfigRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeComplianceByConfigRuleError {
+    fn from(err: io::Error) -> DescribeComplianceByConfigRuleError {
+        DescribeComplianceByConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeComplianceByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1667,6 +1699,11 @@ impl From<CredentialsError> for DescribeComplianceByResourceError {
 impl From<HttpDispatchError> for DescribeComplianceByResourceError {
     fn from(err: HttpDispatchError) -> DescribeComplianceByResourceError {
         DescribeComplianceByResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeComplianceByResourceError {
+    fn from(err: io::Error) -> DescribeComplianceByResourceError {
+        DescribeComplianceByResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeComplianceByResourceError {
@@ -1749,6 +1786,11 @@ impl From<CredentialsError> for DescribeConfigRuleEvaluationStatusError {
 impl From<HttpDispatchError> for DescribeConfigRuleEvaluationStatusError {
     fn from(err: HttpDispatchError) -> DescribeConfigRuleEvaluationStatusError {
         DescribeConfigRuleEvaluationStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeConfigRuleEvaluationStatusError {
+    fn from(err: io::Error) -> DescribeConfigRuleEvaluationStatusError {
+        DescribeConfigRuleEvaluationStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeConfigRuleEvaluationStatusError {
@@ -1834,6 +1876,11 @@ impl From<HttpDispatchError> for DescribeConfigRulesError {
         DescribeConfigRulesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeConfigRulesError {
+    fn from(err: io::Error) -> DescribeConfigRulesError {
+        DescribeConfigRulesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeConfigRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1908,6 +1955,11 @@ impl From<CredentialsError> for DescribeConfigurationRecorderStatusError {
 impl From<HttpDispatchError> for DescribeConfigurationRecorderStatusError {
     fn from(err: HttpDispatchError) -> DescribeConfigurationRecorderStatusError {
         DescribeConfigurationRecorderStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeConfigurationRecorderStatusError {
+    fn from(err: io::Error) -> DescribeConfigurationRecorderStatusError {
+        DescribeConfigurationRecorderStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeConfigurationRecorderStatusError {
@@ -1986,6 +2038,11 @@ impl From<HttpDispatchError> for DescribeConfigurationRecordersError {
         DescribeConfigurationRecordersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeConfigurationRecordersError {
+    fn from(err: io::Error) -> DescribeConfigurationRecordersError {
+        DescribeConfigurationRecordersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeConfigurationRecordersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2060,6 +2117,11 @@ impl From<HttpDispatchError> for DescribeDeliveryChannelStatusError {
         DescribeDeliveryChannelStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDeliveryChannelStatusError {
+    fn from(err: io::Error) -> DescribeDeliveryChannelStatusError {
+        DescribeDeliveryChannelStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDeliveryChannelStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2132,6 +2194,11 @@ impl From<CredentialsError> for DescribeDeliveryChannelsError {
 impl From<HttpDispatchError> for DescribeDeliveryChannelsError {
     fn from(err: HttpDispatchError) -> DescribeDeliveryChannelsError {
         DescribeDeliveryChannelsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDeliveryChannelsError {
+    fn from(err: io::Error) -> DescribeDeliveryChannelsError {
+        DescribeDeliveryChannelsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDeliveryChannelsError {
@@ -2214,6 +2281,11 @@ impl From<HttpDispatchError> for GetComplianceDetailsByConfigRuleError {
         GetComplianceDetailsByConfigRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetComplianceDetailsByConfigRuleError {
+    fn from(err: io::Error) -> GetComplianceDetailsByConfigRuleError {
+        GetComplianceDetailsByConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetComplianceDetailsByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2290,6 +2362,11 @@ impl From<HttpDispatchError> for GetComplianceDetailsByResourceError {
         GetComplianceDetailsByResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetComplianceDetailsByResourceError {
+    fn from(err: io::Error) -> GetComplianceDetailsByResourceError {
+        GetComplianceDetailsByResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetComplianceDetailsByResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2359,6 +2436,11 @@ impl From<CredentialsError> for GetComplianceSummaryByConfigRuleError {
 impl From<HttpDispatchError> for GetComplianceSummaryByConfigRuleError {
     fn from(err: HttpDispatchError) -> GetComplianceSummaryByConfigRuleError {
         GetComplianceSummaryByConfigRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetComplianceSummaryByConfigRuleError {
+    fn from(err: io::Error) -> GetComplianceSummaryByConfigRuleError {
+        GetComplianceSummaryByConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetComplianceSummaryByConfigRuleError {
@@ -2433,6 +2515,11 @@ impl From<CredentialsError> for GetComplianceSummaryByResourceTypeError {
 impl From<HttpDispatchError> for GetComplianceSummaryByResourceTypeError {
     fn from(err: HttpDispatchError) -> GetComplianceSummaryByResourceTypeError {
         GetComplianceSummaryByResourceTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetComplianceSummaryByResourceTypeError {
+    fn from(err: io::Error) -> GetComplianceSummaryByResourceTypeError {
+        GetComplianceSummaryByResourceTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetComplianceSummaryByResourceTypeError {
@@ -2527,6 +2614,11 @@ impl From<HttpDispatchError> for GetResourceConfigHistoryError {
         GetResourceConfigHistoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetResourceConfigHistoryError {
+    fn from(err: io::Error) -> GetResourceConfigHistoryError {
+        GetResourceConfigHistoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetResourceConfigHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2613,6 +2705,11 @@ impl From<CredentialsError> for ListDiscoveredResourcesError {
 impl From<HttpDispatchError> for ListDiscoveredResourcesError {
     fn from(err: HttpDispatchError) -> ListDiscoveredResourcesError {
         ListDiscoveredResourcesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDiscoveredResourcesError {
+    fn from(err: io::Error) -> ListDiscoveredResourcesError {
+        ListDiscoveredResourcesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDiscoveredResourcesError {
@@ -2709,6 +2806,11 @@ impl From<HttpDispatchError> for PutConfigRuleError {
         PutConfigRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutConfigRuleError {
+    fn from(err: io::Error) -> PutConfigRuleError {
+        PutConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2794,6 +2896,11 @@ impl From<CredentialsError> for PutConfigurationRecorderError {
 impl From<HttpDispatchError> for PutConfigurationRecorderError {
     fn from(err: HttpDispatchError) -> PutConfigurationRecorderError {
         PutConfigurationRecorderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutConfigurationRecorderError {
+    fn from(err: io::Error) -> PutConfigurationRecorderError {
+        PutConfigurationRecorderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutConfigurationRecorderError {
@@ -2899,6 +3006,11 @@ impl From<HttpDispatchError> for PutDeliveryChannelError {
         PutDeliveryChannelError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutDeliveryChannelError {
+    fn from(err: io::Error) -> PutDeliveryChannelError {
+        PutDeliveryChannelError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutDeliveryChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2991,6 +3103,11 @@ impl From<HttpDispatchError> for PutEvaluationsError {
         PutEvaluationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutEvaluationsError {
+    fn from(err: io::Error) -> PutEvaluationsError {
+        PutEvaluationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutEvaluationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3078,6 +3195,11 @@ impl From<HttpDispatchError> for StartConfigRulesEvaluationError {
         StartConfigRulesEvaluationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartConfigRulesEvaluationError {
+    fn from(err: io::Error) -> StartConfigRulesEvaluationError {
+        StartConfigRulesEvaluationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartConfigRulesEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3158,6 +3280,11 @@ impl From<HttpDispatchError> for StartConfigurationRecorderError {
         StartConfigurationRecorderError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartConfigurationRecorderError {
+    fn from(err: io::Error) -> StartConfigurationRecorderError {
+        StartConfigurationRecorderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3231,6 +3358,11 @@ impl From<CredentialsError> for StopConfigurationRecorderError {
 impl From<HttpDispatchError> for StopConfigurationRecorderError {
     fn from(err: HttpDispatchError) -> StopConfigurationRecorderError {
         StopConfigurationRecorderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopConfigurationRecorderError {
+    fn from(err: io::Error) -> StopConfigurationRecorderError {
+        StopConfigurationRecorderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopConfigurationRecorderError {
@@ -3464,13 +3596,14 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteConfigRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteConfigRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3490,11 +3623,16 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeleteConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteConfigurationRecorderError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -3512,13 +3650,14 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteDeliveryChannelError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDeliveryChannelError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3539,13 +3678,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteEvaluationResultsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteEvaluationResultsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteEvaluationResultsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteEvaluationResultsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -3564,15 +3710,18 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeliverConfigSnapshotResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeliverConfigSnapshotResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeliverConfigSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeliverConfigSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3593,13 +3742,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeComplianceByConfigRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeComplianceByConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeComplianceByConfigRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeComplianceByConfigRuleError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -3619,13 +3775,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeComplianceByResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeComplianceByResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeComplianceByResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeComplianceByResourceError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -3646,13 +3809,19 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConfigRuleEvaluationStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeConfigRuleEvaluationStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeConfigRuleEvaluationStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConfigRuleEvaluationStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3670,15 +3839,18 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConfigRulesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeConfigRulesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeConfigRulesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConfigRulesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3700,13 +3872,19 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConfigurationRecorderStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeConfigurationRecorderStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeConfigurationRecorderStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConfigurationRecorderStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3726,13 +3904,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConfigurationRecordersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeConfigurationRecordersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeConfigurationRecordersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConfigurationRecordersError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -3752,13 +3937,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDeliveryChannelStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeDeliveryChannelStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDeliveryChannelStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDeliveryChannelStatusError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -3778,13 +3970,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDeliveryChannelsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeDeliveryChannelsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDeliveryChannelsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDeliveryChannelsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -3804,13 +4003,19 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetComplianceDetailsByConfigRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetComplianceDetailsByConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetComplianceDetailsByConfigRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetComplianceDetailsByConfigRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3830,13 +4035,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetComplianceDetailsByResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetComplianceDetailsByResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetComplianceDetailsByResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetComplianceDetailsByResourceError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -3854,13 +4066,19 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetComplianceSummaryByConfigRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetComplianceSummaryByConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetComplianceSummaryByConfigRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetComplianceSummaryByConfigRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3881,13 +4099,19 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetComplianceSummaryByResourceTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetComplianceSummaryByResourceTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetComplianceSummaryByResourceTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetComplianceSummaryByResourceTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3907,13 +4131,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetResourceConfigHistoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetResourceConfigHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetResourceConfigHistoryResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetResourceConfigHistoryError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -3933,13 +4164,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDiscoveredResourcesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListDiscoveredResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDiscoveredResourcesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDiscoveredResourcesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -3955,12 +4193,14 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(PutConfigRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutConfigRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3980,11 +4220,16 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(PutConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutConfigurationRecorderError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -4002,13 +4247,14 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(PutDeliveryChannelError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutDeliveryChannelError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4027,15 +4273,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutEvaluationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutEvaluationsResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PutEvaluationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutEvaluationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4056,13 +4307,20 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartConfigRulesEvaluationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StartConfigRulesEvaluationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartConfigRulesEvaluationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartConfigRulesEvaluationError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -4081,11 +4339,16 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(StartConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartConfigurationRecorderError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -4104,11 +4367,16 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(StopConfigurationRecorderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopConfigurationRecorderError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 }

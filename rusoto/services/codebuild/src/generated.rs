@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -706,6 +708,11 @@ impl From<HttpDispatchError> for BatchGetBuildsError {
         BatchGetBuildsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchGetBuildsError {
+    fn from(err: io::Error) -> BatchGetBuildsError {
+        BatchGetBuildsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchGetBuildsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -778,6 +785,11 @@ impl From<CredentialsError> for BatchGetProjectsError {
 impl From<HttpDispatchError> for BatchGetProjectsError {
     fn from(err: HttpDispatchError) -> BatchGetProjectsError {
         BatchGetProjectsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchGetProjectsError {
+    fn from(err: io::Error) -> BatchGetProjectsError {
+        BatchGetProjectsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for BatchGetProjectsError {
@@ -864,6 +876,11 @@ impl From<HttpDispatchError> for CreateProjectError {
         CreateProjectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateProjectError {
+    fn from(err: io::Error) -> CreateProjectError {
+        CreateProjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -940,6 +957,11 @@ impl From<HttpDispatchError> for DeleteProjectError {
         DeleteProjectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteProjectError {
+    fn from(err: io::Error) -> DeleteProjectError {
+        DeleteProjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1010,6 +1032,11 @@ impl From<CredentialsError> for ListBuildsError {
 impl From<HttpDispatchError> for ListBuildsError {
     fn from(err: HttpDispatchError) -> ListBuildsError {
         ListBuildsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListBuildsError {
+    fn from(err: io::Error) -> ListBuildsError {
+        ListBuildsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListBuildsError {
@@ -1091,6 +1118,11 @@ impl From<HttpDispatchError> for ListBuildsForProjectError {
         ListBuildsForProjectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListBuildsForProjectError {
+    fn from(err: io::Error) -> ListBuildsForProjectError {
+        ListBuildsForProjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListBuildsForProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1161,6 +1193,11 @@ impl From<CredentialsError> for ListCuratedEnvironmentImagesError {
 impl From<HttpDispatchError> for ListCuratedEnvironmentImagesError {
     fn from(err: HttpDispatchError) -> ListCuratedEnvironmentImagesError {
         ListCuratedEnvironmentImagesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListCuratedEnvironmentImagesError {
+    fn from(err: io::Error) -> ListCuratedEnvironmentImagesError {
+        ListCuratedEnvironmentImagesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListCuratedEnvironmentImagesError {
@@ -1236,6 +1273,11 @@ impl From<CredentialsError> for ListProjectsError {
 impl From<HttpDispatchError> for ListProjectsError {
     fn from(err: HttpDispatchError) -> ListProjectsError {
         ListProjectsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListProjectsError {
+    fn from(err: io::Error) -> ListProjectsError {
+        ListProjectsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -1320,6 +1362,11 @@ impl From<HttpDispatchError> for StartBuildError {
         StartBuildError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartBuildError {
+    fn from(err: io::Error) -> StartBuildError {
+        StartBuildError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1397,6 +1444,11 @@ impl From<CredentialsError> for StopBuildError {
 impl From<HttpDispatchError> for StopBuildError {
     fn from(err: HttpDispatchError) -> StopBuildError {
         StopBuildError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopBuildError {
+    fn from(err: io::Error) -> StopBuildError {
+        StopBuildError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopBuildError {
@@ -1477,6 +1529,11 @@ impl From<CredentialsError> for UpdateProjectError {
 impl From<HttpDispatchError> for UpdateProjectError {
     fn from(err: HttpDispatchError) -> UpdateProjectError {
         UpdateProjectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateProjectError {
+    fn from(err: io::Error) -> UpdateProjectError {
+        UpdateProjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateProjectError {
@@ -1597,15 +1654,20 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetBuildsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetBuildsOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(BatchGetBuildsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetBuildsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1624,15 +1686,20 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetProjectsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetProjectsOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(BatchGetProjectsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetProjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1651,14 +1718,20 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateProjectOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateProjectOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1677,14 +1750,20 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteProjectOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteProjectOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1701,13 +1780,21 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListBuildsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListBuildsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListBuildsOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBuildsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1725,15 +1812,18 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListBuildsForProjectOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListBuildsForProjectOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListBuildsForProjectError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBuildsForProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1752,13 +1842,20 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCuratedEnvironmentImagesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListCuratedEnvironmentImagesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListCuratedEnvironmentImagesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCuratedEnvironmentImagesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -1776,14 +1873,20 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListProjectsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListProjectsOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListProjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListProjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1800,13 +1903,21 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartBuildOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StartBuildError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartBuildOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1822,15 +1933,20 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<StopBuildOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopBuildOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(StopBuildError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1848,14 +1964,20 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateProjectOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateProjectOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -5268,6 +5270,11 @@ impl From<HttpDispatchError> for BuildSuggestersError {
         BuildSuggestersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BuildSuggestersError {
+    fn from(err: io::Error) -> BuildSuggestersError {
+        BuildSuggestersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BuildSuggestersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5344,6 +5351,11 @@ impl From<CredentialsError> for CreateDomainError {
 impl From<HttpDispatchError> for CreateDomainError {
     fn from(err: HttpDispatchError) -> CreateDomainError {
         CreateDomainError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDomainError {
+    fn from(err: io::Error) -> CreateDomainError {
+        CreateDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDomainError {
@@ -5432,6 +5444,11 @@ impl From<CredentialsError> for DefineAnalysisSchemeError {
 impl From<HttpDispatchError> for DefineAnalysisSchemeError {
     fn from(err: HttpDispatchError) -> DefineAnalysisSchemeError {
         DefineAnalysisSchemeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DefineAnalysisSchemeError {
+    fn from(err: io::Error) -> DefineAnalysisSchemeError {
+        DefineAnalysisSchemeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DefineAnalysisSchemeError {
@@ -5528,6 +5545,11 @@ impl From<HttpDispatchError> for DefineExpressionError {
         DefineExpressionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DefineExpressionError {
+    fn from(err: io::Error) -> DefineExpressionError {
+        DefineExpressionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DefineExpressionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5618,6 +5640,11 @@ impl From<CredentialsError> for DefineIndexFieldError {
 impl From<HttpDispatchError> for DefineIndexFieldError {
     fn from(err: HttpDispatchError) -> DefineIndexFieldError {
         DefineIndexFieldError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DefineIndexFieldError {
+    fn from(err: io::Error) -> DefineIndexFieldError {
+        DefineIndexFieldError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DefineIndexFieldError {
@@ -5712,6 +5739,11 @@ impl From<HttpDispatchError> for DefineSuggesterError {
         DefineSuggesterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DefineSuggesterError {
+    fn from(err: io::Error) -> DefineSuggesterError {
+        DefineSuggesterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DefineSuggesterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5797,6 +5829,11 @@ impl From<HttpDispatchError> for DeleteAnalysisSchemeError {
         DeleteAnalysisSchemeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAnalysisSchemeError {
+    fn from(err: io::Error) -> DeleteAnalysisSchemeError {
+        DeleteAnalysisSchemeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAnalysisSchemeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5871,6 +5908,11 @@ impl From<CredentialsError> for DeleteDomainError {
 impl From<HttpDispatchError> for DeleteDomainError {
     fn from(err: HttpDispatchError) -> DeleteDomainError {
         DeleteDomainError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDomainError {
+    fn from(err: io::Error) -> DeleteDomainError {
+        DeleteDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDomainError {
@@ -5955,6 +5997,11 @@ impl From<CredentialsError> for DeleteExpressionError {
 impl From<HttpDispatchError> for DeleteExpressionError {
     fn from(err: HttpDispatchError) -> DeleteExpressionError {
         DeleteExpressionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteExpressionError {
+    fn from(err: io::Error) -> DeleteExpressionError {
+        DeleteExpressionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteExpressionError {
@@ -6043,6 +6090,11 @@ impl From<HttpDispatchError> for DeleteIndexFieldError {
         DeleteIndexFieldError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteIndexFieldError {
+    fn from(err: io::Error) -> DeleteIndexFieldError {
+        DeleteIndexFieldError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteIndexFieldError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6129,6 +6181,11 @@ impl From<HttpDispatchError> for DeleteSuggesterError {
         DeleteSuggesterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteSuggesterError {
+    fn from(err: io::Error) -> DeleteSuggesterError {
+        DeleteSuggesterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteSuggesterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6206,6 +6263,11 @@ impl From<CredentialsError> for DescribeAnalysisSchemesError {
 impl From<HttpDispatchError> for DescribeAnalysisSchemesError {
     fn from(err: HttpDispatchError) -> DescribeAnalysisSchemesError {
         DescribeAnalysisSchemesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAnalysisSchemesError {
+    fn from(err: io::Error) -> DescribeAnalysisSchemesError {
+        DescribeAnalysisSchemesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAnalysisSchemesError {
@@ -6295,6 +6357,11 @@ impl From<HttpDispatchError> for DescribeAvailabilityOptionsError {
         DescribeAvailabilityOptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAvailabilityOptionsError {
+    fn from(err: io::Error) -> DescribeAvailabilityOptionsError {
+        DescribeAvailabilityOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAvailabilityOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6375,6 +6442,11 @@ impl From<HttpDispatchError> for DescribeDomainsError {
         DescribeDomainsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDomainsError {
+    fn from(err: io::Error) -> DescribeDomainsError {
+        DescribeDomainsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6450,6 +6522,11 @@ impl From<CredentialsError> for DescribeExpressionsError {
 impl From<HttpDispatchError> for DescribeExpressionsError {
     fn from(err: HttpDispatchError) -> DescribeExpressionsError {
         DescribeExpressionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeExpressionsError {
+    fn from(err: io::Error) -> DescribeExpressionsError {
+        DescribeExpressionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeExpressionsError {
@@ -6532,6 +6609,11 @@ impl From<HttpDispatchError> for DescribeIndexFieldsError {
         DescribeIndexFieldsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeIndexFieldsError {
+    fn from(err: io::Error) -> DescribeIndexFieldsError {
+        DescribeIndexFieldsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeIndexFieldsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6612,6 +6694,11 @@ impl From<HttpDispatchError> for DescribeScalingParametersError {
         DescribeScalingParametersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeScalingParametersError {
+    fn from(err: io::Error) -> DescribeScalingParametersError {
+        DescribeScalingParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeScalingParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6688,6 +6775,11 @@ impl From<CredentialsError> for DescribeServiceAccessPoliciesError {
 impl From<HttpDispatchError> for DescribeServiceAccessPoliciesError {
     fn from(err: HttpDispatchError) -> DescribeServiceAccessPoliciesError {
         DescribeServiceAccessPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeServiceAccessPoliciesError {
+    fn from(err: io::Error) -> DescribeServiceAccessPoliciesError {
+        DescribeServiceAccessPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeServiceAccessPoliciesError {
@@ -6768,6 +6860,11 @@ impl From<CredentialsError> for DescribeSuggestersError {
 impl From<HttpDispatchError> for DescribeSuggestersError {
     fn from(err: HttpDispatchError) -> DescribeSuggestersError {
         DescribeSuggestersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSuggestersError {
+    fn from(err: io::Error) -> DescribeSuggestersError {
+        DescribeSuggestersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSuggestersError {
@@ -6852,6 +6949,11 @@ impl From<HttpDispatchError> for IndexDocumentsError {
         IndexDocumentsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for IndexDocumentsError {
+    fn from(err: io::Error) -> IndexDocumentsError {
+        IndexDocumentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for IndexDocumentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6920,6 +7022,11 @@ impl From<CredentialsError> for ListDomainNamesError {
 impl From<HttpDispatchError> for ListDomainNamesError {
     fn from(err: HttpDispatchError) -> ListDomainNamesError {
         ListDomainNamesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDomainNamesError {
+    fn from(err: io::Error) -> ListDomainNamesError {
+        ListDomainNamesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDomainNamesError {
@@ -7005,6 +7112,11 @@ impl From<CredentialsError> for UpdateAvailabilityOptionsError {
 impl From<HttpDispatchError> for UpdateAvailabilityOptionsError {
     fn from(err: HttpDispatchError) -> UpdateAvailabilityOptionsError {
         UpdateAvailabilityOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAvailabilityOptionsError {
+    fn from(err: io::Error) -> UpdateAvailabilityOptionsError {
+        UpdateAvailabilityOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAvailabilityOptionsError {
@@ -7096,6 +7208,11 @@ impl From<HttpDispatchError> for UpdateScalingParametersError {
         UpdateScalingParametersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateScalingParametersError {
+    fn from(err: io::Error) -> UpdateScalingParametersError {
+        UpdateScalingParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateScalingParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7180,6 +7297,11 @@ impl From<CredentialsError> for UpdateServiceAccessPoliciesError {
 impl From<HttpDispatchError> for UpdateServiceAccessPoliciesError {
     fn from(err: HttpDispatchError) -> UpdateServiceAccessPoliciesError {
         UpdateServiceAccessPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateServiceAccessPoliciesError {
+    fn from(err: io::Error) -> UpdateServiceAccessPoliciesError {
+        UpdateServiceAccessPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateServiceAccessPoliciesError {
@@ -7396,16 +7518,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = BuildSuggestersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7420,8 +7544,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(BuildSuggestersError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BuildSuggestersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7440,16 +7565,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDomainResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7464,7 +7591,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7484,16 +7613,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DefineAnalysisSchemeResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7509,8 +7640,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DefineAnalysisSchemeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DefineAnalysisSchemeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7529,16 +7661,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DefineExpressionResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7553,8 +7687,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DefineExpressionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DefineExpressionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7573,16 +7708,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DefineIndexFieldResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7597,8 +7734,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DefineIndexFieldError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DefineIndexFieldError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7617,16 +7755,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DefineSuggesterResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7641,8 +7781,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DefineSuggesterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DefineSuggesterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7662,16 +7803,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteAnalysisSchemeResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7687,8 +7830,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteAnalysisSchemeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAnalysisSchemeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7707,16 +7851,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteDomainResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7731,7 +7877,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7750,16 +7898,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteExpressionResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7774,8 +7924,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteExpressionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteExpressionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7794,16 +7945,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteIndexFieldResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7818,8 +7971,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteIndexFieldError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteIndexFieldError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7838,16 +7992,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteSuggesterResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7862,8 +8018,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteSuggesterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSuggesterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7883,16 +8040,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAnalysisSchemesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7908,8 +8067,11 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeAnalysisSchemesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAnalysisSchemesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -7928,16 +8090,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAvailabilityOptionsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7951,8 +8115,11 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeAvailabilityOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAvailabilityOptionsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -7970,16 +8137,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeDomainsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7994,8 +8163,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeDomainsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDomainsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8014,16 +8184,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeExpressionsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8038,8 +8210,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeExpressionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeExpressionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8058,16 +8231,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeIndexFieldsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8082,8 +8257,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeIndexFieldsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeIndexFieldsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8103,16 +8279,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeScalingParametersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8126,8 +8304,11 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeScalingParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeScalingParametersError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -8146,16 +8327,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeServiceAccessPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8169,8 +8352,11 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -8188,16 +8374,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSuggestersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8212,8 +8400,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeSuggestersError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSuggestersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8232,16 +8421,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = IndexDocumentsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8256,8 +8447,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(IndexDocumentsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(IndexDocumentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8274,16 +8466,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListDomainNamesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8298,8 +8492,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListDomainNamesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDomainNamesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8319,16 +8514,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateAvailabilityOptionsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8342,8 +8539,11 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(UpdateAvailabilityOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAvailabilityOptionsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -8362,16 +8562,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateScalingParametersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8387,8 +8589,11 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(UpdateScalingParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateScalingParametersError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -8407,16 +8612,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateServiceAccessPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8430,8 +8637,11 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(UpdateServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 }

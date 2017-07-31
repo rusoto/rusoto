@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -639,6 +641,11 @@ impl From<HttpDispatchError> for AddTagsToResourceError {
         AddTagsToResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsToResourceError {
+    fn from(err: io::Error) -> AddTagsToResourceError {
+        AddTagsToResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -725,6 +732,11 @@ impl From<HttpDispatchError> for CreateHapgError {
         CreateHapgError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateHapgError {
+    fn from(err: io::Error) -> CreateHapgError {
+        CreateHapgError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -807,6 +819,11 @@ impl From<CredentialsError> for CreateHsmError {
 impl From<HttpDispatchError> for CreateHsmError {
     fn from(err: HttpDispatchError) -> CreateHsmError {
         CreateHsmError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateHsmError {
+    fn from(err: io::Error) -> CreateHsmError {
+        CreateHsmError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateHsmError {
@@ -895,6 +912,11 @@ impl From<HttpDispatchError> for CreateLunaClientError {
         CreateLunaClientError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateLunaClientError {
+    fn from(err: io::Error) -> CreateLunaClientError {
+        CreateLunaClientError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateLunaClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -979,6 +1001,11 @@ impl From<HttpDispatchError> for DeleteHapgError {
         DeleteHapgError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteHapgError {
+    fn from(err: io::Error) -> DeleteHapgError {
+        DeleteHapgError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1061,6 +1088,11 @@ impl From<CredentialsError> for DeleteHsmError {
 impl From<HttpDispatchError> for DeleteHsmError {
     fn from(err: HttpDispatchError) -> DeleteHsmError {
         DeleteHsmError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteHsmError {
+    fn from(err: io::Error) -> DeleteHsmError {
+        DeleteHsmError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteHsmError {
@@ -1149,6 +1181,11 @@ impl From<HttpDispatchError> for DeleteLunaClientError {
         DeleteLunaClientError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteLunaClientError {
+    fn from(err: io::Error) -> DeleteLunaClientError {
+        DeleteLunaClientError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteLunaClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1233,6 +1270,11 @@ impl From<CredentialsError> for DescribeHapgError {
 impl From<HttpDispatchError> for DescribeHapgError {
     fn from(err: HttpDispatchError) -> DescribeHapgError {
         DescribeHapgError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeHapgError {
+    fn from(err: io::Error) -> DescribeHapgError {
+        DescribeHapgError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeHapgError {
@@ -1321,6 +1363,11 @@ impl From<HttpDispatchError> for DescribeHsmError {
         DescribeHsmError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeHsmError {
+    fn from(err: io::Error) -> DescribeHsmError {
+        DescribeHsmError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1405,6 +1452,11 @@ impl From<CredentialsError> for DescribeLunaClientError {
 impl From<HttpDispatchError> for DescribeLunaClientError {
     fn from(err: HttpDispatchError) -> DescribeLunaClientError {
         DescribeLunaClientError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLunaClientError {
+    fn from(err: io::Error) -> DescribeLunaClientError {
+        DescribeLunaClientError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLunaClientError {
@@ -1493,6 +1545,11 @@ impl From<HttpDispatchError> for GetConfigError {
         GetConfigError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetConfigError {
+    fn from(err: io::Error) -> GetConfigError {
+        GetConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1577,6 +1634,11 @@ impl From<CredentialsError> for ListAvailableZonesError {
 impl From<HttpDispatchError> for ListAvailableZonesError {
     fn from(err: HttpDispatchError) -> ListAvailableZonesError {
         ListAvailableZonesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAvailableZonesError {
+    fn from(err: io::Error) -> ListAvailableZonesError {
+        ListAvailableZonesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAvailableZonesError {
@@ -1665,6 +1727,11 @@ impl From<HttpDispatchError> for ListHapgsError {
         ListHapgsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListHapgsError {
+    fn from(err: io::Error) -> ListHapgsError {
+        ListHapgsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListHapgsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1747,6 +1814,11 @@ impl From<CredentialsError> for ListHsmsError {
 impl From<HttpDispatchError> for ListHsmsError {
     fn from(err: HttpDispatchError) -> ListHsmsError {
         ListHsmsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListHsmsError {
+    fn from(err: io::Error) -> ListHsmsError {
+        ListHsmsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListHsmsError {
@@ -1835,6 +1907,11 @@ impl From<HttpDispatchError> for ListLunaClientsError {
         ListLunaClientsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListLunaClientsError {
+    fn from(err: io::Error) -> ListLunaClientsError {
+        ListLunaClientsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListLunaClientsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1919,6 +1996,11 @@ impl From<CredentialsError> for ListTagsForResourceError {
 impl From<HttpDispatchError> for ListTagsForResourceError {
     fn from(err: HttpDispatchError) -> ListTagsForResourceError {
         ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -2007,6 +2089,11 @@ impl From<HttpDispatchError> for ModifyHapgError {
         ModifyHapgError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyHapgError {
+    fn from(err: io::Error) -> ModifyHapgError {
+        ModifyHapgError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2091,6 +2178,11 @@ impl From<HttpDispatchError> for ModifyHsmError {
         ModifyHsmError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyHsmError {
+    fn from(err: io::Error) -> ModifyHsmError {
+        ModifyHsmError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2165,6 +2257,11 @@ impl From<CredentialsError> for ModifyLunaClientError {
 impl From<HttpDispatchError> for ModifyLunaClientError {
     fn from(err: HttpDispatchError) -> ModifyLunaClientError {
         ModifyLunaClientError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyLunaClientError {
+    fn from(err: io::Error) -> ModifyLunaClientError {
+        ModifyLunaClientError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyLunaClientError {
@@ -2249,6 +2346,11 @@ impl From<CredentialsError> for RemoveTagsFromResourceError {
 impl From<HttpDispatchError> for RemoveTagsFromResourceError {
     fn from(err: HttpDispatchError) -> RemoveTagsFromResourceError {
         RemoveTagsFromResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveTagsFromResourceError {
+    fn from(err: io::Error) -> RemoveTagsFromResourceError {
+        RemoveTagsFromResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -2419,15 +2521,18 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddTagsToResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2446,13 +2551,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateHapgResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateHapgError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2468,13 +2581,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateHsmResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateHsmError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2492,15 +2613,20 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateLunaClientResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateLunaClientError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLunaClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2519,13 +2645,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteHapgResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteHapgError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2541,13 +2675,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteHsmResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteHsmError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2565,15 +2707,20 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteLunaClientResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteLunaClientError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLunaClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2592,14 +2739,20 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeHapgResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeHapgError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2618,13 +2771,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeHsmResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeHsmError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2642,15 +2803,18 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeLunaClientResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeLunaClientError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLunaClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2667,13 +2831,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetConfigResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetConfigResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2688,15 +2860,18 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAvailableZonesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAvailableZonesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListAvailableZonesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAvailableZonesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2713,13 +2888,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListHapgsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListHapgsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListHapgsResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListHapgsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2735,13 +2918,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListHsmsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListHsmsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListHsmsResponse>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListHsmsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2759,15 +2950,20 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListLunaClientsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListLunaClientsResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListLunaClientsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListLunaClientsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2787,15 +2983,18 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2814,13 +3013,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyHapgResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ModifyHapgError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ModifyHapgResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyHapgError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2836,13 +3043,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyHsmResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ModifyHsmError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ModifyHsmResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyHsmError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2860,15 +3075,20 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyLunaClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ModifyLunaClientResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ModifyLunaClientError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyLunaClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2889,15 +3109,18 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

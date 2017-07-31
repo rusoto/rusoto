@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1040,6 +1042,11 @@ impl From<HttpDispatchError> for AddApplicationCloudWatchLoggingOptionError {
         AddApplicationCloudWatchLoggingOptionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddApplicationCloudWatchLoggingOptionError {
+    fn from(err: io::Error) -> AddApplicationCloudWatchLoggingOptionError {
+        AddApplicationCloudWatchLoggingOptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddApplicationCloudWatchLoggingOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1130,6 +1137,11 @@ impl From<CredentialsError> for AddApplicationInputError {
 impl From<HttpDispatchError> for AddApplicationInputError {
     fn from(err: HttpDispatchError) -> AddApplicationInputError {
         AddApplicationInputError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddApplicationInputError {
+    fn from(err: io::Error) -> AddApplicationInputError {
+        AddApplicationInputError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddApplicationInputError {
@@ -1224,6 +1236,11 @@ impl From<HttpDispatchError> for AddApplicationOutputError {
         AddApplicationOutputError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddApplicationOutputError {
+    fn from(err: io::Error) -> AddApplicationOutputError {
+        AddApplicationOutputError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddApplicationOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1309,6 +1326,11 @@ impl From<CredentialsError> for AddApplicationReferenceDataSourceError {
 impl From<HttpDispatchError> for AddApplicationReferenceDataSourceError {
     fn from(err: HttpDispatchError) -> AddApplicationReferenceDataSourceError {
         AddApplicationReferenceDataSourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddApplicationReferenceDataSourceError {
+    fn from(err: io::Error) -> AddApplicationReferenceDataSourceError {
+        AddApplicationReferenceDataSourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddApplicationReferenceDataSourceError {
@@ -1405,6 +1427,11 @@ impl From<HttpDispatchError> for CreateApplicationError {
         CreateApplicationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateApplicationError {
+    fn from(err: io::Error) -> CreateApplicationError {
+        CreateApplicationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1494,6 +1521,11 @@ impl From<HttpDispatchError> for DeleteApplicationError {
         DeleteApplicationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteApplicationError {
+    fn from(err: io::Error) -> DeleteApplicationError {
+        DeleteApplicationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1575,6 +1607,11 @@ impl From<CredentialsError> for DeleteApplicationCloudWatchLoggingOptionError {
 impl From<HttpDispatchError> for DeleteApplicationCloudWatchLoggingOptionError {
     fn from(err: HttpDispatchError) -> DeleteApplicationCloudWatchLoggingOptionError {
         DeleteApplicationCloudWatchLoggingOptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteApplicationCloudWatchLoggingOptionError {
+    fn from(err: io::Error) -> DeleteApplicationCloudWatchLoggingOptionError {
+        DeleteApplicationCloudWatchLoggingOptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteApplicationCloudWatchLoggingOptionError {
@@ -1673,6 +1710,11 @@ impl From<HttpDispatchError> for DeleteApplicationOutputError {
         DeleteApplicationOutputError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteApplicationOutputError {
+    fn from(err: io::Error) -> DeleteApplicationOutputError {
+        DeleteApplicationOutputError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteApplicationOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1760,6 +1802,11 @@ impl From<HttpDispatchError> for DeleteApplicationReferenceDataSourceError {
         DeleteApplicationReferenceDataSourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteApplicationReferenceDataSourceError {
+    fn from(err: io::Error) -> DeleteApplicationReferenceDataSourceError {
+        DeleteApplicationReferenceDataSourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteApplicationReferenceDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1837,6 +1884,11 @@ impl From<CredentialsError> for DescribeApplicationError {
 impl From<HttpDispatchError> for DescribeApplicationError {
     fn from(err: HttpDispatchError) -> DescribeApplicationError {
         DescribeApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeApplicationError {
+    fn from(err: io::Error) -> DescribeApplicationError {
+        DescribeApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeApplicationError {
@@ -1923,6 +1975,11 @@ impl From<HttpDispatchError> for DiscoverInputSchemaError {
         DiscoverInputSchemaError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DiscoverInputSchemaError {
+    fn from(err: io::Error) -> DiscoverInputSchemaError {
+        DiscoverInputSchemaError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DiscoverInputSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1994,6 +2051,11 @@ impl From<CredentialsError> for ListApplicationsError {
 impl From<HttpDispatchError> for ListApplicationsError {
     fn from(err: HttpDispatchError) -> ListApplicationsError {
         ListApplicationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListApplicationsError {
+    fn from(err: io::Error) -> ListApplicationsError {
+        ListApplicationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListApplicationsError {
@@ -2082,6 +2144,11 @@ impl From<HttpDispatchError> for StartApplicationError {
         StartApplicationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartApplicationError {
+    fn from(err: io::Error) -> StartApplicationError {
+        StartApplicationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2162,6 +2229,11 @@ impl From<CredentialsError> for StopApplicationError {
 impl From<HttpDispatchError> for StopApplicationError {
     fn from(err: HttpDispatchError) -> StopApplicationError {
         StopApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopApplicationError {
+    fn from(err: io::Error) -> StopApplicationError {
+        StopApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopApplicationError {
@@ -2257,6 +2329,11 @@ impl From<CredentialsError> for UpdateApplicationError {
 impl From<HttpDispatchError> for UpdateApplicationError {
     fn from(err: HttpDispatchError) -> UpdateApplicationError {
         UpdateApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateApplicationError {
+    fn from(err: io::Error) -> UpdateApplicationError {
+        UpdateApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateApplicationError {
@@ -2409,13 +2486,19 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddApplicationCloudWatchLoggingOptionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AddApplicationCloudWatchLoggingOptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddApplicationCloudWatchLoggingOptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddApplicationCloudWatchLoggingOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2434,15 +2517,18 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddApplicationInputResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddApplicationInputResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(AddApplicationInputError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddApplicationInputError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2463,15 +2549,18 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddApplicationOutputResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddApplicationOutputResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(AddApplicationOutputError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddApplicationOutputError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2493,13 +2582,19 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddApplicationReferenceDataSourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AddApplicationReferenceDataSourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddApplicationReferenceDataSourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddApplicationReferenceDataSourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2518,15 +2613,18 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2546,15 +2644,18 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2572,13 +2673,19 @@ fn delete_application_cloud_watch_logging_option(&self, input: &DeleteApplicatio
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteApplicationCloudWatchLoggingOptionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteApplicationCloudWatchLoggingOptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteApplicationCloudWatchLoggingOptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteApplicationCloudWatchLoggingOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2598,13 +2705,20 @@ fn delete_application_cloud_watch_logging_option(&self, input: &DeleteApplicatio
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteApplicationOutputResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteApplicationOutputError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteApplicationOutputResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteApplicationOutputError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -2621,13 +2735,19 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteApplicationReferenceDataSourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteApplicationReferenceDataSourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteApplicationReferenceDataSourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteApplicationReferenceDataSourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2646,15 +2766,18 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2674,15 +2797,18 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DiscoverInputSchemaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DiscoverInputSchemaResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DiscoverInputSchemaError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DiscoverInputSchemaError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2701,15 +2827,20 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListApplicationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListApplicationsResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListApplicationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListApplicationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2728,15 +2859,20 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartApplicationResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StartApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2755,15 +2891,20 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopApplicationResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StopApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2783,15 +2924,18 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

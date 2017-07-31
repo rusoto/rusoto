@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1266,6 +1268,11 @@ impl From<HttpDispatchError> for CancelJobError {
         CancelJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelJobError {
+    fn from(err: io::Error) -> CancelJobError {
+        CancelJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1414,6 +1421,11 @@ impl From<HttpDispatchError> for CreateJobError {
         CreateJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateJobError {
+    fn from(err: io::Error) -> CreateJobError {
+        CreateJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1525,6 +1537,11 @@ impl From<HttpDispatchError> for GetShippingLabelError {
         GetShippingLabelError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetShippingLabelError {
+    fn from(err: io::Error) -> GetShippingLabelError {
+        GetShippingLabelError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetShippingLabelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1619,6 +1636,11 @@ impl From<HttpDispatchError> for GetStatusError {
         GetStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetStatusError {
+    fn from(err: io::Error) -> GetStatusError {
+        GetStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1699,6 +1721,11 @@ impl From<CredentialsError> for ListJobsError {
 impl From<HttpDispatchError> for ListJobsError {
     fn from(err: HttpDispatchError) -> ListJobsError {
         ListJobsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListJobsError {
+    fn from(err: io::Error) -> ListJobsError {
+        ListJobsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListJobsError {
@@ -1856,6 +1883,11 @@ impl From<HttpDispatchError> for UpdateJobError {
         UpdateJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateJobError {
+    fn from(err: io::Error) -> UpdateJobError {
+        UpdateJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1955,16 +1987,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CancelJobOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1978,7 +2012,11 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CancelJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1995,16 +2033,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateJobOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2018,7 +2058,11 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2039,16 +2083,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetShippingLabelOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2063,8 +2109,9 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetShippingLabelError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetShippingLabelError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2082,16 +2129,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetStatusOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2105,7 +2154,11 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(GetStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2122,16 +2175,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListJobsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2145,7 +2200,11 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2162,16 +2221,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateJobOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2185,7 +2246,11 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(UpdateJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

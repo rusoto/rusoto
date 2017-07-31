@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -214,6 +216,11 @@ impl From<HttpDispatchError> for BatchMeterUsageError {
         BatchMeterUsageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchMeterUsageError {
+    fn from(err: io::Error) -> BatchMeterUsageError {
+        BatchMeterUsageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchMeterUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -321,6 +328,11 @@ impl From<HttpDispatchError> for MeterUsageError {
         MeterUsageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for MeterUsageError {
+    fn from(err: io::Error) -> MeterUsageError {
+        MeterUsageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for MeterUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -416,6 +428,11 @@ impl From<HttpDispatchError> for ResolveCustomerError {
         ResolveCustomerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ResolveCustomerError {
+    fn from(err: io::Error) -> ResolveCustomerError {
+        ResolveCustomerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ResolveCustomerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -492,15 +509,20 @@ impl<P, D> MarketplaceMetering for MarketplaceMeteringClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchMeterUsageResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchMeterUsageResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(BatchMeterUsageError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchMeterUsageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -517,13 +539,21 @@ impl<P, D> MarketplaceMetering for MarketplaceMeteringClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<MeterUsageResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(MeterUsageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<MeterUsageResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(MeterUsageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -541,15 +571,20 @@ impl<P, D> MarketplaceMetering for MarketplaceMeteringClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ResolveCustomerResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ResolveCustomerResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ResolveCustomerError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResolveCustomerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

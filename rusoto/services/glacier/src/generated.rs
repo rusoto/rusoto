@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1117,6 +1119,11 @@ impl From<HttpDispatchError> for AbortMultipartUploadError {
         AbortMultipartUploadError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AbortMultipartUploadError {
+    fn from(err: io::Error) -> AbortMultipartUploadError {
+        AbortMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AbortMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1209,6 +1216,11 @@ impl From<CredentialsError> for AbortVaultLockError {
 impl From<HttpDispatchError> for AbortVaultLockError {
     fn from(err: HttpDispatchError) -> AbortVaultLockError {
         AbortVaultLockError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AbortVaultLockError {
+    fn from(err: io::Error) -> AbortVaultLockError {
+        AbortVaultLockError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AbortVaultLockError {
@@ -1308,6 +1320,11 @@ impl From<HttpDispatchError> for AddTagsToVaultError {
         AddTagsToVaultError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsToVaultError {
+    fn from(err: io::Error) -> AddTagsToVaultError {
+        AddTagsToVaultError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsToVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1393,6 +1410,11 @@ impl From<CredentialsError> for CompleteMultipartUploadError {
 impl From<HttpDispatchError> for CompleteMultipartUploadError {
     fn from(err: HttpDispatchError) -> CompleteMultipartUploadError {
         CompleteMultipartUploadError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CompleteMultipartUploadError {
+    fn from(err: io::Error) -> CompleteMultipartUploadError {
+        CompleteMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CompleteMultipartUploadError {
@@ -1489,6 +1511,11 @@ impl From<HttpDispatchError> for CompleteVaultLockError {
         CompleteVaultLockError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CompleteVaultLockError {
+    fn from(err: io::Error) -> CompleteVaultLockError {
+        CompleteVaultLockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CompleteVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1583,6 +1610,11 @@ impl From<HttpDispatchError> for CreateVaultError {
         CreateVaultError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateVaultError {
+    fn from(err: io::Error) -> CreateVaultError {
+        CreateVaultError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1673,6 +1705,11 @@ impl From<CredentialsError> for DeleteArchiveError {
 impl From<HttpDispatchError> for DeleteArchiveError {
     fn from(err: HttpDispatchError) -> DeleteArchiveError {
         DeleteArchiveError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteArchiveError {
+    fn from(err: io::Error) -> DeleteArchiveError {
+        DeleteArchiveError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteArchiveError {
@@ -1767,6 +1804,11 @@ impl From<HttpDispatchError> for DeleteVaultError {
         DeleteVaultError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteVaultError {
+    fn from(err: io::Error) -> DeleteVaultError {
+        DeleteVaultError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1851,6 +1893,11 @@ impl From<CredentialsError> for DeleteVaultAccessPolicyError {
 impl From<HttpDispatchError> for DeleteVaultAccessPolicyError {
     fn from(err: HttpDispatchError) -> DeleteVaultAccessPolicyError {
         DeleteVaultAccessPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVaultAccessPolicyError {
+    fn from(err: io::Error) -> DeleteVaultAccessPolicyError {
+        DeleteVaultAccessPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteVaultAccessPolicyError {
@@ -1939,6 +1986,11 @@ impl From<CredentialsError> for DeleteVaultNotificationsError {
 impl From<HttpDispatchError> for DeleteVaultNotificationsError {
     fn from(err: HttpDispatchError) -> DeleteVaultNotificationsError {
         DeleteVaultNotificationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVaultNotificationsError {
+    fn from(err: io::Error) -> DeleteVaultNotificationsError {
+        DeleteVaultNotificationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteVaultNotificationsError {
@@ -2035,6 +2087,11 @@ impl From<HttpDispatchError> for DescribeJobError {
         DescribeJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeJobError {
+    fn from(err: io::Error) -> DescribeJobError {
+        DescribeJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2127,6 +2184,11 @@ impl From<HttpDispatchError> for DescribeVaultError {
         DescribeVaultError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVaultError {
+    fn from(err: io::Error) -> DescribeVaultError {
+        DescribeVaultError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2208,6 +2270,11 @@ impl From<CredentialsError> for GetDataRetrievalPolicyError {
 impl From<HttpDispatchError> for GetDataRetrievalPolicyError {
     fn from(err: HttpDispatchError) -> GetDataRetrievalPolicyError {
         GetDataRetrievalPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDataRetrievalPolicyError {
+    fn from(err: io::Error) -> GetDataRetrievalPolicyError {
+        GetDataRetrievalPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDataRetrievalPolicyError {
@@ -2303,6 +2370,11 @@ impl From<HttpDispatchError> for GetJobOutputError {
         GetJobOutputError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetJobOutputError {
+    fn from(err: io::Error) -> GetJobOutputError {
+        GetJobOutputError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetJobOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2389,6 +2461,11 @@ impl From<CredentialsError> for GetVaultAccessPolicyError {
 impl From<HttpDispatchError> for GetVaultAccessPolicyError {
     fn from(err: HttpDispatchError) -> GetVaultAccessPolicyError {
         GetVaultAccessPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetVaultAccessPolicyError {
+    fn from(err: io::Error) -> GetVaultAccessPolicyError {
+        GetVaultAccessPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetVaultAccessPolicyError {
@@ -2485,6 +2562,11 @@ impl From<HttpDispatchError> for GetVaultLockError {
         GetVaultLockError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetVaultLockError {
+    fn from(err: io::Error) -> GetVaultLockError {
+        GetVaultLockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2571,6 +2653,11 @@ impl From<CredentialsError> for GetVaultNotificationsError {
 impl From<HttpDispatchError> for GetVaultNotificationsError {
     fn from(err: HttpDispatchError) -> GetVaultNotificationsError {
         GetVaultNotificationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetVaultNotificationsError {
+    fn from(err: io::Error) -> GetVaultNotificationsError {
+        GetVaultNotificationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetVaultNotificationsError {
@@ -2677,6 +2764,11 @@ impl From<HttpDispatchError> for InitiateJobError {
         InitiateJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for InitiateJobError {
+    fn from(err: io::Error) -> InitiateJobError {
+        InitiateJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for InitiateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2763,6 +2855,11 @@ impl From<CredentialsError> for InitiateMultipartUploadError {
 impl From<HttpDispatchError> for InitiateMultipartUploadError {
     fn from(err: HttpDispatchError) -> InitiateMultipartUploadError {
         InitiateMultipartUploadError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for InitiateMultipartUploadError {
+    fn from(err: io::Error) -> InitiateMultipartUploadError {
+        InitiateMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for InitiateMultipartUploadError {
@@ -2859,6 +2956,11 @@ impl From<HttpDispatchError> for InitiateVaultLockError {
         InitiateVaultLockError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for InitiateVaultLockError {
+    fn from(err: io::Error) -> InitiateVaultLockError {
+        InitiateVaultLockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for InitiateVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2951,6 +3053,11 @@ impl From<HttpDispatchError> for ListJobsError {
         ListJobsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListJobsError {
+    fn from(err: io::Error) -> ListJobsError {
+        ListJobsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3037,6 +3144,11 @@ impl From<CredentialsError> for ListMultipartUploadsError {
 impl From<HttpDispatchError> for ListMultipartUploadsError {
     fn from(err: HttpDispatchError) -> ListMultipartUploadsError {
         ListMultipartUploadsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListMultipartUploadsError {
+    fn from(err: io::Error) -> ListMultipartUploadsError {
+        ListMultipartUploadsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListMultipartUploadsError {
@@ -3131,6 +3243,11 @@ impl From<HttpDispatchError> for ListPartsError {
         ListPartsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPartsError {
+    fn from(err: io::Error) -> ListPartsError {
+        ListPartsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPartsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3210,6 +3327,11 @@ impl From<CredentialsError> for ListProvisionedCapacityError {
 impl From<HttpDispatchError> for ListProvisionedCapacityError {
     fn from(err: HttpDispatchError) -> ListProvisionedCapacityError {
         ListProvisionedCapacityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListProvisionedCapacityError {
+    fn from(err: io::Error) -> ListProvisionedCapacityError {
+        ListProvisionedCapacityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListProvisionedCapacityError {
@@ -3305,6 +3427,11 @@ impl From<HttpDispatchError> for ListTagsForVaultError {
         ListTagsForVaultError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTagsForVaultError {
+    fn from(err: io::Error) -> ListTagsForVaultError {
+        ListTagsForVaultError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTagsForVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3395,6 +3522,11 @@ impl From<HttpDispatchError> for ListVaultsError {
         ListVaultsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListVaultsError {
+    fn from(err: io::Error) -> ListVaultsError {
+        ListVaultsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListVaultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3479,6 +3611,11 @@ impl From<CredentialsError> for PurchaseProvisionedCapacityError {
 impl From<HttpDispatchError> for PurchaseProvisionedCapacityError {
     fn from(err: HttpDispatchError) -> PurchaseProvisionedCapacityError {
         PurchaseProvisionedCapacityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PurchaseProvisionedCapacityError {
+    fn from(err: io::Error) -> PurchaseProvisionedCapacityError {
+        PurchaseProvisionedCapacityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PurchaseProvisionedCapacityError {
@@ -3575,6 +3712,11 @@ impl From<HttpDispatchError> for RemoveTagsFromVaultError {
         RemoveTagsFromVaultError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveTagsFromVaultError {
+    fn from(err: io::Error) -> RemoveTagsFromVaultError {
+        RemoveTagsFromVaultError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveTagsFromVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3658,6 +3800,11 @@ impl From<CredentialsError> for SetDataRetrievalPolicyError {
 impl From<HttpDispatchError> for SetDataRetrievalPolicyError {
     fn from(err: HttpDispatchError) -> SetDataRetrievalPolicyError {
         SetDataRetrievalPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetDataRetrievalPolicyError {
+    fn from(err: io::Error) -> SetDataRetrievalPolicyError {
+        SetDataRetrievalPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetDataRetrievalPolicyError {
@@ -3749,6 +3896,11 @@ impl From<HttpDispatchError> for SetVaultAccessPolicyError {
         SetVaultAccessPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetVaultAccessPolicyError {
+    fn from(err: io::Error) -> SetVaultAccessPolicyError {
+        SetVaultAccessPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetVaultAccessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3837,6 +3989,11 @@ impl From<CredentialsError> for SetVaultNotificationsError {
 impl From<HttpDispatchError> for SetVaultNotificationsError {
     fn from(err: HttpDispatchError) -> SetVaultNotificationsError {
         SetVaultNotificationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetVaultNotificationsError {
+    fn from(err: io::Error) -> SetVaultNotificationsError {
+        SetVaultNotificationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetVaultNotificationsError {
@@ -3938,6 +4095,11 @@ impl From<HttpDispatchError> for UploadArchiveError {
         UploadArchiveError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UploadArchiveError {
+    fn from(err: io::Error) -> UploadArchiveError {
+        UploadArchiveError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UploadArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4034,6 +4196,11 @@ impl From<CredentialsError> for UploadMultipartPartError {
 impl From<HttpDispatchError> for UploadMultipartPartError {
     fn from(err: HttpDispatchError) -> UploadMultipartPartError {
         UploadMultipartPartError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UploadMultipartPartError {
+    fn from(err: io::Error) -> UploadMultipartPartError {
+        UploadMultipartPartError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UploadMultipartPartError {
@@ -4294,8 +4461,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4305,8 +4471,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AbortMultipartUploadError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AbortMultipartUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4328,8 +4495,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4339,8 +4505,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AbortVaultLockError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AbortVaultLockError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4362,8 +4529,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4373,8 +4539,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AddTagsToVaultError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToVaultError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4399,13 +4566,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4430,7 +4597,12 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CompleteMultipartUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CompleteMultipartUploadError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -4454,8 +4626,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4465,8 +4636,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CompleteVaultLockError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CompleteVaultLockError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4490,13 +4662,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4513,7 +4685,11 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateVaultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVaultError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4535,8 +4711,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4546,7 +4721,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteArchiveError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteArchiveError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4568,8 +4745,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4578,7 +4754,11 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteVaultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVaultError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4601,8 +4781,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4611,7 +4790,12 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteVaultAccessPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVaultAccessPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -4634,8 +4818,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4644,7 +4827,12 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteVaultNotificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVaultNotificationsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -4668,13 +4856,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4688,7 +4876,11 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DescribeJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4711,13 +4903,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4732,7 +4924,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeVaultError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVaultError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4756,13 +4950,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4777,8 +4971,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetDataRetrievalPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDataRetrievalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4803,14 +4998,17 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
                 let mut result = GetJobOutputOutput::default();
-                result.body = Some(response.body);
+
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                result.body = Some(body);
 
                 if let Some(accept_ranges) = response.headers.get("Accept-Ranges") {
                     let value = accept_ranges.to_owned();
@@ -4837,7 +5035,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetJobOutputError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetJobOutputError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4861,13 +5061,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4882,8 +5082,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetVaultAccessPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetVaultAccessPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4907,13 +5108,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4928,7 +5129,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetVaultLockError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetVaultLockError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4953,13 +5156,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4974,8 +5177,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetVaultNotificationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetVaultNotificationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4999,13 +5203,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5026,7 +5230,11 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(InitiateJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(InitiateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5050,13 +5258,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5078,7 +5286,12 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(InitiateMultipartUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(InitiateMultipartUploadError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -5101,13 +5314,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5125,8 +5338,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(InitiateVaultLockError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(InitiateVaultLockError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5161,13 +5375,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5181,7 +5395,11 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5211,13 +5429,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5232,8 +5450,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListMultipartUploadsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListMultipartUploadsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5263,13 +5482,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5283,7 +5502,11 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListPartsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPartsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5306,13 +5529,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5327,7 +5550,12 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListProvisionedCapacityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListProvisionedCapacityError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -5350,13 +5578,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5371,8 +5599,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListTagsForVaultError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForVaultError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5399,13 +5628,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5419,7 +5648,11 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListVaultsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListVaultsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5442,13 +5675,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5466,7 +5699,12 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(PurchaseProvisionedCapacityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PurchaseProvisionedCapacityError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -5489,8 +5727,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -5500,8 +5737,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RemoveTagsFromVaultError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromVaultError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5524,8 +5762,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -5535,8 +5772,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SetDataRetrievalPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetDataRetrievalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5560,8 +5798,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -5571,8 +5808,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SetVaultAccessPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetVaultAccessPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5596,8 +5834,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -5607,8 +5844,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SetVaultNotificationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetVaultNotificationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5632,13 +5870,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5664,7 +5902,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UploadArchiveError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UploadArchiveError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5689,13 +5929,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5714,8 +5954,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UploadMultipartPartError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UploadMultipartPartError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

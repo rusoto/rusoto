@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1921,6 +1923,11 @@ impl From<HttpDispatchError> for AcceptPortfolioShareError {
         AcceptPortfolioShareError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AcceptPortfolioShareError {
+    fn from(err: io::Error) -> AcceptPortfolioShareError {
+        AcceptPortfolioShareError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AcceptPortfolioShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2003,6 +2010,11 @@ impl From<HttpDispatchError> for AssociatePrincipalWithPortfolioError {
         AssociatePrincipalWithPortfolioError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssociatePrincipalWithPortfolioError {
+    fn from(err: io::Error) -> AssociatePrincipalWithPortfolioError {
+        AssociatePrincipalWithPortfolioError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssociatePrincipalWithPortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2083,6 +2095,11 @@ impl From<CredentialsError> for AssociateProductWithPortfolioError {
 impl From<HttpDispatchError> for AssociateProductWithPortfolioError {
     fn from(err: HttpDispatchError) -> AssociateProductWithPortfolioError {
         AssociateProductWithPortfolioError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateProductWithPortfolioError {
+    fn from(err: io::Error) -> AssociateProductWithPortfolioError {
+        AssociateProductWithPortfolioError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssociateProductWithPortfolioError {
@@ -2178,6 +2195,11 @@ impl From<HttpDispatchError> for CreateConstraintError {
         CreateConstraintError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateConstraintError {
+    fn from(err: io::Error) -> CreateConstraintError {
+        CreateConstraintError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateConstraintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2258,6 +2280,11 @@ impl From<CredentialsError> for CreatePortfolioError {
 impl From<HttpDispatchError> for CreatePortfolioError {
     fn from(err: HttpDispatchError) -> CreatePortfolioError {
         CreatePortfolioError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePortfolioError {
+    fn from(err: io::Error) -> CreatePortfolioError {
+        CreatePortfolioError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePortfolioError {
@@ -2345,6 +2372,11 @@ impl From<HttpDispatchError> for CreatePortfolioShareError {
         CreatePortfolioShareError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreatePortfolioShareError {
+    fn from(err: io::Error) -> CreatePortfolioShareError {
+        CreatePortfolioShareError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreatePortfolioShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2428,6 +2460,11 @@ impl From<HttpDispatchError> for CreateProductError {
         CreateProductError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateProductError {
+    fn from(err: io::Error) -> CreateProductError {
+        CreateProductError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2507,6 +2544,11 @@ impl From<CredentialsError> for CreateProvisioningArtifactError {
 impl From<HttpDispatchError> for CreateProvisioningArtifactError {
     fn from(err: HttpDispatchError) -> CreateProvisioningArtifactError {
         CreateProvisioningArtifactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateProvisioningArtifactError {
+    fn from(err: io::Error) -> CreateProvisioningArtifactError {
+        CreateProvisioningArtifactError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateProvisioningArtifactError {
@@ -2590,6 +2632,11 @@ impl From<CredentialsError> for DeleteConstraintError {
 impl From<HttpDispatchError> for DeleteConstraintError {
     fn from(err: HttpDispatchError) -> DeleteConstraintError {
         DeleteConstraintError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteConstraintError {
+    fn from(err: io::Error) -> DeleteConstraintError {
+        DeleteConstraintError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteConstraintError {
@@ -2677,6 +2724,11 @@ impl From<HttpDispatchError> for DeletePortfolioError {
         DeletePortfolioError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeletePortfolioError {
+    fn from(err: io::Error) -> DeletePortfolioError {
+        DeletePortfolioError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeletePortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2751,6 +2803,11 @@ impl From<CredentialsError> for DeletePortfolioShareError {
 impl From<HttpDispatchError> for DeletePortfolioShareError {
     fn from(err: HttpDispatchError) -> DeletePortfolioShareError {
         DeletePortfolioShareError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeletePortfolioShareError {
+    fn from(err: io::Error) -> DeletePortfolioShareError {
+        DeletePortfolioShareError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeletePortfolioShareError {
@@ -2839,6 +2896,11 @@ impl From<HttpDispatchError> for DeleteProductError {
         DeleteProductError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteProductError {
+    fn from(err: io::Error) -> DeleteProductError {
+        DeleteProductError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2921,6 +2983,11 @@ impl From<HttpDispatchError> for DeleteProvisioningArtifactError {
         DeleteProvisioningArtifactError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteProvisioningArtifactError {
+    fn from(err: io::Error) -> DeleteProvisioningArtifactError {
+        DeleteProvisioningArtifactError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteProvisioningArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2999,6 +3066,11 @@ impl From<HttpDispatchError> for DescribeConstraintError {
         DescribeConstraintError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeConstraintError {
+    fn from(err: io::Error) -> DescribeConstraintError {
+        DescribeConstraintError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeConstraintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3073,6 +3145,11 @@ impl From<CredentialsError> for DescribePortfolioError {
 impl From<HttpDispatchError> for DescribePortfolioError {
     fn from(err: HttpDispatchError) -> DescribePortfolioError {
         DescribePortfolioError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribePortfolioError {
+    fn from(err: io::Error) -> DescribePortfolioError {
+        DescribePortfolioError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribePortfolioError {
@@ -3156,6 +3233,11 @@ impl From<HttpDispatchError> for DescribeProductError {
         DescribeProductError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeProductError {
+    fn from(err: io::Error) -> DescribeProductError {
+        DescribeProductError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3229,6 +3311,11 @@ impl From<CredentialsError> for DescribeProductAsAdminError {
 impl From<HttpDispatchError> for DescribeProductAsAdminError {
     fn from(err: HttpDispatchError) -> DescribeProductAsAdminError {
         DescribeProductAsAdminError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeProductAsAdminError {
+    fn from(err: io::Error) -> DescribeProductAsAdminError {
+        DescribeProductAsAdminError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeProductAsAdminError {
@@ -3312,6 +3399,11 @@ impl From<HttpDispatchError> for DescribeProductViewError {
         DescribeProductViewError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeProductViewError {
+    fn from(err: io::Error) -> DescribeProductViewError {
+        DescribeProductViewError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeProductViewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3387,6 +3479,11 @@ impl From<HttpDispatchError> for DescribeProvisionedProductError {
         DescribeProvisionedProductError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeProvisionedProductError {
+    fn from(err: io::Error) -> DescribeProvisionedProductError {
+        DescribeProvisionedProductError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeProvisionedProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3459,6 +3556,11 @@ impl From<CredentialsError> for DescribeProvisioningArtifactError {
 impl From<HttpDispatchError> for DescribeProvisioningArtifactError {
     fn from(err: HttpDispatchError) -> DescribeProvisioningArtifactError {
         DescribeProvisioningArtifactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeProvisioningArtifactError {
+    fn from(err: io::Error) -> DescribeProvisioningArtifactError {
+        DescribeProvisioningArtifactError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeProvisioningArtifactError {
@@ -3538,6 +3640,11 @@ impl From<HttpDispatchError> for DescribeProvisioningParametersError {
         DescribeProvisioningParametersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeProvisioningParametersError {
+    fn from(err: io::Error) -> DescribeProvisioningParametersError {
+        DescribeProvisioningParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeProvisioningParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3615,6 +3722,11 @@ impl From<HttpDispatchError> for DescribeRecordError {
         DescribeRecordError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeRecordError {
+    fn from(err: io::Error) -> DescribeRecordError {
+        DescribeRecordError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeRecordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3689,6 +3801,11 @@ impl From<CredentialsError> for DisassociatePrincipalFromPortfolioError {
 impl From<HttpDispatchError> for DisassociatePrincipalFromPortfolioError {
     fn from(err: HttpDispatchError) -> DisassociatePrincipalFromPortfolioError {
         DisassociatePrincipalFromPortfolioError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociatePrincipalFromPortfolioError {
+    fn from(err: io::Error) -> DisassociatePrincipalFromPortfolioError {
+        DisassociatePrincipalFromPortfolioError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisassociatePrincipalFromPortfolioError {
@@ -3769,6 +3886,11 @@ impl From<HttpDispatchError> for DisassociateProductFromPortfolioError {
         DisassociateProductFromPortfolioError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisassociateProductFromPortfolioError {
+    fn from(err: io::Error) -> DisassociateProductFromPortfolioError {
+        DisassociateProductFromPortfolioError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisassociateProductFromPortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3842,6 +3964,11 @@ impl From<CredentialsError> for ListAcceptedPortfolioSharesError {
 impl From<HttpDispatchError> for ListAcceptedPortfolioSharesError {
     fn from(err: HttpDispatchError) -> ListAcceptedPortfolioSharesError {
         ListAcceptedPortfolioSharesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAcceptedPortfolioSharesError {
+    fn from(err: io::Error) -> ListAcceptedPortfolioSharesError {
+        ListAcceptedPortfolioSharesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAcceptedPortfolioSharesError {
@@ -3919,6 +4046,11 @@ impl From<CredentialsError> for ListConstraintsForPortfolioError {
 impl From<HttpDispatchError> for ListConstraintsForPortfolioError {
     fn from(err: HttpDispatchError) -> ListConstraintsForPortfolioError {
         ListConstraintsForPortfolioError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListConstraintsForPortfolioError {
+    fn from(err: io::Error) -> ListConstraintsForPortfolioError {
+        ListConstraintsForPortfolioError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListConstraintsForPortfolioError {
@@ -4003,6 +4135,11 @@ impl From<HttpDispatchError> for ListLaunchPathsError {
         ListLaunchPathsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListLaunchPathsError {
+    fn from(err: io::Error) -> ListLaunchPathsError {
+        ListLaunchPathsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListLaunchPathsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4076,6 +4213,11 @@ impl From<CredentialsError> for ListPortfolioAccessError {
 impl From<HttpDispatchError> for ListPortfolioAccessError {
     fn from(err: HttpDispatchError) -> ListPortfolioAccessError {
         ListPortfolioAccessError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPortfolioAccessError {
+    fn from(err: io::Error) -> ListPortfolioAccessError {
+        ListPortfolioAccessError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPortfolioAccessError {
@@ -4154,6 +4296,11 @@ impl From<HttpDispatchError> for ListPortfoliosError {
         ListPortfoliosError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPortfoliosError {
+    fn from(err: io::Error) -> ListPortfoliosError {
+        ListPortfoliosError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPortfoliosError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4229,6 +4376,11 @@ impl From<CredentialsError> for ListPortfoliosForProductError {
 impl From<HttpDispatchError> for ListPortfoliosForProductError {
     fn from(err: HttpDispatchError) -> ListPortfoliosForProductError {
         ListPortfoliosForProductError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPortfoliosForProductError {
+    fn from(err: io::Error) -> ListPortfoliosForProductError {
+        ListPortfoliosForProductError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPortfoliosForProductError {
@@ -4309,6 +4461,11 @@ impl From<HttpDispatchError> for ListPrincipalsForPortfolioError {
         ListPrincipalsForPortfolioError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPrincipalsForPortfolioError {
+    fn from(err: io::Error) -> ListPrincipalsForPortfolioError {
+        ListPrincipalsForPortfolioError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPrincipalsForPortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4387,6 +4544,11 @@ impl From<HttpDispatchError> for ListProvisioningArtifactsError {
         ListProvisioningArtifactsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListProvisioningArtifactsError {
+    fn from(err: io::Error) -> ListProvisioningArtifactsError {
+        ListProvisioningArtifactsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListProvisioningArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4462,6 +4624,11 @@ impl From<CredentialsError> for ListRecordHistoryError {
 impl From<HttpDispatchError> for ListRecordHistoryError {
     fn from(err: HttpDispatchError) -> ListRecordHistoryError {
         ListRecordHistoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRecordHistoryError {
+    fn from(err: io::Error) -> ListRecordHistoryError {
+        ListRecordHistoryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRecordHistoryError {
@@ -4550,6 +4717,11 @@ impl From<HttpDispatchError> for ProvisionProductError {
         ProvisionProductError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ProvisionProductError {
+    fn from(err: io::Error) -> ProvisionProductError {
+        ProvisionProductError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ProvisionProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4624,6 +4796,11 @@ impl From<CredentialsError> for RejectPortfolioShareError {
 impl From<HttpDispatchError> for RejectPortfolioShareError {
     fn from(err: HttpDispatchError) -> RejectPortfolioShareError {
         RejectPortfolioShareError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RejectPortfolioShareError {
+    fn from(err: io::Error) -> RejectPortfolioShareError {
+        RejectPortfolioShareError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RejectPortfolioShareError {
@@ -4702,6 +4879,11 @@ impl From<HttpDispatchError> for ScanProvisionedProductsError {
         ScanProvisionedProductsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ScanProvisionedProductsError {
+    fn from(err: io::Error) -> ScanProvisionedProductsError {
+        ScanProvisionedProductsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ScanProvisionedProductsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4776,6 +4958,11 @@ impl From<CredentialsError> for SearchProductsError {
 impl From<HttpDispatchError> for SearchProductsError {
     fn from(err: HttpDispatchError) -> SearchProductsError {
         SearchProductsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SearchProductsError {
+    fn from(err: io::Error) -> SearchProductsError {
+        SearchProductsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SearchProductsError {
@@ -4857,6 +5044,11 @@ impl From<HttpDispatchError> for SearchProductsAsAdminError {
         SearchProductsAsAdminError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SearchProductsAsAdminError {
+    fn from(err: io::Error) -> SearchProductsAsAdminError {
+        SearchProductsAsAdminError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SearchProductsAsAdminError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4930,6 +5122,11 @@ impl From<CredentialsError> for TerminateProvisionedProductError {
 impl From<HttpDispatchError> for TerminateProvisionedProductError {
     fn from(err: HttpDispatchError) -> TerminateProvisionedProductError {
         TerminateProvisionedProductError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TerminateProvisionedProductError {
+    fn from(err: io::Error) -> TerminateProvisionedProductError {
+        TerminateProvisionedProductError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TerminateProvisionedProductError {
@@ -5011,6 +5208,11 @@ impl From<CredentialsError> for UpdateConstraintError {
 impl From<HttpDispatchError> for UpdateConstraintError {
     fn from(err: HttpDispatchError) -> UpdateConstraintError {
         UpdateConstraintError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateConstraintError {
+    fn from(err: io::Error) -> UpdateConstraintError {
+        UpdateConstraintError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateConstraintError {
@@ -5098,6 +5300,11 @@ impl From<HttpDispatchError> for UpdatePortfolioError {
         UpdatePortfolioError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdatePortfolioError {
+    fn from(err: io::Error) -> UpdatePortfolioError {
+        UpdatePortfolioError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdatePortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5179,6 +5386,11 @@ impl From<HttpDispatchError> for UpdateProductError {
         UpdateProductError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateProductError {
+    fn from(err: io::Error) -> UpdateProductError {
+        UpdateProductError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5257,6 +5469,11 @@ impl From<HttpDispatchError> for UpdateProvisionedProductError {
         UpdateProvisionedProductError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateProvisionedProductError {
+    fn from(err: io::Error) -> UpdateProvisionedProductError {
+        UpdateProvisionedProductError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateProvisionedProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5333,6 +5550,11 @@ impl From<CredentialsError> for UpdateProvisioningArtifactError {
 impl From<HttpDispatchError> for UpdateProvisioningArtifactError {
     fn from(err: HttpDispatchError) -> UpdateProvisioningArtifactError {
         UpdateProvisioningArtifactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateProvisioningArtifactError {
+    fn from(err: io::Error) -> UpdateProvisioningArtifactError {
+        UpdateProvisioningArtifactError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateProvisioningArtifactError {
@@ -5681,15 +5903,18 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AcceptPortfolioShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AcceptPortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(AcceptPortfolioShareError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AcceptPortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5710,13 +5935,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AssociatePrincipalWithPortfolioOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AssociatePrincipalWithPortfolioError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AssociatePrincipalWithPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociatePrincipalWithPortfolioError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -5736,13 +5968,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AssociateProductWithPortfolioOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AssociateProductWithPortfolioError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AssociateProductWithPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateProductWithPortfolioError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -5761,15 +6000,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateConstraintOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateConstraintOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateConstraintError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5789,15 +6033,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePortfolioOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreatePortfolioOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreatePortfolioError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5817,15 +6066,18 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePortfolioShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreatePortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreatePortfolioShareError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5844,14 +6096,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateProductOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateProductOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateProductError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5872,13 +6130,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateProvisioningArtifactOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateProvisioningArtifactError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -5897,15 +6162,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteConstraintOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteConstraintOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteConstraintError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5925,15 +6195,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeletePortfolioOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeletePortfolioOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeletePortfolioError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5953,15 +6228,18 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeletePortfolioShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeletePortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeletePortfolioShareError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5980,14 +6258,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteProductOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteProductOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteProductError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6008,13 +6292,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteProvisioningArtifactOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteProvisioningArtifactError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -6033,15 +6324,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConstraintOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeConstraintOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeConstraintError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6061,15 +6357,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePortfolioOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribePortfolioOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribePortfolioError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6089,15 +6390,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeProductOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeProductOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeProductError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6118,15 +6424,18 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeProductAsAdminOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeProductAsAdminOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeProductAsAdminError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeProductAsAdminError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6146,15 +6455,18 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeProductViewOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeProductViewOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeProductViewError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeProductViewError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6175,13 +6487,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeProvisionedProductOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeProvisionedProductError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeProvisionedProductError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -6201,13 +6520,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeProvisioningArtifactOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeProvisioningArtifactError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -6227,13 +6553,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeProvisioningParametersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeProvisioningParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeProvisioningParametersOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeProvisioningParametersError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -6251,15 +6584,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeRecordOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeRecordOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeRecordError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRecordError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6281,13 +6619,19 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisassociatePrincipalFromPortfolioOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DisassociatePrincipalFromPortfolioError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisassociatePrincipalFromPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociatePrincipalFromPortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6307,13 +6651,19 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisassociateProductFromPortfolioOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DisassociateProductFromPortfolioError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisassociateProductFromPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateProductFromPortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6333,13 +6683,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAcceptedPortfolioSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListAcceptedPortfolioSharesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAcceptedPortfolioSharesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAcceptedPortfolioSharesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -6359,13 +6716,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListConstraintsForPortfolioOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListConstraintsForPortfolioError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListConstraintsForPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListConstraintsForPortfolioError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -6384,15 +6748,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListLaunchPathsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListLaunchPathsOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListLaunchPathsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListLaunchPathsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6412,15 +6781,18 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPortfolioAccessOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPortfolioAccessOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListPortfolioAccessError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPortfolioAccessError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6439,15 +6811,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPortfoliosOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPortfoliosOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListPortfoliosError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPortfoliosError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6468,13 +6845,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPortfoliosForProductOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListPortfoliosForProductError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPortfoliosForProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPortfoliosForProductError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -6494,13 +6878,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPrincipalsForPortfolioOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListPrincipalsForPortfolioError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPrincipalsForPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPrincipalsForPortfolioError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -6520,13 +6911,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListProvisioningArtifactsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListProvisioningArtifactsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListProvisioningArtifactsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListProvisioningArtifactsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -6545,15 +6943,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRecordHistoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRecordHistoryOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListRecordHistoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRecordHistoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6573,15 +6976,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ProvisionProductOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ProvisionProductOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ProvisionProductError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ProvisionProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6601,15 +7009,18 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RejectPortfolioShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RejectPortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RejectPortfolioShareError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RejectPortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6630,13 +7041,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ScanProvisionedProductsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ScanProvisionedProductsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ScanProvisionedProductsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ScanProvisionedProductsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6654,15 +7072,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SearchProductsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SearchProductsOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(SearchProductsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SearchProductsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6683,15 +7106,18 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SearchProductsAsAdminOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SearchProductsAsAdminOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(SearchProductsAsAdminError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SearchProductsAsAdminError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6712,13 +7138,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TerminateProvisionedProductOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(TerminateProvisionedProductError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<TerminateProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TerminateProvisionedProductError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -6737,15 +7170,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateConstraintOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateConstraintOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateConstraintError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6765,15 +7203,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePortfolioOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdatePortfolioOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdatePortfolioError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdatePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6792,14 +7235,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateProductOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateProductOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateProductError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6820,13 +7269,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateProvisionedProductOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateProvisionedProductError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateProvisionedProductError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -6846,13 +7302,20 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateProvisioningArtifactOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateProvisioningArtifactError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 }

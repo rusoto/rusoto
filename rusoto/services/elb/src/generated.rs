@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -5507,6 +5509,11 @@ impl From<HttpDispatchError> for AddTagsError {
         AddTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsError {
+    fn from(err: io::Error) -> AddTagsError {
+        AddTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5579,6 +5586,11 @@ impl From<CredentialsError> for ApplySecurityGroupsToLoadBalancerError {
 impl From<HttpDispatchError> for ApplySecurityGroupsToLoadBalancerError {
     fn from(err: HttpDispatchError) -> ApplySecurityGroupsToLoadBalancerError {
         ApplySecurityGroupsToLoadBalancerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ApplySecurityGroupsToLoadBalancerError {
+    fn from(err: io::Error) -> ApplySecurityGroupsToLoadBalancerError {
+        ApplySecurityGroupsToLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ApplySecurityGroupsToLoadBalancerError {
@@ -5660,6 +5672,11 @@ impl From<HttpDispatchError> for AttachLoadBalancerToSubnetsError {
         AttachLoadBalancerToSubnetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachLoadBalancerToSubnetsError {
+    fn from(err: io::Error) -> AttachLoadBalancerToSubnetsError {
+        AttachLoadBalancerToSubnetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachLoadBalancerToSubnetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5729,6 +5746,11 @@ impl From<CredentialsError> for ConfigureHealthCheckError {
 impl From<HttpDispatchError> for ConfigureHealthCheckError {
     fn from(err: HttpDispatchError) -> ConfigureHealthCheckError {
         ConfigureHealthCheckError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ConfigureHealthCheckError {
+    fn from(err: io::Error) -> ConfigureHealthCheckError {
+        ConfigureHealthCheckError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ConfigureHealthCheckError {
@@ -5806,6 +5828,11 @@ impl From<CredentialsError> for CreateAppCookieStickinessPolicyError {
 impl From<HttpDispatchError> for CreateAppCookieStickinessPolicyError {
     fn from(err: HttpDispatchError) -> CreateAppCookieStickinessPolicyError {
         CreateAppCookieStickinessPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateAppCookieStickinessPolicyError {
+    fn from(err: io::Error) -> CreateAppCookieStickinessPolicyError {
+        CreateAppCookieStickinessPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAppCookieStickinessPolicyError {
@@ -5886,6 +5913,11 @@ impl From<CredentialsError> for CreateLBCookieStickinessPolicyError {
 impl From<HttpDispatchError> for CreateLBCookieStickinessPolicyError {
     fn from(err: HttpDispatchError) -> CreateLBCookieStickinessPolicyError {
         CreateLBCookieStickinessPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateLBCookieStickinessPolicyError {
+    fn from(err: io::Error) -> CreateLBCookieStickinessPolicyError {
+        CreateLBCookieStickinessPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateLBCookieStickinessPolicyError {
@@ -5997,6 +6029,11 @@ impl From<HttpDispatchError> for CreateLoadBalancerError {
         CreateLoadBalancerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateLoadBalancerError {
+    fn from(err: io::Error) -> CreateLoadBalancerError {
+        CreateLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6087,6 +6124,11 @@ impl From<HttpDispatchError> for CreateLoadBalancerListenersError {
         CreateLoadBalancerListenersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateLoadBalancerListenersError {
+    fn from(err: io::Error) -> CreateLoadBalancerListenersError {
+        CreateLoadBalancerListenersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateLoadBalancerListenersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6171,6 +6213,11 @@ impl From<HttpDispatchError> for CreateLoadBalancerPolicyError {
         CreateLoadBalancerPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateLoadBalancerPolicyError {
+    fn from(err: io::Error) -> CreateLoadBalancerPolicyError {
+        CreateLoadBalancerPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateLoadBalancerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6240,6 +6287,11 @@ impl From<HttpDispatchError> for DeleteLoadBalancerError {
         DeleteLoadBalancerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteLoadBalancerError {
+    fn from(err: io::Error) -> DeleteLoadBalancerError {
+        DeleteLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6305,6 +6357,11 @@ impl From<CredentialsError> for DeleteLoadBalancerListenersError {
 impl From<HttpDispatchError> for DeleteLoadBalancerListenersError {
     fn from(err: HttpDispatchError) -> DeleteLoadBalancerListenersError {
         DeleteLoadBalancerListenersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLoadBalancerListenersError {
+    fn from(err: io::Error) -> DeleteLoadBalancerListenersError {
+        DeleteLoadBalancerListenersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteLoadBalancerListenersError {
@@ -6376,6 +6433,11 @@ impl From<CredentialsError> for DeleteLoadBalancerPolicyError {
 impl From<HttpDispatchError> for DeleteLoadBalancerPolicyError {
     fn from(err: HttpDispatchError) -> DeleteLoadBalancerPolicyError {
         DeleteLoadBalancerPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLoadBalancerPolicyError {
+    fn from(err: io::Error) -> DeleteLoadBalancerPolicyError {
+        DeleteLoadBalancerPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteLoadBalancerPolicyError {
@@ -6450,6 +6512,11 @@ impl From<HttpDispatchError> for DeregisterInstancesFromLoadBalancerError {
         DeregisterInstancesFromLoadBalancerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeregisterInstancesFromLoadBalancerError {
+    fn from(err: io::Error) -> DeregisterInstancesFromLoadBalancerError {
+        DeregisterInstancesFromLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeregisterInstancesFromLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6514,6 +6581,11 @@ impl From<CredentialsError> for DescribeAccountLimitsError {
 impl From<HttpDispatchError> for DescribeAccountLimitsError {
     fn from(err: HttpDispatchError) -> DescribeAccountLimitsError {
         DescribeAccountLimitsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountLimitsError {
+    fn from(err: io::Error) -> DescribeAccountLimitsError {
+        DescribeAccountLimitsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountLimitsError {
@@ -6584,6 +6656,11 @@ impl From<CredentialsError> for DescribeInstanceHealthError {
 impl From<HttpDispatchError> for DescribeInstanceHealthError {
     fn from(err: HttpDispatchError) -> DescribeInstanceHealthError {
         DescribeInstanceHealthError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeInstanceHealthError {
+    fn from(err: io::Error) -> DescribeInstanceHealthError {
+        DescribeInstanceHealthError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeInstanceHealthError {
@@ -6658,6 +6735,11 @@ impl From<HttpDispatchError> for DescribeLoadBalancerAttributesError {
         DescribeLoadBalancerAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeLoadBalancerAttributesError {
+    fn from(err: io::Error) -> DescribeLoadBalancerAttributesError {
+        DescribeLoadBalancerAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6730,6 +6812,11 @@ impl From<HttpDispatchError> for DescribeLoadBalancerPoliciesError {
         DescribeLoadBalancerPoliciesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeLoadBalancerPoliciesError {
+    fn from(err: io::Error) -> DescribeLoadBalancerPoliciesError {
+        DescribeLoadBalancerPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeLoadBalancerPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6797,6 +6884,11 @@ impl From<CredentialsError> for DescribeLoadBalancerPolicyTypesError {
 impl From<HttpDispatchError> for DescribeLoadBalancerPolicyTypesError {
     fn from(err: HttpDispatchError) -> DescribeLoadBalancerPolicyTypesError {
         DescribeLoadBalancerPolicyTypesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLoadBalancerPolicyTypesError {
+    fn from(err: io::Error) -> DescribeLoadBalancerPolicyTypesError {
+        DescribeLoadBalancerPolicyTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLoadBalancerPolicyTypesError {
@@ -6870,6 +6962,11 @@ impl From<HttpDispatchError> for DescribeLoadBalancersError {
         DescribeLoadBalancersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeLoadBalancersError {
+    fn from(err: io::Error) -> DescribeLoadBalancersError {
+        DescribeLoadBalancersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6941,6 +7038,11 @@ impl From<HttpDispatchError> for DescribeTagsError {
         DescribeTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTagsError {
+    fn from(err: io::Error) -> DescribeTagsError {
+        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7008,6 +7110,11 @@ impl From<CredentialsError> for DetachLoadBalancerFromSubnetsError {
 impl From<HttpDispatchError> for DetachLoadBalancerFromSubnetsError {
     fn from(err: HttpDispatchError) -> DetachLoadBalancerFromSubnetsError {
         DetachLoadBalancerFromSubnetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachLoadBalancerFromSubnetsError {
+    fn from(err: io::Error) -> DetachLoadBalancerFromSubnetsError {
+        DetachLoadBalancerFromSubnetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DetachLoadBalancerFromSubnetsError {
@@ -7082,6 +7189,11 @@ impl From<HttpDispatchError> for DisableAvailabilityZonesForLoadBalancerError {
         DisableAvailabilityZonesForLoadBalancerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisableAvailabilityZonesForLoadBalancerError {
+    fn from(err: io::Error) -> DisableAvailabilityZonesForLoadBalancerError {
+        DisableAvailabilityZonesForLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisableAvailabilityZonesForLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7149,6 +7261,11 @@ impl From<CredentialsError> for EnableAvailabilityZonesForLoadBalancerError {
 impl From<HttpDispatchError> for EnableAvailabilityZonesForLoadBalancerError {
     fn from(err: HttpDispatchError) -> EnableAvailabilityZonesForLoadBalancerError {
         EnableAvailabilityZonesForLoadBalancerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EnableAvailabilityZonesForLoadBalancerError {
+    fn from(err: io::Error) -> EnableAvailabilityZonesForLoadBalancerError {
+        EnableAvailabilityZonesForLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableAvailabilityZonesForLoadBalancerError {
@@ -7225,6 +7342,11 @@ impl From<HttpDispatchError> for ModifyLoadBalancerAttributesError {
         ModifyLoadBalancerAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyLoadBalancerAttributesError {
+    fn from(err: io::Error) -> ModifyLoadBalancerAttributesError {
+        ModifyLoadBalancerAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7298,6 +7420,11 @@ impl From<HttpDispatchError> for RegisterInstancesWithLoadBalancerError {
         RegisterInstancesWithLoadBalancerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterInstancesWithLoadBalancerError {
+    fn from(err: io::Error) -> RegisterInstancesWithLoadBalancerError {
+        RegisterInstancesWithLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterInstancesWithLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7367,6 +7494,11 @@ impl From<CredentialsError> for RemoveTagsError {
 impl From<HttpDispatchError> for RemoveTagsError {
     fn from(err: HttpDispatchError) -> RemoveTagsError {
         RemoveTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveTagsError {
+    fn from(err: io::Error) -> RemoveTagsError {
+        RemoveTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsError {
@@ -7445,6 +7577,11 @@ impl From<CredentialsError> for SetLoadBalancerListenerSSLCertificateError {
 impl From<HttpDispatchError> for SetLoadBalancerListenerSSLCertificateError {
     fn from(err: HttpDispatchError) -> SetLoadBalancerListenerSSLCertificateError {
         SetLoadBalancerListenerSSLCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetLoadBalancerListenerSSLCertificateError {
+    fn from(err: io::Error) -> SetLoadBalancerListenerSSLCertificateError {
+        SetLoadBalancerListenerSSLCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetLoadBalancerListenerSSLCertificateError {
@@ -7527,6 +7664,11 @@ impl From<HttpDispatchError> for SetLoadBalancerPoliciesForBackendServerError {
         SetLoadBalancerPoliciesForBackendServerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetLoadBalancerPoliciesForBackendServerError {
+    fn from(err: io::Error) -> SetLoadBalancerPoliciesForBackendServerError {
+        SetLoadBalancerPoliciesForBackendServerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetLoadBalancerPoliciesForBackendServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7604,6 +7746,11 @@ impl From<CredentialsError> for SetLoadBalancerPoliciesOfListenerError {
 impl From<HttpDispatchError> for SetLoadBalancerPoliciesOfListenerError {
     fn from(err: HttpDispatchError) -> SetLoadBalancerPoliciesOfListenerError {
         SetLoadBalancerPoliciesOfListenerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetLoadBalancerPoliciesOfListenerError {
+    fn from(err: io::Error) -> SetLoadBalancerPoliciesOfListenerError {
+        SetLoadBalancerPoliciesOfListenerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetLoadBalancerPoliciesOfListenerError {
@@ -7853,16 +8000,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AddTagsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7876,7 +8025,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7895,16 +8048,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ApplySecurityGroupsToLoadBalancerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7918,8 +8073,10 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ApplySecurityGroupsToLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ApplySecurityGroupsToLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7938,16 +8095,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AttachLoadBalancerToSubnetsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7961,8 +8120,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AttachLoadBalancerToSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachLoadBalancerToSubnetsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -7980,16 +8142,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ConfigureHealthCheckOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8004,8 +8168,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ConfigureHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ConfigureHealthCheckError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8025,16 +8190,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateAppCookieStickinessPolicyOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8048,8 +8215,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateAppCookieStickinessPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAppCookieStickinessPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -8068,16 +8238,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateLBCookieStickinessPolicyOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8091,8 +8263,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateLBCookieStickinessPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLBCookieStickinessPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -8110,16 +8285,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateAccessPointOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8134,8 +8311,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateLoadBalancerError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8155,16 +8333,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateLoadBalancerListenerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8180,8 +8360,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateLoadBalancerListenersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLoadBalancerListenersError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -8200,16 +8383,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateLoadBalancerPolicyOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8225,8 +8410,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateLoadBalancerPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLoadBalancerPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -8244,16 +8432,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteAccessPointOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8268,8 +8458,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteLoadBalancerError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8289,16 +8480,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteLoadBalancerListenerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8314,8 +8507,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DeleteLoadBalancerListenersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLoadBalancerListenersError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -8334,16 +8530,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteLoadBalancerPolicyOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8359,8 +8557,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DeleteLoadBalancerPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLoadBalancerPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -8379,16 +8580,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeregisterEndPointsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8403,8 +8606,10 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DeregisterInstancesFromLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterInstancesFromLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8423,16 +8628,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAccountLimitsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8447,8 +8654,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8468,16 +8676,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeEndPointStateOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8492,8 +8702,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeInstanceHealthError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstanceHealthError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8513,16 +8724,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeLoadBalancerAttributesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8536,8 +8749,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -8556,16 +8772,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeLoadBalancerPoliciesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8579,8 +8797,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeLoadBalancerPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLoadBalancerPoliciesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -8599,16 +8820,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeLoadBalancerPolicyTypesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8622,8 +8845,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeLoadBalancerPolicyTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLoadBalancerPolicyTypesError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -8642,16 +8868,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAccessPointsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8666,8 +8894,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8686,16 +8915,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeTagsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8710,7 +8941,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8730,16 +8963,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DetachLoadBalancerFromSubnetsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8753,8 +8988,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DetachLoadBalancerFromSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachLoadBalancerFromSubnetsError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -8773,16 +9011,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RemoveAvailabilityZonesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8798,8 +9038,10 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DisableAvailabilityZonesForLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableAvailabilityZonesForLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8818,16 +9060,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AddAvailabilityZonesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8842,8 +9086,10 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(EnableAvailabilityZonesForLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableAvailabilityZonesForLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8862,16 +9108,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyLoadBalancerAttributesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8885,8 +9133,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ModifyLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -8905,16 +9156,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RegisterEndPointsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8929,8 +9182,10 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(RegisterInstancesWithLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterInstancesWithLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8946,16 +9201,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RemoveTagsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8969,7 +9226,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8985,16 +9246,18 @@ fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerList
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetLoadBalancerListenerSSLCertificateOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9008,8 +9271,10 @@ fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerList
                 Ok(result)
             }
             _ => {
-                            Err(SetLoadBalancerListenerSSLCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetLoadBalancerListenerSSLCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -9025,16 +9290,18 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetLoadBalancerPoliciesForBackendServerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9048,8 +9315,10 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
                 Ok(result)
             }
             _ => {
-                            Err(SetLoadBalancerPoliciesForBackendServerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetLoadBalancerPoliciesForBackendServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -9068,16 +9337,18 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetLoadBalancerPoliciesOfListenerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9091,8 +9362,10 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
                 Ok(result)
             }
             _ => {
-                            Err(SetLoadBalancerPoliciesOfListenerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetLoadBalancerPoliciesOfListenerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

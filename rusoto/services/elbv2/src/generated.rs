@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -5683,6 +5685,11 @@ impl From<HttpDispatchError> for AddTagsError {
         AddTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsError {
+    fn from(err: io::Error) -> AddTagsError {
+        AddTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5799,6 +5806,11 @@ impl From<HttpDispatchError> for CreateListenerError {
         CreateListenerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateListenerError {
+    fn from(err: io::Error) -> CreateListenerError {
+        CreateListenerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5908,6 +5920,11 @@ impl From<HttpDispatchError> for CreateLoadBalancerError {
         CreateLoadBalancerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateLoadBalancerError {
+    fn from(err: io::Error) -> CreateLoadBalancerError {
+        CreateLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6015,6 +6032,11 @@ impl From<HttpDispatchError> for CreateRuleError {
         CreateRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateRuleError {
+    fn from(err: io::Error) -> CreateRuleError {
+        CreateRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6091,6 +6113,11 @@ impl From<HttpDispatchError> for CreateTargetGroupError {
         CreateTargetGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateTargetGroupError {
+    fn from(err: io::Error) -> CreateTargetGroupError {
+        CreateTargetGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6162,6 +6189,11 @@ impl From<HttpDispatchError> for DeleteListenerError {
         DeleteListenerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteListenerError {
+    fn from(err: io::Error) -> DeleteListenerError {
+        DeleteListenerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6229,6 +6261,11 @@ impl From<CredentialsError> for DeleteLoadBalancerError {
 impl From<HttpDispatchError> for DeleteLoadBalancerError {
     fn from(err: HttpDispatchError) -> DeleteLoadBalancerError {
         DeleteLoadBalancerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLoadBalancerError {
+    fn from(err: io::Error) -> DeleteLoadBalancerError {
+        DeleteLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteLoadBalancerError {
@@ -6307,6 +6344,11 @@ impl From<HttpDispatchError> for DeleteRuleError {
         DeleteRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRuleError {
+    fn from(err: io::Error) -> DeleteRuleError {
+        DeleteRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6374,6 +6416,11 @@ impl From<CredentialsError> for DeleteTargetGroupError {
 impl From<HttpDispatchError> for DeleteTargetGroupError {
     fn from(err: HttpDispatchError) -> DeleteTargetGroupError {
         DeleteTargetGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTargetGroupError {
+    fn from(err: io::Error) -> DeleteTargetGroupError {
+        DeleteTargetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteTargetGroupError {
@@ -6449,6 +6496,11 @@ impl From<HttpDispatchError> for DeregisterTargetsError {
         DeregisterTargetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeregisterTargetsError {
+    fn from(err: io::Error) -> DeregisterTargetsError {
+        DeregisterTargetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeregisterTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6513,6 +6565,11 @@ impl From<CredentialsError> for DescribeAccountLimitsError {
 impl From<HttpDispatchError> for DescribeAccountLimitsError {
     fn from(err: HttpDispatchError) -> DescribeAccountLimitsError {
         DescribeAccountLimitsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountLimitsError {
+    fn from(err: io::Error) -> DescribeAccountLimitsError {
+        DescribeAccountLimitsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountLimitsError {
@@ -6587,6 +6644,11 @@ impl From<HttpDispatchError> for DescribeListenersError {
         DescribeListenersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeListenersError {
+    fn from(err: io::Error) -> DescribeListenersError {
+        DescribeListenersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeListenersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6656,6 +6718,11 @@ impl From<HttpDispatchError> for DescribeLoadBalancerAttributesError {
         DescribeLoadBalancerAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeLoadBalancerAttributesError {
+    fn from(err: io::Error) -> DescribeLoadBalancerAttributesError {
+        DescribeLoadBalancerAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6722,6 +6789,11 @@ impl From<CredentialsError> for DescribeLoadBalancersError {
 impl From<HttpDispatchError> for DescribeLoadBalancersError {
     fn from(err: HttpDispatchError) -> DescribeLoadBalancersError {
         DescribeLoadBalancersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLoadBalancersError {
+    fn from(err: io::Error) -> DescribeLoadBalancersError {
+        DescribeLoadBalancersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLoadBalancersError {
@@ -6799,6 +6871,11 @@ impl From<HttpDispatchError> for DescribeRulesError {
         DescribeRulesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeRulesError {
+    fn from(err: io::Error) -> DescribeRulesError {
+        DescribeRulesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6864,6 +6941,11 @@ impl From<CredentialsError> for DescribeSSLPoliciesError {
 impl From<HttpDispatchError> for DescribeSSLPoliciesError {
     fn from(err: HttpDispatchError) -> DescribeSSLPoliciesError {
         DescribeSSLPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSSLPoliciesError {
+    fn from(err: io::Error) -> DescribeSSLPoliciesError {
+        DescribeSSLPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSSLPoliciesError {
@@ -6951,6 +7033,11 @@ impl From<HttpDispatchError> for DescribeTagsError {
         DescribeTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTagsError {
+    fn from(err: io::Error) -> DescribeTagsError {
+        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7018,6 +7105,11 @@ impl From<CredentialsError> for DescribeTargetGroupAttributesError {
 impl From<HttpDispatchError> for DescribeTargetGroupAttributesError {
     fn from(err: HttpDispatchError) -> DescribeTargetGroupAttributesError {
         DescribeTargetGroupAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTargetGroupAttributesError {
+    fn from(err: io::Error) -> DescribeTargetGroupAttributesError {
+        DescribeTargetGroupAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTargetGroupAttributesError {
@@ -7089,6 +7181,11 @@ impl From<CredentialsError> for DescribeTargetGroupsError {
 impl From<HttpDispatchError> for DescribeTargetGroupsError {
     fn from(err: HttpDispatchError) -> DescribeTargetGroupsError {
         DescribeTargetGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTargetGroupsError {
+    fn from(err: io::Error) -> DescribeTargetGroupsError {
+        DescribeTargetGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTargetGroupsError {
@@ -7166,6 +7263,11 @@ impl From<CredentialsError> for DescribeTargetHealthError {
 impl From<HttpDispatchError> for DescribeTargetHealthError {
     fn from(err: HttpDispatchError) -> DescribeTargetHealthError {
         DescribeTargetHealthError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTargetHealthError {
+    fn from(err: io::Error) -> DescribeTargetHealthError {
+        DescribeTargetHealthError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTargetHealthError {
@@ -7287,6 +7389,11 @@ impl From<HttpDispatchError> for ModifyListenerError {
         ModifyListenerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyListenerError {
+    fn from(err: io::Error) -> ModifyListenerError {
+        ModifyListenerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7365,6 +7472,11 @@ impl From<CredentialsError> for ModifyLoadBalancerAttributesError {
 impl From<HttpDispatchError> for ModifyLoadBalancerAttributesError {
     fn from(err: HttpDispatchError) -> ModifyLoadBalancerAttributesError {
         ModifyLoadBalancerAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyLoadBalancerAttributesError {
+    fn from(err: io::Error) -> ModifyLoadBalancerAttributesError {
+        ModifyLoadBalancerAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyLoadBalancerAttributesError {
@@ -7459,6 +7571,11 @@ impl From<HttpDispatchError> for ModifyRuleError {
         ModifyRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyRuleError {
+    fn from(err: io::Error) -> ModifyRuleError {
+        ModifyRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7530,6 +7647,11 @@ impl From<HttpDispatchError> for ModifyTargetGroupError {
         ModifyTargetGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyTargetGroupError {
+    fn from(err: io::Error) -> ModifyTargetGroupError {
+        ModifyTargetGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7596,6 +7718,11 @@ impl From<CredentialsError> for ModifyTargetGroupAttributesError {
 impl From<HttpDispatchError> for ModifyTargetGroupAttributesError {
     fn from(err: HttpDispatchError) -> ModifyTargetGroupAttributesError {
         ModifyTargetGroupAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyTargetGroupAttributesError {
+    fn from(err: io::Error) -> ModifyTargetGroupAttributesError {
+        ModifyTargetGroupAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyTargetGroupAttributesError {
@@ -7677,6 +7804,11 @@ impl From<CredentialsError> for RegisterTargetsError {
 impl From<HttpDispatchError> for RegisterTargetsError {
     fn from(err: HttpDispatchError) -> RegisterTargetsError {
         RegisterTargetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterTargetsError {
+    fn from(err: io::Error) -> RegisterTargetsError {
+        RegisterTargetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterTargetsError {
@@ -7770,6 +7902,11 @@ impl From<HttpDispatchError> for RemoveTagsError {
         RemoveTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveTagsError {
+    fn from(err: io::Error) -> RemoveTagsError {
+        RemoveTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7846,6 +7983,11 @@ impl From<CredentialsError> for SetIpAddressTypeError {
 impl From<HttpDispatchError> for SetIpAddressTypeError {
     fn from(err: HttpDispatchError) -> SetIpAddressTypeError {
         SetIpAddressTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetIpAddressTypeError {
+    fn from(err: io::Error) -> SetIpAddressTypeError {
+        SetIpAddressTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetIpAddressTypeError {
@@ -7926,6 +8068,11 @@ impl From<HttpDispatchError> for SetRulePrioritiesError {
         SetRulePrioritiesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetRulePrioritiesError {
+    fn from(err: io::Error) -> SetRulePrioritiesError {
+        SetRulePrioritiesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetRulePrioritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8000,6 +8147,11 @@ impl From<CredentialsError> for SetSecurityGroupsError {
 impl From<HttpDispatchError> for SetSecurityGroupsError {
     fn from(err: HttpDispatchError) -> SetSecurityGroupsError {
         SetSecurityGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetSecurityGroupsError {
+    fn from(err: io::Error) -> SetSecurityGroupsError {
+        SetSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetSecurityGroupsError {
@@ -8085,6 +8237,11 @@ impl From<CredentialsError> for SetSubnetsError {
 impl From<HttpDispatchError> for SetSubnetsError {
     fn from(err: HttpDispatchError) -> SetSubnetsError {
         SetSubnetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetSubnetsError {
+    fn from(err: io::Error) -> SetSubnetsError {
+        SetSubnetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetSubnetsError {
@@ -8325,16 +8482,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AddTagsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8348,7 +8507,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8366,16 +8529,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateListenerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8390,8 +8555,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateListenerError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateListenerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8410,16 +8576,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateLoadBalancerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8434,8 +8602,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateLoadBalancerError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8452,16 +8621,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateRuleOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8475,7 +8646,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8493,16 +8668,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateTargetGroupOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8517,8 +8694,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateTargetGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTargetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8537,16 +8715,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteListenerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8561,8 +8741,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteListenerError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteListenerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8581,16 +8762,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteLoadBalancerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8605,8 +8788,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteLoadBalancerError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8623,16 +8807,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteRuleOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8646,7 +8832,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(DeleteRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8664,16 +8854,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteTargetGroupOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8688,8 +8880,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteTargetGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTargetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8708,16 +8901,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeregisterTargetsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8732,8 +8927,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeregisterTargetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8753,16 +8949,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAccountLimitsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8777,8 +8975,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8797,16 +8996,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeListenersOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8821,8 +9022,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeListenersError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeListenersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8842,16 +9044,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeLoadBalancerAttributesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8865,8 +9069,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -8885,16 +9092,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeLoadBalancersOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8909,8 +9118,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8929,16 +9139,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeRulesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8953,7 +9165,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeRulesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRulesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8972,16 +9186,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSSLPoliciesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8996,8 +9212,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeSSLPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSSLPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9016,16 +9233,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeTagsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9040,7 +9259,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9060,16 +9281,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeTargetGroupAttributesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9083,8 +9306,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeTargetGroupAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTargetGroupAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -9102,16 +9328,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeTargetGroupsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9126,8 +9354,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeTargetGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTargetGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9146,16 +9375,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeTargetHealthOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9170,8 +9401,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeTargetHealthError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTargetHealthError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9190,16 +9422,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyListenerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9214,8 +9448,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ModifyListenerError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyListenerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9235,16 +9470,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyLoadBalancerAttributesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9258,8 +9495,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ModifyLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -9275,16 +9515,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyRuleOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9298,7 +9540,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ModifyRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -9316,16 +9562,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyTargetGroupOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9340,8 +9588,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ModifyTargetGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyTargetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9361,16 +9610,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyTargetGroupAttributesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9384,8 +9635,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ModifyTargetGroupAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyTargetGroupAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -9403,16 +9657,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RegisterTargetsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9427,8 +9683,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RegisterTargetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9445,16 +9702,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RemoveTagsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9468,7 +9727,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -9486,16 +9749,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetIpAddressTypeOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9510,8 +9775,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SetIpAddressTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetIpAddressTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9530,16 +9796,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetRulePrioritiesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9554,8 +9822,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SetRulePrioritiesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetRulePrioritiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9574,16 +9843,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetSecurityGroupsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9598,8 +9869,9 @@ impl<P, D> Elb for ElbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SetSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetSecurityGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9616,16 +9888,18 @@ impl<P, D> Elb for ElbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetSubnetsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9639,7 +9913,11 @@ impl<P, D> Elb for ElbClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(SetSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetSubnetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

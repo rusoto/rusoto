@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1149,6 +1151,11 @@ impl From<HttpDispatchError> for AcceptHandshakeError {
         AcceptHandshakeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AcceptHandshakeError {
+    fn from(err: io::Error) -> AcceptHandshakeError {
+        AcceptHandshakeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AcceptHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1280,6 +1287,11 @@ impl From<HttpDispatchError> for AttachPolicyError {
         AttachPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachPolicyError {
+    fn from(err: io::Error) -> AttachPolicyError {
+        AttachPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1397,6 +1409,11 @@ impl From<HttpDispatchError> for CancelHandshakeError {
         CancelHandshakeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelHandshakeError {
+    fn from(err: io::Error) -> CancelHandshakeError {
+        CancelHandshakeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1511,6 +1528,11 @@ impl From<HttpDispatchError> for CreateAccountError {
         CreateAccountError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateAccountError {
+    fn from(err: io::Error) -> CreateAccountError {
+        CreateAccountError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1620,6 +1642,11 @@ impl From<CredentialsError> for CreateOrganizationError {
 impl From<HttpDispatchError> for CreateOrganizationError {
     fn from(err: HttpDispatchError) -> CreateOrganizationError {
         CreateOrganizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateOrganizationError {
+    fn from(err: io::Error) -> CreateOrganizationError {
+        CreateOrganizationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateOrganizationError {
@@ -1734,6 +1761,11 @@ impl From<CredentialsError> for CreateOrganizationalUnitError {
 impl From<HttpDispatchError> for CreateOrganizationalUnitError {
     fn from(err: HttpDispatchError) -> CreateOrganizationalUnitError {
         CreateOrganizationalUnitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateOrganizationalUnitError {
+    fn from(err: io::Error) -> CreateOrganizationalUnitError {
+        CreateOrganizationalUnitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateOrganizationalUnitError {
@@ -1861,6 +1893,11 @@ impl From<HttpDispatchError> for CreatePolicyError {
         CreatePolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreatePolicyError {
+    fn from(err: io::Error) -> CreatePolicyError {
+        CreatePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1977,6 +2014,11 @@ impl From<HttpDispatchError> for DeclineHandshakeError {
         DeclineHandshakeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeclineHandshakeError {
+    fn from(err: io::Error) -> DeclineHandshakeError {
+        DeclineHandshakeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeclineHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2086,6 +2128,11 @@ impl From<HttpDispatchError> for DeleteOrganizationError {
         DeleteOrganizationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteOrganizationError {
+    fn from(err: io::Error) -> DeleteOrganizationError {
+        DeleteOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2193,6 +2240,11 @@ impl From<CredentialsError> for DeleteOrganizationalUnitError {
 impl From<HttpDispatchError> for DeleteOrganizationalUnitError {
     fn from(err: HttpDispatchError) -> DeleteOrganizationalUnitError {
         DeleteOrganizationalUnitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteOrganizationalUnitError {
+    fn from(err: io::Error) -> DeleteOrganizationalUnitError {
+        DeleteOrganizationalUnitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteOrganizationalUnitError {
@@ -2311,6 +2363,11 @@ impl From<HttpDispatchError> for DeletePolicyError {
         DeletePolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeletePolicyError {
+    fn from(err: io::Error) -> DeletePolicyError {
+        DeletePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2417,6 +2474,11 @@ impl From<HttpDispatchError> for DescribeAccountError {
         DescribeAccountError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAccountError {
+    fn from(err: io::Error) -> DescribeAccountError {
+        DescribeAccountError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2513,6 +2575,11 @@ impl From<CredentialsError> for DescribeCreateAccountStatusError {
 impl From<HttpDispatchError> for DescribeCreateAccountStatusError {
     fn from(err: HttpDispatchError) -> DescribeCreateAccountStatusError {
         DescribeCreateAccountStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCreateAccountStatusError {
+    fn from(err: io::Error) -> DescribeCreateAccountStatusError {
+        DescribeCreateAccountStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCreateAccountStatusError {
@@ -2621,6 +2688,11 @@ impl From<HttpDispatchError> for DescribeHandshakeError {
         DescribeHandshakeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeHandshakeError {
+    fn from(err: io::Error) -> DescribeHandshakeError {
+        DescribeHandshakeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2716,6 +2788,11 @@ impl From<CredentialsError> for DescribeOrganizationError {
 impl From<HttpDispatchError> for DescribeOrganizationError {
     fn from(err: HttpDispatchError) -> DescribeOrganizationError {
         DescribeOrganizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeOrganizationError {
+    fn from(err: io::Error) -> DescribeOrganizationError {
+        DescribeOrganizationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeOrganizationError {
@@ -2815,6 +2892,11 @@ impl From<CredentialsError> for DescribeOrganizationalUnitError {
 impl From<HttpDispatchError> for DescribeOrganizationalUnitError {
     fn from(err: HttpDispatchError) -> DescribeOrganizationalUnitError {
         DescribeOrganizationalUnitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeOrganizationalUnitError {
+    fn from(err: io::Error) -> DescribeOrganizationalUnitError {
+        DescribeOrganizationalUnitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeOrganizationalUnitError {
@@ -2919,6 +3001,11 @@ impl From<CredentialsError> for DescribePolicyError {
 impl From<HttpDispatchError> for DescribePolicyError {
     fn from(err: HttpDispatchError) -> DescribePolicyError {
         DescribePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribePolicyError {
+    fn from(err: io::Error) -> DescribePolicyError {
+        DescribePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribePolicyError {
@@ -3043,6 +3130,11 @@ impl From<HttpDispatchError> for DetachPolicyError {
         DetachPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetachPolicyError {
+    fn from(err: io::Error) -> DetachPolicyError {
+        DetachPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3164,6 +3256,11 @@ impl From<HttpDispatchError> for DisablePolicyTypeError {
         DisablePolicyTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisablePolicyTypeError {
+    fn from(err: io::Error) -> DisablePolicyTypeError {
+        DisablePolicyTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisablePolicyTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3272,6 +3369,11 @@ impl From<CredentialsError> for EnableAllFeaturesError {
 impl From<HttpDispatchError> for EnableAllFeaturesError {
     fn from(err: HttpDispatchError) -> EnableAllFeaturesError {
         EnableAllFeaturesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EnableAllFeaturesError {
+    fn from(err: io::Error) -> EnableAllFeaturesError {
+        EnableAllFeaturesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableAllFeaturesError {
@@ -3399,6 +3501,11 @@ impl From<HttpDispatchError> for EnablePolicyTypeError {
         EnablePolicyTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnablePolicyTypeError {
+    fn from(err: io::Error) -> EnablePolicyTypeError {
+        EnablePolicyTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnablePolicyTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3508,6 +3615,11 @@ impl From<CredentialsError> for InviteAccountToOrganizationError {
 impl From<HttpDispatchError> for InviteAccountToOrganizationError {
     fn from(err: HttpDispatchError) -> InviteAccountToOrganizationError {
         InviteAccountToOrganizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for InviteAccountToOrganizationError {
+    fn from(err: io::Error) -> InviteAccountToOrganizationError {
+        InviteAccountToOrganizationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for InviteAccountToOrganizationError {
@@ -3630,6 +3742,11 @@ impl From<HttpDispatchError> for LeaveOrganizationError {
         LeaveOrganizationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for LeaveOrganizationError {
+    fn from(err: io::Error) -> LeaveOrganizationError {
+        LeaveOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for LeaveOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3732,6 +3849,11 @@ impl From<HttpDispatchError> for ListAccountsError {
         ListAccountsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListAccountsError {
+    fn from(err: io::Error) -> ListAccountsError {
+        ListAccountsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListAccountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3831,6 +3953,11 @@ impl From<CredentialsError> for ListAccountsForParentError {
 impl From<HttpDispatchError> for ListAccountsForParentError {
     fn from(err: HttpDispatchError) -> ListAccountsForParentError {
         ListAccountsForParentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAccountsForParentError {
+    fn from(err: io::Error) -> ListAccountsForParentError {
+        ListAccountsForParentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAccountsForParentError {
@@ -3937,6 +4064,11 @@ impl From<HttpDispatchError> for ListChildrenError {
         ListChildrenError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListChildrenError {
+    fn from(err: io::Error) -> ListChildrenError {
+        ListChildrenError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListChildrenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4032,6 +4164,11 @@ impl From<CredentialsError> for ListCreateAccountStatusError {
 impl From<HttpDispatchError> for ListCreateAccountStatusError {
     fn from(err: HttpDispatchError) -> ListCreateAccountStatusError {
         ListCreateAccountStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListCreateAccountStatusError {
+    fn from(err: io::Error) -> ListCreateAccountStatusError {
+        ListCreateAccountStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListCreateAccountStatusError {
@@ -4132,6 +4269,11 @@ impl From<HttpDispatchError> for ListHandshakesForAccountError {
         ListHandshakesForAccountError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListHandshakesForAccountError {
+    fn from(err: io::Error) -> ListHandshakesForAccountError {
+        ListHandshakesForAccountError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListHandshakesForAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4225,6 +4367,11 @@ impl From<CredentialsError> for ListHandshakesForOrganizationError {
 impl From<HttpDispatchError> for ListHandshakesForOrganizationError {
     fn from(err: HttpDispatchError) -> ListHandshakesForOrganizationError {
         ListHandshakesForOrganizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListHandshakesForOrganizationError {
+    fn from(err: io::Error) -> ListHandshakesForOrganizationError {
+        ListHandshakesForOrganizationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListHandshakesForOrganizationError {
@@ -4321,6 +4468,11 @@ impl From<CredentialsError> for ListOrganizationalUnitsForParentError {
 impl From<HttpDispatchError> for ListOrganizationalUnitsForParentError {
     fn from(err: HttpDispatchError) -> ListOrganizationalUnitsForParentError {
         ListOrganizationalUnitsForParentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListOrganizationalUnitsForParentError {
+    fn from(err: io::Error) -> ListOrganizationalUnitsForParentError {
+        ListOrganizationalUnitsForParentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListOrganizationalUnitsForParentError {
@@ -4427,6 +4579,11 @@ impl From<HttpDispatchError> for ListParentsError {
         ListParentsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListParentsError {
+    fn from(err: io::Error) -> ListParentsError {
+        ListParentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListParentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4522,6 +4679,11 @@ impl From<CredentialsError> for ListPoliciesError {
 impl From<HttpDispatchError> for ListPoliciesError {
     fn from(err: HttpDispatchError) -> ListPoliciesError {
         ListPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPoliciesError {
+    fn from(err: io::Error) -> ListPoliciesError {
+        ListPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPoliciesError {
@@ -4625,6 +4787,11 @@ impl From<HttpDispatchError> for ListPoliciesForTargetError {
         ListPoliciesForTargetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPoliciesForTargetError {
+    fn from(err: io::Error) -> ListPoliciesForTargetError {
+        ListPoliciesForTargetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPoliciesForTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4720,6 +4887,11 @@ impl From<CredentialsError> for ListRootsError {
 impl From<HttpDispatchError> for ListRootsError {
     fn from(err: HttpDispatchError) -> ListRootsError {
         ListRootsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRootsError {
+    fn from(err: io::Error) -> ListRootsError {
+        ListRootsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRootsError {
@@ -4821,6 +4993,11 @@ impl From<CredentialsError> for ListTargetsForPolicyError {
 impl From<HttpDispatchError> for ListTargetsForPolicyError {
     fn from(err: HttpDispatchError) -> ListTargetsForPolicyError {
         ListTargetsForPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTargetsForPolicyError {
+    fn from(err: io::Error) -> ListTargetsForPolicyError {
+        ListTargetsForPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTargetsForPolicyError {
@@ -4947,6 +5124,11 @@ impl From<HttpDispatchError> for MoveAccountError {
         MoveAccountError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for MoveAccountError {
+    fn from(err: io::Error) -> MoveAccountError {
+        MoveAccountError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for MoveAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5052,6 +5234,11 @@ impl From<CredentialsError> for RemoveAccountFromOrganizationError {
 impl From<HttpDispatchError> for RemoveAccountFromOrganizationError {
     fn from(err: HttpDispatchError) -> RemoveAccountFromOrganizationError {
         RemoveAccountFromOrganizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveAccountFromOrganizationError {
+    fn from(err: io::Error) -> RemoveAccountFromOrganizationError {
+        RemoveAccountFromOrganizationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveAccountFromOrganizationError {
@@ -5163,6 +5350,11 @@ impl From<CredentialsError> for UpdateOrganizationalUnitError {
 impl From<HttpDispatchError> for UpdateOrganizationalUnitError {
     fn from(err: HttpDispatchError) -> UpdateOrganizationalUnitError {
         UpdateOrganizationalUnitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateOrganizationalUnitError {
+    fn from(err: io::Error) -> UpdateOrganizationalUnitError {
+        UpdateOrganizationalUnitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateOrganizationalUnitError {
@@ -5289,6 +5481,11 @@ impl From<CredentialsError> for UpdatePolicyError {
 impl From<HttpDispatchError> for UpdatePolicyError {
     fn from(err: HttpDispatchError) -> UpdatePolicyError {
         UpdatePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdatePolicyError {
+    fn from(err: io::Error) -> UpdatePolicyError {
+        UpdatePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdatePolicyError {
@@ -5586,15 +5783,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AcceptHandshakeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AcceptHandshakeResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AcceptHandshakeError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AcceptHandshakeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5611,12 +5813,14 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(AttachPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5635,15 +5839,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelHandshakeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CancelHandshakeResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CancelHandshakeError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelHandshakeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5662,14 +5871,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAccountResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateAccountResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateAccountError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAccountError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5689,15 +5904,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateOrganizationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateOrganizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateOrganizationError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateOrganizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5718,13 +5936,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateOrganizationalUnitResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateOrganizationalUnitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateOrganizationalUnitResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateOrganizationalUnitError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -5742,14 +5967,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreatePolicyResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreatePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5768,15 +5999,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeclineHandshakeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeclineHandshakeResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeclineHandshakeError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeclineHandshakeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5793,13 +6029,14 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteOrganizationError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteOrganizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5819,11 +6056,16 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeleteOrganizationalUnitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteOrganizationalUnitError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -5839,12 +6081,14 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5863,15 +6107,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAccountResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAccountResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeAccountError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAccountError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5892,13 +6141,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCreateAccountStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeCreateAccountStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeCreateAccountStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCreateAccountStatusError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -5917,15 +6173,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeHandshakeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeHandshakeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeHandshakeError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeHandshakeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5943,15 +6202,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeOrganizationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeOrganizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeOrganizationError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeOrganizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5972,13 +6234,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeOrganizationalUnitResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeOrganizationalUnitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeOrganizationalUnitResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeOrganizationalUnitError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -5996,15 +6265,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribePolicyResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribePolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6021,12 +6295,14 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DetachPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6046,15 +6322,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisablePolicyTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisablePolicyTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DisablePolicyTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisablePolicyTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6071,15 +6350,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnableAllFeaturesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<EnableAllFeaturesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(EnableAllFeaturesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableAllFeaturesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6098,15 +6380,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnablePolicyTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<EnablePolicyTypeResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(EnablePolicyTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnablePolicyTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6127,13 +6414,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<InviteAccountToOrganizationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(InviteAccountToOrganizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<InviteAccountToOrganizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(InviteAccountToOrganizationError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -6149,13 +6443,14 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(LeaveOrganizationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(LeaveOrganizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6174,14 +6469,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAccountsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAccountsResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListAccountsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAccountsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6202,15 +6503,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAccountsForParentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAccountsForParentResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListAccountsForParentError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAccountsForParentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6229,14 +6533,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListChildrenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListChildrenResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListChildrenError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListChildrenError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6257,13 +6567,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCreateAccountStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListCreateAccountStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListCreateAccountStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCreateAccountStatusError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6283,13 +6600,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListHandshakesForAccountResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListHandshakesForAccountError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListHandshakesForAccountResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListHandshakesForAccountError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -6309,13 +6633,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListHandshakesForOrganizationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListHandshakesForOrganizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListHandshakesForOrganizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListHandshakesForOrganizationError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -6335,13 +6666,19 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOrganizationalUnitsForParentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListOrganizationalUnitsForParentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListOrganizationalUnitsForParentResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListOrganizationalUnitsForParentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6359,13 +6696,21 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListParentsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListParentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListParentsResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListParentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6383,14 +6728,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPoliciesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPoliciesResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6411,15 +6762,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPoliciesForTargetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPoliciesForTargetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListPoliciesForTargetError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPoliciesForTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6436,13 +6790,21 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRootsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListRootsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRootsResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRootsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6462,15 +6824,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTargetsForPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTargetsForPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTargetsForPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTargetsForPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6487,11 +6852,15 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(MoveAccountError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(MoveAccountError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6510,11 +6879,16 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RemoveAccountFromOrganizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveAccountFromOrganizationError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -6534,13 +6908,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateOrganizationalUnitResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateOrganizationalUnitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateOrganizationalUnitResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateOrganizationalUnitError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -6558,14 +6939,20 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdatePolicyResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdatePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdatePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

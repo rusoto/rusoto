@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1650,6 +1652,11 @@ impl From<HttpDispatchError> for AddTagsError {
         AddTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsError {
+    fn from(err: io::Error) -> AddTagsError {
+        AddTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1734,6 +1741,11 @@ impl From<CredentialsError> for CreateBatchPredictionError {
 impl From<HttpDispatchError> for CreateBatchPredictionError {
     fn from(err: HttpDispatchError) -> CreateBatchPredictionError {
         CreateBatchPredictionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateBatchPredictionError {
+    fn from(err: io::Error) -> CreateBatchPredictionError {
+        CreateBatchPredictionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateBatchPredictionError {
@@ -1822,6 +1834,11 @@ impl From<HttpDispatchError> for CreateDataSourceFromRDSError {
         CreateDataSourceFromRDSError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDataSourceFromRDSError {
+    fn from(err: io::Error) -> CreateDataSourceFromRDSError {
+        CreateDataSourceFromRDSError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDataSourceFromRDSError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1904,6 +1921,11 @@ impl From<CredentialsError> for CreateDataSourceFromRedshiftError {
 impl From<HttpDispatchError> for CreateDataSourceFromRedshiftError {
     fn from(err: HttpDispatchError) -> CreateDataSourceFromRedshiftError {
         CreateDataSourceFromRedshiftError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDataSourceFromRedshiftError {
+    fn from(err: io::Error) -> CreateDataSourceFromRedshiftError {
+        CreateDataSourceFromRedshiftError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDataSourceFromRedshiftError {
@@ -1992,6 +2014,11 @@ impl From<HttpDispatchError> for CreateDataSourceFromS3Error {
         CreateDataSourceFromS3Error::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDataSourceFromS3Error {
+    fn from(err: io::Error) -> CreateDataSourceFromS3Error {
+        CreateDataSourceFromS3Error::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDataSourceFromS3Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2076,6 +2103,11 @@ impl From<CredentialsError> for CreateEvaluationError {
 impl From<HttpDispatchError> for CreateEvaluationError {
     fn from(err: HttpDispatchError) -> CreateEvaluationError {
         CreateEvaluationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateEvaluationError {
+    fn from(err: io::Error) -> CreateEvaluationError {
+        CreateEvaluationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateEvaluationError {
@@ -2164,6 +2196,11 @@ impl From<HttpDispatchError> for CreateMLModelError {
         CreateMLModelError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateMLModelError {
+    fn from(err: io::Error) -> CreateMLModelError {
+        CreateMLModelError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2248,6 +2285,11 @@ impl From<CredentialsError> for CreateRealtimeEndpointError {
 impl From<HttpDispatchError> for CreateRealtimeEndpointError {
     fn from(err: HttpDispatchError) -> CreateRealtimeEndpointError {
         CreateRealtimeEndpointError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRealtimeEndpointError {
+    fn from(err: io::Error) -> CreateRealtimeEndpointError {
+        CreateRealtimeEndpointError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateRealtimeEndpointError {
@@ -2338,6 +2380,11 @@ impl From<HttpDispatchError> for DeleteBatchPredictionError {
         DeleteBatchPredictionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteBatchPredictionError {
+    fn from(err: io::Error) -> DeleteBatchPredictionError {
+        DeleteBatchPredictionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2426,6 +2473,11 @@ impl From<HttpDispatchError> for DeleteDataSourceError {
         DeleteDataSourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDataSourceError {
+    fn from(err: io::Error) -> DeleteDataSourceError {
+        DeleteDataSourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2510,6 +2562,11 @@ impl From<CredentialsError> for DeleteEvaluationError {
 impl From<HttpDispatchError> for DeleteEvaluationError {
     fn from(err: HttpDispatchError) -> DeleteEvaluationError {
         DeleteEvaluationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteEvaluationError {
+    fn from(err: io::Error) -> DeleteEvaluationError {
+        DeleteEvaluationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteEvaluationError {
@@ -2598,6 +2655,11 @@ impl From<HttpDispatchError> for DeleteMLModelError {
         DeleteMLModelError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteMLModelError {
+    fn from(err: io::Error) -> DeleteMLModelError {
+        DeleteMLModelError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2682,6 +2744,11 @@ impl From<CredentialsError> for DeleteRealtimeEndpointError {
 impl From<HttpDispatchError> for DeleteRealtimeEndpointError {
     fn from(err: HttpDispatchError) -> DeleteRealtimeEndpointError {
         DeleteRealtimeEndpointError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRealtimeEndpointError {
+    fn from(err: io::Error) -> DeleteRealtimeEndpointError {
+        DeleteRealtimeEndpointError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRealtimeEndpointError {
@@ -2775,6 +2842,11 @@ impl From<HttpDispatchError> for DeleteTagsError {
         DeleteTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTagsError {
+    fn from(err: io::Error) -> DeleteTagsError {
+        DeleteTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2855,6 +2927,11 @@ impl From<CredentialsError> for DescribeBatchPredictionsError {
 impl From<HttpDispatchError> for DescribeBatchPredictionsError {
     fn from(err: HttpDispatchError) -> DescribeBatchPredictionsError {
         DescribeBatchPredictionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeBatchPredictionsError {
+    fn from(err: io::Error) -> DescribeBatchPredictionsError {
+        DescribeBatchPredictionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeBatchPredictionsError {
@@ -2939,6 +3016,11 @@ impl From<HttpDispatchError> for DescribeDataSourcesError {
         DescribeDataSourcesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDataSourcesError {
+    fn from(err: io::Error) -> DescribeDataSourcesError {
+        DescribeDataSourcesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDataSourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3021,6 +3103,11 @@ impl From<HttpDispatchError> for DescribeEvaluationsError {
         DescribeEvaluationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEvaluationsError {
+    fn from(err: io::Error) -> DescribeEvaluationsError {
+        DescribeEvaluationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEvaluationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3101,6 +3188,11 @@ impl From<CredentialsError> for DescribeMLModelsError {
 impl From<HttpDispatchError> for DescribeMLModelsError {
     fn from(err: HttpDispatchError) -> DescribeMLModelsError {
         DescribeMLModelsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeMLModelsError {
+    fn from(err: io::Error) -> DescribeMLModelsError {
+        DescribeMLModelsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeMLModelsError {
@@ -3188,6 +3280,11 @@ impl From<HttpDispatchError> for DescribeTagsError {
         DescribeTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTagsError {
+    fn from(err: io::Error) -> DescribeTagsError {
+        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3272,6 +3369,11 @@ impl From<CredentialsError> for GetBatchPredictionError {
 impl From<HttpDispatchError> for GetBatchPredictionError {
     fn from(err: HttpDispatchError) -> GetBatchPredictionError {
         GetBatchPredictionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBatchPredictionError {
+    fn from(err: io::Error) -> GetBatchPredictionError {
+        GetBatchPredictionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBatchPredictionError {
@@ -3362,6 +3464,11 @@ impl From<HttpDispatchError> for GetDataSourceError {
         GetDataSourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDataSourceError {
+    fn from(err: io::Error) -> GetDataSourceError {
+        GetDataSourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3448,6 +3555,11 @@ impl From<HttpDispatchError> for GetEvaluationError {
         GetEvaluationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetEvaluationError {
+    fn from(err: io::Error) -> GetEvaluationError {
+        GetEvaluationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3530,6 +3642,11 @@ impl From<CredentialsError> for GetMLModelError {
 impl From<HttpDispatchError> for GetMLModelError {
     fn from(err: HttpDispatchError) -> GetMLModelError {
         GetMLModelError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMLModelError {
+    fn from(err: io::Error) -> GetMLModelError {
+        GetMLModelError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetMLModelError {
@@ -3626,6 +3743,11 @@ impl From<HttpDispatchError> for PredictError {
         PredictError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PredictError {
+    fn from(err: io::Error) -> PredictError {
+        PredictError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PredictError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3712,6 +3834,11 @@ impl From<CredentialsError> for UpdateBatchPredictionError {
 impl From<HttpDispatchError> for UpdateBatchPredictionError {
     fn from(err: HttpDispatchError) -> UpdateBatchPredictionError {
         UpdateBatchPredictionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateBatchPredictionError {
+    fn from(err: io::Error) -> UpdateBatchPredictionError {
+        UpdateBatchPredictionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateBatchPredictionError {
@@ -3802,6 +3929,11 @@ impl From<HttpDispatchError> for UpdateDataSourceError {
         UpdateDataSourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateDataSourceError {
+    fn from(err: io::Error) -> UpdateDataSourceError {
+        UpdateDataSourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3888,6 +4020,11 @@ impl From<HttpDispatchError> for UpdateEvaluationError {
         UpdateEvaluationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateEvaluationError {
+    fn from(err: io::Error) -> UpdateEvaluationError {
+        UpdateEvaluationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3972,6 +4109,11 @@ impl From<CredentialsError> for UpdateMLModelError {
 impl From<HttpDispatchError> for UpdateMLModelError {
     fn from(err: HttpDispatchError) -> UpdateMLModelError {
         UpdateMLModelError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateMLModelError {
+    fn from(err: io::Error) -> UpdateMLModelError {
+        UpdateMLModelError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateMLModelError {
@@ -4200,15 +4342,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4227,15 +4374,18 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateBatchPredictionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateBatchPredictionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4255,13 +4405,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDataSourceFromRDSOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateDataSourceFromRDSError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDataSourceFromRDSOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDataSourceFromRDSError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -4281,13 +4438,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDataSourceFromRedshiftOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateDataSourceFromRedshiftError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDataSourceFromRedshiftOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDataSourceFromRedshiftError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -4306,15 +4470,18 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDataSourceFromS3Output>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDataSourceFromS3Output>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateDataSourceFromS3Error::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDataSourceFromS3Error::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4333,15 +4500,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateEvaluationOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateEvaluationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateEvaluationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4360,14 +4532,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateMLModelOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateMLModelError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4387,15 +4565,18 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRealtimeEndpointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateRealtimeEndpointOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateRealtimeEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRealtimeEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4415,15 +4596,18 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteBatchPredictionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBatchPredictionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4442,15 +4626,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDataSourceOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteDataSourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDataSourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4469,15 +4658,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteEvaluationOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteEvaluationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteEvaluationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4496,14 +4690,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteMLModelOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteMLModelError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4523,15 +4723,18 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRealtimeEndpointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRealtimeEndpointOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteRealtimeEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRealtimeEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4548,13 +4751,21 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteTagsOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4573,13 +4784,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeBatchPredictionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeBatchPredictionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeBatchPredictionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeBatchPredictionsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -4597,15 +4815,18 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDataSourcesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDataSourcesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeDataSourcesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDataSourcesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4624,15 +4845,18 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEvaluationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEvaluationsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeEvaluationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEvaluationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4651,15 +4875,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMLModelsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeMLModelsOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeMLModelsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMLModelsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4678,14 +4907,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTagsOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4704,15 +4939,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetBatchPredictionOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBatchPredictionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4731,14 +4971,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDataSourceOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetDataSourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDataSourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4757,14 +5003,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetEvaluationOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetEvaluationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetEvaluationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4781,13 +5033,21 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetMLModelOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetMLModelError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4803,15 +5063,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<PredictOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PredictOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(PredictError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PredictError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4830,15 +5095,18 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateBatchPredictionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateBatchPredictionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4857,15 +5125,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDataSourceOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateDataSourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDataSourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4884,15 +5157,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateEvaluationOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateEvaluationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateEvaluationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4911,14 +5189,20 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateMLModelOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateMLModelError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -10498,6 +10500,11 @@ impl From<HttpDispatchError> for AuthorizeClusterSecurityGroupIngressError {
         AuthorizeClusterSecurityGroupIngressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AuthorizeClusterSecurityGroupIngressError {
+    fn from(err: io::Error) -> AuthorizeClusterSecurityGroupIngressError {
+        AuthorizeClusterSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AuthorizeClusterSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10584,6 +10591,11 @@ impl From<HttpDispatchError> for AuthorizeSnapshotAccessError {
         AuthorizeSnapshotAccessError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AuthorizeSnapshotAccessError {
+    fn from(err: io::Error) -> AuthorizeSnapshotAccessError {
+        AuthorizeSnapshotAccessError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AuthorizeSnapshotAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10666,6 +10678,11 @@ impl From<CredentialsError> for CopyClusterSnapshotError {
 impl From<HttpDispatchError> for CopyClusterSnapshotError {
     fn from(err: HttpDispatchError) -> CopyClusterSnapshotError {
         CopyClusterSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopyClusterSnapshotError {
+    fn from(err: io::Error) -> CopyClusterSnapshotError {
+        CopyClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyClusterSnapshotError {
@@ -10799,6 +10816,11 @@ impl From<HttpDispatchError> for CreateClusterError {
         CreateClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateClusterError {
+    fn from(err: io::Error) -> CreateClusterError {
+        CreateClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10892,6 +10914,11 @@ impl From<HttpDispatchError> for CreateClusterParameterGroupError {
         CreateClusterParameterGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateClusterParameterGroupError {
+    fn from(err: io::Error) -> CreateClusterParameterGroupError {
+        CreateClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10970,6 +10997,11 @@ impl From<CredentialsError> for CreateClusterSecurityGroupError {
 impl From<HttpDispatchError> for CreateClusterSecurityGroupError {
     fn from(err: HttpDispatchError) -> CreateClusterSecurityGroupError {
         CreateClusterSecurityGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateClusterSecurityGroupError {
+    fn from(err: io::Error) -> CreateClusterSecurityGroupError {
+        CreateClusterSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateClusterSecurityGroupError {
@@ -11060,6 +11092,11 @@ impl From<CredentialsError> for CreateClusterSnapshotError {
 impl From<HttpDispatchError> for CreateClusterSnapshotError {
     fn from(err: HttpDispatchError) -> CreateClusterSnapshotError {
         CreateClusterSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateClusterSnapshotError {
+    fn from(err: io::Error) -> CreateClusterSnapshotError {
+        CreateClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateClusterSnapshotError {
@@ -11154,6 +11191,11 @@ impl From<CredentialsError> for CreateClusterSubnetGroupError {
 impl From<HttpDispatchError> for CreateClusterSubnetGroupError {
     fn from(err: HttpDispatchError) -> CreateClusterSubnetGroupError {
         CreateClusterSubnetGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateClusterSubnetGroupError {
+    fn from(err: io::Error) -> CreateClusterSubnetGroupError {
+        CreateClusterSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateClusterSubnetGroupError {
@@ -11263,6 +11305,11 @@ impl From<HttpDispatchError> for CreateEventSubscriptionError {
         CreateEventSubscriptionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateEventSubscriptionError {
+    fn from(err: io::Error) -> CreateEventSubscriptionError {
+        CreateEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11350,6 +11397,11 @@ impl From<HttpDispatchError> for CreateHsmClientCertificateError {
         CreateHsmClientCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateHsmClientCertificateError {
+    fn from(err: io::Error) -> CreateHsmClientCertificateError {
+        CreateHsmClientCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateHsmClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11432,6 +11484,11 @@ impl From<CredentialsError> for CreateHsmConfigurationError {
 impl From<HttpDispatchError> for CreateHsmConfigurationError {
     fn from(err: HttpDispatchError) -> CreateHsmConfigurationError {
         CreateHsmConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateHsmConfigurationError {
+    fn from(err: io::Error) -> CreateHsmConfigurationError {
+        CreateHsmConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateHsmConfigurationError {
@@ -11518,6 +11575,11 @@ impl From<CredentialsError> for CreateSnapshotCopyGrantError {
 impl From<HttpDispatchError> for CreateSnapshotCopyGrantError {
     fn from(err: HttpDispatchError) -> CreateSnapshotCopyGrantError {
         CreateSnapshotCopyGrantError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSnapshotCopyGrantError {
+    fn from(err: io::Error) -> CreateSnapshotCopyGrantError {
+        CreateSnapshotCopyGrantError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateSnapshotCopyGrantError {
@@ -11607,6 +11669,11 @@ impl From<HttpDispatchError> for CreateTagsError {
         CreateTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateTagsError {
+    fn from(err: io::Error) -> CreateTagsError {
+        CreateTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11686,6 +11753,11 @@ impl From<HttpDispatchError> for DeleteClusterError {
         DeleteClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteClusterError {
+    fn from(err: io::Error) -> DeleteClusterError {
+        DeleteClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11756,6 +11828,11 @@ impl From<CredentialsError> for DeleteClusterParameterGroupError {
 impl From<HttpDispatchError> for DeleteClusterParameterGroupError {
     fn from(err: HttpDispatchError) -> DeleteClusterParameterGroupError {
         DeleteClusterParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteClusterParameterGroupError {
+    fn from(err: io::Error) -> DeleteClusterParameterGroupError {
+        DeleteClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteClusterParameterGroupError {
@@ -11834,6 +11911,11 @@ impl From<HttpDispatchError> for DeleteClusterSecurityGroupError {
         DeleteClusterSecurityGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteClusterSecurityGroupError {
+    fn from(err: io::Error) -> DeleteClusterSecurityGroupError {
+        DeleteClusterSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteClusterSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11906,6 +11988,11 @@ impl From<CredentialsError> for DeleteClusterSnapshotError {
 impl From<HttpDispatchError> for DeleteClusterSnapshotError {
     fn from(err: HttpDispatchError) -> DeleteClusterSnapshotError {
         DeleteClusterSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteClusterSnapshotError {
+    fn from(err: io::Error) -> DeleteClusterSnapshotError {
+        DeleteClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteClusterSnapshotError {
@@ -11983,6 +12070,11 @@ impl From<HttpDispatchError> for DeleteClusterSubnetGroupError {
         DeleteClusterSubnetGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteClusterSubnetGroupError {
+    fn from(err: io::Error) -> DeleteClusterSubnetGroupError {
+        DeleteClusterSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteClusterSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12056,6 +12148,11 @@ impl From<HttpDispatchError> for DeleteEventSubscriptionError {
         DeleteEventSubscriptionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteEventSubscriptionError {
+    fn from(err: io::Error) -> DeleteEventSubscriptionError {
+        DeleteEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12126,6 +12223,11 @@ impl From<CredentialsError> for DeleteHsmClientCertificateError {
 impl From<HttpDispatchError> for DeleteHsmClientCertificateError {
     fn from(err: HttpDispatchError) -> DeleteHsmClientCertificateError {
         DeleteHsmClientCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteHsmClientCertificateError {
+    fn from(err: io::Error) -> DeleteHsmClientCertificateError {
+        DeleteHsmClientCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteHsmClientCertificateError {
@@ -12202,6 +12304,11 @@ impl From<HttpDispatchError> for DeleteHsmConfigurationError {
         DeleteHsmConfigurationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteHsmConfigurationError {
+    fn from(err: io::Error) -> DeleteHsmConfigurationError {
+        DeleteHsmConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteHsmConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12272,6 +12379,11 @@ impl From<CredentialsError> for DeleteSnapshotCopyGrantError {
 impl From<HttpDispatchError> for DeleteSnapshotCopyGrantError {
     fn from(err: HttpDispatchError) -> DeleteSnapshotCopyGrantError {
         DeleteSnapshotCopyGrantError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSnapshotCopyGrantError {
+    fn from(err: io::Error) -> DeleteSnapshotCopyGrantError {
+        DeleteSnapshotCopyGrantError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSnapshotCopyGrantError {
@@ -12350,6 +12462,11 @@ impl From<HttpDispatchError> for DeleteTagsError {
         DeleteTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTagsError {
+    fn from(err: io::Error) -> DeleteTagsError {
+        DeleteTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12418,6 +12535,11 @@ impl From<CredentialsError> for DescribeClusterParameterGroupsError {
 impl From<HttpDispatchError> for DescribeClusterParameterGroupsError {
     fn from(err: HttpDispatchError) -> DescribeClusterParameterGroupsError {
         DescribeClusterParameterGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeClusterParameterGroupsError {
+    fn from(err: io::Error) -> DescribeClusterParameterGroupsError {
+        DescribeClusterParameterGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterParameterGroupsError {
@@ -12491,6 +12613,11 @@ impl From<HttpDispatchError> for DescribeClusterParametersError {
         DescribeClusterParametersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeClusterParametersError {
+    fn from(err: io::Error) -> DescribeClusterParametersError {
+        DescribeClusterParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12560,6 +12687,11 @@ impl From<CredentialsError> for DescribeClusterSecurityGroupsError {
 impl From<HttpDispatchError> for DescribeClusterSecurityGroupsError {
     fn from(err: HttpDispatchError) -> DescribeClusterSecurityGroupsError {
         DescribeClusterSecurityGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeClusterSecurityGroupsError {
+    fn from(err: io::Error) -> DescribeClusterSecurityGroupsError {
+        DescribeClusterSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterSecurityGroupsError {
@@ -12636,6 +12768,11 @@ impl From<HttpDispatchError> for DescribeClusterSnapshotsError {
         DescribeClusterSnapshotsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeClusterSnapshotsError {
+    fn from(err: io::Error) -> DescribeClusterSnapshotsError {
+        DescribeClusterSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12708,6 +12845,11 @@ impl From<HttpDispatchError> for DescribeClusterSubnetGroupsError {
         DescribeClusterSubnetGroupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeClusterSubnetGroupsError {
+    fn from(err: io::Error) -> DescribeClusterSubnetGroupsError {
+        DescribeClusterSubnetGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeClusterSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12772,6 +12914,11 @@ impl From<CredentialsError> for DescribeClusterVersionsError {
 impl From<HttpDispatchError> for DescribeClusterVersionsError {
     fn from(err: HttpDispatchError) -> DescribeClusterVersionsError {
         DescribeClusterVersionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeClusterVersionsError {
+    fn from(err: io::Error) -> DescribeClusterVersionsError {
+        DescribeClusterVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterVersionsError {
@@ -12846,6 +12993,11 @@ impl From<HttpDispatchError> for DescribeClustersError {
         DescribeClustersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeClustersError {
+    fn from(err: io::Error) -> DescribeClustersError {
+        DescribeClustersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12910,6 +13062,11 @@ impl From<HttpDispatchError> for DescribeDefaultClusterParametersError {
         DescribeDefaultClusterParametersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDefaultClusterParametersError {
+    fn from(err: io::Error) -> DescribeDefaultClusterParametersError {
+        DescribeDefaultClusterParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDefaultClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12972,6 +13129,11 @@ impl From<CredentialsError> for DescribeEventCategoriesError {
 impl From<HttpDispatchError> for DescribeEventCategoriesError {
     fn from(err: HttpDispatchError) -> DescribeEventCategoriesError {
         DescribeEventCategoriesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventCategoriesError {
+    fn from(err: io::Error) -> DescribeEventCategoriesError {
+        DescribeEventCategoriesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventCategoriesError {
@@ -13041,6 +13203,11 @@ impl From<HttpDispatchError> for DescribeEventSubscriptionsError {
         DescribeEventSubscriptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEventSubscriptionsError {
+    fn from(err: io::Error) -> DescribeEventSubscriptionsError {
+        DescribeEventSubscriptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13104,6 +13271,11 @@ impl From<CredentialsError> for DescribeEventsError {
 impl From<HttpDispatchError> for DescribeEventsError {
     fn from(err: HttpDispatchError) -> DescribeEventsError {
         DescribeEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventsError {
+    fn from(err: io::Error) -> DescribeEventsError {
+        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -13172,6 +13344,11 @@ impl From<CredentialsError> for DescribeHsmClientCertificatesError {
 impl From<HttpDispatchError> for DescribeHsmClientCertificatesError {
     fn from(err: HttpDispatchError) -> DescribeHsmClientCertificatesError {
         DescribeHsmClientCertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeHsmClientCertificatesError {
+    fn from(err: io::Error) -> DescribeHsmClientCertificatesError {
+        DescribeHsmClientCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeHsmClientCertificatesError {
@@ -13248,6 +13425,11 @@ impl From<HttpDispatchError> for DescribeHsmConfigurationsError {
         DescribeHsmConfigurationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeHsmConfigurationsError {
+    fn from(err: io::Error) -> DescribeHsmConfigurationsError {
+        DescribeHsmConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeHsmConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13317,6 +13499,11 @@ impl From<HttpDispatchError> for DescribeLoggingStatusError {
         DescribeLoggingStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeLoggingStatusError {
+    fn from(err: io::Error) -> DescribeLoggingStatusError {
+        DescribeLoggingStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeLoggingStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13380,6 +13567,11 @@ impl From<CredentialsError> for DescribeOrderableClusterOptionsError {
 impl From<HttpDispatchError> for DescribeOrderableClusterOptionsError {
     fn from(err: HttpDispatchError) -> DescribeOrderableClusterOptionsError {
         DescribeOrderableClusterOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeOrderableClusterOptionsError {
+    fn from(err: io::Error) -> DescribeOrderableClusterOptionsError {
+        DescribeOrderableClusterOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeOrderableClusterOptionsError {
@@ -13453,6 +13645,11 @@ impl From<CredentialsError> for DescribeReservedNodeOfferingsError {
 impl From<HttpDispatchError> for DescribeReservedNodeOfferingsError {
     fn from(err: HttpDispatchError) -> DescribeReservedNodeOfferingsError {
         DescribeReservedNodeOfferingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeReservedNodeOfferingsError {
+    fn from(err: io::Error) -> DescribeReservedNodeOfferingsError {
+        DescribeReservedNodeOfferingsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReservedNodeOfferingsError {
@@ -13532,6 +13729,11 @@ impl From<HttpDispatchError> for DescribeReservedNodesError {
         DescribeReservedNodesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeReservedNodesError {
+    fn from(err: io::Error) -> DescribeReservedNodesError {
+        DescribeReservedNodesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeReservedNodesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13606,6 +13808,11 @@ impl From<HttpDispatchError> for DescribeResizeError {
         DescribeResizeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeResizeError {
+    fn from(err: io::Error) -> DescribeResizeError {
+        DescribeResizeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeResizeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13674,6 +13881,11 @@ impl From<CredentialsError> for DescribeSnapshotCopyGrantsError {
 impl From<HttpDispatchError> for DescribeSnapshotCopyGrantsError {
     fn from(err: HttpDispatchError) -> DescribeSnapshotCopyGrantsError {
         DescribeSnapshotCopyGrantsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSnapshotCopyGrantsError {
+    fn from(err: io::Error) -> DescribeSnapshotCopyGrantsError {
+        DescribeSnapshotCopyGrantsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSnapshotCopyGrantsError {
@@ -13746,6 +13958,11 @@ impl From<CredentialsError> for DescribeTableRestoreStatusError {
 impl From<HttpDispatchError> for DescribeTableRestoreStatusError {
     fn from(err: HttpDispatchError) -> DescribeTableRestoreStatusError {
         DescribeTableRestoreStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTableRestoreStatusError {
+    fn from(err: io::Error) -> DescribeTableRestoreStatusError {
+        DescribeTableRestoreStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTableRestoreStatusError {
@@ -13824,6 +14041,11 @@ impl From<HttpDispatchError> for DescribeTagsError {
         DescribeTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTagsError {
+    fn from(err: io::Error) -> DescribeTagsError {
+        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13889,6 +14111,11 @@ impl From<CredentialsError> for DisableLoggingError {
 impl From<HttpDispatchError> for DisableLoggingError {
     fn from(err: HttpDispatchError) -> DisableLoggingError {
         DisableLoggingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableLoggingError {
+    fn from(err: io::Error) -> DisableLoggingError {
+        DisableLoggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableLoggingError {
@@ -13964,6 +14191,11 @@ impl From<CredentialsError> for DisableSnapshotCopyError {
 impl From<HttpDispatchError> for DisableSnapshotCopyError {
     fn from(err: HttpDispatchError) -> DisableSnapshotCopyError {
         DisableSnapshotCopyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableSnapshotCopyError {
+    fn from(err: io::Error) -> DisableSnapshotCopyError {
+        DisableSnapshotCopyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableSnapshotCopyError {
@@ -14051,6 +14283,11 @@ impl From<CredentialsError> for EnableLoggingError {
 impl From<HttpDispatchError> for EnableLoggingError {
     fn from(err: HttpDispatchError) -> EnableLoggingError {
         EnableLoggingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EnableLoggingError {
+    fn from(err: io::Error) -> EnableLoggingError {
+        EnableLoggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableLoggingError {
@@ -14150,6 +14387,11 @@ impl From<HttpDispatchError> for EnableSnapshotCopyError {
         EnableSnapshotCopyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableSnapshotCopyError {
+    fn from(err: io::Error) -> EnableSnapshotCopyError {
+        EnableSnapshotCopyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableSnapshotCopyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14228,6 +14470,11 @@ impl From<CredentialsError> for GetClusterCredentialsError {
 impl From<HttpDispatchError> for GetClusterCredentialsError {
     fn from(err: HttpDispatchError) -> GetClusterCredentialsError {
         GetClusterCredentialsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetClusterCredentialsError {
+    fn from(err: io::Error) -> GetClusterCredentialsError {
+        GetClusterCredentialsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetClusterCredentialsError {
@@ -14348,6 +14595,11 @@ impl From<HttpDispatchError> for ModifyClusterError {
         ModifyClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyClusterError {
+    fn from(err: io::Error) -> ModifyClusterError {
+        ModifyClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14432,6 +14684,11 @@ impl From<HttpDispatchError> for ModifyClusterIamRolesError {
         ModifyClusterIamRolesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyClusterIamRolesError {
+    fn from(err: io::Error) -> ModifyClusterIamRolesError {
+        ModifyClusterIamRolesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyClusterIamRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14502,6 +14759,11 @@ impl From<CredentialsError> for ModifyClusterParameterGroupError {
 impl From<HttpDispatchError> for ModifyClusterParameterGroupError {
     fn from(err: HttpDispatchError) -> ModifyClusterParameterGroupError {
         ModifyClusterParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyClusterParameterGroupError {
+    fn from(err: io::Error) -> ModifyClusterParameterGroupError {
+        ModifyClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyClusterParameterGroupError {
@@ -14590,6 +14852,11 @@ impl From<CredentialsError> for ModifyClusterSubnetGroupError {
 impl From<HttpDispatchError> for ModifyClusterSubnetGroupError {
     fn from(err: HttpDispatchError) -> ModifyClusterSubnetGroupError {
         ModifyClusterSubnetGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyClusterSubnetGroupError {
+    fn from(err: io::Error) -> ModifyClusterSubnetGroupError {
+        ModifyClusterSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyClusterSubnetGroupError {
@@ -14691,6 +14958,11 @@ impl From<HttpDispatchError> for ModifyEventSubscriptionError {
         ModifyEventSubscriptionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyEventSubscriptionError {
+    fn from(err: io::Error) -> ModifyEventSubscriptionError {
+        ModifyEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14776,6 +15048,11 @@ impl From<HttpDispatchError> for ModifySnapshotCopyRetentionPeriodError {
         ModifySnapshotCopyRetentionPeriodError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifySnapshotCopyRetentionPeriodError {
+    fn from(err: io::Error) -> ModifySnapshotCopyRetentionPeriodError {
+        ModifySnapshotCopyRetentionPeriodError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifySnapshotCopyRetentionPeriodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14856,6 +15133,11 @@ impl From<HttpDispatchError> for PurchaseReservedNodeOfferingError {
         PurchaseReservedNodeOfferingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PurchaseReservedNodeOfferingError {
+    fn from(err: io::Error) -> PurchaseReservedNodeOfferingError {
+        PurchaseReservedNodeOfferingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PurchaseReservedNodeOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14934,6 +15216,11 @@ impl From<HttpDispatchError> for RebootClusterError {
         RebootClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RebootClusterError {
+    fn from(err: io::Error) -> RebootClusterError {
+        RebootClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RebootClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15002,6 +15289,11 @@ impl From<CredentialsError> for ResetClusterParameterGroupError {
 impl From<HttpDispatchError> for ResetClusterParameterGroupError {
     fn from(err: HttpDispatchError) -> ResetClusterParameterGroupError {
         ResetClusterParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResetClusterParameterGroupError {
+    fn from(err: io::Error) -> ResetClusterParameterGroupError {
+        ResetClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetClusterParameterGroupError {
@@ -15135,6 +15427,11 @@ impl From<HttpDispatchError> for RestoreFromClusterSnapshotError {
         RestoreFromClusterSnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RestoreFromClusterSnapshotError {
+    fn from(err: io::Error) -> RestoreFromClusterSnapshotError {
+        RestoreFromClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RestoreFromClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15245,6 +15542,11 @@ impl From<HttpDispatchError> for RestoreTableFromClusterSnapshotError {
         RestoreTableFromClusterSnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RestoreTableFromClusterSnapshotError {
+    fn from(err: io::Error) -> RestoreTableFromClusterSnapshotError {
+        RestoreTableFromClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RestoreTableFromClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15329,6 +15631,11 @@ impl From<HttpDispatchError> for RevokeClusterSecurityGroupIngressError {
         RevokeClusterSecurityGroupIngressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RevokeClusterSecurityGroupIngressError {
+    fn from(err: io::Error) -> RevokeClusterSecurityGroupIngressError {
+        RevokeClusterSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RevokeClusterSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15405,6 +15712,11 @@ impl From<HttpDispatchError> for RevokeSnapshotAccessError {
         RevokeSnapshotAccessError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RevokeSnapshotAccessError {
+    fn from(err: io::Error) -> RevokeSnapshotAccessError {
+        RevokeSnapshotAccessError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RevokeSnapshotAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15479,6 +15791,11 @@ impl From<CredentialsError> for RotateEncryptionKeyError {
 impl From<HttpDispatchError> for RotateEncryptionKeyError {
     fn from(err: HttpDispatchError) -> RotateEncryptionKeyError {
         RotateEncryptionKeyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RotateEncryptionKeyError {
+    fn from(err: io::Error) -> RotateEncryptionKeyError {
+        RotateEncryptionKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RotateEncryptionKeyError {
@@ -15954,16 +16271,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AuthorizeClusterSecurityGroupIngressResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15977,8 +16296,10 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AuthorizeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AuthorizeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -15997,16 +16318,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AuthorizeSnapshotAccessResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16022,8 +16345,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AuthorizeSnapshotAccessError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AuthorizeSnapshotAccessError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -16041,16 +16367,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CopyClusterSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16065,8 +16393,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CopyClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopyClusterSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16085,16 +16414,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16109,7 +16440,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16129,16 +16462,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateClusterParameterGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16152,8 +16487,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateClusterParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -16172,16 +16510,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateClusterSecurityGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16197,8 +16537,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateClusterSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateClusterSecurityGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -16217,16 +16560,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateClusterSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16241,8 +16586,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateClusterSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16262,16 +16608,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateClusterSubnetGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16287,8 +16635,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateClusterSubnetGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -16307,16 +16658,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateEventSubscriptionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16332,8 +16685,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -16352,16 +16708,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateHsmClientCertificateResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16377,8 +16735,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateHsmClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateHsmClientCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -16397,16 +16758,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateHsmConfigurationResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16422,8 +16785,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateHsmConfigurationError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateHsmConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16443,16 +16807,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateSnapshotCopyGrantResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16468,8 +16834,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -16485,13 +16854,17 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16509,16 +16882,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16533,7 +16908,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16552,15 +16929,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteClusterParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -16578,15 +16958,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteClusterSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteClusterSecurityGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -16605,16 +16988,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteClusterSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16629,8 +17014,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteClusterSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16649,15 +17035,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteClusterSubnetGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -16675,15 +17064,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -16701,15 +17093,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteHsmClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteHsmClientCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -16727,15 +17122,16 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteHsmConfigurationError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteHsmConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16754,15 +17150,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -16778,13 +17177,17 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16803,16 +17206,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ClusterParameterGroupsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16828,8 +17233,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeClusterParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClusterParameterGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -16848,16 +17256,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ClusterParameterGroupDetails::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16873,8 +17283,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClusterParametersError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -16893,16 +17306,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ClusterSecurityGroupMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16917,8 +17332,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeClusterSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClusterSecurityGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -16936,16 +17354,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SnapshotMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16960,8 +17380,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeClusterSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClusterSnapshotsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -16980,16 +17403,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ClusterSubnetGroupMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17004,8 +17429,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeClusterSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClusterSubnetGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -17024,16 +17452,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ClusterVersionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17048,8 +17478,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeClusterVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClusterVersionsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -17067,16 +17500,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ClustersMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17091,8 +17526,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeClustersError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClustersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17112,16 +17548,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeDefaultClusterParametersResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17135,8 +17573,10 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeDefaultClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDefaultClusterParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -17155,16 +17595,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EventCategoriesMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17179,8 +17621,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -17199,16 +17644,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EventSubscriptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17223,8 +17670,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -17242,16 +17692,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EventsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17266,8 +17718,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17287,16 +17740,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = HsmClientCertificateMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17311,8 +17766,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeHsmClientCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeHsmClientCertificatesError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -17331,16 +17789,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = HsmConfigurationMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17355,8 +17815,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeHsmConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeHsmConfigurationsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -17374,16 +17837,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = LoggingStatus::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17398,8 +17863,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeLoggingStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLoggingStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17419,16 +17885,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = OrderableClusterOptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17444,8 +17912,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeOrderableClusterOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeOrderableClusterOptionsError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -17464,16 +17935,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReservedNodeOfferingsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17489,8 +17962,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeReservedNodeOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReservedNodeOfferingsError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -17508,16 +17984,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReservedNodesMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17532,8 +18010,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeReservedNodesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReservedNodesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17552,16 +18031,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ResizeProgressMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17576,8 +18057,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeResizeError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeResizeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17597,16 +18079,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SnapshotCopyGrantMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17621,8 +18105,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeSnapshotCopyGrantsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSnapshotCopyGrantsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -17641,16 +18128,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = TableRestoreStatusMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17665,8 +18154,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeTableRestoreStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTableRestoreStatusError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -17684,16 +18176,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = TaggedResourceListMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17708,7 +18202,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17727,16 +18223,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = LoggingStatus::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17751,8 +18249,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DisableLoggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableLoggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17771,16 +18270,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DisableSnapshotCopyResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17795,8 +18296,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DisableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableSnapshotCopyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17815,16 +18317,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = LoggingStatus::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17839,7 +18343,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(EnableLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableLoggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17858,16 +18364,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EnableSnapshotCopyResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17882,8 +18390,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(EnableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableSnapshotCopyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17902,16 +18411,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ClusterCredentials::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17926,8 +18437,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetClusterCredentialsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetClusterCredentialsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17946,16 +18458,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17970,7 +18484,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ModifyClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17990,16 +18506,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyClusterIamRolesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18014,8 +18532,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ModifyClusterIamRolesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyClusterIamRolesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18035,16 +18554,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ClusterParameterGroupNameMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18060,8 +18581,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ModifyClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyClusterParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -18080,16 +18604,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyClusterSubnetGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18105,8 +18631,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ModifyClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyClusterSubnetGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -18125,16 +18654,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyEventSubscriptionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18150,8 +18681,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -18170,16 +18704,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifySnapshotCopyRetentionPeriodResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18193,8 +18729,10 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ModifySnapshotCopyRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifySnapshotCopyRetentionPeriodError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -18213,16 +18751,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PurchaseReservedNodeOfferingResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18236,8 +18776,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(PurchaseReservedNodeOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PurchaseReservedNodeOfferingError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -18255,16 +18798,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RebootClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18279,7 +18824,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RebootClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RebootClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18299,16 +18846,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ClusterParameterGroupNameMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18324,8 +18873,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ResetClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetClusterParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -18344,16 +18896,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RestoreFromClusterSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18369,8 +18923,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(RestoreFromClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreFromClusterSnapshotError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -18389,16 +18946,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RestoreTableFromClusterSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18412,8 +18971,11 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(RestoreTableFromClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreTableFromClusterSnapshotError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -18432,16 +18994,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RevokeClusterSecurityGroupIngressResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18455,8 +19019,10 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(RevokeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RevokeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -18474,16 +19040,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RevokeSnapshotAccessResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18498,8 +19066,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RevokeSnapshotAccessError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RevokeSnapshotAccessError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18518,16 +19087,18 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RotateEncryptionKeyResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18542,8 +19113,9 @@ impl<P, D> Redshift for RedshiftClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RotateEncryptionKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RotateEncryptionKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2774,6 +2776,11 @@ impl From<HttpDispatchError> for CountClosedWorkflowExecutionsError {
         CountClosedWorkflowExecutionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CountClosedWorkflowExecutionsError {
+    fn from(err: io::Error) -> CountClosedWorkflowExecutionsError {
+        CountClosedWorkflowExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CountClosedWorkflowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2850,6 +2857,11 @@ impl From<CredentialsError> for CountOpenWorkflowExecutionsError {
 impl From<HttpDispatchError> for CountOpenWorkflowExecutionsError {
     fn from(err: HttpDispatchError) -> CountOpenWorkflowExecutionsError {
         CountOpenWorkflowExecutionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CountOpenWorkflowExecutionsError {
+    fn from(err: io::Error) -> CountOpenWorkflowExecutionsError {
+        CountOpenWorkflowExecutionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CountOpenWorkflowExecutionsError {
@@ -2930,6 +2942,11 @@ impl From<HttpDispatchError> for CountPendingActivityTasksError {
         CountPendingActivityTasksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CountPendingActivityTasksError {
+    fn from(err: io::Error) -> CountPendingActivityTasksError {
+        CountPendingActivityTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CountPendingActivityTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3006,6 +3023,11 @@ impl From<CredentialsError> for CountPendingDecisionTasksError {
 impl From<HttpDispatchError> for CountPendingDecisionTasksError {
     fn from(err: HttpDispatchError) -> CountPendingDecisionTasksError {
         CountPendingDecisionTasksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CountPendingDecisionTasksError {
+    fn from(err: io::Error) -> CountPendingDecisionTasksError {
+        CountPendingDecisionTasksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CountPendingDecisionTasksError {
@@ -3089,6 +3111,11 @@ impl From<CredentialsError> for DeprecateActivityTypeError {
 impl From<HttpDispatchError> for DeprecateActivityTypeError {
     fn from(err: HttpDispatchError) -> DeprecateActivityTypeError {
         DeprecateActivityTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeprecateActivityTypeError {
+    fn from(err: io::Error) -> DeprecateActivityTypeError {
+        DeprecateActivityTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeprecateActivityTypeError {
@@ -3177,6 +3204,11 @@ impl From<HttpDispatchError> for DeprecateDomainError {
         DeprecateDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeprecateDomainError {
+    fn from(err: io::Error) -> DeprecateDomainError {
+        DeprecateDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeprecateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3259,6 +3291,11 @@ impl From<HttpDispatchError> for DeprecateWorkflowTypeError {
         DeprecateWorkflowTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeprecateWorkflowTypeError {
+    fn from(err: io::Error) -> DeprecateWorkflowTypeError {
+        DeprecateWorkflowTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeprecateWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3338,6 +3375,11 @@ impl From<CredentialsError> for DescribeActivityTypeError {
 impl From<HttpDispatchError> for DescribeActivityTypeError {
     fn from(err: HttpDispatchError) -> DescribeActivityTypeError {
         DescribeActivityTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeActivityTypeError {
+    fn from(err: io::Error) -> DescribeActivityTypeError {
+        DescribeActivityTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeActivityTypeError {
@@ -3422,6 +3464,11 @@ impl From<HttpDispatchError> for DescribeDomainError {
         DescribeDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDomainError {
+    fn from(err: io::Error) -> DescribeDomainError {
+        DescribeDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3496,6 +3543,11 @@ impl From<CredentialsError> for DescribeWorkflowExecutionError {
 impl From<HttpDispatchError> for DescribeWorkflowExecutionError {
     fn from(err: HttpDispatchError) -> DescribeWorkflowExecutionError {
         DescribeWorkflowExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeWorkflowExecutionError {
+    fn from(err: io::Error) -> DescribeWorkflowExecutionError {
+        DescribeWorkflowExecutionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeWorkflowExecutionError {
@@ -3578,6 +3630,11 @@ impl From<HttpDispatchError> for DescribeWorkflowTypeError {
         DescribeWorkflowTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeWorkflowTypeError {
+    fn from(err: io::Error) -> DescribeWorkflowTypeError {
+        DescribeWorkflowTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3654,6 +3711,11 @@ impl From<CredentialsError> for GetWorkflowExecutionHistoryError {
 impl From<HttpDispatchError> for GetWorkflowExecutionHistoryError {
     fn from(err: HttpDispatchError) -> GetWorkflowExecutionHistoryError {
         GetWorkflowExecutionHistoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetWorkflowExecutionHistoryError {
+    fn from(err: io::Error) -> GetWorkflowExecutionHistoryError {
+        GetWorkflowExecutionHistoryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetWorkflowExecutionHistoryError {
@@ -3736,6 +3798,11 @@ impl From<HttpDispatchError> for ListActivityTypesError {
         ListActivityTypesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListActivityTypesError {
+    fn from(err: io::Error) -> ListActivityTypesError {
+        ListActivityTypesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListActivityTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3812,6 +3879,11 @@ impl From<CredentialsError> for ListClosedWorkflowExecutionsError {
 impl From<HttpDispatchError> for ListClosedWorkflowExecutionsError {
     fn from(err: HttpDispatchError) -> ListClosedWorkflowExecutionsError {
         ListClosedWorkflowExecutionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListClosedWorkflowExecutionsError {
+    fn from(err: io::Error) -> ListClosedWorkflowExecutionsError {
+        ListClosedWorkflowExecutionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListClosedWorkflowExecutionsError {
@@ -3891,6 +3963,11 @@ impl From<HttpDispatchError> for ListDomainsError {
         ListDomainsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListDomainsError {
+    fn from(err: io::Error) -> ListDomainsError {
+        ListDomainsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3964,6 +4041,11 @@ impl From<CredentialsError> for ListOpenWorkflowExecutionsError {
 impl From<HttpDispatchError> for ListOpenWorkflowExecutionsError {
     fn from(err: HttpDispatchError) -> ListOpenWorkflowExecutionsError {
         ListOpenWorkflowExecutionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListOpenWorkflowExecutionsError {
+    fn from(err: io::Error) -> ListOpenWorkflowExecutionsError {
+        ListOpenWorkflowExecutionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListOpenWorkflowExecutionsError {
@@ -4044,6 +4126,11 @@ impl From<CredentialsError> for ListWorkflowTypesError {
 impl From<HttpDispatchError> for ListWorkflowTypesError {
     fn from(err: HttpDispatchError) -> ListWorkflowTypesError {
         ListWorkflowTypesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListWorkflowTypesError {
+    fn from(err: io::Error) -> ListWorkflowTypesError {
+        ListWorkflowTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListWorkflowTypesError {
@@ -4129,6 +4216,11 @@ impl From<CredentialsError> for PollForActivityTaskError {
 impl From<HttpDispatchError> for PollForActivityTaskError {
     fn from(err: HttpDispatchError) -> PollForActivityTaskError {
         PollForActivityTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PollForActivityTaskError {
+    fn from(err: io::Error) -> PollForActivityTaskError {
+        PollForActivityTaskError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PollForActivityTaskError {
@@ -4217,6 +4309,11 @@ impl From<HttpDispatchError> for PollForDecisionTaskError {
         PollForDecisionTaskError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PollForDecisionTaskError {
+    fn from(err: io::Error) -> PollForDecisionTaskError {
+        PollForDecisionTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PollForDecisionTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4294,6 +4391,11 @@ impl From<CredentialsError> for RecordActivityTaskHeartbeatError {
 impl From<HttpDispatchError> for RecordActivityTaskHeartbeatError {
     fn from(err: HttpDispatchError) -> RecordActivityTaskHeartbeatError {
         RecordActivityTaskHeartbeatError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RecordActivityTaskHeartbeatError {
+    fn from(err: io::Error) -> RecordActivityTaskHeartbeatError {
+        RecordActivityTaskHeartbeatError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RecordActivityTaskHeartbeatError {
@@ -4382,6 +4484,11 @@ impl From<CredentialsError> for RegisterActivityTypeError {
 impl From<HttpDispatchError> for RegisterActivityTypeError {
     fn from(err: HttpDispatchError) -> RegisterActivityTypeError {
         RegisterActivityTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterActivityTypeError {
+    fn from(err: io::Error) -> RegisterActivityTypeError {
+        RegisterActivityTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterActivityTypeError {
@@ -4473,6 +4580,11 @@ impl From<HttpDispatchError> for RegisterDomainError {
         RegisterDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterDomainError {
+    fn from(err: io::Error) -> RegisterDomainError {
+        RegisterDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4560,6 +4672,11 @@ impl From<HttpDispatchError> for RegisterWorkflowTypeError {
         RegisterWorkflowTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterWorkflowTypeError {
+    fn from(err: io::Error) -> RegisterWorkflowTypeError {
+        RegisterWorkflowTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4640,6 +4757,11 @@ impl From<HttpDispatchError> for RequestCancelWorkflowExecutionError {
         RequestCancelWorkflowExecutionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RequestCancelWorkflowExecutionError {
+    fn from(err: io::Error) -> RequestCancelWorkflowExecutionError {
+        RequestCancelWorkflowExecutionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RequestCancelWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4716,6 +4838,11 @@ impl From<CredentialsError> for RespondActivityTaskCanceledError {
 impl From<HttpDispatchError> for RespondActivityTaskCanceledError {
     fn from(err: HttpDispatchError) -> RespondActivityTaskCanceledError {
         RespondActivityTaskCanceledError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RespondActivityTaskCanceledError {
+    fn from(err: io::Error) -> RespondActivityTaskCanceledError {
+        RespondActivityTaskCanceledError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RespondActivityTaskCanceledError {
@@ -4796,6 +4923,11 @@ impl From<HttpDispatchError> for RespondActivityTaskCompletedError {
         RespondActivityTaskCompletedError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RespondActivityTaskCompletedError {
+    fn from(err: io::Error) -> RespondActivityTaskCompletedError {
+        RespondActivityTaskCompletedError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RespondActivityTaskCompletedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4872,6 +5004,11 @@ impl From<CredentialsError> for RespondActivityTaskFailedError {
 impl From<HttpDispatchError> for RespondActivityTaskFailedError {
     fn from(err: HttpDispatchError) -> RespondActivityTaskFailedError {
         RespondActivityTaskFailedError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RespondActivityTaskFailedError {
+    fn from(err: io::Error) -> RespondActivityTaskFailedError {
+        RespondActivityTaskFailedError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RespondActivityTaskFailedError {
@@ -4952,6 +5089,11 @@ impl From<HttpDispatchError> for RespondDecisionTaskCompletedError {
         RespondDecisionTaskCompletedError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RespondDecisionTaskCompletedError {
+    fn from(err: io::Error) -> RespondDecisionTaskCompletedError {
+        RespondDecisionTaskCompletedError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RespondDecisionTaskCompletedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5028,6 +5170,11 @@ impl From<CredentialsError> for SignalWorkflowExecutionError {
 impl From<HttpDispatchError> for SignalWorkflowExecutionError {
     fn from(err: HttpDispatchError) -> SignalWorkflowExecutionError {
         SignalWorkflowExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SignalWorkflowExecutionError {
+    fn from(err: io::Error) -> SignalWorkflowExecutionError {
+        SignalWorkflowExecutionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SignalWorkflowExecutionError {
@@ -5122,6 +5269,11 @@ impl From<HttpDispatchError> for StartWorkflowExecutionError {
         StartWorkflowExecutionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartWorkflowExecutionError {
+    fn from(err: io::Error) -> StartWorkflowExecutionError {
+        StartWorkflowExecutionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5202,6 +5354,11 @@ impl From<CredentialsError> for TerminateWorkflowExecutionError {
 impl From<HttpDispatchError> for TerminateWorkflowExecutionError {
     fn from(err: HttpDispatchError) -> TerminateWorkflowExecutionError {
         TerminateWorkflowExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TerminateWorkflowExecutionError {
+    fn from(err: io::Error) -> TerminateWorkflowExecutionError {
+        TerminateWorkflowExecutionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TerminateWorkflowExecutionError {
@@ -5452,13 +5609,22 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowExecutionCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CountClosedWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<WorkflowExecutionCount>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CountClosedWorkflowExecutionsError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -5478,13 +5644,22 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowExecutionCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CountOpenWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<WorkflowExecutionCount>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CountOpenWorkflowExecutionsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -5503,13 +5678,22 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PendingTaskCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CountPendingActivityTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PendingTaskCount>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CountPendingActivityTasksError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5528,13 +5712,22 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PendingTaskCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CountPendingDecisionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PendingTaskCount>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CountPendingDecisionTasksError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5553,13 +5746,14 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeprecateActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeprecateActivityTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5576,13 +5770,14 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeprecateDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeprecateDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5602,13 +5797,14 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeprecateWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeprecateWorkflowTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5627,15 +5823,20 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ActivityTypeDetail>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ActivityTypeDetail>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeActivityTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5654,17 +5855,19 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<DomainDetail>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DomainDetail>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(DescribeDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5685,13 +5888,22 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowExecutionDetail>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<WorkflowExecutionDetail>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeWorkflowExecutionError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5709,15 +5921,20 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowTypeDetail>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<WorkflowTypeDetail>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeWorkflowTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5737,15 +5954,21 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<History>(String::from_utf8_lossy(&response.body)
-                                                       .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<History>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetWorkflowExecutionHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetWorkflowExecutionHistoryError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -5763,15 +5986,20 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ActivityTypeInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ActivityTypeInfos>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListActivityTypesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListActivityTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5792,13 +6020,22 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowExecutionInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListClosedWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<WorkflowExecutionInfos>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListClosedWorkflowExecutionsError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -5814,15 +6051,20 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<DomainInfos>(String::from_utf8_lossy(&response.body)
-                                                           .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DomainInfos>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(ListDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDomainsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5842,13 +6084,22 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowExecutionInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListOpenWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<WorkflowExecutionInfos>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListOpenWorkflowExecutionsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -5866,15 +6117,20 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowTypeInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<WorkflowTypeInfos>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListWorkflowTypesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListWorkflowTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5893,17 +6149,19 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ActivityTask>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ActivityTask>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(PollForActivityTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PollForActivityTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5922,17 +6180,19 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<DecisionTask>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DecisionTask>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(PollForDecisionTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PollForDecisionTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5953,13 +6213,22 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ActivityTaskStatus>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RecordActivityTaskHeartbeatError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ActivityTaskStatus>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RecordActivityTaskHeartbeatError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -5977,13 +6246,14 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(RegisterActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterActivityTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6000,13 +6270,14 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(RegisterDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6025,13 +6296,14 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(RegisterWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterWorkflowTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6051,11 +6323,16 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RequestCancelWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RequestCancelWorkflowExecutionError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -6074,11 +6351,16 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RespondActivityTaskCanceledError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RespondActivityTaskCanceledError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -6097,11 +6379,16 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RespondActivityTaskCompletedError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RespondActivityTaskCompletedError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -6120,11 +6407,16 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RespondActivityTaskFailedError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RespondActivityTaskFailedError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -6143,11 +6435,16 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RespondDecisionTaskCompletedError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RespondDecisionTaskCompletedError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -6166,11 +6463,16 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(SignalWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SignalWorkflowExecutionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6189,16 +6491,18 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Run>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Run>(String::from_utf8_lossy(&body).as_ref()).unwrap())
             }
             _ => {
-                Err(StartWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartWorkflowExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6218,11 +6522,16 @@ impl<P, D> Swf for SwfClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(TerminateWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TerminateWorkflowExecutionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 }

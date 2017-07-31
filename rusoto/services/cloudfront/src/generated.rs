@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -38,7 +40,7 @@ enum DeserializerNext {
     Element(String),
 }
 #[doc="<p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs. </p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ActiveTrustedSigners {
     #[doc="<p>Enabled is <code>true</code> if any of the AWS accounts listed in the <code>TrustedSigners</code> complex type for this RTMP distribution have active CloudFront key pairs. If not, <code>Enabled</code> is <code>false</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
     pub enabled: bool,
@@ -154,7 +156,7 @@ impl AliasListSerializer {
 }
 
 #[doc="<p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Aliases {
     #[doc="<p>A complex type that contains the CNAME aliases, if any, that you want to associate with this distribution.</p>"]
     pub items: Option<Vec<String>>,
@@ -224,7 +226,7 @@ impl AliasesSerializer {
 }
 
 #[doc="<p>A complex type that controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin. There are three choices:</p> <ul> <li> <p>CloudFront forwards only <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront forwards only <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> <li> <p>CloudFront forwards <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests.</p> </li> </ul> <p>If you pick the third choice, you may need to restrict access to your Amazon S3 bucket or to your custom origin so users can't perform operations that you don't want them to. For example, you might not want users to have permissions to delete objects from your origin.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AllowedMethods {
     pub cached_methods: Option<CachedMethods>,
     #[doc="<p>A complex type that contains the HTTP methods that you want CloudFront to process and forward to your origin.</p>"]
@@ -381,7 +383,7 @@ impl BooleanSerializer {
 }
 
 #[doc="<p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to distribute objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current limit on the number of cache behaviors that you can add to a distribution, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront\">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p> <p>If you don't want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don't include an empty <code>CacheBehavior</code> element, or CloudFront returns a <code>MalformedXML</code> error.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior\">Cache Behaviors</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
     #[doc="<p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify true; if not, specify false. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html\">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
@@ -595,7 +597,7 @@ impl CacheBehaviorListSerializer {
 }
 
 #[doc="<p>A complex type that contains zero or more <code>CacheBehavior</code> elements. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CacheBehaviors {
     #[doc="<p>Optional: A complex type that contains cache behaviors for this distribution. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>"]
     pub items: Option<Vec<CacheBehavior>>,
@@ -666,7 +668,7 @@ impl CacheBehaviorsSerializer {
 }
 
 #[doc="<p>A complex type that controls whether CloudFront caches the response to requests using the specified HTTP methods. There are two choices:</p> <ul> <li> <p>CloudFront caches responses to <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront caches responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> </ul> <p>If you pick the second choice for your Amazon S3 Origin, you may need to forward Access-Control-Request-Method, Access-Control-Request-Headers, and Origin headers for the responses to be cached correctly. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CachedMethods {
     #[doc="<p>A complex type that contains the HTTP methods that you want CloudFront to cache responses to.</p>"]
     pub items: Vec<String>,
@@ -733,7 +735,7 @@ impl CachedMethodsSerializer {
 }
 
 #[doc="<p>CloudFront origin access identity.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CloudFrontOriginAccessIdentity {
     #[doc="<p>The current configuration information for the identity. </p>"]
     pub cloud_front_origin_access_identity_config: Option<CloudFrontOriginAccessIdentityConfig>,
@@ -792,7 +794,7 @@ impl CloudFrontOriginAccessIdentityDeserializer {
     }
 }
 #[doc="<p>Origin access identity configuration. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/CloudFront/identity ID/config</code> resource. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CloudFrontOriginAccessIdentityConfig {
     #[doc="<p>A unique number that ensures the request can't be replayed.</p> <p>If the <code>CallerReference</code> is new (no matter the content of the <code>CloudFrontOriginAccessIdentityConfig</code> object), a new origin access identity is created.</p> <p>If the <code>CallerReference</code> is a value already sent in a previous identity request, and the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is identical to the original request (ignoring white space), the response includes the same information returned to the original request. </p> <p>If the <code>CallerReference</code> is a value you already sent in a previous request to create an identity, but the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is different from the original request, CloudFront returns a <code>CloudFrontOriginAccessIdentityAlreadyExists</code> error. </p>"]
     pub caller_reference: String,
@@ -861,7 +863,7 @@ impl CloudFrontOriginAccessIdentityConfigSerializer {
 }
 
 #[doc="<p>Lists the origin access identities for CloudFront.Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/origin-access-identity/cloudfront</code> resource. The response includes a <code>CloudFrontOriginAccessIdentityList</code> element with zero or more <code>CloudFrontOriginAccessIdentitySummary</code> child elements. By default, your entire list of origin access identities is returned in one single page. If the list is long, you can paginate it using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CloudFrontOriginAccessIdentityList {
     #[doc="<p>A flag that indicates whether more origin access identities remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more items in the list.</p>"]
     pub is_truncated: bool,
@@ -939,7 +941,7 @@ impl CloudFrontOriginAccessIdentityListDeserializer {
     }
 }
 #[doc="<p>Summary of the information about a CloudFront origin access identity.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CloudFrontOriginAccessIdentitySummary {
     #[doc="<p>The comment for this origin access identity, as originally specified when created.</p>"]
     pub comment: String,
@@ -1097,7 +1099,7 @@ impl CookieNameListSerializer {
 }
 
 #[doc="<p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html\">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CookieNames {
     #[doc="<p>A complex type that contains one <code>Name</code> element for each cookie that you want CloudFront to forward to the origin for this cache behavior.</p>"]
     pub items: Option<Vec<String>>,
@@ -1167,7 +1169,7 @@ impl CookieNamesSerializer {
 }
 
 #[doc="<p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html\">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CookiePreference {
     #[doc="<p>Specifies which cookies to forward to the origin for this cache behavior: all, none, or the list of cookies specified in the <code>WhitelistedNames</code> complex type.</p> <p>Amazon S3 doesn't process cookies. When the cache behavior is forwarding requests to an Amazon S3 origin, specify none for the <code>Forward</code> element. </p>"]
     pub forward: String,
@@ -1238,14 +1240,14 @@ impl CookiePreferenceSerializer {
 }
 
 #[doc="<p>The request to create a new origin access identity.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateCloudFrontOriginAccessIdentityRequest {
     #[doc="<p>The current configuration information for the identity.</p>"]
     pub cloud_front_origin_access_identity_config: CloudFrontOriginAccessIdentityConfig,
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateCloudFrontOriginAccessIdentityResult {
     #[doc="<p>The origin access identity's information.</p>"]
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
@@ -1298,14 +1300,14 @@ impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 #[doc="<p>The request to create a new distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateDistributionRequest {
     #[doc="<p>The distribution's configuration information.</p>"]
     pub distribution_config: DistributionConfig,
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateDistributionResult {
     #[doc="<p>The distribution's information.</p>"]
     pub distribution: Option<Distribution>,
@@ -1359,14 +1361,14 @@ impl CreateDistributionResultDeserializer {
     }
 }
 #[doc="<p>The request to create a new distribution with tags. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateDistributionWithTagsRequest {
     #[doc="<p>The distribution's configuration information. </p>"]
     pub distribution_config_with_tags: DistributionConfigWithTags,
 }
 
 #[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateDistributionWithTagsResult {
     #[doc="<p>The distribution's information. </p>"]
     pub distribution: Option<Distribution>,
@@ -1421,7 +1423,7 @@ impl CreateDistributionWithTagsResultDeserializer {
     }
 }
 #[doc="<p>The request to create an invalidation.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateInvalidationRequest {
     #[doc="<p>The distribution's id.</p>"]
     pub distribution_id: String,
@@ -1430,7 +1432,7 @@ pub struct CreateInvalidationRequest {
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateInvalidationResult {
     #[doc="<p>The invalidation's information.</p>"]
     pub invalidation: Option<Invalidation>,
@@ -1482,14 +1484,14 @@ impl CreateInvalidationResultDeserializer {
     }
 }
 #[doc="<p>The request to create a new streaming distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateStreamingDistributionRequest {
     #[doc="<p>The streaming distribution's configuration information.</p>"]
     pub streaming_distribution_config: StreamingDistributionConfig,
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateStreamingDistributionResult {
     #[doc="<p>The current version of the streaming distribution created.</p>"]
     pub e_tag: Option<String>,
@@ -1544,14 +1546,14 @@ impl CreateStreamingDistributionResultDeserializer {
     }
 }
 #[doc="<p>The request to create a new streaming distribution with tags.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateStreamingDistributionWithTagsRequest {
     #[doc="<p> The streaming distribution's configuration information. </p>"]
     pub streaming_distribution_config_with_tags: StreamingDistributionConfigWithTags,
 }
 
 #[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateStreamingDistributionWithTagsResult {
     pub e_tag: Option<String>,
     #[doc="<p>The fully qualified URI of the new streaming distribution resource just created. For example:<code> https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>"]
@@ -1605,7 +1607,7 @@ impl CreateStreamingDistributionWithTagsResultDeserializer {
     }
 }
 #[doc="<p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer. </p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html\">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CustomErrorResponse {
     #[doc="<p>The minimum amount of time, in seconds, that you want CloudFront to cache the HTTP status code specified in <code>ErrorCode</code>. When this time period has elapsed, CloudFront queries your origin to see whether the problem that caused the error has been resolved and the requested object is now available.</p> <p>If you don't want to specify a value, include an empty element, <code>&lt;ErrorCachingMinTTL&gt;</code>, in the XML document.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html\">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
     pub error_caching_min_ttl: Option<i64>,
@@ -1753,7 +1755,7 @@ impl CustomErrorResponseListSerializer {
 }
 
 #[doc="<p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.</p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html\">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CustomErrorResponses {
     #[doc="<p>A complex type that contains a <code>CustomErrorResponse</code> element for each HTTP status code for which you want to specify a custom error page and/or a caching duration. </p>"]
     pub items: Option<Vec<CustomErrorResponse>>,
@@ -1824,7 +1826,7 @@ impl CustomErrorResponsesSerializer {
 }
 
 #[doc="<p>A complex type that contains the list of Custom Headers for each origin. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CustomHeaders {
     #[doc="<p> <b>Optional</b>: A list that contains one <code>OriginCustomHeader</code> element for each custom header that you want CloudFront to forward to the origin. If Quantity is <code>0</code>, omit <code>Items</code>.</p>"]
     pub items: Option<Vec<OriginCustomHeader>>,
@@ -1895,7 +1897,7 @@ impl CustomHeadersSerializer {
 }
 
 #[doc="<p>A customer origin.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CustomOriginConfig {
     #[doc="<p>The HTTP port the custom origin listens on.</p>"]
     pub http_port: i64,
@@ -2004,7 +2006,7 @@ impl CustomOriginConfigSerializer {
 }
 
 #[doc="<p>A complex type that describes the default cache behavior if you do not specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DefaultCacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
     #[doc="<p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html\">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
@@ -2152,7 +2154,7 @@ impl DefaultCacheBehaviorSerializer {
 }
 
 #[doc="<p>Deletes a origin access identity.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteCloudFrontOriginAccessIdentityRequest {
     #[doc="<p>The origin access identity's ID.</p>"]
     pub id: String,
@@ -2161,7 +2163,7 @@ pub struct DeleteCloudFrontOriginAccessIdentityRequest {
 }
 
 #[doc="<p>This action deletes a web distribution. To delete a web distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete a web distribution using the CloudFront API:</b> </p> <ol> <li> <p>Disable the web distribution </p> </li> <li> <p>Submit a <code>GET Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution.</p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Distribution</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 6.</p> </li> <li> <p>Review the response to your <code>DELETE Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html\">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteDistributionRequest {
     #[doc="<p>The distribution ID. </p>"]
     pub id: String,
@@ -2170,7 +2172,7 @@ pub struct DeleteDistributionRequest {
 }
 
 #[doc="<p>The request to delete a streaming distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteStreamingDistributionRequest {
     #[doc="<p>The distribution ID. </p>"]
     pub id: String,
@@ -2179,7 +2181,7 @@ pub struct DeleteStreamingDistributionRequest {
 }
 
 #[doc="<p>The distribution's information.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Distribution {
     #[doc="<p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>"]
     pub arn: String,
@@ -2270,7 +2272,7 @@ impl DistributionDeserializer {
     }
 }
 #[doc="<p>A distribution configuration.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DistributionConfig {
     #[doc="<p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution.</p>"]
     pub aliases: Option<Aliases>,
@@ -2465,7 +2467,7 @@ impl DistributionConfigSerializer {
 }
 
 #[doc="<p>A distribution Configuration and a list of tags to be associated with the distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DistributionConfigWithTags {
     #[doc="<p>A distribution configuration.</p>"]
     pub distribution_config: DistributionConfig,
@@ -2488,7 +2490,7 @@ impl DistributionConfigWithTagsSerializer {
 }
 
 #[doc="<p>A distribution list.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DistributionList {
     #[doc="<p>A flag that indicates whether more distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list.</p>"]
     pub is_truncated: bool,
@@ -2567,7 +2569,7 @@ impl DistributionListDeserializer {
     }
 }
 #[doc="<p>A summary of the information about a CloudFront distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DistributionSummary {
     #[doc="<p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>"]
     pub arn: String,
@@ -2778,7 +2780,7 @@ impl EventTypeSerializer {
 }
 
 #[doc="<p>A complex type that specifies how CloudFront handles query strings and cookies.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ForwardedValues {
     #[doc="<p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html\">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
     pub cookies: CookiePreference,
@@ -2866,7 +2868,7 @@ impl ForwardedValuesSerializer {
 }
 
 #[doc="<p>A complex type that controls the countries in which your content is distributed. CloudFront determines the location of your users using <code>MaxMind</code> GeoIP databases. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GeoRestriction {
     #[doc="<p> A complex type that contains a <code>Location</code> element for each country in which you want CloudFront either to distribute your content (<code>whitelist</code>) or not distribute your content (<code>blacklist</code>).</p> <p>The <code>Location</code> element is a two-letter, uppercase country code for a country that you want to include in your <code>blacklist</code> or <code>whitelist</code>. Include one <code>Location</code> element for each country.</p> <p>CloudFront and <code>MaxMind</code> both use <code>ISO 3166</code> country codes. For the current list of countries and the corresponding codes, see <code>ISO 3166-1-alpha-2</code> code on the <i>International Organization for Standardization</i> website. You can also refer to the country list in the CloudFront console, which includes both country names and codes.</p>"]
     pub items: Option<Vec<String>>,
@@ -2970,14 +2972,14 @@ impl GeoRestrictionTypeSerializer {
 }
 
 #[doc="<p>The origin access identity's configuration information. For more information, see <a>CloudFrontOriginAccessIdentityConfigComplexType</a>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
     #[doc="<p>The identity's ID. </p>"]
     pub id: String,
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetCloudFrontOriginAccessIdentityConfigResult {
     #[doc="<p>The origin access identity's configuration information. </p>"]
     pub cloud_front_origin_access_identity_config: Option<CloudFrontOriginAccessIdentityConfig>,
@@ -3028,14 +3030,14 @@ impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
     }
 }
 #[doc="<p>The request to get an origin access identity's information.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetCloudFrontOriginAccessIdentityRequest {
     #[doc="<p>The identity's ID.</p>"]
     pub id: String,
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetCloudFrontOriginAccessIdentityResult {
     #[doc="<p>The origin access identity's information.</p>"]
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
@@ -3086,14 +3088,14 @@ impl GetCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 #[doc="<p>The request to get a distribution configuration.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetDistributionConfigRequest {
     #[doc="<p>The distribution's ID.</p>"]
     pub id: String,
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetDistributionConfigResult {
     #[doc="<p>The distribution's configuration information.</p>"]
     pub distribution_config: Option<DistributionConfig>,
@@ -3145,14 +3147,14 @@ impl GetDistributionConfigResultDeserializer {
     }
 }
 #[doc="<p>The request to get a distribution's information.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetDistributionRequest {
     #[doc="<p>The distribution's ID.</p>"]
     pub id: String,
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetDistributionResult {
     #[doc="<p>The distribution's information.</p>"]
     pub distribution: Option<Distribution>,
@@ -3204,7 +3206,7 @@ impl GetDistributionResultDeserializer {
     }
 }
 #[doc="<p>The request to get an invalidation's information. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetInvalidationRequest {
     #[doc="<p>The distribution's ID.</p>"]
     pub distribution_id: String,
@@ -3213,7 +3215,7 @@ pub struct GetInvalidationRequest {
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetInvalidationResult {
     #[doc="<p>The invalidation's information. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/InvalidationDatatype.html\">Invalidation Complex Type</a>. </p>"]
     pub invalidation: Option<Invalidation>,
@@ -3263,14 +3265,14 @@ impl GetInvalidationResultDeserializer {
     }
 }
 #[doc="<p>To request to get a streaming distribution configuration.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetStreamingDistributionConfigRequest {
     #[doc="<p>The streaming distribution's ID.</p>"]
     pub id: String,
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetStreamingDistributionConfigResult {
     #[doc="<p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>. </p>"]
     pub e_tag: Option<String>,
@@ -3321,14 +3323,14 @@ impl GetStreamingDistributionConfigResultDeserializer {
     }
 }
 #[doc="<p>The request to get a streaming distribution's information.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetStreamingDistributionRequest {
     #[doc="<p>The streaming distribution's ID.</p>"]
     pub id: String,
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetStreamingDistributionResult {
     #[doc="<p>The current version of the streaming distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
     pub e_tag: Option<String>,
@@ -3436,7 +3438,7 @@ impl HeaderListSerializer {
 }
 
 #[doc="<p>A complex type that specifies the headers that you want CloudFront to forward to the origin for this cache behavior.</p> <p>For the headers that you specify, CloudFront also caches separate versions of a specified object based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>Product</code> header that has a value of either <code>Acme</code> or <code>Apex</code>, and you configure CloudFront to cache your content based on values in the <code>Product</code> header. CloudFront forwards the <code>Product</code> header to the origin and caches the response from the origin once for each header value. For more information about caching based on header values, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html\">How CloudFront Forwards and Caches Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Headers {
     #[doc="<p>A complex type that contains one <code>Name</code> element for each header that you want CloudFront to forward to the origin and to vary on for this cache behavior. If <code>Quantity</code> is <code>0</code>, omit <code>Items</code>.</p>"]
     pub items: Option<Vec<String>>,
@@ -3556,7 +3558,7 @@ impl IntegerSerializer {
 }
 
 #[doc="<p>An invalidation. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Invalidation {
     #[doc="<p>The date and time the invalidation request was first made. </p>"]
     pub create_time: String,
@@ -3622,7 +3624,7 @@ impl InvalidationDeserializer {
     }
 }
 #[doc="<p>An invalidation batch.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct InvalidationBatch {
     #[doc="<p>A value that you specify to uniquely identify an invalidation request. CloudFront uses the value to prevent you from accidentally resubmitting an identical request. Whenever you create a new invalidation request, you must specify a new value for <code>CallerReference</code> and change other values in the request as applicable. One way to ensure that the value of <code>CallerReference</code> is unique is to use a <code>timestamp</code>, for example, <code>20120301090000</code>.</p> <p>If you make a second invalidation request with the same value for <code>CallerReference</code>, and if the rest of the request is the same, CloudFront doesn't create a new invalidation request. Instead, CloudFront returns information about the invalidation request that you previously created with the same <code>CallerReference</code>.</p> <p>If <code>CallerReference</code> is a value you already sent in a previous invalidation batch request but the content of any <code>Path</code> is different from the original request, CloudFront returns an <code>InvalidationBatchAlreadyExists</code> error.</p>"]
     pub caller_reference: String,
@@ -3690,7 +3692,7 @@ impl InvalidationBatchSerializer {
 }
 
 #[doc="<p>The <code>InvalidationList</code> complex type describes the list of invalidation objects. For more information about invalidation, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html\">Invalidating Objects (Web Distributions Only)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct InvalidationList {
     #[doc="<p>A flag that indicates whether more invalidation batch requests remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more invalidation batches in the list.</p>"]
     pub is_truncated: bool,
@@ -3769,7 +3771,7 @@ impl InvalidationListDeserializer {
     }
 }
 #[doc="<p>A summary of an invalidation request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct InvalidationSummary {
     pub create_time: String,
     #[doc="<p>The unique ID for an invalidation request.</p>"]
@@ -3934,7 +3936,7 @@ impl KeyPairIdListDeserializer {
     }
 }
 #[doc="<p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>. </p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct KeyPairIds {
     #[doc="<p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
     pub items: Option<Vec<String>>,
@@ -3989,7 +3991,7 @@ impl KeyPairIdsDeserializer {
     }
 }
 #[doc="<p>A complex type that contains a Lambda function association.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct LambdaFunctionAssociation {
     #[doc="<p>Specifies the event type that triggers a Lambda function invocation. Valid values are:</p> <ul> <li> <p> <code>viewer-request</code> </p> </li> <li> <p> <code>origin-request</code> </p> </li> <li> <p> <code>viewer-response</code> </p> </li> <li> <p> <code>origin-response</code> </p> </li> </ul>"]
     pub event_type: Option<String>,
@@ -4119,7 +4121,7 @@ impl LambdaFunctionAssociationListSerializer {
 }
 
 #[doc="<p>A complex type that specifies a list of Lambda functions associations for a cache behavior.</p> <p>If you want to invoke one or more Lambda functions triggered by requests that match the <code>PathPattern</code> of the cache behavior, specify the applicable values for <code>Quantity</code> and <code>Items</code>. Note that there can be up to 4 <code>LambdaFunctionAssociation</code> items in this list (one for each possible value of <code>EventType</code>) and each <code>EventType</code> can be associated with the Lambda function only once.</p> <p>If you don't want to invoke any Lambda functions for the requests that match <code>PathPattern</code>, specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct LambdaFunctionAssociations {
     #[doc="<p> <b>Optional</b>: A complex type that contains <code>LambdaFunctionAssociation</code> items for this cache behavior. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>"]
     pub items: Option<Vec<LambdaFunctionAssociation>>,
@@ -4188,7 +4190,7 @@ impl LambdaFunctionAssociationsSerializer {
 }
 
 #[doc="<p>The request to list origin access identities. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListCloudFrontOriginAccessIdentitiesRequest {
     #[doc="<p>Use this when paginating results to indicate where to begin in your list of origin access identities. The results include identities in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last identity on that page).</p>"]
     pub marker: Option<String>,
@@ -4197,7 +4199,7 @@ pub struct ListCloudFrontOriginAccessIdentitiesRequest {
 }
 
 #[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListCloudFrontOriginAccessIdentitiesResult {
     #[doc="<p>The <code>CloudFrontOriginAccessIdentityList</code> type. </p>"]
     pub cloud_front_origin_access_identity_list: Option<CloudFrontOriginAccessIdentityList>,
@@ -4246,7 +4248,7 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
     }
 }
 #[doc="<p>The request to list distributions that are associated with a specified AWS WAF web ACL. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListDistributionsByWebACLIdRequest {
     #[doc="<p>Use <code>Marker</code> and <code>MaxItems</code> to control pagination of results. If you have more than <code>MaxItems</code> distributions that satisfy the request, the response includes a <code>NextMarker</code> element. To get the next page of results, submit another request. For the value of <code>Marker</code>, specify the value of <code>NextMarker</code> from the last response. (For the first request, omit <code>Marker</code>.) </p>"]
     pub marker: Option<String>,
@@ -4257,7 +4259,7 @@ pub struct ListDistributionsByWebACLIdRequest {
 }
 
 #[doc="<p>The response to a request to list the distributions that are associated with a specified AWS WAF web ACL. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListDistributionsByWebACLIdResult {
     #[doc="<p>The <code>DistributionList</code> type. </p>"]
     pub distribution_list: Option<DistributionList>,
@@ -4308,7 +4310,7 @@ impl ListDistributionsByWebACLIdResultDeserializer {
     }
 }
 #[doc="<p>The request to list your distributions. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListDistributionsRequest {
     #[doc="<p>Use this when paginating results to indicate where to begin in your list of distributions. The results include distributions in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last distribution on that page).</p>"]
     pub marker: Option<String>,
@@ -4317,7 +4319,7 @@ pub struct ListDistributionsRequest {
 }
 
 #[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListDistributionsResult {
     #[doc="<p>The <code>DistributionList</code> type. </p>"]
     pub distribution_list: Option<DistributionList>,
@@ -4367,7 +4369,7 @@ impl ListDistributionsResultDeserializer {
     }
 }
 #[doc="<p>The request to list invalidations. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListInvalidationsRequest {
     #[doc="<p>The distribution's ID.</p>"]
     pub distribution_id: String,
@@ -4378,7 +4380,7 @@ pub struct ListInvalidationsRequest {
 }
 
 #[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListInvalidationsResult {
     #[doc="<p>Information about invalidation batches. </p>"]
     pub invalidation_list: Option<InvalidationList>,
@@ -4428,7 +4430,7 @@ impl ListInvalidationsResultDeserializer {
     }
 }
 #[doc="<p>The request to list your streaming distributions. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListStreamingDistributionsRequest {
     #[doc="<p>The value that you provided for the <code>Marker</code> request parameter.</p>"]
     pub marker: Option<String>,
@@ -4437,7 +4439,7 @@ pub struct ListStreamingDistributionsRequest {
 }
 
 #[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListStreamingDistributionsResult {
     #[doc="<p>The <code>StreamingDistributionList</code> type. </p>"]
     pub streaming_distribution_list: Option<StreamingDistributionList>,
@@ -4486,14 +4488,14 @@ impl ListStreamingDistributionsResultDeserializer {
     }
 }
 #[doc="<p> The request to list tags for a CloudFront resource.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTagsForResourceRequest {
     #[doc="<p> An ARN of a CloudFront resource.</p>"]
     pub resource: String,
 }
 
 #[doc="<p> The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTagsForResourceResult {
     #[doc="<p> A complex type that contains zero or more <code>Tag</code> elements.</p>"]
     pub tags: Tags,
@@ -4597,7 +4599,7 @@ impl LocationListSerializer {
 }
 
 #[doc="<p>A complex type that controls whether access logs are written for the distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct LoggingConfig {
     #[doc="<p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>"]
     pub bucket: String,
@@ -4808,7 +4810,7 @@ impl MinimumProtocolVersionSerializer {
 }
 
 #[doc="<p>A complex type that describes the Amazon S3 bucket or the HTTP server (for example, a web server) from which CloudFront gets your files. You must create at least one origin.</p> <p>For the current limit on the number of origins that you can create for a distribution, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront\">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Origin {
     #[doc="<p>A complex type that contains names and values for the custom headers that you want.</p>"]
     pub custom_headers: Option<CustomHeaders>,
@@ -4914,7 +4916,7 @@ impl OriginSerializer {
 }
 
 #[doc="<p>A complex type that contains <code>HeaderName</code> and <code>HeaderValue</code> elements, if any, for this distribution. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct OriginCustomHeader {
     #[doc="<p>The name of a header that you want CloudFront to forward to your origin. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/forward-custom-headers.html\">Forwarding Custom Headers to Your Origin (Web Distributions Only)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p>"]
     pub header_name: String,
@@ -5120,7 +5122,7 @@ impl OriginProtocolPolicySerializer {
 }
 
 #[doc="<p>A complex type that contains information about the SSL/TLS protocols that CloudFront can use when establishing an HTTPS connection with your origin. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct OriginSslProtocols {
     #[doc="<p>A list that contains allowed SSL/TLS protocols for this distribution.</p>"]
     pub items: Vec<String>,
@@ -5188,7 +5190,7 @@ impl OriginSslProtocolsSerializer {
 }
 
 #[doc="<p>A complex type that contains information about origins for this distribution. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Origins {
     #[doc="<p>A complex type that contains origins for this distribution.</p>"]
     pub items: Option<Vec<Origin>>,
@@ -5314,7 +5316,7 @@ impl PathListSerializer {
 }
 
 #[doc="<p>A complex type that contains information about the objects that you want to invalidate. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects\">Specifying the Objects to Invalidate</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Paths {
     #[doc="<p>A complex type that contains a list of the paths that you want to invalidate.</p>"]
     pub items: Option<Vec<String>>,
@@ -5408,7 +5410,7 @@ impl PriceClassSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct QueryStringCacheKeys {
     #[doc="<p>(Optional) A list that contains the query string parameters that you want CloudFront to use as a basis for caching for this cache behavior. If <code>Quantity</code> is 0, you can omit <code>Items</code>. </p>"]
     pub items: Option<Vec<String>>,
@@ -5544,7 +5546,7 @@ impl ResourceARNSerializer {
 }
 
 #[doc="<p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Restrictions {
     pub geo_restriction: GeoRestriction,
 }
@@ -5605,7 +5607,7 @@ impl RestrictionsSerializer {
 }
 
 #[doc="<p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct S3Origin {
     #[doc="<p>The DNS name of the Amazon S3 origin. </p>"]
     pub domain_name: String,
@@ -5675,7 +5677,7 @@ impl S3OriginSerializer {
 }
 
 #[doc="<p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct S3OriginConfig {
     #[doc="<p>The CloudFront origin access identity to associate with the origin. Use an origin access identity to configure the origin so that viewers can <i>only</i> access objects in an Amazon S3 bucket through CloudFront. The format of the value is:</p> <p>origin-access-identity/cloudfront/<i>ID-of-origin-access-identity</i> </p> <p>where <code> <i>ID-of-origin-access-identity</i> </code> is the value that CloudFront returned in the <code>ID</code> element when you created the origin access identity.</p> <p>If you want viewers to be able to access objects using either the CloudFront URL or the Amazon S3 URL, specify an empty <code>OriginAccessIdentity</code> element.</p> <p>To delete the origin access identity from an existing distribution, update the distribution configuration and include an empty <code>OriginAccessIdentity</code> element.</p> <p>To replace the origin access identity, update the distribution configuration and specify the new origin access identity.</p> <p>For more information about the origin access identity, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
     pub origin_access_identity: String,
@@ -5763,7 +5765,7 @@ impl SSLSupportMethodSerializer {
 }
 
 #[doc="<p>A complex type that lists the AWS accounts that were included in the <code>TrustedSigners</code> complex type, as well as their active CloudFront key pair IDs, if any. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Signer {
     #[doc="<p>An AWS account that is included in the <code>TrustedSigners</code> complex type for this RTMP distribution. Valid values include:</p> <ul> <li> <p> <code>self</code>, which is the AWS account used to create the distribution.</p> </li> <li> <p>An AWS account number.</p> </li> </ul>"]
     pub aws_account_number: Option<String>,
@@ -5942,7 +5944,7 @@ impl SslProtocolsListSerializer {
 }
 
 #[doc="<p>A streaming distribution. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct StreamingDistribution {
     pub arn: String,
     #[doc="<p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>"]
@@ -6026,7 +6028,7 @@ impl StreamingDistributionDeserializer {
     }
 }
 #[doc="<p>The RTMP distribution's configuration information.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct StreamingDistributionConfig {
     #[doc="<p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this streaming distribution. </p>"]
     pub aliases: Option<Aliases>,
@@ -6144,7 +6146,7 @@ impl StreamingDistributionConfigSerializer {
 }
 
 #[doc="<p>A streaming distribution Configuration and a list of tags to be associated with the streaming distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct StreamingDistributionConfigWithTags {
     #[doc="<p>A streaming distribution Configuration.</p>"]
     pub streaming_distribution_config: StreamingDistributionConfig,
@@ -6168,7 +6170,7 @@ impl StreamingDistributionConfigWithTagsSerializer {
 }
 
 #[doc="<p>A streaming distribution list. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct StreamingDistributionList {
     #[doc="<p>A flag that indicates whether more streaming distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list. </p>"]
     pub is_truncated: bool,
@@ -6245,7 +6247,7 @@ impl StreamingDistributionListDeserializer {
     }
 }
 #[doc="<p> A summary of the information for an Amazon CloudFront streaming distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct StreamingDistributionSummary {
     #[doc="<p> The ARN (Amazon Resource Name) for the streaming distribution. For example: <code>arn:aws:cloudfront::123456789012:streaming-distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>"]
     pub arn: String,
@@ -6390,7 +6392,7 @@ impl StreamingDistributionSummaryListDeserializer {
     }
 }
 #[doc="<p>A complex type that controls whether access logs are written for this streaming distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct StreamingLoggingConfig {
     #[doc="<p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>"]
     pub bucket: String,
@@ -6487,7 +6489,7 @@ impl StringSerializer {
 }
 
 #[doc="<p> A complex type that contains <code>Tag</code> key and <code>Tag</code> value.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Tag {
     #[doc="<p> A string that contains <code>Tag</code> key.</p> <p>The string length should be between 1 and 128 characters. Valid characters include <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, space, and the special characters <code>_ - . : / = + @</code>.</p>"]
     pub key: String,
@@ -6596,7 +6598,7 @@ impl TagKeyListSerializer {
 }
 
 #[doc="<p> A complex type that contains zero or more <code>Tag</code> elements.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TagKeys {
     #[doc="<p> A complex type that contains <code>Tag</code> key elements.</p>"]
     pub items: Option<Vec<String>>,
@@ -6673,7 +6675,7 @@ impl TagListSerializer {
 }
 
 #[doc="<p> The request to add tags to a CloudFront resource.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TagResourceRequest {
     #[doc="<p> An ARN of a CloudFront resource.</p>"]
     pub resource: String,
@@ -6707,7 +6709,7 @@ impl TagValueSerializer {
 }
 
 #[doc="<p> A complex type that contains zero or more <code>Tag</code> elements.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Tags {
     #[doc="<p> A complex type that contains <code>Tag</code> elements.</p>"]
     pub items: Option<Vec<Tag>>,
@@ -6784,7 +6786,7 @@ impl TimestampDeserializer {
     }
 }
 #[doc="<p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p> <p>For more information about updating the distribution configuration, see <a>DistributionConfig</a> .</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TrustedSigners {
     #[doc="<p>Specifies whether you want to require viewers to use signed URLs to access the files specified by <code>PathPattern</code> and <code>TargetOriginId</code>.</p>"]
     pub enabled: bool,
@@ -6861,7 +6863,7 @@ impl TrustedSignersSerializer {
 }
 
 #[doc="<p> The request to remove tags from a CloudFront resource.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UntagResourceRequest {
     #[doc="<p> An ARN of a CloudFront resource.</p>"]
     pub resource: String,
@@ -6870,7 +6872,7 @@ pub struct UntagResourceRequest {
 }
 
 #[doc="<p>The request to update an origin access identity.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateCloudFrontOriginAccessIdentityRequest {
     #[doc="<p>The identity's configuration information.</p>"]
     pub cloud_front_origin_access_identity_config: CloudFrontOriginAccessIdentityConfig,
@@ -6881,7 +6883,7 @@ pub struct UpdateCloudFrontOriginAccessIdentityRequest {
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateCloudFrontOriginAccessIdentityResult {
     #[doc="<p>The origin access identity's information.</p>"]
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
@@ -6932,7 +6934,7 @@ impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 #[doc="<p>The request to update a distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateDistributionRequest {
     #[doc="<p>The distribution's configuration information.</p>"]
     pub distribution_config: DistributionConfig,
@@ -6943,7 +6945,7 @@ pub struct UpdateDistributionRequest {
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateDistributionResult {
     #[doc="<p>The distribution's information.</p>"]
     pub distribution: Option<Distribution>,
@@ -6995,7 +6997,7 @@ impl UpdateDistributionResultDeserializer {
     }
 }
 #[doc="<p>The request to update a streaming distribution.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateStreamingDistributionRequest {
     #[doc="<p>The streaming distribution's id.</p>"]
     pub id: String,
@@ -7006,7 +7008,7 @@ pub struct UpdateStreamingDistributionRequest {
 }
 
 #[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateStreamingDistributionResult {
     #[doc="<p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
     pub e_tag: Option<String>,
@@ -7059,7 +7061,7 @@ impl UpdateStreamingDistributionResultDeserializer {
     }
 }
 #[doc="<p>A complex type that specifies the following:</p> <ul> <li> <p>Which SSL/TLS certificate to use when viewers request objects using HTTPS</p> </li> <li> <p>Whether you want CloudFront to use dedicated IP addresses or SNI when you're using alternate domain names in your object names</p> </li> <li> <p>The minimum protocol version that you want CloudFront to use when communicating with viewers</p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html\">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ViewerCertificate {
     pub acm_certificate_arn: Option<String>,
     pub cloud_front_default_certificate: Option<bool>,
@@ -7249,6 +7251,11 @@ impl From<CredentialsError> for CreateCloudFrontOriginAccessIdentityError {
 impl From<HttpDispatchError> for CreateCloudFrontOriginAccessIdentityError {
     fn from(err: HttpDispatchError) -> CreateCloudFrontOriginAccessIdentityError {
         CreateCloudFrontOriginAccessIdentityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateCloudFrontOriginAccessIdentityError {
+    fn from(err: io::Error) -> CreateCloudFrontOriginAccessIdentityError {
+        CreateCloudFrontOriginAccessIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateCloudFrontOriginAccessIdentityError {
@@ -7454,6 +7461,11 @@ impl From<CredentialsError> for CreateDistributionError {
 impl From<HttpDispatchError> for CreateDistributionError {
     fn from(err: HttpDispatchError) -> CreateDistributionError {
         CreateDistributionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDistributionError {
+    fn from(err: io::Error) -> CreateDistributionError {
+        CreateDistributionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDistributionError {
@@ -7683,6 +7695,11 @@ impl From<HttpDispatchError> for CreateDistributionWithTagsError {
         CreateDistributionWithTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDistributionWithTagsError {
+    fn from(err: io::Error) -> CreateDistributionWithTagsError {
+        CreateDistributionWithTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDistributionWithTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7817,6 +7834,11 @@ impl From<HttpDispatchError> for CreateInvalidationError {
         CreateInvalidationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateInvalidationError {
+    fn from(err: io::Error) -> CreateInvalidationError {
+        CreateInvalidationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateInvalidationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7922,6 +7944,11 @@ impl From<CredentialsError> for CreateStreamingDistributionError {
 impl From<HttpDispatchError> for CreateStreamingDistributionError {
     fn from(err: HttpDispatchError) -> CreateStreamingDistributionError {
         CreateStreamingDistributionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateStreamingDistributionError {
+    fn from(err: io::Error) -> CreateStreamingDistributionError {
+        CreateStreamingDistributionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateStreamingDistributionError {
@@ -8043,6 +8070,11 @@ impl From<HttpDispatchError> for CreateStreamingDistributionWithTagsError {
         CreateStreamingDistributionWithTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateStreamingDistributionWithTagsError {
+    fn from(err: io::Error) -> CreateStreamingDistributionWithTagsError {
+        CreateStreamingDistributionWithTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateStreamingDistributionWithTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8139,6 +8171,11 @@ impl From<HttpDispatchError> for DeleteCloudFrontOriginAccessIdentityError {
         DeleteCloudFrontOriginAccessIdentityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteCloudFrontOriginAccessIdentityError {
+    fn from(err: io::Error) -> DeleteCloudFrontOriginAccessIdentityError {
+        DeleteCloudFrontOriginAccessIdentityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8225,6 +8262,11 @@ impl From<HttpDispatchError> for DeleteDistributionError {
         DeleteDistributionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDistributionError {
+    fn from(err: io::Error) -> DeleteDistributionError {
+        DeleteDistributionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8309,6 +8351,11 @@ impl From<HttpDispatchError> for DeleteStreamingDistributionError {
         DeleteStreamingDistributionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteStreamingDistributionError {
+    fn from(err: io::Error) -> DeleteStreamingDistributionError {
+        DeleteStreamingDistributionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8384,6 +8431,11 @@ impl From<HttpDispatchError> for GetCloudFrontOriginAccessIdentityError {
         GetCloudFrontOriginAccessIdentityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetCloudFrontOriginAccessIdentityError {
+    fn from(err: io::Error) -> GetCloudFrontOriginAccessIdentityError {
+        GetCloudFrontOriginAccessIdentityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8454,6 +8506,11 @@ impl From<CredentialsError> for GetCloudFrontOriginAccessIdentityConfigError {
 impl From<HttpDispatchError> for GetCloudFrontOriginAccessIdentityConfigError {
     fn from(err: HttpDispatchError) -> GetCloudFrontOriginAccessIdentityConfigError {
         GetCloudFrontOriginAccessIdentityConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCloudFrontOriginAccessIdentityConfigError {
+    fn from(err: io::Error) -> GetCloudFrontOriginAccessIdentityConfigError {
+        GetCloudFrontOriginAccessIdentityConfigError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetCloudFrontOriginAccessIdentityConfigError {
@@ -8532,6 +8589,11 @@ impl From<HttpDispatchError> for GetDistributionError {
         GetDistributionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDistributionError {
+    fn from(err: io::Error) -> GetDistributionError {
+        GetDistributionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8602,6 +8664,11 @@ impl From<CredentialsError> for GetDistributionConfigError {
 impl From<HttpDispatchError> for GetDistributionConfigError {
     fn from(err: HttpDispatchError) -> GetDistributionConfigError {
         GetDistributionConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDistributionConfigError {
+    fn from(err: io::Error) -> GetDistributionConfigError {
+        GetDistributionConfigError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDistributionConfigError {
@@ -8685,6 +8752,11 @@ impl From<HttpDispatchError> for GetInvalidationError {
         GetInvalidationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetInvalidationError {
+    fn from(err: io::Error) -> GetInvalidationError {
+        GetInvalidationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetInvalidationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8754,6 +8826,11 @@ impl From<CredentialsError> for GetStreamingDistributionError {
 impl From<HttpDispatchError> for GetStreamingDistributionError {
     fn from(err: HttpDispatchError) -> GetStreamingDistributionError {
         GetStreamingDistributionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetStreamingDistributionError {
+    fn from(err: io::Error) -> GetStreamingDistributionError {
+        GetStreamingDistributionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetStreamingDistributionError {
@@ -8828,6 +8905,11 @@ impl From<HttpDispatchError> for GetStreamingDistributionConfigError {
         GetStreamingDistributionConfigError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetStreamingDistributionConfigError {
+    fn from(err: io::Error) -> GetStreamingDistributionConfigError {
+        GetStreamingDistributionConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetStreamingDistributionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8895,6 +8977,11 @@ impl From<CredentialsError> for ListCloudFrontOriginAccessIdentitiesError {
 impl From<HttpDispatchError> for ListCloudFrontOriginAccessIdentitiesError {
     fn from(err: HttpDispatchError) -> ListCloudFrontOriginAccessIdentitiesError {
         ListCloudFrontOriginAccessIdentitiesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListCloudFrontOriginAccessIdentitiesError {
+    fn from(err: io::Error) -> ListCloudFrontOriginAccessIdentitiesError {
+        ListCloudFrontOriginAccessIdentitiesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListCloudFrontOriginAccessIdentitiesError {
@@ -8967,6 +9054,11 @@ impl From<HttpDispatchError> for ListDistributionsError {
         ListDistributionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListDistributionsError {
+    fn from(err: io::Error) -> ListDistributionsError {
+        ListDistributionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListDistributionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9036,6 +9128,11 @@ impl From<CredentialsError> for ListDistributionsByWebACLIdError {
 impl From<HttpDispatchError> for ListDistributionsByWebACLIdError {
     fn from(err: HttpDispatchError) -> ListDistributionsByWebACLIdError {
         ListDistributionsByWebACLIdError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDistributionsByWebACLIdError {
+    fn from(err: io::Error) -> ListDistributionsByWebACLIdError {
+        ListDistributionsByWebACLIdError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDistributionsByWebACLIdError {
@@ -9117,6 +9214,11 @@ impl From<HttpDispatchError> for ListInvalidationsError {
         ListInvalidationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListInvalidationsError {
+    fn from(err: io::Error) -> ListInvalidationsError {
+        ListInvalidationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListInvalidationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9185,6 +9287,11 @@ impl From<CredentialsError> for ListStreamingDistributionsError {
 impl From<HttpDispatchError> for ListStreamingDistributionsError {
     fn from(err: HttpDispatchError) -> ListStreamingDistributionsError {
         ListStreamingDistributionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListStreamingDistributionsError {
+    fn from(err: io::Error) -> ListStreamingDistributionsError {
+        ListStreamingDistributionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListStreamingDistributionsError {
@@ -9268,6 +9375,11 @@ impl From<CredentialsError> for ListTagsForResourceError {
 impl From<HttpDispatchError> for ListTagsForResourceError {
     fn from(err: HttpDispatchError) -> ListTagsForResourceError {
         ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -9358,6 +9470,11 @@ impl From<HttpDispatchError> for TagResourceError {
         TagResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9442,6 +9559,11 @@ impl From<CredentialsError> for UntagResourceError {
 impl From<HttpDispatchError> for UntagResourceError {
     fn from(err: HttpDispatchError) -> UntagResourceError {
         UntagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -9532,6 +9654,11 @@ impl From<CredentialsError> for UpdateCloudFrontOriginAccessIdentityError {
 impl From<HttpDispatchError> for UpdateCloudFrontOriginAccessIdentityError {
     fn from(err: HttpDispatchError) -> UpdateCloudFrontOriginAccessIdentityError {
         UpdateCloudFrontOriginAccessIdentityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateCloudFrontOriginAccessIdentityError {
+    fn from(err: io::Error) -> UpdateCloudFrontOriginAccessIdentityError {
+        UpdateCloudFrontOriginAccessIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateCloudFrontOriginAccessIdentityError {
@@ -9742,6 +9869,11 @@ impl From<HttpDispatchError> for UpdateDistributionError {
         UpdateDistributionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateDistributionError {
+    fn from(err: io::Error) -> UpdateDistributionError {
+        UpdateDistributionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9883,6 +10015,11 @@ impl From<CredentialsError> for UpdateStreamingDistributionError {
 impl From<HttpDispatchError> for UpdateStreamingDistributionError {
     fn from(err: HttpDispatchError) -> UpdateStreamingDistributionError {
         UpdateStreamingDistributionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateStreamingDistributionError {
+    fn from(err: io::Error) -> UpdateStreamingDistributionError {
+        UpdateStreamingDistributionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateStreamingDistributionError {
@@ -10144,7 +10281,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10152,11 +10289,13 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateCloudFrontOriginAccessIdentityResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10174,7 +10313,11 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(CreateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -10203,7 +10346,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10211,11 +10354,13 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10236,8 +10381,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDistributionError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDistributionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10266,7 +10412,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10274,11 +10420,13 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDistributionWithTagsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10296,7 +10444,12 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(CreateDistributionWithTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDistributionWithTagsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -10325,7 +10478,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10333,11 +10486,13 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateInvalidationResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10354,8 +10509,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateInvalidationError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateInvalidationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10384,7 +10540,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10392,11 +10548,13 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateStreamingDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10414,7 +10572,12 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(CreateStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStreamingDistributionError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -10443,7 +10606,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10451,11 +10614,13 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateStreamingDistributionWithTagsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10473,7 +10638,11 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(CreateStreamingDistributionWithTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStreamingDistributionWithTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -10501,7 +10670,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10511,7 +10680,11 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -10538,7 +10711,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10549,8 +10722,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteDistributionError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDistributionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10578,7 +10752,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10588,7 +10762,12 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteStreamingDistributionError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -10613,7 +10792,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10621,11 +10800,13 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetCloudFrontOriginAccessIdentityResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10639,7 +10820,11 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(GetCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -10662,7 +10847,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10670,11 +10855,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetCloudFrontOriginAccessIdentityConfigResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10688,7 +10875,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 };
                 Ok(result)
             }
-            _ => Err(GetCloudFrontOriginAccessIdentityConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCloudFrontOriginAccessIdentityConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -10712,7 +10903,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10720,11 +10911,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10740,8 +10933,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 Ok(result)
             }
             _ => {
-                Err(GetDistributionError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDistributionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10767,7 +10961,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10775,11 +10969,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetDistributionConfigResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10794,8 +10990,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 Ok(result)
             }
             _ => {
-                Err(GetDistributionConfigError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDistributionConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10822,7 +11019,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10830,11 +11027,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetInvalidationResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10847,8 +11046,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 Ok(result)
             }
             _ => {
-                Err(GetInvalidationError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInvalidationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10874,7 +11074,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10882,11 +11082,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetStreamingDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10900,7 +11102,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 };
                 Ok(result)
             }
-            _ => Err(GetStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetStreamingDistributionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -10925,7 +11132,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10933,11 +11140,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetStreamingDistributionConfigResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10951,7 +11160,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 };
                 Ok(result)
             }
-            _ => Err(GetStreamingDistributionConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetStreamingDistributionConfigError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -10984,7 +11198,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -10992,11 +11206,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListCloudFrontOriginAccessIdentitiesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11007,7 +11223,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
                 Ok(result)
             }
-            _ => Err(ListCloudFrontOriginAccessIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCloudFrontOriginAccessIdentitiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11038,7 +11258,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11046,11 +11266,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListDistributionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11064,8 +11286,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 Ok(result)
             }
             _ => {
-                Err(ListDistributionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDistributionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11098,7 +11321,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11106,11 +11329,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListDistributionsByWebACLIdResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11121,7 +11346,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
                 Ok(result)
             }
-            _ => Err(ListDistributionsByWebACLIdError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDistributionsByWebACLIdError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -11152,7 +11382,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11160,11 +11390,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListInvalidationsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11178,8 +11410,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 Ok(result)
             }
             _ => {
-                Err(ListInvalidationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListInvalidationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11212,7 +11445,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11220,11 +11453,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListStreamingDistributionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11235,7 +11470,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
                 Ok(result)
             }
-            _ => Err(ListStreamingDistributionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListStreamingDistributionsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -11259,7 +11499,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11267,11 +11507,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListTagsForResourceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11285,8 +11527,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 Ok(result)
             }
             _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11312,7 +11555,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11322,7 +11565,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
                 Ok(result)
             }
-            _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11347,7 +11594,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11358,7 +11605,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 Ok(result)
             }
             _ => {
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11392,7 +11641,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11400,11 +11649,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateCloudFrontOriginAccessIdentityResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11418,7 +11669,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 };
                 Ok(result)
             }
-            _ => Err(UpdateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11450,7 +11705,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11458,11 +11713,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11479,8 +11736,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 Ok(result)
             }
             _ => {
-                Err(UpdateDistributionError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDistributionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11512,7 +11770,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11520,11 +11778,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateStreamingDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11538,7 +11798,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 };
                 Ok(result)
             }
-            _ => Err(UpdateStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateStreamingDistributionError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 }

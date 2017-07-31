@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2314,6 +2316,11 @@ impl From<HttpDispatchError> for AddInstanceFleetError {
         AddInstanceFleetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddInstanceFleetError {
+    fn from(err: io::Error) -> AddInstanceFleetError {
+        AddInstanceFleetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddInstanceFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2387,6 +2394,11 @@ impl From<CredentialsError> for AddInstanceGroupsError {
 impl From<HttpDispatchError> for AddInstanceGroupsError {
     fn from(err: HttpDispatchError) -> AddInstanceGroupsError {
         AddInstanceGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddInstanceGroupsError {
+    fn from(err: io::Error) -> AddInstanceGroupsError {
+        AddInstanceGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddInstanceGroupsError {
@@ -2465,6 +2477,11 @@ impl From<HttpDispatchError> for AddJobFlowStepsError {
         AddJobFlowStepsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddJobFlowStepsError {
+    fn from(err: io::Error) -> AddJobFlowStepsError {
+        AddJobFlowStepsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddJobFlowStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2540,6 +2557,11 @@ impl From<CredentialsError> for AddTagsError {
 impl From<HttpDispatchError> for AddTagsError {
     fn from(err: HttpDispatchError) -> AddTagsError {
         AddTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddTagsError {
+    fn from(err: io::Error) -> AddTagsError {
+        AddTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddTagsError {
@@ -2622,6 +2644,11 @@ impl From<HttpDispatchError> for CancelStepsError {
         CancelStepsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelStepsError {
+    fn from(err: io::Error) -> CancelStepsError {
+        CancelStepsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2696,6 +2723,11 @@ impl From<CredentialsError> for CreateSecurityConfigurationError {
 impl From<HttpDispatchError> for CreateSecurityConfigurationError {
     fn from(err: HttpDispatchError) -> CreateSecurityConfigurationError {
         CreateSecurityConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSecurityConfigurationError {
+    fn from(err: io::Error) -> CreateSecurityConfigurationError {
+        CreateSecurityConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateSecurityConfigurationError {
@@ -2774,6 +2806,11 @@ impl From<CredentialsError> for DeleteSecurityConfigurationError {
 impl From<HttpDispatchError> for DeleteSecurityConfigurationError {
     fn from(err: HttpDispatchError) -> DeleteSecurityConfigurationError {
         DeleteSecurityConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSecurityConfigurationError {
+    fn from(err: io::Error) -> DeleteSecurityConfigurationError {
+        DeleteSecurityConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSecurityConfigurationError {
@@ -2858,6 +2895,11 @@ impl From<HttpDispatchError> for DescribeClusterError {
         DescribeClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeClusterError {
+    fn from(err: io::Error) -> DescribeClusterError {
+        DescribeClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2933,6 +2975,11 @@ impl From<HttpDispatchError> for DescribeJobFlowsError {
         DescribeJobFlowsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeJobFlowsError {
+    fn from(err: io::Error) -> DescribeJobFlowsError {
+        DescribeJobFlowsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeJobFlowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3006,6 +3053,11 @@ impl From<CredentialsError> for DescribeSecurityConfigurationError {
 impl From<HttpDispatchError> for DescribeSecurityConfigurationError {
     fn from(err: HttpDispatchError) -> DescribeSecurityConfigurationError {
         DescribeSecurityConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSecurityConfigurationError {
+    fn from(err: io::Error) -> DescribeSecurityConfigurationError {
+        DescribeSecurityConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSecurityConfigurationError {
@@ -3090,6 +3142,11 @@ impl From<HttpDispatchError> for DescribeStepError {
         DescribeStepError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeStepError {
+    fn from(err: io::Error) -> DescribeStepError {
+        DescribeStepError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeStepError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3168,6 +3225,11 @@ impl From<CredentialsError> for ListBootstrapActionsError {
 impl From<HttpDispatchError> for ListBootstrapActionsError {
     fn from(err: HttpDispatchError) -> ListBootstrapActionsError {
         ListBootstrapActionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListBootstrapActionsError {
+    fn from(err: io::Error) -> ListBootstrapActionsError {
+        ListBootstrapActionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListBootstrapActionsError {
@@ -3252,6 +3314,11 @@ impl From<HttpDispatchError> for ListClustersError {
         ListClustersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListClustersError {
+    fn from(err: io::Error) -> ListClustersError {
+        ListClustersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3330,6 +3397,11 @@ impl From<CredentialsError> for ListInstanceFleetsError {
 impl From<HttpDispatchError> for ListInstanceFleetsError {
     fn from(err: HttpDispatchError) -> ListInstanceFleetsError {
         ListInstanceFleetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListInstanceFleetsError {
+    fn from(err: io::Error) -> ListInstanceFleetsError {
+        ListInstanceFleetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListInstanceFleetsError {
@@ -3414,6 +3486,11 @@ impl From<HttpDispatchError> for ListInstanceGroupsError {
         ListInstanceGroupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListInstanceGroupsError {
+    fn from(err: io::Error) -> ListInstanceGroupsError {
+        ListInstanceGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3496,6 +3573,11 @@ impl From<HttpDispatchError> for ListInstancesError {
         ListInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListInstancesError {
+    fn from(err: io::Error) -> ListInstancesError {
+        ListInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3574,6 +3656,11 @@ impl From<CredentialsError> for ListSecurityConfigurationsError {
 impl From<HttpDispatchError> for ListSecurityConfigurationsError {
     fn from(err: HttpDispatchError) -> ListSecurityConfigurationsError {
         ListSecurityConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSecurityConfigurationsError {
+    fn from(err: io::Error) -> ListSecurityConfigurationsError {
+        ListSecurityConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListSecurityConfigurationsError {
@@ -3656,6 +3743,11 @@ impl From<HttpDispatchError> for ListStepsError {
         ListStepsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListStepsError {
+    fn from(err: io::Error) -> ListStepsError {
+        ListStepsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3736,6 +3828,11 @@ impl From<HttpDispatchError> for ModifyInstanceFleetError {
         ModifyInstanceFleetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyInstanceFleetError {
+    fn from(err: io::Error) -> ModifyInstanceFleetError {
+        ModifyInstanceFleetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyInstanceFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3813,6 +3910,11 @@ impl From<HttpDispatchError> for ModifyInstanceGroupsError {
         ModifyInstanceGroupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyInstanceGroupsError {
+    fn from(err: io::Error) -> ModifyInstanceGroupsError {
+        ModifyInstanceGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3884,6 +3986,11 @@ impl From<HttpDispatchError> for PutAutoScalingPolicyError {
         PutAutoScalingPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutAutoScalingPolicyError {
+    fn from(err: io::Error) -> PutAutoScalingPolicyError {
+        PutAutoScalingPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutAutoScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3952,6 +4059,11 @@ impl From<CredentialsError> for RemoveAutoScalingPolicyError {
 impl From<HttpDispatchError> for RemoveAutoScalingPolicyError {
     fn from(err: HttpDispatchError) -> RemoveAutoScalingPolicyError {
         RemoveAutoScalingPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveAutoScalingPolicyError {
+    fn from(err: io::Error) -> RemoveAutoScalingPolicyError {
+        RemoveAutoScalingPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveAutoScalingPolicyError {
@@ -4032,6 +4144,11 @@ impl From<HttpDispatchError> for RemoveTagsError {
         RemoveTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveTagsError {
+    fn from(err: io::Error) -> RemoveTagsError {
+        RemoveTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4105,6 +4222,11 @@ impl From<HttpDispatchError> for RunJobFlowError {
         RunJobFlowError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RunJobFlowError {
+    fn from(err: io::Error) -> RunJobFlowError {
+        RunJobFlowError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RunJobFlowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4175,6 +4297,11 @@ impl From<CredentialsError> for SetTerminationProtectionError {
 impl From<HttpDispatchError> for SetTerminationProtectionError {
     fn from(err: HttpDispatchError) -> SetTerminationProtectionError {
         SetTerminationProtectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetTerminationProtectionError {
+    fn from(err: io::Error) -> SetTerminationProtectionError {
+        SetTerminationProtectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetTerminationProtectionError {
@@ -4253,6 +4380,11 @@ impl From<HttpDispatchError> for SetVisibleToAllUsersError {
         SetVisibleToAllUsersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetVisibleToAllUsersError {
+    fn from(err: io::Error) -> SetVisibleToAllUsersError {
+        SetVisibleToAllUsersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetVisibleToAllUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4327,6 +4459,11 @@ impl From<CredentialsError> for TerminateJobFlowsError {
 impl From<HttpDispatchError> for TerminateJobFlowsError {
     fn from(err: HttpDispatchError) -> TerminateJobFlowsError {
         TerminateJobFlowsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TerminateJobFlowsError {
+    fn from(err: io::Error) -> TerminateJobFlowsError {
+        TerminateJobFlowsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TerminateJobFlowsError {
@@ -4547,15 +4684,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddInstanceFleetOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddInstanceFleetOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AddInstanceFleetError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddInstanceFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4574,15 +4716,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddInstanceGroupsOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AddInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddInstanceGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4601,15 +4748,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddJobFlowStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddJobFlowStepsOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AddJobFlowStepsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddJobFlowStepsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4626,15 +4778,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4652,13 +4809,21 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CancelStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CancelStepsOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelStepsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4678,13 +4843,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateSecurityConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSecurityConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -4704,13 +4876,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteSecurityConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSecurityConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -4728,15 +4907,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeClusterOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeClusterOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4755,15 +4939,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeJobFlowsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeJobFlowsOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeJobFlowsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeJobFlowsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4784,13 +4973,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeSecurityConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSecurityConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -4808,14 +5004,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStepOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeStepOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeStepError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStepError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4834,15 +5036,18 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListBootstrapActionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListBootstrapActionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListBootstrapActionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBootstrapActionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4861,14 +5066,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListClustersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListClustersOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListClustersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4887,15 +5098,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInstanceFleetsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListInstanceFleetsOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListInstanceFleetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListInstanceFleetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4914,15 +5130,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListInstanceGroupsOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListInstanceGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4941,14 +5162,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListInstancesOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4969,13 +5196,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSecurityConfigurationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListSecurityConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListSecurityConfigurationsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSecurityConfigurationsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -4991,15 +5225,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListStepsOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListStepsOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(ListStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListStepsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5017,13 +5256,14 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(ModifyInstanceFleetError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyInstanceFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5042,13 +5282,14 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(ModifyInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyInstanceGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5067,15 +5308,18 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutAutoScalingPolicyOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(PutAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutAutoScalingPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5095,13 +5339,20 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RemoveAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveAutoScalingPolicyOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveAutoScalingPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -5117,13 +5368,21 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveTagsOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5139,13 +5398,21 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RunJobFlowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RunJobFlowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RunJobFlowOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RunJobFlowError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5163,11 +5430,16 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(SetTerminationProtectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetTerminationProtectionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -5185,13 +5457,14 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(SetVisibleToAllUsersError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetVisibleToAllUsersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5210,13 +5483,14 @@ impl<P, D> Emr for EmrClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(TerminateJobFlowsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TerminateJobFlowsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

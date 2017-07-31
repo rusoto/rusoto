@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1249,6 +1251,11 @@ impl From<HttpDispatchError> for AddAttributesToFindingsError {
         AddAttributesToFindingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddAttributesToFindingsError {
+    fn from(err: io::Error) -> AddAttributesToFindingsError {
+        AddAttributesToFindingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddAttributesToFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1346,6 +1353,11 @@ impl From<CredentialsError> for CreateAssessmentTargetError {
 impl From<HttpDispatchError> for CreateAssessmentTargetError {
     fn from(err: HttpDispatchError) -> CreateAssessmentTargetError {
         CreateAssessmentTargetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateAssessmentTargetError {
+    fn from(err: io::Error) -> CreateAssessmentTargetError {
+        CreateAssessmentTargetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAssessmentTargetError {
@@ -1448,6 +1460,11 @@ impl From<HttpDispatchError> for CreateAssessmentTemplateError {
         CreateAssessmentTemplateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateAssessmentTemplateError {
+    fn from(err: io::Error) -> CreateAssessmentTemplateError {
+        CreateAssessmentTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateAssessmentTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1541,6 +1558,11 @@ impl From<CredentialsError> for CreateResourceGroupError {
 impl From<HttpDispatchError> for CreateResourceGroupError {
     fn from(err: HttpDispatchError) -> CreateResourceGroupError {
         CreateResourceGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateResourceGroupError {
+    fn from(err: io::Error) -> CreateResourceGroupError {
+        CreateResourceGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateResourceGroupError {
@@ -1638,6 +1660,11 @@ impl From<CredentialsError> for DeleteAssessmentRunError {
 impl From<HttpDispatchError> for DeleteAssessmentRunError {
     fn from(err: HttpDispatchError) -> DeleteAssessmentRunError {
         DeleteAssessmentRunError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteAssessmentRunError {
+    fn from(err: io::Error) -> DeleteAssessmentRunError {
+        DeleteAssessmentRunError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteAssessmentRunError {
@@ -1738,6 +1765,11 @@ impl From<HttpDispatchError> for DeleteAssessmentTargetError {
         DeleteAssessmentTargetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAssessmentTargetError {
+    fn from(err: io::Error) -> DeleteAssessmentTargetError {
+        DeleteAssessmentTargetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAssessmentTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1836,6 +1868,11 @@ impl From<HttpDispatchError> for DeleteAssessmentTemplateError {
         DeleteAssessmentTemplateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAssessmentTemplateError {
+    fn from(err: io::Error) -> DeleteAssessmentTemplateError {
+        DeleteAssessmentTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAssessmentTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1921,6 +1958,11 @@ impl From<HttpDispatchError> for DescribeAssessmentRunsError {
         DescribeAssessmentRunsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAssessmentRunsError {
+    fn from(err: io::Error) -> DescribeAssessmentRunsError {
+        DescribeAssessmentRunsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAssessmentRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2001,6 +2043,11 @@ impl From<CredentialsError> for DescribeAssessmentTargetsError {
 impl From<HttpDispatchError> for DescribeAssessmentTargetsError {
     fn from(err: HttpDispatchError) -> DescribeAssessmentTargetsError {
         DescribeAssessmentTargetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAssessmentTargetsError {
+    fn from(err: io::Error) -> DescribeAssessmentTargetsError {
+        DescribeAssessmentTargetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAssessmentTargetsError {
@@ -2085,6 +2132,11 @@ impl From<HttpDispatchError> for DescribeAssessmentTemplatesError {
         DescribeAssessmentTemplatesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAssessmentTemplatesError {
+    fn from(err: io::Error) -> DescribeAssessmentTemplatesError {
+        DescribeAssessmentTemplatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAssessmentTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2160,6 +2212,11 @@ impl From<CredentialsError> for DescribeCrossAccountAccessRoleError {
 impl From<HttpDispatchError> for DescribeCrossAccountAccessRoleError {
     fn from(err: HttpDispatchError) -> DescribeCrossAccountAccessRoleError {
         DescribeCrossAccountAccessRoleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCrossAccountAccessRoleError {
+    fn from(err: io::Error) -> DescribeCrossAccountAccessRoleError {
+        DescribeCrossAccountAccessRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCrossAccountAccessRoleError {
@@ -2243,6 +2300,11 @@ impl From<HttpDispatchError> for DescribeFindingsError {
         DescribeFindingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeFindingsError {
+    fn from(err: io::Error) -> DescribeFindingsError {
+        DescribeFindingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2321,6 +2383,11 @@ impl From<CredentialsError> for DescribeResourceGroupsError {
 impl From<HttpDispatchError> for DescribeResourceGroupsError {
     fn from(err: HttpDispatchError) -> DescribeResourceGroupsError {
         DescribeResourceGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeResourceGroupsError {
+    fn from(err: io::Error) -> DescribeResourceGroupsError {
+        DescribeResourceGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeResourceGroupsError {
@@ -2403,6 +2470,11 @@ impl From<CredentialsError> for DescribeRulesPackagesError {
 impl From<HttpDispatchError> for DescribeRulesPackagesError {
     fn from(err: HttpDispatchError) -> DescribeRulesPackagesError {
         DescribeRulesPackagesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeRulesPackagesError {
+    fn from(err: io::Error) -> DescribeRulesPackagesError {
+        DescribeRulesPackagesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeRulesPackagesError {
@@ -2505,6 +2577,11 @@ impl From<HttpDispatchError> for GetAssessmentReportError {
         GetAssessmentReportError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetAssessmentReportError {
+    fn from(err: io::Error) -> GetAssessmentReportError {
+        GetAssessmentReportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetAssessmentReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2601,6 +2678,11 @@ impl From<HttpDispatchError> for GetTelemetryMetadataError {
         GetTelemetryMetadataError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetTelemetryMetadataError {
+    fn from(err: io::Error) -> GetTelemetryMetadataError {
+        GetTelemetryMetadataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetTelemetryMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2693,6 +2775,11 @@ impl From<CredentialsError> for ListAssessmentRunAgentsError {
 impl From<HttpDispatchError> for ListAssessmentRunAgentsError {
     fn from(err: HttpDispatchError) -> ListAssessmentRunAgentsError {
         ListAssessmentRunAgentsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAssessmentRunAgentsError {
+    fn from(err: io::Error) -> ListAssessmentRunAgentsError {
+        ListAssessmentRunAgentsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAssessmentRunAgentsError {
@@ -2789,6 +2876,11 @@ impl From<HttpDispatchError> for ListAssessmentRunsError {
         ListAssessmentRunsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListAssessmentRunsError {
+    fn from(err: io::Error) -> ListAssessmentRunsError {
+        ListAssessmentRunsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListAssessmentRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2876,6 +2968,11 @@ impl From<CredentialsError> for ListAssessmentTargetsError {
 impl From<HttpDispatchError> for ListAssessmentTargetsError {
     fn from(err: HttpDispatchError) -> ListAssessmentTargetsError {
         ListAssessmentTargetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAssessmentTargetsError {
+    fn from(err: io::Error) -> ListAssessmentTargetsError {
+        ListAssessmentTargetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAssessmentTargetsError {
@@ -2969,6 +3066,11 @@ impl From<CredentialsError> for ListAssessmentTemplatesError {
 impl From<HttpDispatchError> for ListAssessmentTemplatesError {
     fn from(err: HttpDispatchError) -> ListAssessmentTemplatesError {
         ListAssessmentTemplatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAssessmentTemplatesError {
+    fn from(err: io::Error) -> ListAssessmentTemplatesError {
+        ListAssessmentTemplatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAssessmentTemplatesError {
@@ -3065,6 +3167,11 @@ impl From<HttpDispatchError> for ListEventSubscriptionsError {
         ListEventSubscriptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListEventSubscriptionsError {
+    fn from(err: io::Error) -> ListEventSubscriptionsError {
+        ListEventSubscriptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3157,6 +3264,11 @@ impl From<HttpDispatchError> for ListFindingsError {
         ListFindingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListFindingsError {
+    fn from(err: io::Error) -> ListFindingsError {
+        ListFindingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3242,6 +3354,11 @@ impl From<CredentialsError> for ListRulesPackagesError {
 impl From<HttpDispatchError> for ListRulesPackagesError {
     fn from(err: HttpDispatchError) -> ListRulesPackagesError {
         ListRulesPackagesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRulesPackagesError {
+    fn from(err: io::Error) -> ListRulesPackagesError {
+        ListRulesPackagesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRulesPackagesError {
@@ -3335,6 +3452,11 @@ impl From<CredentialsError> for ListTagsForResourceError {
 impl From<HttpDispatchError> for ListTagsForResourceError {
     fn from(err: HttpDispatchError) -> ListTagsForResourceError {
         ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -3436,6 +3558,11 @@ impl From<HttpDispatchError> for PreviewAgentsError {
         PreviewAgentsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PreviewAgentsError {
+    fn from(err: io::Error) -> PreviewAgentsError {
+        PreviewAgentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PreviewAgentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3521,6 +3648,11 @@ impl From<CredentialsError> for RegisterCrossAccountAccessRoleError {
 impl From<HttpDispatchError> for RegisterCrossAccountAccessRoleError {
     fn from(err: HttpDispatchError) -> RegisterCrossAccountAccessRoleError {
         RegisterCrossAccountAccessRoleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterCrossAccountAccessRoleError {
+    fn from(err: io::Error) -> RegisterCrossAccountAccessRoleError {
+        RegisterCrossAccountAccessRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterCrossAccountAccessRoleError {
@@ -3617,6 +3749,11 @@ impl From<HttpDispatchError> for RemoveAttributesFromFindingsError {
         RemoveAttributesFromFindingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveAttributesFromFindingsError {
+    fn from(err: io::Error) -> RemoveAttributesFromFindingsError {
+        RemoveAttributesFromFindingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveAttributesFromFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3709,6 +3846,11 @@ impl From<CredentialsError> for SetTagsForResourceError {
 impl From<HttpDispatchError> for SetTagsForResourceError {
     fn from(err: HttpDispatchError) -> SetTagsForResourceError {
         SetTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetTagsForResourceError {
+    fn from(err: io::Error) -> SetTagsForResourceError {
+        SetTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetTagsForResourceError {
@@ -3816,6 +3958,11 @@ impl From<HttpDispatchError> for StartAssessmentRunError {
         StartAssessmentRunError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartAssessmentRunError {
+    fn from(err: io::Error) -> StartAssessmentRunError {
+        StartAssessmentRunError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartAssessmentRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3911,6 +4058,11 @@ impl From<CredentialsError> for StopAssessmentRunError {
 impl From<HttpDispatchError> for StopAssessmentRunError {
     fn from(err: HttpDispatchError) -> StopAssessmentRunError {
         StopAssessmentRunError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopAssessmentRunError {
+    fn from(err: io::Error) -> StopAssessmentRunError {
+        StopAssessmentRunError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopAssessmentRunError {
@@ -4012,6 +4164,11 @@ impl From<HttpDispatchError> for SubscribeToEventError {
         SubscribeToEventError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SubscribeToEventError {
+    fn from(err: io::Error) -> SubscribeToEventError {
+        SubscribeToEventError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SubscribeToEventError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4103,6 +4260,11 @@ impl From<CredentialsError> for UnsubscribeFromEventError {
 impl From<HttpDispatchError> for UnsubscribeFromEventError {
     fn from(err: HttpDispatchError) -> UnsubscribeFromEventError {
         UnsubscribeFromEventError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UnsubscribeFromEventError {
+    fn from(err: io::Error) -> UnsubscribeFromEventError {
+        UnsubscribeFromEventError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UnsubscribeFromEventError {
@@ -4197,6 +4359,11 @@ impl From<CredentialsError> for UpdateAssessmentTargetError {
 impl From<HttpDispatchError> for UpdateAssessmentTargetError {
     fn from(err: HttpDispatchError) -> UpdateAssessmentTargetError {
         UpdateAssessmentTargetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAssessmentTargetError {
+    fn from(err: io::Error) -> UpdateAssessmentTargetError {
+        UpdateAssessmentTargetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAssessmentTargetError {
@@ -4474,13 +4641,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddAttributesToFindingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AddAttributesToFindingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddAttributesToFindingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddAttributesToFindingsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -4499,15 +4673,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAssessmentTargetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateAssessmentTargetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateAssessmentTargetError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAssessmentTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4527,13 +4704,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAssessmentTemplateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateAssessmentTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateAssessmentTemplateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAssessmentTemplateError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -4551,15 +4735,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateResourceGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateResourceGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateResourceGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateResourceGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4578,13 +4765,14 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteAssessmentRunError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAssessmentRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4603,13 +4791,14 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteAssessmentTargetError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAssessmentTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4628,11 +4817,16 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeleteAssessmentTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAssessmentTemplateError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -4651,15 +4845,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAssessmentRunsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAssessmentRunsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeAssessmentRunsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAssessmentRunsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4679,13 +4876,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAssessmentTargetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeAssessmentTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAssessmentTargetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAssessmentTargetsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -4705,13 +4909,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAssessmentTemplatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeAssessmentTemplatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAssessmentTemplatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAssessmentTemplatesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -4729,13 +4940,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCrossAccountAccessRoleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeCrossAccountAccessRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeCrossAccountAccessRoleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCrossAccountAccessRoleError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -4753,15 +4971,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeFindingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeFindingsResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeFindingsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeFindingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4781,15 +5004,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeResourceGroupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeResourceGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeResourceGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeResourceGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4809,15 +5035,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeRulesPackagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeRulesPackagesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeRulesPackagesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRulesPackagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4836,15 +5065,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAssessmentReportResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetAssessmentReportResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetAssessmentReportError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAssessmentReportError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4864,15 +5096,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetTelemetryMetadataResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetTelemetryMetadataResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetTelemetryMetadataError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTelemetryMetadataError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4892,13 +5127,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAssessmentRunAgentsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListAssessmentRunAgentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAssessmentRunAgentsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAssessmentRunAgentsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -4916,15 +5158,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAssessmentRunsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAssessmentRunsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListAssessmentRunsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAssessmentRunsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4944,15 +5189,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAssessmentTargetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAssessmentTargetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListAssessmentTargetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAssessmentTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4972,13 +5220,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAssessmentTemplatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListAssessmentTemplatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAssessmentTemplatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAssessmentTemplatesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -4997,15 +5252,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListEventSubscriptionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListEventSubscriptionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListEventSubscriptionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListEventSubscriptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5024,14 +5282,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListFindingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListFindingsResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListFindingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListFindingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5050,15 +5314,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRulesPackagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRulesPackagesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListRulesPackagesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRulesPackagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5077,15 +5344,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5104,14 +5374,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PreviewAgentsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PreviewAgentsResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PreviewAgentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PreviewAgentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5131,11 +5407,16 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RegisterCrossAccountAccessRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterCrossAccountAccessRoleError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -5155,13 +5436,20 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveAttributesFromFindingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RemoveAttributesFromFindingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveAttributesFromFindingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveAttributesFromFindingsError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -5179,13 +5467,14 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(SetTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5204,15 +5493,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartAssessmentRunResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartAssessmentRunResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(StartAssessmentRunError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartAssessmentRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5231,13 +5523,14 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(StopAssessmentRunError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopAssessmentRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5256,13 +5549,14 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(SubscribeToEventError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SubscribeToEventError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5281,13 +5575,14 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(UnsubscribeFromEventError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UnsubscribeFromEventError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5306,13 +5601,14 @@ impl<P, D> Inspector for InspectorClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(UpdateAssessmentTargetError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAssessmentTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

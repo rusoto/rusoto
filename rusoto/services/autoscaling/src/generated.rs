@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -7353,6 +7355,11 @@ impl From<HttpDispatchError> for AttachInstancesError {
         AttachInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachInstancesError {
+    fn from(err: io::Error) -> AttachInstancesError {
+        AttachInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7417,6 +7424,11 @@ impl From<CredentialsError> for AttachLoadBalancerTargetGroupsError {
 impl From<HttpDispatchError> for AttachLoadBalancerTargetGroupsError {
     fn from(err: HttpDispatchError) -> AttachLoadBalancerTargetGroupsError {
         AttachLoadBalancerTargetGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachLoadBalancerTargetGroupsError {
+    fn from(err: io::Error) -> AttachLoadBalancerTargetGroupsError {
+        AttachLoadBalancerTargetGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AttachLoadBalancerTargetGroupsError {
@@ -7487,6 +7499,11 @@ impl From<HttpDispatchError> for AttachLoadBalancersError {
         AttachLoadBalancersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachLoadBalancersError {
+    fn from(err: io::Error) -> AttachLoadBalancersError {
+        AttachLoadBalancersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7553,6 +7570,11 @@ impl From<CredentialsError> for CompleteLifecycleActionError {
 impl From<HttpDispatchError> for CompleteLifecycleActionError {
     fn from(err: HttpDispatchError) -> CompleteLifecycleActionError {
         CompleteLifecycleActionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CompleteLifecycleActionError {
+    fn from(err: io::Error) -> CompleteLifecycleActionError {
+        CompleteLifecycleActionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CompleteLifecycleActionError {
@@ -7627,6 +7649,11 @@ impl From<CredentialsError> for CreateAutoScalingGroupError {
 impl From<HttpDispatchError> for CreateAutoScalingGroupError {
     fn from(err: HttpDispatchError) -> CreateAutoScalingGroupError {
         CreateAutoScalingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateAutoScalingGroupError {
+    fn from(err: io::Error) -> CreateAutoScalingGroupError {
+        CreateAutoScalingGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAutoScalingGroupError {
@@ -7705,6 +7732,11 @@ impl From<HttpDispatchError> for CreateLaunchConfigurationError {
         CreateLaunchConfigurationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateLaunchConfigurationError {
+    fn from(err: io::Error) -> CreateLaunchConfigurationError {
+        CreateLaunchConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7779,6 +7811,11 @@ impl From<CredentialsError> for CreateOrUpdateTagsError {
 impl From<HttpDispatchError> for CreateOrUpdateTagsError {
     fn from(err: HttpDispatchError) -> CreateOrUpdateTagsError {
         CreateOrUpdateTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateOrUpdateTagsError {
+    fn from(err: io::Error) -> CreateOrUpdateTagsError {
+        CreateOrUpdateTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateOrUpdateTagsError {
@@ -7857,6 +7894,11 @@ impl From<HttpDispatchError> for DeleteAutoScalingGroupError {
         DeleteAutoScalingGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAutoScalingGroupError {
+    fn from(err: io::Error) -> DeleteAutoScalingGroupError {
+        DeleteAutoScalingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAutoScalingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7930,6 +7972,11 @@ impl From<HttpDispatchError> for DeleteLaunchConfigurationError {
         DeleteLaunchConfigurationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteLaunchConfigurationError {
+    fn from(err: io::Error) -> DeleteLaunchConfigurationError {
+        DeleteLaunchConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7997,6 +8044,11 @@ impl From<CredentialsError> for DeleteLifecycleHookError {
 impl From<HttpDispatchError> for DeleteLifecycleHookError {
     fn from(err: HttpDispatchError) -> DeleteLifecycleHookError {
         DeleteLifecycleHookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLifecycleHookError {
+    fn from(err: io::Error) -> DeleteLifecycleHookError {
+        DeleteLifecycleHookError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteLifecycleHookError {
@@ -8067,6 +8119,11 @@ impl From<HttpDispatchError> for DeleteNotificationConfigurationError {
         DeleteNotificationConfigurationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteNotificationConfigurationError {
+    fn from(err: io::Error) -> DeleteNotificationConfigurationError {
+        DeleteNotificationConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteNotificationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8135,6 +8192,11 @@ impl From<HttpDispatchError> for DeletePolicyError {
         DeletePolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeletePolicyError {
+    fn from(err: io::Error) -> DeletePolicyError {
+        DeletePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8199,6 +8261,11 @@ impl From<CredentialsError> for DeleteScheduledActionError {
 impl From<HttpDispatchError> for DeleteScheduledActionError {
     fn from(err: HttpDispatchError) -> DeleteScheduledActionError {
         DeleteScheduledActionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteScheduledActionError {
+    fn from(err: io::Error) -> DeleteScheduledActionError {
+        DeleteScheduledActionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteScheduledActionError {
@@ -8271,6 +8338,11 @@ impl From<HttpDispatchError> for DeleteTagsError {
         DeleteTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTagsError {
+    fn from(err: io::Error) -> DeleteTagsError {
+        DeleteTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8335,6 +8407,11 @@ impl From<CredentialsError> for DescribeAccountLimitsError {
 impl From<HttpDispatchError> for DescribeAccountLimitsError {
     fn from(err: HttpDispatchError) -> DescribeAccountLimitsError {
         DescribeAccountLimitsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountLimitsError {
+    fn from(err: io::Error) -> DescribeAccountLimitsError {
+        DescribeAccountLimitsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountLimitsError {
@@ -8403,6 +8480,11 @@ impl From<CredentialsError> for DescribeAdjustmentTypesError {
 impl From<HttpDispatchError> for DescribeAdjustmentTypesError {
     fn from(err: HttpDispatchError) -> DescribeAdjustmentTypesError {
         DescribeAdjustmentTypesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAdjustmentTypesError {
+    fn from(err: io::Error) -> DescribeAdjustmentTypesError {
+        DescribeAdjustmentTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAdjustmentTypesError {
@@ -8474,6 +8556,11 @@ impl From<CredentialsError> for DescribeAutoScalingGroupsError {
 impl From<HttpDispatchError> for DescribeAutoScalingGroupsError {
     fn from(err: HttpDispatchError) -> DescribeAutoScalingGroupsError {
         DescribeAutoScalingGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAutoScalingGroupsError {
+    fn from(err: io::Error) -> DescribeAutoScalingGroupsError {
+        DescribeAutoScalingGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAutoScalingGroupsError {
@@ -8548,6 +8635,11 @@ impl From<HttpDispatchError> for DescribeAutoScalingInstancesError {
         DescribeAutoScalingInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAutoScalingInstancesError {
+    fn from(err: io::Error) -> DescribeAutoScalingInstancesError {
+        DescribeAutoScalingInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAutoScalingInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8615,6 +8707,11 @@ impl From<CredentialsError> for DescribeAutoScalingNotificationTypesError {
 impl From<HttpDispatchError> for DescribeAutoScalingNotificationTypesError {
     fn from(err: HttpDispatchError) -> DescribeAutoScalingNotificationTypesError {
         DescribeAutoScalingNotificationTypesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAutoScalingNotificationTypesError {
+    fn from(err: io::Error) -> DescribeAutoScalingNotificationTypesError {
+        DescribeAutoScalingNotificationTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAutoScalingNotificationTypesError {
@@ -8688,6 +8785,11 @@ impl From<HttpDispatchError> for DescribeLaunchConfigurationsError {
         DescribeLaunchConfigurationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeLaunchConfigurationsError {
+    fn from(err: io::Error) -> DescribeLaunchConfigurationsError {
+        DescribeLaunchConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeLaunchConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8755,6 +8857,11 @@ impl From<CredentialsError> for DescribeLifecycleHookTypesError {
 impl From<HttpDispatchError> for DescribeLifecycleHookTypesError {
     fn from(err: HttpDispatchError) -> DescribeLifecycleHookTypesError {
         DescribeLifecycleHookTypesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLifecycleHookTypesError {
+    fn from(err: io::Error) -> DescribeLifecycleHookTypesError {
+        DescribeLifecycleHookTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLifecycleHookTypesError {
@@ -8825,6 +8932,11 @@ impl From<HttpDispatchError> for DescribeLifecycleHooksError {
         DescribeLifecycleHooksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeLifecycleHooksError {
+    fn from(err: io::Error) -> DescribeLifecycleHooksError {
+        DescribeLifecycleHooksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeLifecycleHooksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8891,6 +9003,11 @@ impl From<CredentialsError> for DescribeLoadBalancerTargetGroupsError {
 impl From<HttpDispatchError> for DescribeLoadBalancerTargetGroupsError {
     fn from(err: HttpDispatchError) -> DescribeLoadBalancerTargetGroupsError {
         DescribeLoadBalancerTargetGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLoadBalancerTargetGroupsError {
+    fn from(err: io::Error) -> DescribeLoadBalancerTargetGroupsError {
+        DescribeLoadBalancerTargetGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLoadBalancerTargetGroupsError {
@@ -8961,6 +9078,11 @@ impl From<HttpDispatchError> for DescribeLoadBalancersError {
         DescribeLoadBalancersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeLoadBalancersError {
+    fn from(err: io::Error) -> DescribeLoadBalancersError {
+        DescribeLoadBalancersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9027,6 +9149,11 @@ impl From<CredentialsError> for DescribeMetricCollectionTypesError {
 impl From<HttpDispatchError> for DescribeMetricCollectionTypesError {
     fn from(err: HttpDispatchError) -> DescribeMetricCollectionTypesError {
         DescribeMetricCollectionTypesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeMetricCollectionTypesError {
+    fn from(err: io::Error) -> DescribeMetricCollectionTypesError {
+        DescribeMetricCollectionTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeMetricCollectionTypesError {
@@ -9098,6 +9225,11 @@ impl From<CredentialsError> for DescribeNotificationConfigurationsError {
 impl From<HttpDispatchError> for DescribeNotificationConfigurationsError {
     fn from(err: HttpDispatchError) -> DescribeNotificationConfigurationsError {
         DescribeNotificationConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeNotificationConfigurationsError {
+    fn from(err: io::Error) -> DescribeNotificationConfigurationsError {
+        DescribeNotificationConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeNotificationConfigurationsError {
@@ -9174,6 +9306,11 @@ impl From<HttpDispatchError> for DescribePoliciesError {
         DescribePoliciesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribePoliciesError {
+    fn from(err: io::Error) -> DescribePoliciesError {
+        DescribePoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9242,6 +9379,11 @@ impl From<CredentialsError> for DescribeScalingActivitiesError {
 impl From<HttpDispatchError> for DescribeScalingActivitiesError {
     fn from(err: HttpDispatchError) -> DescribeScalingActivitiesError {
         DescribeScalingActivitiesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeScalingActivitiesError {
+    fn from(err: io::Error) -> DescribeScalingActivitiesError {
+        DescribeScalingActivitiesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeScalingActivitiesError {
@@ -9313,6 +9455,11 @@ impl From<HttpDispatchError> for DescribeScalingProcessTypesError {
         DescribeScalingProcessTypesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeScalingProcessTypesError {
+    fn from(err: io::Error) -> DescribeScalingProcessTypesError {
+        DescribeScalingProcessTypesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeScalingProcessTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9382,6 +9529,11 @@ impl From<CredentialsError> for DescribeScheduledActionsError {
 impl From<HttpDispatchError> for DescribeScheduledActionsError {
     fn from(err: HttpDispatchError) -> DescribeScheduledActionsError {
         DescribeScheduledActionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeScheduledActionsError {
+    fn from(err: io::Error) -> DescribeScheduledActionsError {
+        DescribeScheduledActionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeScheduledActionsError {
@@ -9458,6 +9610,11 @@ impl From<HttpDispatchError> for DescribeTagsError {
         DescribeTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTagsError {
+    fn from(err: io::Error) -> DescribeTagsError {
+        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9523,6 +9680,11 @@ impl From<CredentialsError> for DescribeTerminationPolicyTypesError {
 impl From<HttpDispatchError> for DescribeTerminationPolicyTypesError {
     fn from(err: HttpDispatchError) -> DescribeTerminationPolicyTypesError {
         DescribeTerminationPolicyTypesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTerminationPolicyTypesError {
+    fn from(err: io::Error) -> DescribeTerminationPolicyTypesError {
+        DescribeTerminationPolicyTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTerminationPolicyTypesError {
@@ -9593,6 +9755,11 @@ impl From<HttpDispatchError> for DetachInstancesError {
         DetachInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetachInstancesError {
+    fn from(err: io::Error) -> DetachInstancesError {
+        DetachInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetachInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9657,6 +9824,11 @@ impl From<CredentialsError> for DetachLoadBalancerTargetGroupsError {
 impl From<HttpDispatchError> for DetachLoadBalancerTargetGroupsError {
     fn from(err: HttpDispatchError) -> DetachLoadBalancerTargetGroupsError {
         DetachLoadBalancerTargetGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachLoadBalancerTargetGroupsError {
+    fn from(err: io::Error) -> DetachLoadBalancerTargetGroupsError {
+        DetachLoadBalancerTargetGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DetachLoadBalancerTargetGroupsError {
@@ -9727,6 +9899,11 @@ impl From<HttpDispatchError> for DetachLoadBalancersError {
         DetachLoadBalancersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetachLoadBalancersError {
+    fn from(err: io::Error) -> DetachLoadBalancersError {
+        DetachLoadBalancersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetachLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9793,6 +9970,11 @@ impl From<CredentialsError> for DisableMetricsCollectionError {
 impl From<HttpDispatchError> for DisableMetricsCollectionError {
     fn from(err: HttpDispatchError) -> DisableMetricsCollectionError {
         DisableMetricsCollectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableMetricsCollectionError {
+    fn from(err: io::Error) -> DisableMetricsCollectionError {
+        DisableMetricsCollectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableMetricsCollectionError {
@@ -9863,6 +10045,11 @@ impl From<HttpDispatchError> for EnableMetricsCollectionError {
         EnableMetricsCollectionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableMetricsCollectionError {
+    fn from(err: io::Error) -> EnableMetricsCollectionError {
+        EnableMetricsCollectionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableMetricsCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9929,6 +10116,11 @@ impl From<CredentialsError> for EnterStandbyError {
 impl From<HttpDispatchError> for EnterStandbyError {
     fn from(err: HttpDispatchError) -> EnterStandbyError {
         EnterStandbyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EnterStandbyError {
+    fn from(err: io::Error) -> EnterStandbyError {
+        EnterStandbyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnterStandbyError {
@@ -10000,6 +10192,11 @@ impl From<HttpDispatchError> for ExecutePolicyError {
         ExecutePolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ExecutePolicyError {
+    fn from(err: io::Error) -> ExecutePolicyError {
+        ExecutePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ExecutePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10065,6 +10262,11 @@ impl From<CredentialsError> for ExitStandbyError {
 impl From<HttpDispatchError> for ExitStandbyError {
     fn from(err: HttpDispatchError) -> ExitStandbyError {
         ExitStandbyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ExitStandbyError {
+    fn from(err: io::Error) -> ExitStandbyError {
+        ExitStandbyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ExitStandbyError {
@@ -10134,6 +10336,11 @@ impl From<CredentialsError> for PutLifecycleHookError {
 impl From<HttpDispatchError> for PutLifecycleHookError {
     fn from(err: HttpDispatchError) -> PutLifecycleHookError {
         PutLifecycleHookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutLifecycleHookError {
+    fn from(err: io::Error) -> PutLifecycleHookError {
+        PutLifecycleHookError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutLifecycleHookError {
@@ -10206,6 +10413,11 @@ impl From<HttpDispatchError> for PutNotificationConfigurationError {
         PutNotificationConfigurationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutNotificationConfigurationError {
+    fn from(err: io::Error) -> PutNotificationConfigurationError {
+        PutNotificationConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutNotificationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10276,6 +10488,11 @@ impl From<CredentialsError> for PutScalingPolicyError {
 impl From<HttpDispatchError> for PutScalingPolicyError {
     fn from(err: HttpDispatchError) -> PutScalingPolicyError {
         PutScalingPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutScalingPolicyError {
+    fn from(err: io::Error) -> PutScalingPolicyError {
+        PutScalingPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutScalingPolicyError {
@@ -10351,6 +10568,11 @@ impl From<HttpDispatchError> for PutScheduledUpdateGroupActionError {
         PutScheduledUpdateGroupActionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutScheduledUpdateGroupActionError {
+    fn from(err: io::Error) -> PutScheduledUpdateGroupActionError {
+        PutScheduledUpdateGroupActionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutScheduledUpdateGroupActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10419,6 +10641,11 @@ impl From<CredentialsError> for RecordLifecycleActionHeartbeatError {
 impl From<HttpDispatchError> for RecordLifecycleActionHeartbeatError {
     fn from(err: HttpDispatchError) -> RecordLifecycleActionHeartbeatError {
         RecordLifecycleActionHeartbeatError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RecordLifecycleActionHeartbeatError {
+    fn from(err: io::Error) -> RecordLifecycleActionHeartbeatError {
+        RecordLifecycleActionHeartbeatError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RecordLifecycleActionHeartbeatError {
@@ -10494,6 +10721,11 @@ impl From<HttpDispatchError> for ResumeProcessesError {
         ResumeProcessesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ResumeProcessesError {
+    fn from(err: io::Error) -> ResumeProcessesError {
+        ResumeProcessesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ResumeProcessesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10562,6 +10794,11 @@ impl From<CredentialsError> for SetDesiredCapacityError {
 impl From<HttpDispatchError> for SetDesiredCapacityError {
     fn from(err: HttpDispatchError) -> SetDesiredCapacityError {
         SetDesiredCapacityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetDesiredCapacityError {
+    fn from(err: io::Error) -> SetDesiredCapacityError {
+        SetDesiredCapacityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetDesiredCapacityError {
@@ -10633,6 +10870,11 @@ impl From<HttpDispatchError> for SetInstanceHealthError {
         SetInstanceHealthError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetInstanceHealthError {
+    fn from(err: io::Error) -> SetInstanceHealthError {
+        SetInstanceHealthError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetInstanceHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10702,6 +10944,11 @@ impl From<CredentialsError> for SetInstanceProtectionError {
 impl From<HttpDispatchError> for SetInstanceProtectionError {
     fn from(err: HttpDispatchError) -> SetInstanceProtectionError {
         SetInstanceProtectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetInstanceProtectionError {
+    fn from(err: io::Error) -> SetInstanceProtectionError {
+        SetInstanceProtectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetInstanceProtectionError {
@@ -10776,6 +11023,11 @@ impl From<HttpDispatchError> for SuspendProcessesError {
         SuspendProcessesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SuspendProcessesError {
+    fn from(err: io::Error) -> SuspendProcessesError {
+        SuspendProcessesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SuspendProcessesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10844,6 +11096,11 @@ impl From<CredentialsError> for TerminateInstanceInAutoScalingGroupError {
 impl From<HttpDispatchError> for TerminateInstanceInAutoScalingGroupError {
     fn from(err: HttpDispatchError) -> TerminateInstanceInAutoScalingGroupError {
         TerminateInstanceInAutoScalingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TerminateInstanceInAutoScalingGroupError {
+    fn from(err: io::Error) -> TerminateInstanceInAutoScalingGroupError {
+        TerminateInstanceInAutoScalingGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TerminateInstanceInAutoScalingGroupError {
@@ -10918,6 +11175,11 @@ impl From<CredentialsError> for UpdateAutoScalingGroupError {
 impl From<HttpDispatchError> for UpdateAutoScalingGroupError {
     fn from(err: HttpDispatchError) -> UpdateAutoScalingGroupError {
         UpdateAutoScalingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAutoScalingGroupError {
+    fn from(err: io::Error) -> UpdateAutoScalingGroupError {
+        UpdateAutoScalingGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAutoScalingGroupError {
@@ -11292,15 +11554,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AttachInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11320,16 +11583,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AttachLoadBalancerTargetGroupsResultType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11343,8 +11608,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AttachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -11362,16 +11630,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AttachLoadBalancersResultType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11387,8 +11657,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AttachLoadBalancersError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachLoadBalancersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11408,16 +11679,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CompleteLifecycleActionAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11433,8 +11706,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CompleteLifecycleActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CompleteLifecycleActionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -11452,15 +11728,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(CreateAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAutoScalingGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11479,15 +11756,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(CreateLaunchConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLaunchConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -11505,15 +11785,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(CreateOrUpdateTagsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateOrUpdateTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11532,15 +11813,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAutoScalingGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11559,15 +11841,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteLaunchConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLaunchConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -11585,16 +11870,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteLifecycleHookAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11609,8 +11896,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteLifecycleHookError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLifecycleHookError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11629,15 +11917,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteNotificationConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -11653,14 +11944,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11679,15 +11972,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteScheduledActionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteScheduledActionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11704,13 +11998,17 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11728,16 +12026,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAccountLimitsAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11752,8 +12052,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11772,16 +12073,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAdjustmentTypesAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11797,8 +12100,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeAdjustmentTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAdjustmentTypesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -11817,16 +12123,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AutoScalingGroupsType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11841,8 +12149,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeAutoScalingGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAutoScalingGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -11861,16 +12172,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AutoScalingInstancesType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11885,8 +12198,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeAutoScalingInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAutoScalingInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -11905,16 +12221,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAutoScalingNotificationTypesAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11928,8 +12246,10 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeAutoScalingNotificationTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAutoScalingNotificationTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11948,16 +12268,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = LaunchConfigurationsType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11972,8 +12294,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeLaunchConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLaunchConfigurationsError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -11991,16 +12316,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeLifecycleHookTypesAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12016,8 +12343,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeLifecycleHookTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLifecycleHookTypesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -12036,16 +12366,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeLifecycleHooksAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12061,8 +12393,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeLifecycleHooksError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLifecycleHooksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12082,16 +12415,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeLoadBalancerTargetGroupsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12105,8 +12440,10 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12125,16 +12462,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeLoadBalancersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12150,8 +12489,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12170,16 +12510,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeMetricCollectionTypesAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12193,8 +12535,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeMetricCollectionTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMetricCollectionTypesError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -12214,16 +12559,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeNotificationConfigurationsAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12237,8 +12584,10 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeNotificationConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeNotificationConfigurationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12256,16 +12605,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PoliciesType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12280,8 +12631,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribePoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12300,16 +12652,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ActivitiesType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12324,8 +12678,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeScalingActivitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeScalingActivitiesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -12343,16 +12700,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ProcessesType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12367,8 +12726,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeScalingProcessTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeScalingProcessTypesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -12387,16 +12749,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ScheduledActionsType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12411,8 +12775,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeScheduledActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeScheduledActionsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -12428,16 +12795,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = TagsType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12452,7 +12821,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12471,16 +12842,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeTerminationPolicyTypesAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12494,8 +12867,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeTerminationPolicyTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTerminationPolicyTypesError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -12513,16 +12889,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DetachInstancesAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12537,8 +12915,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DetachInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12558,16 +12937,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DetachLoadBalancerTargetGroupsResultType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12581,8 +12962,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DetachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -12600,16 +12984,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DetachLoadBalancersResultType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12625,8 +13011,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DetachLoadBalancersError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachLoadBalancersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12645,15 +13032,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DisableMetricsCollectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableMetricsCollectionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -12671,15 +13061,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(EnableMetricsCollectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableMetricsCollectionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -12697,16 +13090,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EnterStandbyAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12721,7 +13116,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(EnterStandbyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnterStandbyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12738,14 +13135,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ExecutePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ExecutePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12764,16 +13163,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ExitStandbyAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12787,7 +13188,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ExitStandbyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ExitStandbyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12805,16 +13210,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PutLifecycleHookAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12829,8 +13236,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutLifecycleHookError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutLifecycleHookError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12849,15 +13257,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(PutNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutNotificationConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -12875,16 +13286,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PolicyARNType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12899,8 +13312,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutScalingPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutScalingPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12919,15 +13333,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(PutScheduledUpdateGroupActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutScheduledUpdateGroupActionError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -12946,16 +13363,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RecordLifecycleActionHeartbeatAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12969,8 +13388,11 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(RecordLifecycleActionHeartbeatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RecordLifecycleActionHeartbeatError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -12986,15 +13408,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ResumeProcessesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResumeProcessesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13013,15 +13436,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(SetDesiredCapacityError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetDesiredCapacityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13040,15 +13464,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(SetInstanceHealthError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetInstanceHealthError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13068,16 +13493,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetInstanceProtectionAnswer::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13092,8 +13519,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SetInstanceProtectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetInstanceProtectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13110,15 +13538,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(SuspendProcessesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SuspendProcessesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13138,16 +13567,18 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ActivityType::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13162,8 +13593,10 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(TerminateInstanceInAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TerminateInstanceInAutoScalingGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13181,15 +13614,16 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(UpdateAutoScalingGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAutoScalingGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

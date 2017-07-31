@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1047,6 +1049,11 @@ impl From<HttpDispatchError> for AddPermissionError {
         AddPermissionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddPermissionError {
+    fn from(err: io::Error) -> AddPermissionError {
+        AddPermissionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1144,6 +1151,11 @@ impl From<HttpDispatchError> for CreateAliasError {
         CreateAliasError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateAliasError {
+    fn from(err: io::Error) -> CreateAliasError {
+        CreateAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1238,6 +1250,11 @@ impl From<CredentialsError> for CreateEventSourceMappingError {
 impl From<HttpDispatchError> for CreateEventSourceMappingError {
     fn from(err: HttpDispatchError) -> CreateEventSourceMappingError {
         CreateEventSourceMappingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateEventSourceMappingError {
+    fn from(err: io::Error) -> CreateEventSourceMappingError {
+        CreateEventSourceMappingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateEventSourceMappingError {
@@ -1343,6 +1360,11 @@ impl From<HttpDispatchError> for CreateFunctionError {
         CreateFunctionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateFunctionError {
+    fn from(err: io::Error) -> CreateFunctionError {
+        CreateFunctionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1428,6 +1450,11 @@ impl From<CredentialsError> for DeleteAliasError {
 impl From<HttpDispatchError> for DeleteAliasError {
     fn from(err: HttpDispatchError) -> DeleteAliasError {
         DeleteAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteAliasError {
+    fn from(err: io::Error) -> DeleteAliasError {
+        DeleteAliasError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteAliasError {
@@ -1517,6 +1544,11 @@ impl From<CredentialsError> for DeleteEventSourceMappingError {
 impl From<HttpDispatchError> for DeleteEventSourceMappingError {
     fn from(err: HttpDispatchError) -> DeleteEventSourceMappingError {
         DeleteEventSourceMappingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteEventSourceMappingError {
+    fn from(err: io::Error) -> DeleteEventSourceMappingError {
+        DeleteEventSourceMappingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteEventSourceMappingError {
@@ -1616,6 +1648,11 @@ impl From<HttpDispatchError> for DeleteFunctionError {
         DeleteFunctionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteFunctionError {
+    fn from(err: io::Error) -> DeleteFunctionError {
+        DeleteFunctionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1697,6 +1734,11 @@ impl From<CredentialsError> for GetAccountSettingsError {
 impl From<HttpDispatchError> for GetAccountSettingsError {
     fn from(err: HttpDispatchError) -> GetAccountSettingsError {
         GetAccountSettingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAccountSettingsError {
+    fn from(err: io::Error) -> GetAccountSettingsError {
+        GetAccountSettingsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAccountSettingsError {
@@ -1787,6 +1829,11 @@ impl From<HttpDispatchError> for GetAliasError {
         GetAliasError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetAliasError {
+    fn from(err: io::Error) -> GetAliasError {
+        GetAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1875,6 +1922,11 @@ impl From<CredentialsError> for GetEventSourceMappingError {
 impl From<HttpDispatchError> for GetEventSourceMappingError {
     fn from(err: HttpDispatchError) -> GetEventSourceMappingError {
         GetEventSourceMappingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetEventSourceMappingError {
+    fn from(err: io::Error) -> GetEventSourceMappingError {
+        GetEventSourceMappingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetEventSourceMappingError {
@@ -1969,6 +2021,11 @@ impl From<HttpDispatchError> for GetFunctionError {
         GetFunctionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetFunctionError {
+    fn from(err: io::Error) -> GetFunctionError {
+        GetFunctionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2059,6 +2116,11 @@ impl From<HttpDispatchError> for GetFunctionConfigurationError {
         GetFunctionConfigurationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetFunctionConfigurationError {
+    fn from(err: io::Error) -> GetFunctionConfigurationError {
+        GetFunctionConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetFunctionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2147,6 +2209,11 @@ impl From<CredentialsError> for GetPolicyError {
 impl From<HttpDispatchError> for GetPolicyError {
     fn from(err: HttpDispatchError) -> GetPolicyError {
         GetPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetPolicyError {
+    fn from(err: io::Error) -> GetPolicyError {
+        GetPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetPolicyError {
@@ -2313,6 +2380,11 @@ impl From<HttpDispatchError> for InvokeError {
         InvokeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for InvokeError {
+    fn from(err: io::Error) -> InvokeError {
+        InvokeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for InvokeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2419,6 +2491,11 @@ impl From<HttpDispatchError> for InvokeAsyncError {
         InvokeAsyncError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for InvokeAsyncError {
+    fn from(err: io::Error) -> InvokeAsyncError {
+        InvokeAsyncError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for InvokeAsyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2507,6 +2584,11 @@ impl From<CredentialsError> for ListAliasesError {
 impl From<HttpDispatchError> for ListAliasesError {
     fn from(err: HttpDispatchError) -> ListAliasesError {
         ListAliasesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAliasesError {
+    fn from(err: io::Error) -> ListAliasesError {
+        ListAliasesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAliasesError {
@@ -2599,6 +2681,11 @@ impl From<HttpDispatchError> for ListEventSourceMappingsError {
         ListEventSourceMappingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListEventSourceMappingsError {
+    fn from(err: io::Error) -> ListEventSourceMappingsError {
+        ListEventSourceMappingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListEventSourceMappingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2679,6 +2766,11 @@ impl From<CredentialsError> for ListFunctionsError {
 impl From<HttpDispatchError> for ListFunctionsError {
     fn from(err: HttpDispatchError) -> ListFunctionsError {
         ListFunctionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListFunctionsError {
+    fn from(err: io::Error) -> ListFunctionsError {
+        ListFunctionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListFunctionsError {
@@ -2765,6 +2857,11 @@ impl From<CredentialsError> for ListTagsError {
 impl From<HttpDispatchError> for ListTagsError {
     fn from(err: HttpDispatchError) -> ListTagsError {
         ListTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsError {
+    fn from(err: io::Error) -> ListTagsError {
+        ListTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsError {
@@ -2855,6 +2952,11 @@ impl From<CredentialsError> for ListVersionsByFunctionError {
 impl From<HttpDispatchError> for ListVersionsByFunctionError {
     fn from(err: HttpDispatchError) -> ListVersionsByFunctionError {
         ListVersionsByFunctionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListVersionsByFunctionError {
+    fn from(err: io::Error) -> ListVersionsByFunctionError {
+        ListVersionsByFunctionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListVersionsByFunctionError {
@@ -2954,6 +3056,11 @@ impl From<HttpDispatchError> for PublishVersionError {
         PublishVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PublishVersionError {
+    fn from(err: io::Error) -> PublishVersionError {
+        PublishVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PublishVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3047,6 +3154,11 @@ impl From<HttpDispatchError> for RemovePermissionError {
         RemovePermissionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemovePermissionError {
+    fn from(err: io::Error) -> RemovePermissionError {
+        RemovePermissionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3135,6 +3247,11 @@ impl From<CredentialsError> for TagResourceError {
 impl From<HttpDispatchError> for TagResourceError {
     fn from(err: HttpDispatchError) -> TagResourceError {
         TagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TagResourceError {
@@ -3227,6 +3344,11 @@ impl From<HttpDispatchError> for UntagResourceError {
         UntagResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3315,6 +3437,11 @@ impl From<CredentialsError> for UpdateAliasError {
 impl From<HttpDispatchError> for UpdateAliasError {
     fn from(err: HttpDispatchError) -> UpdateAliasError {
         UpdateAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAliasError {
+    fn from(err: io::Error) -> UpdateAliasError {
+        UpdateAliasError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAliasError {
@@ -3410,6 +3537,11 @@ impl From<CredentialsError> for UpdateEventSourceMappingError {
 impl From<HttpDispatchError> for UpdateEventSourceMappingError {
     fn from(err: HttpDispatchError) -> UpdateEventSourceMappingError {
         UpdateEventSourceMappingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateEventSourceMappingError {
+    fn from(err: io::Error) -> UpdateEventSourceMappingError {
+        UpdateEventSourceMappingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateEventSourceMappingError {
@@ -3512,6 +3644,11 @@ impl From<HttpDispatchError> for UpdateFunctionCodeError {
         UpdateFunctionCodeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateFunctionCodeError {
+    fn from(err: io::Error) -> UpdateFunctionCodeError {
+        UpdateFunctionCodeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateFunctionCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3602,6 +3739,11 @@ impl From<CredentialsError> for UpdateFunctionConfigurationError {
 impl From<HttpDispatchError> for UpdateFunctionConfigurationError {
     fn from(err: HttpDispatchError) -> UpdateFunctionConfigurationError {
         UpdateFunctionConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateFunctionConfigurationError {
+    fn from(err: io::Error) -> UpdateFunctionConfigurationError {
+        UpdateFunctionConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateFunctionConfigurationError {
@@ -3833,13 +3975,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3854,7 +3996,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddPermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3877,13 +4021,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3897,7 +4041,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3919,13 +4067,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3940,7 +4088,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateEventSourceMappingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateEventSourceMappingError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -3961,13 +4114,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3982,8 +4135,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateFunctionError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateFunctionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4005,8 +4159,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4015,7 +4168,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4038,13 +4195,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4059,7 +4216,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteEventSourceMappingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteEventSourceMappingError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -4083,8 +4245,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4094,8 +4255,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteFunctionError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteFunctionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4115,13 +4277,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4136,8 +4298,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4159,13 +4322,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4179,7 +4342,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4202,13 +4369,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4224,8 +4391,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetEventSourceMappingError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetEventSourceMappingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4252,13 +4420,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4272,7 +4440,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetFunctionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetFunctionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4299,13 +4471,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4319,7 +4491,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetFunctionConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetFunctionConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -4343,13 +4520,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4363,7 +4540,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4387,14 +4568,17 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
                 let mut result = InvocationResponse::default();
-                result.payload = Some(response.body);
+
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                result.payload = Some(body);
 
                 if let Some(function_error) = response.headers.get("X-Amz-Function-Error") {
                     let value = function_error.to_owned();
@@ -4407,7 +4591,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 result.status_code = Some(StatusCode::to_u16(&response.status) as i64);
                 Ok(result)
             }
-            _ => Err(InvokeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(InvokeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4429,13 +4617,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4449,7 +4637,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 result.status = Some(StatusCode::to_u16(&response.status) as i64);
                 Ok(result)
             }
-            _ => Err(InvokeAsyncError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(InvokeAsyncError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4481,13 +4673,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4501,7 +4693,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListAliasesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAliasesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4536,13 +4732,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4557,7 +4753,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListEventSourceMappingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListEventSourceMappingsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -4585,13 +4786,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4606,7 +4807,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListFunctionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListFunctionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4626,13 +4829,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4646,7 +4849,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4676,13 +4883,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4698,8 +4905,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListVersionsByFunctionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListVersionsByFunctionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4722,13 +4930,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4743,8 +4951,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PublishVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PublishVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4772,8 +4981,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4783,8 +4991,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4804,8 +5013,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4814,7 +5022,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4837,8 +5049,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4848,7 +5059,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4872,13 +5085,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4892,7 +5105,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4915,13 +5132,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4936,7 +5153,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateEventSourceMappingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateEventSourceMappingError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -4958,13 +5180,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -4979,8 +5201,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateFunctionCodeError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateFunctionCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5004,13 +5227,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -5024,7 +5247,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateFunctionConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateFunctionConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 }

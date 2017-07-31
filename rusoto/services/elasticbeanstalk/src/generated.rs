@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -9374,6 +9376,11 @@ impl From<HttpDispatchError> for AbortEnvironmentUpdateError {
         AbortEnvironmentUpdateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AbortEnvironmentUpdateError {
+    fn from(err: io::Error) -> AbortEnvironmentUpdateError {
+        AbortEnvironmentUpdateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AbortEnvironmentUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9445,6 +9452,11 @@ impl From<HttpDispatchError> for ApplyEnvironmentManagedActionError {
         ApplyEnvironmentManagedActionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ApplyEnvironmentManagedActionError {
+    fn from(err: io::Error) -> ApplyEnvironmentManagedActionError {
+        ApplyEnvironmentManagedActionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ApplyEnvironmentManagedActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9509,6 +9521,11 @@ impl From<CredentialsError> for CheckDNSAvailabilityError {
 impl From<HttpDispatchError> for CheckDNSAvailabilityError {
     fn from(err: HttpDispatchError) -> CheckDNSAvailabilityError {
         CheckDNSAvailabilityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CheckDNSAvailabilityError {
+    fn from(err: io::Error) -> CheckDNSAvailabilityError {
+        CheckDNSAvailabilityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CheckDNSAvailabilityError {
@@ -9581,6 +9598,11 @@ impl From<HttpDispatchError> for ComposeEnvironmentsError {
         ComposeEnvironmentsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ComposeEnvironmentsError {
+    fn from(err: io::Error) -> ComposeEnvironmentsError {
+        ComposeEnvironmentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ComposeEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9648,6 +9670,11 @@ impl From<CredentialsError> for CreateApplicationError {
 impl From<HttpDispatchError> for CreateApplicationError {
     fn from(err: HttpDispatchError) -> CreateApplicationError {
         CreateApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateApplicationError {
+    fn from(err: io::Error) -> CreateApplicationError {
+        CreateApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -9730,6 +9757,11 @@ impl From<HttpDispatchError> for CreateApplicationVersionError {
         CreateApplicationVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateApplicationVersionError {
+    fn from(err: io::Error) -> CreateApplicationVersionError {
+        CreateApplicationVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateApplicationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9808,6 +9840,11 @@ impl From<HttpDispatchError> for CreateConfigurationTemplateError {
         CreateConfigurationTemplateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateConfigurationTemplateError {
+    fn from(err: io::Error) -> CreateConfigurationTemplateError {
+        CreateConfigurationTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateConfigurationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9879,6 +9916,11 @@ impl From<CredentialsError> for CreateEnvironmentError {
 impl From<HttpDispatchError> for CreateEnvironmentError {
     fn from(err: HttpDispatchError) -> CreateEnvironmentError {
         CreateEnvironmentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateEnvironmentError {
+    fn from(err: io::Error) -> CreateEnvironmentError {
+        CreateEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateEnvironmentError {
@@ -9954,6 +9996,11 @@ impl From<CredentialsError> for CreatePlatformVersionError {
 impl From<HttpDispatchError> for CreatePlatformVersionError {
     fn from(err: HttpDispatchError) -> CreatePlatformVersionError {
         CreatePlatformVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePlatformVersionError {
+    fn from(err: io::Error) -> CreatePlatformVersionError {
+        CreatePlatformVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePlatformVersionError {
@@ -10032,6 +10079,11 @@ impl From<HttpDispatchError> for CreateStorageLocationError {
         CreateStorageLocationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateStorageLocationError {
+    fn from(err: io::Error) -> CreateStorageLocationError {
+        CreateStorageLocationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateStorageLocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10100,6 +10152,11 @@ impl From<CredentialsError> for DeleteApplicationError {
 impl From<HttpDispatchError> for DeleteApplicationError {
     fn from(err: HttpDispatchError) -> DeleteApplicationError {
         DeleteApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteApplicationError {
+    fn from(err: io::Error) -> DeleteApplicationError {
+        DeleteApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteApplicationError {
@@ -10179,6 +10236,11 @@ impl From<HttpDispatchError> for DeleteApplicationVersionError {
         DeleteApplicationVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteApplicationVersionError {
+    fn from(err: io::Error) -> DeleteApplicationVersionError {
+        DeleteApplicationVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteApplicationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10250,6 +10312,11 @@ impl From<HttpDispatchError> for DeleteConfigurationTemplateError {
         DeleteConfigurationTemplateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteConfigurationTemplateError {
+    fn from(err: io::Error) -> DeleteConfigurationTemplateError {
+        DeleteConfigurationTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteConfigurationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10313,6 +10380,11 @@ impl From<CredentialsError> for DeleteEnvironmentConfigurationError {
 impl From<HttpDispatchError> for DeleteEnvironmentConfigurationError {
     fn from(err: HttpDispatchError) -> DeleteEnvironmentConfigurationError {
         DeleteEnvironmentConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteEnvironmentConfigurationError {
+    fn from(err: io::Error) -> DeleteEnvironmentConfigurationError {
+        DeleteEnvironmentConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteEnvironmentConfigurationError {
@@ -10391,6 +10463,11 @@ impl From<HttpDispatchError> for DeletePlatformVersionError {
         DeletePlatformVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeletePlatformVersionError {
+    fn from(err: io::Error) -> DeletePlatformVersionError {
+        DeletePlatformVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeletePlatformVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10459,6 +10536,11 @@ impl From<HttpDispatchError> for DescribeApplicationVersionsError {
         DescribeApplicationVersionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeApplicationVersionsError {
+    fn from(err: io::Error) -> DescribeApplicationVersionsError {
+        DescribeApplicationVersionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeApplicationVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10521,6 +10603,11 @@ impl From<CredentialsError> for DescribeApplicationsError {
 impl From<HttpDispatchError> for DescribeApplicationsError {
     fn from(err: HttpDispatchError) -> DescribeApplicationsError {
         DescribeApplicationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeApplicationsError {
+    fn from(err: io::Error) -> DescribeApplicationsError {
+        DescribeApplicationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeApplicationsError {
@@ -10590,6 +10677,11 @@ impl From<HttpDispatchError> for DescribeConfigurationOptionsError {
         DescribeConfigurationOptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeConfigurationOptionsError {
+    fn from(err: io::Error) -> DescribeConfigurationOptionsError {
+        DescribeConfigurationOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeConfigurationOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10656,6 +10748,11 @@ impl From<CredentialsError> for DescribeConfigurationSettingsError {
 impl From<HttpDispatchError> for DescribeConfigurationSettingsError {
     fn from(err: HttpDispatchError) -> DescribeConfigurationSettingsError {
         DescribeConfigurationSettingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeConfigurationSettingsError {
+    fn from(err: io::Error) -> DescribeConfigurationSettingsError {
+        DescribeConfigurationSettingsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeConfigurationSettingsError {
@@ -10729,6 +10826,11 @@ impl From<HttpDispatchError> for DescribeEnvironmentHealthError {
         DescribeEnvironmentHealthError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEnvironmentHealthError {
+    fn from(err: io::Error) -> DescribeEnvironmentHealthError {
+        DescribeEnvironmentHealthError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEnvironmentHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10796,6 +10898,11 @@ impl From<CredentialsError> for DescribeEnvironmentManagedActionHistoryError {
 impl From<HttpDispatchError> for DescribeEnvironmentManagedActionHistoryError {
     fn from(err: HttpDispatchError) -> DescribeEnvironmentManagedActionHistoryError {
         DescribeEnvironmentManagedActionHistoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEnvironmentManagedActionHistoryError {
+    fn from(err: io::Error) -> DescribeEnvironmentManagedActionHistoryError {
+        DescribeEnvironmentManagedActionHistoryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEnvironmentManagedActionHistoryError {
@@ -10868,6 +10975,11 @@ impl From<HttpDispatchError> for DescribeEnvironmentManagedActionsError {
         DescribeEnvironmentManagedActionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEnvironmentManagedActionsError {
+    fn from(err: io::Error) -> DescribeEnvironmentManagedActionsError {
+        DescribeEnvironmentManagedActionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEnvironmentManagedActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10936,6 +11048,11 @@ impl From<HttpDispatchError> for DescribeEnvironmentResourcesError {
         DescribeEnvironmentResourcesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEnvironmentResourcesError {
+    fn from(err: io::Error) -> DescribeEnvironmentResourcesError {
+        DescribeEnvironmentResourcesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEnvironmentResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11001,6 +11118,11 @@ impl From<HttpDispatchError> for DescribeEnvironmentsError {
         DescribeEnvironmentsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEnvironmentsError {
+    fn from(err: io::Error) -> DescribeEnvironmentsError {
+        DescribeEnvironmentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11063,6 +11185,11 @@ impl From<CredentialsError> for DescribeEventsError {
 impl From<HttpDispatchError> for DescribeEventsError {
     fn from(err: HttpDispatchError) -> DescribeEventsError {
         DescribeEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventsError {
+    fn from(err: io::Error) -> DescribeEventsError {
+        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -11131,6 +11258,11 @@ impl From<CredentialsError> for DescribeInstancesHealthError {
 impl From<HttpDispatchError> for DescribeInstancesHealthError {
     fn from(err: HttpDispatchError) -> DescribeInstancesHealthError {
         DescribeInstancesHealthError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeInstancesHealthError {
+    fn from(err: io::Error) -> DescribeInstancesHealthError {
+        DescribeInstancesHealthError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeInstancesHealthError {
@@ -11205,6 +11337,11 @@ impl From<HttpDispatchError> for DescribePlatformVersionError {
         DescribePlatformVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribePlatformVersionError {
+    fn from(err: io::Error) -> DescribePlatformVersionError {
+        DescribePlatformVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribePlatformVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11269,6 +11406,11 @@ impl From<CredentialsError> for ListAvailableSolutionStacksError {
 impl From<HttpDispatchError> for ListAvailableSolutionStacksError {
     fn from(err: HttpDispatchError) -> ListAvailableSolutionStacksError {
         ListAvailableSolutionStacksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAvailableSolutionStacksError {
+    fn from(err: io::Error) -> ListAvailableSolutionStacksError {
+        ListAvailableSolutionStacksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAvailableSolutionStacksError {
@@ -11341,6 +11483,11 @@ impl From<HttpDispatchError> for ListPlatformVersionsError {
         ListPlatformVersionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPlatformVersionsError {
+    fn from(err: io::Error) -> ListPlatformVersionsError {
+        ListPlatformVersionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPlatformVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11410,6 +11557,11 @@ impl From<HttpDispatchError> for RebuildEnvironmentError {
         RebuildEnvironmentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RebuildEnvironmentError {
+    fn from(err: io::Error) -> RebuildEnvironmentError {
+        RebuildEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RebuildEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11473,6 +11625,11 @@ impl From<CredentialsError> for RequestEnvironmentInfoError {
 impl From<HttpDispatchError> for RequestEnvironmentInfoError {
     fn from(err: HttpDispatchError) -> RequestEnvironmentInfoError {
         RequestEnvironmentInfoError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RequestEnvironmentInfoError {
+    fn from(err: io::Error) -> RequestEnvironmentInfoError {
+        RequestEnvironmentInfoError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RequestEnvironmentInfoError {
@@ -11539,6 +11696,11 @@ impl From<HttpDispatchError> for RestartAppServerError {
         RestartAppServerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RestartAppServerError {
+    fn from(err: io::Error) -> RestartAppServerError {
+        RestartAppServerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RestartAppServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11599,6 +11761,11 @@ impl From<CredentialsError> for RetrieveEnvironmentInfoError {
 impl From<HttpDispatchError> for RetrieveEnvironmentInfoError {
     fn from(err: HttpDispatchError) -> RetrieveEnvironmentInfoError {
         RetrieveEnvironmentInfoError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RetrieveEnvironmentInfoError {
+    fn from(err: io::Error) -> RetrieveEnvironmentInfoError {
+        RetrieveEnvironmentInfoError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RetrieveEnvironmentInfoError {
@@ -11663,6 +11830,11 @@ impl From<CredentialsError> for SwapEnvironmentCNAMEsError {
 impl From<HttpDispatchError> for SwapEnvironmentCNAMEsError {
     fn from(err: HttpDispatchError) -> SwapEnvironmentCNAMEsError {
         SwapEnvironmentCNAMEsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SwapEnvironmentCNAMEsError {
+    fn from(err: io::Error) -> SwapEnvironmentCNAMEsError {
+        SwapEnvironmentCNAMEsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SwapEnvironmentCNAMEsError {
@@ -11732,6 +11904,11 @@ impl From<HttpDispatchError> for TerminateEnvironmentError {
         TerminateEnvironmentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TerminateEnvironmentError {
+    fn from(err: io::Error) -> TerminateEnvironmentError {
+        TerminateEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TerminateEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11795,6 +11972,11 @@ impl From<CredentialsError> for UpdateApplicationError {
 impl From<HttpDispatchError> for UpdateApplicationError {
     fn from(err: HttpDispatchError) -> UpdateApplicationError {
         UpdateApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateApplicationError {
+    fn from(err: io::Error) -> UpdateApplicationError {
+        UpdateApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateApplicationError {
@@ -11864,6 +12046,11 @@ impl From<HttpDispatchError> for UpdateApplicationResourceLifecycleError {
         UpdateApplicationResourceLifecycleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateApplicationResourceLifecycleError {
+    fn from(err: io::Error) -> UpdateApplicationResourceLifecycleError {
+        UpdateApplicationResourceLifecycleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateApplicationResourceLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11927,6 +12114,11 @@ impl From<CredentialsError> for UpdateApplicationVersionError {
 impl From<HttpDispatchError> for UpdateApplicationVersionError {
     fn from(err: HttpDispatchError) -> UpdateApplicationVersionError {
         UpdateApplicationVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateApplicationVersionError {
+    fn from(err: io::Error) -> UpdateApplicationVersionError {
+        UpdateApplicationVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateApplicationVersionError {
@@ -11997,6 +12189,11 @@ impl From<CredentialsError> for UpdateConfigurationTemplateError {
 impl From<HttpDispatchError> for UpdateConfigurationTemplateError {
     fn from(err: HttpDispatchError) -> UpdateConfigurationTemplateError {
         UpdateConfigurationTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateConfigurationTemplateError {
+    fn from(err: io::Error) -> UpdateConfigurationTemplateError {
+        UpdateConfigurationTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateConfigurationTemplateError {
@@ -12073,6 +12270,11 @@ impl From<HttpDispatchError> for UpdateEnvironmentError {
         UpdateEnvironmentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateEnvironmentError {
+    fn from(err: io::Error) -> UpdateEnvironmentError {
+        UpdateEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12143,6 +12345,11 @@ impl From<CredentialsError> for ValidateConfigurationSettingsError {
 impl From<HttpDispatchError> for ValidateConfigurationSettingsError {
     fn from(err: HttpDispatchError) -> ValidateConfigurationSettingsError {
         ValidateConfigurationSettingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ValidateConfigurationSettingsError {
+    fn from(err: io::Error) -> ValidateConfigurationSettingsError {
+        ValidateConfigurationSettingsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ValidateConfigurationSettingsError {
@@ -12467,15 +12674,16 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AbortEnvironmentUpdateError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AbortEnvironmentUpdateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12495,16 +12703,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ApplyEnvironmentManagedActionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12518,8 +12728,11 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ApplyEnvironmentManagedActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ApplyEnvironmentManagedActionError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -12538,16 +12751,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CheckDNSAvailabilityResultMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12561,8 +12776,9 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CheckDNSAvailabilityError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CheckDNSAvailabilityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12581,16 +12797,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EnvironmentDescriptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12606,8 +12824,9 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ComposeEnvironmentsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ComposeEnvironmentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12626,16 +12845,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ApplicationDescriptionMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12651,8 +12872,9 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12672,16 +12894,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ApplicationVersionDescriptionMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12695,8 +12919,11 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateApplicationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateApplicationVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -12715,16 +12942,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ConfigurationSettingsDescription::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12740,8 +12969,11 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateConfigurationTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateConfigurationTemplateError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -12759,16 +12991,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EnvironmentDescription::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12783,8 +13017,9 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateEnvironmentError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateEnvironmentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12804,16 +13039,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreatePlatformVersionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12828,8 +13065,9 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreatePlatformVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePlatformVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12848,16 +13086,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateStorageLocationResultMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12871,8 +13111,9 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateStorageLocationError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStorageLocationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12891,15 +13132,16 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12918,15 +13160,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteApplicationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteApplicationVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -12944,15 +13189,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteConfigurationTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteConfigurationTemplateError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -12970,15 +13218,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteEnvironmentConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteEnvironmentConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -12997,16 +13248,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeletePlatformVersionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13021,8 +13274,9 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeletePlatformVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePlatformVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13042,16 +13296,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ApplicationVersionDescriptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13065,8 +13321,11 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeApplicationVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeApplicationVersionsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -13085,16 +13344,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ApplicationDescriptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13110,8 +13371,9 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeApplicationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeApplicationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13131,16 +13393,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ConfigurationOptionsDescription::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13156,8 +13420,11 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeConfigurationOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConfigurationOptionsError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -13176,16 +13443,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ConfigurationSettingsDescriptions::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13199,8 +13468,11 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeConfigurationSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConfigurationSettingsError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -13219,16 +13491,18 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeEnvironmentHealthResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13244,8 +13518,11 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEnvironmentHealthError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEnvironmentHealthError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -13263,16 +13540,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeEnvironmentManagedActionHistoryResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13286,8 +13565,10 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEnvironmentManagedActionHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEnvironmentManagedActionHistoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13306,16 +13587,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeEnvironmentManagedActionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13329,8 +13612,10 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEnvironmentManagedActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEnvironmentManagedActionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13349,16 +13634,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EnvironmentResourceDescriptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13372,8 +13659,11 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEnvironmentResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEnvironmentResourcesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -13392,16 +13682,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EnvironmentDescriptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13417,8 +13709,9 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                Err(DescribeEnvironmentsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEnvironmentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13437,16 +13730,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EventDescriptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13461,8 +13756,9 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13482,16 +13778,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeInstancesHealthResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13507,8 +13805,11 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                            Err(DescribeInstancesHealthError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstancesHealthError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -13527,16 +13828,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribePlatformVersionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13552,8 +13855,11 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                            Err(DescribePlatformVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePlatformVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -13571,16 +13877,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListAvailableSolutionStacksResultMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13594,8 +13902,11 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                            Err(ListAvailableSolutionStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAvailableSolutionStacksError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -13613,16 +13924,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListPlatformVersionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13637,8 +13950,9 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                Err(ListPlatformVersionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPlatformVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13657,15 +13971,16 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(RebuildEnvironmentError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RebuildEnvironmentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13684,15 +13999,16 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(RequestEnvironmentInfoError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RequestEnvironmentInfoError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13711,15 +14027,16 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(RestartAppServerError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestartAppServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13739,16 +14056,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RetrieveEnvironmentInfoResultMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13762,8 +14081,11 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                            Err(RetrieveEnvironmentInfoError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RetrieveEnvironmentInfoError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -13781,15 +14103,16 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(SwapEnvironmentCNAMEsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SwapEnvironmentCNAMEsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13808,16 +14131,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EnvironmentDescription::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13832,8 +14157,9 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                Err(TerminateEnvironmentError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TerminateEnvironmentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13852,16 +14178,18 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ApplicationDescriptionMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13877,8 +14205,9 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                 Ok(result)
             }
             _ => {
-                Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13895,16 +14224,18 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ApplicationResourceLifecycleDescriptionMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13918,8 +14249,10 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
                 Ok(result)
             }
             _ => {
-                            Err(UpdateApplicationResourceLifecycleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateApplicationResourceLifecycleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13938,16 +14271,18 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ApplicationVersionDescriptionMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13961,8 +14296,11 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
                 Ok(result)
             }
             _ => {
-                            Err(UpdateApplicationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateApplicationVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -13981,16 +14319,18 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ConfigurationSettingsDescription::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14006,8 +14346,11 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
                 Ok(result)
             }
             _ => {
-                            Err(UpdateConfigurationTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateConfigurationTemplateError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -14025,16 +14368,18 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EnvironmentDescription::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14049,8 +14394,9 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
                 Ok(result)
             }
             _ => {
-                Err(UpdateEnvironmentError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateEnvironmentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14070,16 +14416,18 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ConfigurationSettingsValidationMessages::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14093,8 +14441,11 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
                 Ok(result)
             }
             _ => {
-                            Err(ValidateConfigurationSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ValidateConfigurationSettingsError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 }

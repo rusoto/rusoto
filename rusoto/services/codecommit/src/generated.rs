@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -640,6 +642,11 @@ impl From<HttpDispatchError> for BatchGetRepositoriesError {
         BatchGetRepositoriesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchGetRepositoriesError {
+    fn from(err: io::Error) -> BatchGetRepositoriesError {
+        BatchGetRepositoriesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchGetRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -786,6 +793,11 @@ impl From<HttpDispatchError> for CreateBranchError {
         CreateBranchError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateBranchError {
+    fn from(err: io::Error) -> CreateBranchError {
+        CreateBranchError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -912,6 +924,11 @@ impl From<HttpDispatchError> for CreateRepositoryError {
         CreateRepositoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateRepositoryError {
+    fn from(err: io::Error) -> CreateRepositoryError {
+        CreateRepositoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1019,6 +1036,11 @@ impl From<CredentialsError> for DeleteRepositoryError {
 impl From<HttpDispatchError> for DeleteRepositoryError {
     fn from(err: HttpDispatchError) -> DeleteRepositoryError {
         DeleteRepositoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRepositoryError {
+    fn from(err: io::Error) -> DeleteRepositoryError {
+        DeleteRepositoryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRepositoryError {
@@ -1154,6 +1176,11 @@ impl From<HttpDispatchError> for GetBlobError {
         GetBlobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBlobError {
+    fn from(err: io::Error) -> GetBlobError {
+        GetBlobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBlobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1287,6 +1314,11 @@ impl From<HttpDispatchError> for GetBranchError {
         GetBranchError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBranchError {
+    fn from(err: io::Error) -> GetBranchError {
+        GetBranchError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1417,6 +1449,11 @@ impl From<CredentialsError> for GetCommitError {
 impl From<HttpDispatchError> for GetCommitError {
     fn from(err: HttpDispatchError) -> GetCommitError {
         GetCommitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCommitError {
+    fn from(err: io::Error) -> GetCommitError {
+        GetCommitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetCommitError {
@@ -1576,6 +1613,11 @@ impl From<HttpDispatchError> for GetDifferencesError {
         GetDifferencesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDifferencesError {
+    fn from(err: io::Error) -> GetDifferencesError {
+        GetDifferencesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDifferencesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1698,6 +1740,11 @@ impl From<HttpDispatchError> for GetRepositoryError {
         GetRepositoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRepositoryError {
+    fn from(err: io::Error) -> GetRepositoryError {
+        GetRepositoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1796,6 +1843,11 @@ impl From<CredentialsError> for GetRepositoryTriggersError {
 impl From<HttpDispatchError> for GetRepositoryTriggersError {
     fn from(err: HttpDispatchError) -> GetRepositoryTriggersError {
         GetRepositoryTriggersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRepositoryTriggersError {
+    fn from(err: io::Error) -> GetRepositoryTriggersError {
+        GetRepositoryTriggersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetRepositoryTriggersError {
@@ -1919,6 +1971,11 @@ impl From<HttpDispatchError> for ListBranchesError {
         ListBranchesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListBranchesError {
+    fn from(err: io::Error) -> ListBranchesError {
+        ListBranchesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListBranchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2009,6 +2066,11 @@ impl From<CredentialsError> for ListRepositoriesError {
 impl From<HttpDispatchError> for ListRepositoriesError {
     fn from(err: HttpDispatchError) -> ListRepositoriesError {
         ListRepositoriesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRepositoriesError {
+    fn from(err: io::Error) -> ListRepositoriesError {
+        ListRepositoriesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRepositoriesError {
@@ -2143,6 +2205,11 @@ impl From<CredentialsError> for PutRepositoryTriggersError {
 impl From<HttpDispatchError> for PutRepositoryTriggersError {
     fn from(err: HttpDispatchError) -> PutRepositoryTriggersError {
         PutRepositoryTriggersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutRepositoryTriggersError {
+    fn from(err: io::Error) -> PutRepositoryTriggersError {
+        PutRepositoryTriggersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutRepositoryTriggersError {
@@ -2299,6 +2366,11 @@ impl From<HttpDispatchError> for TestRepositoryTriggersError {
         TestRepositoryTriggersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TestRepositoryTriggersError {
+    fn from(err: io::Error) -> TestRepositoryTriggersError {
+        TestRepositoryTriggersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TestRepositoryTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2439,6 +2511,11 @@ impl From<HttpDispatchError> for UpdateDefaultBranchError {
         UpdateDefaultBranchError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateDefaultBranchError {
+    fn from(err: io::Error) -> UpdateDefaultBranchError {
+        UpdateDefaultBranchError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateDefaultBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2547,6 +2624,11 @@ impl From<HttpDispatchError> for UpdateRepositoryDescriptionError {
         UpdateRepositoryDescriptionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateRepositoryDescriptionError {
+    fn from(err: io::Error) -> UpdateRepositoryDescriptionError {
+        UpdateRepositoryDescriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateRepositoryDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2638,6 +2720,11 @@ impl From<CredentialsError> for UpdateRepositoryNameError {
 impl From<HttpDispatchError> for UpdateRepositoryNameError {
     fn from(err: HttpDispatchError) -> UpdateRepositoryNameError {
         UpdateRepositoryNameError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRepositoryNameError {
+    fn from(err: io::Error) -> UpdateRepositoryNameError {
+        UpdateRepositoryNameError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateRepositoryNameError {
@@ -2799,15 +2886,18 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetRepositoriesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(BatchGetRepositoriesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetRepositoriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2824,12 +2914,14 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(CreateBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateBranchError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2848,15 +2940,20 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateRepositoryOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateRepositoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRepositoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2875,15 +2972,20 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRepositoryOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2900,15 +3002,20 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetBlobOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetBlobOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetBlobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBlobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2924,15 +3031,20 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetBranchOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetBranchOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBranchError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2948,15 +3060,20 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetCommitOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetCommitOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetCommitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCommitError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2974,15 +3091,20 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDifferencesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDifferencesOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetDifferencesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDifferencesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3001,14 +3123,20 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRepositoryOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRepositoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3028,15 +3156,18 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRepositoryTriggersOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRepositoryTriggersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3055,14 +3186,20 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListBranchesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListBranchesOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListBranchesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBranchesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3081,15 +3218,20 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRepositoriesOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListRepositoriesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRepositoriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3109,15 +3251,18 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutRepositoryTriggersOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(PutRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutRepositoryTriggersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3137,15 +3282,18 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TestRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<TestRepositoryTriggersOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(TestRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestRepositoryTriggersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3164,13 +3312,14 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(UpdateDefaultBranchError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDefaultBranchError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3190,11 +3339,16 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(UpdateRepositoryDescriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRepositoryDescriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -3212,13 +3366,14 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(UpdateRepositoryNameError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRepositoryNameError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

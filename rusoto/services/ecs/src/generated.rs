@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1761,6 +1763,11 @@ impl From<HttpDispatchError> for CreateClusterError {
         CreateClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateClusterError {
+    fn from(err: io::Error) -> CreateClusterError {
+        CreateClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1848,6 +1855,11 @@ impl From<HttpDispatchError> for CreateServiceError {
         CreateServiceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateServiceError {
+    fn from(err: io::Error) -> CreateServiceError {
+        CreateServiceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1933,6 +1945,11 @@ impl From<CredentialsError> for DeleteAttributesError {
 impl From<HttpDispatchError> for DeleteAttributesError {
     fn from(err: HttpDispatchError) -> DeleteAttributesError {
         DeleteAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteAttributesError {
+    fn from(err: io::Error) -> DeleteAttributesError {
+        DeleteAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteAttributesError {
@@ -2030,6 +2047,11 @@ impl From<HttpDispatchError> for DeleteClusterError {
         DeleteClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteClusterError {
+    fn from(err: io::Error) -> DeleteClusterError {
+        DeleteClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2125,6 +2147,11 @@ impl From<HttpDispatchError> for DeleteServiceError {
         DeleteServiceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteServiceError {
+    fn from(err: io::Error) -> DeleteServiceError {
+        DeleteServiceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2212,6 +2239,11 @@ impl From<CredentialsError> for DeregisterContainerInstanceError {
 impl From<HttpDispatchError> for DeregisterContainerInstanceError {
     fn from(err: HttpDispatchError) -> DeregisterContainerInstanceError {
         DeregisterContainerInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeregisterContainerInstanceError {
+    fn from(err: io::Error) -> DeregisterContainerInstanceError {
+        DeregisterContainerInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeregisterContainerInstanceError {
@@ -2303,6 +2335,11 @@ impl From<HttpDispatchError> for DeregisterTaskDefinitionError {
         DeregisterTaskDefinitionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeregisterTaskDefinitionError {
+    fn from(err: io::Error) -> DeregisterTaskDefinitionError {
+        DeregisterTaskDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeregisterTaskDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2385,6 +2422,11 @@ impl From<CredentialsError> for DescribeClustersError {
 impl From<HttpDispatchError> for DescribeClustersError {
     fn from(err: HttpDispatchError) -> DescribeClustersError {
         DescribeClustersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeClustersError {
+    fn from(err: io::Error) -> DescribeClustersError {
+        DescribeClustersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClustersError {
@@ -2472,6 +2514,11 @@ impl From<CredentialsError> for DescribeContainerInstancesError {
 impl From<HttpDispatchError> for DescribeContainerInstancesError {
     fn from(err: HttpDispatchError) -> DescribeContainerInstancesError {
         DescribeContainerInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeContainerInstancesError {
+    fn from(err: io::Error) -> DescribeContainerInstancesError {
+        DescribeContainerInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeContainerInstancesError {
@@ -2564,6 +2611,11 @@ impl From<HttpDispatchError> for DescribeServicesError {
         DescribeServicesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeServicesError {
+    fn from(err: io::Error) -> DescribeServicesError {
+        DescribeServicesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2649,6 +2701,11 @@ impl From<CredentialsError> for DescribeTaskDefinitionError {
 impl From<HttpDispatchError> for DescribeTaskDefinitionError {
     fn from(err: HttpDispatchError) -> DescribeTaskDefinitionError {
         DescribeTaskDefinitionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTaskDefinitionError {
+    fn from(err: io::Error) -> DescribeTaskDefinitionError {
+        DescribeTaskDefinitionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTaskDefinitionError {
@@ -2740,6 +2797,11 @@ impl From<HttpDispatchError> for DescribeTasksError {
         DescribeTasksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTasksError {
+    fn from(err: io::Error) -> DescribeTasksError {
+        DescribeTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2820,6 +2882,11 @@ impl From<CredentialsError> for DiscoverPollEndpointError {
 impl From<HttpDispatchError> for DiscoverPollEndpointError {
     fn from(err: HttpDispatchError) -> DiscoverPollEndpointError {
         DiscoverPollEndpointError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DiscoverPollEndpointError {
+    fn from(err: io::Error) -> DiscoverPollEndpointError {
+        DiscoverPollEndpointError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DiscoverPollEndpointError {
@@ -2904,6 +2971,11 @@ impl From<HttpDispatchError> for ListAttributesError {
         ListAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListAttributesError {
+    fn from(err: io::Error) -> ListAttributesError {
+        ListAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2983,6 +3055,11 @@ impl From<CredentialsError> for ListClustersError {
 impl From<HttpDispatchError> for ListClustersError {
     fn from(err: HttpDispatchError) -> ListClustersError {
         ListClustersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListClustersError {
+    fn from(err: io::Error) -> ListClustersError {
+        ListClustersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListClustersError {
@@ -3076,6 +3153,11 @@ impl From<HttpDispatchError> for ListContainerInstancesError {
         ListContainerInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListContainerInstancesError {
+    fn from(err: io::Error) -> ListContainerInstancesError {
+        ListContainerInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListContainerInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3166,6 +3248,11 @@ impl From<HttpDispatchError> for ListServicesError {
         ListServicesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListServicesError {
+    fn from(err: io::Error) -> ListServicesError {
+        ListServicesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3249,6 +3336,11 @@ impl From<CredentialsError> for ListTaskDefinitionFamiliesError {
 impl From<HttpDispatchError> for ListTaskDefinitionFamiliesError {
     fn from(err: HttpDispatchError) -> ListTaskDefinitionFamiliesError {
         ListTaskDefinitionFamiliesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTaskDefinitionFamiliesError {
+    fn from(err: io::Error) -> ListTaskDefinitionFamiliesError {
+        ListTaskDefinitionFamiliesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTaskDefinitionFamiliesError {
@@ -3337,6 +3429,11 @@ impl From<CredentialsError> for ListTaskDefinitionsError {
 impl From<HttpDispatchError> for ListTaskDefinitionsError {
     fn from(err: HttpDispatchError) -> ListTaskDefinitionsError {
         ListTaskDefinitionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTaskDefinitionsError {
+    fn from(err: io::Error) -> ListTaskDefinitionsError {
+        ListTaskDefinitionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTaskDefinitionsError {
@@ -3429,6 +3526,11 @@ impl From<CredentialsError> for ListTasksError {
 impl From<HttpDispatchError> for ListTasksError {
     fn from(err: HttpDispatchError) -> ListTasksError {
         ListTasksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTasksError {
+    fn from(err: io::Error) -> ListTasksError {
+        ListTasksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTasksError {
@@ -3524,6 +3626,11 @@ impl From<HttpDispatchError> for PutAttributesError {
         PutAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutAttributesError {
+    fn from(err: io::Error) -> PutAttributesError {
+        PutAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3604,6 +3711,11 @@ impl From<CredentialsError> for RegisterContainerInstanceError {
 impl From<HttpDispatchError> for RegisterContainerInstanceError {
     fn from(err: HttpDispatchError) -> RegisterContainerInstanceError {
         RegisterContainerInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterContainerInstanceError {
+    fn from(err: io::Error) -> RegisterContainerInstanceError {
+        RegisterContainerInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterContainerInstanceError {
@@ -3693,6 +3805,11 @@ impl From<HttpDispatchError> for RegisterTaskDefinitionError {
         RegisterTaskDefinitionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterTaskDefinitionError {
+    fn from(err: io::Error) -> RegisterTaskDefinitionError {
+        RegisterTaskDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterTaskDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3778,6 +3895,11 @@ impl From<CredentialsError> for RunTaskError {
 impl From<HttpDispatchError> for RunTaskError {
     fn from(err: HttpDispatchError) -> RunTaskError {
         RunTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RunTaskError {
+    fn from(err: io::Error) -> RunTaskError {
+        RunTaskError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RunTaskError {
@@ -3866,6 +3988,11 @@ impl From<HttpDispatchError> for StartTaskError {
         StartTaskError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartTaskError {
+    fn from(err: io::Error) -> StartTaskError {
+        StartTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3952,6 +4079,11 @@ impl From<HttpDispatchError> for StopTaskError {
         StopTaskError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StopTaskError {
+    fn from(err: io::Error) -> StopTaskError {
+        StopTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StopTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4034,6 +4166,11 @@ impl From<HttpDispatchError> for SubmitContainerStateChangeError {
         SubmitContainerStateChangeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SubmitContainerStateChangeError {
+    fn from(err: io::Error) -> SubmitContainerStateChangeError {
+        SubmitContainerStateChangeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SubmitContainerStateChangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4114,6 +4251,11 @@ impl From<CredentialsError> for SubmitTaskStateChangeError {
 impl From<HttpDispatchError> for SubmitTaskStateChangeError {
     fn from(err: HttpDispatchError) -> SubmitTaskStateChangeError {
         SubmitTaskStateChangeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SubmitTaskStateChangeError {
+    fn from(err: io::Error) -> SubmitTaskStateChangeError {
+        SubmitTaskStateChangeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SubmitTaskStateChangeError {
@@ -4223,6 +4365,11 @@ impl From<HttpDispatchError> for UpdateContainerAgentError {
         UpdateContainerAgentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateContainerAgentError {
+    fn from(err: io::Error) -> UpdateContainerAgentError {
+        UpdateContainerAgentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateContainerAgentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4314,6 +4461,11 @@ impl From<CredentialsError> for UpdateContainerInstancesStateError {
 impl From<HttpDispatchError> for UpdateContainerInstancesStateError {
     fn from(err: HttpDispatchError) -> UpdateContainerInstancesStateError {
         UpdateContainerInstancesStateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateContainerInstancesStateError {
+    fn from(err: io::Error) -> UpdateContainerInstancesStateError {
+        UpdateContainerInstancesStateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateContainerInstancesStateError {
@@ -4414,6 +4566,11 @@ impl From<CredentialsError> for UpdateServiceError {
 impl From<HttpDispatchError> for UpdateServiceError {
     fn from(err: HttpDispatchError) -> UpdateServiceError {
         UpdateServiceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateServiceError {
+    fn from(err: io::Error) -> UpdateServiceError {
+        UpdateServiceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateServiceError {
@@ -4670,14 +4827,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateClusterResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateClusterResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4697,14 +4860,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateServiceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateServiceResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateServiceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateServiceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4724,15 +4893,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteAttributesResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4752,14 +4926,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteClusterResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteClusterResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4779,14 +4959,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteServiceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteServiceResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteServiceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteServiceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4807,13 +4993,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterContainerInstanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeregisterContainerInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeregisterContainerInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterContainerInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -4833,13 +5026,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterTaskDefinitionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeregisterTaskDefinitionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeregisterTaskDefinitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterTaskDefinitionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -4858,15 +5058,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeClustersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeClustersResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeClustersError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClustersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4887,13 +5092,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeContainerInstancesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeContainerInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeContainerInstancesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeContainerInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -4912,15 +5124,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeServicesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeServicesResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeServicesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeServicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4941,15 +5158,18 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTaskDefinitionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTaskDefinitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeTaskDefinitionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTaskDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4969,14 +5189,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTasksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTasksResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4997,15 +5223,18 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DiscoverPollEndpointResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DiscoverPollEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DiscoverPollEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DiscoverPollEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5025,15 +5254,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAttributesResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5053,14 +5287,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListClustersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListClustersResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListClustersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5081,15 +5321,18 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListContainerInstancesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListContainerInstancesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListContainerInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListContainerInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5109,14 +5352,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListServicesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListServicesResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListServicesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListServicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5137,13 +5386,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTaskDefinitionFamiliesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListTaskDefinitionFamiliesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTaskDefinitionFamiliesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTaskDefinitionFamiliesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -5162,15 +5418,18 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTaskDefinitionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTaskDefinitionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTaskDefinitionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTaskDefinitionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5188,13 +5447,21 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTasksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTasksResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5213,14 +5480,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutAttributesResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PutAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5241,13 +5514,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterContainerInstanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RegisterContainerInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RegisterContainerInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterContainerInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5267,15 +5547,18 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterTaskDefinitionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RegisterTaskDefinitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RegisterTaskDefinitionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterTaskDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5292,15 +5575,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<RunTaskResponse>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RunTaskResponse>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(RunTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RunTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5317,13 +5605,21 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StartTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartTaskResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5340,13 +5636,21 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StopTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopTaskResponse>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5366,13 +5670,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SubmitContainerStateChangeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(SubmitContainerStateChangeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SubmitContainerStateChangeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SubmitContainerStateChangeError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -5392,15 +5703,18 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SubmitTaskStateChangeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SubmitTaskStateChangeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(SubmitTaskStateChangeError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SubmitTaskStateChangeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5421,15 +5735,18 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateContainerAgentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateContainerAgentResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateContainerAgentError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateContainerAgentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5450,13 +5767,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateContainerInstancesStateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateContainerInstancesStateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateContainerInstancesStateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateContainerInstancesStateError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -5475,14 +5799,20 @@ impl<P, D> Ecs for EcsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateServiceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateServiceResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateServiceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateServiceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
