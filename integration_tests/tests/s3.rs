@@ -220,7 +220,18 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
     println!("get object result: {:#?}", result);
 
     let mut body: Vec<u8> = Vec::new();
-    assert!(result.body.unwrap().read_to_end(&mut body).is_ok());
+    let mut buf: [u8; 5] = [0; 5];
+    let mut stream = result.body.unwrap();
+
+    while let Ok(len) = stream.read(&mut buf) {
+        if len == 0 {
+            break;
+        }
+
+        println!("read {} bytes", len);
+        body.extend_from_slice(&buf);
+    }
+
     assert!(body.len() > 0);
 }
 
