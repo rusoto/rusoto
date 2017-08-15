@@ -407,6 +407,9 @@ fn build_hostname(service: &str, region: Region) -> String {
                 _ => format!("s3-{}.amazonaws.com", region),
             }
         }
+        "route53" => {
+            String::from("route53.amazonaws.com")
+        }
         _ => {
             match region {
                 Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
