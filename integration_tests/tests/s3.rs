@@ -12,6 +12,7 @@ use std::io::Read;
 use time::get_time;
 
 use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::credential::{AwsCredentials, ProvideAwsCredentials};
 use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
@@ -37,6 +38,9 @@ fn test_all_the_things() {
     let utf8_filename = format!("test[über]file@{}", get_time().sec);
     let binary_filename = format!("test_file_b{}", get_time().sec);
     let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
+
+    // generate a presigned url
+    test_generate_presigned_url(&Region::UsEast1, &DefaultCredentialsProvider::new().unwrap().credentials().unwrap(), &test_bucket, &multipart_filename);
 
     // get a list of list_buckets
     test_list_buckets(&client);
@@ -343,4 +347,16 @@ fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
 
     let result = client.put_bucket_cors(&req).expect("Couldn't apply bucket CORS");
     println!("{:#?}", result);
+}
+
+fn test_generate_presigned_url(region: &Region, credentials: &AwsCredentials, _bucket: &str, _filename: &str) {
+    let get_req = GetObjectRequest {
+        bucket: "example_bucket".to_string(),
+        key: "example_file".to_string(),
+        ..Default::default()
+    };
+
+    let result = rusoto_s3::util::generate_presigned_url(region, credentials, &get_req).unwrap();
+    println!("get object result: {:#?}", result);
+    assert_eq!(result, "tomato");
 }
