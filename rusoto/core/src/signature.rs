@@ -408,7 +408,7 @@ fn build_hostname(service: &str, region: Region) -> String {
             }
         }
         "route53" => {
-            String::from("route53.amazonaws.com")
+            "route53.amazonaws.com".to_owned()
         }
         _ => {
             match region {
