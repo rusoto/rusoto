@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -59,6 +55,73 @@ pub struct Connector {
     #[serde(rename="vmManagerType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vm_manager_type: Option<String>,
+}
+
+#[doc="Capabilities for a Connector"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConnectorCapability {
+    Vsphere,
+}
+
+impl Into<String> for ConnectorCapability {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConnectorCapability {
+    fn into(self) -> &'static str {
+        match self {
+            ConnectorCapability::Vsphere => "VSPHERE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectorCapability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "VSPHERE" => Ok(ConnectorCapability::Vsphere),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="Status of on-premise Connector"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConnectorStatus {
+    Healthy,
+    Unhealthy,
+}
+
+impl Into<String> for ConnectorStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConnectorStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ConnectorStatus::Healthy => "HEALTHY",
+            ConnectorStatus::Unhealthy => "UNHEALTHY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectorStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "HEALTHY" => Ok(ConnectorStatus::Healthy),
+            "UNHEALTHY" => Ok(ConnectorStatus::Unhealthy),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -211,6 +274,41 @@ pub struct ImportServerCatalogRequest;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ImportServerCatalogResponse;
 
+#[doc="The license type to be used for the Amazon Machine Image (AMI) created after a successful ReplicationRun."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LicenseType {
+    Aws,
+    Byol,
+}
+
+impl Into<String> for LicenseType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LicenseType {
+    fn into(self) -> &'static str {
+        match self {
+            LicenseType::Aws => "AWS",
+            LicenseType::Byol => "BYOL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LicenseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AWS" => Ok(LicenseType::Aws),
+            "BYOL" => Ok(LicenseType::Byol),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="Object representing a Replication Job"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReplicationJob {
@@ -258,6 +356,50 @@ pub struct ReplicationJob {
     pub vm_server: Option<VmServer>,
 }
 
+#[doc="Current state of Replication Job"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReplicationJobState {
+    Active,
+    Deleted,
+    Deleting,
+    Failed,
+    Pending,
+}
+
+impl Into<String> for ReplicationJobState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReplicationJobState {
+    fn into(self) -> &'static str {
+        match self {
+            ReplicationJobState::Active => "ACTIVE",
+            ReplicationJobState::Deleted => "DELETED",
+            ReplicationJobState::Deleting => "DELETING",
+            ReplicationJobState::Failed => "FAILED",
+            ReplicationJobState::Pending => "PENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationJobState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(ReplicationJobState::Active),
+            "DELETED" => Ok(ReplicationJobState::Deleted),
+            "DELETING" => Ok(ReplicationJobState::Deleting),
+            "FAILED" => Ok(ReplicationJobState::Failed),
+            "PENDING" => Ok(ReplicationJobState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="Object representing a Replication Run"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReplicationRun {
@@ -287,6 +429,91 @@ pub struct ReplicationRun {
     pub type_: Option<String>,
 }
 
+#[doc="Current state of Replication Run"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReplicationRunState {
+    Active,
+    Completed,
+    Deleted,
+    Deleting,
+    Failed,
+    Missed,
+    Pending,
+}
+
+impl Into<String> for ReplicationRunState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReplicationRunState {
+    fn into(self) -> &'static str {
+        match self {
+            ReplicationRunState::Active => "ACTIVE",
+            ReplicationRunState::Completed => "COMPLETED",
+            ReplicationRunState::Deleted => "DELETED",
+            ReplicationRunState::Deleting => "DELETING",
+            ReplicationRunState::Failed => "FAILED",
+            ReplicationRunState::Missed => "MISSED",
+            ReplicationRunState::Pending => "PENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationRunState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(ReplicationRunState::Active),
+            "COMPLETED" => Ok(ReplicationRunState::Completed),
+            "DELETED" => Ok(ReplicationRunState::Deleted),
+            "DELETING" => Ok(ReplicationRunState::Deleting),
+            "FAILED" => Ok(ReplicationRunState::Failed),
+            "MISSED" => Ok(ReplicationRunState::Missed),
+            "PENDING" => Ok(ReplicationRunState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="Type of Replication Run"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReplicationRunType {
+    Automatic,
+    OnDemand,
+}
+
+impl Into<String> for ReplicationRunType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReplicationRunType {
+    fn into(self) -> &'static str {
+        match self {
+            ReplicationRunType::Automatic => "AUTOMATIC",
+            ReplicationRunType::OnDemand => "ON_DEMAND",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationRunType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AUTOMATIC" => Ok(ReplicationRunType::Automatic),
+            "ON_DEMAND" => Ok(ReplicationRunType::OnDemand),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="Object representing a server"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Server {
@@ -305,6 +532,82 @@ pub struct Server {
     #[serde(rename="vmServer")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vm_server: Option<VmServer>,
+}
+
+#[doc="Status of Server catalog"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ServerCatalogStatus {
+    Available,
+    Deleted,
+    Expired,
+    Importing,
+    NotImported,
+}
+
+impl Into<String> for ServerCatalogStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ServerCatalogStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ServerCatalogStatus::Available => "AVAILABLE",
+            ServerCatalogStatus::Deleted => "DELETED",
+            ServerCatalogStatus::Expired => "EXPIRED",
+            ServerCatalogStatus::Importing => "IMPORTING",
+            ServerCatalogStatus::NotImported => "NOT_IMPORTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerCatalogStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AVAILABLE" => Ok(ServerCatalogStatus::Available),
+            "DELETED" => Ok(ServerCatalogStatus::Deleted),
+            "EXPIRED" => Ok(ServerCatalogStatus::Expired),
+            "IMPORTING" => Ok(ServerCatalogStatus::Importing),
+            "NOT_IMPORTED" => Ok(ServerCatalogStatus::NotImported),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="Type of server."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ServerType {
+    VirtualMachine,
+}
+
+impl Into<String> for ServerType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ServerType {
+    fn into(self) -> &'static str {
+        match self {
+            ServerType::VirtualMachine => "VIRTUAL_MACHINE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "VIRTUAL_MACHINE" => Ok(ServerType::VirtualMachine),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -346,6 +649,38 @@ pub struct UpdateReplicationJobRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateReplicationJobResponse;
+
+#[doc="VM Management Product"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VmManagerType {
+    Vsphere,
+}
+
+impl Into<String> for VmManagerType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VmManagerType {
+    fn into(self) -> &'static str {
+        match self {
+            VmManagerType::Vsphere => "VSPHERE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VmManagerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "VSPHERE" => Ok(VmManagerType::Vsphere),
+            _ => Err(()),
+        }
+    }
+}
 
 #[doc="Object representing a VM server"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1479,7 +1814,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateReplicationJobResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1508,7 +1843,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteReplicationJobResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1534,7 +1869,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteServerCatalogResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1563,7 +1898,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DisassociateConnectorResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1591,7 +1926,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetConnectorsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1618,7 +1953,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetReplicationJobsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1646,7 +1981,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetReplicationRunsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1674,7 +2009,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetServersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetServersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -1697,7 +2032,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ImportServerCatalogResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1726,7 +2061,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StartOnDemandReplicationRunResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(StartOnDemandReplicationRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -1752,7 +2087,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateReplicationJobResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

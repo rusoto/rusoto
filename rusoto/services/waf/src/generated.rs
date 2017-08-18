@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -101,6 +97,126 @@ pub struct ByteMatchTuple {
     #[doc="<p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>TargetString</code> before inspecting a request for a match.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system commandline command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \\ \" ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\\f, formfeed, decimal 12</p> </li> <li> <p>\\t, tab, decimal 9</p> </li> <li> <p>\\n, newline, decimal 10</p> </li> <li> <p>\\r, carriage return, decimal 13</p> </li> <li> <p>\\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>\"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a \"less than\" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>"]
     #[serde(rename="TextTransformation")]
     pub text_transformation: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChangeAction {
+    Delete,
+    Insert,
+}
+
+impl Into<String> for ChangeAction {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChangeAction {
+    fn into(self) -> &'static str {
+        match self {
+            ChangeAction::Delete => "DELETE",
+            ChangeAction::Insert => "INSERT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DELETE" => Ok(ChangeAction::Delete),
+            "INSERT" => Ok(ChangeAction::Insert),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChangeTokenStatus {
+    Insync,
+    Pending,
+    Provisioned,
+}
+
+impl Into<String> for ChangeTokenStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChangeTokenStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ChangeTokenStatus::Insync => "INSYNC",
+            ChangeTokenStatus::Pending => "PENDING",
+            ChangeTokenStatus::Provisioned => "PROVISIONED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeTokenStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "INSYNC" => Ok(ChangeTokenStatus::Insync),
+            "PENDING" => Ok(ChangeTokenStatus::Pending),
+            "PROVISIONED" => Ok(ChangeTokenStatus::Provisioned),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComparisonOperator {
+    Eq,
+    Ge,
+    Gt,
+    Le,
+    Lt,
+    Ne,
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComparisonOperator {
+    fn into(self) -> &'static str {
+        match self {
+            ComparisonOperator::Eq => "EQ",
+            ComparisonOperator::Ge => "GE",
+            ComparisonOperator::Gt => "GT",
+            ComparisonOperator::Le => "LE",
+            ComparisonOperator::Lt => "LT",
+            ComparisonOperator::Ne => "NE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EQ" => Ok(ComparisonOperator::Eq),
+            "GE" => Ok(ComparisonOperator::Ge),
+            "GT" => Ok(ComparisonOperator::Gt),
+            "LE" => Ok(ComparisonOperator::Le),
+            "LT" => Ok(ComparisonOperator::Lt),
+            "NE" => Ok(ComparisonOperator::Ne),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -734,6 +850,41 @@ pub struct IPSetDescriptor {
     pub value: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IPSetDescriptorType {
+    Ipv4,
+    Ipv6,
+}
+
+impl Into<String> for IPSetDescriptorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IPSetDescriptorType {
+    fn into(self) -> &'static str {
+        match self {
+            IPSetDescriptorType::Ipv4 => "IPV4",
+            IPSetDescriptorType::Ipv6 => "IPV6",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IPSetDescriptorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "IPV4" => Ok(IPSetDescriptorType::Ipv4),
+            "IPV6" => Ok(IPSetDescriptorType::Ipv6),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains the identifier and the name of the <code>IPSet</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct IPSetSummary {
@@ -952,6 +1103,208 @@ pub struct ListXssMatchSetsResponse {
     pub xss_match_sets: Option<Vec<XssMatchSetSummary>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MatchFieldType {
+    Body,
+    Header,
+    Method,
+    QueryString,
+    Uri,
+}
+
+impl Into<String> for MatchFieldType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MatchFieldType {
+    fn into(self) -> &'static str {
+        match self {
+            MatchFieldType::Body => "BODY",
+            MatchFieldType::Header => "HEADER",
+            MatchFieldType::Method => "METHOD",
+            MatchFieldType::QueryString => "QUERY_STRING",
+            MatchFieldType::Uri => "URI",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MatchFieldType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BODY" => Ok(MatchFieldType::Body),
+            "HEADER" => Ok(MatchFieldType::Header),
+            "METHOD" => Ok(MatchFieldType::Method),
+            "QUERY_STRING" => Ok(MatchFieldType::QueryString),
+            "URI" => Ok(MatchFieldType::Uri),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ParameterExceptionField {
+    ByteMatchFieldType,
+    ByteMatchPositionalConstraint,
+    ByteMatchTextTransformation,
+    ChangeAction,
+    IpsetType,
+    NextMarker,
+    PredicateType,
+    RateKey,
+    RuleType,
+    SizeConstraintComparisonOperator,
+    SqlInjectionMatchFieldType,
+    WafAction,
+}
+
+impl Into<String> for ParameterExceptionField {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ParameterExceptionField {
+    fn into(self) -> &'static str {
+        match self {
+            ParameterExceptionField::ByteMatchFieldType => "BYTE_MATCH_FIELD_TYPE",
+            ParameterExceptionField::ByteMatchPositionalConstraint => {
+                "BYTE_MATCH_POSITIONAL_CONSTRAINT"
+            }
+            ParameterExceptionField::ByteMatchTextTransformation => {
+                "BYTE_MATCH_TEXT_TRANSFORMATION"
+            }
+            ParameterExceptionField::ChangeAction => "CHANGE_ACTION",
+            ParameterExceptionField::IpsetType => "IPSET_TYPE",
+            ParameterExceptionField::NextMarker => "NEXT_MARKER",
+            ParameterExceptionField::PredicateType => "PREDICATE_TYPE",
+            ParameterExceptionField::RateKey => "RATE_KEY",
+            ParameterExceptionField::RuleType => "RULE_TYPE",
+            ParameterExceptionField::SizeConstraintComparisonOperator => {
+                "SIZE_CONSTRAINT_COMPARISON_OPERATOR"
+            }
+            ParameterExceptionField::SqlInjectionMatchFieldType => "SQL_INJECTION_MATCH_FIELD_TYPE",
+            ParameterExceptionField::WafAction => "WAF_ACTION",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterExceptionField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BYTE_MATCH_FIELD_TYPE" => Ok(ParameterExceptionField::ByteMatchFieldType),
+            "BYTE_MATCH_POSITIONAL_CONSTRAINT" => {
+                Ok(ParameterExceptionField::ByteMatchPositionalConstraint)
+            }
+            "BYTE_MATCH_TEXT_TRANSFORMATION" => {
+                Ok(ParameterExceptionField::ByteMatchTextTransformation)
+            }
+            "CHANGE_ACTION" => Ok(ParameterExceptionField::ChangeAction),
+            "IPSET_TYPE" => Ok(ParameterExceptionField::IpsetType),
+            "NEXT_MARKER" => Ok(ParameterExceptionField::NextMarker),
+            "PREDICATE_TYPE" => Ok(ParameterExceptionField::PredicateType),
+            "RATE_KEY" => Ok(ParameterExceptionField::RateKey),
+            "RULE_TYPE" => Ok(ParameterExceptionField::RuleType),
+            "SIZE_CONSTRAINT_COMPARISON_OPERATOR" => {
+                Ok(ParameterExceptionField::SizeConstraintComparisonOperator)
+            }
+            "SQL_INJECTION_MATCH_FIELD_TYPE" => {
+                Ok(ParameterExceptionField::SqlInjectionMatchFieldType)
+            }
+            "WAF_ACTION" => Ok(ParameterExceptionField::WafAction),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ParameterExceptionReason {
+    IllegalCombination,
+    InvalidOption,
+}
+
+impl Into<String> for ParameterExceptionReason {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ParameterExceptionReason {
+    fn into(self) -> &'static str {
+        match self {
+            ParameterExceptionReason::IllegalCombination => "ILLEGAL_COMBINATION",
+            ParameterExceptionReason::InvalidOption => "INVALID_OPTION",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ILLEGAL_COMBINATION" => Ok(ParameterExceptionReason::IllegalCombination),
+            "INVALID_OPTION" => Ok(ParameterExceptionReason::InvalidOption),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PositionalConstraint {
+    Contains,
+    ContainsWord,
+    EndsWith,
+    Exactly,
+    StartsWith,
+}
+
+impl Into<String> for PositionalConstraint {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PositionalConstraint {
+    fn into(self) -> &'static str {
+        match self {
+            PositionalConstraint::Contains => "CONTAINS",
+            PositionalConstraint::ContainsWord => "CONTAINS_WORD",
+            PositionalConstraint::EndsWith => "ENDS_WITH",
+            PositionalConstraint::Exactly => "EXACTLY",
+            PositionalConstraint::StartsWith => "STARTS_WITH",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PositionalConstraint {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONTAINS" => Ok(PositionalConstraint::Contains),
+            "CONTAINS_WORD" => Ok(PositionalConstraint::ContainsWord),
+            "ENDS_WITH" => Ok(PositionalConstraint::EndsWith),
+            "EXACTLY" => Ok(PositionalConstraint::Exactly),
+            "STARTS_WITH" => Ok(PositionalConstraint::StartsWith),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Specifies the <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, and <a>SizeConstraintSet</a> objects that you want to add to a <code>Rule</code> and, for each object, indicates whether you want to negate the settings, for example, requests that do NOT originate from the IP address 192.0.2.44. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Predicate {
@@ -964,6 +1317,50 @@ pub struct Predicate {
     #[doc="<p>The type of predicate in a <code>Rule</code>, such as <code>ByteMatchSet</code> or <code>IPSet</code>.</p>"]
     #[serde(rename="Type")]
     pub type_: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PredicateType {
+    ByteMatch,
+    Ipmatch,
+    SizeConstraint,
+    SqlInjectionMatch,
+    XssMatch,
+}
+
+impl Into<String> for PredicateType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PredicateType {
+    fn into(self) -> &'static str {
+        match self {
+            PredicateType::ByteMatch => "ByteMatch",
+            PredicateType::Ipmatch => "IPMatch",
+            PredicateType::SizeConstraint => "SizeConstraint",
+            PredicateType::SqlInjectionMatch => "SqlInjectionMatch",
+            PredicateType::XssMatch => "XssMatch",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PredicateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ByteMatch" => Ok(PredicateType::ByteMatch),
+            "IPMatch" => Ok(PredicateType::Ipmatch),
+            "SizeConstraint" => Ok(PredicateType::SizeConstraint),
+            "SqlInjectionMatch" => Ok(PredicateType::SqlInjectionMatch),
+            "XssMatch" => Ok(PredicateType::XssMatch),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A <code>RateBasedRule</code> is identical to a regular <a>Rule</a>, with one addition: a <code>RateBasedRule</code> counts the number of requests that arrive from a specified IP address every five minutes. For example, based on recent requests that you've seen from an attacker, you might create a <code>RateBasedRule</code> that includes the following conditions: </p> <ul> <li> <p>The requests come from 192.0.2.44.</p> </li> <li> <p>They contain the value <code>BadBot</code> in the <code>User-Agent</code> header.</p> </li> </ul> <p>In the rule, you also define the rate limit as 15,000.</p> <p>Requests that meet both of these conditions and exceed 15,000 requests every five minutes trigger the rule's action (block or count), which is defined in the web ACL.</p>"]
@@ -989,6 +1386,38 @@ pub struct RateBasedRule {
     #[doc="<p>A unique identifier for a <code>RateBasedRule</code>. You use <code>RuleId</code> to get more information about a <code>RateBasedRule</code> (see <a>GetRateBasedRule</a>), update a <code>RateBasedRule</code> (see <a>UpdateRateBasedRule</a>), insert a <code>RateBasedRule</code> into a <code>WebACL</code> or delete one from a <code>WebACL</code> (see <a>UpdateWebACL</a>), or delete a <code>RateBasedRule</code> from AWS WAF (see <a>DeleteRateBasedRule</a>).</p>"]
     #[serde(rename="RuleId")]
     pub rule_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RateKey {
+    Ip,
+}
+
+impl Into<String> for RateKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RateKey {
+    fn into(self) -> &'static str {
+        match self {
+            RateKey::Ip => "IP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RateKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "IP" => Ok(RateKey::Ip),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A combination of <a>ByteMatchSet</a>, <a>IPSet</a>, and/or <a>SqlInjectionMatchSet</a> objects that identify the web requests that you want to allow, block, or count. For example, you might create a <code>Rule</code> that includes the following predicates:</p> <ul> <li> <p>An <code>IPSet</code> that causes AWS WAF to search for web requests that originate from the IP address <code>192.0.2.44</code> </p> </li> <li> <p>A <code>ByteMatchSet</code> that causes AWS WAF to search for web requests for which the value of the <code>User-Agent</code> header is <code>BadBot</code>.</p> </li> </ul> <p>To match the settings in this <code>Rule</code>, a request must originate from <code>192.0.2.44</code> AND include a <code>User-Agent</code> header for which the value is <code>BadBot</code>.</p>"]
@@ -1151,6 +1580,53 @@ pub struct SqlInjectionMatchTuple {
     #[doc="<p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>FieldToMatch</code> before inspecting a request for a match.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system commandline command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \\ \" ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\\f, formfeed, decimal 12</p> </li> <li> <p>\\t, tab, decimal 9</p> </li> <li> <p>\\n, newline, decimal 10</p> </li> <li> <p>\\r, carriage return, decimal 13</p> </li> <li> <p>\\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>\"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a \"less than\" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>"]
     #[serde(rename="TextTransformation")]
     pub text_transformation: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TextTransformation {
+    CmdLine,
+    CompressWhiteSpace,
+    HtmlEntityDecode,
+    Lowercase,
+    None,
+    UrlDecode,
+}
+
+impl Into<String> for TextTransformation {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TextTransformation {
+    fn into(self) -> &'static str {
+        match self {
+            TextTransformation::CmdLine => "CMD_LINE",
+            TextTransformation::CompressWhiteSpace => "COMPRESS_WHITE_SPACE",
+            TextTransformation::HtmlEntityDecode => "HTML_ENTITY_DECODE",
+            TextTransformation::Lowercase => "LOWERCASE",
+            TextTransformation::None => "NONE",
+            TextTransformation::UrlDecode => "URL_DECODE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TextTransformation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CMD_LINE" => Ok(TextTransformation::CmdLine),
+            "COMPRESS_WHITE_SPACE" => Ok(TextTransformation::CompressWhiteSpace),
+            "HTML_ENTITY_DECODE" => Ok(TextTransformation::HtmlEntityDecode),
+            "LOWERCASE" => Ok(TextTransformation::Lowercase),
+            "NONE" => Ok(TextTransformation::None),
+            "URL_DECODE" => Ok(TextTransformation::UrlDecode),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>In a <a>GetSampledRequests</a> request, the <code>StartTime</code> and <code>EndTime</code> objects specify the time range for which you want AWS WAF to return a sample of web requests.</p> <p>In a <a>GetSampledRequests</a> response, the <code>StartTime</code> and <code>EndTime</code> objects specify the time range for which AWS WAF actually returned a sample of web requests. AWS WAF gets the specified number of requests from among the first 5,000 requests that your AWS resource receives during the specified time period. If your resource receives more than 5,000 requests during that period, AWS WAF stops sampling after the 5,000th request. In that case, <code>EndTime</code> is the time that AWS WAF received the 5,000th request. </p>"]
@@ -1350,6 +1826,79 @@ pub struct WafAction {
     #[doc="<p>Specifies how you want AWS WAF to respond to requests that match the settings in a <code>Rule</code>. Valid settings include the following:</p> <ul> <li> <p> <code>ALLOW</code>: AWS WAF allows requests</p> </li> <li> <p> <code>BLOCK</code>: AWS WAF blocks requests</p> </li> <li> <p> <code>COUNT</code>: AWS WAF increments a counter of the requests that match all of the conditions in the rule. AWS WAF then continues to inspect the web request based on the remaining rules in the web ACL. You can't specify <code>COUNT</code> for the default action for a <code>WebACL</code>.</p> </li> </ul>"]
     #[serde(rename="Type")]
     pub type_: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum WafActionType {
+    Allow,
+    Block,
+    Count,
+}
+
+impl Into<String> for WafActionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for WafActionType {
+    fn into(self) -> &'static str {
+        match self {
+            WafActionType::Allow => "ALLOW",
+            WafActionType::Block => "BLOCK",
+            WafActionType::Count => "COUNT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for WafActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALLOW" => Ok(WafActionType::Allow),
+            "BLOCK" => Ok(WafActionType::Block),
+            "COUNT" => Ok(WafActionType::Count),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum WafRuleType {
+    RateBased,
+    Regular,
+}
+
+impl Into<String> for WafRuleType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for WafRuleType {
+    fn into(self) -> &'static str {
+        match self {
+            WafRuleType::RateBased => "RATE_BASED",
+            WafRuleType::Regular => "REGULAR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for WafRuleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "RATE_BASED" => Ok(WafRuleType::RateBased),
+            "REGULAR" => Ok(WafRuleType::Regular),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Contains the <code>Rules</code> that identify the requests that you want to allow, block, or count. In a <code>WebACL</code>, you also specify a default action (<code>ALLOW</code> or <code>BLOCK</code>), and the action for each <code>Rule</code> that you add to a <code>WebACL</code>, for example, block requests from specified IP addresses or block requests from specified referrers. You also associate the <code>WebACL</code> with a CloudFront distribution to identify the requests that you want AWS WAF to filter. If you add more than one <code>Rule</code> to a <code>WebACL</code>, a request needs to match only one of the specifications to be allowed, blocked, or counted. For more information, see <a>UpdateWebACL</a>.</p>"]
@@ -5986,7 +6535,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6013,7 +6562,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6037,7 +6586,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateRateBasedRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6064,7 +6613,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6089,7 +6638,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6114,7 +6663,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6138,7 +6687,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6164,7 +6713,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6191,7 +6740,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6218,7 +6767,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6242,7 +6791,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteRateBasedRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6269,7 +6818,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6294,7 +6843,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6319,7 +6868,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6343,7 +6892,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6369,7 +6918,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6396,7 +6945,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6420,7 +6969,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetChangeTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6448,7 +6997,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetChangeTokenStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6473,7 +7022,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6497,7 +7046,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetRateBasedRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6526,7 +7075,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetRateBasedRuleManagedKeysResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetRateBasedRuleManagedKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6548,7 +7097,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetRuleResponse>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -6574,7 +7123,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetSampledRequestsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6602,7 +7151,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6630,7 +7179,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6652,7 +7201,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6676,7 +7225,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6703,7 +7252,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListByteMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6730,7 +7279,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListIPSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListIPSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6754,7 +7303,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListRateBasedRulesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6779,7 +7328,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListRulesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListRulesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6804,7 +7353,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListSizeConstraintSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6832,7 +7381,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListSqlInjectionMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListSqlInjectionMatchSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6856,7 +7405,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListWebACLsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListWebACLsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6880,7 +7429,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListXssMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6907,7 +7456,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6934,7 +7483,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6958,7 +7507,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateRateBasedRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6985,7 +7534,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7010,7 +7559,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7035,7 +7584,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7059,7 +7608,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7085,7 +7634,7 @@ impl<P, D> Waf for WafClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

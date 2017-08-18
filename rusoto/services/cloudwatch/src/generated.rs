@@ -11,18 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
-use std::str::FromStr;
 use xml::EventReader;
 use xml::reader::ParserConfig;
 use rusoto_core::param::{Params, ServiceParams};
@@ -44,7 +39,7 @@ impl ActionsEnabledDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -222,6 +217,49 @@ impl AlarmNamesSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComparisonOperator {
+    GreaterThanOrEqualToThreshold,
+    GreaterThanThreshold,
+    LessThanOrEqualToThreshold,
+    LessThanThreshold,
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComparisonOperator {
+    fn into(self) -> &'static str {
+        match self {
+            ComparisonOperator::GreaterThanOrEqualToThreshold => "GreaterThanOrEqualToThreshold",
+            ComparisonOperator::GreaterThanThreshold => "GreaterThanThreshold",
+            ComparisonOperator::LessThanOrEqualToThreshold => "LessThanOrEqualToThreshold",
+            ComparisonOperator::LessThanThreshold => "LessThanThreshold",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GreaterThanOrEqualToThreshold" => {
+                Ok(ComparisonOperator::GreaterThanOrEqualToThreshold)
+            }
+            "GreaterThanThreshold" => Ok(ComparisonOperator::GreaterThanThreshold),
+            "LessThanOrEqualToThreshold" => Ok(ComparisonOperator::LessThanOrEqualToThreshold),
+            "LessThanThreshold" => Ok(ComparisonOperator::LessThanThreshold),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ComparisonOperatorDeserializer;
 impl ComparisonOperatorDeserializer {
     #[allow(unused_variables)]
@@ -339,7 +377,7 @@ impl DatapointValueDeserializer {
                                        stack: &mut T)
                                        -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<f64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1001,7 +1039,7 @@ impl EvaluationPeriodsDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1161,6 +1199,44 @@ impl HistoryDataDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HistoryItemType {
+    Action,
+    ConfigurationUpdate,
+    StateUpdate,
+}
+
+impl Into<String> for HistoryItemType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HistoryItemType {
+    fn into(self) -> &'static str {
+        match self {
+            HistoryItemType::Action => "Action",
+            HistoryItemType::ConfigurationUpdate => "ConfigurationUpdate",
+            HistoryItemType::StateUpdate => "StateUpdate",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HistoryItemType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Action" => Ok(HistoryItemType::Action),
+            "ConfigurationUpdate" => Ok(HistoryItemType::ConfigurationUpdate),
+            "StateUpdate" => Ok(HistoryItemType::StateUpdate),
+            _ => Err(()),
+        }
+    }
+}
+
 struct HistoryItemTypeDeserializer;
 impl HistoryItemTypeDeserializer {
     #[allow(unused_variables)]
@@ -1752,7 +1828,7 @@ impl PeriodDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1991,6 +2067,116 @@ impl SetAlarmStateInputSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StandardUnit {
+    Bits,
+    BitsSecond,
+    Bytes,
+    BytesSecond,
+    Count,
+    CountSecond,
+    Gigabits,
+    GigabitsSecond,
+    Gigabytes,
+    GigabytesSecond,
+    Kilobits,
+    KilobitsSecond,
+    Kilobytes,
+    KilobytesSecond,
+    Megabits,
+    MegabitsSecond,
+    Megabytes,
+    MegabytesSecond,
+    Microseconds,
+    Milliseconds,
+    None,
+    Percent,
+    Seconds,
+    Terabits,
+    TerabitsSecond,
+    Terabytes,
+    TerabytesSecond,
+}
+
+impl Into<String> for StandardUnit {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StandardUnit {
+    fn into(self) -> &'static str {
+        match self {
+            StandardUnit::Bits => "Bits",
+            StandardUnit::BitsSecond => "Bits/Second",
+            StandardUnit::Bytes => "Bytes",
+            StandardUnit::BytesSecond => "Bytes/Second",
+            StandardUnit::Count => "Count",
+            StandardUnit::CountSecond => "Count/Second",
+            StandardUnit::Gigabits => "Gigabits",
+            StandardUnit::GigabitsSecond => "Gigabits/Second",
+            StandardUnit::Gigabytes => "Gigabytes",
+            StandardUnit::GigabytesSecond => "Gigabytes/Second",
+            StandardUnit::Kilobits => "Kilobits",
+            StandardUnit::KilobitsSecond => "Kilobits/Second",
+            StandardUnit::Kilobytes => "Kilobytes",
+            StandardUnit::KilobytesSecond => "Kilobytes/Second",
+            StandardUnit::Megabits => "Megabits",
+            StandardUnit::MegabitsSecond => "Megabits/Second",
+            StandardUnit::Megabytes => "Megabytes",
+            StandardUnit::MegabytesSecond => "Megabytes/Second",
+            StandardUnit::Microseconds => "Microseconds",
+            StandardUnit::Milliseconds => "Milliseconds",
+            StandardUnit::None => "None",
+            StandardUnit::Percent => "Percent",
+            StandardUnit::Seconds => "Seconds",
+            StandardUnit::Terabits => "Terabits",
+            StandardUnit::TerabitsSecond => "Terabits/Second",
+            StandardUnit::Terabytes => "Terabytes",
+            StandardUnit::TerabytesSecond => "Terabytes/Second",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StandardUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Bits" => Ok(StandardUnit::Bits),
+            "Bits/Second" => Ok(StandardUnit::BitsSecond),
+            "Bytes" => Ok(StandardUnit::Bytes),
+            "Bytes/Second" => Ok(StandardUnit::BytesSecond),
+            "Count" => Ok(StandardUnit::Count),
+            "Count/Second" => Ok(StandardUnit::CountSecond),
+            "Gigabits" => Ok(StandardUnit::Gigabits),
+            "Gigabits/Second" => Ok(StandardUnit::GigabitsSecond),
+            "Gigabytes" => Ok(StandardUnit::Gigabytes),
+            "Gigabytes/Second" => Ok(StandardUnit::GigabytesSecond),
+            "Kilobits" => Ok(StandardUnit::Kilobits),
+            "Kilobits/Second" => Ok(StandardUnit::KilobitsSecond),
+            "Kilobytes" => Ok(StandardUnit::Kilobytes),
+            "Kilobytes/Second" => Ok(StandardUnit::KilobytesSecond),
+            "Megabits" => Ok(StandardUnit::Megabits),
+            "Megabits/Second" => Ok(StandardUnit::MegabitsSecond),
+            "Megabytes" => Ok(StandardUnit::Megabytes),
+            "Megabytes/Second" => Ok(StandardUnit::MegabytesSecond),
+            "Microseconds" => Ok(StandardUnit::Microseconds),
+            "Milliseconds" => Ok(StandardUnit::Milliseconds),
+            "None" => Ok(StandardUnit::None),
+            "Percent" => Ok(StandardUnit::Percent),
+            "Seconds" => Ok(StandardUnit::Seconds),
+            "Terabits" => Ok(StandardUnit::Terabits),
+            "Terabits/Second" => Ok(StandardUnit::TerabitsSecond),
+            "Terabytes" => Ok(StandardUnit::Terabytes),
+            "Terabytes/Second" => Ok(StandardUnit::TerabytesSecond),
+            _ => Err(()),
+        }
+    }
+}
+
 struct StandardUnitDeserializer;
 impl StandardUnitDeserializer {
     #[allow(unused_variables)]
@@ -2033,6 +2219,44 @@ impl StateReasonDataDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StateValue {
+    Alarm,
+    InsufficientData,
+    Ok,
+}
+
+impl Into<String> for StateValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StateValue {
+    fn into(self) -> &'static str {
+        match self {
+            StateValue::Alarm => "ALARM",
+            StateValue::InsufficientData => "INSUFFICIENT_DATA",
+            StateValue::Ok => "OK",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StateValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALARM" => Ok(StateValue::Alarm),
+            "INSUFFICIENT_DATA" => Ok(StateValue::InsufficientData),
+            "OK" => Ok(StateValue::Ok),
+            _ => Err(()),
+        }
+    }
+}
+
 struct StateValueDeserializer;
 impl StateValueDeserializer {
     #[allow(unused_variables)]
@@ -2047,6 +2271,50 @@ impl StateValueDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Statistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+}
+
+impl Into<String> for Statistic {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Statistic {
+    fn into(self) -> &'static str {
+        match self {
+            Statistic::Average => "Average",
+            Statistic::Maximum => "Maximum",
+            Statistic::Minimum => "Minimum",
+            Statistic::SampleCount => "SampleCount",
+            Statistic::Sum => "Sum",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Statistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Average" => Ok(Statistic::Average),
+            "Maximum" => Ok(Statistic::Maximum),
+            "Minimum" => Ok(Statistic::Minimum),
+            "SampleCount" => Ok(Statistic::SampleCount),
+            "Sum" => Ok(Statistic::Sum),
+            _ => Err(()),
+        }
+    }
+}
+
 struct StatisticDeserializer;
 impl StatisticDeserializer {
     #[allow(unused_variables)]
@@ -2114,7 +2382,7 @@ impl ThresholdDeserializer {
                                        stack: &mut T)
                                        -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<f64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3021,7 +3289,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -3047,7 +3315,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -3091,7 +3359,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -3136,7 +3404,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -3180,7 +3448,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -3207,7 +3475,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -3234,7 +3502,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -3278,7 +3546,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -3317,7 +3585,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -3342,7 +3610,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -3366,7 +3634,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }

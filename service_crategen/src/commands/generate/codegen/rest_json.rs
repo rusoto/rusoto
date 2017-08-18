@@ -157,7 +157,7 @@ trait CodegenString {
 }
 impl CodegenString for StatusCode {
     fn enum_as_string(&self) -> String {
-        format!("StatusCode::{:?}", self)
+        format!("::hyper::status::StatusCode::{:?}", self)
     }
 }
 
@@ -166,7 +166,7 @@ fn http_code_to_status_code(code: Option<i32>) -> String {
         Some(actual_code) => StatusCode::from_u16(actual_code as u16).enum_as_string(),
         // Some service definitions such as elastictranscoder don't specify
         // the response code, we'll assume this:
-        None => "StatusCode::Ok".to_string(),
+        None => "::hyper::status::StatusCode::Ok".to_string(),
     }
 }
 
@@ -390,9 +390,9 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
         if let Some(ref location) = member.location {
             if location == "statusCode" {
                 if output_shape.required(member_name) {
-                    status_code_parser += &format!("result.{} = StatusCode::to_u16(&response.status);", member_name.to_snake_case());
+                    status_code_parser += &format!("result.{} = ::hyper::status::StatusCode::to_u16(&response.status);", member_name.to_snake_case());
                 } else {
-                    status_code_parser += &format!("result.{} = Some(StatusCode::to_u16(&response.status) as i64);", member_name.to_snake_case());
+                    status_code_parser += &format!("result.{} = Some(::hyper::status::StatusCode::to_u16(&response.status) as i64);", member_name.to_snake_case());
                 }
             }
         }

@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -37,6 +33,41 @@ pub struct AgeRange {
     #[serde(rename="Low")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub low: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Attribute {
+    All,
+    Default,
+}
+
+impl Into<String> for Attribute {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Attribute {
+    fn into(self) -> &'static str {
+        match self {
+            Attribute::All => "ALL",
+            Attribute::Default => "DEFAULT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Attribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALL" => Ok(Attribute::All),
+            "DEFAULT" => Ok(Attribute::Default),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Indicates whether or not the face has a beard, and the confidence level in the determination.</p>"]
@@ -321,6 +352,59 @@ pub struct Emotion {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EmotionName {
+    Angry,
+    Calm,
+    Confused,
+    Disgusted,
+    Happy,
+    Sad,
+    Surprised,
+    Unknown,
+}
+
+impl Into<String> for EmotionName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EmotionName {
+    fn into(self) -> &'static str {
+        match self {
+            EmotionName::Angry => "ANGRY",
+            EmotionName::Calm => "CALM",
+            EmotionName::Confused => "CONFUSED",
+            EmotionName::Disgusted => "DISGUSTED",
+            EmotionName::Happy => "HAPPY",
+            EmotionName::Sad => "SAD",
+            EmotionName::Surprised => "SURPRISED",
+            EmotionName::Unknown => "UNKNOWN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EmotionName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ANGRY" => Ok(EmotionName::Angry),
+            "CALM" => Ok(EmotionName::Calm),
+            "CONFUSED" => Ok(EmotionName::Confused),
+            "DISGUSTED" => Ok(EmotionName::Disgusted),
+            "HAPPY" => Ok(EmotionName::Happy),
+            "SAD" => Ok(EmotionName::Sad),
+            "SURPRISED" => Ok(EmotionName::Surprised),
+            "UNKNOWN" => Ok(EmotionName::Unknown),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Indicates whether or not the eyes on the face are open, and the confidence level in the determination.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct EyeOpen {
@@ -476,6 +560,41 @@ pub struct Gender {
     pub value: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum GenderType {
+    Female,
+    Male,
+}
+
+impl Into<String> for GenderType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for GenderType {
+    fn into(self) -> &'static str {
+        match self {
+            GenderType::Female => "FEMALE",
+            GenderType::Male => "MALE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for GenderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FEMALE" => Ok(GenderType::Female),
+            "MALE" => Ok(GenderType::Male),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetCelebrityInfoRequest {
     #[doc="<p>The ID for the celebrity. You get the celebrity ID from a call to the operation, which recognizes celebrities in an image. </p>"]
@@ -585,6 +704,110 @@ pub struct Landmark {
     pub y: Option<f32>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LandmarkType {
+    EyeLeft,
+    EyeRight,
+    LeftEyebrowLeft,
+    LeftEyebrowRight,
+    LeftEyebrowUp,
+    LeftEyeDown,
+    LeftEyeLeft,
+    LeftEyeRight,
+    LeftEyeUp,
+    LeftPupil,
+    MouthDown,
+    MouthLeft,
+    MouthRight,
+    MouthUp,
+    Nose,
+    NoseLeft,
+    NoseRight,
+    RightEyebrowLeft,
+    RightEyebrowRight,
+    RightEyebrowUp,
+    RightEyeDown,
+    RightEyeLeft,
+    RightEyeRight,
+    RightEyeUp,
+    RightPupil,
+}
+
+impl Into<String> for LandmarkType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LandmarkType {
+    fn into(self) -> &'static str {
+        match self {
+            LandmarkType::EyeLeft => "EYE_LEFT",
+            LandmarkType::EyeRight => "EYE_RIGHT",
+            LandmarkType::LeftEyebrowLeft => "LEFT_EYEBROW_LEFT",
+            LandmarkType::LeftEyebrowRight => "LEFT_EYEBROW_RIGHT",
+            LandmarkType::LeftEyebrowUp => "LEFT_EYEBROW_UP",
+            LandmarkType::LeftEyeDown => "LEFT_EYE_DOWN",
+            LandmarkType::LeftEyeLeft => "LEFT_EYE_LEFT",
+            LandmarkType::LeftEyeRight => "LEFT_EYE_RIGHT",
+            LandmarkType::LeftEyeUp => "LEFT_EYE_UP",
+            LandmarkType::LeftPupil => "LEFT_PUPIL",
+            LandmarkType::MouthDown => "MOUTH_DOWN",
+            LandmarkType::MouthLeft => "MOUTH_LEFT",
+            LandmarkType::MouthRight => "MOUTH_RIGHT",
+            LandmarkType::MouthUp => "MOUTH_UP",
+            LandmarkType::Nose => "NOSE",
+            LandmarkType::NoseLeft => "NOSE_LEFT",
+            LandmarkType::NoseRight => "NOSE_RIGHT",
+            LandmarkType::RightEyebrowLeft => "RIGHT_EYEBROW_LEFT",
+            LandmarkType::RightEyebrowRight => "RIGHT_EYEBROW_RIGHT",
+            LandmarkType::RightEyebrowUp => "RIGHT_EYEBROW_UP",
+            LandmarkType::RightEyeDown => "RIGHT_EYE_DOWN",
+            LandmarkType::RightEyeLeft => "RIGHT_EYE_LEFT",
+            LandmarkType::RightEyeRight => "RIGHT_EYE_RIGHT",
+            LandmarkType::RightEyeUp => "RIGHT_EYE_UP",
+            LandmarkType::RightPupil => "RIGHT_PUPIL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LandmarkType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EYE_LEFT" => Ok(LandmarkType::EyeLeft),
+            "EYE_RIGHT" => Ok(LandmarkType::EyeRight),
+            "LEFT_EYEBROW_LEFT" => Ok(LandmarkType::LeftEyebrowLeft),
+            "LEFT_EYEBROW_RIGHT" => Ok(LandmarkType::LeftEyebrowRight),
+            "LEFT_EYEBROW_UP" => Ok(LandmarkType::LeftEyebrowUp),
+            "LEFT_EYE_DOWN" => Ok(LandmarkType::LeftEyeDown),
+            "LEFT_EYE_LEFT" => Ok(LandmarkType::LeftEyeLeft),
+            "LEFT_EYE_RIGHT" => Ok(LandmarkType::LeftEyeRight),
+            "LEFT_EYE_UP" => Ok(LandmarkType::LeftEyeUp),
+            "LEFT_PUPIL" => Ok(LandmarkType::LeftPupil),
+            "MOUTH_DOWN" => Ok(LandmarkType::MouthDown),
+            "MOUTH_LEFT" => Ok(LandmarkType::MouthLeft),
+            "MOUTH_RIGHT" => Ok(LandmarkType::MouthRight),
+            "MOUTH_UP" => Ok(LandmarkType::MouthUp),
+            "NOSE" => Ok(LandmarkType::Nose),
+            "NOSE_LEFT" => Ok(LandmarkType::NoseLeft),
+            "NOSE_RIGHT" => Ok(LandmarkType::NoseRight),
+            "RIGHT_EYEBROW_LEFT" => Ok(LandmarkType::RightEyebrowLeft),
+            "RIGHT_EYEBROW_RIGHT" => Ok(LandmarkType::RightEyebrowRight),
+            "RIGHT_EYEBROW_UP" => Ok(LandmarkType::RightEyebrowUp),
+            "RIGHT_EYE_DOWN" => Ok(LandmarkType::RightEyeDown),
+            "RIGHT_EYE_LEFT" => Ok(LandmarkType::RightEyeLeft),
+            "RIGHT_EYE_RIGHT" => Ok(LandmarkType::RightEyeRight),
+            "RIGHT_EYE_UP" => Ok(LandmarkType::RightEyeUp),
+            "RIGHT_PUPIL" => Ok(LandmarkType::RightPupil),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListCollectionsRequest {
     #[doc="<p>Maximum number of collection IDs to return.</p>"]
@@ -677,6 +900,47 @@ pub struct Mustache {
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<bool>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OrientationCorrection {
+    Rotate0,
+    Rotate180,
+    Rotate270,
+    Rotate90,
+}
+
+impl Into<String> for OrientationCorrection {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OrientationCorrection {
+    fn into(self) -> &'static str {
+        match self {
+            OrientationCorrection::Rotate0 => "ROTATE_0",
+            OrientationCorrection::Rotate180 => "ROTATE_180",
+            OrientationCorrection::Rotate270 => "ROTATE_270",
+            OrientationCorrection::Rotate90 => "ROTATE_90",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrientationCorrection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ROTATE_0" => Ok(OrientationCorrection::Rotate0),
+            "ROTATE_180" => Ok(OrientationCorrection::Rotate180),
+            "ROTATE_270" => Ok(OrientationCorrection::Rotate270),
+            "ROTATE_90" => Ok(OrientationCorrection::Rotate90),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Indicates the pose of the face as determined by its pitch, roll, and yaw.</p>"]
@@ -2499,7 +2763,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CompareFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2525,7 +2789,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateCollectionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2552,7 +2816,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteCollectionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2579,7 +2843,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2603,7 +2867,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DetectFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DetectFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2627,7 +2891,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DetectLabelsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2654,7 +2918,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DetectModerationLabelsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2681,7 +2945,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetCelebrityInfoResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2708,7 +2972,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<IndexFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(IndexFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2732,7 +2996,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListCollectionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2757,7 +3021,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2781,7 +3045,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RecognizeCelebritiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2808,7 +3072,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<SearchFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(SearchFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2832,7 +3096,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<SearchFacesByImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

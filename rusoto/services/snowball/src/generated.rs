@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -183,6 +179,50 @@ pub struct ClusterMetadata {
     #[serde(rename="SnowballType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub snowball_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ClusterState {
+    AwaitingQuorum,
+    Cancelled,
+    Complete,
+    InUse,
+    Pending,
+}
+
+impl Into<String> for ClusterState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ClusterState {
+    fn into(self) -> &'static str {
+        match self {
+            ClusterState::AwaitingQuorum => "AwaitingQuorum",
+            ClusterState::Cancelled => "Cancelled",
+            ClusterState::Complete => "Complete",
+            ClusterState::InUse => "InUse",
+            ClusterState::Pending => "Pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AwaitingQuorum" => Ok(ClusterState::AwaitingQuorum),
+            "Cancelled" => Ok(ClusterState::Cancelled),
+            "Complete" => Ok(ClusterState::Complete),
+            "InUse" => Ok(ClusterState::InUse),
+            "Pending" => Ok(ClusterState::Pending),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -591,6 +631,109 @@ pub struct JobResource {
     pub s3_resources: Option<Vec<S3Resource>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum JobState {
+    Cancelled,
+    Complete,
+    InProgress,
+    InTransitToAWS,
+    InTransitToCustomer,
+    Listing,
+    New,
+    Pending,
+    PreparingAppliance,
+    PreparingShipment,
+    WithAWS,
+    WithCustomer,
+}
+
+impl Into<String> for JobState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for JobState {
+    fn into(self) -> &'static str {
+        match self {
+            JobState::Cancelled => "Cancelled",
+            JobState::Complete => "Complete",
+            JobState::InProgress => "InProgress",
+            JobState::InTransitToAWS => "InTransitToAWS",
+            JobState::InTransitToCustomer => "InTransitToCustomer",
+            JobState::Listing => "Listing",
+            JobState::New => "New",
+            JobState::Pending => "Pending",
+            JobState::PreparingAppliance => "PreparingAppliance",
+            JobState::PreparingShipment => "PreparingShipment",
+            JobState::WithAWS => "WithAWS",
+            JobState::WithCustomer => "WithCustomer",
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Cancelled" => Ok(JobState::Cancelled),
+            "Complete" => Ok(JobState::Complete),
+            "InProgress" => Ok(JobState::InProgress),
+            "InTransitToAWS" => Ok(JobState::InTransitToAWS),
+            "InTransitToCustomer" => Ok(JobState::InTransitToCustomer),
+            "Listing" => Ok(JobState::Listing),
+            "New" => Ok(JobState::New),
+            "Pending" => Ok(JobState::Pending),
+            "PreparingAppliance" => Ok(JobState::PreparingAppliance),
+            "PreparingShipment" => Ok(JobState::PreparingShipment),
+            "WithAWS" => Ok(JobState::WithAWS),
+            "WithCustomer" => Ok(JobState::WithCustomer),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum JobType {
+    Export,
+    Import,
+    LocalUse,
+}
+
+impl Into<String> for JobType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for JobType {
+    fn into(self) -> &'static str {
+        match self {
+            JobType::Export => "EXPORT",
+            JobType::Import => "IMPORT",
+            JobType::LocalUse => "LOCAL_USE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EXPORT" => Ok(JobType::Export),
+            "IMPORT" => Ok(JobType::Import),
+            "LOCAL_USE" => Ok(JobType::LocalUse),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains a key range. For export jobs, a <code>S3Resource</code> object can have an optional <code>KeyRange</code> value. The length of the range is defined at job creation, and has either an inclusive <code>BeginMarker</code>, an inclusive <code>EndMarker</code>, or both. Ranges are UTF-8 binary sorted.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KeyRange {
@@ -750,6 +893,123 @@ pub struct ShippingDetails {
     #[serde(rename="ShippingOption")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub shipping_option: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ShippingOption {
+    Express,
+    NextDay,
+    SecondDay,
+    Standard,
+}
+
+impl Into<String> for ShippingOption {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ShippingOption {
+    fn into(self) -> &'static str {
+        match self {
+            ShippingOption::Express => "EXPRESS",
+            ShippingOption::NextDay => "NEXT_DAY",
+            ShippingOption::SecondDay => "SECOND_DAY",
+            ShippingOption::Standard => "STANDARD",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShippingOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EXPRESS" => Ok(ShippingOption::Express),
+            "NEXT_DAY" => Ok(ShippingOption::NextDay),
+            "SECOND_DAY" => Ok(ShippingOption::SecondDay),
+            "STANDARD" => Ok(ShippingOption::Standard),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SnowballCapacity {
+    NoPreference,
+    T100,
+    T50,
+    T80,
+}
+
+impl Into<String> for SnowballCapacity {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SnowballCapacity {
+    fn into(self) -> &'static str {
+        match self {
+            SnowballCapacity::NoPreference => "NoPreference",
+            SnowballCapacity::T100 => "T100",
+            SnowballCapacity::T50 => "T50",
+            SnowballCapacity::T80 => "T80",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnowballCapacity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NoPreference" => Ok(SnowballCapacity::NoPreference),
+            "T100" => Ok(SnowballCapacity::T100),
+            "T50" => Ok(SnowballCapacity::T50),
+            "T80" => Ok(SnowballCapacity::T80),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SnowballType {
+    Edge,
+    Standard,
+}
+
+impl Into<String> for SnowballType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SnowballType {
+    fn into(self) -> &'static str {
+        match self {
+            SnowballType::Edge => "EDGE",
+            SnowballType::Standard => "STANDARD",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnowballType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EDGE" => Ok(SnowballType::Edge),
+            "STANDARD" => Ok(SnowballType::Standard),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -2341,7 +2601,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CancelClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2366,7 +2626,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<CancelJobResult>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -2393,7 +2653,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateAddressResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2420,7 +2680,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2445,7 +2705,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<CreateJobResult>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -2472,7 +2732,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAddressResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2500,7 +2760,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAddressesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2528,7 +2788,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2556,7 +2816,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeJobResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2581,7 +2841,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetJobManifestResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2609,7 +2869,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetJobUnlockCodeResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2634,7 +2894,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetSnowballUsageResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2662,7 +2922,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListClusterJobsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2690,7 +2950,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListClustersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2714,7 +2974,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&response.body)
                                                               .as_ref())
                            .unwrap())
@@ -2741,7 +3001,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2766,7 +3026,7 @@ impl<P, D> Snowball for SnowballClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<UpdateJobResult>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())

@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -1053,6 +1049,218 @@ pub struct Disk {
     #[serde(rename="DiskStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub disk_status: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ErrorCode {
+    ActivationKeyExpired,
+    ActivationKeyInvalid,
+    ActivationKeyNotFound,
+    AuthenticationFailure,
+    BandwidthThrottleScheduleNotFound,
+    Blocked,
+    CannotExportSnapshot,
+    ChapCredentialNotFound,
+    DiskAlreadyAllocated,
+    DiskDoesNotExist,
+    DiskSizeGreaterThanVolumeMaxSize,
+    DiskSizeLessThanVolumeSize,
+    DiskSizeNotGigAligned,
+    DuplicateCertificateInfo,
+    DuplicateSchedule,
+    EndpointNotFound,
+    GatewayInternalError,
+    GatewayNotConnected,
+    GatewayNotFound,
+    GatewayProxyNetworkConnectionBusy,
+    IamnotSupported,
+    InitiatorInvalid,
+    InitiatorNotFound,
+    InternalError,
+    InvalidEndpoint,
+    InvalidGateway,
+    InvalidParameters,
+    InvalidSchedule,
+    LocalStorageLimitExceeded,
+    LunAlreadyAllocated,
+    LunInvalid,
+    MaximumContentLengthExceeded,
+    MaximumTapeCartridgeCountExceeded,
+    MaximumVolumeCountExceeded,
+    NetworkConfigurationChanged,
+    NoDisksAvailable,
+    NotImplemented,
+    NotSupported,
+    OperationAborted,
+    OutdatedGateway,
+    ParametersNotImplemented,
+    RegionInvalid,
+    RequestTimeout,
+    ServiceUnavailable,
+    SnapshotDeleted,
+    SnapshotIdInvalid,
+    SnapshotInProgress,
+    SnapshotNotFound,
+    SnapshotScheduleNotFound,
+    StagingAreaFull,
+    StorageFailure,
+    TapeCartridgeNotFound,
+    TargetAlreadyExists,
+    TargetInvalid,
+    TargetNotFound,
+    UnauthorizedOperation,
+    VolumeAlreadyExists,
+    VolumeIdInvalid,
+    VolumeInUse,
+    VolumeNotFound,
+    VolumeNotReady,
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            ErrorCode::ActivationKeyExpired => "ActivationKeyExpired",
+            ErrorCode::ActivationKeyInvalid => "ActivationKeyInvalid",
+            ErrorCode::ActivationKeyNotFound => "ActivationKeyNotFound",
+            ErrorCode::AuthenticationFailure => "AuthenticationFailure",
+            ErrorCode::BandwidthThrottleScheduleNotFound => "BandwidthThrottleScheduleNotFound",
+            ErrorCode::Blocked => "Blocked",
+            ErrorCode::CannotExportSnapshot => "CannotExportSnapshot",
+            ErrorCode::ChapCredentialNotFound => "ChapCredentialNotFound",
+            ErrorCode::DiskAlreadyAllocated => "DiskAlreadyAllocated",
+            ErrorCode::DiskDoesNotExist => "DiskDoesNotExist",
+            ErrorCode::DiskSizeGreaterThanVolumeMaxSize => "DiskSizeGreaterThanVolumeMaxSize",
+            ErrorCode::DiskSizeLessThanVolumeSize => "DiskSizeLessThanVolumeSize",
+            ErrorCode::DiskSizeNotGigAligned => "DiskSizeNotGigAligned",
+            ErrorCode::DuplicateCertificateInfo => "DuplicateCertificateInfo",
+            ErrorCode::DuplicateSchedule => "DuplicateSchedule",
+            ErrorCode::EndpointNotFound => "EndpointNotFound",
+            ErrorCode::GatewayInternalError => "GatewayInternalError",
+            ErrorCode::GatewayNotConnected => "GatewayNotConnected",
+            ErrorCode::GatewayNotFound => "GatewayNotFound",
+            ErrorCode::GatewayProxyNetworkConnectionBusy => "GatewayProxyNetworkConnectionBusy",
+            ErrorCode::IamnotSupported => "IAMNotSupported",
+            ErrorCode::InitiatorInvalid => "InitiatorInvalid",
+            ErrorCode::InitiatorNotFound => "InitiatorNotFound",
+            ErrorCode::InternalError => "InternalError",
+            ErrorCode::InvalidEndpoint => "InvalidEndpoint",
+            ErrorCode::InvalidGateway => "InvalidGateway",
+            ErrorCode::InvalidParameters => "InvalidParameters",
+            ErrorCode::InvalidSchedule => "InvalidSchedule",
+            ErrorCode::LocalStorageLimitExceeded => "LocalStorageLimitExceeded",
+            ErrorCode::LunAlreadyAllocated => "LunAlreadyAllocated ",
+            ErrorCode::LunInvalid => "LunInvalid",
+            ErrorCode::MaximumContentLengthExceeded => "MaximumContentLengthExceeded",
+            ErrorCode::MaximumTapeCartridgeCountExceeded => "MaximumTapeCartridgeCountExceeded",
+            ErrorCode::MaximumVolumeCountExceeded => "MaximumVolumeCountExceeded",
+            ErrorCode::NetworkConfigurationChanged => "NetworkConfigurationChanged",
+            ErrorCode::NoDisksAvailable => "NoDisksAvailable",
+            ErrorCode::NotImplemented => "NotImplemented",
+            ErrorCode::NotSupported => "NotSupported",
+            ErrorCode::OperationAborted => "OperationAborted",
+            ErrorCode::OutdatedGateway => "OutdatedGateway",
+            ErrorCode::ParametersNotImplemented => "ParametersNotImplemented",
+            ErrorCode::RegionInvalid => "RegionInvalid",
+            ErrorCode::RequestTimeout => "RequestTimeout",
+            ErrorCode::ServiceUnavailable => "ServiceUnavailable",
+            ErrorCode::SnapshotDeleted => "SnapshotDeleted",
+            ErrorCode::SnapshotIdInvalid => "SnapshotIdInvalid",
+            ErrorCode::SnapshotInProgress => "SnapshotInProgress",
+            ErrorCode::SnapshotNotFound => "SnapshotNotFound",
+            ErrorCode::SnapshotScheduleNotFound => "SnapshotScheduleNotFound",
+            ErrorCode::StagingAreaFull => "StagingAreaFull",
+            ErrorCode::StorageFailure => "StorageFailure",
+            ErrorCode::TapeCartridgeNotFound => "TapeCartridgeNotFound",
+            ErrorCode::TargetAlreadyExists => "TargetAlreadyExists",
+            ErrorCode::TargetInvalid => "TargetInvalid",
+            ErrorCode::TargetNotFound => "TargetNotFound",
+            ErrorCode::UnauthorizedOperation => "UnauthorizedOperation",
+            ErrorCode::VolumeAlreadyExists => "VolumeAlreadyExists",
+            ErrorCode::VolumeIdInvalid => "VolumeIdInvalid",
+            ErrorCode::VolumeInUse => "VolumeInUse",
+            ErrorCode::VolumeNotFound => "VolumeNotFound",
+            ErrorCode::VolumeNotReady => "VolumeNotReady",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ActivationKeyExpired" => Ok(ErrorCode::ActivationKeyExpired),
+            "ActivationKeyInvalid" => Ok(ErrorCode::ActivationKeyInvalid),
+            "ActivationKeyNotFound" => Ok(ErrorCode::ActivationKeyNotFound),
+            "AuthenticationFailure" => Ok(ErrorCode::AuthenticationFailure),
+            "BandwidthThrottleScheduleNotFound" => Ok(ErrorCode::BandwidthThrottleScheduleNotFound),
+            "Blocked" => Ok(ErrorCode::Blocked),
+            "CannotExportSnapshot" => Ok(ErrorCode::CannotExportSnapshot),
+            "ChapCredentialNotFound" => Ok(ErrorCode::ChapCredentialNotFound),
+            "DiskAlreadyAllocated" => Ok(ErrorCode::DiskAlreadyAllocated),
+            "DiskDoesNotExist" => Ok(ErrorCode::DiskDoesNotExist),
+            "DiskSizeGreaterThanVolumeMaxSize" => Ok(ErrorCode::DiskSizeGreaterThanVolumeMaxSize),
+            "DiskSizeLessThanVolumeSize" => Ok(ErrorCode::DiskSizeLessThanVolumeSize),
+            "DiskSizeNotGigAligned" => Ok(ErrorCode::DiskSizeNotGigAligned),
+            "DuplicateCertificateInfo" => Ok(ErrorCode::DuplicateCertificateInfo),
+            "DuplicateSchedule" => Ok(ErrorCode::DuplicateSchedule),
+            "EndpointNotFound" => Ok(ErrorCode::EndpointNotFound),
+            "GatewayInternalError" => Ok(ErrorCode::GatewayInternalError),
+            "GatewayNotConnected" => Ok(ErrorCode::GatewayNotConnected),
+            "GatewayNotFound" => Ok(ErrorCode::GatewayNotFound),
+            "GatewayProxyNetworkConnectionBusy" => Ok(ErrorCode::GatewayProxyNetworkConnectionBusy),
+            "IAMNotSupported" => Ok(ErrorCode::IamnotSupported),
+            "InitiatorInvalid" => Ok(ErrorCode::InitiatorInvalid),
+            "InitiatorNotFound" => Ok(ErrorCode::InitiatorNotFound),
+            "InternalError" => Ok(ErrorCode::InternalError),
+            "InvalidEndpoint" => Ok(ErrorCode::InvalidEndpoint),
+            "InvalidGateway" => Ok(ErrorCode::InvalidGateway),
+            "InvalidParameters" => Ok(ErrorCode::InvalidParameters),
+            "InvalidSchedule" => Ok(ErrorCode::InvalidSchedule),
+            "LocalStorageLimitExceeded" => Ok(ErrorCode::LocalStorageLimitExceeded),
+            "LunAlreadyAllocated " => Ok(ErrorCode::LunAlreadyAllocated),
+            "LunInvalid" => Ok(ErrorCode::LunInvalid),
+            "MaximumContentLengthExceeded" => Ok(ErrorCode::MaximumContentLengthExceeded),
+            "MaximumTapeCartridgeCountExceeded" => Ok(ErrorCode::MaximumTapeCartridgeCountExceeded),
+            "MaximumVolumeCountExceeded" => Ok(ErrorCode::MaximumVolumeCountExceeded),
+            "NetworkConfigurationChanged" => Ok(ErrorCode::NetworkConfigurationChanged),
+            "NoDisksAvailable" => Ok(ErrorCode::NoDisksAvailable),
+            "NotImplemented" => Ok(ErrorCode::NotImplemented),
+            "NotSupported" => Ok(ErrorCode::NotSupported),
+            "OperationAborted" => Ok(ErrorCode::OperationAborted),
+            "OutdatedGateway" => Ok(ErrorCode::OutdatedGateway),
+            "ParametersNotImplemented" => Ok(ErrorCode::ParametersNotImplemented),
+            "RegionInvalid" => Ok(ErrorCode::RegionInvalid),
+            "RequestTimeout" => Ok(ErrorCode::RequestTimeout),
+            "ServiceUnavailable" => Ok(ErrorCode::ServiceUnavailable),
+            "SnapshotDeleted" => Ok(ErrorCode::SnapshotDeleted),
+            "SnapshotIdInvalid" => Ok(ErrorCode::SnapshotIdInvalid),
+            "SnapshotInProgress" => Ok(ErrorCode::SnapshotInProgress),
+            "SnapshotNotFound" => Ok(ErrorCode::SnapshotNotFound),
+            "SnapshotScheduleNotFound" => Ok(ErrorCode::SnapshotScheduleNotFound),
+            "StagingAreaFull" => Ok(ErrorCode::StagingAreaFull),
+            "StorageFailure" => Ok(ErrorCode::StorageFailure),
+            "TapeCartridgeNotFound" => Ok(ErrorCode::TapeCartridgeNotFound),
+            "TargetAlreadyExists" => Ok(ErrorCode::TargetAlreadyExists),
+            "TargetInvalid" => Ok(ErrorCode::TargetInvalid),
+            "TargetNotFound" => Ok(ErrorCode::TargetNotFound),
+            "UnauthorizedOperation" => Ok(ErrorCode::UnauthorizedOperation),
+            "VolumeAlreadyExists" => Ok(ErrorCode::VolumeAlreadyExists),
+            "VolumeIdInvalid" => Ok(ErrorCode::VolumeIdInvalid),
+            "VolumeInUse" => Ok(ErrorCode::VolumeInUse),
+            "VolumeNotFound" => Ok(ErrorCode::VolumeNotFound),
+            "VolumeNotReady" => Ok(ErrorCode::VolumeNotReady),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes a file share.</p>"]
@@ -7361,7 +7569,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ActivateGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7386,7 +7594,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<AddCacheOutput>(String::from_utf8_lossy(&response.body)
                                                               .as_ref())
                            .unwrap())
@@ -7412,7 +7620,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddTagsToResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7439,7 +7647,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7466,7 +7674,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7493,7 +7701,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CancelArchivalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7520,7 +7728,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CancelRetrievalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7549,7 +7757,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateCachediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateCachediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7573,7 +7781,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7600,7 +7808,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateSnapshotOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7626,7 +7834,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateSnapshotFromVolumeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateSnapshotFromVolumeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7652,7 +7860,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateStorediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateStorediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7678,7 +7886,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateTapeWithBarcodeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7705,7 +7913,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7731,7 +7939,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7757,7 +7965,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7784,7 +7992,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7811,7 +8019,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7839,7 +8047,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7864,7 +8072,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteTapeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteTapeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7888,7 +8096,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7915,7 +8123,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7943,7 +8151,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7967,7 +8175,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7995,7 +8203,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeCachediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeCachediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8021,7 +8229,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeChapCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8047,7 +8255,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeGatewayInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8073,7 +8281,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8099,7 +8307,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeNFSFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8128,7 +8336,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8154,7 +8362,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeStorediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeStorediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8179,7 +8387,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTapeArchivesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8208,7 +8416,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTapeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeTapeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8232,7 +8440,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8259,7 +8467,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8286,7 +8494,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeVTLDevicesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8315,7 +8523,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8342,7 +8550,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DisableGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8369,7 +8577,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8396,7 +8604,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListGatewaysOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8422,7 +8630,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListLocalDisksOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8450,7 +8658,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTagsForResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8475,7 +8683,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<ListTapesOutput>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -8502,7 +8710,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListVolumeInitiatorsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8531,7 +8739,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListVolumeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListVolumeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8555,7 +8763,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8579,7 +8787,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RefreshCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8607,7 +8815,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RemoveTagsFromResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8632,7 +8840,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ResetCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ResetCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8657,7 +8865,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RetrieveTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8686,7 +8894,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RetrieveTapeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RetrieveTapeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8712,7 +8920,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<SetLocalConsolePasswordOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(SetLocalConsolePasswordError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8736,7 +8944,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ShutdownGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8763,7 +8971,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StartGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8791,7 +8999,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8817,7 +9025,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8846,7 +9054,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateGatewayInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8872,7 +9080,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateGatewaySoftwareNowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateGatewaySoftwareNowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8898,7 +9106,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8922,7 +9130,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8951,7 +9159,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8979,7 +9187,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateVTLDeviceTypeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -155,6 +151,82 @@ pub struct Backup {
     #[serde(rename="UserArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub user_arn: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BackupStatus {
+    Deleting,
+    Failed,
+    InProgress,
+    Ok,
+}
+
+impl Into<String> for BackupStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BackupStatus {
+    fn into(self) -> &'static str {
+        match self {
+            BackupStatus::Deleting => "DELETING",
+            BackupStatus::Failed => "FAILED",
+            BackupStatus::InProgress => "IN_PROGRESS",
+            BackupStatus::Ok => "OK",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DELETING" => Ok(BackupStatus::Deleting),
+            "FAILED" => Ok(BackupStatus::Failed),
+            "IN_PROGRESS" => Ok(BackupStatus::InProgress),
+            "OK" => Ok(BackupStatus::Ok),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BackupType {
+    Automated,
+    Manual,
+}
+
+impl Into<String> for BackupType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BackupType {
+    fn into(self) -> &'static str {
+        match self {
+            BackupType::Automated => "AUTOMATED",
+            BackupType::Manual => "MANUAL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AUTOMATED" => Ok(BackupType::Automated),
+            "MANUAL" => Ok(BackupType::Manual),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -422,6 +494,79 @@ pub struct EngineAttribute {
     pub value: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MaintenanceStatus {
+    Failed,
+    Success,
+}
+
+impl Into<String> for MaintenanceStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MaintenanceStatus {
+    fn into(self) -> &'static str {
+        match self {
+            MaintenanceStatus::Failed => "FAILED",
+            MaintenanceStatus::Success => "SUCCESS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MaintenanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(MaintenanceStatus::Failed),
+            "SUCCESS" => Ok(MaintenanceStatus::Success),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="<p>The status of the association or disassociation request. </p> <p class=\"title\"> <b>Possible values:</b> </p> <ul> <li> <p> <code>SUCCESS</code>: The association or disassociation succeeded. </p> </li> <li> <p> <code>FAILED</code>: The association or disassociation failed. </p> </li> <li> <p> <code>IN_PROGRESS</code>: The association or disassociation is still in progress. </p> </li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NodeAssociationStatus {
+    Failed,
+    InProgress,
+    Success,
+}
+
+impl Into<String> for NodeAssociationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NodeAssociationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            NodeAssociationStatus::Failed => "FAILED",
+            NodeAssociationStatus::InProgress => "IN_PROGRESS",
+            NodeAssociationStatus::Success => "SUCCESS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NodeAssociationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(NodeAssociationStatus::Failed),
+            "IN_PROGRESS" => Ok(NodeAssociationStatus::InProgress),
+            "SUCCESS" => Ok(NodeAssociationStatus::Success),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RestoreServerRequest {
     #[doc="<p> The ID of the backup that you want to use to restore a server. </p>"]
@@ -559,6 +704,74 @@ pub struct ServerEvent {
     #[serde(rename="ServerName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub server_name: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ServerStatus {
+    BackingUp,
+    ConnectionLost,
+    Creating,
+    Deleting,
+    Failed,
+    Healthy,
+    Modifying,
+    Restoring,
+    Running,
+    Setup,
+    Terminated,
+    UnderMaintenance,
+    Unhealthy,
+}
+
+impl Into<String> for ServerStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ServerStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ServerStatus::BackingUp => "BACKING_UP",
+            ServerStatus::ConnectionLost => "CONNECTION_LOST",
+            ServerStatus::Creating => "CREATING",
+            ServerStatus::Deleting => "DELETING",
+            ServerStatus::Failed => "FAILED",
+            ServerStatus::Healthy => "HEALTHY",
+            ServerStatus::Modifying => "MODIFYING",
+            ServerStatus::Restoring => "RESTORING",
+            ServerStatus::Running => "RUNNING",
+            ServerStatus::Setup => "SETUP",
+            ServerStatus::Terminated => "TERMINATED",
+            ServerStatus::UnderMaintenance => "UNDER_MAINTENANCE",
+            ServerStatus::Unhealthy => "UNHEALTHY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BACKING_UP" => Ok(ServerStatus::BackingUp),
+            "CONNECTION_LOST" => Ok(ServerStatus::ConnectionLost),
+            "CREATING" => Ok(ServerStatus::Creating),
+            "DELETING" => Ok(ServerStatus::Deleting),
+            "FAILED" => Ok(ServerStatus::Failed),
+            "HEALTHY" => Ok(ServerStatus::Healthy),
+            "MODIFYING" => Ok(ServerStatus::Modifying),
+            "RESTORING" => Ok(ServerStatus::Restoring),
+            "RUNNING" => Ok(ServerStatus::Running),
+            "SETUP" => Ok(ServerStatus::Setup),
+            "TERMINATED" => Ok(ServerStatus::Terminated),
+            "UNDER_MAINTENANCE" => Ok(ServerStatus::UnderMaintenance),
+            "UNHEALTHY" => Ok(ServerStatus::Unhealthy),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1959,7 +2172,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AssociateNodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1985,7 +2198,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateBackupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2011,7 +2224,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateServerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2037,7 +2250,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteBackupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2063,7 +2276,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteServerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2089,7 +2302,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAccountAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2113,7 +2326,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeBackupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2140,7 +2353,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2169,7 +2382,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeNodeAssociationStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeNodeAssociationStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2193,7 +2406,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeServersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2220,7 +2433,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DisassociateNodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2247,7 +2460,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RestoreServerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2273,7 +2486,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StartMaintenanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2300,7 +2513,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateServerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2328,7 +2541,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateServerEngineAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateServerEngineAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),

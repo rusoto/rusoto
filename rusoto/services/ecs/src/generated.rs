@@ -11,21 +11,64 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AgentUpdateStatus {
+    Failed,
+    Pending,
+    Staged,
+    Staging,
+    Updated,
+    Updating,
+}
+
+impl Into<String> for AgentUpdateStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AgentUpdateStatus {
+    fn into(self) -> &'static str {
+        match self {
+            AgentUpdateStatus::Failed => "FAILED",
+            AgentUpdateStatus::Pending => "PENDING",
+            AgentUpdateStatus::Staged => "STAGED",
+            AgentUpdateStatus::Staging => "STAGING",
+            AgentUpdateStatus::Updated => "UPDATED",
+            AgentUpdateStatus::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AgentUpdateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(AgentUpdateStatus::Failed),
+            "PENDING" => Ok(AgentUpdateStatus::Pending),
+            "STAGED" => Ok(AgentUpdateStatus::Staged),
+            "STAGING" => Ok(AgentUpdateStatus::Staging),
+            "UPDATED" => Ok(AgentUpdateStatus::Updated),
+            "UPDATING" => Ok(AgentUpdateStatus::Updating),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>An attribute is a name-value pair associated with an Amazon ECS object. Attributes enable you to extend the Amazon ECS data model by adding custom metadata to your resources. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html#attributes\">Attributes</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Attribute {
@@ -276,6 +319,41 @@ pub struct ContainerInstance {
     #[serde(rename="versionInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub version_info: Option<VersionInfo>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ContainerInstanceStatus {
+    Active,
+    Draining,
+}
+
+impl Into<String> for ContainerInstanceStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ContainerInstanceStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ContainerInstanceStatus::Active => "ACTIVE",
+            ContainerInstanceStatus::Draining => "DRAINING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerInstanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(ContainerInstanceStatus::Active),
+            "DRAINING" => Ok(ContainerInstanceStatus::Draining),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The overrides that should be sent to a container.</p>"]
@@ -615,6 +693,44 @@ pub struct DescribeTasksResponse {
     #[serde(rename="tasks")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub tasks: Option<Vec<Task>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DesiredStatus {
+    Pending,
+    Running,
+    Stopped,
+}
+
+impl Into<String> for DesiredStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DesiredStatus {
+    fn into(self) -> &'static str {
+        match self {
+            DesiredStatus::Pending => "PENDING",
+            DesiredStatus::Running => "RUNNING",
+            DesiredStatus::Stopped => "STOPPED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DesiredStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PENDING" => Ok(DesiredStatus::Pending),
+            "RUNNING" => Ok(DesiredStatus::Running),
+            "STOPPED" => Ok(DesiredStatus::Stopped),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -963,6 +1079,56 @@ pub struct LogConfiguration {
     pub options: Option<::std::collections::HashMap<String, String>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LogDriver {
+    Awslogs,
+    Fluentd,
+    Gelf,
+    Journald,
+    JsonFile,
+    Splunk,
+    Syslog,
+}
+
+impl Into<String> for LogDriver {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LogDriver {
+    fn into(self) -> &'static str {
+        match self {
+            LogDriver::Awslogs => "awslogs",
+            LogDriver::Fluentd => "fluentd",
+            LogDriver::Gelf => "gelf",
+            LogDriver::Journald => "journald",
+            LogDriver::JsonFile => "json-file",
+            LogDriver::Splunk => "splunk",
+            LogDriver::Syslog => "syslog",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogDriver {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "awslogs" => Ok(LogDriver::Awslogs),
+            "fluentd" => Ok(LogDriver::Fluentd),
+            "gelf" => Ok(LogDriver::Gelf),
+            "journald" => Ok(LogDriver::Journald),
+            "json-file" => Ok(LogDriver::JsonFile),
+            "splunk" => Ok(LogDriver::Splunk),
+            "syslog" => Ok(LogDriver::Syslog),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Details on a volume mount point that is used in a container definition.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MountPoint {
@@ -1001,6 +1167,44 @@ pub struct NetworkBinding {
     pub protocol: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NetworkMode {
+    Bridge,
+    Host,
+    None,
+}
+
+impl Into<String> for NetworkMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NetworkMode {
+    fn into(self) -> &'static str {
+        match self {
+            NetworkMode::Bridge => "bridge",
+            NetworkMode::Host => "host",
+            NetworkMode::None => "none",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NetworkMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "bridge" => Ok(NetworkMode::Bridge),
+            "host" => Ok(NetworkMode::Host),
+            "none" => Ok(NetworkMode::None),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>An object representing a constraint on task placement. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html\">Task Placement Constraints</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PlacementConstraint {
@@ -1014,6 +1218,41 @@ pub struct PlacementConstraint {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlacementConstraintType {
+    DistinctInstance,
+    MemberOf,
+}
+
+impl Into<String> for PlacementConstraintType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlacementConstraintType {
+    fn into(self) -> &'static str {
+        match self {
+            PlacementConstraintType::DistinctInstance => "distinctInstance",
+            PlacementConstraintType::MemberOf => "memberOf",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlacementConstraintType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "distinctInstance" => Ok(PlacementConstraintType::DistinctInstance),
+            "memberOf" => Ok(PlacementConstraintType::MemberOf),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The task placement strategy for a task or service. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-strategies.html\">Task Placement Strategies</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PlacementStrategy {
@@ -1025,6 +1264,44 @@ pub struct PlacementStrategy {
     #[serde(rename="type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlacementStrategyType {
+    Binpack,
+    Random,
+    Spread,
+}
+
+impl Into<String> for PlacementStrategyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlacementStrategyType {
+    fn into(self) -> &'static str {
+        match self {
+            PlacementStrategyType::Binpack => "binpack",
+            PlacementStrategyType::Random => "random",
+            PlacementStrategyType::Spread => "spread",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlacementStrategyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "binpack" => Ok(PlacementStrategyType::Binpack),
+            "random" => Ok(PlacementStrategyType::Random),
+            "spread" => Ok(PlacementStrategyType::Spread),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Port mappings allow containers to access ports on the host container instance to send or receive traffic. Port mappings are specified as part of the container definition. After a task reaches the <code>RUNNING</code> status, manual and automatic host and container port assignments are visible in the <code>networkBindings</code> section of <a>DescribeTasks</a> API responses.</p>"]
@@ -1299,6 +1576,41 @@ pub struct ServiceEvent {
     pub message: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SortOrder {
+    Asc,
+    Desc,
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SortOrder {
+    fn into(self) -> &'static str {
+        match self {
+            SortOrder::Asc => "ASC",
+            SortOrder::Desc => "DESC",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASC" => Ok(SortOrder::Asc),
+            "DESC" => Ok(SortOrder::Desc),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartTaskRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster on which to start your task. If you do not specify a cluster, the default cluster is assumed.</p>"]
@@ -1428,6 +1740,38 @@ pub struct SubmitTaskStateChangeResponse {
     pub acknowledgment: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TargetType {
+    ContainerInstance,
+}
+
+impl Into<String> for TargetType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TargetType {
+    fn into(self) -> &'static str {
+        match self {
+            TargetType::ContainerInstance => "container-instance",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "container-instance" => Ok(TargetType::ContainerInstance),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Details on a task in a cluster.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Task {
@@ -1538,6 +1882,44 @@ pub struct TaskDefinition {
     pub volumes: Option<Vec<Volume>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TaskDefinitionFamilyStatus {
+    Active,
+    All,
+    Inactive,
+}
+
+impl Into<String> for TaskDefinitionFamilyStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TaskDefinitionFamilyStatus {
+    fn into(self) -> &'static str {
+        match self {
+            TaskDefinitionFamilyStatus::Active => "ACTIVE",
+            TaskDefinitionFamilyStatus::All => "ALL",
+            TaskDefinitionFamilyStatus::Inactive => "INACTIVE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskDefinitionFamilyStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(TaskDefinitionFamilyStatus::Active),
+            "ALL" => Ok(TaskDefinitionFamilyStatus::All),
+            "INACTIVE" => Ok(TaskDefinitionFamilyStatus::Inactive),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>An object representing a constraint on task placement in the task definition. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html\">Task Placement Constraints</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TaskDefinitionPlacementConstraint {
@@ -1549,6 +1931,73 @@ pub struct TaskDefinitionPlacementConstraint {
     #[serde(rename="type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TaskDefinitionPlacementConstraintType {
+    MemberOf,
+}
+
+impl Into<String> for TaskDefinitionPlacementConstraintType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TaskDefinitionPlacementConstraintType {
+    fn into(self) -> &'static str {
+        match self {
+            TaskDefinitionPlacementConstraintType::MemberOf => "memberOf",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskDefinitionPlacementConstraintType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "memberOf" => Ok(TaskDefinitionPlacementConstraintType::MemberOf),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TaskDefinitionStatus {
+    Active,
+    Inactive,
+}
+
+impl Into<String> for TaskDefinitionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TaskDefinitionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            TaskDefinitionStatus::Active => "ACTIVE",
+            TaskDefinitionStatus::Inactive => "INACTIVE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskDefinitionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(TaskDefinitionStatus::Active),
+            "INACTIVE" => Ok(TaskDefinitionStatus::Inactive),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The overrides associated with a task.</p>"]
@@ -1564,6 +2013,41 @@ pub struct TaskOverride {
     pub task_role_arn: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TransportProtocol {
+    Tcp,
+    Udp,
+}
+
+impl Into<String> for TransportProtocol {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TransportProtocol {
+    fn into(self) -> &'static str {
+        match self {
+            TransportProtocol::Tcp => "tcp",
+            TransportProtocol::Udp => "udp",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TransportProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "tcp" => Ok(TransportProtocol::Tcp),
+            "udp" => Ok(TransportProtocol::Udp),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The <code>ulimit</code> settings to pass to the container.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Ulimit {
@@ -1576,6 +2060,80 @@ pub struct Ulimit {
     #[doc="<p>The soft limit for the ulimit type.</p>"]
     #[serde(rename="softLimit")]
     pub soft_limit: i64,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UlimitName {
+    Core,
+    Cpu,
+    Data,
+    Fsize,
+    Locks,
+    Memlock,
+    Msgqueue,
+    Nice,
+    Nofile,
+    Nproc,
+    Rss,
+    Rtprio,
+    Rttime,
+    Sigpending,
+    Stack,
+}
+
+impl Into<String> for UlimitName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UlimitName {
+    fn into(self) -> &'static str {
+        match self {
+            UlimitName::Core => "core",
+            UlimitName::Cpu => "cpu",
+            UlimitName::Data => "data",
+            UlimitName::Fsize => "fsize",
+            UlimitName::Locks => "locks",
+            UlimitName::Memlock => "memlock",
+            UlimitName::Msgqueue => "msgqueue",
+            UlimitName::Nice => "nice",
+            UlimitName::Nofile => "nofile",
+            UlimitName::Nproc => "nproc",
+            UlimitName::Rss => "rss",
+            UlimitName::Rtprio => "rtprio",
+            UlimitName::Rttime => "rttime",
+            UlimitName::Sigpending => "sigpending",
+            UlimitName::Stack => "stack",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UlimitName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "core" => Ok(UlimitName::Core),
+            "cpu" => Ok(UlimitName::Cpu),
+            "data" => Ok(UlimitName::Data),
+            "fsize" => Ok(UlimitName::Fsize),
+            "locks" => Ok(UlimitName::Locks),
+            "memlock" => Ok(UlimitName::Memlock),
+            "msgqueue" => Ok(UlimitName::Msgqueue),
+            "nice" => Ok(UlimitName::Nice),
+            "nofile" => Ok(UlimitName::Nofile),
+            "nproc" => Ok(UlimitName::Nproc),
+            "rss" => Ok(UlimitName::Rss),
+            "rtprio" => Ok(UlimitName::Rtprio),
+            "rttime" => Ok(UlimitName::Rttime),
+            "sigpending" => Ok(UlimitName::Sigpending),
+            "stack" => Ok(UlimitName::Stack),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -4673,7 +5231,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateClusterResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4700,7 +5258,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateServiceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4727,7 +5285,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4755,7 +5313,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteClusterResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4782,7 +5340,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteServiceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4810,7 +5368,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeregisterContainerInstanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeregisterContainerInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4836,7 +5394,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeregisterTaskDefinitionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeregisterTaskDefinitionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4861,7 +5419,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeClustersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4890,7 +5448,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeContainerInstancesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeContainerInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4915,7 +5473,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeServicesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4944,7 +5502,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTaskDefinitionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4972,7 +5530,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTasksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5000,7 +5558,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DiscoverPollEndpointResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5028,7 +5586,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5056,7 +5614,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListClustersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5084,7 +5642,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListContainerInstancesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5112,7 +5670,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListServicesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5140,7 +5698,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTaskDefinitionFamiliesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListTaskDefinitionFamiliesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5165,7 +5723,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTaskDefinitionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5191,7 +5749,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTasksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5216,7 +5774,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PutAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5244,7 +5802,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RegisterContainerInstanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RegisterContainerInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5270,7 +5828,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RegisterTaskDefinitionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5295,7 +5853,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<RunTaskResponse>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -5320,7 +5878,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StartTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(StartTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5343,7 +5901,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StopTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(StopTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5369,7 +5927,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<SubmitContainerStateChangeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(SubmitContainerStateChangeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5395,7 +5953,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<SubmitTaskStateChangeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5424,7 +5982,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateContainerAgentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5453,7 +6011,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateContainerInstancesStateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateContainerInstancesStateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5478,7 +6036,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateServiceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

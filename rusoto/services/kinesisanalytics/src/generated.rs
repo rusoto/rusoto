@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -144,6 +140,53 @@ pub struct ApplicationDetail {
     #[serde(rename="ReferenceDataSourceDescriptions")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub reference_data_source_descriptions: Option<Vec<ReferenceDataSourceDescription>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ApplicationStatus {
+    Deleting,
+    Ready,
+    Running,
+    Starting,
+    Stopping,
+    Updating,
+}
+
+impl Into<String> for ApplicationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ApplicationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ApplicationStatus::Deleting => "DELETING",
+            ApplicationStatus::Ready => "READY",
+            ApplicationStatus::Running => "RUNNING",
+            ApplicationStatus::Starting => "STARTING",
+            ApplicationStatus::Stopping => "STOPPING",
+            ApplicationStatus::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplicationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DELETING" => Ok(ApplicationStatus::Deleting),
+            "READY" => Ok(ApplicationStatus::Ready),
+            "RUNNING" => Ok(ApplicationStatus::Running),
+            "STARTING" => Ok(ApplicationStatus::Starting),
+            "STOPPING" => Ok(ApplicationStatus::Stopping),
+            "UPDATING" => Ok(ApplicationStatus::Updating),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides application summary information, including the application Amazon Resource Name (ARN), name, and status.</p>"]
@@ -500,6 +543,44 @@ pub struct InputSchemaUpdate {
     pub record_format_update: Option<RecordFormat>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InputStartingPosition {
+    LastStoppedPoint,
+    Now,
+    TrimHorizon,
+}
+
+impl Into<String> for InputStartingPosition {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InputStartingPosition {
+    fn into(self) -> &'static str {
+        match self {
+            InputStartingPosition::LastStoppedPoint => "LAST_STOPPED_POINT",
+            InputStartingPosition::Now => "NOW",
+            InputStartingPosition::TrimHorizon => "TRIM_HORIZON",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputStartingPosition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "LAST_STOPPED_POINT" => Ok(InputStartingPosition::LastStoppedPoint),
+            "NOW" => Ok(InputStartingPosition::Now),
+            "TRIM_HORIZON" => Ok(InputStartingPosition::TrimHorizon),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the point at which the application reads from the streaming source.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InputStartingPositionConfiguration {
@@ -820,6 +901,41 @@ pub struct RecordFormat {
     #[doc="<p>The type of record format.</p>"]
     #[serde(rename="RecordFormatType")]
     pub record_format_type: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RecordFormatType {
+    Csv,
+    Json,
+}
+
+impl Into<String> for RecordFormatType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RecordFormatType {
+    fn into(self) -> &'static str {
+        match self {
+            RecordFormatType::Csv => "CSV",
+            RecordFormatType::Json => "JSON",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecordFormatType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CSV" => Ok(RecordFormatType::Csv),
+            "JSON" => Ok(RecordFormatType::Json),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes the reference data source by providing the source information (S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.</p>"]
@@ -2412,7 +2528,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddApplicationCloudWatchLoggingOptionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AddApplicationCloudWatchLoggingOptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2437,7 +2553,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddApplicationInputResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2466,7 +2582,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddApplicationOutputResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2496,7 +2612,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddApplicationReferenceDataSourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AddApplicationReferenceDataSourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2521,7 +2637,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2549,7 +2665,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2575,7 +2691,7 @@ fn delete_application_cloud_watch_logging_option(&self, input: &DeleteApplicatio
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteApplicationCloudWatchLoggingOptionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteApplicationCloudWatchLoggingOptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2601,7 +2717,7 @@ fn delete_application_cloud_watch_logging_option(&self, input: &DeleteApplicatio
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteApplicationOutputResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteApplicationOutputError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2624,7 +2740,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteApplicationReferenceDataSourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteApplicationReferenceDataSourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2649,7 +2765,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2677,7 +2793,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DiscoverInputSchemaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2704,7 +2820,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListApplicationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2731,7 +2847,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StartApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2758,7 +2874,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StopApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2786,7 +2902,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateApplicationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

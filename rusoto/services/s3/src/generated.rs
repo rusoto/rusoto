@@ -11,19 +11,14 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 
-use std::str::FromStr;
 use xml::reader::ParserConfig;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -830,6 +825,38 @@ impl AnalyticsS3BucketDestinationSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AnalyticsS3ExportFileFormat {
+    Csv,
+}
+
+impl Into<String> for AnalyticsS3ExportFileFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AnalyticsS3ExportFileFormat {
+    fn into(self) -> &'static str {
+        match self {
+            AnalyticsS3ExportFileFormat::Csv => "CSV",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AnalyticsS3ExportFileFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CSV" => Ok(AnalyticsS3ExportFileFormat::Csv),
+            _ => Err(()),
+        }
+    }
+}
+
 struct AnalyticsS3ExportFileFormatDeserializer;
 impl AnalyticsS3ExportFileFormatDeserializer {
     #[allow(unused_variables)]
@@ -921,6 +948,41 @@ impl BucketDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BucketAccelerateStatus {
+    Enabled,
+    Suspended,
+}
+
+impl Into<String> for BucketAccelerateStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BucketAccelerateStatus {
+    fn into(self) -> &'static str {
+        match self {
+            BucketAccelerateStatus::Enabled => "Enabled",
+            BucketAccelerateStatus::Suspended => "Suspended",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BucketAccelerateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Enabled" => Ok(BucketAccelerateStatus::Enabled),
+            "Suspended" => Ok(BucketAccelerateStatus::Suspended),
+            _ => Err(()),
+        }
+    }
+}
+
 struct BucketAccelerateStatusDeserializer;
 impl BucketAccelerateStatusDeserializer {
     #[allow(unused_variables)]
@@ -946,6 +1008,47 @@ impl BucketAccelerateStatusSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BucketCannedACL {
+    AuthenticatedRead,
+    Private,
+    PublicRead,
+    PublicReadWrite,
+}
+
+impl Into<String> for BucketCannedACL {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BucketCannedACL {
+    fn into(self) -> &'static str {
+        match self {
+            BucketCannedACL::AuthenticatedRead => "authenticated-read",
+            BucketCannedACL::Private => "private",
+            BucketCannedACL::PublicRead => "public-read",
+            BucketCannedACL::PublicReadWrite => "public-read-write",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BucketCannedACL {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "authenticated-read" => Ok(BucketCannedACL::AuthenticatedRead),
+            "private" => Ok(BucketCannedACL::Private),
+            "public-read" => Ok(BucketCannedACL::PublicRead),
+            "public-read-write" => Ok(BucketCannedACL::PublicReadWrite),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Clone,Debug)]
 pub struct BucketLifecycleConfiguration {
     pub rules: Vec<LifecycleRule>,
@@ -960,6 +1063,68 @@ impl BucketLifecycleConfigurationSerializer {
         serialized += &LifecycleRulesSerializer::serialize("Rule", &obj.rules);
         serialized += &format!("</{name}>", name = name);
         serialized
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BucketLocationConstraint {
+    Eu,
+    ApNortheast1,
+    ApSouth1,
+    ApSoutheast1,
+    ApSoutheast2,
+    CnNorth1,
+    EuCentral1,
+    EuWest1,
+    SaEast1,
+    UsWest1,
+    UsWest2,
+}
+
+impl Into<String> for BucketLocationConstraint {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BucketLocationConstraint {
+    fn into(self) -> &'static str {
+        match self {
+            BucketLocationConstraint::Eu => "EU",
+            BucketLocationConstraint::ApNortheast1 => "ap-northeast-1",
+            BucketLocationConstraint::ApSouth1 => "ap-south-1",
+            BucketLocationConstraint::ApSoutheast1 => "ap-southeast-1",
+            BucketLocationConstraint::ApSoutheast2 => "ap-southeast-2",
+            BucketLocationConstraint::CnNorth1 => "cn-north-1",
+            BucketLocationConstraint::EuCentral1 => "eu-central-1",
+            BucketLocationConstraint::EuWest1 => "eu-west-1",
+            BucketLocationConstraint::SaEast1 => "sa-east-1",
+            BucketLocationConstraint::UsWest1 => "us-west-1",
+            BucketLocationConstraint::UsWest2 => "us-west-2",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BucketLocationConstraint {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EU" => Ok(BucketLocationConstraint::Eu),
+            "ap-northeast-1" => Ok(BucketLocationConstraint::ApNortheast1),
+            "ap-south-1" => Ok(BucketLocationConstraint::ApSouth1),
+            "ap-southeast-1" => Ok(BucketLocationConstraint::ApSoutheast1),
+            "ap-southeast-2" => Ok(BucketLocationConstraint::ApSoutheast2),
+            "cn-north-1" => Ok(BucketLocationConstraint::CnNorth1),
+            "eu-central-1" => Ok(BucketLocationConstraint::EuCentral1),
+            "eu-west-1" => Ok(BucketLocationConstraint::EuWest1),
+            "sa-east-1" => Ok(BucketLocationConstraint::SaEast1),
+            "us-west-1" => Ok(BucketLocationConstraint::UsWest1),
+            "us-west-2" => Ok(BucketLocationConstraint::UsWest2),
+            _ => Err(()),
+        }
     }
 }
 
@@ -1004,6 +1169,44 @@ impl BucketLoggingStatusSerializer {
         }
         serialized += &format!("</{name}>", name = name);
         serialized
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BucketLogsPermission {
+    FullControl,
+    Read,
+    Write,
+}
+
+impl Into<String> for BucketLogsPermission {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BucketLogsPermission {
+    fn into(self) -> &'static str {
+        match self {
+            BucketLogsPermission::FullControl => "FULL_CONTROL",
+            BucketLogsPermission::Read => "READ",
+            BucketLogsPermission::Write => "WRITE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BucketLogsPermission {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FULL_CONTROL" => Ok(BucketLogsPermission::FullControl),
+            "READ" => Ok(BucketLogsPermission::Read),
+            "WRITE" => Ok(BucketLogsPermission::Write),
+            _ => Err(()),
+        }
     }
 }
 
@@ -1054,6 +1257,41 @@ impl BucketNameSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BucketVersioningStatus {
+    Enabled,
+    Suspended,
+}
+
+impl Into<String> for BucketVersioningStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BucketVersioningStatus {
+    fn into(self) -> &'static str {
+        match self {
+            BucketVersioningStatus::Enabled => "Enabled",
+            BucketVersioningStatus::Suspended => "Suspended",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BucketVersioningStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Enabled" => Ok(BucketVersioningStatus::Enabled),
+            "Suspended" => Ok(BucketVersioningStatus::Suspended),
+            _ => Err(()),
+        }
     }
 }
 
@@ -2171,7 +2409,7 @@ impl DaysDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -2196,7 +2434,7 @@ impl DaysAfterInitiationDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -2302,7 +2540,7 @@ impl DeleteMarkerDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -2812,6 +3050,38 @@ impl EmailAddressSerializer {
     }
 }
 
+#[doc="Requests Amazon S3 to encode the object keys in the response and specifies the encoding method to use. An object key may contain any Unicode character; however, XML 1.0 parser cannot parse some characters, such as characters with an ASCII value from 0 to 10. For characters that are not supported in XML 1.0, you can add this parameter to request that Amazon S3 encode the keys in the response."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EncodingType {
+    Url,
+}
+
+impl Into<String> for EncodingType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EncodingType {
+    fn into(self) -> &'static str {
+        match self {
+            EncodingType::Url => "url",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncodingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "url" => Ok(EncodingType::Url),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EncodingTypeDeserializer;
 impl EncodingTypeDeserializer {
     #[allow(unused_variables)]
@@ -2985,6 +3255,66 @@ impl ErrorsDeserializer {
 
     }
 }
+#[doc="Bucket event for which to send notifications."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Event {
+    S3ObjectCreated,
+    S3ObjectCreatedCompleteMultipartUpload,
+    S3ObjectCreatedCopy,
+    S3ObjectCreatedPost,
+    S3ObjectCreatedPut,
+    S3ObjectRemoved,
+    S3ObjectRemovedDelete,
+    S3ObjectRemovedDeleteMarkerCreated,
+    S3ReducedRedundancyLostObject,
+}
+
+impl Into<String> for Event {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Event {
+    fn into(self) -> &'static str {
+        match self {
+            Event::S3ObjectCreated => "s3:ObjectCreated:*",
+            Event::S3ObjectCreatedCompleteMultipartUpload => {
+                "s3:ObjectCreated:CompleteMultipartUpload"
+            }
+            Event::S3ObjectCreatedCopy => "s3:ObjectCreated:Copy",
+            Event::S3ObjectCreatedPost => "s3:ObjectCreated:Post",
+            Event::S3ObjectCreatedPut => "s3:ObjectCreated:Put",
+            Event::S3ObjectRemoved => "s3:ObjectRemoved:*",
+            Event::S3ObjectRemovedDelete => "s3:ObjectRemoved:Delete",
+            Event::S3ObjectRemovedDeleteMarkerCreated => "s3:ObjectRemoved:DeleteMarkerCreated",
+            Event::S3ReducedRedundancyLostObject => "s3:ReducedRedundancyLostObject",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Event {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "s3:ObjectCreated:*" => Ok(Event::S3ObjectCreated),
+            "s3:ObjectCreated:CompleteMultipartUpload" => {
+                Ok(Event::S3ObjectCreatedCompleteMultipartUpload)
+            }
+            "s3:ObjectCreated:Copy" => Ok(Event::S3ObjectCreatedCopy),
+            "s3:ObjectCreated:Post" => Ok(Event::S3ObjectCreatedPost),
+            "s3:ObjectCreated:Put" => Ok(Event::S3ObjectCreatedPut),
+            "s3:ObjectRemoved:*" => Ok(Event::S3ObjectRemoved),
+            "s3:ObjectRemoved:Delete" => Ok(Event::S3ObjectRemovedDelete),
+            "s3:ObjectRemoved:DeleteMarkerCreated" => Ok(Event::S3ObjectRemovedDeleteMarkerCreated),
+            "s3:ReducedRedundancyLostObject" => Ok(Event::S3ReducedRedundancyLostObject),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EventDeserializer;
 impl EventDeserializer {
     #[allow(unused_variables)]
@@ -3051,6 +3381,41 @@ impl EventListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExpirationStatus {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for ExpirationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExpirationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ExpirationStatus::Disabled => "Disabled",
+            ExpirationStatus::Enabled => "Enabled",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExpirationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Disabled" => Ok(ExpirationStatus::Disabled),
+            "Enabled" => Ok(ExpirationStatus::Enabled),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ExpirationStatusDeserializer;
 impl ExpirationStatusDeserializer {
     #[allow(unused_variables)]
@@ -3083,7 +3448,7 @@ impl ExpiredObjectDeleteMarkerDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3287,6 +3652,41 @@ impl FilterRuleListSerializer {
             parts.push(FilterRuleSerializer::serialize(name, element));
         }
         parts.join("")
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FilterRuleName {
+    Prefix,
+    Suffix,
+}
+
+impl Into<String> for FilterRuleName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FilterRuleName {
+    fn into(self) -> &'static str {
+        match self {
+            FilterRuleName::Prefix => "prefix",
+            FilterRuleName::Suffix => "suffix",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FilterRuleName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "prefix" => Ok(FilterRuleName::Prefix),
+            "suffix" => Ok(FilterRuleName::Suffix),
+            _ => Err(()),
+        }
     }
 }
 
@@ -5208,6 +5608,38 @@ impl InventoryFilterSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InventoryFormat {
+    Csv,
+}
+
+impl Into<String> for InventoryFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InventoryFormat {
+    fn into(self) -> &'static str {
+        match self {
+            InventoryFormat::Csv => "CSV",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CSV" => Ok(InventoryFormat::Csv),
+            _ => Err(()),
+        }
+    }
+}
+
 struct InventoryFormatDeserializer;
 impl InventoryFormatDeserializer {
     #[allow(unused_variables)]
@@ -5230,6 +5662,41 @@ impl InventoryFormatSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InventoryFrequency {
+    Daily,
+    Weekly,
+}
+
+impl Into<String> for InventoryFrequency {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InventoryFrequency {
+    fn into(self) -> &'static str {
+        match self {
+            InventoryFrequency::Daily => "Daily",
+            InventoryFrequency::Weekly => "Weekly",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryFrequency {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Daily" => Ok(InventoryFrequency::Daily),
+            "Weekly" => Ok(InventoryFrequency::Weekly),
+            _ => Err(()),
+        }
     }
 }
 
@@ -5283,6 +5750,41 @@ impl InventoryIdSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InventoryIncludedObjectVersions {
+    All,
+    Current,
+}
+
+impl Into<String> for InventoryIncludedObjectVersions {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InventoryIncludedObjectVersions {
+    fn into(self) -> &'static str {
+        match self {
+            InventoryIncludedObjectVersions::All => "All",
+            InventoryIncludedObjectVersions::Current => "Current",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryIncludedObjectVersions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "All" => Ok(InventoryIncludedObjectVersions::All),
+            "Current" => Ok(InventoryIncludedObjectVersions::Current),
+            _ => Err(()),
+        }
+    }
+}
+
 struct InventoryIncludedObjectVersionsDeserializer;
 impl InventoryIncludedObjectVersionsDeserializer {
     #[allow(unused_variables)]
@@ -5305,6 +5807,53 @@ impl InventoryIncludedObjectVersionsSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InventoryOptionalField {
+    Etag,
+    IsMultipartUploaded,
+    LastModifiedDate,
+    ReplicationStatus,
+    Size,
+    StorageClass,
+}
+
+impl Into<String> for InventoryOptionalField {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InventoryOptionalField {
+    fn into(self) -> &'static str {
+        match self {
+            InventoryOptionalField::Etag => "ETag",
+            InventoryOptionalField::IsMultipartUploaded => "IsMultipartUploaded",
+            InventoryOptionalField::LastModifiedDate => "LastModifiedDate",
+            InventoryOptionalField::ReplicationStatus => "ReplicationStatus",
+            InventoryOptionalField::Size => "Size",
+            InventoryOptionalField::StorageClass => "StorageClass",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryOptionalField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ETag" => Ok(InventoryOptionalField::Etag),
+            "IsMultipartUploaded" => Ok(InventoryOptionalField::IsMultipartUploaded),
+            "LastModifiedDate" => Ok(InventoryOptionalField::LastModifiedDate),
+            "ReplicationStatus" => Ok(InventoryOptionalField::ReplicationStatus),
+            "Size" => Ok(InventoryOptionalField::Size),
+            "StorageClass" => Ok(InventoryOptionalField::StorageClass),
+            _ => Err(()),
+        }
     }
 }
 
@@ -5542,7 +6091,7 @@ impl IsEnabledDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5567,7 +6116,7 @@ impl IsLatestDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5581,7 +6130,7 @@ impl IsTruncatedDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5595,7 +6144,7 @@ impl KeyCountDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7253,6 +7802,41 @@ impl LoggingEnabledSerializer {
 }
 
 
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MFADelete {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for MFADelete {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MFADelete {
+    fn into(self) -> &'static str {
+        match self {
+            MFADelete::Disabled => "Disabled",
+            MFADelete::Enabled => "Enabled",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MFADelete {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Disabled" => Ok(MFADelete::Disabled),
+            "Enabled" => Ok(MFADelete::Enabled),
+            _ => Err(()),
+        }
+    }
+}
+
+
 pub struct MFADeleteSerializer;
 impl MFADeleteSerializer {
     #[allow(unused_variables, warnings)]
@@ -7260,6 +7844,41 @@ impl MFADeleteSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MFADeleteStatus {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for MFADeleteStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MFADeleteStatus {
+    fn into(self) -> &'static str {
+        match self {
+            MFADeleteStatus::Disabled => "Disabled",
+            MFADeleteStatus::Enabled => "Enabled",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MFADeleteStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Disabled" => Ok(MFADeleteStatus::Disabled),
+            "Enabled" => Ok(MFADeleteStatus::Enabled),
+            _ => Err(()),
+        }
     }
 }
 
@@ -7309,7 +7928,7 @@ impl MaxAgeSecondsDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7334,7 +7953,7 @@ impl MaxKeysDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7359,7 +7978,7 @@ impl MaxPartsDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7384,7 +8003,7 @@ impl MaxUploadsDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7416,6 +8035,41 @@ impl MessageDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MetadataDirective {
+    Copy,
+    Replace,
+}
+
+impl Into<String> for MetadataDirective {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MetadataDirective {
+    fn into(self) -> &'static str {
+        match self {
+            MetadataDirective::Copy => "COPY",
+            MetadataDirective::Replace => "REPLACE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetadataDirective {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COPY" => Ok(MetadataDirective::Copy),
+            "REPLACE" => Ok(MetadataDirective::Replace),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Clone,Debug)]
 pub struct MetricsAndOperator {
     #[doc="The prefix used when evaluating an AND predicate."]
@@ -7852,7 +8506,7 @@ impl NextPartNumberMarkerDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -8397,6 +9051,56 @@ impl ObjectDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ObjectCannedACL {
+    AuthenticatedRead,
+    AwsExecRead,
+    BucketOwnerFullControl,
+    BucketOwnerRead,
+    Private,
+    PublicRead,
+    PublicReadWrite,
+}
+
+impl Into<String> for ObjectCannedACL {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ObjectCannedACL {
+    fn into(self) -> &'static str {
+        match self {
+            ObjectCannedACL::AuthenticatedRead => "authenticated-read",
+            ObjectCannedACL::AwsExecRead => "aws-exec-read",
+            ObjectCannedACL::BucketOwnerFullControl => "bucket-owner-full-control",
+            ObjectCannedACL::BucketOwnerRead => "bucket-owner-read",
+            ObjectCannedACL::Private => "private",
+            ObjectCannedACL::PublicRead => "public-read",
+            ObjectCannedACL::PublicReadWrite => "public-read-write",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectCannedACL {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "authenticated-read" => Ok(ObjectCannedACL::AuthenticatedRead),
+            "aws-exec-read" => Ok(ObjectCannedACL::AwsExecRead),
+            "bucket-owner-full-control" => Ok(ObjectCannedACL::BucketOwnerFullControl),
+            "bucket-owner-read" => Ok(ObjectCannedACL::BucketOwnerRead),
+            "private" => Ok(ObjectCannedACL::Private),
+            "public-read" => Ok(ObjectCannedACL::PublicRead),
+            "public-read-write" => Ok(ObjectCannedACL::PublicReadWrite),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Clone,Debug)]
 pub struct ObjectIdentifier {
     #[doc="Key name of the object to delete."]
@@ -8486,6 +9190,44 @@ impl ObjectListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ObjectStorageClass {
+    Glacier,
+    ReducedRedundancy,
+    Standard,
+}
+
+impl Into<String> for ObjectStorageClass {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ObjectStorageClass {
+    fn into(self) -> &'static str {
+        match self {
+            ObjectStorageClass::Glacier => "GLACIER",
+            ObjectStorageClass::ReducedRedundancy => "REDUCED_REDUNDANCY",
+            ObjectStorageClass::Standard => "STANDARD",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectStorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GLACIER" => Ok(ObjectStorageClass::Glacier),
+            "REDUCED_REDUNDANCY" => Ok(ObjectStorageClass::ReducedRedundancy),
+            "STANDARD" => Ok(ObjectStorageClass::Standard),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ObjectStorageClassDeserializer;
 impl ObjectStorageClassDeserializer {
     #[allow(unused_variables)]
@@ -8638,6 +9380,38 @@ impl ObjectVersionListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ObjectVersionStorageClass {
+    Standard,
+}
+
+impl Into<String> for ObjectVersionStorageClass {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ObjectVersionStorageClass {
+    fn into(self) -> &'static str {
+        match self {
+            ObjectVersionStorageClass::Standard => "STANDARD",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectVersionStorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "STANDARD" => Ok(ObjectVersionStorageClass::Standard),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ObjectVersionStorageClassDeserializer;
 impl ObjectVersionStorageClassDeserializer {
     #[allow(unused_variables)]
@@ -8794,7 +9568,7 @@ impl PartNumberDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -8819,7 +9593,7 @@ impl PartNumberMarkerDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -8865,6 +9639,41 @@ impl PartsDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Payer {
+    BucketOwner,
+    Requester,
+}
+
+impl Into<String> for Payer {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Payer {
+    fn into(self) -> &'static str {
+        match self {
+            Payer::BucketOwner => "BucketOwner",
+            Payer::Requester => "Requester",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Payer {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BucketOwner" => Ok(Payer::BucketOwner),
+            "Requester" => Ok(Payer::Requester),
+            _ => Err(()),
+        }
+    }
+}
+
 struct PayerDeserializer;
 impl PayerDeserializer {
     #[allow(unused_variables)]
@@ -8887,6 +9696,50 @@ impl PayerSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Permission {
+    FullControl,
+    Read,
+    ReadAcp,
+    Write,
+    WriteAcp,
+}
+
+impl Into<String> for Permission {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Permission {
+    fn into(self) -> &'static str {
+        match self {
+            Permission::FullControl => "FULL_CONTROL",
+            Permission::Read => "READ",
+            Permission::ReadAcp => "READ_ACP",
+            Permission::Write => "WRITE",
+            Permission::WriteAcp => "WRITE_ACP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Permission {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FULL_CONTROL" => Ok(Permission::FullControl),
+            "READ" => Ok(Permission::Read),
+            "READ_ACP" => Ok(Permission::ReadAcp),
+            "WRITE" => Ok(Permission::Write),
+            "WRITE_ACP" => Ok(Permission::WriteAcp),
+            _ => Err(()),
+        }
     }
 }
 
@@ -8948,6 +9801,41 @@ impl PrefixSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Protocol {
+    Http,
+    Https,
+}
+
+impl Into<String> for Protocol {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Protocol {
+    fn into(self) -> &'static str {
+        match self {
+            Protocol::Http => "http",
+            Protocol::Https => "https",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Protocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "http" => Ok(Protocol::Http),
+            "https" => Ok(Protocol::Https),
+            _ => Err(()),
+        }
     }
 }
 
@@ -9886,6 +10774,41 @@ impl ReplicationRuleSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReplicationRuleStatus {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for ReplicationRuleStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReplicationRuleStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ReplicationRuleStatus::Disabled => "Disabled",
+            ReplicationRuleStatus::Enabled => "Enabled",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationRuleStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Disabled" => Ok(ReplicationRuleStatus::Disabled),
+            "Enabled" => Ok(ReplicationRuleStatus::Enabled),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ReplicationRuleStatusDeserializer;
 impl ReplicationRuleStatusDeserializer {
     #[allow(unused_variables)]
@@ -9949,6 +10872,111 @@ impl ReplicationRulesSerializer {
             parts.push(ReplicationRuleSerializer::serialize(name, element));
         }
         parts.join("")
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReplicationStatus {
+    Complete,
+    Failed,
+    Pending,
+    Replica,
+}
+
+impl Into<String> for ReplicationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReplicationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ReplicationStatus::Complete => "COMPLETE",
+            ReplicationStatus::Failed => "FAILED",
+            ReplicationStatus::Pending => "PENDING",
+            ReplicationStatus::Replica => "REPLICA",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COMPLETE" => Ok(ReplicationStatus::Complete),
+            "FAILED" => Ok(ReplicationStatus::Failed),
+            "PENDING" => Ok(ReplicationStatus::Pending),
+            "REPLICA" => Ok(ReplicationStatus::Replica),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="If present, indicates that the requester was successfully charged for the request."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RequestCharged {
+    Requester,
+}
+
+impl Into<String> for RequestCharged {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RequestCharged {
+    fn into(self) -> &'static str {
+        match self {
+            RequestCharged::Requester => "requester",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequestCharged {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "requester" => Ok(RequestCharged::Requester),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="Confirms that the requester knows that she or he will be charged for the request. Bucket owners need not specify this parameter in their requests. Documentation on downloading objects from requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RequestPayer {
+    Requester,
+}
+
+impl Into<String> for RequestPayer {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RequestPayer {
+    fn into(self) -> &'static str {
+        match self {
+            RequestPayer::Requester => "requester",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequestPayer {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "requester" => Ok(RequestPayer::Requester),
+            _ => Err(()),
+        }
     }
 }
 
@@ -10458,6 +11486,41 @@ impl S3KeyFilterSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ServerSideEncryption {
+    Aes256,
+    AwsKms,
+}
+
+impl Into<String> for ServerSideEncryption {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ServerSideEncryption {
+    fn into(self) -> &'static str {
+        match self {
+            ServerSideEncryption::Aes256 => "AES256",
+            ServerSideEncryption::AwsKms => "aws:kms",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerSideEncryption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AES256" => Ok(ServerSideEncryption::Aes256),
+            "aws:kms" => Ok(ServerSideEncryption::AwsKms),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SizeDeserializer;
 impl SizeDeserializer {
     #[allow(unused_variables)]
@@ -10465,7 +11528,7 @@ impl SizeDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -10494,6 +11557,44 @@ impl StartAfterSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StorageClass {
+    ReducedRedundancy,
+    Standard,
+    StandardIa,
+}
+
+impl Into<String> for StorageClass {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StorageClass {
+    fn into(self) -> &'static str {
+        match self {
+            StorageClass::ReducedRedundancy => "REDUCED_REDUNDANCY",
+            StorageClass::Standard => "STANDARD",
+            StorageClass::StandardIa => "STANDARD_IA",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "REDUCED_REDUNDANCY" => Ok(StorageClass::ReducedRedundancy),
+            "STANDARD" => Ok(StorageClass::Standard),
+            "STANDARD_IA" => Ok(StorageClass::StandardIa),
+            _ => Err(()),
+        }
     }
 }
 
@@ -10649,6 +11750,38 @@ impl StorageClassAnalysisDataExportSerializer {
                 value = obj.output_schema_version);
         serialized += &format!("</{name}>", name = name);
         serialized
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StorageClassAnalysisSchemaVersion {
+    V1,
+}
+
+impl Into<String> for StorageClassAnalysisSchemaVersion {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StorageClassAnalysisSchemaVersion {
+    fn into(self) -> &'static str {
+        match self {
+            StorageClassAnalysisSchemaVersion::V1 => "V_1",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageClassAnalysisSchemaVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "V_1" => Ok(StorageClassAnalysisSchemaVersion::V1),
+            _ => Err(()),
+        }
     }
 }
 
@@ -10840,6 +11973,41 @@ impl TaggingSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TaggingDirective {
+    Copy,
+    Replace,
+}
+
+impl Into<String> for TaggingDirective {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TaggingDirective {
+    fn into(self) -> &'static str {
+        match self {
+            TaggingDirective::Copy => "COPY",
+            TaggingDirective::Replace => "REPLACE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaggingDirective {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COPY" => Ok(TaggingDirective::Copy),
+            "REPLACE" => Ok(TaggingDirective::Replace),
+            _ => Err(()),
+        }
+    }
+}
+
 struct TargetBucketDeserializer;
 impl TargetBucketDeserializer {
     #[allow(unused_variables)]
@@ -11014,6 +12182,44 @@ impl TargetPrefixSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Tier {
+    Bulk,
+    Expedited,
+    Standard,
+}
+
+impl Into<String> for Tier {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Tier {
+    fn into(self) -> &'static str {
+        match self {
+            Tier::Bulk => "Bulk",
+            Tier::Expedited => "Expedited",
+            Tier::Standard => "Standard",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Tier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Bulk" => Ok(Tier::Bulk),
+            "Expedited" => Ok(Tier::Expedited),
+            "Standard" => Ok(Tier::Standard),
+            _ => Err(()),
+        }
     }
 }
 
@@ -11397,6 +12603,41 @@ impl TransitionListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TransitionStorageClass {
+    Glacier,
+    StandardIa,
+}
+
+impl Into<String> for TransitionStorageClass {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TransitionStorageClass {
+    fn into(self) -> &'static str {
+        match self {
+            TransitionStorageClass::Glacier => "GLACIER",
+            TransitionStorageClass::StandardIa => "STANDARD_IA",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TransitionStorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GLACIER" => Ok(TransitionStorageClass::Glacier),
+            "STANDARD_IA" => Ok(TransitionStorageClass::StandardIa),
+            _ => Err(()),
+        }
+    }
+}
+
 struct TransitionStorageClassDeserializer;
 impl TransitionStorageClassDeserializer {
     #[allow(unused_variables)]
@@ -11419,6 +12660,44 @@ impl TransitionStorageClassSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Type {
+    AmazonCustomerByEmail,
+    CanonicalUser,
+    Group,
+}
+
+impl Into<String> for Type {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Type {
+    fn into(self) -> &'static str {
+        match self {
+            Type::AmazonCustomerByEmail => "AmazonCustomerByEmail",
+            Type::CanonicalUser => "CanonicalUser",
+            Type::Group => "Group",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Type {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AmazonCustomerByEmail" => Ok(Type::AmazonCustomerByEmail),
+            "CanonicalUser" => Ok(Type::CanonicalUser),
+            "Group" => Ok(Type::Group),
+            _ => Err(()),
+        }
     }
 }
 
@@ -16973,9 +18252,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -17045,9 +18324,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -17244,9 +18523,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -17364,9 +18643,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -17500,9 +18779,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -17585,9 +18864,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -17622,9 +18901,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -17656,9 +18935,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -17694,9 +18973,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -17728,9 +19007,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -17765,9 +19044,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -17799,9 +19078,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -17836,9 +19115,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -17870,9 +19149,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -17907,9 +19186,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -17955,9 +19234,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18020,9 +19299,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18092,9 +19371,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18146,9 +19425,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18193,9 +19472,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18244,9 +19523,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18291,9 +19570,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18342,9 +19621,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18389,9 +19668,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18442,9 +19721,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18489,9 +19768,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18541,9 +19820,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18594,9 +19873,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18642,9 +19921,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18693,9 +19972,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18742,9 +20021,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result = GetBucketPolicyOutput::default();
                 result.policy = Some(String::from_utf8_lossy(&response.body).into_owned());
@@ -18782,9 +20061,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18835,9 +20114,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18882,9 +20161,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18934,9 +20213,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -18986,9 +20265,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -19106,9 +20385,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result = GetObjectOutput::default();
                 result.body = Some(response.body);
@@ -19272,9 +20551,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -19329,9 +20608,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -19388,9 +20667,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result = GetObjectTorrentOutput::default();
                 result.body = Some(response.body);
@@ -19429,9 +20708,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -19507,9 +20786,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -19673,9 +20952,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -19724,9 +21003,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -19775,9 +21054,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -19820,9 +21099,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -19891,9 +21170,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -19966,9 +21245,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -20040,9 +21319,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -20118,9 +21397,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -20178,9 +21457,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -20242,9 +21521,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20313,9 +21592,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20354,9 +21633,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20401,9 +21680,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20442,9 +21721,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20498,9 +21777,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20555,9 +21834,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20597,9 +21876,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20639,9 +21918,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20679,9 +21958,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20723,9 +22002,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20763,9 +22042,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20816,9 +22095,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20859,9 +22138,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20906,9 +22185,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -20955,9 +22234,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -21000,9 +22279,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -21132,9 +22411,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -21268,9 +22547,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -21331,9 +22610,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -21402,9 +22681,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -21484,9 +22763,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -21626,9 +22905,9 @@ impl<P, D> S3 for S3Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 

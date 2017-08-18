@@ -11,18 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
-use std::str::FromStr;
 use xml::EventReader;
 use xml::reader::ParserConfig;
 use rusoto_core::param::{Params, ServiceParams};
@@ -87,13 +82,51 @@ impl AbortableOperationInProgressDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionHistoryStatus {
+    Completed,
+    Failed,
+    Unknown,
+}
+
+impl Into<String> for ActionHistoryStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionHistoryStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ActionHistoryStatus::Completed => "Completed",
+            ActionHistoryStatus::Failed => "Failed",
+            ActionHistoryStatus::Unknown => "Unknown",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionHistoryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Completed" => Ok(ActionHistoryStatus::Completed),
+            "Failed" => Ok(ActionHistoryStatus::Failed),
+            "Unknown" => Ok(ActionHistoryStatus::Unknown),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ActionHistoryStatusDeserializer;
 impl ActionHistoryStatusDeserializer {
     #[allow(unused_variables)]
@@ -108,6 +141,47 @@ impl ActionHistoryStatusDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionStatus {
+    Pending,
+    Running,
+    Scheduled,
+    Unknown,
+}
+
+impl Into<String> for ActionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ActionStatus::Pending => "Pending",
+            ActionStatus::Running => "Running",
+            ActionStatus::Scheduled => "Scheduled",
+            ActionStatus::Unknown => "Unknown",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Pending" => Ok(ActionStatus::Pending),
+            "Running" => Ok(ActionStatus::Running),
+            "Scheduled" => Ok(ActionStatus::Scheduled),
+            "Unknown" => Ok(ActionStatus::Unknown),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ActionStatusDeserializer;
 impl ActionStatusDeserializer {
     #[allow(unused_variables)]
@@ -122,6 +196,44 @@ impl ActionStatusDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionType {
+    InstanceRefresh,
+    PlatformUpdate,
+    Unknown,
+}
+
+impl Into<String> for ActionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionType {
+    fn into(self) -> &'static str {
+        match self {
+            ActionType::InstanceRefresh => "InstanceRefresh",
+            ActionType::PlatformUpdate => "PlatformUpdate",
+            ActionType::Unknown => "Unknown",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "InstanceRefresh" => Ok(ActionType::InstanceRefresh),
+            "PlatformUpdate" => Ok(ActionType::PlatformUpdate),
+            "Unknown" => Ok(ActionType::Unknown),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ActionTypeDeserializer;
 impl ActionTypeDeserializer {
     #[allow(unused_variables)]
@@ -925,6 +1037,50 @@ impl ApplicationVersionLifecycleConfigSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ApplicationVersionStatus {
+    Building,
+    Failed,
+    Processed,
+    Processing,
+    Unprocessed,
+}
+
+impl Into<String> for ApplicationVersionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ApplicationVersionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ApplicationVersionStatus::Building => "Building",
+            ApplicationVersionStatus::Failed => "Failed",
+            ApplicationVersionStatus::Processed => "Processed",
+            ApplicationVersionStatus::Processing => "Processing",
+            ApplicationVersionStatus::Unprocessed => "Unprocessed",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplicationVersionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Building" => Ok(ApplicationVersionStatus::Building),
+            "Failed" => Ok(ApplicationVersionStatus::Failed),
+            "Processed" => Ok(ApplicationVersionStatus::Processed),
+            "Processing" => Ok(ApplicationVersionStatus::Processing),
+            "Unprocessed" => Ok(ApplicationVersionStatus::Unprocessed),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ApplicationVersionStatusDeserializer;
 impl ApplicationVersionStatusDeserializer {
     #[allow(unused_variables)]
@@ -1221,7 +1377,7 @@ impl BoxedBooleanDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1235,7 +1391,7 @@ impl BoxedIntDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1561,7 +1717,7 @@ impl CnameAvailabilityDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1601,6 +1757,82 @@ impl ComposeEnvironmentsMessageSerializer {
                                                field_value);
         }
 
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComputeType {
+    BuildGeneral1Large,
+    BuildGeneral1Medium,
+    BuildGeneral1Small,
+}
+
+impl Into<String> for ComputeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComputeType {
+    fn into(self) -> &'static str {
+        match self {
+            ComputeType::BuildGeneral1Large => "BUILD_GENERAL1_LARGE",
+            ComputeType::BuildGeneral1Medium => "BUILD_GENERAL1_MEDIUM",
+            ComputeType::BuildGeneral1Small => "BUILD_GENERAL1_SMALL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComputeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BUILD_GENERAL1_LARGE" => Ok(ComputeType::BuildGeneral1Large),
+            "BUILD_GENERAL1_MEDIUM" => Ok(ComputeType::BuildGeneral1Medium),
+            "BUILD_GENERAL1_SMALL" => Ok(ComputeType::BuildGeneral1Small),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConfigurationDeploymentStatus {
+    Deployed,
+    Failed,
+    Pending,
+}
+
+impl Into<String> for ConfigurationDeploymentStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConfigurationDeploymentStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ConfigurationDeploymentStatus::Deployed => "deployed",
+            ConfigurationDeploymentStatus::Failed => "failed",
+            ConfigurationDeploymentStatus::Pending => "pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationDeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "deployed" => Ok(ConfigurationDeploymentStatus::Deployed),
+            "failed" => Ok(ConfigurationDeploymentStatus::Failed),
+            "pending" => Ok(ConfigurationDeploymentStatus::Pending),
+            _ => Err(()),
+        }
     }
 }
 
@@ -2027,6 +2259,41 @@ impl ConfigurationOptionValueDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConfigurationOptionValueType {
+    List,
+    Scalar,
+}
+
+impl Into<String> for ConfigurationOptionValueType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConfigurationOptionValueType {
+    fn into(self) -> &'static str {
+        match self {
+            ConfigurationOptionValueType::List => "List",
+            ConfigurationOptionValueType::Scalar => "Scalar",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationOptionValueType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "List" => Ok(ConfigurationOptionValueType::List),
+            "Scalar" => Ok(ConfigurationOptionValueType::Scalar),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ConfigurationOptionValueTypeDeserializer;
 impl ConfigurationOptionValueTypeDeserializer {
     #[allow(unused_variables)]
@@ -4322,6 +4589,47 @@ impl EnvironmentDescriptionsMessageDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EnvironmentHealth {
+    Green,
+    Grey,
+    Red,
+    Yellow,
+}
+
+impl Into<String> for EnvironmentHealth {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EnvironmentHealth {
+    fn into(self) -> &'static str {
+        match self {
+            EnvironmentHealth::Green => "Green",
+            EnvironmentHealth::Grey => "Grey",
+            EnvironmentHealth::Red => "Red",
+            EnvironmentHealth::Yellow => "Yellow",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentHealth {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Green" => Ok(EnvironmentHealth::Green),
+            "Grey" => Ok(EnvironmentHealth::Grey),
+            "Red" => Ok(EnvironmentHealth::Red),
+            "Yellow" => Ok(EnvironmentHealth::Yellow),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EnvironmentHealthDeserializer;
 impl EnvironmentHealthDeserializer {
     #[allow(unused_variables)]
@@ -4337,6 +4645,59 @@ impl EnvironmentHealthDeserializer {
     }
 }
 
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EnvironmentHealthAttribute {
+    All,
+    ApplicationMetrics,
+    Causes,
+    Color,
+    HealthStatus,
+    InstancesHealth,
+    RefreshedAt,
+    Status,
+}
+
+impl Into<String> for EnvironmentHealthAttribute {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EnvironmentHealthAttribute {
+    fn into(self) -> &'static str {
+        match self {
+            EnvironmentHealthAttribute::All => "All",
+            EnvironmentHealthAttribute::ApplicationMetrics => "ApplicationMetrics",
+            EnvironmentHealthAttribute::Causes => "Causes",
+            EnvironmentHealthAttribute::Color => "Color",
+            EnvironmentHealthAttribute::HealthStatus => "HealthStatus",
+            EnvironmentHealthAttribute::InstancesHealth => "InstancesHealth",
+            EnvironmentHealthAttribute::RefreshedAt => "RefreshedAt",
+            EnvironmentHealthAttribute::Status => "Status",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentHealthAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "All" => Ok(EnvironmentHealthAttribute::All),
+            "ApplicationMetrics" => Ok(EnvironmentHealthAttribute::ApplicationMetrics),
+            "Causes" => Ok(EnvironmentHealthAttribute::Causes),
+            "Color" => Ok(EnvironmentHealthAttribute::Color),
+            "HealthStatus" => Ok(EnvironmentHealthAttribute::HealthStatus),
+            "InstancesHealth" => Ok(EnvironmentHealthAttribute::InstancesHealth),
+            "RefreshedAt" => Ok(EnvironmentHealthAttribute::RefreshedAt),
+            "Status" => Ok(EnvironmentHealthAttribute::Status),
+            _ => Err(()),
+        }
+    }
+}
+
+
 /// Serialize `EnvironmentHealthAttributes` contents to a `SignedRequest`.
 struct EnvironmentHealthAttributesSerializer;
 impl EnvironmentHealthAttributesSerializer {
@@ -4344,6 +4705,59 @@ impl EnvironmentHealthAttributesSerializer {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EnvironmentHealthStatus {
+    Degraded,
+    Info,
+    NoData,
+    Ok,
+    Pending,
+    Severe,
+    Unknown,
+    Warning,
+}
+
+impl Into<String> for EnvironmentHealthStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EnvironmentHealthStatus {
+    fn into(self) -> &'static str {
+        match self {
+            EnvironmentHealthStatus::Degraded => "Degraded",
+            EnvironmentHealthStatus::Info => "Info",
+            EnvironmentHealthStatus::NoData => "NoData",
+            EnvironmentHealthStatus::Ok => "Ok",
+            EnvironmentHealthStatus::Pending => "Pending",
+            EnvironmentHealthStatus::Severe => "Severe",
+            EnvironmentHealthStatus::Unknown => "Unknown",
+            EnvironmentHealthStatus::Warning => "Warning",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentHealthStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Degraded" => Ok(EnvironmentHealthStatus::Degraded),
+            "Info" => Ok(EnvironmentHealthStatus::Info),
+            "NoData" => Ok(EnvironmentHealthStatus::NoData),
+            "Ok" => Ok(EnvironmentHealthStatus::Ok),
+            "Pending" => Ok(EnvironmentHealthStatus::Pending),
+            "Severe" => Ok(EnvironmentHealthStatus::Severe),
+            "Unknown" => Ok(EnvironmentHealthStatus::Unknown),
+            "Warning" => Ok(EnvironmentHealthStatus::Warning),
+            _ => Err(()),
         }
     }
 }
@@ -4501,6 +4915,41 @@ impl EnvironmentInfoDescriptionListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EnvironmentInfoType {
+    Bundle,
+    Tail,
+}
+
+impl Into<String> for EnvironmentInfoType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EnvironmentInfoType {
+    fn into(self) -> &'static str {
+        match self {
+            EnvironmentInfoType::Bundle => "bundle",
+            EnvironmentInfoType::Tail => "tail",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentInfoType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "bundle" => Ok(EnvironmentInfoType::Bundle),
+            "tail" => Ok(EnvironmentInfoType::Tail),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EnvironmentInfoTypeDeserializer;
 impl EnvironmentInfoTypeDeserializer {
     #[allow(unused_variables)]
@@ -4828,6 +5277,50 @@ impl EnvironmentResourcesDescriptionDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EnvironmentStatus {
+    Launching,
+    Ready,
+    Terminated,
+    Terminating,
+    Updating,
+}
+
+impl Into<String> for EnvironmentStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EnvironmentStatus {
+    fn into(self) -> &'static str {
+        match self {
+            EnvironmentStatus::Launching => "Launching",
+            EnvironmentStatus::Ready => "Ready",
+            EnvironmentStatus::Terminated => "Terminated",
+            EnvironmentStatus::Terminating => "Terminating",
+            EnvironmentStatus::Updating => "Updating",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Launching" => Ok(EnvironmentStatus::Launching),
+            "Ready" => Ok(EnvironmentStatus::Ready),
+            "Terminated" => Ok(EnvironmentStatus::Terminated),
+            "Terminating" => Ok(EnvironmentStatus::Terminating),
+            "Updating" => Ok(EnvironmentStatus::Updating),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EnvironmentStatusDeserializer;
 impl EnvironmentStatusDeserializer {
     #[allow(unused_variables)]
@@ -5150,6 +5643,53 @@ impl EventMessageDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventSeverity {
+    Debug,
+    Error,
+    Fatal,
+    Info,
+    Trace,
+    Warn,
+}
+
+impl Into<String> for EventSeverity {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventSeverity {
+    fn into(self) -> &'static str {
+        match self {
+            EventSeverity::Debug => "DEBUG",
+            EventSeverity::Error => "ERROR",
+            EventSeverity::Fatal => "FATAL",
+            EventSeverity::Info => "INFO",
+            EventSeverity::Trace => "TRACE",
+            EventSeverity::Warn => "WARN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventSeverity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DEBUG" => Ok(EventSeverity::Debug),
+            "ERROR" => Ok(EventSeverity::Error),
+            "FATAL" => Ok(EventSeverity::Fatal),
+            "INFO" => Ok(EventSeverity::Info),
+            "TRACE" => Ok(EventSeverity::Trace),
+            "WARN" => Ok(EventSeverity::Warn),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EventSeverityDeserializer;
 impl EventSeverityDeserializer {
     #[allow(unused_variables)]
@@ -5164,6 +5704,56 @@ impl EventSeverityDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FailureType {
+    CancellationFailed,
+    InternalFailure,
+    InvalidEnvironmentState,
+    PermissionsError,
+    RollbackFailed,
+    RollbackSuccessful,
+    UpdateCancelled,
+}
+
+impl Into<String> for FailureType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FailureType {
+    fn into(self) -> &'static str {
+        match self {
+            FailureType::CancellationFailed => "CancellationFailed",
+            FailureType::InternalFailure => "InternalFailure",
+            FailureType::InvalidEnvironmentState => "InvalidEnvironmentState",
+            FailureType::PermissionsError => "PermissionsError",
+            FailureType::RollbackFailed => "RollbackFailed",
+            FailureType::RollbackSuccessful => "RollbackSuccessful",
+            FailureType::UpdateCancelled => "UpdateCancelled",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailureType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CancellationFailed" => Ok(FailureType::CancellationFailed),
+            "InternalFailure" => Ok(FailureType::InternalFailure),
+            "InvalidEnvironmentState" => Ok(FailureType::InvalidEnvironmentState),
+            "PermissionsError" => Ok(FailureType::PermissionsError),
+            "RollbackFailed" => Ok(FailureType::RollbackFailed),
+            "RollbackSuccessful" => Ok(FailureType::RollbackSuccessful),
+            "UpdateCancelled" => Ok(FailureType::UpdateCancelled),
+            _ => Err(()),
+        }
+    }
+}
+
 struct FailureTypeDeserializer;
 impl FailureTypeDeserializer {
     #[allow(unused_variables)]
@@ -5449,6 +6039,68 @@ impl InstanceListDeserializer {
     }
 }
 
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstancesHealthAttribute {
+    All,
+    ApplicationMetrics,
+    AvailabilityZone,
+    Causes,
+    Color,
+    Deployment,
+    HealthStatus,
+    InstanceType,
+    LaunchedAt,
+    RefreshedAt,
+    System,
+}
+
+impl Into<String> for InstancesHealthAttribute {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstancesHealthAttribute {
+    fn into(self) -> &'static str {
+        match self {
+            InstancesHealthAttribute::All => "All",
+            InstancesHealthAttribute::ApplicationMetrics => "ApplicationMetrics",
+            InstancesHealthAttribute::AvailabilityZone => "AvailabilityZone",
+            InstancesHealthAttribute::Causes => "Causes",
+            InstancesHealthAttribute::Color => "Color",
+            InstancesHealthAttribute::Deployment => "Deployment",
+            InstancesHealthAttribute::HealthStatus => "HealthStatus",
+            InstancesHealthAttribute::InstanceType => "InstanceType",
+            InstancesHealthAttribute::LaunchedAt => "LaunchedAt",
+            InstancesHealthAttribute::RefreshedAt => "RefreshedAt",
+            InstancesHealthAttribute::System => "System",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstancesHealthAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "All" => Ok(InstancesHealthAttribute::All),
+            "ApplicationMetrics" => Ok(InstancesHealthAttribute::ApplicationMetrics),
+            "AvailabilityZone" => Ok(InstancesHealthAttribute::AvailabilityZone),
+            "Causes" => Ok(InstancesHealthAttribute::Causes),
+            "Color" => Ok(InstancesHealthAttribute::Color),
+            "Deployment" => Ok(InstancesHealthAttribute::Deployment),
+            "HealthStatus" => Ok(InstancesHealthAttribute::HealthStatus),
+            "InstanceType" => Ok(InstancesHealthAttribute::InstanceType),
+            "LaunchedAt" => Ok(InstancesHealthAttribute::LaunchedAt),
+            "RefreshedAt" => Ok(InstancesHealthAttribute::RefreshedAt),
+            "System" => Ok(InstancesHealthAttribute::System),
+            _ => Err(()),
+        }
+    }
+}
+
+
 /// Serialize `InstancesHealthAttributes` contents to a `SignedRequest`.
 struct InstancesHealthAttributesSerializer;
 impl InstancesHealthAttributesSerializer {
@@ -5467,7 +6119,7 @@ impl IntegerDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5917,7 +6569,7 @@ impl LoadAverageValueDeserializer {
                                        stack: &mut T)
                                        -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<f64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -6595,7 +7247,7 @@ impl NullableDoubleDeserializer {
                                        stack: &mut T)
                                        -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<f64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -6609,7 +7261,7 @@ impl NullableIntegerDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -6623,7 +7275,7 @@ impl NullableLongDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -6679,7 +7331,7 @@ impl OptionRestrictionMaxLengthDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -6693,7 +7345,7 @@ impl OptionRestrictionMaxValueDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -6707,7 +7359,7 @@ impl OptionRestrictionMinValueDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7288,6 +7940,50 @@ impl PlatformProgrammingLanguagesDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlatformStatus {
+    Creating,
+    Deleted,
+    Deleting,
+    Failed,
+    Ready,
+}
+
+impl Into<String> for PlatformStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlatformStatus {
+    fn into(self) -> &'static str {
+        match self {
+            PlatformStatus::Creating => "Creating",
+            PlatformStatus::Deleted => "Deleted",
+            PlatformStatus::Deleting => "Deleting",
+            PlatformStatus::Failed => "Failed",
+            PlatformStatus::Ready => "Ready",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlatformStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Creating" => Ok(PlatformStatus::Creating),
+            "Deleted" => Ok(PlatformStatus::Deleted),
+            "Deleting" => Ok(PlatformStatus::Deleting),
+            "Failed" => Ok(PlatformStatus::Failed),
+            "Ready" => Ok(PlatformStatus::Ready),
+            _ => Err(()),
+        }
+    }
+}
+
 struct PlatformStatusDeserializer;
 impl PlatformStatusDeserializer {
     #[allow(unused_variables)]
@@ -7628,7 +8324,7 @@ impl RequestCountDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -8276,6 +8972,41 @@ impl SourceLocationDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SourceRepository {
+    CodeCommit,
+    S3,
+}
+
+impl Into<String> for SourceRepository {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SourceRepository {
+    fn into(self) -> &'static str {
+        match self {
+            SourceRepository::CodeCommit => "CodeCommit",
+            SourceRepository::S3 => "S3",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceRepository {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CodeCommit" => Ok(SourceRepository::CodeCommit),
+            "S3" => Ok(SourceRepository::S3),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SourceRepositoryDeserializer;
 impl SourceRepositoryDeserializer {
     #[allow(unused_variables)]
@@ -8290,6 +9021,41 @@ impl SourceRepositoryDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SourceType {
+    Git,
+    Zip,
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SourceType {
+    fn into(self) -> &'static str {
+        match self {
+            SourceType::Git => "Git",
+            SourceType::Zip => "Zip",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Git" => Ok(SourceType::Git),
+            "Zip" => Ok(SourceType::Zip),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
@@ -9044,7 +9810,7 @@ impl UserDefinedOptionDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -9217,6 +9983,41 @@ impl ValidationMessagesListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ValidationSeverity {
+    Error,
+    Warning,
+}
+
+impl Into<String> for ValidationSeverity {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ValidationSeverity {
+    fn into(self) -> &'static str {
+        match self {
+            ValidationSeverity::Error => "error",
+            ValidationSeverity::Warning => "warning",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ValidationSeverity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "error" => Ok(ValidationSeverity::Error),
+            "warning" => Ok(ValidationSeverity::Warning),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ValidationSeverityDeserializer;
 impl ValidationSeverityDeserializer {
     #[allow(unused_variables)]
@@ -12469,7 +13270,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12497,7 +13298,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -12540,7 +13341,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -12583,7 +13384,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -12628,7 +13429,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -12674,7 +13475,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -12717,7 +13518,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -12761,7 +13562,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -12806,7 +13607,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -12850,7 +13651,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -12893,7 +13694,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12920,7 +13721,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12946,7 +13747,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12972,7 +13773,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12999,7 +13800,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13044,7 +13845,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13087,7 +13888,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13133,7 +13934,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13178,7 +13979,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13221,7 +14022,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13265,7 +14066,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13308,7 +14109,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13351,7 +14152,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13394,7 +14195,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13439,7 +14240,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13484,7 +14285,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13529,7 +14330,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13573,7 +14374,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13615,7 +14416,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13659,7 +14460,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -13686,7 +14487,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -13713,7 +14514,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -13741,7 +14542,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13783,7 +14584,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -13810,7 +14611,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13854,7 +14655,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13897,7 +14698,7 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13940,7 +14741,7 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -13983,7 +14784,7 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -14027,7 +14828,7 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -14072,7 +14873,7 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 

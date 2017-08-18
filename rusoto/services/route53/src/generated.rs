@@ -11,19 +11,14 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 
-use std::str::FromStr;
 use xml::reader::ParserConfig;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -136,7 +131,7 @@ impl AliasHealthEnabledDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -327,6 +322,44 @@ impl ChangeSerializer {
 }
 
 
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChangeAction {
+    Create,
+    Delete,
+    Upsert,
+}
+
+impl Into<String> for ChangeAction {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChangeAction {
+    fn into(self) -> &'static str {
+        match self {
+            ChangeAction::Create => "CREATE",
+            ChangeAction::Delete => "DELETE",
+            ChangeAction::Upsert => "UPSERT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CREATE" => Ok(ChangeAction::Create),
+            "DELETE" => Ok(ChangeAction::Delete),
+            "UPSERT" => Ok(ChangeAction::Upsert),
+            _ => Err(()),
+        }
+    }
+}
+
+
 pub struct ChangeActionSerializer;
 impl ChangeActionSerializer {
     #[allow(unused_variables, warnings)]
@@ -487,6 +520,41 @@ impl ChangeResourceRecordSetsResponseDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChangeStatus {
+    Insync,
+    Pending,
+}
+
+impl Into<String> for ChangeStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChangeStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ChangeStatus::Insync => "INSYNC",
+            ChangeStatus::Pending => "PENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "INSYNC" => Ok(ChangeStatus::Insync),
+            "PENDING" => Ok(ChangeStatus::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ChangeStatusDeserializer;
 impl ChangeStatusDeserializer {
     #[allow(unused_variables)]
@@ -740,6 +808,77 @@ impl CloudWatchAlarmConfigurationDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CloudWatchRegion {
+    ApNortheast1,
+    ApNortheast2,
+    ApSouth1,
+    ApSoutheast1,
+    ApSoutheast2,
+    CaCentral1,
+    EuCentral1,
+    EuWest1,
+    EuWest2,
+    SaEast1,
+    UsEast1,
+    UsEast2,
+    UsWest1,
+    UsWest2,
+}
+
+impl Into<String> for CloudWatchRegion {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CloudWatchRegion {
+    fn into(self) -> &'static str {
+        match self {
+            CloudWatchRegion::ApNortheast1 => "ap-northeast-1",
+            CloudWatchRegion::ApNortheast2 => "ap-northeast-2",
+            CloudWatchRegion::ApSouth1 => "ap-south-1",
+            CloudWatchRegion::ApSoutheast1 => "ap-southeast-1",
+            CloudWatchRegion::ApSoutheast2 => "ap-southeast-2",
+            CloudWatchRegion::CaCentral1 => "ca-central-1",
+            CloudWatchRegion::EuCentral1 => "eu-central-1",
+            CloudWatchRegion::EuWest1 => "eu-west-1",
+            CloudWatchRegion::EuWest2 => "eu-west-2",
+            CloudWatchRegion::SaEast1 => "sa-east-1",
+            CloudWatchRegion::UsEast1 => "us-east-1",
+            CloudWatchRegion::UsEast2 => "us-east-2",
+            CloudWatchRegion::UsWest1 => "us-west-1",
+            CloudWatchRegion::UsWest2 => "us-west-2",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudWatchRegion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ap-northeast-1" => Ok(CloudWatchRegion::ApNortheast1),
+            "ap-northeast-2" => Ok(CloudWatchRegion::ApNortheast2),
+            "ap-south-1" => Ok(CloudWatchRegion::ApSouth1),
+            "ap-southeast-1" => Ok(CloudWatchRegion::ApSoutheast1),
+            "ap-southeast-2" => Ok(CloudWatchRegion::ApSoutheast2),
+            "ca-central-1" => Ok(CloudWatchRegion::CaCentral1),
+            "eu-central-1" => Ok(CloudWatchRegion::EuCentral1),
+            "eu-west-1" => Ok(CloudWatchRegion::EuWest1),
+            "eu-west-2" => Ok(CloudWatchRegion::EuWest2),
+            "sa-east-1" => Ok(CloudWatchRegion::SaEast1),
+            "us-east-1" => Ok(CloudWatchRegion::UsEast1),
+            "us-east-2" => Ok(CloudWatchRegion::UsEast2),
+            "us-west-1" => Ok(CloudWatchRegion::UsWest1),
+            "us-west-2" => Ok(CloudWatchRegion::UsWest2),
+            _ => Err(()),
+        }
+    }
+}
+
 struct CloudWatchRegionDeserializer;
 impl CloudWatchRegionDeserializer {
     #[allow(unused_variables)]
@@ -762,6 +901,49 @@ impl CloudWatchRegionSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComparisonOperator {
+    GreaterThanOrEqualToThreshold,
+    GreaterThanThreshold,
+    LessThanOrEqualToThreshold,
+    LessThanThreshold,
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComparisonOperator {
+    fn into(self) -> &'static str {
+        match self {
+            ComparisonOperator::GreaterThanOrEqualToThreshold => "GreaterThanOrEqualToThreshold",
+            ComparisonOperator::GreaterThanThreshold => "GreaterThanThreshold",
+            ComparisonOperator::LessThanOrEqualToThreshold => "LessThanOrEqualToThreshold",
+            ComparisonOperator::LessThanThreshold => "LessThanThreshold",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GreaterThanOrEqualToThreshold" => {
+                Ok(ComparisonOperator::GreaterThanOrEqualToThreshold)
+            }
+            "GreaterThanThreshold" => Ok(ComparisonOperator::GreaterThanThreshold),
+            "LessThanOrEqualToThreshold" => Ok(ComparisonOperator::LessThanOrEqualToThreshold),
+            "LessThanThreshold" => Ok(ComparisonOperator::LessThanThreshold),
+            _ => Err(()),
+        }
     }
 }
 
@@ -1812,7 +1994,7 @@ impl EnableSNIDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1837,7 +2019,7 @@ impl EvaluationPeriodsDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1851,7 +2033,7 @@ impl FailureThresholdDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3240,7 +3422,7 @@ impl HealthCheckCountDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3401,6 +3583,59 @@ impl HealthCheckObservationsDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HealthCheckRegion {
+    ApNortheast1,
+    ApSoutheast1,
+    ApSoutheast2,
+    EuWest1,
+    SaEast1,
+    UsEast1,
+    UsWest1,
+    UsWest2,
+}
+
+impl Into<String> for HealthCheckRegion {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HealthCheckRegion {
+    fn into(self) -> &'static str {
+        match self {
+            HealthCheckRegion::ApNortheast1 => "ap-northeast-1",
+            HealthCheckRegion::ApSoutheast1 => "ap-southeast-1",
+            HealthCheckRegion::ApSoutheast2 => "ap-southeast-2",
+            HealthCheckRegion::EuWest1 => "eu-west-1",
+            HealthCheckRegion::SaEast1 => "sa-east-1",
+            HealthCheckRegion::UsEast1 => "us-east-1",
+            HealthCheckRegion::UsWest1 => "us-west-1",
+            HealthCheckRegion::UsWest2 => "us-west-2",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HealthCheckRegion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ap-northeast-1" => Ok(HealthCheckRegion::ApNortheast1),
+            "ap-southeast-1" => Ok(HealthCheckRegion::ApSoutheast1),
+            "ap-southeast-2" => Ok(HealthCheckRegion::ApSoutheast2),
+            "eu-west-1" => Ok(HealthCheckRegion::EuWest1),
+            "sa-east-1" => Ok(HealthCheckRegion::SaEast1),
+            "us-east-1" => Ok(HealthCheckRegion::UsEast1),
+            "us-west-1" => Ok(HealthCheckRegion::UsWest1),
+            "us-west-2" => Ok(HealthCheckRegion::UsWest2),
+            _ => Err(()),
+        }
+    }
+}
+
 struct HealthCheckRegionDeserializer;
 impl HealthCheckRegionDeserializer {
     #[allow(unused_variables)]
@@ -3482,6 +3717,56 @@ impl HealthCheckRegionListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HealthCheckType {
+    Calculated,
+    CloudwatchMetric,
+    Http,
+    Https,
+    HttpsStrMatch,
+    HttpStrMatch,
+    Tcp,
+}
+
+impl Into<String> for HealthCheckType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HealthCheckType {
+    fn into(self) -> &'static str {
+        match self {
+            HealthCheckType::Calculated => "CALCULATED",
+            HealthCheckType::CloudwatchMetric => "CLOUDWATCH_METRIC",
+            HealthCheckType::Http => "HTTP",
+            HealthCheckType::Https => "HTTPS",
+            HealthCheckType::HttpsStrMatch => "HTTPS_STR_MATCH",
+            HealthCheckType::HttpStrMatch => "HTTP_STR_MATCH",
+            HealthCheckType::Tcp => "TCP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HealthCheckType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CALCULATED" => Ok(HealthCheckType::Calculated),
+            "CLOUDWATCH_METRIC" => Ok(HealthCheckType::CloudwatchMetric),
+            "HTTP" => Ok(HealthCheckType::Http),
+            "HTTPS" => Ok(HealthCheckType::Https),
+            "HTTPS_STR_MATCH" => Ok(HealthCheckType::HttpsStrMatch),
+            "HTTP_STR_MATCH" => Ok(HealthCheckType::HttpStrMatch),
+            "TCP" => Ok(HealthCheckType::Tcp),
+            _ => Err(()),
+        }
+    }
+}
+
 struct HealthCheckTypeDeserializer;
 impl HealthCheckTypeDeserializer {
     #[allow(unused_variables)]
@@ -3514,7 +3799,7 @@ impl HealthCheckVersionDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3580,7 +3865,7 @@ impl HealthThresholdDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3752,7 +4037,7 @@ impl HostedZoneCountDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3766,7 +4051,7 @@ impl HostedZoneRRSetCountDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3853,6 +4138,44 @@ impl IPAddressCidrDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InsufficientDataHealthStatus {
+    Healthy,
+    LastKnownStatus,
+    Unhealthy,
+}
+
+impl Into<String> for InsufficientDataHealthStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InsufficientDataHealthStatus {
+    fn into(self) -> &'static str {
+        match self {
+            InsufficientDataHealthStatus::Healthy => "Healthy",
+            InsufficientDataHealthStatus::LastKnownStatus => "LastKnownStatus",
+            InsufficientDataHealthStatus::Unhealthy => "Unhealthy",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InsufficientDataHealthStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Healthy" => Ok(InsufficientDataHealthStatus::Healthy),
+            "LastKnownStatus" => Ok(InsufficientDataHealthStatus::LastKnownStatus),
+            "Unhealthy" => Ok(InsufficientDataHealthStatus::Unhealthy),
+            _ => Err(()),
+        }
+    }
+}
+
 struct InsufficientDataHealthStatusDeserializer;
 impl InsufficientDataHealthStatusDeserializer {
     #[allow(unused_variables)]
@@ -3885,7 +4208,7 @@ impl InvertedDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3910,7 +4233,7 @@ impl IsPrivateZoneDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5119,7 +5442,7 @@ impl MeasureLatencyDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5275,7 +5598,7 @@ impl PageTruncatedDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5314,7 +5637,7 @@ impl PeriodDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5328,7 +5651,7 @@ impl PortDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5368,6 +5691,68 @@ impl RDataSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RRType {
+    A,
+    Aaaa,
+    Cname,
+    Mx,
+    Naptr,
+    Ns,
+    Ptr,
+    Soa,
+    Spf,
+    Srv,
+    Txt,
+}
+
+impl Into<String> for RRType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RRType {
+    fn into(self) -> &'static str {
+        match self {
+            RRType::A => "A",
+            RRType::Aaaa => "AAAA",
+            RRType::Cname => "CNAME",
+            RRType::Mx => "MX",
+            RRType::Naptr => "NAPTR",
+            RRType::Ns => "NS",
+            RRType::Ptr => "PTR",
+            RRType::Soa => "SOA",
+            RRType::Spf => "SPF",
+            RRType::Srv => "SRV",
+            RRType::Txt => "TXT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RRType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "A" => Ok(RRType::A),
+            "AAAA" => Ok(RRType::Aaaa),
+            "CNAME" => Ok(RRType::Cname),
+            "MX" => Ok(RRType::Mx),
+            "NAPTR" => Ok(RRType::Naptr),
+            "NS" => Ok(RRType::Ns),
+            "PTR" => Ok(RRType::Ptr),
+            "SOA" => Ok(RRType::Soa),
+            "SPF" => Ok(RRType::Spf),
+            "SRV" => Ok(RRType::Srv),
+            "TXT" => Ok(RRType::Txt),
+            _ => Err(()),
+        }
     }
 }
 
@@ -5459,7 +5844,7 @@ impl RequestIntervalDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5782,6 +6167,41 @@ impl ResourceRecordSetSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceRecordSetFailover {
+    Primary,
+    Secondary,
+}
+
+impl Into<String> for ResourceRecordSetFailover {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceRecordSetFailover {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceRecordSetFailover::Primary => "PRIMARY",
+            ResourceRecordSetFailover::Secondary => "SECONDARY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceRecordSetFailover {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PRIMARY" => Ok(ResourceRecordSetFailover::Primary),
+            "SECONDARY" => Ok(ResourceRecordSetFailover::Secondary),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ResourceRecordSetFailoverDeserializer;
 impl ResourceRecordSetFailoverDeserializer {
     #[allow(unused_variables)]
@@ -5839,7 +6259,7 @@ impl ResourceRecordSetMultiValueAnswerDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5854,6 +6274,80 @@ impl ResourceRecordSetMultiValueAnswerSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceRecordSetRegion {
+    ApNortheast1,
+    ApNortheast2,
+    ApSouth1,
+    ApSoutheast1,
+    ApSoutheast2,
+    CaCentral1,
+    CnNorth1,
+    EuCentral1,
+    EuWest1,
+    EuWest2,
+    SaEast1,
+    UsEast1,
+    UsEast2,
+    UsWest1,
+    UsWest2,
+}
+
+impl Into<String> for ResourceRecordSetRegion {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceRecordSetRegion {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceRecordSetRegion::ApNortheast1 => "ap-northeast-1",
+            ResourceRecordSetRegion::ApNortheast2 => "ap-northeast-2",
+            ResourceRecordSetRegion::ApSouth1 => "ap-south-1",
+            ResourceRecordSetRegion::ApSoutheast1 => "ap-southeast-1",
+            ResourceRecordSetRegion::ApSoutheast2 => "ap-southeast-2",
+            ResourceRecordSetRegion::CaCentral1 => "ca-central-1",
+            ResourceRecordSetRegion::CnNorth1 => "cn-north-1",
+            ResourceRecordSetRegion::EuCentral1 => "eu-central-1",
+            ResourceRecordSetRegion::EuWest1 => "eu-west-1",
+            ResourceRecordSetRegion::EuWest2 => "eu-west-2",
+            ResourceRecordSetRegion::SaEast1 => "sa-east-1",
+            ResourceRecordSetRegion::UsEast1 => "us-east-1",
+            ResourceRecordSetRegion::UsEast2 => "us-east-2",
+            ResourceRecordSetRegion::UsWest1 => "us-west-1",
+            ResourceRecordSetRegion::UsWest2 => "us-west-2",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceRecordSetRegion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ap-northeast-1" => Ok(ResourceRecordSetRegion::ApNortheast1),
+            "ap-northeast-2" => Ok(ResourceRecordSetRegion::ApNortheast2),
+            "ap-south-1" => Ok(ResourceRecordSetRegion::ApSouth1),
+            "ap-southeast-1" => Ok(ResourceRecordSetRegion::ApSoutheast1),
+            "ap-southeast-2" => Ok(ResourceRecordSetRegion::ApSoutheast2),
+            "ca-central-1" => Ok(ResourceRecordSetRegion::CaCentral1),
+            "cn-north-1" => Ok(ResourceRecordSetRegion::CnNorth1),
+            "eu-central-1" => Ok(ResourceRecordSetRegion::EuCentral1),
+            "eu-west-1" => Ok(ResourceRecordSetRegion::EuWest1),
+            "eu-west-2" => Ok(ResourceRecordSetRegion::EuWest2),
+            "sa-east-1" => Ok(ResourceRecordSetRegion::SaEast1),
+            "us-east-1" => Ok(ResourceRecordSetRegion::UsEast1),
+            "us-east-2" => Ok(ResourceRecordSetRegion::UsEast2),
+            "us-west-1" => Ok(ResourceRecordSetRegion::UsWest1),
+            "us-west-2" => Ok(ResourceRecordSetRegion::UsWest2),
+            _ => Err(()),
+        }
     }
 }
 
@@ -5889,7 +6383,7 @@ impl ResourceRecordSetWeightDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -6134,6 +6628,50 @@ impl SearchStringSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Statistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+}
+
+impl Into<String> for Statistic {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Statistic {
+    fn into(self) -> &'static str {
+        match self {
+            Statistic::Average => "Average",
+            Statistic::Maximum => "Maximum",
+            Statistic::Minimum => "Minimum",
+            Statistic::SampleCount => "SampleCount",
+            Statistic::Sum => "Sum",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Statistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Average" => Ok(Statistic::Average),
+            "Maximum" => Ok(Statistic::Maximum),
+            "Minimum" => Ok(Statistic::Minimum),
+            "SampleCount" => Ok(Statistic::SampleCount),
+            "Sum" => Ok(Statistic::Sum),
+            _ => Err(()),
+        }
+    }
+}
+
 struct StatisticDeserializer;
 impl StatisticDeserializer {
     #[allow(unused_variables)]
@@ -6236,7 +6774,7 @@ impl TTLDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -6461,6 +6999,41 @@ impl TagResourceIdListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TagResourceType {
+    Healthcheck,
+    Hostedzone,
+}
+
+impl Into<String> for TagResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TagResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            TagResourceType::Healthcheck => "healthcheck",
+            TagResourceType::Hostedzone => "hostedzone",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TagResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "healthcheck" => Ok(TagResourceType::Healthcheck),
+            "hostedzone" => Ok(TagResourceType::Hostedzone),
+            _ => Err(()),
+        }
+    }
+}
+
 struct TagResourceTypeDeserializer;
 impl TagResourceTypeDeserializer {
     #[allow(unused_variables)]
@@ -6614,7 +7187,7 @@ impl ThresholdDeserializer {
                                        stack: &mut T)
                                        -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<f64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -6936,7 +7509,7 @@ impl TrafficPolicyInstanceCountDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7169,7 +7742,7 @@ impl TrafficPolicyVersionDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7583,6 +8156,80 @@ impl VPCIdSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VPCRegion {
+    ApNortheast1,
+    ApNortheast2,
+    ApSouth1,
+    ApSoutheast1,
+    ApSoutheast2,
+    CaCentral1,
+    CnNorth1,
+    EuCentral1,
+    EuWest1,
+    EuWest2,
+    SaEast1,
+    UsEast1,
+    UsEast2,
+    UsWest1,
+    UsWest2,
+}
+
+impl Into<String> for VPCRegion {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VPCRegion {
+    fn into(self) -> &'static str {
+        match self {
+            VPCRegion::ApNortheast1 => "ap-northeast-1",
+            VPCRegion::ApNortheast2 => "ap-northeast-2",
+            VPCRegion::ApSouth1 => "ap-south-1",
+            VPCRegion::ApSoutheast1 => "ap-southeast-1",
+            VPCRegion::ApSoutheast2 => "ap-southeast-2",
+            VPCRegion::CaCentral1 => "ca-central-1",
+            VPCRegion::CnNorth1 => "cn-north-1",
+            VPCRegion::EuCentral1 => "eu-central-1",
+            VPCRegion::EuWest1 => "eu-west-1",
+            VPCRegion::EuWest2 => "eu-west-2",
+            VPCRegion::SaEast1 => "sa-east-1",
+            VPCRegion::UsEast1 => "us-east-1",
+            VPCRegion::UsEast2 => "us-east-2",
+            VPCRegion::UsWest1 => "us-west-1",
+            VPCRegion::UsWest2 => "us-west-2",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VPCRegion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ap-northeast-1" => Ok(VPCRegion::ApNortheast1),
+            "ap-northeast-2" => Ok(VPCRegion::ApNortheast2),
+            "ap-south-1" => Ok(VPCRegion::ApSouth1),
+            "ap-southeast-1" => Ok(VPCRegion::ApSoutheast1),
+            "ap-southeast-2" => Ok(VPCRegion::ApSoutheast2),
+            "ca-central-1" => Ok(VPCRegion::CaCentral1),
+            "cn-north-1" => Ok(VPCRegion::CnNorth1),
+            "eu-central-1" => Ok(VPCRegion::EuCentral1),
+            "eu-west-1" => Ok(VPCRegion::EuWest1),
+            "eu-west-2" => Ok(VPCRegion::EuWest2),
+            "sa-east-1" => Ok(VPCRegion::SaEast1),
+            "us-east-1" => Ok(VPCRegion::UsEast1),
+            "us-east-2" => Ok(VPCRegion::UsEast2),
+            "us-west-1" => Ok(VPCRegion::UsWest1),
+            "us-west-2" => Ok(VPCRegion::UsWest2),
+            _ => Err(()),
+        }
     }
 }
 
@@ -11834,9 +12481,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11882,9 +12529,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11931,9 +12578,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11981,9 +12628,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12034,9 +12681,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12088,9 +12735,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12136,9 +12783,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12188,9 +12835,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12237,9 +12884,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12287,9 +12934,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12334,9 +12981,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12386,9 +13033,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12439,9 +13086,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12487,9 +13134,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12538,9 +13185,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12587,9 +13234,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12635,9 +13282,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12680,9 +13327,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12728,9 +13375,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12791,9 +13438,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12843,9 +13490,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12895,9 +13542,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12947,9 +13594,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -12995,9 +13642,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13045,9 +13692,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13095,9 +13742,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13148,9 +13795,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13196,9 +13843,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13249,9 +13896,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13297,9 +13944,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13359,9 +14006,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13418,9 +14065,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13481,9 +14128,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13545,9 +14192,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13611,9 +14258,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13669,9 +14316,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13717,9 +14364,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13768,9 +14415,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13825,9 +14472,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13895,9 +14542,9 @@ impl<P, D> Route53 for Route53Client<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -13956,9 +14603,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -14026,9 +14673,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -14081,9 +14728,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -14136,9 +14783,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -14197,9 +14844,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -14247,9 +14894,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -14300,9 +14947,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -14349,9 +14996,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -14397,9 +15044,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 

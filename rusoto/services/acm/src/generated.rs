@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -125,6 +121,56 @@ pub struct CertificateDetail {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CertificateStatus {
+    Expired,
+    Failed,
+    Inactive,
+    Issued,
+    PendingValidation,
+    Revoked,
+    ValidationTimedOut,
+}
+
+impl Into<String> for CertificateStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CertificateStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CertificateStatus::Expired => "EXPIRED",
+            CertificateStatus::Failed => "FAILED",
+            CertificateStatus::Inactive => "INACTIVE",
+            CertificateStatus::Issued => "ISSUED",
+            CertificateStatus::PendingValidation => "PENDING_VALIDATION",
+            CertificateStatus::Revoked => "REVOKED",
+            CertificateStatus::ValidationTimedOut => "VALIDATION_TIMED_OUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EXPIRED" => Ok(CertificateStatus::Expired),
+            "FAILED" => Ok(CertificateStatus::Failed),
+            "INACTIVE" => Ok(CertificateStatus::Inactive),
+            "ISSUED" => Ok(CertificateStatus::Issued),
+            "PENDING_VALIDATION" => Ok(CertificateStatus::PendingValidation),
+            "REVOKED" => Ok(CertificateStatus::Revoked),
+            "VALIDATION_TIMED_OUT" => Ok(CertificateStatus::ValidationTimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>This structure is returned in the response object of <a>ListCertificates</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CertificateSummary {
@@ -136,6 +182,41 @@ pub struct CertificateSummary {
     #[serde(rename="DomainName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub domain_name: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CertificateType {
+    AmazonIssued,
+    Imported,
+}
+
+impl Into<String> for CertificateType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CertificateType {
+    fn into(self) -> &'static str {
+        match self {
+            CertificateType::AmazonIssued => "AMAZON_ISSUED",
+            CertificateType::Imported => "IMPORTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AMAZON_ISSUED" => Ok(CertificateType::AmazonIssued),
+            "IMPORTED" => Ok(CertificateType::Imported),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -158,6 +239,44 @@ pub struct DescribeCertificateResponse {
     #[serde(rename="Certificate")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub certificate: Option<CertificateDetail>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DomainStatus {
+    Failed,
+    PendingValidation,
+    Success,
+}
+
+impl Into<String> for DomainStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DomainStatus {
+    fn into(self) -> &'static str {
+        match self {
+            DomainStatus::Failed => "FAILED",
+            DomainStatus::PendingValidation => "PENDING_VALIDATION",
+            DomainStatus::Success => "SUCCESS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(DomainStatus::Failed),
+            "PENDING_VALIDATION" => Ok(DomainStatus::PendingValidation),
+            "SUCCESS" => Ok(DomainStatus::Success),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Contains information about the validation of each domain name in the certificate.</p>"]
@@ -189,6 +308,50 @@ pub struct DomainValidationOption {
     #[doc="<p>The domain name that you want ACM to use to send you validation emails. This domain name is the suffix of the email addresses that you want ACM to use. This must be the same as the <code>DomainName</code> value or a superdomain of the <code>DomainName</code> value. For example, if you request a certificate for <code>testing.example.com</code>, you can specify <code>example.com</code> for this value. In that case, ACM sends domain validation emails to the following five addresses:</p> <ul> <li> <p>admin@example.com</p> </li> <li> <p>administrator@example.com</p> </li> <li> <p>hostmaster@example.com</p> </li> <li> <p>postmaster@example.com</p> </li> <li> <p>webmaster@example.com</p> </li> </ul>"]
     #[serde(rename="ValidationDomain")]
     pub validation_domain: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FailureReason {
+    AdditionalVerificationRequired,
+    DomainNotAllowed,
+    InvalidPublicDomain,
+    NoAvailableContacts,
+    Other,
+}
+
+impl Into<String> for FailureReason {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FailureReason {
+    fn into(self) -> &'static str {
+        match self {
+            FailureReason::AdditionalVerificationRequired => "ADDITIONAL_VERIFICATION_REQUIRED",
+            FailureReason::DomainNotAllowed => "DOMAIN_NOT_ALLOWED",
+            FailureReason::InvalidPublicDomain => "INVALID_PUBLIC_DOMAIN",
+            FailureReason::NoAvailableContacts => "NO_AVAILABLE_CONTACTS",
+            FailureReason::Other => "OTHER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailureReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ADDITIONAL_VERIFICATION_REQUIRED" => Ok(FailureReason::AdditionalVerificationRequired),
+            "DOMAIN_NOT_ALLOWED" => Ok(FailureReason::DomainNotAllowed),
+            "INVALID_PUBLIC_DOMAIN" => Ok(FailureReason::InvalidPublicDomain),
+            "NO_AVAILABLE_CONTACTS" => Ok(FailureReason::NoAvailableContacts),
+            "OTHER" => Ok(FailureReason::Other),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -250,6 +413,44 @@ pub struct ImportCertificateResponse {
     pub certificate_arn: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum KeyAlgorithm {
+    EcPrime256V1,
+    Rsa1024,
+    Rsa2048,
+}
+
+impl Into<String> for KeyAlgorithm {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for KeyAlgorithm {
+    fn into(self) -> &'static str {
+        match self {
+            KeyAlgorithm::EcPrime256V1 => "EC_prime256v1",
+            KeyAlgorithm::Rsa1024 => "RSA_1024",
+            KeyAlgorithm::Rsa2048 => "RSA_2048",
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyAlgorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EC_prime256v1" => Ok(KeyAlgorithm::EcPrime256V1),
+            "RSA_1024" => Ok(KeyAlgorithm::Rsa1024),
+            "RSA_2048" => Ok(KeyAlgorithm::Rsa2048),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListCertificatesRequest {
     #[doc="<p>The status or statuses on which to filter the list of ACM Certificates.</p>"]
@@ -303,6 +504,47 @@ pub struct RemoveTagsFromCertificateRequest {
     pub tags: Vec<Tag>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RenewalStatus {
+    Failed,
+    PendingAutoRenewal,
+    PendingValidation,
+    Success,
+}
+
+impl Into<String> for RenewalStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RenewalStatus {
+    fn into(self) -> &'static str {
+        match self {
+            RenewalStatus::Failed => "FAILED",
+            RenewalStatus::PendingAutoRenewal => "PENDING_AUTO_RENEWAL",
+            RenewalStatus::PendingValidation => "PENDING_VALIDATION",
+            RenewalStatus::Success => "SUCCESS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RenewalStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(RenewalStatus::Failed),
+            "PENDING_AUTO_RENEWAL" => Ok(RenewalStatus::PendingAutoRenewal),
+            "PENDING_VALIDATION" => Ok(RenewalStatus::PendingValidation),
+            "SUCCESS" => Ok(RenewalStatus::Success),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains information about the status of ACM's <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html\">managed renewal</a> for the certificate. This structure exists only when the certificate type is <code>AMAZON_ISSUED</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RenewalSummary {
@@ -352,6 +594,65 @@ pub struct ResendValidationEmailRequest {
     #[doc="<p>The base validation domain that will act as the suffix of the email addresses that are used to send the emails. This must be the same as the <code>Domain</code> value or a superdomain of the <code>Domain</code> value. For example, if you requested a certificate for <code>site.subdomain.example.com</code> and specify a <b>ValidationDomain</b> of <code>subdomain.example.com</code>, ACM sends email to the domain registrant, technical contact, and administrative contact in WHOIS and the following five addresses:</p> <ul> <li> <p>admin@subdomain.example.com</p> </li> <li> <p>administrator@subdomain.example.com</p> </li> <li> <p>hostmaster@subdomain.example.com</p> </li> <li> <p>postmaster@subdomain.example.com</p> </li> <li> <p>webmaster@subdomain.example.com</p> </li> </ul>"]
     #[serde(rename="ValidationDomain")]
     pub validation_domain: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RevocationReason {
+    AffiliationChanged,
+    AACompromise,
+    CaCompromise,
+    CertificateHold,
+    CessationOfOperation,
+    KeyCompromise,
+    PrivilegeWithdrawn,
+    RemoveFromCrl,
+    Superceded,
+    Unspecified,
+}
+
+impl Into<String> for RevocationReason {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RevocationReason {
+    fn into(self) -> &'static str {
+        match self {
+            RevocationReason::AffiliationChanged => "AFFILIATION_CHANGED",
+            RevocationReason::AACompromise => "A_A_COMPROMISE",
+            RevocationReason::CaCompromise => "CA_COMPROMISE",
+            RevocationReason::CertificateHold => "CERTIFICATE_HOLD",
+            RevocationReason::CessationOfOperation => "CESSATION_OF_OPERATION",
+            RevocationReason::KeyCompromise => "KEY_COMPROMISE",
+            RevocationReason::PrivilegeWithdrawn => "PRIVILEGE_WITHDRAWN",
+            RevocationReason::RemoveFromCrl => "REMOVE_FROM_CRL",
+            RevocationReason::Superceded => "SUPERCEDED",
+            RevocationReason::Unspecified => "UNSPECIFIED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RevocationReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AFFILIATION_CHANGED" => Ok(RevocationReason::AffiliationChanged),
+            "A_A_COMPROMISE" => Ok(RevocationReason::AACompromise),
+            "CA_COMPROMISE" => Ok(RevocationReason::CaCompromise),
+            "CERTIFICATE_HOLD" => Ok(RevocationReason::CertificateHold),
+            "CESSATION_OF_OPERATION" => Ok(RevocationReason::CessationOfOperation),
+            "KEY_COMPROMISE" => Ok(RevocationReason::KeyCompromise),
+            "PRIVILEGE_WITHDRAWN" => Ok(RevocationReason::PrivilegeWithdrawn),
+            "REMOVE_FROM_CRL" => Ok(RevocationReason::RemoveFromCrl),
+            "SUPERCEDED" => Ok(RevocationReason::Superceded),
+            "UNSPECIFIED" => Ok(RevocationReason::Unspecified),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A key-value pair that identifies or specifies metadata about an ACM resource.</p>"]
@@ -1311,7 +1612,7 @@ impl<P, D> Acm for AcmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(AddTagsToCertificateError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
@@ -1336,7 +1637,7 @@ impl<P, D> Acm for AcmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&response.body)
                                                           .as_ref()))
@@ -1361,7 +1662,7 @@ impl<P, D> Acm for AcmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1388,7 +1689,7 @@ impl<P, D> Acm for AcmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1415,7 +1716,7 @@ impl<P, D> Acm for AcmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ImportCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1442,7 +1743,7 @@ impl<P, D> Acm for AcmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListCertificatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1470,7 +1771,7 @@ impl<P, D> Acm for AcmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTagsForCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1498,7 +1799,7 @@ impl<P, D> Acm for AcmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(RemoveTagsFromCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -1520,7 +1821,7 @@ impl<P, D> Acm for AcmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RequestCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1547,7 +1848,7 @@ impl<P, D> Acm for AcmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(ResendValidationEmailError::from_body(String::from_utf8_lossy(&response.body)
                                                               .as_ref()))

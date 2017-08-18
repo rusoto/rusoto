@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -335,6 +331,44 @@ pub struct EventSourceMappingConfiguration {
     pub uuid: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventSourcePosition {
+    AtTimestamp,
+    Latest,
+    TrimHorizon,
+}
+
+impl Into<String> for EventSourcePosition {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventSourcePosition {
+    fn into(self) -> &'static str {
+        match self {
+            EventSourcePosition::AtTimestamp => "AT_TIMESTAMP",
+            EventSourcePosition::Latest => "LATEST",
+            EventSourcePosition::TrimHorizon => "TRIM_HORIZON",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventSourcePosition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AT_TIMESTAMP" => Ok(EventSourcePosition::AtTimestamp),
+            "LATEST" => Ok(EventSourcePosition::Latest),
+            "TRIM_HORIZON" => Ok(EventSourcePosition::TrimHorizon),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The code for the Lambda function.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct FunctionCode {
@@ -582,6 +616,44 @@ pub struct InvocationResponse {
     pub status_code: Option<i64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InvocationType {
+    DryRun,
+    Event,
+    RequestResponse,
+}
+
+impl Into<String> for InvocationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InvocationType {
+    fn into(self) -> &'static str {
+        match self {
+            InvocationType::DryRun => "DryRun",
+            InvocationType::Event => "Event",
+            InvocationType::RequestResponse => "RequestResponse",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvocationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DryRun" => Ok(InvocationType::DryRun),
+            "Event" => Ok(InvocationType::Event),
+            "RequestResponse" => Ok(InvocationType::RequestResponse),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct InvokeAsyncRequest {
@@ -742,6 +814,41 @@ pub struct ListVersionsByFunctionResponse {
     pub versions: Option<Vec<FunctionConfiguration>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LogType {
+    None,
+    Tail,
+}
+
+impl Into<String> for LogType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LogType {
+    fn into(self) -> &'static str {
+        match self {
+            LogType::None => "None",
+            LogType::Tail => "Tail",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "None" => Ok(LogType::None),
+            "Tail" => Ok(LogType::Tail),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PublishVersionRequest {
@@ -773,6 +880,59 @@ pub struct RemovePermissionRequest {
     pub statement_id: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Runtime {
+    Dotnetcore10,
+    Java8,
+    Nodejs,
+    Nodejs43,
+    Nodejs43Edge,
+    Nodejs610,
+    Python27,
+    Python36,
+}
+
+impl Into<String> for Runtime {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Runtime {
+    fn into(self) -> &'static str {
+        match self {
+            Runtime::Dotnetcore10 => "dotnetcore1.0",
+            Runtime::Java8 => "java8",
+            Runtime::Nodejs => "nodejs",
+            Runtime::Nodejs43 => "nodejs4.3",
+            Runtime::Nodejs43Edge => "nodejs4.3-edge",
+            Runtime::Nodejs610 => "nodejs6.10",
+            Runtime::Python27 => "python2.7",
+            Runtime::Python36 => "python3.6",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Runtime {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "dotnetcore1.0" => Ok(Runtime::Dotnetcore10),
+            "java8" => Ok(Runtime::Java8),
+            "nodejs" => Ok(Runtime::Nodejs),
+            "nodejs4.3" => Ok(Runtime::Nodejs43),
+            "nodejs4.3-edge" => Ok(Runtime::Nodejs43Edge),
+            "nodejs6.10" => Ok(Runtime::Nodejs610),
+            "python2.7" => Ok(Runtime::Python27),
+            "python3.6" => Ok(Runtime::Python36),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TagResourceRequest {
     #[doc="<p>The ARN (Amazon Resource Name) of the Lambda function.</p>"]
@@ -781,6 +941,52 @@ pub struct TagResourceRequest {
     #[doc="<p>The list of tags (key-value pairs) you are assigning to the Lambda function.</p>"]
     #[serde(rename="Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ThrottleReason {
+    CallerRateLimitExceeded,
+    ConcurrentInvocationLimitExceeded,
+    FunctionInvocationRateLimitExceeded,
+}
+
+impl Into<String> for ThrottleReason {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ThrottleReason {
+    fn into(self) -> &'static str {
+        match self {
+            ThrottleReason::CallerRateLimitExceeded => "CallerRateLimitExceeded",
+            ThrottleReason::ConcurrentInvocationLimitExceeded => {
+                "ConcurrentInvocationLimitExceeded"
+            }
+            ThrottleReason::FunctionInvocationRateLimitExceeded => {
+                "FunctionInvocationRateLimitExceeded"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThrottleReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CallerRateLimitExceeded" => Ok(ThrottleReason::CallerRateLimitExceeded),
+            "ConcurrentInvocationLimitExceeded" => {
+                Ok(ThrottleReason::ConcurrentInvocationLimitExceeded)
+            }
+            "FunctionInvocationRateLimitExceeded" => {
+                Ok(ThrottleReason::FunctionInvocationRateLimitExceeded)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The parent object that contains your function's tracing settings.</p>"]
@@ -799,6 +1005,41 @@ pub struct TracingConfigResponse {
     #[serde(rename="Mode")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub mode: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TracingMode {
+    Active,
+    PassThrough,
+}
+
+impl Into<String> for TracingMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TracingMode {
+    fn into(self) -> &'static str {
+        match self {
+            TracingMode::Active => "Active",
+            TracingMode::PassThrough => "PassThrough",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TracingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Active" => Ok(TracingMode::Active),
+            "PassThrough" => Ok(TracingMode::PassThrough),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -3837,7 +4078,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body = response.body;
 
@@ -3881,7 +4122,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body = response.body;
 
@@ -3923,7 +4164,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
 
                 let mut body = response.body;
 
@@ -3965,7 +4206,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body = response.body;
 
@@ -4009,7 +4250,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4042,7 +4283,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
 
                 let mut body = response.body;
 
@@ -4087,7 +4328,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4119,7 +4360,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4163,7 +4404,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4206,7 +4447,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4256,7 +4497,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4303,7 +4544,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4347,7 +4588,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4391,7 +4632,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut result = InvocationResponse::default();
                 result.payload = Some(response.body);
@@ -4404,7 +4645,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
                     let value = log_result.to_owned();
                     result.log_result = Some(value)
                 };
-                result.status_code = Some(StatusCode::to_u16(&response.status) as i64);
+                result.status_code = Some(::hyper::status::StatusCode::to_u16(&response.status) as
+                                          i64);
                 Ok(result)
             }
             _ => Err(InvokeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4433,7 +4675,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
 
                 let mut body = response.body;
 
@@ -4446,7 +4688,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
                 let mut result = serde_json::from_slice::<InvokeAsyncResponse>(&body).unwrap();
 
 
-                result.status = Some(StatusCode::to_u16(&response.status) as i64);
+                result.status = Some(::hyper::status::StatusCode::to_u16(&response.status) as i64);
                 Ok(result)
             }
             _ => Err(InvokeAsyncError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4485,7 +4727,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4540,7 +4782,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4589,7 +4831,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4630,7 +4872,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4680,7 +4922,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4726,7 +4968,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body = response.body;
 
@@ -4776,7 +5018,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4808,7 +5050,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4841,7 +5083,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4876,7 +5118,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -4919,7 +5161,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
 
                 let mut body = response.body;
 
@@ -4962,7 +5204,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -5008,7 +5250,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 

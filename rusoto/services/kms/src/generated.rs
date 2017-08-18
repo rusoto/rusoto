@@ -11,21 +11,55 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AlgorithmSpec {
+    RsaesOaepSha1,
+    RsaesOaepSha256,
+    RsaesPkcs1V15,
+}
+
+impl Into<String> for AlgorithmSpec {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AlgorithmSpec {
+    fn into(self) -> &'static str {
+        match self {
+            AlgorithmSpec::RsaesOaepSha1 => "RSAES_OAEP_SHA_1",
+            AlgorithmSpec::RsaesOaepSha256 => "RSAES_OAEP_SHA_256",
+            AlgorithmSpec::RsaesPkcs1V15 => "RSAES_PKCS1_V1_5",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AlgorithmSpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "RSAES_OAEP_SHA_1" => Ok(AlgorithmSpec::RsaesOaepSha1),
+            "RSAES_OAEP_SHA_256" => Ok(AlgorithmSpec::RsaesOaepSha256),
+            "RSAES_PKCS1_V1_5" => Ok(AlgorithmSpec::RsaesPkcs1V15),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains information about an alias.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AliasListEntry {
@@ -144,6 +178,41 @@ pub struct CreateKeyResponse {
     #[serde(rename="KeyMetadata")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub key_metadata: Option<KeyMetadata>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DataKeySpec {
+    Aes128,
+    Aes256,
+}
+
+impl Into<String> for DataKeySpec {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DataKeySpec {
+    fn into(self) -> &'static str {
+        match self {
+            DataKeySpec::Aes128 => "AES_128",
+            DataKeySpec::Aes256 => "AES_256",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataKeySpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AES_128" => Ok(DataKeySpec::Aes128),
+            "AES_256" => Ok(DataKeySpec::Aes256),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -280,6 +349,41 @@ pub struct EncryptResponse {
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub key_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExpirationModelType {
+    KeyMaterialDoesNotExpire,
+    KeyMaterialExpires,
+}
+
+impl Into<String> for ExpirationModelType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExpirationModelType {
+    fn into(self) -> &'static str {
+        match self {
+            ExpirationModelType::KeyMaterialDoesNotExpire => "KEY_MATERIAL_DOES_NOT_EXPIRE",
+            ExpirationModelType::KeyMaterialExpires => "KEY_MATERIAL_EXPIRES",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExpirationModelType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "KEY_MATERIAL_DOES_NOT_EXPIRE" => Ok(ExpirationModelType::KeyMaterialDoesNotExpire),
+            "KEY_MATERIAL_EXPIRES" => Ok(ExpirationModelType::KeyMaterialExpires),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -516,6 +620,64 @@ pub struct GrantListEntry {
     pub retiring_principal: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum GrantOperation {
+    CreateGrant,
+    Decrypt,
+    DescribeKey,
+    Encrypt,
+    GenerateDataKey,
+    GenerateDataKeyWithoutPlaintext,
+    ReEncryptFrom,
+    ReEncryptTo,
+    RetireGrant,
+}
+
+impl Into<String> for GrantOperation {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for GrantOperation {
+    fn into(self) -> &'static str {
+        match self {
+            GrantOperation::CreateGrant => "CreateGrant",
+            GrantOperation::Decrypt => "Decrypt",
+            GrantOperation::DescribeKey => "DescribeKey",
+            GrantOperation::Encrypt => "Encrypt",
+            GrantOperation::GenerateDataKey => "GenerateDataKey",
+            GrantOperation::GenerateDataKeyWithoutPlaintext => "GenerateDataKeyWithoutPlaintext",
+            GrantOperation::ReEncryptFrom => "ReEncryptFrom",
+            GrantOperation::ReEncryptTo => "ReEncryptTo",
+            GrantOperation::RetireGrant => "RetireGrant",
+        }
+    }
+}
+
+impl ::std::str::FromStr for GrantOperation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CreateGrant" => Ok(GrantOperation::CreateGrant),
+            "Decrypt" => Ok(GrantOperation::Decrypt),
+            "DescribeKey" => Ok(GrantOperation::DescribeKey),
+            "Encrypt" => Ok(GrantOperation::Encrypt),
+            "GenerateDataKey" => Ok(GrantOperation::GenerateDataKey),
+            "GenerateDataKeyWithoutPlaintext" => {
+                Ok(GrantOperation::GenerateDataKeyWithoutPlaintext)
+            }
+            "ReEncryptFrom" => Ok(GrantOperation::ReEncryptFrom),
+            "ReEncryptTo" => Ok(GrantOperation::ReEncryptTo),
+            "RetireGrant" => Ok(GrantOperation::RetireGrant),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ImportKeyMaterialRequest {
     #[doc="<p>The encrypted key material to import. It must be encrypted with the public key that you received in the response to a previous <a>GetParametersForImport</a> request, using the wrapping algorithm that you specified in that request.</p>"]
@@ -613,6 +775,79 @@ pub struct KeyMetadata {
     #[serde(rename="ValidTo")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub valid_to: Option<f64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum KeyState {
+    Disabled,
+    Enabled,
+    PendingDeletion,
+    PendingImport,
+}
+
+impl Into<String> for KeyState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for KeyState {
+    fn into(self) -> &'static str {
+        match self {
+            KeyState::Disabled => "Disabled",
+            KeyState::Enabled => "Enabled",
+            KeyState::PendingDeletion => "PendingDeletion",
+            KeyState::PendingImport => "PendingImport",
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Disabled" => Ok(KeyState::Disabled),
+            "Enabled" => Ok(KeyState::Enabled),
+            "PendingDeletion" => Ok(KeyState::PendingDeletion),
+            "PendingImport" => Ok(KeyState::PendingImport),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum KeyUsageType {
+    EncryptDecrypt,
+}
+
+impl Into<String> for KeyUsageType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for KeyUsageType {
+    fn into(self) -> &'static str {
+        match self {
+            KeyUsageType::EncryptDecrypt => "ENCRYPT_DECRYPT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyUsageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ENCRYPT_DECRYPT" => Ok(KeyUsageType::EncryptDecrypt),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -779,6 +1014,41 @@ pub struct ListRetirableGrantsRequest {
     pub retiring_principal: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OriginType {
+    AwsKms,
+    External,
+}
+
+impl Into<String> for OriginType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OriginType {
+    fn into(self) -> &'static str {
+        match self {
+            OriginType::AwsKms => "AWS_KMS",
+            OriginType::External => "EXTERNAL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AWS_KMS" => Ok(OriginType::AwsKms),
+            "EXTERNAL" => Ok(OriginType::External),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutKeyPolicyRequest {
     #[doc="<p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the likelihood that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>Use this parameter only when you intend to prevent the principal that is making the request from making a subsequent <code>PutKeyPolicy</code> request on the CMK.</p> <p>The default value is false.</p>"]
@@ -941,6 +1211,38 @@ pub struct UpdateKeyDescriptionRequest {
     #[doc="<p>A unique identifier for the CMK. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
     pub key_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum WrappingKeySpec {
+    Rsa2048,
+}
+
+impl Into<String> for WrappingKeySpec {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for WrappingKeySpec {
+    fn into(self) -> &'static str {
+        match self {
+            WrappingKeySpec::Rsa2048 => "RSA_2048",
+        }
+    }
+}
+
+impl ::std::str::FromStr for WrappingKeySpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "RSA_2048" => Ok(WrappingKeySpec::Rsa2048),
+            _ => Err(()),
+        }
+    }
 }
 
 /// Errors returned by CancelKeyDeletion
@@ -4734,7 +5036,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CancelKeyDeletionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4759,7 +5061,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(CreateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -4781,7 +5083,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateGrantResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4803,7 +5105,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateKeyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4825,7 +5127,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<DecryptResponse>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -4849,7 +5151,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DeleteAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -4871,7 +5173,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DeleteImportedKeyMaterialError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -4893,7 +5195,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeKeyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4915,7 +5217,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DisableKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -4937,7 +5239,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DisableKeyRotationError::from_body(String::from_utf8_lossy(&response.body)
                                                            .as_ref()))
@@ -4960,7 +5262,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(EnableKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -4982,7 +5284,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(EnableKeyRotationError::from_body(String::from_utf8_lossy(&response.body)
                                                           .as_ref()))
@@ -5005,7 +5307,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<EncryptResponse>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -5031,7 +5333,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GenerateDataKeyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5060,7 +5362,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GenerateDataKeyWithoutPlaintextResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GenerateDataKeyWithoutPlaintextError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5084,7 +5386,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GenerateRandomResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5111,7 +5413,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetKeyPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5138,7 +5440,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetKeyRotationStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5166,7 +5468,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetParametersForImportResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5193,7 +5495,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ImportKeyMaterialResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5220,7 +5522,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListAliasesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListAliasesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5244,7 +5546,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListGrantsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListGrantsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5268,7 +5570,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListKeyPoliciesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5293,7 +5595,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListKeysResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5317,7 +5619,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListResourceTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5344,7 +5646,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListGrantsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5369,7 +5671,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(PutKeyPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -5391,7 +5693,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ReEncryptResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ReEncryptError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5413,7 +5715,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(RetireGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -5433,7 +5735,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(RevokeGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -5455,7 +5757,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ScheduleKeyDeletionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5480,7 +5782,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -5500,7 +5802,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -5522,7 +5824,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(UpdateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -5544,7 +5846,7 @@ impl<P, D> Kms for KmsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UpdateKeyDescriptionError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))

@@ -11,21 +11,52 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AmbiguousRoleResolutionType {
+    AuthenticatedRole,
+    Deny,
+}
+
+impl Into<String> for AmbiguousRoleResolutionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AmbiguousRoleResolutionType {
+    fn into(self) -> &'static str {
+        match self {
+            AmbiguousRoleResolutionType::AuthenticatedRole => "AuthenticatedRole",
+            AmbiguousRoleResolutionType::Deny => "Deny",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AmbiguousRoleResolutionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AuthenticatedRole" => Ok(AmbiguousRoleResolutionType::AuthenticatedRole),
+            "Deny" => Ok(AmbiguousRoleResolutionType::Deny),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A provider representing an Amazon Cognito Identity User Pool and its client ID.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CognitoIdentityProvider {
@@ -134,6 +165,41 @@ pub struct DescribeIdentityPoolInput {
     #[doc="<p>An identity pool ID in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityPoolId")]
     pub identity_pool_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ErrorCode {
+    AccessDenied,
+    InternalServerError,
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            ErrorCode::AccessDenied => "AccessDenied",
+            ErrorCode::InternalServerError => "InternalServerError",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AccessDenied" => Ok(ErrorCode::AccessDenied),
+            "InternalServerError" => Ok(ErrorCode::InternalServerError),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Input to the <code>GetCredentialsForIdentity</code> action.</p>"]
@@ -459,6 +525,47 @@ pub struct MappingRule {
     pub value: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MappingRuleMatchType {
+    Contains,
+    Equals,
+    NotEqual,
+    StartsWith,
+}
+
+impl Into<String> for MappingRuleMatchType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MappingRuleMatchType {
+    fn into(self) -> &'static str {
+        match self {
+            MappingRuleMatchType::Contains => "Contains",
+            MappingRuleMatchType::Equals => "Equals",
+            MappingRuleMatchType::NotEqual => "NotEqual",
+            MappingRuleMatchType::StartsWith => "StartsWith",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MappingRuleMatchType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Contains" => Ok(MappingRuleMatchType::Contains),
+            "Equals" => Ok(MappingRuleMatchType::Equals),
+            "NotEqual" => Ok(MappingRuleMatchType::NotEqual),
+            "StartsWith" => Ok(MappingRuleMatchType::StartsWith),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Input to the <code>MergeDeveloperIdentities</code> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct MergeDeveloperIdentitiesInput {
@@ -499,6 +606,41 @@ pub struct RoleMapping {
     #[doc="<p>The role mapping type. Token will use <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims from the Cognito identity provider token to map groups to roles. Rules will attempt to match claims from the token to map to a role.</p>"]
     #[serde(rename="Type")]
     pub type_: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RoleMappingType {
+    Rules,
+    Token,
+}
+
+impl Into<String> for RoleMappingType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RoleMappingType {
+    fn into(self) -> &'static str {
+        match self {
+            RoleMappingType::Rules => "Rules",
+            RoleMappingType::Token => "Token",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RoleMappingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Rules" => Ok(RoleMappingType::Rules),
+            "Token" => Ok(RoleMappingType::Token),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A container for rules.</p>"]
@@ -2602,7 +2744,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
                                                             .as_ref())
                            .unwrap())
@@ -2631,7 +2773,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2659,7 +2801,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
                                                            .as_ref()))
@@ -2684,7 +2826,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<IdentityDescription>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2712,7 +2854,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
                                                             .as_ref())
                            .unwrap())
@@ -2743,7 +2885,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetCredentialsForIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetCredentialsForIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2765,7 +2907,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetIdResponse>(String::from_utf8_lossy(&response.body)
                                                              .as_ref())
                            .unwrap())
@@ -2793,7 +2935,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetIdentityPoolRolesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2820,7 +2962,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetOpenIdTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2850,7 +2992,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetOpenIdTokenForDeveloperIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetOpenIdTokenForDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2874,7 +3016,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2902,7 +3044,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListIdentityPoolsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2931,7 +3073,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<LookupDeveloperIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(LookupDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2957,7 +3099,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<MergeDeveloperIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(MergeDeveloperIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2982,7 +3124,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(SetIdentityPoolRolesError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
@@ -3008,7 +3150,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(UnlinkDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -3028,7 +3170,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UnlinkIdentityError::from_body(String::from_utf8_lossy(&response.body)
                                                        .as_ref()))
@@ -3054,7 +3196,7 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
                                                             .as_ref())
                            .unwrap())

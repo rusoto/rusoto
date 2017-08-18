@@ -11,21 +11,84 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AccessDeniedErrorCode {
+    AccessDeniedToAssessmentRun,
+    AccessDeniedToAssessmentTarget,
+    AccessDeniedToAssessmentTemplate,
+    AccessDeniedToFinding,
+    AccessDeniedToIamRole,
+    AccessDeniedToResourceGroup,
+    AccessDeniedToRulesPackage,
+    AccessDeniedToSnsTopic,
+}
+
+impl Into<String> for AccessDeniedErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AccessDeniedErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            AccessDeniedErrorCode::AccessDeniedToAssessmentRun => "ACCESS_DENIED_TO_ASSESSMENT_RUN",
+            AccessDeniedErrorCode::AccessDeniedToAssessmentTarget => {
+                "ACCESS_DENIED_TO_ASSESSMENT_TARGET"
+            }
+            AccessDeniedErrorCode::AccessDeniedToAssessmentTemplate => {
+                "ACCESS_DENIED_TO_ASSESSMENT_TEMPLATE"
+            }
+            AccessDeniedErrorCode::AccessDeniedToFinding => "ACCESS_DENIED_TO_FINDING",
+            AccessDeniedErrorCode::AccessDeniedToIamRole => "ACCESS_DENIED_TO_IAM_ROLE",
+            AccessDeniedErrorCode::AccessDeniedToResourceGroup => "ACCESS_DENIED_TO_RESOURCE_GROUP",
+            AccessDeniedErrorCode::AccessDeniedToRulesPackage => "ACCESS_DENIED_TO_RULES_PACKAGE",
+            AccessDeniedErrorCode::AccessDeniedToSnsTopic => "ACCESS_DENIED_TO_SNS_TOPIC",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccessDeniedErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCESS_DENIED_TO_ASSESSMENT_RUN" => {
+                Ok(AccessDeniedErrorCode::AccessDeniedToAssessmentRun)
+            }
+            "ACCESS_DENIED_TO_ASSESSMENT_TARGET" => {
+                Ok(AccessDeniedErrorCode::AccessDeniedToAssessmentTarget)
+            }
+            "ACCESS_DENIED_TO_ASSESSMENT_TEMPLATE" => {
+                Ok(AccessDeniedErrorCode::AccessDeniedToAssessmentTemplate)
+            }
+            "ACCESS_DENIED_TO_FINDING" => Ok(AccessDeniedErrorCode::AccessDeniedToFinding),
+            "ACCESS_DENIED_TO_IAM_ROLE" => Ok(AccessDeniedErrorCode::AccessDeniedToIamRole),
+            "ACCESS_DENIED_TO_RESOURCE_GROUP" => {
+                Ok(AccessDeniedErrorCode::AccessDeniedToResourceGroup)
+            }
+            "ACCESS_DENIED_TO_RULES_PACKAGE" => {
+                Ok(AccessDeniedErrorCode::AccessDeniedToRulesPackage)
+            }
+            "ACCESS_DENIED_TO_SNS_TOPIC" => Ok(AccessDeniedErrorCode::AccessDeniedToSnsTopic),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AddAttributesToFindingsRequest {
     #[doc="<p>The array of attributes that you want to assign to specified findings.</p>"]
@@ -61,6 +124,88 @@ pub struct AgentFilter {
     #[doc="<p>The current health state of the agent. Values can be set to <b>HEALTHY</b> or <b>UNHEALTHY</b>.</p>"]
     #[serde(rename="agentHealths")]
     pub agent_healths: Vec<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AgentHealth {
+    Healthy,
+    Unhealthy,
+}
+
+impl Into<String> for AgentHealth {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AgentHealth {
+    fn into(self) -> &'static str {
+        match self {
+            AgentHealth::Healthy => "HEALTHY",
+            AgentHealth::Unhealthy => "UNHEALTHY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AgentHealth {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "HEALTHY" => Ok(AgentHealth::Healthy),
+            "UNHEALTHY" => Ok(AgentHealth::Unhealthy),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AgentHealthCode {
+    Idle,
+    Running,
+    Shutdown,
+    Throttled,
+    Unhealthy,
+    Unknown,
+}
+
+impl Into<String> for AgentHealthCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AgentHealthCode {
+    fn into(self) -> &'static str {
+        match self {
+            AgentHealthCode::Idle => "IDLE",
+            AgentHealthCode::Running => "RUNNING",
+            AgentHealthCode::Shutdown => "SHUTDOWN",
+            AgentHealthCode::Throttled => "THROTTLED",
+            AgentHealthCode::Unhealthy => "UNHEALTHY",
+            AgentHealthCode::Unknown => "UNKNOWN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AgentHealthCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "IDLE" => Ok(AgentHealthCode::Idle),
+            "RUNNING" => Ok(AgentHealthCode::Running),
+            "SHUTDOWN" => Ok(AgentHealthCode::Shutdown),
+            "THROTTLED" => Ok(AgentHealthCode::Throttled),
+            "UNHEALTHY" => Ok(AgentHealthCode::Unhealthy),
+            "UNKNOWN" => Ok(AgentHealthCode::Unknown),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Used as a response element in the <a>PreviewAgents</a> action.</p>"]
@@ -214,6 +359,116 @@ pub struct AssessmentRunNotification {
     pub sns_topic_arn: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AssessmentRunNotificationSnsStatusCode {
+    AccessDenied,
+    InternalError,
+    Success,
+    TopicDoesNotExist,
+}
+
+impl Into<String> for AssessmentRunNotificationSnsStatusCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AssessmentRunNotificationSnsStatusCode {
+    fn into(self) -> &'static str {
+        match self {
+            AssessmentRunNotificationSnsStatusCode::AccessDenied => "ACCESS_DENIED",
+            AssessmentRunNotificationSnsStatusCode::InternalError => "INTERNAL_ERROR",
+            AssessmentRunNotificationSnsStatusCode::Success => "SUCCESS",
+            AssessmentRunNotificationSnsStatusCode::TopicDoesNotExist => "TOPIC_DOES_NOT_EXIST",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssessmentRunNotificationSnsStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCESS_DENIED" => Ok(AssessmentRunNotificationSnsStatusCode::AccessDenied),
+            "INTERNAL_ERROR" => Ok(AssessmentRunNotificationSnsStatusCode::InternalError),
+            "SUCCESS" => Ok(AssessmentRunNotificationSnsStatusCode::Success),
+            "TOPIC_DOES_NOT_EXIST" => Ok(AssessmentRunNotificationSnsStatusCode::TopicDoesNotExist),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AssessmentRunState {
+    CollectingData,
+    Completed,
+    CompletedWithErrors,
+    Created,
+    DataCollected,
+    Error,
+    EvaluatingRules,
+    Failed,
+    StartDataCollectionInProgress,
+    StartDataCollectionPending,
+    StartEvaluatingRulesPending,
+    StopDataCollectionPending,
+}
+
+impl Into<String> for AssessmentRunState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AssessmentRunState {
+    fn into(self) -> &'static str {
+        match self {
+            AssessmentRunState::CollectingData => "COLLECTING_DATA",
+            AssessmentRunState::Completed => "COMPLETED",
+            AssessmentRunState::CompletedWithErrors => "COMPLETED_WITH_ERRORS",
+            AssessmentRunState::Created => "CREATED",
+            AssessmentRunState::DataCollected => "DATA_COLLECTED",
+            AssessmentRunState::Error => "ERROR",
+            AssessmentRunState::EvaluatingRules => "EVALUATING_RULES",
+            AssessmentRunState::Failed => "FAILED",
+            AssessmentRunState::StartDataCollectionInProgress => {
+                "START_DATA_COLLECTION_IN_PROGRESS"
+            }
+            AssessmentRunState::StartDataCollectionPending => "START_DATA_COLLECTION_PENDING",
+            AssessmentRunState::StartEvaluatingRulesPending => "START_EVALUATING_RULES_PENDING",
+            AssessmentRunState::StopDataCollectionPending => "STOP_DATA_COLLECTION_PENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssessmentRunState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COLLECTING_DATA" => Ok(AssessmentRunState::CollectingData),
+            "COMPLETED" => Ok(AssessmentRunState::Completed),
+            "COMPLETED_WITH_ERRORS" => Ok(AssessmentRunState::CompletedWithErrors),
+            "CREATED" => Ok(AssessmentRunState::Created),
+            "DATA_COLLECTED" => Ok(AssessmentRunState::DataCollected),
+            "ERROR" => Ok(AssessmentRunState::Error),
+            "EVALUATING_RULES" => Ok(AssessmentRunState::EvaluatingRules),
+            "FAILED" => Ok(AssessmentRunState::Failed),
+            "START_DATA_COLLECTION_IN_PROGRESS" => {
+                Ok(AssessmentRunState::StartDataCollectionInProgress)
+            }
+            "START_DATA_COLLECTION_PENDING" => Ok(AssessmentRunState::StartDataCollectionPending),
+            "START_EVALUATING_RULES_PENDING" => Ok(AssessmentRunState::StartEvaluatingRulesPending),
+            "STOP_DATA_COLLECTION_PENDING" => Ok(AssessmentRunState::StopDataCollectionPending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssessmentRunStateChange {
@@ -323,6 +578,38 @@ pub struct AssetAttributes {
     #[doc="<p>The schema version of this data type.</p>"]
     #[serde(rename="schemaVersion")]
     pub schema_version: i64,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AssetType {
+    Ec2Instance,
+}
+
+impl Into<String> for AssetType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AssetType {
+    fn into(self) -> &'static str {
+        match self {
+            AssetType::Ec2Instance => "ec2-instance",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ec2-instance" => Ok(AssetType::Ec2Instance),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>This data type is used as a request parameter in the <a>AddAttributesToFindings</a> and <a>CreateAssessmentTemplate</a> actions.</p>"]
@@ -573,6 +860,53 @@ pub struct FailedItemDetails {
     pub retryable: bool,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FailedItemErrorCode {
+    AccessDenied,
+    DuplicateArn,
+    InternalError,
+    InvalidArn,
+    ItemDoesNotExist,
+    LimitExceeded,
+}
+
+impl Into<String> for FailedItemErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FailedItemErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            FailedItemErrorCode::AccessDenied => "ACCESS_DENIED",
+            FailedItemErrorCode::DuplicateArn => "DUPLICATE_ARN",
+            FailedItemErrorCode::InternalError => "INTERNAL_ERROR",
+            FailedItemErrorCode::InvalidArn => "INVALID_ARN",
+            FailedItemErrorCode::ItemDoesNotExist => "ITEM_DOES_NOT_EXIST",
+            FailedItemErrorCode::LimitExceeded => "LIMIT_EXCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailedItemErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCESS_DENIED" => Ok(FailedItemErrorCode::AccessDenied),
+            "DUPLICATE_ARN" => Ok(FailedItemErrorCode::DuplicateArn),
+            "INTERNAL_ERROR" => Ok(FailedItemErrorCode::InternalError),
+            "INVALID_ARN" => Ok(FailedItemErrorCode::InvalidArn),
+            "ITEM_DOES_NOT_EXIST" => Ok(FailedItemErrorCode::ItemDoesNotExist),
+            "LIMIT_EXCEEDED" => Ok(FailedItemErrorCode::LimitExceeded),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains information about an Amazon Inspector finding. This data type is used as the response element in the <a>DescribeFindings</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Finding {
@@ -720,6 +1054,50 @@ pub struct GetTelemetryMetadataResponse {
     pub telemetry_metadata: Vec<TelemetryMetadata>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InspectorEvent {
+    AssessmentRunCompleted,
+    AssessmentRunStarted,
+    AssessmentRunStateChanged,
+    FindingReported,
+    Other,
+}
+
+impl Into<String> for InspectorEvent {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InspectorEvent {
+    fn into(self) -> &'static str {
+        match self {
+            InspectorEvent::AssessmentRunCompleted => "ASSESSMENT_RUN_COMPLETED",
+            InspectorEvent::AssessmentRunStarted => "ASSESSMENT_RUN_STARTED",
+            InspectorEvent::AssessmentRunStateChanged => "ASSESSMENT_RUN_STATE_CHANGED",
+            InspectorEvent::FindingReported => "FINDING_REPORTED",
+            InspectorEvent::Other => "OTHER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InspectorEvent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASSESSMENT_RUN_COMPLETED" => Ok(InspectorEvent::AssessmentRunCompleted),
+            "ASSESSMENT_RUN_STARTED" => Ok(InspectorEvent::AssessmentRunStarted),
+            "ASSESSMENT_RUN_STATE_CHANGED" => Ok(InspectorEvent::AssessmentRunStateChanged),
+            "FINDING_REPORTED" => Ok(InspectorEvent::FindingReported),
+            "OTHER" => Ok(InspectorEvent::Other),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>This data type is used in the <a>Finding</a> data type.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InspectorServiceAttributes {
@@ -734,6 +1112,396 @@ pub struct InspectorServiceAttributes {
     #[doc="<p>The schema version of this data type.</p>"]
     #[serde(rename="schemaVersion")]
     pub schema_version: i64,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InvalidCrossAccountRoleErrorCode {
+    RoleDoesNotExistOrInvalidTrustRelationship,
+    RoleDoesNotHaveCorrectPolicy,
+}
+
+impl Into<String> for InvalidCrossAccountRoleErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InvalidCrossAccountRoleErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            InvalidCrossAccountRoleErrorCode::RoleDoesNotExistOrInvalidTrustRelationship => {
+                "ROLE_DOES_NOT_EXIST_OR_INVALID_TRUST_RELATIONSHIP"
+            }
+            InvalidCrossAccountRoleErrorCode::RoleDoesNotHaveCorrectPolicy => {
+                "ROLE_DOES_NOT_HAVE_CORRECT_POLICY"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvalidCrossAccountRoleErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ROLE_DOES_NOT_EXIST_OR_INVALID_TRUST_RELATIONSHIP" => {
+                Ok(InvalidCrossAccountRoleErrorCode::RoleDoesNotExistOrInvalidTrustRelationship)
+            }
+            "ROLE_DOES_NOT_HAVE_CORRECT_POLICY" => {
+                Ok(InvalidCrossAccountRoleErrorCode::RoleDoesNotHaveCorrectPolicy)
+            }
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InvalidInputErrorCode {
+    AssessmentTargetNameAlreadyTaken,
+    AssessmentTemplateNameAlreadyTaken,
+    InvalidAgentId,
+    InvalidAssessmentRunArn,
+    InvalidAssessmentRunCompletionTimeRange,
+    InvalidAssessmentRunDurationRange,
+    InvalidAssessmentRunStartTimeRange,
+    InvalidAssessmentRunState,
+    InvalidAssessmentRunStateChangeTimeRange,
+    InvalidAssessmentTargetArn,
+    InvalidAssessmentTargetName,
+    InvalidAssessmentTargetNamePattern,
+    InvalidAssessmentTemplateArn,
+    InvalidAssessmentTemplateDuration,
+    InvalidAssessmentTemplateDurationRange,
+    InvalidAssessmentTemplateName,
+    InvalidAssessmentTemplateNamePattern,
+    InvalidAttribute,
+    InvalidAutoScalingGroup,
+    InvalidEvent,
+    InvalidFindingArn,
+    InvalidIamRoleArn,
+    InvalidLocale,
+    InvalidMaxResults,
+    InvalidNumberOfAgentIds,
+    InvalidNumberOfAssessmentRunArns,
+    InvalidNumberOfAssessmentRunStates,
+    InvalidNumberOfAssessmentTargetArns,
+    InvalidNumberOfAssessmentTemplateArns,
+    InvalidNumberOfAttributes,
+    InvalidNumberOfAutoScalingGroups,
+    InvalidNumberOfFindingArns,
+    InvalidNumberOfResourceGroupArns,
+    InvalidNumberOfResourceGroupTags,
+    InvalidNumberOfRulesPackageArns,
+    InvalidNumberOfRuleNames,
+    InvalidNumberOfSeverities,
+    InvalidNumberOfTags,
+    InvalidNumberOfUserAttributes,
+    InvalidPaginationToken,
+    InvalidResourceArn,
+    InvalidResourceGroupArn,
+    InvalidResourceGroupTagKey,
+    InvalidResourceGroupTagValue,
+    InvalidRulesPackageArn,
+    InvalidRuleName,
+    InvalidSeverity,
+    InvalidSnsTopicArn,
+    InvalidTag,
+    InvalidTagKey,
+    InvalidTagValue,
+    InvalidUserAttribute,
+    InvalidUserAttributeKey,
+    InvalidUserAttributeValue,
+}
+
+impl Into<String> for InvalidInputErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InvalidInputErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            InvalidInputErrorCode::AssessmentTargetNameAlreadyTaken => {
+                "ASSESSMENT_TARGET_NAME_ALREADY_TAKEN"
+            }
+            InvalidInputErrorCode::AssessmentTemplateNameAlreadyTaken => {
+                "ASSESSMENT_TEMPLATE_NAME_ALREADY_TAKEN"
+            }
+            InvalidInputErrorCode::InvalidAgentId => "INVALID_AGENT_ID",
+            InvalidInputErrorCode::InvalidAssessmentRunArn => "INVALID_ASSESSMENT_RUN_ARN",
+            InvalidInputErrorCode::InvalidAssessmentRunCompletionTimeRange => {
+                "INVALID_ASSESSMENT_RUN_COMPLETION_TIME_RANGE"
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunDurationRange => {
+                "INVALID_ASSESSMENT_RUN_DURATION_RANGE"
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunStartTimeRange => {
+                "INVALID_ASSESSMENT_RUN_START_TIME_RANGE"
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunState => "INVALID_ASSESSMENT_RUN_STATE",
+            InvalidInputErrorCode::InvalidAssessmentRunStateChangeTimeRange => {
+                "INVALID_ASSESSMENT_RUN_STATE_CHANGE_TIME_RANGE"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTargetArn => "INVALID_ASSESSMENT_TARGET_ARN",
+            InvalidInputErrorCode::InvalidAssessmentTargetName => "INVALID_ASSESSMENT_TARGET_NAME",
+            InvalidInputErrorCode::InvalidAssessmentTargetNamePattern => {
+                "INVALID_ASSESSMENT_TARGET_NAME_PATTERN"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateArn => {
+                "INVALID_ASSESSMENT_TEMPLATE_ARN"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateDuration => {
+                "INVALID_ASSESSMENT_TEMPLATE_DURATION"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateDurationRange => {
+                "INVALID_ASSESSMENT_TEMPLATE_DURATION_RANGE"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateName => {
+                "INVALID_ASSESSMENT_TEMPLATE_NAME"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateNamePattern => {
+                "INVALID_ASSESSMENT_TEMPLATE_NAME_PATTERN"
+            }
+            InvalidInputErrorCode::InvalidAttribute => "INVALID_ATTRIBUTE",
+            InvalidInputErrorCode::InvalidAutoScalingGroup => "INVALID_AUTO_SCALING_GROUP",
+            InvalidInputErrorCode::InvalidEvent => "INVALID_EVENT",
+            InvalidInputErrorCode::InvalidFindingArn => "INVALID_FINDING_ARN",
+            InvalidInputErrorCode::InvalidIamRoleArn => "INVALID_IAM_ROLE_ARN",
+            InvalidInputErrorCode::InvalidLocale => "INVALID_LOCALE",
+            InvalidInputErrorCode::InvalidMaxResults => "INVALID_MAX_RESULTS",
+            InvalidInputErrorCode::InvalidNumberOfAgentIds => "INVALID_NUMBER_OF_AGENT_IDS",
+            InvalidInputErrorCode::InvalidNumberOfAssessmentRunArns => {
+                "INVALID_NUMBER_OF_ASSESSMENT_RUN_ARNS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfAssessmentRunStates => {
+                "INVALID_NUMBER_OF_ASSESSMENT_RUN_STATES"
+            }
+            InvalidInputErrorCode::InvalidNumberOfAssessmentTargetArns => {
+                "INVALID_NUMBER_OF_ASSESSMENT_TARGET_ARNS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfAssessmentTemplateArns => {
+                "INVALID_NUMBER_OF_ASSESSMENT_TEMPLATE_ARNS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfAttributes => "INVALID_NUMBER_OF_ATTRIBUTES",
+            InvalidInputErrorCode::InvalidNumberOfAutoScalingGroups => {
+                "INVALID_NUMBER_OF_AUTO_SCALING_GROUPS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfFindingArns => "INVALID_NUMBER_OF_FINDING_ARNS",
+            InvalidInputErrorCode::InvalidNumberOfResourceGroupArns => {
+                "INVALID_NUMBER_OF_RESOURCE_GROUP_ARNS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfResourceGroupTags => {
+                "INVALID_NUMBER_OF_RESOURCE_GROUP_TAGS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfRulesPackageArns => {
+                "INVALID_NUMBER_OF_RULES_PACKAGE_ARNS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfRuleNames => "INVALID_NUMBER_OF_RULE_NAMES",
+            InvalidInputErrorCode::InvalidNumberOfSeverities => "INVALID_NUMBER_OF_SEVERITIES",
+            InvalidInputErrorCode::InvalidNumberOfTags => "INVALID_NUMBER_OF_TAGS",
+            InvalidInputErrorCode::InvalidNumberOfUserAttributes => {
+                "INVALID_NUMBER_OF_USER_ATTRIBUTES"
+            }
+            InvalidInputErrorCode::InvalidPaginationToken => "INVALID_PAGINATION_TOKEN",
+            InvalidInputErrorCode::InvalidResourceArn => "INVALID_RESOURCE_ARN",
+            InvalidInputErrorCode::InvalidResourceGroupArn => "INVALID_RESOURCE_GROUP_ARN",
+            InvalidInputErrorCode::InvalidResourceGroupTagKey => "INVALID_RESOURCE_GROUP_TAG_KEY",
+            InvalidInputErrorCode::InvalidResourceGroupTagValue => {
+                "INVALID_RESOURCE_GROUP_TAG_VALUE"
+            }
+            InvalidInputErrorCode::InvalidRulesPackageArn => "INVALID_RULES_PACKAGE_ARN",
+            InvalidInputErrorCode::InvalidRuleName => "INVALID_RULE_NAME",
+            InvalidInputErrorCode::InvalidSeverity => "INVALID_SEVERITY",
+            InvalidInputErrorCode::InvalidSnsTopicArn => "INVALID_SNS_TOPIC_ARN",
+            InvalidInputErrorCode::InvalidTag => "INVALID_TAG",
+            InvalidInputErrorCode::InvalidTagKey => "INVALID_TAG_KEY",
+            InvalidInputErrorCode::InvalidTagValue => "INVALID_TAG_VALUE",
+            InvalidInputErrorCode::InvalidUserAttribute => "INVALID_USER_ATTRIBUTE",
+            InvalidInputErrorCode::InvalidUserAttributeKey => "INVALID_USER_ATTRIBUTE_KEY",
+            InvalidInputErrorCode::InvalidUserAttributeValue => "INVALID_USER_ATTRIBUTE_VALUE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvalidInputErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASSESSMENT_TARGET_NAME_ALREADY_TAKEN" => {
+                Ok(InvalidInputErrorCode::AssessmentTargetNameAlreadyTaken)
+            }
+            "ASSESSMENT_TEMPLATE_NAME_ALREADY_TAKEN" => {
+                Ok(InvalidInputErrorCode::AssessmentTemplateNameAlreadyTaken)
+            }
+            "INVALID_AGENT_ID" => Ok(InvalidInputErrorCode::InvalidAgentId),
+            "INVALID_ASSESSMENT_RUN_ARN" => Ok(InvalidInputErrorCode::InvalidAssessmentRunArn),
+            "INVALID_ASSESSMENT_RUN_COMPLETION_TIME_RANGE" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentRunCompletionTimeRange)
+            }
+            "INVALID_ASSESSMENT_RUN_DURATION_RANGE" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentRunDurationRange)
+            }
+            "INVALID_ASSESSMENT_RUN_START_TIME_RANGE" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentRunStartTimeRange)
+            }
+            "INVALID_ASSESSMENT_RUN_STATE" => Ok(InvalidInputErrorCode::InvalidAssessmentRunState),
+            "INVALID_ASSESSMENT_RUN_STATE_CHANGE_TIME_RANGE" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentRunStateChangeTimeRange)
+            }
+            "INVALID_ASSESSMENT_TARGET_ARN" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentTargetArn)
+            }
+            "INVALID_ASSESSMENT_TARGET_NAME" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentTargetName)
+            }
+            "INVALID_ASSESSMENT_TARGET_NAME_PATTERN" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentTargetNamePattern)
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_ARN" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentTemplateArn)
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_DURATION" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentTemplateDuration)
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_DURATION_RANGE" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentTemplateDurationRange)
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_NAME" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentTemplateName)
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_NAME_PATTERN" => {
+                Ok(InvalidInputErrorCode::InvalidAssessmentTemplateNamePattern)
+            }
+            "INVALID_ATTRIBUTE" => Ok(InvalidInputErrorCode::InvalidAttribute),
+            "INVALID_AUTO_SCALING_GROUP" => Ok(InvalidInputErrorCode::InvalidAutoScalingGroup),
+            "INVALID_EVENT" => Ok(InvalidInputErrorCode::InvalidEvent),
+            "INVALID_FINDING_ARN" => Ok(InvalidInputErrorCode::InvalidFindingArn),
+            "INVALID_IAM_ROLE_ARN" => Ok(InvalidInputErrorCode::InvalidIamRoleArn),
+            "INVALID_LOCALE" => Ok(InvalidInputErrorCode::InvalidLocale),
+            "INVALID_MAX_RESULTS" => Ok(InvalidInputErrorCode::InvalidMaxResults),
+            "INVALID_NUMBER_OF_AGENT_IDS" => Ok(InvalidInputErrorCode::InvalidNumberOfAgentIds),
+            "INVALID_NUMBER_OF_ASSESSMENT_RUN_ARNS" => {
+                Ok(InvalidInputErrorCode::InvalidNumberOfAssessmentRunArns)
+            }
+            "INVALID_NUMBER_OF_ASSESSMENT_RUN_STATES" => {
+                Ok(InvalidInputErrorCode::InvalidNumberOfAssessmentRunStates)
+            }
+            "INVALID_NUMBER_OF_ASSESSMENT_TARGET_ARNS" => {
+                Ok(InvalidInputErrorCode::InvalidNumberOfAssessmentTargetArns)
+            }
+            "INVALID_NUMBER_OF_ASSESSMENT_TEMPLATE_ARNS" => {
+                Ok(InvalidInputErrorCode::InvalidNumberOfAssessmentTemplateArns)
+            }
+            "INVALID_NUMBER_OF_ATTRIBUTES" => Ok(InvalidInputErrorCode::InvalidNumberOfAttributes),
+            "INVALID_NUMBER_OF_AUTO_SCALING_GROUPS" => {
+                Ok(InvalidInputErrorCode::InvalidNumberOfAutoScalingGroups)
+            }
+            "INVALID_NUMBER_OF_FINDING_ARNS" => {
+                Ok(InvalidInputErrorCode::InvalidNumberOfFindingArns)
+            }
+            "INVALID_NUMBER_OF_RESOURCE_GROUP_ARNS" => {
+                Ok(InvalidInputErrorCode::InvalidNumberOfResourceGroupArns)
+            }
+            "INVALID_NUMBER_OF_RESOURCE_GROUP_TAGS" => {
+                Ok(InvalidInputErrorCode::InvalidNumberOfResourceGroupTags)
+            }
+            "INVALID_NUMBER_OF_RULES_PACKAGE_ARNS" => {
+                Ok(InvalidInputErrorCode::InvalidNumberOfRulesPackageArns)
+            }
+            "INVALID_NUMBER_OF_RULE_NAMES" => Ok(InvalidInputErrorCode::InvalidNumberOfRuleNames),
+            "INVALID_NUMBER_OF_SEVERITIES" => Ok(InvalidInputErrorCode::InvalidNumberOfSeverities),
+            "INVALID_NUMBER_OF_TAGS" => Ok(InvalidInputErrorCode::InvalidNumberOfTags),
+            "INVALID_NUMBER_OF_USER_ATTRIBUTES" => {
+                Ok(InvalidInputErrorCode::InvalidNumberOfUserAttributes)
+            }
+            "INVALID_PAGINATION_TOKEN" => Ok(InvalidInputErrorCode::InvalidPaginationToken),
+            "INVALID_RESOURCE_ARN" => Ok(InvalidInputErrorCode::InvalidResourceArn),
+            "INVALID_RESOURCE_GROUP_ARN" => Ok(InvalidInputErrorCode::InvalidResourceGroupArn),
+            "INVALID_RESOURCE_GROUP_TAG_KEY" => {
+                Ok(InvalidInputErrorCode::InvalidResourceGroupTagKey)
+            }
+            "INVALID_RESOURCE_GROUP_TAG_VALUE" => {
+                Ok(InvalidInputErrorCode::InvalidResourceGroupTagValue)
+            }
+            "INVALID_RULES_PACKAGE_ARN" => Ok(InvalidInputErrorCode::InvalidRulesPackageArn),
+            "INVALID_RULE_NAME" => Ok(InvalidInputErrorCode::InvalidRuleName),
+            "INVALID_SEVERITY" => Ok(InvalidInputErrorCode::InvalidSeverity),
+            "INVALID_SNS_TOPIC_ARN" => Ok(InvalidInputErrorCode::InvalidSnsTopicArn),
+            "INVALID_TAG" => Ok(InvalidInputErrorCode::InvalidTag),
+            "INVALID_TAG_KEY" => Ok(InvalidInputErrorCode::InvalidTagKey),
+            "INVALID_TAG_VALUE" => Ok(InvalidInputErrorCode::InvalidTagValue),
+            "INVALID_USER_ATTRIBUTE" => Ok(InvalidInputErrorCode::InvalidUserAttribute),
+            "INVALID_USER_ATTRIBUTE_KEY" => Ok(InvalidInputErrorCode::InvalidUserAttributeKey),
+            "INVALID_USER_ATTRIBUTE_VALUE" => Ok(InvalidInputErrorCode::InvalidUserAttributeValue),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LimitExceededErrorCode {
+    AssessmentRunLimitExceeded,
+    AssessmentTargetLimitExceeded,
+    AssessmentTemplateLimitExceeded,
+    EventSubscriptionLimitExceeded,
+    ResourceGroupLimitExceeded,
+}
+
+impl Into<String> for LimitExceededErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LimitExceededErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            LimitExceededErrorCode::AssessmentRunLimitExceeded => "ASSESSMENT_RUN_LIMIT_EXCEEDED",
+            LimitExceededErrorCode::AssessmentTargetLimitExceeded => {
+                "ASSESSMENT_TARGET_LIMIT_EXCEEDED"
+            }
+            LimitExceededErrorCode::AssessmentTemplateLimitExceeded => {
+                "ASSESSMENT_TEMPLATE_LIMIT_EXCEEDED"
+            }
+            LimitExceededErrorCode::EventSubscriptionLimitExceeded => {
+                "EVENT_SUBSCRIPTION_LIMIT_EXCEEDED"
+            }
+            LimitExceededErrorCode::ResourceGroupLimitExceeded => "RESOURCE_GROUP_LIMIT_EXCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LimitExceededErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASSESSMENT_RUN_LIMIT_EXCEEDED" => {
+                Ok(LimitExceededErrorCode::AssessmentRunLimitExceeded)
+            }
+            "ASSESSMENT_TARGET_LIMIT_EXCEEDED" => {
+                Ok(LimitExceededErrorCode::AssessmentTargetLimitExceeded)
+            }
+            "ASSESSMENT_TEMPLATE_LIMIT_EXCEEDED" => {
+                Ok(LimitExceededErrorCode::AssessmentTemplateLimitExceeded)
+            }
+            "EVENT_SUBSCRIPTION_LIMIT_EXCEEDED" => {
+                Ok(LimitExceededErrorCode::EventSubscriptionLimitExceeded)
+            }
+            "RESOURCE_GROUP_LIMIT_EXCEEDED" => {
+                Ok(LimitExceededErrorCode::ResourceGroupLimitExceeded)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -950,6 +1718,99 @@ pub struct ListTagsForResourceResponse {
     pub tags: Vec<Tag>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Locale {
+    EnUs,
+}
+
+impl Into<String> for Locale {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Locale {
+    fn into(self) -> &'static str {
+        match self {
+            Locale::EnUs => "EN_US",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Locale {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EN_US" => Ok(Locale::EnUs),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NoSuchEntityErrorCode {
+    AssessmentRunDoesNotExist,
+    AssessmentTargetDoesNotExist,
+    AssessmentTemplateDoesNotExist,
+    FindingDoesNotExist,
+    IamRoleDoesNotExist,
+    ResourceGroupDoesNotExist,
+    RulesPackageDoesNotExist,
+    SnsTopicDoesNotExist,
+}
+
+impl Into<String> for NoSuchEntityErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NoSuchEntityErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            NoSuchEntityErrorCode::AssessmentRunDoesNotExist => "ASSESSMENT_RUN_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::AssessmentTargetDoesNotExist => {
+                "ASSESSMENT_TARGET_DOES_NOT_EXIST"
+            }
+            NoSuchEntityErrorCode::AssessmentTemplateDoesNotExist => {
+                "ASSESSMENT_TEMPLATE_DOES_NOT_EXIST"
+            }
+            NoSuchEntityErrorCode::FindingDoesNotExist => "FINDING_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::IamRoleDoesNotExist => "IAM_ROLE_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::ResourceGroupDoesNotExist => "RESOURCE_GROUP_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::RulesPackageDoesNotExist => "RULES_PACKAGE_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::SnsTopicDoesNotExist => "SNS_TOPIC_DOES_NOT_EXIST",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NoSuchEntityErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASSESSMENT_RUN_DOES_NOT_EXIST" => Ok(NoSuchEntityErrorCode::AssessmentRunDoesNotExist),
+            "ASSESSMENT_TARGET_DOES_NOT_EXIST" => {
+                Ok(NoSuchEntityErrorCode::AssessmentTargetDoesNotExist)
+            }
+            "ASSESSMENT_TEMPLATE_DOES_NOT_EXIST" => {
+                Ok(NoSuchEntityErrorCode::AssessmentTemplateDoesNotExist)
+            }
+            "FINDING_DOES_NOT_EXIST" => Ok(NoSuchEntityErrorCode::FindingDoesNotExist),
+            "IAM_ROLE_DOES_NOT_EXIST" => Ok(NoSuchEntityErrorCode::IamRoleDoesNotExist),
+            "RESOURCE_GROUP_DOES_NOT_EXIST" => Ok(NoSuchEntityErrorCode::ResourceGroupDoesNotExist),
+            "RULES_PACKAGE_DOES_NOT_EXIST" => Ok(NoSuchEntityErrorCode::RulesPackageDoesNotExist),
+            "SNS_TOPIC_DOES_NOT_EXIST" => Ok(NoSuchEntityErrorCode::SnsTopicDoesNotExist),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PreviewAgentsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
@@ -998,6 +1859,114 @@ pub struct RemoveAttributesFromFindingsResponse {
     #[doc="<p>Attributes details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReportFileFormat {
+    Html,
+    Pdf,
+}
+
+impl Into<String> for ReportFileFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReportFileFormat {
+    fn into(self) -> &'static str {
+        match self {
+            ReportFileFormat::Html => "HTML",
+            ReportFileFormat::Pdf => "PDF",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportFileFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "HTML" => Ok(ReportFileFormat::Html),
+            "PDF" => Ok(ReportFileFormat::Pdf),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReportStatus {
+    Completed,
+    Failed,
+    WorkInProgress,
+}
+
+impl Into<String> for ReportStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReportStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ReportStatus::Completed => "COMPLETED",
+            ReportStatus::Failed => "FAILED",
+            ReportStatus::WorkInProgress => "WORK_IN_PROGRESS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COMPLETED" => Ok(ReportStatus::Completed),
+            "FAILED" => Ok(ReportStatus::Failed),
+            "WORK_IN_PROGRESS" => Ok(ReportStatus::WorkInProgress),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReportType {
+    Finding,
+    Full,
+}
+
+impl Into<String> for ReportType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReportType {
+    fn into(self) -> &'static str {
+        match self {
+            ReportType::Finding => "FINDING",
+            ReportType::Full => "FULL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FINDING" => Ok(ReportType::Finding),
+            "FULL" => Ok(ReportType::Full),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Contains information about a resource group. The resource group defines a set of tags that, when queried, identify the AWS resources that make up the assessment target. This data type is used as the response element in the <a>DescribeResourceGroups</a> action.</p>"]
@@ -1056,6 +2025,50 @@ pub struct SetTagsForResourceRequest {
     #[serde(rename="tags")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Severity {
+    High,
+    Informational,
+    Low,
+    Medium,
+    Undefined,
+}
+
+impl Into<String> for Severity {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Severity {
+    fn into(self) -> &'static str {
+        match self {
+            Severity::High => "High",
+            Severity::Informational => "Informational",
+            Severity::Low => "Low",
+            Severity::Medium => "Medium",
+            Severity::Undefined => "Undefined",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Severity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "High" => Ok(Severity::High),
+            "Informational" => Ok(Severity::Informational),
+            "Low" => Ok(Severity::Low),
+            "Medium" => Ok(Severity::Medium),
+            "Undefined" => Ok(Severity::Undefined),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -4477,7 +5490,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddAttributesToFindingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AddAttributesToFindingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4502,7 +5515,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateAssessmentTargetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4530,7 +5543,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateAssessmentTemplateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateAssessmentTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4554,7 +5567,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateResourceGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4581,7 +5594,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteAssessmentRunError::from_body(String::from_utf8_lossy(&response.body)
                                                             .as_ref()))
@@ -4606,7 +5619,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteAssessmentTargetError::from_body(String::from_utf8_lossy(&response.body)
                                                                .as_ref()))
@@ -4631,7 +5644,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DeleteAssessmentTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -4654,7 +5667,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAssessmentRunsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4682,7 +5695,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAssessmentTargetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeAssessmentTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4708,7 +5721,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAssessmentTemplatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeAssessmentTemplatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4732,7 +5745,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeCrossAccountAccessRoleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeCrossAccountAccessRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4756,7 +5769,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeFindingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4784,7 +5797,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeResourceGroupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4812,7 +5825,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeRulesPackagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4839,7 +5852,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetAssessmentReportResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4867,7 +5880,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetTelemetryMetadataResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4895,7 +5908,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListAssessmentRunAgentsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListAssessmentRunAgentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4919,7 +5932,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListAssessmentRunsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4947,7 +5960,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListAssessmentTargetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4975,7 +5988,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListAssessmentTemplatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListAssessmentTemplatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5000,7 +6013,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListEventSubscriptionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5027,7 +6040,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListFindingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5053,7 +6066,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListRulesPackagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5080,7 +6093,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5107,7 +6120,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PreviewAgentsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5134,7 +6147,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(RegisterCrossAccountAccessRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -5158,7 +6171,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RemoveAttributesFromFindingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RemoveAttributesFromFindingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5182,7 +6195,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(SetTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
                                                            .as_ref()))
@@ -5207,7 +6220,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StartAssessmentRunResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5234,7 +6247,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(StopAssessmentRunError::from_body(String::from_utf8_lossy(&response.body)
                                                           .as_ref()))
@@ -5259,7 +6272,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(SubscribeToEventError::from_body(String::from_utf8_lossy(&response.body)
                                                          .as_ref()))
@@ -5284,7 +6297,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UnsubscribeFromEventError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
@@ -5309,7 +6322,7 @@ impl<P, D> Inspector for InspectorClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UpdateAssessmentTargetError::from_body(String::from_utf8_lossy(&response.body)
                                                                .as_ref()))

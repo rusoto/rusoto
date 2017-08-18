@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -50,6 +46,38 @@ pub struct AddTagsOutput {
     #[serde(rename="ResourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<String>,
+}
+
+#[doc="<p>The function used to train an <code>MLModel</code>. Training choices supported by Amazon ML include the following:</p> <ul> <li> <code>SGD</code> - Stochastic Gradient Descent.</li> <li> <code>RandomForest</code> - Random forest of decision trees.</li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Algorithm {
+    Sgd,
+}
+
+impl Into<String> for Algorithm {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Algorithm {
+    fn into(self) -> &'static str {
+        match self {
+            Algorithm::Sgd => "sgd",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Algorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "sgd" => Ok(Algorithm::Sgd),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p> Represents the output of a <code>GetBatchPrediction</code> operation.</p> <p> The content consists of the detailed metadata, the status, and the data file information of a <code>Batch Prediction</code>.</p>"]
@@ -114,6 +142,59 @@ pub struct BatchPrediction {
     #[serde(rename="TotalRecordCount")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub total_record_count: Option<i64>,
+}
+
+#[doc="<p>A list of the variables to use in searching or filtering <code>BatchPrediction</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>BatchPrediction</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>BatchPrediction</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>BatchPrediction</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>BatchPrediction</code> creation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataURI</code> - Sets the search criteria to the data file(s) used in the <code>BatchPrediction</code>. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BatchPredictionFilterVariable {
+    CreatedAt,
+    DataSourceId,
+    DataURI,
+    Iamuser,
+    LastUpdatedAt,
+    MlmodelId,
+    Name,
+    Status,
+}
+
+impl Into<String> for BatchPredictionFilterVariable {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BatchPredictionFilterVariable {
+    fn into(self) -> &'static str {
+        match self {
+            BatchPredictionFilterVariable::CreatedAt => "CreatedAt",
+            BatchPredictionFilterVariable::DataSourceId => "DataSourceId",
+            BatchPredictionFilterVariable::DataURI => "DataURI",
+            BatchPredictionFilterVariable::Iamuser => "IAMUser",
+            BatchPredictionFilterVariable::LastUpdatedAt => "LastUpdatedAt",
+            BatchPredictionFilterVariable::MlmodelId => "MLModelId",
+            BatchPredictionFilterVariable::Name => "Name",
+            BatchPredictionFilterVariable::Status => "Status",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BatchPredictionFilterVariable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CreatedAt" => Ok(BatchPredictionFilterVariable::CreatedAt),
+            "DataSourceId" => Ok(BatchPredictionFilterVariable::DataSourceId),
+            "DataURI" => Ok(BatchPredictionFilterVariable::DataURI),
+            "IAMUser" => Ok(BatchPredictionFilterVariable::Iamuser),
+            "LastUpdatedAt" => Ok(BatchPredictionFilterVariable::LastUpdatedAt),
+            "MLModelId" => Ok(BatchPredictionFilterVariable::MlmodelId),
+            "Name" => Ok(BatchPredictionFilterVariable::Name),
+            "Status" => Ok(BatchPredictionFilterVariable::Status),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -385,6 +466,53 @@ pub struct DataSource {
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
+}
+
+#[doc="<p>A list of the variables to use in searching or filtering <code>DataSource</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>DataSource</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>DataSource</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>DataSource</code> <b> </b> <code>Name</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the URI of data files used to create the <code>DataSource</code>. The URI can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>DataSource</code> creation.</li> </ul> <note><title>Note</title> <p>The variable names should match the variable names in the <code>DataSource</code>.</p> </note>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DataSourceFilterVariable {
+    CreatedAt,
+    DataLocationS3,
+    Iamuser,
+    LastUpdatedAt,
+    Name,
+    Status,
+}
+
+impl Into<String> for DataSourceFilterVariable {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DataSourceFilterVariable {
+    fn into(self) -> &'static str {
+        match self {
+            DataSourceFilterVariable::CreatedAt => "CreatedAt",
+            DataSourceFilterVariable::DataLocationS3 => "DataLocationS3",
+            DataSourceFilterVariable::Iamuser => "IAMUser",
+            DataSourceFilterVariable::LastUpdatedAt => "LastUpdatedAt",
+            DataSourceFilterVariable::Name => "Name",
+            DataSourceFilterVariable::Status => "Status",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSourceFilterVariable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CreatedAt" => Ok(DataSourceFilterVariable::CreatedAt),
+            "DataLocationS3" => Ok(DataSourceFilterVariable::DataLocationS3),
+            "IAMUser" => Ok(DataSourceFilterVariable::Iamuser),
+            "LastUpdatedAt" => Ok(DataSourceFilterVariable::LastUpdatedAt),
+            "Name" => Ok(DataSourceFilterVariable::Name),
+            "Status" => Ok(DataSourceFilterVariable::Status),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -768,6 +896,85 @@ pub struct DescribeTagsOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[doc="Contains the key values of <code>DetailsMap</code>: <code>PredictiveModelType</code> - Indicates the type of the <code>MLModel</code>. <code>Algorithm</code> - Indicates the algorithm that was used for the <code>MLModel</code>."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DetailsAttributes {
+    Algorithm,
+    PredictiveModelType,
+}
+
+impl Into<String> for DetailsAttributes {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DetailsAttributes {
+    fn into(self) -> &'static str {
+        match self {
+            DetailsAttributes::Algorithm => "Algorithm",
+            DetailsAttributes::PredictiveModelType => "PredictiveModelType",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DetailsAttributes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Algorithm" => Ok(DetailsAttributes::Algorithm),
+            "PredictiveModelType" => Ok(DetailsAttributes::PredictiveModelType),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="<p>Object status with the following possible values:</p> <ul> <li><code>PENDING</code></li> <li><code>INPROGRESS</code></li> <li><code>FAILED</code></li> <li><code>COMPLETED</code></li> <li><code>DELETED</code></li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EntityStatus {
+    Completed,
+    Deleted,
+    Failed,
+    Inprogress,
+    Pending,
+}
+
+impl Into<String> for EntityStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EntityStatus {
+    fn into(self) -> &'static str {
+        match self {
+            EntityStatus::Completed => "COMPLETED",
+            EntityStatus::Deleted => "DELETED",
+            EntityStatus::Failed => "FAILED",
+            EntityStatus::Inprogress => "INPROGRESS",
+            EntityStatus::Pending => "PENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COMPLETED" => Ok(EntityStatus::Completed),
+            "DELETED" => Ok(EntityStatus::Deleted),
+            "FAILED" => Ok(EntityStatus::Failed),
+            "INPROGRESS" => Ok(EntityStatus::Inprogress),
+            "PENDING" => Ok(EntityStatus::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p> Represents the output of <code>GetEvaluation</code> operation. </p> <p>The content consists of the detailed metadata and data file information and the current status of the <code>Evaluation</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Evaluation {
@@ -824,6 +1031,59 @@ pub struct Evaluation {
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
+}
+
+#[doc="<p>A list of the variables to use in searching or filtering <code>Evaluation</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>Evaluation</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>Evaluation</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>Evaluation</code> <b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked an evaluation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>Predictor</code> that was evaluated.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in evaluation.</li> <li> <code>DataUri</code> - Sets the search criteria to the data file(s) used in evaluation. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EvaluationFilterVariable {
+    CreatedAt,
+    DataSourceId,
+    DataURI,
+    Iamuser,
+    LastUpdatedAt,
+    MlmodelId,
+    Name,
+    Status,
+}
+
+impl Into<String> for EvaluationFilterVariable {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EvaluationFilterVariable {
+    fn into(self) -> &'static str {
+        match self {
+            EvaluationFilterVariable::CreatedAt => "CreatedAt",
+            EvaluationFilterVariable::DataSourceId => "DataSourceId",
+            EvaluationFilterVariable::DataURI => "DataURI",
+            EvaluationFilterVariable::Iamuser => "IAMUser",
+            EvaluationFilterVariable::LastUpdatedAt => "LastUpdatedAt",
+            EvaluationFilterVariable::MlmodelId => "MLModelId",
+            EvaluationFilterVariable::Name => "Name",
+            EvaluationFilterVariable::Status => "Status",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EvaluationFilterVariable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CreatedAt" => Ok(EvaluationFilterVariable::CreatedAt),
+            "DataSourceId" => Ok(EvaluationFilterVariable::DataSourceId),
+            "DataURI" => Ok(EvaluationFilterVariable::DataURI),
+            "IAMUser" => Ok(EvaluationFilterVariable::Iamuser),
+            "LastUpdatedAt" => Ok(EvaluationFilterVariable::LastUpdatedAt),
+            "MLModelId" => Ok(EvaluationFilterVariable::MlmodelId),
+            "Name" => Ok(EvaluationFilterVariable::Name),
+            "Status" => Ok(EvaluationFilterVariable::Status),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1246,6 +1506,103 @@ pub struct MLModel {
     pub training_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MLModelFilterVariable {
+    Algorithm,
+    CreatedAt,
+    Iamuser,
+    LastUpdatedAt,
+    MlmodelType,
+    Name,
+    RealtimeEndpointStatus,
+    Status,
+    TrainingDataSourceId,
+    TrainingDataURI,
+}
+
+impl Into<String> for MLModelFilterVariable {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MLModelFilterVariable {
+    fn into(self) -> &'static str {
+        match self {
+            MLModelFilterVariable::Algorithm => "Algorithm",
+            MLModelFilterVariable::CreatedAt => "CreatedAt",
+            MLModelFilterVariable::Iamuser => "IAMUser",
+            MLModelFilterVariable::LastUpdatedAt => "LastUpdatedAt",
+            MLModelFilterVariable::MlmodelType => "MLModelType",
+            MLModelFilterVariable::Name => "Name",
+            MLModelFilterVariable::RealtimeEndpointStatus => "RealtimeEndpointStatus",
+            MLModelFilterVariable::Status => "Status",
+            MLModelFilterVariable::TrainingDataSourceId => "TrainingDataSourceId",
+            MLModelFilterVariable::TrainingDataURI => "TrainingDataURI",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MLModelFilterVariable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Algorithm" => Ok(MLModelFilterVariable::Algorithm),
+            "CreatedAt" => Ok(MLModelFilterVariable::CreatedAt),
+            "IAMUser" => Ok(MLModelFilterVariable::Iamuser),
+            "LastUpdatedAt" => Ok(MLModelFilterVariable::LastUpdatedAt),
+            "MLModelType" => Ok(MLModelFilterVariable::MlmodelType),
+            "Name" => Ok(MLModelFilterVariable::Name),
+            "RealtimeEndpointStatus" => Ok(MLModelFilterVariable::RealtimeEndpointStatus),
+            "Status" => Ok(MLModelFilterVariable::Status),
+            "TrainingDataSourceId" => Ok(MLModelFilterVariable::TrainingDataSourceId),
+            "TrainingDataURI" => Ok(MLModelFilterVariable::TrainingDataURI),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MLModelType {
+    Binary,
+    Multiclass,
+    Regression,
+}
+
+impl Into<String> for MLModelType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MLModelType {
+    fn into(self) -> &'static str {
+        match self {
+            MLModelType::Binary => "BINARY",
+            MLModelType::Multiclass => "MULTICLASS",
+            MLModelType::Regression => "REGRESSION",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MLModelType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BINARY" => Ok(MLModelType::Binary),
+            "MULTICLASS" => Ok(MLModelType::Multiclass),
+            "REGRESSION" => Ok(MLModelType::Regression),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Measurements of how well the <code>MLModel</code> performed on known observations. One of the following metrics is returned, based on the type of the <code>MLModel</code>: </p> <ul> <li> <p>BinaryAUC: The binary <code>MLModel</code> uses the Area Under the Curve (AUC) technique to measure performance. </p> </li> <li> <p>RegressionRMSE: The regression <code>MLModel</code> uses the Root Mean Square Error (RMSE) technique to measure performance. RMSE measures the difference between predicted and actual values for a single variable.</p> </li> <li> <p>MulticlassAvgFScore: The multiclass <code>MLModel</code> uses the F1 score technique to measure performance. </p> </li> </ul> <p> For more information about performance metrics, please see the <a href=\"http://docs.aws.amazon.com/machine-learning/latest/dg\">Amazon Machine Learning Developer Guide</a>. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PerformanceMetrics {
@@ -1400,6 +1757,47 @@ pub struct RealtimeEndpointInfo {
     pub peak_requests_per_second: Option<i64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RealtimeEndpointStatus {
+    Failed,
+    None,
+    Ready,
+    Updating,
+}
+
+impl Into<String> for RealtimeEndpointStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RealtimeEndpointStatus {
+    fn into(self) -> &'static str {
+        match self {
+            RealtimeEndpointStatus::Failed => "FAILED",
+            RealtimeEndpointStatus::None => "NONE",
+            RealtimeEndpointStatus::Ready => "READY",
+            RealtimeEndpointStatus::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RealtimeEndpointStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(RealtimeEndpointStatus::Failed),
+            "NONE" => Ok(RealtimeEndpointStatus::None),
+            "READY" => Ok(RealtimeEndpointStatus::Ready),
+            "UPDATING" => Ok(RealtimeEndpointStatus::Updating),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the data specification of an Amazon Redshift <code>DataSource</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RedshiftDataSpec {
@@ -1482,6 +1880,41 @@ pub struct S3DataSpec {
     pub data_schema_location_s3: Option<String>,
 }
 
+#[doc="<p>The sort order specified in a listing condition. Possible values include the following:</p> <ul> <li> <code>asc</code> - Present the information in ascending order (from A-Z).</li> <li> <code>dsc</code> - Present the information in descending order (from Z-A).</li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SortOrder {
+    Asc,
+    Dsc,
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SortOrder {
+    fn into(self) -> &'static str {
+        match self {
+            SortOrder::Asc => "asc",
+            SortOrder::Dsc => "dsc",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "asc" => Ok(SortOrder::Asc),
+            "dsc" => Ok(SortOrder::Dsc),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A custom key-value pair associated with an ML object, such as an ML model.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
@@ -1493,6 +1926,47 @@ pub struct Tag {
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TaggableResourceType {
+    BatchPrediction,
+    DataSource,
+    Evaluation,
+    Mlmodel,
+}
+
+impl Into<String> for TaggableResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TaggableResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            TaggableResourceType::BatchPrediction => "BatchPrediction",
+            TaggableResourceType::DataSource => "DataSource",
+            TaggableResourceType::Evaluation => "Evaluation",
+            TaggableResourceType::Mlmodel => "MLModel",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaggableResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BatchPrediction" => Ok(TaggableResourceType::BatchPrediction),
+            "DataSource" => Ok(TaggableResourceType::DataSource),
+            "Evaluation" => Ok(TaggableResourceType::Evaluation),
+            "MLModel" => Ok(TaggableResourceType::Mlmodel),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -4203,7 +4677,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body)
                                                              .as_ref())
                            .unwrap())
@@ -4230,7 +4704,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4258,7 +4732,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateDataSourceFromRDSOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateDataSourceFromRDSError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4284,7 +4758,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateDataSourceFromRedshiftOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateDataSourceFromRedshiftError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4309,7 +4783,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateDataSourceFromS3Output>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4336,7 +4810,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4363,7 +4837,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4390,7 +4864,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateRealtimeEndpointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4418,7 +4892,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4445,7 +4919,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4472,7 +4946,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4499,7 +4973,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4526,7 +5000,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteRealtimeEndpointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4551,7 +5025,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4576,7 +5050,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeBatchPredictionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeBatchPredictionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4600,7 +5074,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeDataSourcesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4627,7 +5101,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeEvaluationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4654,7 +5128,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeMLModelsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4681,7 +5155,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4707,7 +5181,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4734,7 +5208,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4760,7 +5234,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4784,7 +5258,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4806,7 +5280,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<PredictOutput>(String::from_utf8_lossy(&response.body)
                                                              .as_ref())
                            .unwrap())
@@ -4833,7 +5307,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4860,7 +5334,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4887,7 +5361,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4914,7 +5388,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

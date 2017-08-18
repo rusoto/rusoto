@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -298,6 +294,63 @@ pub struct MergeShardsInput {
     pub stream_name: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MetricsName {
+    All,
+    IncomingBytes,
+    IncomingRecords,
+    IteratorAgeMilliseconds,
+    OutgoingBytes,
+    OutgoingRecords,
+    ReadProvisionedThroughputExceeded,
+    WriteProvisionedThroughputExceeded,
+}
+
+impl Into<String> for MetricsName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MetricsName {
+    fn into(self) -> &'static str {
+        match self {
+            MetricsName::All => "ALL",
+            MetricsName::IncomingBytes => "IncomingBytes",
+            MetricsName::IncomingRecords => "IncomingRecords",
+            MetricsName::IteratorAgeMilliseconds => "IteratorAgeMilliseconds",
+            MetricsName::OutgoingBytes => "OutgoingBytes",
+            MetricsName::OutgoingRecords => "OutgoingRecords",
+            MetricsName::ReadProvisionedThroughputExceeded => "ReadProvisionedThroughputExceeded",
+            MetricsName::WriteProvisionedThroughputExceeded => "WriteProvisionedThroughputExceeded",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricsName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALL" => Ok(MetricsName::All),
+            "IncomingBytes" => Ok(MetricsName::IncomingBytes),
+            "IncomingRecords" => Ok(MetricsName::IncomingRecords),
+            "IteratorAgeMilliseconds" => Ok(MetricsName::IteratorAgeMilliseconds),
+            "OutgoingBytes" => Ok(MetricsName::OutgoingBytes),
+            "OutgoingRecords" => Ok(MetricsName::OutgoingRecords),
+            "ReadProvisionedThroughputExceeded" => {
+                Ok(MetricsName::ReadProvisionedThroughputExceeded)
+            }
+            "WriteProvisionedThroughputExceeded" => {
+                Ok(MetricsName::WriteProvisionedThroughputExceeded)
+            }
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the input for <code>PutRecord</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutRecordInput {
@@ -434,6 +487,38 @@ pub struct RemoveTagsFromStreamInput {
     pub tag_keys: Vec<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScalingType {
+    UniformScaling,
+}
+
+impl Into<String> for ScalingType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScalingType {
+    fn into(self) -> &'static str {
+        match self {
+            ScalingType::UniformScaling => "UNIFORM_SCALING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "UNIFORM_SCALING" => Ok(ScalingType::UniformScaling),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The range of possible sequence numbers for the shard.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SequenceNumberRange {
@@ -466,6 +551,50 @@ pub struct Shard {
     #[doc="<p>The unique identifier of the shard within the stream.</p>"]
     #[serde(rename="ShardId")]
     pub shard_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ShardIteratorType {
+    AfterSequenceNumber,
+    AtSequenceNumber,
+    AtTimestamp,
+    Latest,
+    TrimHorizon,
+}
+
+impl Into<String> for ShardIteratorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ShardIteratorType {
+    fn into(self) -> &'static str {
+        match self {
+            ShardIteratorType::AfterSequenceNumber => "AFTER_SEQUENCE_NUMBER",
+            ShardIteratorType::AtSequenceNumber => "AT_SEQUENCE_NUMBER",
+            ShardIteratorType::AtTimestamp => "AT_TIMESTAMP",
+            ShardIteratorType::Latest => "LATEST",
+            ShardIteratorType::TrimHorizon => "TRIM_HORIZON",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShardIteratorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AFTER_SEQUENCE_NUMBER" => Ok(ShardIteratorType::AfterSequenceNumber),
+            "AT_SEQUENCE_NUMBER" => Ok(ShardIteratorType::AtSequenceNumber),
+            "AT_TIMESTAMP" => Ok(ShardIteratorType::AtTimestamp),
+            "LATEST" => Ok(ShardIteratorType::Latest),
+            "TRIM_HORIZON" => Ok(ShardIteratorType::TrimHorizon),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input for <code>SplitShard</code>.</p>"]
@@ -509,6 +638,47 @@ pub struct StreamDescription {
     #[doc="<p>The current status of the stream being described. The stream status is one of the following states:</p> <ul> <li> <p> <code>CREATING</code> - The stream is being created. Amazon Kinesis immediately returns and sets <code>StreamStatus</code> to <code>CREATING</code>.</p> </li> <li> <p> <code>DELETING</code> - The stream is being deleted. The specified stream is in the <code>DELETING</code> state until Amazon Kinesis completes the deletion.</p> </li> <li> <p> <code>ACTIVE</code> - The stream exists and is ready for read and write operations or deletion. You should perform read and write operations only on an <code>ACTIVE</code> stream.</p> </li> <li> <p> <code>UPDATING</code> - Shards in the stream are being merged or split. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state.</p> </li> </ul>"]
     #[serde(rename="StreamStatus")]
     pub stream_status: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StreamStatus {
+    Active,
+    Creating,
+    Deleting,
+    Updating,
+}
+
+impl Into<String> for StreamStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StreamStatus {
+    fn into(self) -> &'static str {
+        match self {
+            StreamStatus::Active => "ACTIVE",
+            StreamStatus::Creating => "CREATING",
+            StreamStatus::Deleting => "DELETING",
+            StreamStatus::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(StreamStatus::Active),
+            "CREATING" => Ok(StreamStatus::Creating),
+            "DELETING" => Ok(StreamStatus::Deleting),
+            "UPDATING" => Ok(StreamStatus::Updating),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Metadata assigned to the stream, consisting of a key-value pair.</p>"]
@@ -2326,7 +2496,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(AddTagsToStreamError::from_body(String::from_utf8_lossy(&response.body)
                                                         .as_ref()))
@@ -2349,7 +2519,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(CreateStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -2374,7 +2544,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DecreaseStreamRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -2394,7 +2564,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -2415,7 +2585,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeLimitsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2442,7 +2612,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2470,7 +2640,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<EnhancedMonitoringOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DisableEnhancedMonitoringError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2495,7 +2665,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<EnhancedMonitoringOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(EnableEnhancedMonitoringError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2517,7 +2687,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetRecordsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetRecordsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2541,7 +2711,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetShardIteratorOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2569,7 +2739,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(IncreaseStreamRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -2591,7 +2761,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListStreamsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListStreamsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2615,7 +2785,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTagsForStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2640,7 +2810,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(MergeShardsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -2660,7 +2830,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<PutRecordOutput>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -2684,7 +2854,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PutRecordsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(PutRecordsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2708,7 +2878,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(RemoveTagsFromStreamError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
@@ -2731,7 +2901,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(SplitShardError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -2753,7 +2923,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateShardCountOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

@@ -11,18 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
-use std::str::FromStr;
 use xml::EventReader;
 use xml::reader::ParserConfig;
 use rusoto_core::param::{Params, ServiceParams};
@@ -480,6 +475,44 @@ impl ArnTypeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AssignmentStatusType {
+    Any,
+    Assigned,
+    Unassigned,
+}
+
+impl Into<String> for AssignmentStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AssignmentStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            AssignmentStatusType::Any => "Any",
+            AssignmentStatusType::Assigned => "Assigned",
+            AssignmentStatusType::Unassigned => "Unassigned",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssignmentStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Any" => Ok(AssignmentStatusType::Any),
+            "Assigned" => Ok(AssignmentStatusType::Assigned),
+            "Unassigned" => Ok(AssignmentStatusType::Unassigned),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone)]
 pub struct AttachGroupPolicyRequest {
     #[doc="<p>The name (friendly name, not ARN) of the group to attach the policy to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
@@ -655,7 +688,7 @@ impl AttachmentCountTypeDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -669,7 +702,7 @@ impl BooleanObjectTypeDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -683,7 +716,7 @@ impl BooleanTypeDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -886,7 +919,7 @@ impl ColumnNumberDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -999,6 +1032,71 @@ impl ContextKeyNamesResultListTypeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ContextKeyTypeEnum {
+    Binary,
+    BinaryList,
+    Boolean,
+    BooleanList,
+    Date,
+    DateList,
+    Ip,
+    IpList,
+    Numeric,
+    NumericList,
+    String,
+    StringList,
+}
+
+impl Into<String> for ContextKeyTypeEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ContextKeyTypeEnum {
+    fn into(self) -> &'static str {
+        match self {
+            ContextKeyTypeEnum::Binary => "binary",
+            ContextKeyTypeEnum::BinaryList => "binaryList",
+            ContextKeyTypeEnum::Boolean => "boolean",
+            ContextKeyTypeEnum::BooleanList => "booleanList",
+            ContextKeyTypeEnum::Date => "date",
+            ContextKeyTypeEnum::DateList => "dateList",
+            ContextKeyTypeEnum::Ip => "ip",
+            ContextKeyTypeEnum::IpList => "ipList",
+            ContextKeyTypeEnum::Numeric => "numeric",
+            ContextKeyTypeEnum::NumericList => "numericList",
+            ContextKeyTypeEnum::String => "string",
+            ContextKeyTypeEnum::StringList => "stringList",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContextKeyTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "binary" => Ok(ContextKeyTypeEnum::Binary),
+            "binaryList" => Ok(ContextKeyTypeEnum::BinaryList),
+            "boolean" => Ok(ContextKeyTypeEnum::Boolean),
+            "booleanList" => Ok(ContextKeyTypeEnum::BooleanList),
+            "date" => Ok(ContextKeyTypeEnum::Date),
+            "dateList" => Ok(ContextKeyTypeEnum::DateList),
+            "ip" => Ok(ContextKeyTypeEnum::Ip),
+            "ipList" => Ok(ContextKeyTypeEnum::IpList),
+            "numeric" => Ok(ContextKeyTypeEnum::Numeric),
+            "numericList" => Ok(ContextKeyTypeEnum::NumericList),
+            "string" => Ok(ContextKeyTypeEnum::String),
+            "stringList" => Ok(ContextKeyTypeEnum::StringList),
+            _ => Err(()),
+        }
+    }
+}
+
 
 /// Serialize `ContextKeyValueListType` contents to a `SignedRequest`.
 struct ContextKeyValueListTypeSerializer;
@@ -2623,6 +2721,41 @@ impl EnableMFADeviceRequestSerializer {
 }
 
 
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EncodingType {
+    Pem,
+    Ssh,
+}
+
+impl Into<String> for EncodingType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EncodingType {
+    fn into(self) -> &'static str {
+        match self {
+            EncodingType::Pem => "PEM",
+            EncodingType::Ssh => "SSH",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncodingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PEM" => Ok(EncodingType::Pem),
+            "SSH" => Ok(EncodingType::Ssh),
+            _ => Err(()),
+        }
+    }
+}
+
+
 /// Serialize `EntityListType` contents to a `SignedRequest`.
 struct EntityListTypeSerializer;
 impl EntityListTypeSerializer {
@@ -2630,6 +2763,50 @@ impl EntityListTypeSerializer {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EntityType {
+    AwsmanagedPolicy,
+    Group,
+    LocalManagedPolicy,
+    Role,
+    User,
+}
+
+impl Into<String> for EntityType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EntityType {
+    fn into(self) -> &'static str {
+        match self {
+            EntityType::AwsmanagedPolicy => "AWSManagedPolicy",
+            EntityType::Group => "Group",
+            EntityType::LocalManagedPolicy => "LocalManagedPolicy",
+            EntityType::Role => "Role",
+            EntityType::User => "User",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AWSManagedPolicy" => Ok(EntityType::AwsmanagedPolicy),
+            "Group" => Ok(EntityType::Group),
+            "LocalManagedPolicy" => Ok(EntityType::LocalManagedPolicy),
+            "Role" => Ok(EntityType::Role),
+            "User" => Ok(EntityType::User),
+            _ => Err(()),
         }
     }
 }
@@ -4889,7 +5066,7 @@ impl LineNumberDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7553,7 +7730,7 @@ impl MaxPasswordAgeTypeDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7608,7 +7785,7 @@ impl MinimumPasswordLengthTypeDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7884,7 +8061,7 @@ impl PasswordReusePreventionTypeDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -8178,6 +8355,44 @@ impl PolicyDocumentVersionListTypeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PolicyEvaluationDecisionType {
+    Allowed,
+    ExplicitDeny,
+    ImplicitDeny,
+}
+
+impl Into<String> for PolicyEvaluationDecisionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PolicyEvaluationDecisionType {
+    fn into(self) -> &'static str {
+        match self {
+            PolicyEvaluationDecisionType::Allowed => "allowed",
+            PolicyEvaluationDecisionType::ExplicitDeny => "explicitDeny",
+            PolicyEvaluationDecisionType::ImplicitDeny => "implicitDeny",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyEvaluationDecisionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "allowed" => Ok(PolicyEvaluationDecisionType::Allowed),
+            "explicitDeny" => Ok(PolicyEvaluationDecisionType::ExplicitDeny),
+            "implicitDeny" => Ok(PolicyEvaluationDecisionType::ImplicitDeny),
+            _ => Err(()),
+        }
+    }
+}
+
 struct PolicyEvaluationDecisionTypeDeserializer;
 impl PolicyEvaluationDecisionTypeDeserializer {
     #[allow(unused_variables)]
@@ -8510,6 +8725,94 @@ impl PolicyRoleListTypeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PolicyScopeType {
+    Aws,
+    All,
+    Local,
+}
+
+impl Into<String> for PolicyScopeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PolicyScopeType {
+    fn into(self) -> &'static str {
+        match self {
+            PolicyScopeType::Aws => "AWS",
+            PolicyScopeType::All => "All",
+            PolicyScopeType::Local => "Local",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyScopeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AWS" => Ok(PolicyScopeType::Aws),
+            "All" => Ok(PolicyScopeType::All),
+            "Local" => Ok(PolicyScopeType::Local),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PolicySourceType {
+    AwsManaged,
+    Group,
+    None,
+    Resource,
+    Role,
+    User,
+    UserManaged,
+}
+
+impl Into<String> for PolicySourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PolicySourceType {
+    fn into(self) -> &'static str {
+        match self {
+            PolicySourceType::AwsManaged => "aws-managed",
+            PolicySourceType::Group => "group",
+            PolicySourceType::None => "none",
+            PolicySourceType::Resource => "resource",
+            PolicySourceType::Role => "role",
+            PolicySourceType::User => "user",
+            PolicySourceType::UserManaged => "user-managed",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicySourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "aws-managed" => Ok(PolicySourceType::AwsManaged),
+            "group" => Ok(PolicySourceType::Group),
+            "none" => Ok(PolicySourceType::None),
+            "resource" => Ok(PolicySourceType::Resource),
+            "role" => Ok(PolicySourceType::Role),
+            "user" => Ok(PolicySourceType::User),
+            "user-managed" => Ok(PolicySourceType::UserManaged),
+            _ => Err(()),
+        }
+    }
+}
+
 struct PolicySourceTypeDeserializer;
 impl PolicySourceTypeDeserializer {
     #[allow(unused_variables)]
@@ -8976,6 +9279,38 @@ impl ReportContentTypeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReportFormatType {
+    TextCsv,
+}
+
+impl Into<String> for ReportFormatType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReportFormatType {
+    fn into(self) -> &'static str {
+        match self {
+            ReportFormatType::TextCsv => "text/csv",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportFormatType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "text/csv" => Ok(ReportFormatType::TextCsv),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ReportFormatTypeDeserializer;
 impl ReportFormatTypeDeserializer {
     #[allow(unused_variables)]
@@ -9004,6 +9339,44 @@ impl ReportStateDescriptionTypeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReportStateType {
+    Complete,
+    Inprogress,
+    Started,
+}
+
+impl Into<String> for ReportStateType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReportStateType {
+    fn into(self) -> &'static str {
+        match self {
+            ReportStateType::Complete => "COMPLETE",
+            ReportStateType::Inprogress => "INPROGRESS",
+            ReportStateType::Started => "STARTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportStateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COMPLETE" => Ok(ReportStateType::Complete),
+            "INPROGRESS" => Ok(ReportStateType::Inprogress),
+            "STARTED" => Ok(ReportStateType::Started),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ReportStateTypeDeserializer;
 impl ReportStateTypeDeserializer {
     #[allow(unused_variables)]
@@ -10782,6 +11155,41 @@ impl StatementListTypeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StatusType {
+    Active,
+    Inactive,
+}
+
+impl Into<String> for StatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StatusType {
+    fn into(self) -> &'static str {
+        match self {
+            StatusType::Active => "Active",
+            StatusType::Inactive => "Inactive",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Active" => Ok(StatusType::Active),
+            "Inactive" => Ok(StatusType::Inactive),
+            _ => Err(()),
+        }
+    }
+}
+
 struct StatusTypeDeserializer;
 impl StatusTypeDeserializer {
     #[allow(unused_variables)]
@@ -10810,6 +11218,116 @@ impl StringTypeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SummaryKeyType {
+    AccessKeysPerUserQuota,
+    AccountAccessKeysPresent,
+    AccountMFAEnabled,
+    AccountSigningCertificatesPresent,
+    AttachedPoliciesPerGroupQuota,
+    AttachedPoliciesPerRoleQuota,
+    AttachedPoliciesPerUserQuota,
+    GroupPolicySizeQuota,
+    Groups,
+    GroupsPerUserQuota,
+    GroupsQuota,
+    Mfadevices,
+    MfadevicesInUse,
+    Policies,
+    PoliciesQuota,
+    PolicySizeQuota,
+    PolicyVersionsInUse,
+    PolicyVersionsInUseQuota,
+    ServerCertificates,
+    ServerCertificatesQuota,
+    SigningCertificatesPerUserQuota,
+    UserPolicySizeQuota,
+    Users,
+    UsersQuota,
+    VersionsPerPolicyQuota,
+}
+
+impl Into<String> for SummaryKeyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SummaryKeyType {
+    fn into(self) -> &'static str {
+        match self {
+            SummaryKeyType::AccessKeysPerUserQuota => "AccessKeysPerUserQuota",
+            SummaryKeyType::AccountAccessKeysPresent => "AccountAccessKeysPresent",
+            SummaryKeyType::AccountMFAEnabled => "AccountMFAEnabled",
+            SummaryKeyType::AccountSigningCertificatesPresent => {
+                "AccountSigningCertificatesPresent"
+            }
+            SummaryKeyType::AttachedPoliciesPerGroupQuota => "AttachedPoliciesPerGroupQuota",
+            SummaryKeyType::AttachedPoliciesPerRoleQuota => "AttachedPoliciesPerRoleQuota",
+            SummaryKeyType::AttachedPoliciesPerUserQuota => "AttachedPoliciesPerUserQuota",
+            SummaryKeyType::GroupPolicySizeQuota => "GroupPolicySizeQuota",
+            SummaryKeyType::Groups => "Groups",
+            SummaryKeyType::GroupsPerUserQuota => "GroupsPerUserQuota",
+            SummaryKeyType::GroupsQuota => "GroupsQuota",
+            SummaryKeyType::Mfadevices => "MFADevices",
+            SummaryKeyType::MfadevicesInUse => "MFADevicesInUse",
+            SummaryKeyType::Policies => "Policies",
+            SummaryKeyType::PoliciesQuota => "PoliciesQuota",
+            SummaryKeyType::PolicySizeQuota => "PolicySizeQuota",
+            SummaryKeyType::PolicyVersionsInUse => "PolicyVersionsInUse",
+            SummaryKeyType::PolicyVersionsInUseQuota => "PolicyVersionsInUseQuota",
+            SummaryKeyType::ServerCertificates => "ServerCertificates",
+            SummaryKeyType::ServerCertificatesQuota => "ServerCertificatesQuota",
+            SummaryKeyType::SigningCertificatesPerUserQuota => "SigningCertificatesPerUserQuota",
+            SummaryKeyType::UserPolicySizeQuota => "UserPolicySizeQuota",
+            SummaryKeyType::Users => "Users",
+            SummaryKeyType::UsersQuota => "UsersQuota",
+            SummaryKeyType::VersionsPerPolicyQuota => "VersionsPerPolicyQuota",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SummaryKeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AccessKeysPerUserQuota" => Ok(SummaryKeyType::AccessKeysPerUserQuota),
+            "AccountAccessKeysPresent" => Ok(SummaryKeyType::AccountAccessKeysPresent),
+            "AccountMFAEnabled" => Ok(SummaryKeyType::AccountMFAEnabled),
+            "AccountSigningCertificatesPresent" => {
+                Ok(SummaryKeyType::AccountSigningCertificatesPresent)
+            }
+            "AttachedPoliciesPerGroupQuota" => Ok(SummaryKeyType::AttachedPoliciesPerGroupQuota),
+            "AttachedPoliciesPerRoleQuota" => Ok(SummaryKeyType::AttachedPoliciesPerRoleQuota),
+            "AttachedPoliciesPerUserQuota" => Ok(SummaryKeyType::AttachedPoliciesPerUserQuota),
+            "GroupPolicySizeQuota" => Ok(SummaryKeyType::GroupPolicySizeQuota),
+            "Groups" => Ok(SummaryKeyType::Groups),
+            "GroupsPerUserQuota" => Ok(SummaryKeyType::GroupsPerUserQuota),
+            "GroupsQuota" => Ok(SummaryKeyType::GroupsQuota),
+            "MFADevices" => Ok(SummaryKeyType::Mfadevices),
+            "MFADevicesInUse" => Ok(SummaryKeyType::MfadevicesInUse),
+            "Policies" => Ok(SummaryKeyType::Policies),
+            "PoliciesQuota" => Ok(SummaryKeyType::PoliciesQuota),
+            "PolicySizeQuota" => Ok(SummaryKeyType::PolicySizeQuota),
+            "PolicyVersionsInUse" => Ok(SummaryKeyType::PolicyVersionsInUse),
+            "PolicyVersionsInUseQuota" => Ok(SummaryKeyType::PolicyVersionsInUseQuota),
+            "ServerCertificates" => Ok(SummaryKeyType::ServerCertificates),
+            "ServerCertificatesQuota" => Ok(SummaryKeyType::ServerCertificatesQuota),
+            "SigningCertificatesPerUserQuota" => {
+                Ok(SummaryKeyType::SigningCertificatesPerUserQuota)
+            }
+            "UserPolicySizeQuota" => Ok(SummaryKeyType::UserPolicySizeQuota),
+            "Users" => Ok(SummaryKeyType::Users),
+            "UsersQuota" => Ok(SummaryKeyType::UsersQuota),
+            "VersionsPerPolicyQuota" => Ok(SummaryKeyType::VersionsPerPolicyQuota),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SummaryKeyTypeDeserializer;
 impl SummaryKeyTypeDeserializer {
     #[allow(unused_variables)]
@@ -10855,7 +11373,7 @@ impl SummaryValueTypeDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -22297,7 +22815,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -22323,7 +22841,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -22347,7 +22865,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -22374,7 +22892,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -22401,7 +22919,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -22428,7 +22946,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -22453,7 +22971,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -22480,7 +22998,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22524,7 +23042,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -22551,7 +23069,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22593,7 +23111,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22638,7 +23156,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22683,7 +23201,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22725,7 +23243,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22768,7 +23286,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22812,7 +23330,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22853,7 +23371,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22898,7 +23416,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22943,7 +23461,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -22985,7 +23503,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -23027,7 +23545,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -23072,7 +23590,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23099,7 +23617,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23126,7 +23644,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23151,7 +23669,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23175,7 +23693,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23199,7 +23717,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23226,7 +23744,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23253,7 +23771,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23280,7 +23798,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23304,7 +23822,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23330,7 +23848,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23355,7 +23873,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23379,7 +23897,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23406,7 +23924,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23433,7 +23951,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23460,7 +23978,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23486,7 +24004,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23512,7 +24030,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23536,7 +24054,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23560,7 +24078,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23587,7 +24105,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23614,7 +24132,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23641,7 +24159,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23668,7 +24186,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23695,7 +24213,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -23722,7 +24240,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -23767,7 +24285,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -23813,7 +24331,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -23855,7 +24373,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -23897,7 +24415,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -23942,7 +24460,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -23987,7 +24505,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24030,7 +24548,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24072,7 +24590,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24113,7 +24631,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24157,7 +24675,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24201,7 +24719,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24246,7 +24764,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24288,7 +24806,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24329,7 +24847,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24371,7 +24889,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24412,7 +24930,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24455,7 +24973,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24499,7 +25017,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24544,7 +25062,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24587,7 +25105,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24628,7 +25146,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24671,7 +25189,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24715,7 +25233,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24760,7 +25278,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24803,7 +25321,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24848,7 +25366,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24893,7 +25411,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24938,7 +25456,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -24982,7 +25500,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25023,7 +25541,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25068,7 +25586,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25114,7 +25632,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25156,7 +25674,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25201,7 +25719,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25243,7 +25761,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25286,7 +25804,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25330,7 +25848,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25372,7 +25890,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25413,7 +25931,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25457,7 +25975,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25502,7 +26020,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25548,7 +26066,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25591,7 +26109,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25635,7 +26153,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25677,7 +26195,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25719,7 +26237,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25762,7 +26280,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25787,7 +26305,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25811,7 +26329,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25840,7 +26358,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25866,7 +26384,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25892,7 +26410,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25920,7 +26438,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -25962,7 +26480,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25989,7 +26507,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26015,7 +26533,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -26060,7 +26578,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -26103,7 +26621,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26130,7 +26648,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26156,7 +26674,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26181,7 +26699,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26205,7 +26723,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26233,7 +26751,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26260,7 +26778,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -26305,7 +26823,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -26349,7 +26867,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26376,7 +26894,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26402,7 +26920,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26428,7 +26946,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26452,7 +26970,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -26476,7 +26994,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -26521,7 +27039,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -26566,7 +27084,7 @@ impl<P, D> Iam for IamClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 

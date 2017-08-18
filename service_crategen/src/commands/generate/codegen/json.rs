@@ -44,7 +44,7 @@ impl GenerateProtocol for JsonGenerator {
                     let response = try!(self.dispatcher.dispatch(&request));
 
                     match response.status {{
-                        StatusCode::Ok => {{
+                        ::hyper::status::StatusCode::Ok => {{
                             {ok_response}
                         }}
                         _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref())),
