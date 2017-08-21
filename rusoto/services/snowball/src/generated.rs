@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -900,6 +902,11 @@ impl From<HttpDispatchError> for CancelClusterError {
         CancelClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelClusterError {
+    fn from(err: io::Error) -> CancelClusterError {
+        CancelClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -984,6 +991,11 @@ impl From<HttpDispatchError> for CancelJobError {
         CancelJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelJobError {
+    fn from(err: io::Error) -> CancelJobError {
+        CancelJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1063,6 +1075,11 @@ impl From<CredentialsError> for CreateAddressError {
 impl From<HttpDispatchError> for CreateAddressError {
     fn from(err: HttpDispatchError) -> CreateAddressError {
         CreateAddressError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateAddressError {
+    fn from(err: io::Error) -> CreateAddressError {
+        CreateAddressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAddressError {
@@ -1148,6 +1165,11 @@ impl From<CredentialsError> for CreateClusterError {
 impl From<HttpDispatchError> for CreateClusterError {
     fn from(err: HttpDispatchError) -> CreateClusterError {
         CreateClusterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateClusterError {
+    fn from(err: io::Error) -> CreateClusterError {
+        CreateClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateClusterError {
@@ -1239,6 +1261,11 @@ impl From<HttpDispatchError> for CreateJobError {
         CreateJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateJobError {
+    fn from(err: io::Error) -> CreateJobError {
+        CreateJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1314,6 +1341,11 @@ impl From<CredentialsError> for DescribeAddressError {
 impl From<HttpDispatchError> for DescribeAddressError {
     fn from(err: HttpDispatchError) -> DescribeAddressError {
         DescribeAddressError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAddressError {
+    fn from(err: io::Error) -> DescribeAddressError {
+        DescribeAddressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAddressError {
@@ -1395,6 +1427,11 @@ impl From<HttpDispatchError> for DescribeAddressesError {
         DescribeAddressesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAddressesError {
+    fn from(err: io::Error) -> DescribeAddressesError {
+        DescribeAddressesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAddressesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1472,6 +1509,11 @@ impl From<HttpDispatchError> for DescribeClusterError {
         DescribeClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeClusterError {
+    fn from(err: io::Error) -> DescribeClusterError {
+        DescribeClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1544,6 +1586,11 @@ impl From<CredentialsError> for DescribeJobError {
 impl From<HttpDispatchError> for DescribeJobError {
     fn from(err: HttpDispatchError) -> DescribeJobError {
         DescribeJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeJobError {
+    fn from(err: io::Error) -> DescribeJobError {
+        DescribeJobError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeJobError {
@@ -1623,6 +1670,11 @@ impl From<CredentialsError> for GetJobManifestError {
 impl From<HttpDispatchError> for GetJobManifestError {
     fn from(err: HttpDispatchError) -> GetJobManifestError {
         GetJobManifestError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetJobManifestError {
+    fn from(err: io::Error) -> GetJobManifestError {
+        GetJobManifestError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetJobManifestError {
@@ -1705,6 +1757,11 @@ impl From<HttpDispatchError> for GetJobUnlockCodeError {
         GetJobUnlockCodeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetJobUnlockCodeError {
+    fn from(err: io::Error) -> GetJobUnlockCodeError {
+        GetJobUnlockCodeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetJobUnlockCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1773,6 +1830,11 @@ impl From<CredentialsError> for GetSnowballUsageError {
 impl From<HttpDispatchError> for GetSnowballUsageError {
     fn from(err: HttpDispatchError) -> GetSnowballUsageError {
         GetSnowballUsageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSnowballUsageError {
+    fn from(err: io::Error) -> GetSnowballUsageError {
+        GetSnowballUsageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSnowballUsageError {
@@ -1853,6 +1915,11 @@ impl From<HttpDispatchError> for ListClusterJobsError {
         ListClusterJobsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListClusterJobsError {
+    fn from(err: io::Error) -> ListClusterJobsError {
+        ListClusterJobsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListClusterJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1928,6 +1995,11 @@ impl From<HttpDispatchError> for ListClustersError {
         ListClustersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListClustersError {
+    fn from(err: io::Error) -> ListClustersError {
+        ListClustersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1998,6 +2070,11 @@ impl From<CredentialsError> for ListJobsError {
 impl From<HttpDispatchError> for ListJobsError {
     fn from(err: HttpDispatchError) -> ListJobsError {
         ListJobsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListJobsError {
+    fn from(err: io::Error) -> ListJobsError {
+        ListJobsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListJobsError {
@@ -2087,6 +2164,11 @@ impl From<CredentialsError> for UpdateClusterError {
 impl From<HttpDispatchError> for UpdateClusterError {
     fn from(err: HttpDispatchError) -> UpdateClusterError {
         UpdateClusterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateClusterError {
+    fn from(err: io::Error) -> UpdateClusterError {
+        UpdateClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateClusterError {
@@ -2182,6 +2264,11 @@ impl From<CredentialsError> for UpdateJobError {
 impl From<HttpDispatchError> for UpdateJobError {
     fn from(err: HttpDispatchError) -> UpdateJobError {
         UpdateJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateJobError {
+    fn from(err: io::Error) -> UpdateJobError {
+        UpdateJobError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateJobError {
@@ -2338,14 +2425,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CancelClusterResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CancelClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2363,15 +2456,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<CancelJobResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CancelJobResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(CancelJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2390,14 +2488,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAddressResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateAddressResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAddressError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2417,14 +2521,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateClusterResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2442,15 +2552,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<CreateJobResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateJobResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(CreateJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2469,15 +2584,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAddressResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAddressResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeAddressError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAddressError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2497,15 +2617,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAddressesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAddressesResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeAddressesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAddressesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2525,15 +2650,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeClusterResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2553,13 +2683,21 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeJobResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeJobResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2578,15 +2716,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetJobManifestResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetJobManifestResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetJobManifestError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetJobManifestError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2606,15 +2749,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetJobUnlockCodeResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetJobUnlockCodeResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetJobUnlockCodeError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetJobUnlockCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2631,15 +2779,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetSnowballUsageResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetSnowballUsageResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetSnowballUsageError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSnowballUsageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2659,15 +2812,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListClusterJobsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListClusterJobsResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListClusterJobsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListClusterJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2687,14 +2845,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListClustersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListClustersResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListClustersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2711,15 +2875,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&response.body)
-                                                              .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(ListJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2738,14 +2907,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateClusterResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2763,15 +2938,20 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<UpdateJobResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateJobResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(UpdateJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

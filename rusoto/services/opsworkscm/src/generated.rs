@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -690,6 +692,11 @@ impl From<HttpDispatchError> for AssociateNodeError {
         AssociateNodeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssociateNodeError {
+    fn from(err: io::Error) -> AssociateNodeError {
+        AssociateNodeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssociateNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -773,6 +780,11 @@ impl From<CredentialsError> for CreateBackupError {
 impl From<HttpDispatchError> for CreateBackupError {
     fn from(err: HttpDispatchError) -> CreateBackupError {
         CreateBackupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateBackupError {
+    fn from(err: io::Error) -> CreateBackupError {
+        CreateBackupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateBackupError {
@@ -861,6 +873,11 @@ impl From<HttpDispatchError> for CreateServerError {
         CreateServerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateServerError {
+    fn from(err: io::Error) -> CreateServerError {
+        CreateServerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -940,6 +957,11 @@ impl From<CredentialsError> for DeleteBackupError {
 impl From<HttpDispatchError> for DeleteBackupError {
     fn from(err: HttpDispatchError) -> DeleteBackupError {
         DeleteBackupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBackupError {
+    fn from(err: io::Error) -> DeleteBackupError {
+        DeleteBackupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBackupError {
@@ -1022,6 +1044,11 @@ impl From<HttpDispatchError> for DeleteServerError {
         DeleteServerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteServerError {
+    fn from(err: io::Error) -> DeleteServerError {
+        DeleteServerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1090,6 +1117,11 @@ impl From<CredentialsError> for DescribeAccountAttributesError {
 impl From<HttpDispatchError> for DescribeAccountAttributesError {
     fn from(err: HttpDispatchError) -> DescribeAccountAttributesError {
         DescribeAccountAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountAttributesError {
+    fn from(err: io::Error) -> DescribeAccountAttributesError {
+        DescribeAccountAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountAttributesError {
@@ -1172,6 +1204,11 @@ impl From<HttpDispatchError> for DescribeBackupsError {
         DescribeBackupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeBackupsError {
+    fn from(err: io::Error) -> DescribeBackupsError {
+        DescribeBackupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1252,6 +1289,11 @@ impl From<HttpDispatchError> for DescribeEventsError {
         DescribeEventsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEventsError {
+    fn from(err: io::Error) -> DescribeEventsError {
+        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1323,6 +1365,11 @@ impl From<CredentialsError> for DescribeNodeAssociationStatusError {
 impl From<HttpDispatchError> for DescribeNodeAssociationStatusError {
     fn from(err: HttpDispatchError) -> DescribeNodeAssociationStatusError {
         DescribeNodeAssociationStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeNodeAssociationStatusError {
+    fn from(err: io::Error) -> DescribeNodeAssociationStatusError {
+        DescribeNodeAssociationStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeNodeAssociationStatusError {
@@ -1406,6 +1453,11 @@ impl From<HttpDispatchError> for DescribeServersError {
         DescribeServersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeServersError {
+    fn from(err: io::Error) -> DescribeServersError {
+        DescribeServersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeServersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1484,6 +1536,11 @@ impl From<CredentialsError> for DisassociateNodeError {
 impl From<HttpDispatchError> for DisassociateNodeError {
     fn from(err: HttpDispatchError) -> DisassociateNodeError {
         DisassociateNodeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateNodeError {
+    fn from(err: io::Error) -> DisassociateNodeError {
+        DisassociateNodeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisassociateNodeError {
@@ -1566,6 +1623,11 @@ impl From<HttpDispatchError> for RestoreServerError {
         RestoreServerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RestoreServerError {
+    fn from(err: io::Error) -> RestoreServerError {
+        RestoreServerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RestoreServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1644,6 +1706,11 @@ impl From<CredentialsError> for StartMaintenanceError {
 impl From<HttpDispatchError> for StartMaintenanceError {
     fn from(err: HttpDispatchError) -> StartMaintenanceError {
         StartMaintenanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartMaintenanceError {
+    fn from(err: io::Error) -> StartMaintenanceError {
+        StartMaintenanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StartMaintenanceError {
@@ -1726,6 +1793,11 @@ impl From<HttpDispatchError> for UpdateServerError {
         UpdateServerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateServerError {
+    fn from(err: io::Error) -> UpdateServerError {
+        UpdateServerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1802,6 +1874,11 @@ impl From<CredentialsError> for UpdateServerEngineAttributesError {
 impl From<HttpDispatchError> for UpdateServerEngineAttributesError {
     fn from(err: HttpDispatchError) -> UpdateServerEngineAttributesError {
         UpdateServerEngineAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateServerEngineAttributesError {
+    fn from(err: io::Error) -> UpdateServerEngineAttributesError {
+        UpdateServerEngineAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateServerEngineAttributesError {
@@ -1956,14 +2033,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AssociateNodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AssociateNodeResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AssociateNodeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateNodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1982,14 +2065,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateBackupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateBackupResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateBackupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateBackupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2008,14 +2097,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateServerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateServerResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateServerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2034,14 +2129,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteBackupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteBackupResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteBackupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBackupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2060,14 +2161,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteServerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteServerResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteServerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2086,13 +2193,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAccountAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAccountAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -2110,15 +2224,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeBackupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeBackupsResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeBackupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeBackupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2137,15 +2256,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2166,13 +2290,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeNodeAssociationStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeNodeAssociationStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeNodeAssociationStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeNodeAssociationStatusError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -2190,15 +2321,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeServersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeServersResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeServersError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeServersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2217,15 +2353,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisassociateNodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisassociateNodeResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DisassociateNodeError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateNodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2244,14 +2385,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RestoreServerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RestoreServerResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RestoreServerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2270,15 +2417,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartMaintenanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartMaintenanceResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StartMaintenanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartMaintenanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2297,14 +2449,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateServerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateServerResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateServerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2325,13 +2483,20 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateServerEngineAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateServerEngineAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateServerEngineAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateServerEngineAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 }

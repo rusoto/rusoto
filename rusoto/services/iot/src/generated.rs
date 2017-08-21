@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1954,6 +1956,11 @@ impl From<HttpDispatchError> for AcceptCertificateTransferError {
         AcceptCertificateTransferError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AcceptCertificateTransferError {
+    fn from(err: io::Error) -> AcceptCertificateTransferError {
+        AcceptCertificateTransferError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AcceptCertificateTransferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2066,6 +2073,11 @@ impl From<HttpDispatchError> for AttachPrincipalPolicyError {
         AttachPrincipalPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachPrincipalPolicyError {
+    fn from(err: io::Error) -> AttachPrincipalPolicyError {
+        AttachPrincipalPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachPrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2173,6 +2185,11 @@ impl From<HttpDispatchError> for AttachThingPrincipalError {
         AttachThingPrincipalError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachThingPrincipalError {
+    fn from(err: io::Error) -> AttachThingPrincipalError {
+        AttachThingPrincipalError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachThingPrincipalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2278,6 +2295,11 @@ impl From<HttpDispatchError> for CancelCertificateTransferError {
         CancelCertificateTransferError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelCertificateTransferError {
+    fn from(err: io::Error) -> CancelCertificateTransferError {
+        CancelCertificateTransferError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelCertificateTransferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2378,6 +2400,11 @@ impl From<HttpDispatchError> for CreateCertificateFromCsrError {
         CreateCertificateFromCsrError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateCertificateFromCsrError {
+    fn from(err: io::Error) -> CreateCertificateFromCsrError {
+        CreateCertificateFromCsrError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateCertificateFromCsrError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2474,6 +2501,11 @@ impl From<CredentialsError> for CreateKeysAndCertificateError {
 impl From<HttpDispatchError> for CreateKeysAndCertificateError {
     fn from(err: HttpDispatchError) -> CreateKeysAndCertificateError {
         CreateKeysAndCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateKeysAndCertificateError {
+    fn from(err: io::Error) -> CreateKeysAndCertificateError {
+        CreateKeysAndCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateKeysAndCertificateError {
@@ -2584,6 +2616,11 @@ impl From<CredentialsError> for CreatePolicyError {
 impl From<HttpDispatchError> for CreatePolicyError {
     fn from(err: HttpDispatchError) -> CreatePolicyError {
         CreatePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePolicyError {
+    fn from(err: io::Error) -> CreatePolicyError {
+        CreatePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePolicyError {
@@ -2701,6 +2738,11 @@ impl From<HttpDispatchError> for CreatePolicyVersionError {
         CreatePolicyVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreatePolicyVersionError {
+    fn from(err: io::Error) -> CreatePolicyVersionError {
+        CreatePolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreatePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2814,6 +2856,11 @@ impl From<HttpDispatchError> for CreateThingError {
         CreateThingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateThingError {
+    fn from(err: io::Error) -> CreateThingError {
+        CreateThingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2919,6 +2966,11 @@ impl From<HttpDispatchError> for CreateThingTypeError {
         CreateThingTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateThingTypeError {
+    fn from(err: io::Error) -> CreateThingTypeError {
+        CreateThingTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateThingTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3016,6 +3068,11 @@ impl From<CredentialsError> for CreateTopicRuleError {
 impl From<HttpDispatchError> for CreateTopicRuleError {
     fn from(err: HttpDispatchError) -> CreateTopicRuleError {
         CreateTopicRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateTopicRuleError {
+    fn from(err: io::Error) -> CreateTopicRuleError {
+        CreateTopicRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTopicRuleError {
@@ -3124,6 +3181,11 @@ impl From<CredentialsError> for DeleteCACertificateError {
 impl From<HttpDispatchError> for DeleteCACertificateError {
     fn from(err: HttpDispatchError) -> DeleteCACertificateError {
         DeleteCACertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteCACertificateError {
+    fn from(err: io::Error) -> DeleteCACertificateError {
+        DeleteCACertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteCACertificateError {
@@ -3243,6 +3305,11 @@ impl From<HttpDispatchError> for DeleteCertificateError {
         DeleteCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteCertificateError {
+    fn from(err: io::Error) -> DeleteCertificateError {
+        DeleteCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3356,6 +3423,11 @@ impl From<HttpDispatchError> for DeletePolicyError {
         DeletePolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeletePolicyError {
+    fn from(err: io::Error) -> DeletePolicyError {
+        DeletePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3466,6 +3538,11 @@ impl From<HttpDispatchError> for DeletePolicyVersionError {
         DeletePolicyVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeletePolicyVersionError {
+    fn from(err: io::Error) -> DeletePolicyVersionError {
+        DeletePolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeletePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3566,6 +3643,11 @@ impl From<CredentialsError> for DeleteRegistrationCodeError {
 impl From<HttpDispatchError> for DeleteRegistrationCodeError {
     fn from(err: HttpDispatchError) -> DeleteRegistrationCodeError {
         DeleteRegistrationCodeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRegistrationCodeError {
+    fn from(err: io::Error) -> DeleteRegistrationCodeError {
+        DeleteRegistrationCodeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRegistrationCodeError {
@@ -3678,6 +3760,11 @@ impl From<HttpDispatchError> for DeleteThingError {
         DeleteThingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteThingError {
+    fn from(err: io::Error) -> DeleteThingError {
+        DeleteThingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3783,6 +3870,11 @@ impl From<HttpDispatchError> for DeleteThingTypeError {
         DeleteThingTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteThingTypeError {
+    fn from(err: io::Error) -> DeleteThingTypeError {
+        DeleteThingTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteThingTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3875,6 +3967,11 @@ impl From<CredentialsError> for DeleteTopicRuleError {
 impl From<HttpDispatchError> for DeleteTopicRuleError {
     fn from(err: HttpDispatchError) -> DeleteTopicRuleError {
         DeleteTopicRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTopicRuleError {
+    fn from(err: io::Error) -> DeleteTopicRuleError {
+        DeleteTopicRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteTopicRuleError {
@@ -3977,6 +4074,11 @@ impl From<CredentialsError> for DeprecateThingTypeError {
 impl From<HttpDispatchError> for DeprecateThingTypeError {
     fn from(err: HttpDispatchError) -> DeprecateThingTypeError {
         DeprecateThingTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeprecateThingTypeError {
+    fn from(err: io::Error) -> DeprecateThingTypeError {
+        DeprecateThingTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeprecateThingTypeError {
@@ -4085,6 +4187,11 @@ impl From<HttpDispatchError> for DescribeCACertificateError {
         DescribeCACertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeCACertificateError {
+    fn from(err: io::Error) -> DescribeCACertificateError {
+        DescribeCACertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeCACertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4191,6 +4298,11 @@ impl From<HttpDispatchError> for DescribeCertificateError {
         DescribeCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeCertificateError {
+    fn from(err: io::Error) -> DescribeCertificateError {
+        DescribeCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4280,6 +4392,11 @@ impl From<CredentialsError> for DescribeEndpointError {
 impl From<HttpDispatchError> for DescribeEndpointError {
     fn from(err: HttpDispatchError) -> DescribeEndpointError {
         DescribeEndpointError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEndpointError {
+    fn from(err: io::Error) -> DescribeEndpointError {
+        DescribeEndpointError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEndpointError {
@@ -4381,6 +4498,11 @@ impl From<CredentialsError> for DescribeThingError {
 impl From<HttpDispatchError> for DescribeThingError {
     fn from(err: HttpDispatchError) -> DescribeThingError {
         DescribeThingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeThingError {
+    fn from(err: io::Error) -> DescribeThingError {
+        DescribeThingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeThingError {
@@ -4485,6 +4607,11 @@ impl From<CredentialsError> for DescribeThingTypeError {
 impl From<HttpDispatchError> for DescribeThingTypeError {
     fn from(err: HttpDispatchError) -> DescribeThingTypeError {
         DescribeThingTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeThingTypeError {
+    fn from(err: io::Error) -> DescribeThingTypeError {
+        DescribeThingTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeThingTypeError {
@@ -4593,6 +4720,11 @@ impl From<HttpDispatchError> for DetachPrincipalPolicyError {
         DetachPrincipalPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetachPrincipalPolicyError {
+    fn from(err: io::Error) -> DetachPrincipalPolicyError {
+        DetachPrincipalPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetachPrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4699,6 +4831,11 @@ impl From<HttpDispatchError> for DetachThingPrincipalError {
         DetachThingPrincipalError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetachThingPrincipalError {
+    fn from(err: io::Error) -> DetachThingPrincipalError {
+        DetachThingPrincipalError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetachThingPrincipalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4795,6 +4932,11 @@ impl From<HttpDispatchError> for DisableTopicRuleError {
         DisableTopicRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisableTopicRuleError {
+    fn from(err: io::Error) -> DisableTopicRuleError {
+        DisableTopicRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisableTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4887,6 +5029,11 @@ impl From<HttpDispatchError> for EnableTopicRuleError {
         EnableTopicRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableTopicRuleError {
+    fn from(err: io::Error) -> EnableTopicRuleError {
+        EnableTopicRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4972,6 +5119,11 @@ impl From<CredentialsError> for GetLoggingOptionsError {
 impl From<HttpDispatchError> for GetLoggingOptionsError {
     fn from(err: HttpDispatchError) -> GetLoggingOptionsError {
         GetLoggingOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLoggingOptionsError {
+    fn from(err: io::Error) -> GetLoggingOptionsError {
+        GetLoggingOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetLoggingOptionsError {
@@ -5073,6 +5225,11 @@ impl From<CredentialsError> for GetPolicyError {
 impl From<HttpDispatchError> for GetPolicyError {
     fn from(err: HttpDispatchError) -> GetPolicyError {
         GetPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetPolicyError {
+    fn from(err: io::Error) -> GetPolicyError {
+        GetPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetPolicyError {
@@ -5179,6 +5336,11 @@ impl From<HttpDispatchError> for GetPolicyVersionError {
         GetPolicyVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetPolicyVersionError {
+    fn from(err: io::Error) -> GetPolicyVersionError {
+        GetPolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5278,6 +5440,11 @@ impl From<HttpDispatchError> for GetRegistrationCodeError {
         GetRegistrationCodeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRegistrationCodeError {
+    fn from(err: io::Error) -> GetRegistrationCodeError {
+        GetRegistrationCodeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRegistrationCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5369,6 +5536,11 @@ impl From<CredentialsError> for GetTopicRuleError {
 impl From<HttpDispatchError> for GetTopicRuleError {
     fn from(err: HttpDispatchError) -> GetTopicRuleError {
         GetTopicRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetTopicRuleError {
+    fn from(err: io::Error) -> GetTopicRuleError {
+        GetTopicRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetTopicRuleError {
@@ -5466,6 +5638,11 @@ impl From<CredentialsError> for ListCACertificatesError {
 impl From<HttpDispatchError> for ListCACertificatesError {
     fn from(err: HttpDispatchError) -> ListCACertificatesError {
         ListCACertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListCACertificatesError {
+    fn from(err: io::Error) -> ListCACertificatesError {
+        ListCACertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListCACertificatesError {
@@ -5568,6 +5745,11 @@ impl From<HttpDispatchError> for ListCertificatesError {
         ListCertificatesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListCertificatesError {
+    fn from(err: io::Error) -> ListCertificatesError {
+        ListCertificatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5664,6 +5846,11 @@ impl From<CredentialsError> for ListCertificatesByCAError {
 impl From<HttpDispatchError> for ListCertificatesByCAError {
     fn from(err: HttpDispatchError) -> ListCertificatesByCAError {
         ListCertificatesByCAError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListCertificatesByCAError {
+    fn from(err: io::Error) -> ListCertificatesByCAError {
+        ListCertificatesByCAError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListCertificatesByCAError {
@@ -5764,6 +5951,11 @@ impl From<HttpDispatchError> for ListOutgoingCertificatesError {
         ListOutgoingCertificatesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListOutgoingCertificatesError {
+    fn from(err: io::Error) -> ListOutgoingCertificatesError {
+        ListOutgoingCertificatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListOutgoingCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5862,6 +6054,11 @@ impl From<CredentialsError> for ListPoliciesError {
 impl From<HttpDispatchError> for ListPoliciesError {
     fn from(err: HttpDispatchError) -> ListPoliciesError {
         ListPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPoliciesError {
+    fn from(err: io::Error) -> ListPoliciesError {
+        ListPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPoliciesError {
@@ -5965,6 +6162,11 @@ impl From<CredentialsError> for ListPolicyPrincipalsError {
 impl From<HttpDispatchError> for ListPolicyPrincipalsError {
     fn from(err: HttpDispatchError) -> ListPolicyPrincipalsError {
         ListPolicyPrincipalsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPolicyPrincipalsError {
+    fn from(err: io::Error) -> ListPolicyPrincipalsError {
+        ListPolicyPrincipalsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPolicyPrincipalsError {
@@ -6073,6 +6275,11 @@ impl From<HttpDispatchError> for ListPolicyVersionsError {
         ListPolicyVersionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPolicyVersionsError {
+    fn from(err: io::Error) -> ListPolicyVersionsError {
+        ListPolicyVersionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPolicyVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6177,6 +6384,11 @@ impl From<CredentialsError> for ListPrincipalPoliciesError {
 impl From<HttpDispatchError> for ListPrincipalPoliciesError {
     fn from(err: HttpDispatchError) -> ListPrincipalPoliciesError {
         ListPrincipalPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPrincipalPoliciesError {
+    fn from(err: io::Error) -> ListPrincipalPoliciesError {
+        ListPrincipalPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPrincipalPoliciesError {
@@ -6285,6 +6497,11 @@ impl From<HttpDispatchError> for ListPrincipalThingsError {
         ListPrincipalThingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPrincipalThingsError {
+    fn from(err: io::Error) -> ListPrincipalThingsError {
+        ListPrincipalThingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPrincipalThingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6391,6 +6608,11 @@ impl From<HttpDispatchError> for ListThingPrincipalsError {
         ListThingPrincipalsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListThingPrincipalsError {
+    fn from(err: io::Error) -> ListThingPrincipalsError {
+        ListThingPrincipalsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListThingPrincipalsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6492,6 +6714,11 @@ impl From<HttpDispatchError> for ListThingTypesError {
         ListThingTypesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListThingTypesError {
+    fn from(err: io::Error) -> ListThingTypesError {
+        ListThingTypesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListThingTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6588,6 +6815,11 @@ impl From<HttpDispatchError> for ListThingsError {
         ListThingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListThingsError {
+    fn from(err: io::Error) -> ListThingsError {
+        ListThingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListThingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6674,6 +6906,11 @@ impl From<CredentialsError> for ListTopicRulesError {
 impl From<HttpDispatchError> for ListTopicRulesError {
     fn from(err: HttpDispatchError) -> ListTopicRulesError {
         ListTopicRulesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTopicRulesError {
+    fn from(err: io::Error) -> ListTopicRulesError {
+        ListTopicRulesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTopicRulesError {
@@ -6784,6 +7021,11 @@ impl From<CredentialsError> for RegisterCACertificateError {
 impl From<HttpDispatchError> for RegisterCACertificateError {
     fn from(err: HttpDispatchError) -> RegisterCACertificateError {
         RegisterCACertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterCACertificateError {
+    fn from(err: io::Error) -> RegisterCACertificateError {
+        RegisterCACertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterCACertificateError {
@@ -6910,6 +7152,11 @@ impl From<HttpDispatchError> for RegisterCertificateError {
         RegisterCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterCertificateError {
+    fn from(err: io::Error) -> RegisterCertificateError {
+        RegisterCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7018,6 +7265,11 @@ impl From<HttpDispatchError> for RejectCertificateTransferError {
         RejectCertificateTransferError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RejectCertificateTransferError {
+    fn from(err: io::Error) -> RejectCertificateTransferError {
+        RejectCertificateTransferError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RejectCertificateTransferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7118,6 +7370,11 @@ impl From<CredentialsError> for ReplaceTopicRuleError {
 impl From<HttpDispatchError> for ReplaceTopicRuleError {
     fn from(err: HttpDispatchError) -> ReplaceTopicRuleError {
         ReplaceTopicRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ReplaceTopicRuleError {
+    fn from(err: io::Error) -> ReplaceTopicRuleError {
+        ReplaceTopicRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ReplaceTopicRuleError {
@@ -7221,6 +7478,11 @@ impl From<HttpDispatchError> for SetDefaultPolicyVersionError {
         SetDefaultPolicyVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetDefaultPolicyVersionError {
+    fn from(err: io::Error) -> SetDefaultPolicyVersionError {
+        SetDefaultPolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetDefaultPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7310,6 +7572,11 @@ impl From<CredentialsError> for SetLoggingOptionsError {
 impl From<HttpDispatchError> for SetLoggingOptionsError {
     fn from(err: HttpDispatchError) -> SetLoggingOptionsError {
         SetLoggingOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetLoggingOptionsError {
+    fn from(err: io::Error) -> SetLoggingOptionsError {
+        SetLoggingOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetLoggingOptionsError {
@@ -7425,6 +7692,11 @@ impl From<HttpDispatchError> for TransferCertificateError {
         TransferCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TransferCertificateError {
+    fn from(err: io::Error) -> TransferCertificateError {
+        TransferCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TransferCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7531,6 +7803,11 @@ impl From<CredentialsError> for UpdateCACertificateError {
 impl From<HttpDispatchError> for UpdateCACertificateError {
     fn from(err: HttpDispatchError) -> UpdateCACertificateError {
         UpdateCACertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateCACertificateError {
+    fn from(err: io::Error) -> UpdateCACertificateError {
+        UpdateCACertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateCACertificateError {
@@ -7644,6 +7921,11 @@ impl From<HttpDispatchError> for UpdateCertificateError {
         UpdateCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateCertificateError {
+    fn from(err: io::Error) -> UpdateCertificateError {
+        UpdateCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7754,6 +8036,11 @@ impl From<CredentialsError> for UpdateThingError {
 impl From<HttpDispatchError> for UpdateThingError {
     fn from(err: HttpDispatchError) -> UpdateThingError {
         UpdateThingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateThingError {
+    fn from(err: io::Error) -> UpdateThingError {
+        UpdateThingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateThingError {
@@ -8170,8 +8457,7 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8180,7 +8466,12 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(AcceptCertificateTransferError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AcceptCertificateTransferError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -8202,8 +8493,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8213,8 +8503,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AttachPrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8238,13 +8529,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8259,8 +8550,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AttachThingPrincipalError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachThingPrincipalError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8283,8 +8575,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8293,7 +8584,12 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CancelCertificateTransferError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelCertificateTransferError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -8319,13 +8615,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8340,7 +8636,12 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateCertificateFromCsrError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCertificateFromCsrError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -8366,13 +8667,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8387,7 +8688,12 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateKeysAndCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateKeysAndCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -8408,13 +8714,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8429,7 +8735,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreatePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8456,13 +8764,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8477,8 +8785,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8500,13 +8809,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8520,7 +8829,11 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateThingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateThingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8542,13 +8855,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8563,8 +8876,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateThingTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8586,8 +8900,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8597,8 +8910,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateTopicRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8621,13 +8935,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8642,8 +8956,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteCACertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8666,8 +8981,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8677,8 +8991,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8698,8 +9013,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8709,7 +9023,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8733,8 +9049,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8744,8 +9059,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8767,13 +9083,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8789,8 +9105,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteRegistrationCodeError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRegistrationCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8816,13 +9133,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8836,7 +9153,11 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteThingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteThingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8858,13 +9179,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8879,8 +9200,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteThingTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8902,8 +9224,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8913,8 +9234,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteTopicRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8937,13 +9259,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -8958,8 +9280,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeprecateThingTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeprecateThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8983,13 +9306,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9005,8 +9328,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeCACertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9029,13 +9353,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9050,8 +9374,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9071,13 +9396,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9092,8 +9417,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9115,13 +9441,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9136,7 +9462,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeThingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeThingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9159,13 +9487,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9180,8 +9508,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeThingTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9204,8 +9533,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9215,8 +9543,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DetachPrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9240,13 +9569,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9261,8 +9590,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DetachThingPrincipalError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachThingPrincipalError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9284,8 +9614,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9295,8 +9624,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DisableTopicRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9318,8 +9648,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9329,8 +9658,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(EnableTopicRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9350,13 +9680,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9371,8 +9701,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetLoggingOptionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLoggingOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9392,13 +9723,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9412,7 +9743,11 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -9435,13 +9770,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9456,8 +9791,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9478,13 +9814,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9499,8 +9835,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetRegistrationCodeError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRegistrationCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9522,13 +9859,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9543,7 +9880,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetTopicRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9575,13 +9914,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9596,8 +9935,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListCACertificatesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCACertificatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9629,13 +9969,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9650,8 +9990,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListCertificatesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9685,13 +10026,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9706,8 +10047,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListCertificatesByCAError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCertificatesByCAError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9740,13 +10082,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9761,7 +10103,12 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListOutgoingCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListOutgoingCertificatesError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -9792,13 +10139,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9813,7 +10160,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9846,13 +10195,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9867,8 +10216,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListPolicyPrincipalsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPolicyPrincipalsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9891,13 +10241,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9912,8 +10262,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9946,13 +10297,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -9968,8 +10319,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListPrincipalPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPrincipalPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -9998,13 +10350,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -10019,8 +10371,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListPrincipalThingsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPrincipalThingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10043,13 +10396,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -10064,8 +10417,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListThingPrincipalsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListThingPrincipalsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10097,13 +10451,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -10118,8 +10472,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListThingTypesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListThingTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10157,13 +10512,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -10177,7 +10532,11 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListThingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListThingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -10211,13 +10570,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -10232,8 +10591,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListTopicRulesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTopicRulesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10263,13 +10623,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -10285,8 +10645,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RegisterCACertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10308,13 +10669,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -10329,8 +10690,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RegisterCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10353,8 +10715,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10363,7 +10724,12 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(RejectCertificateTransferError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RejectCertificateTransferError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -10384,8 +10750,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10395,8 +10760,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ReplaceTopicRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReplaceTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10420,8 +10786,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10430,7 +10795,12 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -10451,8 +10821,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10462,8 +10831,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SetLoggingOptionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetLoggingOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10488,13 +10858,13 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -10509,8 +10879,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(TransferCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TransferCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10540,8 +10911,7 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10551,8 +10921,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateCACertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10577,8 +10948,7 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10588,8 +10958,9 @@ impl<P, D> Iot for IotClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10611,13 +10982,13 @@ impl<P, D> Iot for IotClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -10631,7 +11002,11 @@ impl<P, D> Iot for IotClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateThingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateThingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

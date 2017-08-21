@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -796,6 +798,11 @@ impl From<HttpDispatchError> for CreateActivityError {
         CreateActivityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateActivityError {
+    fn from(err: io::Error) -> CreateActivityError {
+        CreateActivityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -892,6 +899,11 @@ impl From<HttpDispatchError> for CreateStateMachineError {
         CreateStateMachineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateStateMachineError {
+    fn from(err: io::Error) -> CreateStateMachineError {
+        CreateStateMachineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateStateMachineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -971,6 +983,11 @@ impl From<HttpDispatchError> for DeleteActivityError {
         DeleteActivityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteActivityError {
+    fn from(err: io::Error) -> DeleteActivityError {
+        DeleteActivityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1043,6 +1060,11 @@ impl From<CredentialsError> for DeleteStateMachineError {
 impl From<HttpDispatchError> for DeleteStateMachineError {
     fn from(err: HttpDispatchError) -> DeleteStateMachineError {
         DeleteStateMachineError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteStateMachineError {
+    fn from(err: io::Error) -> DeleteStateMachineError {
+        DeleteStateMachineError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteStateMachineError {
@@ -1124,6 +1146,11 @@ impl From<HttpDispatchError> for DescribeActivityError {
         DescribeActivityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeActivityError {
+    fn from(err: io::Error) -> DescribeActivityError {
+        DescribeActivityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1200,6 +1227,11 @@ impl From<CredentialsError> for DescribeExecutionError {
 impl From<HttpDispatchError> for DescribeExecutionError {
     fn from(err: HttpDispatchError) -> DescribeExecutionError {
         DescribeExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeExecutionError {
+    fn from(err: io::Error) -> DescribeExecutionError {
+        DescribeExecutionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeExecutionError {
@@ -1280,6 +1312,11 @@ impl From<CredentialsError> for DescribeStateMachineError {
 impl From<HttpDispatchError> for DescribeStateMachineError {
     fn from(err: HttpDispatchError) -> DescribeStateMachineError {
         DescribeStateMachineError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeStateMachineError {
+    fn from(err: io::Error) -> DescribeStateMachineError {
+        DescribeStateMachineError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeStateMachineError {
@@ -1363,6 +1400,11 @@ impl From<CredentialsError> for GetActivityTaskError {
 impl From<HttpDispatchError> for GetActivityTaskError {
     fn from(err: HttpDispatchError) -> GetActivityTaskError {
         GetActivityTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetActivityTaskError {
+    fn from(err: io::Error) -> GetActivityTaskError {
+        GetActivityTaskError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetActivityTaskError {
@@ -1451,6 +1493,11 @@ impl From<HttpDispatchError> for GetExecutionHistoryError {
         GetExecutionHistoryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetExecutionHistoryError {
+    fn from(err: io::Error) -> GetExecutionHistoryError {
+        GetExecutionHistoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetExecutionHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1527,6 +1574,11 @@ impl From<CredentialsError> for ListActivitiesError {
 impl From<HttpDispatchError> for ListActivitiesError {
     fn from(err: HttpDispatchError) -> ListActivitiesError {
         ListActivitiesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListActivitiesError {
+    fn from(err: io::Error) -> ListActivitiesError {
+        ListActivitiesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListActivitiesError {
@@ -1611,6 +1663,11 @@ impl From<HttpDispatchError> for ListExecutionsError {
         ListExecutionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListExecutionsError {
+    fn from(err: io::Error) -> ListExecutionsError {
+        ListExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1685,6 +1742,11 @@ impl From<CredentialsError> for ListStateMachinesError {
 impl From<HttpDispatchError> for ListStateMachinesError {
     fn from(err: HttpDispatchError) -> ListStateMachinesError {
         ListStateMachinesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListStateMachinesError {
+    fn from(err: io::Error) -> ListStateMachinesError {
+        ListStateMachinesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListStateMachinesError {
@@ -1773,6 +1835,11 @@ impl From<HttpDispatchError> for SendTaskFailureError {
         SendTaskFailureError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SendTaskFailureError {
+    fn from(err: io::Error) -> SendTaskFailureError {
+        SendTaskFailureError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SendTaskFailureError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1857,6 +1924,11 @@ impl From<CredentialsError> for SendTaskHeartbeatError {
 impl From<HttpDispatchError> for SendTaskHeartbeatError {
     fn from(err: HttpDispatchError) -> SendTaskHeartbeatError {
         SendTaskHeartbeatError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendTaskHeartbeatError {
+    fn from(err: io::Error) -> SendTaskHeartbeatError {
+        SendTaskHeartbeatError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendTaskHeartbeatError {
@@ -1950,6 +2022,11 @@ impl From<CredentialsError> for SendTaskSuccessError {
 impl From<HttpDispatchError> for SendTaskSuccessError {
     fn from(err: HttpDispatchError) -> SendTaskSuccessError {
         SendTaskSuccessError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendTaskSuccessError {
+    fn from(err: io::Error) -> SendTaskSuccessError {
+        SendTaskSuccessError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendTaskSuccessError {
@@ -2055,6 +2132,11 @@ impl From<HttpDispatchError> for StartExecutionError {
         StartExecutionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartExecutionError {
+    fn from(err: io::Error) -> StartExecutionError {
+        StartExecutionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2136,6 +2218,11 @@ impl From<CredentialsError> for StopExecutionError {
 impl From<HttpDispatchError> for StopExecutionError {
     fn from(err: HttpDispatchError) -> StopExecutionError {
         StopExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopExecutionError {
+    fn from(err: io::Error) -> StopExecutionError {
+        StopExecutionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopExecutionError {
@@ -2298,15 +2385,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateActivityOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateActivityOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateActivityError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateActivityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2325,15 +2417,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateStateMachineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateStateMachineOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateStateMachineError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStateMachineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2352,15 +2449,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteActivityOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteActivityOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteActivityError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteActivityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2379,15 +2481,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteStateMachineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteStateMachineOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteStateMachineError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteStateMachineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2406,15 +2513,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeActivityOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeActivityOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeActivityError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeActivityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2433,15 +2545,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeExecutionOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeExecutionError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2460,15 +2577,18 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStateMachineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeStateMachineOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeStateMachineError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStateMachineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2487,15 +2607,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetActivityTaskOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetActivityTaskOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetActivityTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetActivityTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2514,15 +2639,18 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetExecutionHistoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetExecutionHistoryOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetExecutionHistoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetExecutionHistoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2541,15 +2669,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListActivitiesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListActivitiesOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListActivitiesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListActivitiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2568,15 +2701,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListExecutionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListExecutionsOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListExecutionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListExecutionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2595,15 +2733,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListStateMachinesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListStateMachinesOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListStateMachinesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListStateMachinesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2622,15 +2765,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SendTaskFailureOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SendTaskFailureOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(SendTaskFailureError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendTaskFailureError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2649,15 +2797,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SendTaskHeartbeatOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SendTaskHeartbeatOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(SendTaskHeartbeatError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendTaskHeartbeatError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2676,15 +2829,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SendTaskSuccessOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SendTaskSuccessOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(SendTaskSuccessError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendTaskSuccessError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2703,15 +2861,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartExecutionOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StartExecutionError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2730,14 +2893,20 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopExecutionOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StopExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

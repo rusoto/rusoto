@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -459,6 +461,11 @@ impl From<HttpDispatchError> for CreateReplicationJobError {
         CreateReplicationJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateReplicationJobError {
+    fn from(err: io::Error) -> CreateReplicationJobError {
+        CreateReplicationJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateReplicationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -554,6 +561,11 @@ impl From<HttpDispatchError> for DeleteReplicationJobError {
         DeleteReplicationJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteReplicationJobError {
+    fn from(err: io::Error) -> DeleteReplicationJobError {
+        DeleteReplicationJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteReplicationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -647,6 +659,11 @@ impl From<HttpDispatchError> for DeleteServerCatalogError {
         DeleteServerCatalogError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteServerCatalogError {
+    fn from(err: io::Error) -> DeleteServerCatalogError {
+        DeleteServerCatalogError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteServerCatalogError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -735,6 +752,11 @@ impl From<HttpDispatchError> for DisassociateConnectorError {
         DisassociateConnectorError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisassociateConnectorError {
+    fn from(err: io::Error) -> DisassociateConnectorError {
+        DisassociateConnectorError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisassociateConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -812,6 +834,11 @@ impl From<CredentialsError> for GetConnectorsError {
 impl From<HttpDispatchError> for GetConnectorsError {
     fn from(err: HttpDispatchError) -> GetConnectorsError {
         GetConnectorsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetConnectorsError {
+    fn from(err: io::Error) -> GetConnectorsError {
+        GetConnectorsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetConnectorsError {
@@ -894,6 +921,11 @@ impl From<CredentialsError> for GetReplicationJobsError {
 impl From<HttpDispatchError> for GetReplicationJobsError {
     fn from(err: HttpDispatchError) -> GetReplicationJobsError {
         GetReplicationJobsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetReplicationJobsError {
+    fn from(err: io::Error) -> GetReplicationJobsError {
+        GetReplicationJobsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetReplicationJobsError {
@@ -982,6 +1014,11 @@ impl From<HttpDispatchError> for GetReplicationRunsError {
         GetReplicationRunsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetReplicationRunsError {
+    fn from(err: io::Error) -> GetReplicationRunsError {
+        GetReplicationRunsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetReplicationRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1056,6 +1093,11 @@ impl From<CredentialsError> for GetServersError {
 impl From<HttpDispatchError> for GetServersError {
     fn from(err: HttpDispatchError) -> GetServersError {
         GetServersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetServersError {
+    fn from(err: io::Error) -> GetServersError {
+        GetServersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetServersError {
@@ -1150,6 +1192,11 @@ impl From<HttpDispatchError> for ImportServerCatalogError {
         ImportServerCatalogError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ImportServerCatalogError {
+    fn from(err: io::Error) -> ImportServerCatalogError {
+        ImportServerCatalogError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ImportServerCatalogError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1238,6 +1285,11 @@ impl From<CredentialsError> for StartOnDemandReplicationRunError {
 impl From<HttpDispatchError> for StartOnDemandReplicationRunError {
     fn from(err: HttpDispatchError) -> StartOnDemandReplicationRunError {
         StartOnDemandReplicationRunError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartOnDemandReplicationRunError {
+    fn from(err: io::Error) -> StartOnDemandReplicationRunError {
+        StartOnDemandReplicationRunError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StartOnDemandReplicationRunError {
@@ -1338,6 +1390,11 @@ impl From<CredentialsError> for UpdateReplicationJobError {
 impl From<HttpDispatchError> for UpdateReplicationJobError {
     fn from(err: HttpDispatchError) -> UpdateReplicationJobError {
         UpdateReplicationJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateReplicationJobError {
+    fn from(err: io::Error) -> UpdateReplicationJobError {
+        UpdateReplicationJobError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateReplicationJobError {
@@ -1476,15 +1533,18 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateReplicationJobResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateReplicationJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateReplicationJobError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateReplicationJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1505,15 +1565,18 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteReplicationJobResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteReplicationJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteReplicationJobError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteReplicationJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1531,15 +1594,18 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteServerCatalogResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteServerCatalogResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteServerCatalogError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteServerCatalogError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1560,15 +1626,18 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisassociateConnectorResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisassociateConnectorResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DisassociateConnectorError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateConnectorError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1588,14 +1657,20 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetConnectorsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetConnectorsResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetConnectorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetConnectorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1615,15 +1690,18 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetReplicationJobsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetReplicationJobsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetReplicationJobsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetReplicationJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1643,15 +1721,18 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetReplicationRunsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetReplicationRunsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetReplicationRunsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetReplicationRunsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1671,13 +1752,21 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetServersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetServersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetServersResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetServersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1694,15 +1783,18 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ImportServerCatalogResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ImportServerCatalogResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ImportServerCatalogError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportServerCatalogError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1723,13 +1815,20 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartOnDemandReplicationRunResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StartOnDemandReplicationRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartOnDemandReplicationRunResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartOnDemandReplicationRunError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -1749,15 +1848,18 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateReplicationJobResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateReplicationJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateReplicationJobError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateReplicationJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

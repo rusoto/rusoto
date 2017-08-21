@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -38,7 +40,7 @@ enum DeserializerNext {
     Element(String),
 }
 #[doc="<p>A complex type that identifies the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AlarmIdentifier {
     #[doc="<p>The name of the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p>"]
     pub name: String,
@@ -155,7 +157,7 @@ impl AliasHealthEnabledSerializer {
 }
 
 #[doc="<p> <i>Alias resource record sets only:</i> Information about the CloudFront distribution, Elastic Beanstalk environment, ELB load balancer, Amazon S3 bucket, or Amazon Route 53 resource record set that you're redirecting queries to. An Elastic Beanstalk environment must have a regionalized subdomain.</p> <p>When creating resource record sets for a private hosted zone, note the following:</p> <ul> <li> <p>Resource record sets can't be created for CloudFront distributions in a private hosted zone.</p> </li> <li> <p>Creating geolocation alias resource record sets or latency alias resource record sets in a private hosted zone is unsupported.</p> </li> <li> <p>For information about creating failover resource record sets in a private hosted zone, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html\">Configuring Failover in a Private Hosted Zone</a>.</p> </li> </ul>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AliasTarget {
     #[doc="<p> <i>Alias resource record sets only:</i> The value that you specify depends on where you want to route queries:</p> <dl> <dt>CloudFront distribution</dt> <dd> <p>Specify the domain name that CloudFront assigned when you created your distribution.</p> <p>Your CloudFront distribution must include an alternate domain name that matches the name of the resource record set. For example, if the name of the resource record set is <i>acme.example.com</i>, your CloudFront distribution must include <i>acme.example.com</i> as one of the alternate domain names. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html\">Using Alternate Domain Names (CNAMEs)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </dd> <dt>Elastic Beanstalk environment</dt> <dd> <p>Specify the <code>CNAME</code> attribute for the environment. (The environment must have a regionalized domain name.) You can use the following methods to get the value of the CNAME attribute:</p> <ul> <li> <p> <i>AWS Management Console</i>: For information about how to get the value by using the console, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customdomains.html\">Using Custom Domains with AWS Elastic Beanstalk</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> </li> <li> <p> <i>Elastic Beanstalk API</i>: Use the <code>DescribeEnvironments</code> action to get the value of the <code>CNAME</code> attribute. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/api/API_DescribeEnvironments.html\">DescribeEnvironments</a> in the <i>AWS Elastic Beanstalk API Reference</i>.</p> </li> <li> <p> <i>AWS CLI</i>: Use the <code>describe-environments</code> command to get the value of the <code>CNAME</code> attribute. For more information, see <a href=\"http://docs.aws.amazon.com/cli/latest/reference/elasticbeanstalk/describe-environments.html\">describe-environments</a> in the <i>AWS Command Line Interface Reference</i>.</p> </li> </ul> </dd> <dt>ELB load balancer</dt> <dd> <p>Specify the DNS name that is associated with the load balancer. Get the DNS name by using the AWS Management Console, the ELB API, or the AWS CLI. </p> <ul> <li> <p> <b>AWS Management Console</b>: Go to the EC2 page, choose <b>Load Balancers</b> in the navigation pane, choose the load balancer, choose the <b>Description</b> tab, and get the value of the <b>DNS name</b> field. (If you're routing traffic to a Classic Load Balancer, get the value that begins with <b>dualstack</b>.) </p> </li> <li> <p> <b>Elastic Load Balancing API</b>: Use <code>DescribeLoadBalancers</code> to get the value of <code>DNSName</code>. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancer: <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html\">DescribeLoadBalancers</a> </p> </li> <li> <p>Application Load Balancer: <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html\">DescribeLoadBalancers</a> </p> </li> </ul> </li> <li> <p> <b>AWS CLI</b>: Use <code> <a href=\"http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html\">describe-load-balancers</a> </code> to get the value of <code>DNSName</code>.</p> </li> </ul> </dd> <dt>Amazon S3 bucket that is configured as a static website</dt> <dd> <p>Specify the domain name of the Amazon S3 website endpoint in which you created the bucket, for example, <code>s3-website-us-east-2.amazonaws.com</code>. For more information about valid values, see the table <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region\">Amazon Simple Storage Service (S3) Website Endpoints</a> in the <i>Amazon Web Services General Reference</i>. For more information about using S3 buckets for websites, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/getting-started.html\">Getting Started with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide.</i> </p> </dd> <dt>Another Amazon Route 53 resource record set</dt> <dd> <p>Specify the value of the <code>Name</code> element for a resource record set in the current hosted zone.</p> </dd> </dl>"]
     pub dns_name: String,
@@ -243,7 +245,7 @@ impl AssociateVPCCommentSerializer {
 }
 
 #[doc="<p>A complex type that contains information about the request to associate a VPC with a private hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AssociateVPCWithHostedZoneRequest {
     #[doc="<p> <i>Optional:</i> A comment about the association request.</p>"]
     pub comment: Option<String>,
@@ -254,7 +256,7 @@ pub struct AssociateVPCWithHostedZoneRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the <code>AssociateVPCWithHostedZone</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AssociateVPCWithHostedZoneResponse {
     #[doc="<p>A complex type that describes the changes made to your hosted zone.</p>"]
     pub change_info: ChangeInfo,
@@ -304,7 +306,7 @@ impl AssociateVPCWithHostedZoneResponseDeserializer {
     }
 }
 #[doc="<p>The information for each resource record set that you want to change.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Change {
     #[doc="<p>The action to perform:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes a existing resource record set.</p> <important> <p>To delete the resource record set that is associated with a traffic policy instance, use <code> <a>DeleteTrafficPolicyInstance</a> </code>. Amazon Route 53 will delete the resource record set automatically. If you delete the resource record set by using <code>ChangeResourceRecordSets</code>, Amazon Route 53 doesn't automatically delete the traffic policy instance, and you'll continue to be charged for it even though it's no longer in use. </p> </important> </li> <li> <p> <code>UPSERT</code>: If a resource record set doesn't already exist, Amazon Route 53 creates it. If a resource record set does exist, Amazon Route 53 updates it with the values in the request.</p> </li> </ul> <p>The values that you need to include in the request depend on the type of resource record set that you're creating, deleting, or updating:</p> <p> <b>Basic resource record sets (excluding alias, failover, geolocation, latency, and weighted resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> </ul> <p> <b>Failover, geolocation, latency, or weighted resource record sets (excluding alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> <li> <p> <code>SetIdentifier</code> </p> </li> </ul> <p> <b>Alias resource record sets (including failover alias, geolocation alias, latency alias, and weighted alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>AliasTarget</code> (includes <code>DNSName</code>, <code>EvaluateTargetHealth</code>, and <code>HostedZoneId</code>)</p> </li> <li> <p> <code>SetIdentifier</code> (for failover, geolocation, latency, and weighted resource record sets)</p> </li> </ul>"]
     pub action: String,
@@ -338,7 +340,7 @@ impl ChangeActionSerializer {
 }
 
 #[doc="<p>The information for a change request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ChangeBatch {
     #[doc="<p>Information about the changes to make to the record sets.</p>"]
     pub changes: Vec<Change>,
@@ -362,7 +364,7 @@ impl ChangeBatchSerializer {
 }
 
 #[doc="<p>A complex type that describes change information about changes made to your hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ChangeInfo {
     #[doc="<p>A complex type that describes change information about changes made to your hosted zone.</p> <p>This element contains an ID that you use when performing a <a>GetChange</a> action to get detailed information about the change.</p>"]
     pub comment: Option<String>,
@@ -429,7 +431,7 @@ impl ChangeInfoDeserializer {
     }
 }
 #[doc="<p>A complex type that contains change information for the resource record set.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ChangeResourceRecordSetsRequest {
     #[doc="<p>A complex type that contains an optional comment and the <code>Changes</code> element.</p>"]
     pub change_batch: ChangeBatch,
@@ -438,7 +440,7 @@ pub struct ChangeResourceRecordSetsRequest {
 }
 
 #[doc="<p>A complex type containing the response for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ChangeResourceRecordSetsResponse {
     #[doc="<p>A complex type that contains information about changes made to your hosted zone.</p> <p>This element contains an ID that you use when performing a <a>GetChange</a> action to get detailed information about the change.</p>"]
     pub change_info: ChangeInfo,
@@ -502,7 +504,7 @@ impl ChangeStatusDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the tags that you want to add, edit, or delete.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ChangeTagsForResourceRequest {
     #[doc="<p>A complex type that contains a list of the tags that you want to add to the specified health check or hosted zone and/or the tags that you want to edit <code>Value</code> for.</p> <p>You can add a maximum of 10 tags to a health check or a hosted zone.</p>"]
     pub add_tags: Option<Vec<Tag>>,
@@ -515,7 +517,7 @@ pub struct ChangeTagsForResourceRequest {
 }
 
 #[doc="<p>Empty response for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ChangeTagsForResourceResponse;
 
 struct ChangeTagsForResourceResponseDeserializer;
@@ -648,7 +650,7 @@ impl ChildHealthCheckListSerializer {
 }
 
 #[doc="<p>A complex type that contains information about the CloudWatch alarm that Amazon Route 53 is monitoring for this health check.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CloudWatchAlarmConfiguration {
     #[doc="<p>For the metric that the CloudWatch alarm is associated with, the arithmetic operation that is used for the comparison.</p>"]
     pub comparison_operator: String,
@@ -780,7 +782,7 @@ impl ComparisonOperatorDeserializer {
     }
 }
 #[doc="<p>A complex type that contains the health check request information.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateHealthCheckRequest {
     #[doc="<p>A unique string that identifies the request and that allows you to retry a failed <code>CreateHealthCheck</code> request without the risk of creating two identical health checks:</p> <ul> <li> <p>If you send a <code>CreateHealthCheck</code> request with the same <code>CallerReference</code> and settings as a previous request, and if the health check doesn't exist, Amazon Route 53 creates the health check. If the health check does exist, Amazon Route 53 returns the settings for the existing health check.</p> </li> <li> <p>If you send a <code>CreateHealthCheck</code> request with the same <code>CallerReference</code> as a deleted health check, regardless of the settings, Amazon Route 53 returns a <code>HealthCheckAlreadyExists</code> error.</p> </li> <li> <p>If you send a <code>CreateHealthCheck</code> request with the same <code>CallerReference</code> as an existing health check but with different settings, Amazon Route 53 returns a <code>HealthCheckAlreadyExists</code> error.</p> </li> <li> <p>If you send a <code>CreateHealthCheck</code> request with a unique <code>CallerReference</code> but settings identical to an existing health check, Amazon Route 53 creates the health check.</p> </li> </ul>"]
     pub caller_reference: String,
@@ -789,7 +791,7 @@ pub struct CreateHealthCheckRequest {
 }
 
 #[doc="<p>A complex type containing the response information for the new health check.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateHealthCheckResponse {
     #[doc="<p>A complex type that contains identifying information about the health check.</p>"]
     pub health_check: HealthCheck,
@@ -840,7 +842,7 @@ impl CreateHealthCheckResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the request to create a hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateHostedZoneRequest {
     #[doc="<p>A unique string that identifies the request and that allows failed <code>CreateHostedZone</code> requests to be retried without the risk of executing the operation twice. You must use a unique <code>CallerReference</code> string every time you submit a <code>CreateHostedZone</code> request. <code>CallerReference</code> can be any unique string, for example, a date/time stamp.</p>"]
     pub caller_reference: String,
@@ -855,7 +857,7 @@ pub struct CreateHostedZoneRequest {
 }
 
 #[doc="<p>A complex type containing the response information for the hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateHostedZoneResponse {
     #[doc="<p>A complex type that contains information about the <code>CreateHostedZone</code> request.</p>"]
     pub change_info: ChangeInfo,
@@ -923,7 +925,7 @@ impl CreateHostedZoneResponseDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateReusableDelegationSetRequest {
     #[doc="<p>A unique string that identifies the request, and that allows you to retry failed <code>CreateReusableDelegationSet</code> requests without the risk of executing the operation twice. You must use a unique <code>CallerReference</code> string every time you submit a <code>CreateReusableDelegationSet</code> request. <code>CallerReference</code> can be any unique string, for example a date/time stamp.</p>"]
     pub caller_reference: String,
@@ -931,7 +933,7 @@ pub struct CreateReusableDelegationSetRequest {
     pub hosted_zone_id: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateReusableDelegationSetResponse {
     #[doc="<p>A complex type that contains name server information.</p>"]
     pub delegation_set: DelegationSet,
@@ -984,7 +986,7 @@ impl CreateReusableDelegationSetResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the resource record sets that you want to create based on a specified traffic policy.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateTrafficPolicyInstanceRequest {
     #[doc="<p>The ID of the hosted zone in which you want Amazon Route 53 to create resource record sets by using the configuration in a traffic policy.</p>"]
     pub hosted_zone_id: String,
@@ -999,7 +1001,7 @@ pub struct CreateTrafficPolicyInstanceRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the <code>CreateTrafficPolicyInstance</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateTrafficPolicyInstanceResponse {
     #[doc="<p>A unique URL that represents a new traffic policy instance.</p>"]
     pub location: String,
@@ -1052,7 +1054,7 @@ impl CreateTrafficPolicyInstanceResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the traffic policy that you want to create.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateTrafficPolicyRequest {
     #[doc="<p>(Optional) Any comments that you want to include about the traffic policy.</p>"]
     pub comment: Option<String>,
@@ -1063,7 +1065,7 @@ pub struct CreateTrafficPolicyRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the <code>CreateTrafficPolicy</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateTrafficPolicyResponse {
     #[doc="<p>A unique URL that represents a new traffic policy.</p>"]
     pub location: String,
@@ -1115,7 +1117,7 @@ impl CreateTrafficPolicyResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the traffic policy that you want to create a new version for.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateTrafficPolicyVersionRequest {
     #[doc="<p>The comment that you specified in the <code>CreateTrafficPolicyVersion</code> request, if any.</p>"]
     pub comment: Option<String>,
@@ -1126,7 +1128,7 @@ pub struct CreateTrafficPolicyVersionRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the <code>CreateTrafficPolicyVersion</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateTrafficPolicyVersionResponse {
     #[doc="<p>A unique URL that represents a new traffic policy version.</p>"]
     pub location: String,
@@ -1179,7 +1181,7 @@ impl CreateTrafficPolicyVersionResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the request to authorize associating a VPC with your private hosted zone. Authorization is only required when a private hosted zone and a VPC were created by using different accounts.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateVPCAssociationAuthorizationRequest {
     #[doc="<p>The ID of the private hosted zone that you want to authorize associating a VPC with.</p>"]
     pub hosted_zone_id: String,
@@ -1188,7 +1190,7 @@ pub struct CreateVPCAssociationAuthorizationRequest {
 }
 
 #[doc="<p>A complex type that contains the response information from a <code>CreateVPCAssociationAuthorization</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateVPCAssociationAuthorizationResponse {
     #[doc="<p>The ID of the hosted zone that you authorized associating a VPC with.</p>"]
     pub hosted_zone_id: String,
@@ -1282,7 +1284,7 @@ impl DNSRCodeDeserializer {
     }
 }
 #[doc="<p>A complex type that lists the name servers in a delegation set, as well as the <code>CallerReference</code> and the <code>ID</code> for the delegation set.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DelegationSet {
     #[doc="<p>The value that you specified for <code>CallerReference</code> when you created the reusable delegation set.</p>"]
     pub caller_reference: Option<String>,
@@ -1427,14 +1429,14 @@ impl DelegationSetsDeserializer {
     }
 }
 #[doc="<p>This action deletes a health check.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteHealthCheckRequest {
     #[doc="<p>The ID of the health check that you want to delete.</p>"]
     pub health_check_id: String,
 }
 
 #[doc="<p>An empty element.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteHealthCheckResponse;
 
 struct DeleteHealthCheckResponseDeserializer;
@@ -1454,14 +1456,14 @@ impl DeleteHealthCheckResponseDeserializer {
     }
 }
 #[doc="<p>A request to delete a hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteHostedZoneRequest {
     #[doc="<p>The ID of the hosted zone you want to delete.</p>"]
     pub id: String,
 }
 
 #[doc="<p>A complex type that contains the response to a <code>DeleteHostedZone</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteHostedZoneResponse {
     #[doc="<p>A complex type that contains the ID, the status, and the date and time of a request to delete a hosted zone.</p>"]
     pub change_info: ChangeInfo,
@@ -1510,14 +1512,14 @@ impl DeleteHostedZoneResponseDeserializer {
     }
 }
 #[doc="<p>A request to delete a reusable delegation set.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteReusableDelegationSetRequest {
     #[doc="<p>The ID of the reusable delegation set that you want to delete.</p>"]
     pub id: String,
 }
 
 #[doc="<p>An empty element.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteReusableDelegationSetResponse;
 
 struct DeleteReusableDelegationSetResponseDeserializer;
@@ -1538,14 +1540,14 @@ impl DeleteReusableDelegationSetResponseDeserializer {
     }
 }
 #[doc="<p>A request to delete a specified traffic policy instance.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteTrafficPolicyInstanceRequest {
     #[doc="<p>The ID of the traffic policy instance that you want to delete. </p> <important> <p>When you delete a traffic policy instance, Amazon Route 53 also deletes all of the resource record sets that were created when you created the traffic policy instance.</p> </important>"]
     pub id: String,
 }
 
 #[doc="<p>An empty element.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteTrafficPolicyInstanceResponse;
 
 struct DeleteTrafficPolicyInstanceResponseDeserializer;
@@ -1566,7 +1568,7 @@ impl DeleteTrafficPolicyInstanceResponseDeserializer {
     }
 }
 #[doc="<p>A request to delete a specified traffic policy version.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteTrafficPolicyRequest {
     #[doc="<p>The ID of the traffic policy that you want to delete.</p>"]
     pub id: String,
@@ -1575,7 +1577,7 @@ pub struct DeleteTrafficPolicyRequest {
 }
 
 #[doc="<p>An empty element.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteTrafficPolicyResponse;
 
 struct DeleteTrafficPolicyResponseDeserializer;
@@ -1595,7 +1597,7 @@ impl DeleteTrafficPolicyResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the request to remove authorization to associate a VPC that was created by one AWS account with a hosted zone that was created with a different AWS account. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteVPCAssociationAuthorizationRequest {
     #[doc="<p>When removing authorization to associate a VPC that was created by one AWS account with a hosted zone that was created with a different AWS account, the ID of the hosted zone.</p>"]
     pub hosted_zone_id: String,
@@ -1604,7 +1606,7 @@ pub struct DeleteVPCAssociationAuthorizationRequest {
 }
 
 #[doc="<p>Empty response for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteVPCAssociationAuthorizationResponse;
 
 struct DeleteVPCAssociationAuthorizationResponseDeserializer;
@@ -1625,7 +1627,7 @@ impl DeleteVPCAssociationAuthorizationResponseDeserializer {
     }
 }
 #[doc="<p>For the metric that the CloudWatch alarm is associated with, a complex type that contains information about one dimension.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Dimension {
     #[doc="<p>For the metric that the CloudWatch alarm is associated with, the name of one dimension.</p>"]
     pub name: String,
@@ -1745,7 +1747,7 @@ impl DisassociateVPCCommentSerializer {
 }
 
 #[doc="<p>A complex type that contains information about the VPC that you want to disassociate from a specified private hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DisassociateVPCFromHostedZoneRequest {
     #[doc="<p> <i>Optional:</i> A comment about the disassociation request.</p>"]
     pub comment: Option<String>,
@@ -1756,7 +1758,7 @@ pub struct DisassociateVPCFromHostedZoneRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the disassociate request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DisassociateVPCFromHostedZoneResponse {
     #[doc="<p>A complex type that describes the changes made to the specified private hosted zone.</p>"]
     pub change_info: ChangeInfo,
@@ -1895,7 +1897,7 @@ impl FullyQualifiedDomainNameSerializer {
 }
 
 #[doc="<p>A complex type that contains information about a geo location.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GeoLocation {
     #[doc="<p>The two-letter code for the continent.</p> <p>Valid values: <code>AF</code> | <code>AN</code> | <code>AS</code> | <code>EU</code> | <code>OC</code> | <code>NA</code> | <code>SA</code> </p> <p>Constraint: Specifying <code>ContinentCode</code> with either <code>CountryCode</code> or <code>SubdivisionCode</code> returns an <code>InvalidInput</code> error.</p>"]
     pub continent_code: Option<String>,
@@ -2053,7 +2055,7 @@ impl GeoLocationCountryNameDeserializer {
     }
 }
 #[doc="<p>A complex type that contains the codes and full continent, country, and subdivision names for the specified <code>geolocation</code> code.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GeoLocationDetails {
     #[doc="<p>The two-letter code for the continent.</p>"]
     pub continent_code: Option<String>,
@@ -2210,14 +2212,14 @@ impl GeoLocationSubdivisionNameDeserializer {
     }
 }
 #[doc="<p>The input for a GetChange request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetChangeRequest {
     #[doc="<p>The ID of the change batch request. The value that you specify here is the value that <code>ChangeResourceRecordSets</code> returned in the <code>Id</code> element when you submitted the request.</p>"]
     pub id: String,
 }
 
 #[doc="<p>A complex type that contains the <code>ChangeInfo</code> element.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetChangeResponse {
     #[doc="<p>A complex type that contains information about the specified change batch.</p>"]
     pub change_info: ChangeInfo,
@@ -2265,10 +2267,10 @@ impl GetChangeResponseDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetCheckerIpRangesRequest;
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetCheckerIpRangesResponse {
     pub checker_ip_ranges: Vec<String>,
 }
@@ -2317,7 +2319,7 @@ impl GetCheckerIpRangesResponseDeserializer {
     }
 }
 #[doc="<p>A request for information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetGeoLocationRequest {
     #[doc="<p>Amazon Route 53 supports the following continent codes:</p> <ul> <li> <p> <b>AF</b>: Africa</p> </li> <li> <p> <b>AN</b>: Antarctica</p> </li> <li> <p> <b>AS</b>: Asia</p> </li> <li> <p> <b>EU</b>: Europe</p> </li> <li> <p> <b>OC</b>: Oceania</p> </li> <li> <p> <b>NA</b>: North America</p> </li> <li> <p> <b>SA</b>: South America</p> </li> </ul>"]
     pub continent_code: Option<String>,
@@ -2328,7 +2330,7 @@ pub struct GetGeoLocationRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the specified geolocation code.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetGeoLocationResponse {
     #[doc="<p>A complex type that contains the codes and full continent, country, and subdivision names for the specified geolocation code.</p>"]
     pub geo_location_details: GeoLocationDetails,
@@ -2378,11 +2380,11 @@ impl GetGeoLocationResponseDeserializer {
     }
 }
 #[doc="<p>A request for the number of health checks that are associated with the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHealthCheckCountRequest;
 
 #[doc="<p>A complex type that contains the response to a <code>GetHealthCheckCount</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHealthCheckCountResponse {
     #[doc="<p>The number of health checks associated with the current AWS account.</p>"]
     pub health_check_count: i64,
@@ -2432,14 +2434,14 @@ impl GetHealthCheckCountResponseDeserializer {
     }
 }
 #[doc="<p>A request for the reason that a health check failed most recently.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHealthCheckLastFailureReasonRequest {
     #[doc="<p>The ID for the health check for which you want the last failure reason. When you created the health check, <code>CreateHealthCheck</code> returned the ID in the response, in the <code>HealthCheckId</code> element.</p>"]
     pub health_check_id: String,
 }
 
 #[doc="<p>A complex type that contains the response to a <code>GetHealthCheckLastFailureReason</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHealthCheckLastFailureReasonResponse {
     #[doc="<p>A list that contains one <code>Observation</code> element for each Amazon Route 53 health checker that is reporting a last failure reason. </p>"]
     pub health_check_observations: Vec<HealthCheckObservation>,
@@ -2490,14 +2492,14 @@ impl GetHealthCheckLastFailureReasonResponseDeserializer {
     }
 }
 #[doc="<p>A request to get information about a specified health check. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHealthCheckRequest {
     #[doc="<p>The identifier that Amazon Route 53 assigned to the health check when you created it. When you add or update a resource record set, you use this value to specify which health check to use. The value can be up to 64 characters long.</p>"]
     pub health_check_id: String,
 }
 
 #[doc="<p>A complex type that contains the response to a <code>GetHealthCheck</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHealthCheckResponse {
     #[doc="<p>A complex type that contains information about one health check that is associated with the current AWS account.</p>"]
     pub health_check: HealthCheck,
@@ -2546,14 +2548,14 @@ impl GetHealthCheckResponseDeserializer {
     }
 }
 #[doc="<p>A request to get the status for a health check.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHealthCheckStatusRequest {
     #[doc="<p>The ID for the health check that you want the current status for. When you created the health check, <code>CreateHealthCheck</code> returned the ID in the response, in the <code>HealthCheckId</code> element.</p> <note> <p>If you want to check the status of a calculated health check, you must use the Amazon Route 53 console or the CloudWatch console. You can't use <code>GetHealthCheckStatus</code> to get the status of a calculated health check.</p> </note>"]
     pub health_check_id: String,
 }
 
 #[doc="<p>A complex type that contains the response to a <code>GetHealthCheck</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHealthCheckStatusResponse {
     #[doc="<p>A list that contains one <code>HealthCheckObservation</code> element for each Amazon Route 53 health checker that is reporting a status about the health check endpoint.</p>"]
     pub health_check_observations: Vec<HealthCheckObservation>,
@@ -2603,11 +2605,11 @@ impl GetHealthCheckStatusResponseDeserializer {
     }
 }
 #[doc="<p>A request to retrieve a count of all the hosted zones that are associated with the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHostedZoneCountRequest;
 
 #[doc="<p>A complex type that contains the response to a <code>GetHostedZoneCount</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHostedZoneCountResponse {
     #[doc="<p>The total number of public and private hosted zones that are associated with the current AWS account.</p>"]
     pub hosted_zone_count: i64,
@@ -2657,14 +2659,14 @@ impl GetHostedZoneCountResponseDeserializer {
     }
 }
 #[doc="<p>A request to get information about a specified hosted zone. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHostedZoneRequest {
     #[doc="<p>The ID of the hosted zone that you want to get information about.</p>"]
     pub id: String,
 }
 
 #[doc="<p>A complex type that contain the response to a <code>GetHostedZone</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetHostedZoneResponse {
     #[doc="<p>A complex type that lists the Amazon Route 53 name servers for the specified hosted zone.</p>"]
     pub delegation_set: Option<DelegationSet>,
@@ -2725,14 +2727,14 @@ impl GetHostedZoneResponseDeserializer {
     }
 }
 #[doc="<p>A request to get information about a specified reusable delegation set.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetReusableDelegationSetRequest {
     #[doc="<p>The ID of the reusable delegation set that you want to get a list of name servers for.</p>"]
     pub id: String,
 }
 
 #[doc="<p>A complex type that contains the response to the <code>GetReusableDelegationSet</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetReusableDelegationSetResponse {
     #[doc="<p>A complex type that contains information about the reusable delegation set.</p>"]
     pub delegation_set: DelegationSet,
@@ -2783,11 +2785,11 @@ impl GetReusableDelegationSetResponseDeserializer {
     }
 }
 #[doc="<p>Request to get the number of traffic policy instances that are associated with the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetTrafficPolicyInstanceCountRequest;
 
 #[doc="<p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetTrafficPolicyInstanceCountResponse {
     #[doc="<p>The number of traffic policy instances that are associated with the current AWS account.</p>"]
     pub traffic_policy_instance_count: i64,
@@ -2838,14 +2840,14 @@ impl GetTrafficPolicyInstanceCountResponseDeserializer {
     }
 }
 #[doc="<p>Gets information about a specified traffic policy instance.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetTrafficPolicyInstanceRequest {
     #[doc="<p>The ID of the traffic policy instance that you want to get information about.</p>"]
     pub id: String,
 }
 
 #[doc="<p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetTrafficPolicyInstanceResponse {
     #[doc="<p>A complex type that contains settings for the traffic policy instance.</p>"]
     pub traffic_policy_instance: TrafficPolicyInstance,
@@ -2896,7 +2898,7 @@ impl GetTrafficPolicyInstanceResponseDeserializer {
     }
 }
 #[doc="<p>Gets information about a specific traffic policy version.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetTrafficPolicyRequest {
     #[doc="<p>The ID of the traffic policy that you want to get information about.</p>"]
     pub id: String,
@@ -2905,7 +2907,7 @@ pub struct GetTrafficPolicyRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetTrafficPolicyResponse {
     #[doc="<p>A complex type that contains settings for the specified traffic policy.</p>"]
     pub traffic_policy: TrafficPolicy,
@@ -2955,7 +2957,7 @@ impl GetTrafficPolicyResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about one health check that is associated with the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct HealthCheck {
     #[doc="<p>A unique string that you specified when you created the health check.</p>"]
     pub caller_reference: String,
@@ -3029,7 +3031,7 @@ impl HealthCheckDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the health check.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct HealthCheckConfig {
     #[doc="<p>A complex type that identifies the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p>"]
     pub alarm_identifier: Option<AlarmIdentifier>,
@@ -3298,7 +3300,7 @@ impl HealthCheckNonceSerializer {
 }
 
 #[doc="<p>A complex type that contains the last failure reason as reported by one Amazon Route 53 health checker.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct HealthCheckObservation {
     #[doc="<p>The IP address of the Amazon Route 53 health checker that provided the failure reason in <code>StatusReport</code>.</p>"]
     pub ip_address: Option<String>,
@@ -3599,7 +3601,7 @@ impl HealthThresholdSerializer {
 }
 
 #[doc="<p>A complex type that contains general information about the hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct HostedZone {
     #[doc="<p>The value that you specified for <code>CallerReference</code> when you created the hosted zone.</p>"]
     pub caller_reference: String,
@@ -3672,7 +3674,7 @@ impl HostedZoneDeserializer {
     }
 }
 #[doc="<p>A complex type that contains an optional comment about your hosted zone. If you don't want to specify a comment, omit both the <code>HostedZoneConfig</code> and <code>Comment</code> elements.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct HostedZoneConfig {
     #[doc="<p>Any comments that you want to include about the hosted zone.</p>"]
     pub comment: Option<String>,
@@ -3929,7 +3931,7 @@ impl IsPrivateZoneSerializer {
 }
 
 #[doc="<p>A request to get a list of geographic locations that Amazon Route 53 supports for geolocation resource record sets. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListGeoLocationsRequest {
     #[doc="<p>(Optional) The maximum number of geolocations to be included in the response body for this request. If more than <code>MaxItems</code> geolocations remain to be listed, then the value of the <code>IsTruncated</code> element in the response is <code>true</code>.</p>"]
     pub max_items: Option<String>,
@@ -3942,7 +3944,7 @@ pub struct ListGeoLocationsRequest {
 }
 
 #[doc="<p>A complex type containing the response information for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListGeoLocationsResponse {
     #[doc="<p>A complex type that contains one <code>GeoLocationDetails</code> element for each location that Amazon Route 53 supports for geolocation.</p>"]
     pub geo_location_details_list: Vec<GeoLocationDetails>,
@@ -4021,7 +4023,7 @@ impl ListGeoLocationsResponseDeserializer {
     }
 }
 #[doc="<p>A request to retrieve a list of the health checks that are associated with the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListHealthChecksRequest {
     #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more health checks. To get another group, submit another <code>ListHealthChecks</code> request. </p> <p>For the value of <code>marker</code>, specify the value of <code>NextMarker</code> from the previous response, which is the ID of the first health check that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more health checks to get.</p>"]
     pub marker: Option<String>,
@@ -4030,7 +4032,7 @@ pub struct ListHealthChecksRequest {
 }
 
 #[doc="<p>A complex type that contains the response to a <code>ListHealthChecks</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListHealthChecksResponse {
     #[doc="<p>A complex type that contains one <code>HealthCheck</code> element for each health check that is associated with the current AWS account.</p>"]
     pub health_checks: Vec<HealthCheck>,
@@ -4103,7 +4105,7 @@ impl ListHealthChecksResponseDeserializer {
     }
 }
 #[doc="<p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account in ASCII order by domain name. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListHostedZonesByNameRequest {
     #[doc="<p>(Optional) For your first request to <code>ListHostedZonesByName</code>, include the <code>dnsname</code> parameter only if you want to specify the name of the first hosted zone in the response. If you don't include the <code>dnsname</code> parameter, Amazon Route 53 returns all of the hosted zones that were created by the current AWS account, in ASCII order. For subsequent requests, include both <code>dnsname</code> and <code>hostedzoneid</code> parameters. For <code>dnsname</code>, specify the value of <code>NextDNSName</code> from the previous response.</p>"]
     pub dns_name: Option<String>,
@@ -4114,7 +4116,7 @@ pub struct ListHostedZonesByNameRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListHostedZonesByNameResponse {
     #[doc="<p>For the second and subsequent calls to <code>ListHostedZonesByName</code>, <code>DNSName</code> is the value that you specified for the <code>dnsname</code> parameter in the request that produced the current response.</p>"]
     pub dns_name: Option<String>,
@@ -4201,7 +4203,7 @@ impl ListHostedZonesByNameResponseDeserializer {
     }
 }
 #[doc="<p>A request to retrieve a list of the public and private hosted zones that are associated with the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListHostedZonesRequest {
     #[doc="<p>If you're using reusable delegation sets and you want to list all of the hosted zones that are associated with a reusable delegation set, specify the ID of that reusable delegation set. </p>"]
     pub delegation_set_id: Option<String>,
@@ -4211,7 +4213,7 @@ pub struct ListHostedZonesRequest {
     pub max_items: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListHostedZonesResponse {
     #[doc="<p>A complex type that contains general information about the hosted zone.</p>"]
     pub hosted_zones: Vec<HostedZone>,
@@ -4284,7 +4286,7 @@ impl ListHostedZonesResponseDeserializer {
     }
 }
 #[doc="<p>A request for the resource record sets that are associated with a specified hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListResourceRecordSetsRequest {
     #[doc="<p>The ID of the hosted zone that contains the resource record sets that you want to list.</p>"]
     pub hosted_zone_id: String,
@@ -4299,7 +4301,7 @@ pub struct ListResourceRecordSetsRequest {
 }
 
 #[doc="<p>A complex type that contains list information for the resource record set.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListResourceRecordSetsResponse {
     #[doc="<p>A flag that indicates whether more resource record sets remain to be listed. If your results were truncated, you can make a follow-up pagination request by using the <code>NextRecordName</code> element.</p>"]
     pub is_truncated: bool,
@@ -4380,7 +4382,7 @@ impl ListResourceRecordSetsResponseDeserializer {
     }
 }
 #[doc="<p>A request to get a list of the reusable delegation sets that are associated with the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListReusableDelegationSetsRequest {
     #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more reusable delegation sets. To get another group, submit another <code>ListReusableDelegationSets</code> request. </p> <p>For the value of <code>marker</code>, specify the value of <code>NextMarker</code> from the previous response, which is the ID of the first reusable delegation set that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more reusable delegation sets to get.</p>"]
     pub marker: Option<String>,
@@ -4389,7 +4391,7 @@ pub struct ListReusableDelegationSetsRequest {
 }
 
 #[doc="<p>A complex type that contains information about the reusable delegation sets that are associated with the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListReusableDelegationSetsResponse {
     #[doc="<p>A complex type that contains one <code>DelegationSet</code> element for each reusable delegation set that was created by the current AWS account.</p>"]
     pub delegation_sets: Vec<DelegationSet>,
@@ -4464,7 +4466,7 @@ impl ListReusableDelegationSetsResponseDeserializer {
     }
 }
 #[doc="<p>A complex type containing information about a request for a list of the tags that are associated with an individual resource.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTagsForResourceRequest {
     #[doc="<p>The ID of the resource for which you want to retrieve tags.</p>"]
     pub resource_id: String,
@@ -4473,7 +4475,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[doc="<p>A complex type that contains information about the health checks or hosted zones for which you want to list tags.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTagsForResourceResponse {
     #[doc="<p>A <code>ResourceTagSet</code> containing tags associated with the specified resource.</p>"]
     pub resource_tag_set: ResourceTagSet,
@@ -4523,7 +4525,7 @@ impl ListTagsForResourceResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the health checks or hosted zones for which you want to list tags.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTagsForResourcesRequest {
     #[doc="<p>A complex type that contains the ResourceId element for each resource for which you want to get a list of tags.</p>"]
     pub resource_ids: Vec<String>,
@@ -4532,7 +4534,7 @@ pub struct ListTagsForResourcesRequest {
 }
 
 #[doc="<p>A complex type containing tags for the specified resources.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTagsForResourcesResponse {
     #[doc="<p>A list of <code>ResourceTagSet</code>s containing tags associated with the specified resources.</p>"]
     pub resource_tag_sets: Vec<ResourceTagSet>,
@@ -4582,7 +4584,7 @@ impl ListTagsForResourcesResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains the information about the request to list the traffic policies that are associated with the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTrafficPoliciesRequest {
     #[doc="<p>(Optional) The maximum number of traffic policies that you want Amazon Route 53 to return in response to this request. If you have more than <code>MaxItems</code> traffic policies, the value of <code>IsTruncated</code> in the response is <code>true</code>, and the value of <code>TrafficPolicyIdMarker</code> is the ID of the first traffic policy that Amazon Route 53 will return if you submit another request.</p>"]
     pub max_items: Option<String>,
@@ -4591,7 +4593,7 @@ pub struct ListTrafficPoliciesRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTrafficPoliciesResponse {
     #[doc="<p>A flag that indicates whether there are more traffic policies to be listed. If the response was truncated, you can get the next group of traffic policies by submitting another <code>ListTrafficPolicies</code> request and specifying the value of <code>TrafficPolicyIdMarker</code> in the <code>TrafficPolicyIdMarker</code> request parameter.</p>"]
     pub is_truncated: bool,
@@ -4660,7 +4662,7 @@ impl ListTrafficPoliciesResponseDeserializer {
     }
 }
 #[doc="<p>A request for the traffic policy instances that you created in a specified hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTrafficPolicyInstancesByHostedZoneRequest {
     #[doc="<p>The ID of the hosted zone that you want to list traffic policy instances for.</p>"]
     pub hosted_zone_id: String,
@@ -4673,7 +4675,7 @@ pub struct ListTrafficPolicyInstancesByHostedZoneRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTrafficPolicyInstancesByHostedZoneResponse {
     #[doc="<p>A flag that indicates whether there are more traffic policy instances to be listed. If the response was truncated, you can get the next group of traffic policy instances by submitting another <code>ListTrafficPolicyInstancesByHostedZone</code> request and specifying the values of <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> in the corresponding request parameters.</p>"]
     pub is_truncated: bool,
@@ -4750,7 +4752,7 @@ impl ListTrafficPolicyInstancesByHostedZoneResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains the information about the request to list your traffic policy instances.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTrafficPolicyInstancesByPolicyRequest {
     #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstancesByPolicy</code> request. </p> <p>For the value of <code>hostedzoneid</code>, specify the value of <code>HostedZoneIdMarker</code> from the previous response, which is the hosted zone ID of the first traffic policy instance that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
     pub hosted_zone_id_marker: Option<String>,
@@ -4767,7 +4769,7 @@ pub struct ListTrafficPolicyInstancesByPolicyRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTrafficPolicyInstancesByPolicyResponse {
     #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>HostedZoneIdMarker</code> is the ID of the hosted zone of the first traffic policy instance in the next group of traffic policy instances.</p>"]
     pub hosted_zone_id_marker: Option<String>,
@@ -4851,7 +4853,7 @@ impl ListTrafficPolicyInstancesByPolicyResponseDeserializer {
     }
 }
 #[doc="<p>A request to get information about the traffic policy instances that you created by using the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTrafficPolicyInstancesRequest {
     #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>HostedZoneId</code>, specify the value of <code>HostedZoneIdMarker</code> from the previous response, which is the hosted zone ID of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
     pub hosted_zone_id_marker: Option<String>,
@@ -4864,7 +4866,7 @@ pub struct ListTrafficPolicyInstancesRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTrafficPolicyInstancesResponse {
     #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>HostedZoneIdMarker</code> is the ID of the hosted zone of the first traffic policy instance that Amazon Route 53 will return if you submit another <code>ListTrafficPolicyInstances</code> request. </p>"]
     pub hosted_zone_id_marker: Option<String>,
@@ -4948,7 +4950,7 @@ impl ListTrafficPolicyInstancesResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains the information about the request to list your traffic policies.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTrafficPolicyVersionsRequest {
     #[doc="<p>Specify the value of <code>Id</code> of the traffic policy for which you want to list all versions.</p>"]
     pub id: String,
@@ -4959,7 +4961,7 @@ pub struct ListTrafficPolicyVersionsRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListTrafficPolicyVersionsResponse {
     #[doc="<p>A flag that indicates whether there are more traffic policies to be listed. If the response was truncated, you can get the next group of traffic policies by submitting another <code>ListTrafficPolicyVersions</code> request and specifying the value of <code>NextMarker</code> in the <code>marker</code> parameter.</p>"]
     pub is_truncated: bool,
@@ -5029,7 +5031,7 @@ impl ListTrafficPolicyVersionsResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about that can be associated with your hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListVPCAssociationAuthorizationsRequest {
     #[doc="<p>The ID of the hosted zone for which you want a list of VPCs that can be associated with the hosted zone.</p>"]
     pub hosted_zone_id: String,
@@ -5040,7 +5042,7 @@ pub struct ListVPCAssociationAuthorizationsRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListVPCAssociationAuthorizationsResponse {
     #[doc="<p>The ID of the hosted zone that you can associate the listed VPCs with.</p>"]
     pub hosted_zone_id: String,
@@ -5553,7 +5555,7 @@ impl ResourcePathSerializer {
 }
 
 #[doc="<p>Information specific to the resource record.</p> <note> <p>If you're creating an alias resource record set, omit <code>ResourceRecord</code>.</p> </note>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ResourceRecord {
     #[doc="<p>The current or new DNS record value, not to exceed 4,000 characters. In the case of a <code>DELETE</code> action, if the current value does not match the actual value, an error is returned. For descriptions about how to format <code>Value</code> for different record types, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/ResourceRecordTypes.html\">Supported DNS Resource Record Types</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>You can specify more than one value for all record types except <code>CNAME</code> and <code>SOA</code>. </p> <note> <p>If you're creating an alias resource record set, omit <code>Value</code>.</p> </note>"]
     pub value: String,
@@ -5613,7 +5615,7 @@ impl ResourceRecordSerializer {
 }
 
 #[doc="<p>Information about the resource record set to create or delete.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ResourceRecordSet {
     #[doc="<p> <i>Alias resource record sets only:</i> Information about the CloudFront distribution, AWS Elastic Beanstalk environment, ELB load balancer, Amazon S3 bucket, or Amazon Route 53 resource record set to which you're redirecting queries. The AWS Elastic Beanstalk environment must have a regionalized subdomain.</p> <p>If you're creating resource records sets for a private hosted zone, note the following:</p> <ul> <li> <p>You can't create alias resource record sets for CloudFront distributions in a private hosted zone.</p> </li> <li> <p>Creating geolocation alias resource record sets or latency alias resource record sets in a private hosted zone is unsupported.</p> </li> <li> <p>For information about creating failover resource record sets in a private hosted zone, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html\">Configuring Failover in a Private Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> </ul>"]
     pub alias_target: Option<AliasTarget>,
@@ -6006,7 +6008,7 @@ impl ResourceRecordsSerializer {
 }
 
 #[doc="<p>A complex type containing a resource and its associated tags.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ResourceTagSet {
     #[doc="<p>The ID for the specified resource.</p>"]
     pub resource_id: Option<String>,
@@ -6163,7 +6165,7 @@ impl StatusDeserializer {
     }
 }
 #[doc="<p>A complex type that contains the status that one Amazon Route 53 health checker reports and the time of the health check.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct StatusReport {
     #[doc="<p>The date and time that the health checker performed the health check in <a href=\"https://en.wikipedia.org/wiki/ISO_8601\">ISO 8601 format</a> and Coordinated Universal Time (UTC). For example, the value <code>2017-03-27T17:48:16.751Z</code> represents March 27, 2017 at 17:48:16.751 UTC.</p>"]
     pub checked_time: Option<String>,
@@ -6255,7 +6257,7 @@ impl TTLSerializer {
 }
 
 #[doc="<p>A complex type that contains information about a tag that you want to add or edit for the specified health check or hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Tag {
     #[doc="<p>The value of <code>Key</code> depends on the operation that you want to perform:</p> <ul> <li> <p> <b>Add a tag to a health check or hosted zone</b>: <code>Key</code> is the name that you want to give the new tag.</p> </li> <li> <p> <b>Edit a tag</b>: <code>Key</code> is the name of the tag that you want to change the <code>Value</code> for.</p> </li> <li> <p> <b> Delete a key</b>: <code>Key</code> is the name of the tag you want to remove.</p> </li> <li> <p> <b>Give a name to a health check</b>: Edit the default <code>Name</code> tag. In the Amazon Route 53 console, the list of your health checks includes a <b>Name</b> column that lets you see the name that you've given to each health check.</p> </li> </ul>"]
     pub key: Option<String>,
@@ -6512,7 +6514,7 @@ impl TagValueSerializer {
 }
 
 #[doc="<p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TestDNSAnswerRequest {
     #[doc="<p>If the resolver that you specified for resolverip supports EDNS0, specify the IPv4 or IPv6 address of a client in the applicable location, for example, <code>192.0.2.44</code> or <code>2001:db8:85a3::8a2e:370:7334</code>.</p>"]
     pub edns0_client_subnet_ip: Option<String>,
@@ -6529,7 +6531,7 @@ pub struct TestDNSAnswerRequest {
 }
 
 #[doc="<p>A complex type that contains the response to a <code>TestDNSAnswer</code> request. </p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TestDNSAnswerResponse {
     #[doc="<p>The Amazon Route 53 name server used to respond to the request.</p>"]
     pub nameserver: String,
@@ -6678,7 +6680,7 @@ impl TrafficPoliciesDeserializer {
     }
 }
 #[doc="<p>A complex type that contains settings for a traffic policy.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TrafficPolicy {
     #[doc="<p>The comment that you specify in the <code>CreateTrafficPolicy</code> request, if any.</p>"]
     pub comment: Option<String>,
@@ -6833,7 +6835,7 @@ impl TrafficPolicyIdSerializer {
 }
 
 #[doc="<p>A complex type that contains settings for the new traffic policy instance.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TrafficPolicyInstance {
     #[doc="<p>The ID of the hosted zone that Amazon Route 53 created resource record sets in.</p>"]
     pub hosted_zone_id: String,
@@ -7090,7 +7092,7 @@ impl TrafficPolicySummariesDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the latest version of one traffic policy that is associated with the current AWS account.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TrafficPolicySummary {
     #[doc="<p>The ID that Amazon Route 53 assigned to the traffic policy when you created it.</p>"]
     pub id: String,
@@ -7227,7 +7229,7 @@ impl TransportProtocolDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about a request to update a health check.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateHealthCheckRequest {
     pub alarm_identifier: Option<AlarmIdentifier>,
     #[doc="<p>A complex type that contains one <code>ChildHealthCheck</code> element for each health check that you want to associate with a <code>CALCULATED</code> health check.</p>"]
@@ -7260,7 +7262,7 @@ pub struct UpdateHealthCheckRequest {
     pub search_string: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateHealthCheckResponse {
     pub health_check: HealthCheck,
 }
@@ -7308,7 +7310,7 @@ impl UpdateHealthCheckResponseDeserializer {
     }
 }
 #[doc="<p>A request to update the comment for a hosted zone.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateHostedZoneCommentRequest {
     #[doc="<p>The new comment for the hosted zone. If you don't specify a value for <code>Comment</code>, Amazon Route 53 deletes the existing value of the <code>Comment</code> element, if any.</p>"]
     pub comment: Option<String>,
@@ -7317,7 +7319,7 @@ pub struct UpdateHostedZoneCommentRequest {
 }
 
 #[doc="<p>A complex type that contains the response to the <code>UpdateHostedZoneComment</code> request.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateHostedZoneCommentResponse {
     pub hosted_zone: HostedZone,
 }
@@ -7366,7 +7368,7 @@ impl UpdateHostedZoneCommentResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the traffic policy that you want to update the comment for.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateTrafficPolicyCommentRequest {
     #[doc="<p>The new comment for the specified traffic policy and version.</p>"]
     pub comment: String,
@@ -7377,7 +7379,7 @@ pub struct UpdateTrafficPolicyCommentRequest {
 }
 
 #[doc="<p>A complex type that contains the response information for the traffic policy.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateTrafficPolicyCommentResponse {
     #[doc="<p>A complex type that contains settings for the specified traffic policy.</p>"]
     pub traffic_policy: TrafficPolicy,
@@ -7428,7 +7430,7 @@ impl UpdateTrafficPolicyCommentResponseDeserializer {
     }
 }
 #[doc="<p>A complex type that contains information about the resource record sets that you want to update based on a specified traffic policy instance.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateTrafficPolicyInstanceRequest {
     #[doc="<p>The ID of the traffic policy instance that you want to update.</p>"]
     pub id: String,
@@ -7441,7 +7443,7 @@ pub struct UpdateTrafficPolicyInstanceRequest {
 }
 
 #[doc="<p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UpdateTrafficPolicyInstanceResponse {
     #[doc="<p>A complex type that contains settings for the updated traffic policy instance.</p>"]
     pub traffic_policy_instance: TrafficPolicyInstance,
@@ -7492,7 +7494,7 @@ impl UpdateTrafficPolicyInstanceResponseDeserializer {
     }
 }
 #[doc="<p>(Private hosted zones only) A complex type that contains information about an Amazon VPC.</p>"]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct VPC {
     pub vpc_id: Option<String>,
     #[doc="<p>(Private hosted zones only) The region in which you created an Amazon VPC.</p>"]
@@ -7720,6 +7722,11 @@ impl From<HttpDispatchError> for AssociateVPCWithHostedZoneError {
         AssociateVPCWithHostedZoneError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssociateVPCWithHostedZoneError {
+    fn from(err: io::Error) -> AssociateVPCWithHostedZoneError {
+        AssociateVPCWithHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssociateVPCWithHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7804,6 +7811,11 @@ impl From<CredentialsError> for ChangeResourceRecordSetsError {
 impl From<HttpDispatchError> for ChangeResourceRecordSetsError {
     fn from(err: HttpDispatchError) -> ChangeResourceRecordSetsError {
         ChangeResourceRecordSetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ChangeResourceRecordSetsError {
+    fn from(err: io::Error) -> ChangeResourceRecordSetsError {
+        ChangeResourceRecordSetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ChangeResourceRecordSetsError {
@@ -7894,6 +7906,11 @@ impl From<HttpDispatchError> for ChangeTagsForResourceError {
         ChangeTagsForResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ChangeTagsForResourceError {
+    fn from(err: io::Error) -> ChangeTagsForResourceError {
+        ChangeTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ChangeTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7972,6 +7989,11 @@ impl From<CredentialsError> for CreateHealthCheckError {
 impl From<HttpDispatchError> for CreateHealthCheckError {
     fn from(err: HttpDispatchError) -> CreateHealthCheckError {
         CreateHealthCheckError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateHealthCheckError {
+    fn from(err: io::Error) -> CreateHealthCheckError {
+        CreateHealthCheckError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateHealthCheckError {
@@ -8074,6 +8096,11 @@ impl From<HttpDispatchError> for CreateHostedZoneError {
         CreateHostedZoneError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateHostedZoneError {
+    fn from(err: io::Error) -> CreateHostedZoneError {
+        CreateHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8166,6 +8193,11 @@ impl From<HttpDispatchError> for CreateReusableDelegationSetError {
         CreateReusableDelegationSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateReusableDelegationSetError {
+    fn from(err: io::Error) -> CreateReusableDelegationSetError {
+        CreateReusableDelegationSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateReusableDelegationSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8251,6 +8283,11 @@ impl From<HttpDispatchError> for CreateTrafficPolicyError {
         CreateTrafficPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateTrafficPolicyError {
+    fn from(err: io::Error) -> CreateTrafficPolicyError {
+        CreateTrafficPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateTrafficPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8332,6 +8369,11 @@ impl From<CredentialsError> for CreateTrafficPolicyInstanceError {
 impl From<HttpDispatchError> for CreateTrafficPolicyInstanceError {
     fn from(err: HttpDispatchError) -> CreateTrafficPolicyInstanceError {
         CreateTrafficPolicyInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateTrafficPolicyInstanceError {
+    fn from(err: io::Error) -> CreateTrafficPolicyInstanceError {
+        CreateTrafficPolicyInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTrafficPolicyInstanceError {
@@ -8417,6 +8459,11 @@ impl From<HttpDispatchError> for CreateTrafficPolicyVersionError {
         CreateTrafficPolicyVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateTrafficPolicyVersionError {
+    fn from(err: io::Error) -> CreateTrafficPolicyVersionError {
+        CreateTrafficPolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateTrafficPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8500,6 +8547,11 @@ impl From<HttpDispatchError> for CreateVPCAssociationAuthorizationError {
         CreateVPCAssociationAuthorizationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateVPCAssociationAuthorizationError {
+    fn from(err: io::Error) -> CreateVPCAssociationAuthorizationError {
+        CreateVPCAssociationAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateVPCAssociationAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8580,6 +8632,11 @@ impl From<CredentialsError> for DeleteHealthCheckError {
 impl From<HttpDispatchError> for DeleteHealthCheckError {
     fn from(err: HttpDispatchError) -> DeleteHealthCheckError {
         DeleteHealthCheckError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteHealthCheckError {
+    fn from(err: io::Error) -> DeleteHealthCheckError {
+        DeleteHealthCheckError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteHealthCheckError {
@@ -8670,6 +8727,11 @@ impl From<HttpDispatchError> for DeleteHostedZoneError {
         DeleteHostedZoneError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteHostedZoneError {
+    fn from(err: io::Error) -> DeleteHostedZoneError {
+        DeleteHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8747,6 +8809,11 @@ impl From<CredentialsError> for DeleteReusableDelegationSetError {
 impl From<HttpDispatchError> for DeleteReusableDelegationSetError {
     fn from(err: HttpDispatchError) -> DeleteReusableDelegationSetError {
         DeleteReusableDelegationSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteReusableDelegationSetError {
+    fn from(err: io::Error) -> DeleteReusableDelegationSetError {
+        DeleteReusableDelegationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteReusableDelegationSetError {
@@ -8831,6 +8898,11 @@ impl From<HttpDispatchError> for DeleteTrafficPolicyError {
         DeleteTrafficPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTrafficPolicyError {
+    fn from(err: io::Error) -> DeleteTrafficPolicyError {
+        DeleteTrafficPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTrafficPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8906,6 +8978,11 @@ impl From<CredentialsError> for DeleteTrafficPolicyInstanceError {
 impl From<HttpDispatchError> for DeleteTrafficPolicyInstanceError {
     fn from(err: HttpDispatchError) -> DeleteTrafficPolicyInstanceError {
         DeleteTrafficPolicyInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTrafficPolicyInstanceError {
+    fn from(err: io::Error) -> DeleteTrafficPolicyInstanceError {
+        DeleteTrafficPolicyInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteTrafficPolicyInstanceError {
@@ -8988,6 +9065,11 @@ impl From<CredentialsError> for DeleteVPCAssociationAuthorizationError {
 impl From<HttpDispatchError> for DeleteVPCAssociationAuthorizationError {
     fn from(err: HttpDispatchError) -> DeleteVPCAssociationAuthorizationError {
         DeleteVPCAssociationAuthorizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVPCAssociationAuthorizationError {
+    fn from(err: io::Error) -> DeleteVPCAssociationAuthorizationError {
+        DeleteVPCAssociationAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteVPCAssociationAuthorizationError {
@@ -9074,6 +9156,11 @@ impl From<HttpDispatchError> for DisassociateVPCFromHostedZoneError {
         DisassociateVPCFromHostedZoneError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisassociateVPCFromHostedZoneError {
+    fn from(err: io::Error) -> DisassociateVPCFromHostedZoneError {
+        DisassociateVPCFromHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisassociateVPCFromHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9153,6 +9240,11 @@ impl From<HttpDispatchError> for GetChangeError {
         GetChangeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetChangeError {
+    fn from(err: io::Error) -> GetChangeError {
+        GetChangeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetChangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9215,6 +9307,11 @@ impl From<CredentialsError> for GetCheckerIpRangesError {
 impl From<HttpDispatchError> for GetCheckerIpRangesError {
     fn from(err: HttpDispatchError) -> GetCheckerIpRangesError {
         GetCheckerIpRangesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCheckerIpRangesError {
+    fn from(err: io::Error) -> GetCheckerIpRangesError {
+        GetCheckerIpRangesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetCheckerIpRangesError {
@@ -9289,6 +9386,11 @@ impl From<CredentialsError> for GetGeoLocationError {
 impl From<HttpDispatchError> for GetGeoLocationError {
     fn from(err: HttpDispatchError) -> GetGeoLocationError {
         GetGeoLocationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetGeoLocationError {
+    fn from(err: io::Error) -> GetGeoLocationError {
+        GetGeoLocationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetGeoLocationError {
@@ -9370,6 +9472,11 @@ impl From<HttpDispatchError> for GetHealthCheckError {
         GetHealthCheckError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetHealthCheckError {
+    fn from(err: io::Error) -> GetHealthCheckError {
+        GetHealthCheckError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetHealthCheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9433,6 +9540,11 @@ impl From<CredentialsError> for GetHealthCheckCountError {
 impl From<HttpDispatchError> for GetHealthCheckCountError {
     fn from(err: HttpDispatchError) -> GetHealthCheckCountError {
         GetHealthCheckCountError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetHealthCheckCountError {
+    fn from(err: io::Error) -> GetHealthCheckCountError {
+        GetHealthCheckCountError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHealthCheckCountError {
@@ -9503,6 +9615,11 @@ impl From<CredentialsError> for GetHealthCheckLastFailureReasonError {
 impl From<HttpDispatchError> for GetHealthCheckLastFailureReasonError {
     fn from(err: HttpDispatchError) -> GetHealthCheckLastFailureReasonError {
         GetHealthCheckLastFailureReasonError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetHealthCheckLastFailureReasonError {
+    fn from(err: io::Error) -> GetHealthCheckLastFailureReasonError {
+        GetHealthCheckLastFailureReasonError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHealthCheckLastFailureReasonError {
@@ -9577,6 +9694,11 @@ impl From<CredentialsError> for GetHealthCheckStatusError {
 impl From<HttpDispatchError> for GetHealthCheckStatusError {
     fn from(err: HttpDispatchError) -> GetHealthCheckStatusError {
         GetHealthCheckStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetHealthCheckStatusError {
+    fn from(err: io::Error) -> GetHealthCheckStatusError {
+        GetHealthCheckStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHealthCheckStatusError {
@@ -9655,6 +9777,11 @@ impl From<HttpDispatchError> for GetHostedZoneError {
         GetHostedZoneError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetHostedZoneError {
+    fn from(err: io::Error) -> GetHostedZoneError {
+        GetHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9722,6 +9849,11 @@ impl From<CredentialsError> for GetHostedZoneCountError {
 impl From<HttpDispatchError> for GetHostedZoneCountError {
     fn from(err: HttpDispatchError) -> GetHostedZoneCountError {
         GetHostedZoneCountError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetHostedZoneCountError {
+    fn from(err: io::Error) -> GetHostedZoneCountError {
+        GetHostedZoneCountError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHostedZoneCountError {
@@ -9796,6 +9928,11 @@ impl From<CredentialsError> for GetReusableDelegationSetError {
 impl From<HttpDispatchError> for GetReusableDelegationSetError {
     fn from(err: HttpDispatchError) -> GetReusableDelegationSetError {
         GetReusableDelegationSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetReusableDelegationSetError {
+    fn from(err: io::Error) -> GetReusableDelegationSetError {
+        GetReusableDelegationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetReusableDelegationSetError {
@@ -9873,6 +10010,11 @@ impl From<HttpDispatchError> for GetTrafficPolicyError {
         GetTrafficPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetTrafficPolicyError {
+    fn from(err: io::Error) -> GetTrafficPolicyError {
+        GetTrafficPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetTrafficPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9943,6 +10085,11 @@ impl From<HttpDispatchError> for GetTrafficPolicyInstanceError {
         GetTrafficPolicyInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetTrafficPolicyInstanceError {
+    fn from(err: io::Error) -> GetTrafficPolicyInstanceError {
+        GetTrafficPolicyInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetTrafficPolicyInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10007,6 +10154,11 @@ impl From<CredentialsError> for GetTrafficPolicyInstanceCountError {
 impl From<HttpDispatchError> for GetTrafficPolicyInstanceCountError {
     fn from(err: HttpDispatchError) -> GetTrafficPolicyInstanceCountError {
         GetTrafficPolicyInstanceCountError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetTrafficPolicyInstanceCountError {
+    fn from(err: io::Error) -> GetTrafficPolicyInstanceCountError {
+        GetTrafficPolicyInstanceCountError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetTrafficPolicyInstanceCountError {
@@ -10078,6 +10230,11 @@ impl From<HttpDispatchError> for ListGeoLocationsError {
         ListGeoLocationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListGeoLocationsError {
+    fn from(err: io::Error) -> ListGeoLocationsError {
+        ListGeoLocationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListGeoLocationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10147,6 +10304,11 @@ impl From<CredentialsError> for ListHealthChecksError {
 impl From<HttpDispatchError> for ListHealthChecksError {
     fn from(err: HttpDispatchError) -> ListHealthChecksError {
         ListHealthChecksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListHealthChecksError {
+    fn from(err: io::Error) -> ListHealthChecksError {
+        ListHealthChecksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListHealthChecksError {
@@ -10224,6 +10386,11 @@ impl From<HttpDispatchError> for ListHostedZonesError {
         ListHostedZonesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListHostedZonesError {
+    fn from(err: io::Error) -> ListHostedZonesError {
+        ListHostedZonesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListHostedZonesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10295,6 +10462,11 @@ impl From<CredentialsError> for ListHostedZonesByNameError {
 impl From<HttpDispatchError> for ListHostedZonesByNameError {
     fn from(err: HttpDispatchError) -> ListHostedZonesByNameError {
         ListHostedZonesByNameError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListHostedZonesByNameError {
+    fn from(err: io::Error) -> ListHostedZonesByNameError {
+        ListHostedZonesByNameError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListHostedZonesByNameError {
@@ -10369,6 +10541,11 @@ impl From<HttpDispatchError> for ListResourceRecordSetsError {
         ListResourceRecordSetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListResourceRecordSetsError {
+    fn from(err: io::Error) -> ListResourceRecordSetsError {
+        ListResourceRecordSetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListResourceRecordSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10436,6 +10613,11 @@ impl From<CredentialsError> for ListReusableDelegationSetsError {
 impl From<HttpDispatchError> for ListReusableDelegationSetsError {
     fn from(err: HttpDispatchError) -> ListReusableDelegationSetsError {
         ListReusableDelegationSetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListReusableDelegationSetsError {
+    fn from(err: io::Error) -> ListReusableDelegationSetsError {
+        ListReusableDelegationSetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListReusableDelegationSetsError {
@@ -10520,6 +10702,11 @@ impl From<CredentialsError> for ListTagsForResourceError {
 impl From<HttpDispatchError> for ListTagsForResourceError {
     fn from(err: HttpDispatchError) -> ListTagsForResourceError {
         ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -10610,6 +10797,11 @@ impl From<HttpDispatchError> for ListTagsForResourcesError {
         ListTagsForResourcesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTagsForResourcesError {
+    fn from(err: io::Error) -> ListTagsForResourcesError {
+        ListTagsForResourcesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTagsForResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10684,6 +10876,11 @@ impl From<HttpDispatchError> for ListTrafficPoliciesError {
         ListTrafficPoliciesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTrafficPoliciesError {
+    fn from(err: io::Error) -> ListTrafficPoliciesError {
+        ListTrafficPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTrafficPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10753,6 +10950,11 @@ impl From<CredentialsError> for ListTrafficPolicyInstancesError {
 impl From<HttpDispatchError> for ListTrafficPolicyInstancesError {
     fn from(err: HttpDispatchError) -> ListTrafficPolicyInstancesError {
         ListTrafficPolicyInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTrafficPolicyInstancesError {
+    fn from(err: io::Error) -> ListTrafficPolicyInstancesError {
+        ListTrafficPolicyInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTrafficPolicyInstancesError {
@@ -10828,6 +11030,11 @@ impl From<CredentialsError> for ListTrafficPolicyInstancesByHostedZoneError {
 impl From<HttpDispatchError> for ListTrafficPolicyInstancesByHostedZoneError {
     fn from(err: HttpDispatchError) -> ListTrafficPolicyInstancesByHostedZoneError {
         ListTrafficPolicyInstancesByHostedZoneError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTrafficPolicyInstancesByHostedZoneError {
+    fn from(err: io::Error) -> ListTrafficPolicyInstancesByHostedZoneError {
+        ListTrafficPolicyInstancesByHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTrafficPolicyInstancesByHostedZoneError {
@@ -10908,6 +11115,11 @@ impl From<HttpDispatchError> for ListTrafficPolicyInstancesByPolicyError {
         ListTrafficPolicyInstancesByPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTrafficPolicyInstancesByPolicyError {
+    fn from(err: io::Error) -> ListTrafficPolicyInstancesByPolicyError {
+        ListTrafficPolicyInstancesByPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTrafficPolicyInstancesByPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10983,6 +11195,11 @@ impl From<HttpDispatchError> for ListTrafficPolicyVersionsError {
         ListTrafficPolicyVersionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTrafficPolicyVersionsError {
+    fn from(err: io::Error) -> ListTrafficPolicyVersionsError {
+        ListTrafficPolicyVersionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTrafficPolicyVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11056,6 +11273,11 @@ impl From<CredentialsError> for ListVPCAssociationAuthorizationsError {
 impl From<HttpDispatchError> for ListVPCAssociationAuthorizationsError {
     fn from(err: HttpDispatchError) -> ListVPCAssociationAuthorizationsError {
         ListVPCAssociationAuthorizationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListVPCAssociationAuthorizationsError {
+    fn from(err: io::Error) -> ListVPCAssociationAuthorizationsError {
+        ListVPCAssociationAuthorizationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListVPCAssociationAuthorizationsError {
@@ -11135,6 +11357,11 @@ impl From<HttpDispatchError> for TestDNSAnswerError {
         TestDNSAnswerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TestDNSAnswerError {
+    fn from(err: io::Error) -> TestDNSAnswerError {
+        TestDNSAnswerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TestDNSAnswerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11210,6 +11437,11 @@ impl From<HttpDispatchError> for UpdateHealthCheckError {
         UpdateHealthCheckError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateHealthCheckError {
+    fn from(err: io::Error) -> UpdateHealthCheckError {
+        UpdateHealthCheckError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateHealthCheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11281,6 +11513,11 @@ impl From<CredentialsError> for UpdateHostedZoneCommentError {
 impl From<HttpDispatchError> for UpdateHostedZoneCommentError {
     fn from(err: HttpDispatchError) -> UpdateHostedZoneCommentError {
         UpdateHostedZoneCommentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateHostedZoneCommentError {
+    fn from(err: io::Error) -> UpdateHostedZoneCommentError {
+        UpdateHostedZoneCommentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateHostedZoneCommentError {
@@ -11356,6 +11593,11 @@ impl From<CredentialsError> for UpdateTrafficPolicyCommentError {
 impl From<HttpDispatchError> for UpdateTrafficPolicyCommentError {
     fn from(err: HttpDispatchError) -> UpdateTrafficPolicyCommentError {
         UpdateTrafficPolicyCommentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateTrafficPolicyCommentError {
+    fn from(err: io::Error) -> UpdateTrafficPolicyCommentError {
+        UpdateTrafficPolicyCommentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateTrafficPolicyCommentError {
@@ -11438,6 +11680,11 @@ impl From<CredentialsError> for UpdateTrafficPolicyInstanceError {
 impl From<HttpDispatchError> for UpdateTrafficPolicyInstanceError {
     fn from(err: HttpDispatchError) -> UpdateTrafficPolicyInstanceError {
         UpdateTrafficPolicyInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateTrafficPolicyInstanceError {
+    fn from(err: io::Error) -> UpdateTrafficPolicyInstanceError {
+        UpdateTrafficPolicyInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateTrafficPolicyInstanceError {
@@ -11831,7 +12078,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11839,11 +12086,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AssociateVPCWithHostedZoneResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11854,7 +12103,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(AssociateVPCWithHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateVPCWithHostedZoneError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -11879,7 +12133,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11887,11 +12141,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ChangeResourceRecordSetsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11902,7 +12158,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(ChangeResourceRecordSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ChangeResourceRecordSetsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -11928,7 +12189,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11936,11 +12197,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ChangeTagsForResourceResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11952,8 +12215,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ChangeTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ChangeTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11978,7 +12242,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -11986,11 +12250,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateHealthCheckResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12005,8 +12271,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateHealthCheckError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12031,7 +12298,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12039,11 +12306,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateHostedZoneResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12058,8 +12327,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateHostedZoneError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateHostedZoneError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12085,7 +12355,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12093,11 +12363,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateReusableDelegationSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12109,7 +12381,12 @@ impl<P, D> Route53 for Route53Client<P, D>
                 result.location = value;
                 Ok(result)
             }
-            _ => Err(CreateReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateReusableDelegationSetError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -12133,7 +12410,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12141,11 +12418,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateTrafficPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12158,8 +12437,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTrafficPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12185,7 +12465,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12193,11 +12473,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateTrafficPolicyInstanceResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12209,7 +12491,12 @@ impl<P, D> Route53 for Route53Client<P, D>
                 result.location = value;
                 Ok(result)
             }
-            _ => Err(CreateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -12234,7 +12521,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12242,11 +12529,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateTrafficPolicyVersionResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12258,7 +12547,12 @@ impl<P, D> Route53 for Route53Client<P, D>
                 result.location = value;
                 Ok(result)
             }
-            _ => Err(CreateTrafficPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTrafficPolicyVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -12284,7 +12578,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12292,11 +12586,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateVPCAssociationAuthorizationResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12307,7 +12603,11 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12331,7 +12631,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12339,11 +12639,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteHealthCheckResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12357,8 +12659,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteHealthCheckError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12383,7 +12686,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12391,11 +12694,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteHostedZoneResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12409,8 +12714,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteHostedZoneError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteHostedZoneError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12436,7 +12742,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12444,11 +12750,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteReusableDelegationSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12459,7 +12767,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteReusableDelegationSetError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -12484,7 +12797,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12492,11 +12805,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteTrafficPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12508,8 +12823,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTrafficPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12535,7 +12851,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12543,11 +12859,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteTrafficPolicyInstanceResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12558,7 +12876,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -12584,7 +12907,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12592,11 +12915,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteVPCAssociationAuthorizationResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12607,7 +12932,11 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12632,7 +12961,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12640,11 +12969,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DisassociateVPCFromHostedZoneResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12655,7 +12986,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(DisassociateVPCFromHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateVPCFromHostedZoneError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -12677,7 +13013,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12685,11 +13021,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetChangeResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12701,7 +13039,11 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetChangeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetChangeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12725,7 +13067,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12733,11 +13075,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetCheckerIpRangesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12751,8 +13095,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetCheckerIpRangesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCheckerIpRangesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12788,7 +13133,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12796,11 +13141,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetGeoLocationResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12814,8 +13161,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetGeoLocationError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetGeoLocationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12840,7 +13188,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12848,11 +13196,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetHealthCheckResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12866,8 +13216,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetHealthCheckError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12892,7 +13243,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12900,11 +13251,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetHealthCheckCountResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12916,8 +13269,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetHealthCheckCountError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetHealthCheckCountError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12944,7 +13298,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -12952,11 +13306,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetHealthCheckLastFailureReasonResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12967,7 +13323,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetHealthCheckLastFailureReasonError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetHealthCheckLastFailureReasonError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -12992,7 +13353,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13000,11 +13361,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetHealthCheckStatusResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13016,8 +13379,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetHealthCheckStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetHealthCheckStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13042,7 +13406,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13050,11 +13414,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetHostedZoneResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13067,7 +13433,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetHostedZoneError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13092,7 +13460,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13100,11 +13468,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetHostedZoneCountResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13118,8 +13488,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetHostedZoneCountError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetHostedZoneCountError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13145,7 +13516,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13153,11 +13524,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetReusableDelegationSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13168,7 +13541,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetReusableDelegationSetError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -13193,7 +13571,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13201,11 +13579,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetTrafficPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13219,8 +13599,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTrafficPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13246,7 +13627,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13254,11 +13635,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetTrafficPolicyInstanceResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13269,7 +13652,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -13294,7 +13682,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13302,11 +13690,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetTrafficPolicyInstanceCountResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13317,7 +13707,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetTrafficPolicyInstanceCountError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTrafficPolicyInstanceCountError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -13356,7 +13751,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13364,11 +13759,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListGeoLocationsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13382,8 +13779,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListGeoLocationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListGeoLocationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13415,7 +13813,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13423,11 +13821,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListHealthChecksResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13441,8 +13841,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListHealthChecksError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListHealthChecksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13478,7 +13879,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13486,11 +13887,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListHostedZonesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13504,8 +13907,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListHostedZonesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListHostedZonesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13542,7 +13946,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13550,11 +13954,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListHostedZonesByNameResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13566,8 +13972,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListHostedZonesByNameError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListHostedZonesByNameError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13608,7 +14015,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13616,11 +14023,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListResourceRecordSetsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13632,8 +14041,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListResourceRecordSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListResourceRecordSetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13666,7 +14076,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13674,11 +14084,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListReusableDelegationSetsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13689,7 +14101,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListReusableDelegationSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListReusableDelegationSetsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -13714,7 +14131,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13722,11 +14139,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListTagsForResourceResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13738,8 +14157,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13765,7 +14185,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13773,11 +14193,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListTagsForResourcesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13789,8 +14211,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListTagsForResourcesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourcesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13822,7 +14245,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13830,11 +14253,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListTrafficPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13846,8 +14271,9 @@ impl<P, D> Route53 for Route53Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListTrafficPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTrafficPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13892,7 +14318,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13900,11 +14326,13 @@ impl<P, D> Route53 for Route53Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListTrafficPolicyInstancesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13915,7 +14343,12 @@ impl<P, D> Route53 for Route53Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListTrafficPolicyInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTrafficPolicyInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -13953,7 +14386,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -13961,11 +14394,13 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13976,7 +14411,11 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
                 Ok(result)
             }
-            _ => Err(ListTrafficPolicyInstancesByHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTrafficPolicyInstancesByHostedZoneError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -14023,7 +14462,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -14031,11 +14470,13 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListTrafficPolicyInstancesByPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14046,7 +14487,11 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
                 Ok(result)
             }
-            _ => Err(ListTrafficPolicyInstancesByPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTrafficPolicyInstancesByPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -14078,7 +14523,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -14086,11 +14531,13 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListTrafficPolicyVersionsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14101,7 +14548,12 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
                 Ok(result)
             }
-            _ => Err(ListTrafficPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTrafficPolicyVersionsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -14133,7 +14585,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -14141,11 +14593,13 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListVPCAssociationAuthorizationsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14156,7 +14610,11 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
                 Ok(result)
             }
-            _ => Err(ListVPCAssociationAuthorizationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListVPCAssociationAuthorizationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -14194,7 +14652,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -14202,11 +14660,13 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = TestDNSAnswerResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14219,7 +14679,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
                 Ok(result)
             }
             _ => {
-                Err(TestDNSAnswerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestDNSAnswerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14244,7 +14706,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -14252,11 +14714,13 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateHealthCheckResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14270,8 +14734,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
                 Ok(result)
             }
             _ => {
-                Err(UpdateHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateHealthCheckError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14297,7 +14762,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -14305,11 +14770,13 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateHostedZoneCommentResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14320,7 +14787,12 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
                 Ok(result)
             }
-            _ => Err(UpdateHostedZoneCommentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateHostedZoneCommentError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -14346,7 +14818,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -14354,11 +14826,13 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateTrafficPolicyCommentResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14369,7 +14843,12 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
                 Ok(result)
             }
-            _ => Err(UpdateTrafficPolicyCommentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateTrafficPolicyCommentError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -14394,7 +14873,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -14402,11 +14881,13 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateTrafficPolicyInstanceResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14417,7 +14898,12 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
                 Ok(result)
             }
-            _ => Err(UpdateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 }

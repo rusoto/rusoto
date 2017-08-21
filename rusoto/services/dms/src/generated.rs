@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2020,6 +2022,11 @@ impl From<HttpDispatchError> for AddTagsToResourceError {
         AddTagsToResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsToResourceError {
+    fn from(err: io::Error) -> AddTagsToResourceError {
+        AddTagsToResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2121,6 +2128,11 @@ impl From<HttpDispatchError> for CreateEndpointError {
         CreateEndpointError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateEndpointError {
+    fn from(err: io::Error) -> CreateEndpointError {
+        CreateEndpointError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2208,6 +2220,11 @@ impl From<CredentialsError> for CreateEventSubscriptionError {
 impl From<HttpDispatchError> for CreateEventSubscriptionError {
     fn from(err: HttpDispatchError) -> CreateEventSubscriptionError {
         CreateEventSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateEventSubscriptionError {
+    fn from(err: io::Error) -> CreateEventSubscriptionError {
+        CreateEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateEventSubscriptionError {
@@ -2317,6 +2334,11 @@ impl From<HttpDispatchError> for CreateReplicationInstanceError {
         CreateReplicationInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateReplicationInstanceError {
+    fn from(err: io::Error) -> CreateReplicationInstanceError {
+        CreateReplicationInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2415,6 +2437,11 @@ impl From<HttpDispatchError> for CreateReplicationSubnetGroupError {
         CreateReplicationSubnetGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateReplicationSubnetGroupError {
+    fn from(err: io::Error) -> CreateReplicationSubnetGroupError {
+        CreateReplicationSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2511,6 +2538,11 @@ impl From<HttpDispatchError> for CreateReplicationTaskError {
         CreateReplicationTaskError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateReplicationTaskError {
+    fn from(err: io::Error) -> CreateReplicationTaskError {
+        CreateReplicationTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2595,6 +2627,11 @@ impl From<HttpDispatchError> for DeleteCertificateError {
         DeleteCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteCertificateError {
+    fn from(err: io::Error) -> DeleteCertificateError {
+        DeleteCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2677,6 +2714,11 @@ impl From<HttpDispatchError> for DeleteEndpointError {
         DeleteEndpointError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteEndpointError {
+    fn from(err: io::Error) -> DeleteEndpointError {
+        DeleteEndpointError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2751,6 +2793,11 @@ impl From<CredentialsError> for DeleteEventSubscriptionError {
 impl From<HttpDispatchError> for DeleteEventSubscriptionError {
     fn from(err: HttpDispatchError) -> DeleteEventSubscriptionError {
         DeleteEventSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteEventSubscriptionError {
+    fn from(err: io::Error) -> DeleteEventSubscriptionError {
+        DeleteEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteEventSubscriptionError {
@@ -2831,6 +2878,11 @@ impl From<HttpDispatchError> for DeleteReplicationInstanceError {
         DeleteReplicationInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteReplicationInstanceError {
+    fn from(err: io::Error) -> DeleteReplicationInstanceError {
+        DeleteReplicationInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2907,6 +2959,11 @@ impl From<CredentialsError> for DeleteReplicationSubnetGroupError {
 impl From<HttpDispatchError> for DeleteReplicationSubnetGroupError {
     fn from(err: HttpDispatchError) -> DeleteReplicationSubnetGroupError {
         DeleteReplicationSubnetGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteReplicationSubnetGroupError {
+    fn from(err: io::Error) -> DeleteReplicationSubnetGroupError {
+        DeleteReplicationSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteReplicationSubnetGroupError {
@@ -2987,6 +3044,11 @@ impl From<HttpDispatchError> for DeleteReplicationTaskError {
         DeleteReplicationTaskError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteReplicationTaskError {
+    fn from(err: io::Error) -> DeleteReplicationTaskError {
+        DeleteReplicationTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3057,6 +3119,11 @@ impl From<CredentialsError> for DescribeAccountAttributesError {
 impl From<HttpDispatchError> for DescribeAccountAttributesError {
     fn from(err: HttpDispatchError) -> DescribeAccountAttributesError {
         DescribeAccountAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountAttributesError {
+    fn from(err: io::Error) -> DescribeAccountAttributesError {
+        DescribeAccountAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountAttributesError {
@@ -3130,6 +3197,11 @@ impl From<CredentialsError> for DescribeCertificatesError {
 impl From<HttpDispatchError> for DescribeCertificatesError {
     fn from(err: HttpDispatchError) -> DescribeCertificatesError {
         DescribeCertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCertificatesError {
+    fn from(err: io::Error) -> DescribeCertificatesError {
+        DescribeCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCertificatesError {
@@ -3208,6 +3280,11 @@ impl From<HttpDispatchError> for DescribeConnectionsError {
         DescribeConnectionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeConnectionsError {
+    fn from(err: io::Error) -> DescribeConnectionsError {
+        DescribeConnectionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3277,6 +3354,11 @@ impl From<CredentialsError> for DescribeEndpointTypesError {
 impl From<HttpDispatchError> for DescribeEndpointTypesError {
     fn from(err: HttpDispatchError) -> DescribeEndpointTypesError {
         DescribeEndpointTypesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEndpointTypesError {
+    fn from(err: io::Error) -> DescribeEndpointTypesError {
+        DescribeEndpointTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEndpointTypesError {
@@ -3354,6 +3436,11 @@ impl From<HttpDispatchError> for DescribeEndpointsError {
         DescribeEndpointsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEndpointsError {
+    fn from(err: io::Error) -> DescribeEndpointsError {
+        DescribeEndpointsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3423,6 +3510,11 @@ impl From<CredentialsError> for DescribeEventCategoriesError {
 impl From<HttpDispatchError> for DescribeEventCategoriesError {
     fn from(err: HttpDispatchError) -> DescribeEventCategoriesError {
         DescribeEventCategoriesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventCategoriesError {
+    fn from(err: io::Error) -> DescribeEventCategoriesError {
+        DescribeEventCategoriesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventCategoriesError {
@@ -3498,6 +3590,11 @@ impl From<HttpDispatchError> for DescribeEventSubscriptionsError {
         DescribeEventSubscriptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEventSubscriptionsError {
+    fn from(err: io::Error) -> DescribeEventSubscriptionsError {
+        DescribeEventSubscriptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3569,6 +3666,11 @@ impl From<HttpDispatchError> for DescribeEventsError {
         DescribeEventsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEventsError {
+    fn from(err: io::Error) -> DescribeEventsError {
+        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3636,6 +3738,11 @@ impl From<CredentialsError> for DescribeOrderableReplicationInstancesError {
 impl From<HttpDispatchError> for DescribeOrderableReplicationInstancesError {
     fn from(err: HttpDispatchError) -> DescribeOrderableReplicationInstancesError {
         DescribeOrderableReplicationInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeOrderableReplicationInstancesError {
+    fn from(err: io::Error) -> DescribeOrderableReplicationInstancesError {
+        DescribeOrderableReplicationInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeOrderableReplicationInstancesError {
@@ -3714,6 +3821,11 @@ impl From<HttpDispatchError> for DescribeRefreshSchemasStatusError {
         DescribeRefreshSchemasStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeRefreshSchemasStatusError {
+    fn from(err: io::Error) -> DescribeRefreshSchemasStatusError {
+        DescribeRefreshSchemasStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeRefreshSchemasStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3787,6 +3899,11 @@ impl From<CredentialsError> for DescribeReplicationInstancesError {
 impl From<HttpDispatchError> for DescribeReplicationInstancesError {
     fn from(err: HttpDispatchError) -> DescribeReplicationInstancesError {
         DescribeReplicationInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeReplicationInstancesError {
+    fn from(err: io::Error) -> DescribeReplicationInstancesError {
+        DescribeReplicationInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReplicationInstancesError {
@@ -3863,6 +3980,11 @@ impl From<HttpDispatchError> for DescribeReplicationSubnetGroupsError {
         DescribeReplicationSubnetGroupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeReplicationSubnetGroupsError {
+    fn from(err: io::Error) -> DescribeReplicationSubnetGroupsError {
+        DescribeReplicationSubnetGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeReplicationSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3935,6 +4057,11 @@ impl From<CredentialsError> for DescribeReplicationTasksError {
 impl From<HttpDispatchError> for DescribeReplicationTasksError {
     fn from(err: HttpDispatchError) -> DescribeReplicationTasksError {
         DescribeReplicationTasksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeReplicationTasksError {
+    fn from(err: io::Error) -> DescribeReplicationTasksError {
+        DescribeReplicationTasksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReplicationTasksError {
@@ -4018,6 +4145,11 @@ impl From<HttpDispatchError> for DescribeSchemasError {
         DescribeSchemasError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeSchemasError {
+    fn from(err: io::Error) -> DescribeSchemasError {
+        DescribeSchemasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeSchemasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4092,6 +4224,11 @@ impl From<CredentialsError> for DescribeTableStatisticsError {
 impl From<HttpDispatchError> for DescribeTableStatisticsError {
     fn from(err: HttpDispatchError) -> DescribeTableStatisticsError {
         DescribeTableStatisticsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTableStatisticsError {
+    fn from(err: io::Error) -> DescribeTableStatisticsError {
+        DescribeTableStatisticsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTableStatisticsError {
@@ -4174,6 +4311,11 @@ impl From<HttpDispatchError> for ImportCertificateError {
         ImportCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ImportCertificateError {
+    fn from(err: io::Error) -> ImportCertificateError {
+        ImportCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ImportCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4249,6 +4391,11 @@ impl From<CredentialsError> for ListTagsForResourceError {
 impl From<HttpDispatchError> for ListTagsForResourceError {
     fn from(err: HttpDispatchError) -> ListTagsForResourceError {
         ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -4347,6 +4494,11 @@ impl From<HttpDispatchError> for ModifyEndpointError {
         ModifyEndpointError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyEndpointError {
+    fn from(err: io::Error) -> ModifyEndpointError {
+        ModifyEndpointError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4430,6 +4582,11 @@ impl From<CredentialsError> for ModifyEventSubscriptionError {
 impl From<HttpDispatchError> for ModifyEventSubscriptionError {
     fn from(err: HttpDispatchError) -> ModifyEventSubscriptionError {
         ModifyEventSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyEventSubscriptionError {
+    fn from(err: io::Error) -> ModifyEventSubscriptionError {
+        ModifyEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyEventSubscriptionError {
@@ -4522,6 +4679,11 @@ impl From<CredentialsError> for ModifyReplicationInstanceError {
 impl From<HttpDispatchError> for ModifyReplicationInstanceError {
     fn from(err: HttpDispatchError) -> ModifyReplicationInstanceError {
         ModifyReplicationInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyReplicationInstanceError {
+    fn from(err: io::Error) -> ModifyReplicationInstanceError {
+        ModifyReplicationInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyReplicationInstanceError {
@@ -4618,6 +4780,11 @@ impl From<HttpDispatchError> for ModifyReplicationSubnetGroupError {
         ModifyReplicationSubnetGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyReplicationSubnetGroupError {
+    fn from(err: io::Error) -> ModifyReplicationSubnetGroupError {
+        ModifyReplicationSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4704,6 +4871,11 @@ impl From<CredentialsError> for ModifyReplicationTaskError {
 impl From<HttpDispatchError> for ModifyReplicationTaskError {
     fn from(err: HttpDispatchError) -> ModifyReplicationTaskError {
         ModifyReplicationTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyReplicationTaskError {
+    fn from(err: io::Error) -> ModifyReplicationTaskError {
+        ModifyReplicationTaskError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyReplicationTaskError {
@@ -4800,6 +4972,11 @@ impl From<HttpDispatchError> for RefreshSchemasError {
         RefreshSchemasError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RefreshSchemasError {
+    fn from(err: io::Error) -> RefreshSchemasError {
+        RefreshSchemasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RefreshSchemasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4882,6 +5059,11 @@ impl From<HttpDispatchError> for ReloadTablesError {
         ReloadTablesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReloadTablesError {
+    fn from(err: io::Error) -> ReloadTablesError {
+        ReloadTablesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReloadTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4953,6 +5135,11 @@ impl From<CredentialsError> for RemoveTagsFromResourceError {
 impl From<HttpDispatchError> for RemoveTagsFromResourceError {
     fn from(err: HttpDispatchError) -> RemoveTagsFromResourceError {
         RemoveTagsFromResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveTagsFromResourceError {
+    fn from(err: io::Error) -> RemoveTagsFromResourceError {
+        RemoveTagsFromResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -5030,6 +5217,11 @@ impl From<CredentialsError> for StartReplicationTaskError {
 impl From<HttpDispatchError> for StartReplicationTaskError {
     fn from(err: HttpDispatchError) -> StartReplicationTaskError {
         StartReplicationTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartReplicationTaskError {
+    fn from(err: io::Error) -> StartReplicationTaskError {
+        StartReplicationTaskError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StartReplicationTaskError {
@@ -5110,6 +5302,11 @@ impl From<CredentialsError> for StopReplicationTaskError {
 impl From<HttpDispatchError> for StopReplicationTaskError {
     fn from(err: HttpDispatchError) -> StopReplicationTaskError {
         StopReplicationTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopReplicationTaskError {
+    fn from(err: io::Error) -> StopReplicationTaskError {
+        StopReplicationTaskError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopReplicationTaskError {
@@ -5202,6 +5399,11 @@ impl From<CredentialsError> for TestConnectionError {
 impl From<HttpDispatchError> for TestConnectionError {
     fn from(err: HttpDispatchError) -> TestConnectionError {
         TestConnectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TestConnectionError {
+    fn from(err: io::Error) -> TestConnectionError {
+        TestConnectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TestConnectionError {
@@ -5524,15 +5726,18 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddTagsToResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5551,15 +5756,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateEndpointResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateEndpointResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5579,13 +5789,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateEventSubscriptionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateEventSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -5605,13 +5822,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateReplicationInstanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateReplicationInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateReplicationInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateReplicationInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5631,13 +5855,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateReplicationSubnetGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateReplicationSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateReplicationSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateReplicationSubnetGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -5656,15 +5887,18 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateReplicationTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateReplicationTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateReplicationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5683,15 +5917,18 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5710,15 +5947,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteEndpointResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteEndpointResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5738,13 +5980,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteEventSubscriptionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteEventSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -5764,13 +6013,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteReplicationInstanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteReplicationInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteReplicationInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteReplicationInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5790,13 +6046,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteReplicationSubnetGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteReplicationSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteReplicationSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteReplicationSubnetGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -5815,15 +6078,18 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteReplicationTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteReplicationTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteReplicationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5842,13 +6108,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAccountAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAccountAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5866,15 +6139,18 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCertificatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeCertificatesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5893,15 +6169,18 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConnectionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeConnectionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeConnectionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConnectionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5921,15 +6200,18 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEndpointTypesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEndpointTypesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeEndpointTypesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEndpointTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5948,15 +6230,18 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEndpointsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEndpointsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeEndpointsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEndpointsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5976,13 +6261,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEventCategoriesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEventCategoriesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6002,13 +6294,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEventSubscriptionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEventSubscriptionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -6026,15 +6325,20 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6052,13 +6356,19 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeOrderableReplicationInstancesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeOrderableReplicationInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeOrderableReplicationInstancesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeOrderableReplicationInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6078,13 +6388,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeRefreshSchemasStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeRefreshSchemasStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeRefreshSchemasStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRefreshSchemasStatusError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -6104,13 +6421,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeReplicationInstancesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeReplicationInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeReplicationInstancesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReplicationInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -6130,13 +6454,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeReplicationSubnetGroupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeReplicationSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeReplicationSubnetGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReplicationSubnetGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -6156,13 +6487,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeReplicationTasksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeReplicationTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeReplicationTasksResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReplicationTasksError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -6180,15 +6518,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSchemasResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeSchemasResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeSchemasError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSchemasError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6208,13 +6551,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTableStatisticsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeTableStatisticsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTableStatisticsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTableStatisticsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6232,15 +6582,18 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ImportCertificateResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ImportCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ImportCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6259,15 +6612,18 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6286,15 +6642,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyEndpointResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ModifyEndpointResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ModifyEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6314,13 +6675,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyEventSubscriptionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ModifyEventSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6340,13 +6708,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyReplicationInstanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ModifyReplicationInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ModifyReplicationInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyReplicationInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -6366,13 +6741,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyReplicationSubnetGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ModifyReplicationSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ModifyReplicationSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyReplicationSubnetGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -6391,15 +6773,18 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyReplicationTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ModifyReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ModifyReplicationTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyReplicationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6418,15 +6803,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RefreshSchemasResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RefreshSchemasResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RefreshSchemasError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RefreshSchemasError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6445,14 +6835,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ReloadTablesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ReloadTablesResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ReloadTablesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReloadTablesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6472,15 +6868,18 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6500,15 +6899,18 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartReplicationTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(StartReplicationTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartReplicationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6527,15 +6929,18 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopReplicationTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(StopReplicationTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopReplicationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6554,15 +6959,20 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TestConnectionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<TestConnectionResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(TestConnectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -7532,6 +7534,11 @@ impl From<HttpDispatchError> for AddTagsToResourceError {
         AddTagsToResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsToResourceError {
+    fn from(err: io::Error) -> AddTagsToResourceError {
+        AddTagsToResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7613,6 +7620,11 @@ impl From<CredentialsError> for AuthorizeCacheSecurityGroupIngressError {
 impl From<HttpDispatchError> for AuthorizeCacheSecurityGroupIngressError {
     fn from(err: HttpDispatchError) -> AuthorizeCacheSecurityGroupIngressError {
         AuthorizeCacheSecurityGroupIngressError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AuthorizeCacheSecurityGroupIngressError {
+    fn from(err: io::Error) -> AuthorizeCacheSecurityGroupIngressError {
+        AuthorizeCacheSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AuthorizeCacheSecurityGroupIngressError {
@@ -7710,6 +7722,11 @@ impl From<CredentialsError> for CopySnapshotError {
 impl From<HttpDispatchError> for CopySnapshotError {
     fn from(err: HttpDispatchError) -> CopySnapshotError {
         CopySnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopySnapshotError {
+    fn from(err: io::Error) -> CopySnapshotError {
+        CopySnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopySnapshotError {
@@ -7822,6 +7839,11 @@ impl From<HttpDispatchError> for CreateCacheClusterError {
         CreateCacheClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateCacheClusterError {
+    fn from(err: io::Error) -> CreateCacheClusterError {
+        CreateCacheClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateCacheClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7915,6 +7937,11 @@ impl From<HttpDispatchError> for CreateCacheParameterGroupError {
         CreateCacheParameterGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateCacheParameterGroupError {
+    fn from(err: io::Error) -> CreateCacheParameterGroupError {
+        CreateCacheParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateCacheParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8002,6 +8029,11 @@ impl From<HttpDispatchError> for CreateCacheSecurityGroupError {
         CreateCacheSecurityGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateCacheSecurityGroupError {
+    fn from(err: io::Error) -> CreateCacheSecurityGroupError {
+        CreateCacheSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateCacheSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8080,6 +8112,11 @@ impl From<CredentialsError> for CreateCacheSubnetGroupError {
 impl From<HttpDispatchError> for CreateCacheSubnetGroupError {
     fn from(err: HttpDispatchError) -> CreateCacheSubnetGroupError {
         CreateCacheSubnetGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateCacheSubnetGroupError {
+    fn from(err: io::Error) -> CreateCacheSubnetGroupError {
+        CreateCacheSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateCacheSubnetGroupError {
@@ -8195,6 +8232,11 @@ impl From<HttpDispatchError> for CreateReplicationGroupError {
         CreateReplicationGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateReplicationGroupError {
+    fn from(err: io::Error) -> CreateReplicationGroupError {
+        CreateReplicationGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateReplicationGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8301,6 +8343,11 @@ impl From<HttpDispatchError> for CreateSnapshotError {
         CreateSnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateSnapshotError {
+    fn from(err: io::Error) -> CreateSnapshotError {
+        CreateSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8393,6 +8440,11 @@ impl From<HttpDispatchError> for DeleteCacheClusterError {
         DeleteCacheClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteCacheClusterError {
+    fn from(err: io::Error) -> DeleteCacheClusterError {
+        DeleteCacheClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteCacheClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8474,6 +8526,11 @@ impl From<CredentialsError> for DeleteCacheParameterGroupError {
 impl From<HttpDispatchError> for DeleteCacheParameterGroupError {
     fn from(err: HttpDispatchError) -> DeleteCacheParameterGroupError {
         DeleteCacheParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteCacheParameterGroupError {
+    fn from(err: io::Error) -> DeleteCacheParameterGroupError {
+        DeleteCacheParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteCacheParameterGroupError {
@@ -8558,6 +8615,11 @@ impl From<HttpDispatchError> for DeleteCacheSecurityGroupError {
         DeleteCacheSecurityGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteCacheSecurityGroupError {
+    fn from(err: io::Error) -> DeleteCacheSecurityGroupError {
+        DeleteCacheSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteCacheSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8630,6 +8692,11 @@ impl From<CredentialsError> for DeleteCacheSubnetGroupError {
 impl From<HttpDispatchError> for DeleteCacheSubnetGroupError {
     fn from(err: HttpDispatchError) -> DeleteCacheSubnetGroupError {
         DeleteCacheSubnetGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteCacheSubnetGroupError {
+    fn from(err: io::Error) -> DeleteCacheSubnetGroupError {
+        DeleteCacheSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteCacheSubnetGroupError {
@@ -8719,6 +8786,11 @@ impl From<HttpDispatchError> for DeleteReplicationGroupError {
         DeleteReplicationGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteReplicationGroupError {
+    fn from(err: io::Error) -> DeleteReplicationGroupError {
+        DeleteReplicationGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteReplicationGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8802,6 +8874,11 @@ impl From<HttpDispatchError> for DeleteSnapshotError {
         DeleteSnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteSnapshotError {
+    fn from(err: io::Error) -> DeleteSnapshotError {
+        DeleteSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8877,6 +8954,11 @@ impl From<HttpDispatchError> for DescribeCacheClustersError {
         DescribeCacheClustersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeCacheClustersError {
+    fn from(err: io::Error) -> DescribeCacheClustersError {
+        DescribeCacheClustersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeCacheClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8942,6 +9024,11 @@ impl From<CredentialsError> for DescribeCacheEngineVersionsError {
 impl From<HttpDispatchError> for DescribeCacheEngineVersionsError {
     fn from(err: HttpDispatchError) -> DescribeCacheEngineVersionsError {
         DescribeCacheEngineVersionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCacheEngineVersionsError {
+    fn from(err: io::Error) -> DescribeCacheEngineVersionsError {
+        DescribeCacheEngineVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCacheEngineVersionsError {
@@ -9015,6 +9102,11 @@ impl From<CredentialsError> for DescribeCacheParameterGroupsError {
 impl From<HttpDispatchError> for DescribeCacheParameterGroupsError {
     fn from(err: HttpDispatchError) -> DescribeCacheParameterGroupsError {
         DescribeCacheParameterGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCacheParameterGroupsError {
+    fn from(err: io::Error) -> DescribeCacheParameterGroupsError {
+        DescribeCacheParameterGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCacheParameterGroupsError {
@@ -9093,6 +9185,11 @@ impl From<HttpDispatchError> for DescribeCacheParametersError {
         DescribeCacheParametersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeCacheParametersError {
+    fn from(err: io::Error) -> DescribeCacheParametersError {
+        DescribeCacheParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeCacheParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9169,6 +9266,11 @@ impl From<HttpDispatchError> for DescribeCacheSecurityGroupsError {
         DescribeCacheSecurityGroupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeCacheSecurityGroupsError {
+    fn from(err: io::Error) -> DescribeCacheSecurityGroupsError {
+        DescribeCacheSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeCacheSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9237,6 +9339,11 @@ impl From<CredentialsError> for DescribeCacheSubnetGroupsError {
 impl From<HttpDispatchError> for DescribeCacheSubnetGroupsError {
     fn from(err: HttpDispatchError) -> DescribeCacheSubnetGroupsError {
         DescribeCacheSubnetGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCacheSubnetGroupsError {
+    fn from(err: io::Error) -> DescribeCacheSubnetGroupsError {
+        DescribeCacheSubnetGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCacheSubnetGroupsError {
@@ -9308,6 +9415,11 @@ impl From<CredentialsError> for DescribeEngineDefaultParametersError {
 impl From<HttpDispatchError> for DescribeEngineDefaultParametersError {
     fn from(err: HttpDispatchError) -> DescribeEngineDefaultParametersError {
         DescribeEngineDefaultParametersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEngineDefaultParametersError {
+    fn from(err: io::Error) -> DescribeEngineDefaultParametersError {
+        DescribeEngineDefaultParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEngineDefaultParametersError {
@@ -9382,6 +9494,11 @@ impl From<HttpDispatchError> for DescribeEventsError {
         DescribeEventsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEventsError {
+    fn from(err: io::Error) -> DescribeEventsError {
+        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9453,6 +9570,11 @@ impl From<CredentialsError> for DescribeReplicationGroupsError {
 impl From<HttpDispatchError> for DescribeReplicationGroupsError {
     fn from(err: HttpDispatchError) -> DescribeReplicationGroupsError {
         DescribeReplicationGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeReplicationGroupsError {
+    fn from(err: io::Error) -> DescribeReplicationGroupsError {
+        DescribeReplicationGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReplicationGroupsError {
@@ -9531,6 +9653,11 @@ impl From<HttpDispatchError> for DescribeReservedCacheNodesError {
         DescribeReservedCacheNodesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeReservedCacheNodesError {
+    fn from(err: io::Error) -> DescribeReservedCacheNodesError {
+        DescribeReservedCacheNodesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeReservedCacheNodesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9605,6 +9732,11 @@ impl From<CredentialsError> for DescribeReservedCacheNodesOfferingsError {
 impl From<HttpDispatchError> for DescribeReservedCacheNodesOfferingsError {
     fn from(err: HttpDispatchError) -> DescribeReservedCacheNodesOfferingsError {
         DescribeReservedCacheNodesOfferingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeReservedCacheNodesOfferingsError {
+    fn from(err: io::Error) -> DescribeReservedCacheNodesOfferingsError {
+        DescribeReservedCacheNodesOfferingsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReservedCacheNodesOfferingsError {
@@ -9688,6 +9820,11 @@ impl From<HttpDispatchError> for DescribeSnapshotsError {
         DescribeSnapshotsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeSnapshotsError {
+    fn from(err: io::Error) -> DescribeSnapshotsError {
+        DescribeSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9768,6 +9905,11 @@ impl From<HttpDispatchError> for ListAllowedNodeTypeModificationsError {
         ListAllowedNodeTypeModificationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListAllowedNodeTypeModificationsError {
+    fn from(err: io::Error) -> ListAllowedNodeTypeModificationsError {
+        ListAllowedNodeTypeModificationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListAllowedNodeTypeModificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9845,6 +9987,11 @@ impl From<CredentialsError> for ListTagsForResourceError {
 impl From<HttpDispatchError> for ListTagsForResourceError {
     fn from(err: HttpDispatchError) -> ListTagsForResourceError {
         ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -9947,6 +10094,11 @@ impl From<HttpDispatchError> for ModifyCacheClusterError {
         ModifyCacheClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyCacheClusterError {
+    fn from(err: io::Error) -> ModifyCacheClusterError {
+        ModifyCacheClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyCacheClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10034,6 +10186,11 @@ impl From<HttpDispatchError> for ModifyCacheParameterGroupError {
         ModifyCacheParameterGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyCacheParameterGroupError {
+    fn from(err: io::Error) -> ModifyCacheParameterGroupError {
+        ModifyCacheParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyCacheParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10116,6 +10273,11 @@ impl From<CredentialsError> for ModifyCacheSubnetGroupError {
 impl From<HttpDispatchError> for ModifyCacheSubnetGroupError {
     fn from(err: HttpDispatchError) -> ModifyCacheSubnetGroupError {
         ModifyCacheSubnetGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyCacheSubnetGroupError {
+    fn from(err: io::Error) -> ModifyCacheSubnetGroupError {
+        ModifyCacheSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyCacheSubnetGroupError {
@@ -10225,6 +10387,11 @@ impl From<HttpDispatchError> for ModifyReplicationGroupError {
         ModifyReplicationGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyReplicationGroupError {
+    fn from(err: io::Error) -> ModifyReplicationGroupError {
+        ModifyReplicationGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyReplicationGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10317,6 +10484,11 @@ impl From<HttpDispatchError> for PurchaseReservedCacheNodesOfferingError {
         PurchaseReservedCacheNodesOfferingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PurchaseReservedCacheNodesOfferingError {
+    fn from(err: io::Error) -> PurchaseReservedCacheNodesOfferingError {
+        PurchaseReservedCacheNodesOfferingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PurchaseReservedCacheNodesOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10392,6 +10564,11 @@ impl From<CredentialsError> for RebootCacheClusterError {
 impl From<HttpDispatchError> for RebootCacheClusterError {
     fn from(err: HttpDispatchError) -> RebootCacheClusterError {
         RebootCacheClusterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RebootCacheClusterError {
+    fn from(err: io::Error) -> RebootCacheClusterError {
+        RebootCacheClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RebootCacheClusterError {
@@ -10472,6 +10649,11 @@ impl From<HttpDispatchError> for RemoveTagsFromResourceError {
         RemoveTagsFromResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveTagsFromResourceError {
+    fn from(err: io::Error) -> RemoveTagsFromResourceError {
+        RemoveTagsFromResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10550,6 +10732,11 @@ impl From<CredentialsError> for ResetCacheParameterGroupError {
 impl From<HttpDispatchError> for ResetCacheParameterGroupError {
     fn from(err: HttpDispatchError) -> ResetCacheParameterGroupError {
         ResetCacheParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResetCacheParameterGroupError {
+    fn from(err: io::Error) -> ResetCacheParameterGroupError {
+        ResetCacheParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetCacheParameterGroupError {
@@ -10633,6 +10820,11 @@ impl From<CredentialsError> for RevokeCacheSecurityGroupIngressError {
 impl From<HttpDispatchError> for RevokeCacheSecurityGroupIngressError {
     fn from(err: HttpDispatchError) -> RevokeCacheSecurityGroupIngressError {
         RevokeCacheSecurityGroupIngressError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RevokeCacheSecurityGroupIngressError {
+    fn from(err: io::Error) -> RevokeCacheSecurityGroupIngressError {
+        RevokeCacheSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RevokeCacheSecurityGroupIngressError {
@@ -10730,6 +10922,11 @@ impl From<CredentialsError> for TestFailoverError {
 impl From<HttpDispatchError> for TestFailoverError {
     fn from(err: HttpDispatchError) -> TestFailoverError {
         TestFailoverError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TestFailoverError {
+    fn from(err: io::Error) -> TestFailoverError {
+        TestFailoverError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TestFailoverError {
@@ -11054,16 +11251,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = TagListMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11078,8 +11277,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11100,16 +11300,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AuthorizeCacheSecurityGroupIngressResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11123,8 +11325,10 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AuthorizeCacheSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AuthorizeCacheSecurityGroupIngressError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11142,16 +11346,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CopySnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11166,7 +11372,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CopySnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopySnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11185,16 +11393,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateCacheClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11209,8 +11419,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateCacheClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCacheClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11230,16 +11441,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateCacheParameterGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11255,8 +11468,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCacheParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -11275,16 +11491,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateCacheSecurityGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11300,8 +11518,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateCacheSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCacheSecurityGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -11320,16 +11541,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateCacheSubnetGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11345,8 +11568,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateCacheSubnetGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCacheSubnetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11366,16 +11590,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateReplicationGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11391,8 +11617,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateReplicationGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateReplicationGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11411,16 +11638,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11435,8 +11664,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11455,16 +11685,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteCacheClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11479,8 +11711,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteCacheClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCacheClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11499,15 +11732,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCacheParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -11525,15 +11761,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteCacheSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCacheSecurityGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -11551,15 +11790,16 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteCacheSubnetGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCacheSubnetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11579,16 +11819,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteReplicationGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11604,8 +11846,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteReplicationGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteReplicationGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11624,16 +11867,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11648,8 +11893,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11668,16 +11914,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CacheClusterMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11692,8 +11940,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeCacheClustersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCacheClustersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11713,16 +11962,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CacheEngineVersionMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11737,8 +11988,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeCacheEngineVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCacheEngineVersionsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -11757,16 +12011,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CacheParameterGroupsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11781,8 +12037,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeCacheParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCacheParameterGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -11801,16 +12060,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CacheParameterGroupDetails::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11825,8 +12086,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeCacheParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCacheParametersError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -11845,16 +12109,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CacheSecurityGroupMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11869,8 +12135,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeCacheSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCacheSecurityGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -11889,16 +12158,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CacheSubnetGroupMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11913,8 +12184,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeCacheSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCacheSubnetGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -11933,16 +12207,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeEngineDefaultParametersResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11956,8 +12232,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEngineDefaultParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEngineDefaultParametersError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -11975,16 +12254,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EventsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11999,8 +12280,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12020,16 +12302,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReplicationGroupMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12044,8 +12328,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeReplicationGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReplicationGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -12064,16 +12351,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReservedCacheNodeMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12088,8 +12377,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeReservedCacheNodesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReservedCacheNodesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -12108,16 +12400,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReservedCacheNodesOfferingMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12131,8 +12425,10 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeReservedCacheNodesOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReservedCacheNodesOfferingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12150,16 +12446,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeSnapshotsListMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12175,8 +12473,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12196,16 +12495,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AllowedNodeTypeModificationsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12219,8 +12520,10 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListAllowedNodeTypeModificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAllowedNodeTypeModificationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12238,16 +12541,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = TagListMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12262,8 +12567,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12282,16 +12588,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyCacheClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12306,8 +12614,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ModifyCacheClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyCacheClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12327,16 +12636,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CacheParameterGroupNameMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12352,8 +12663,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ModifyCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyCacheParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -12372,16 +12686,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyCacheSubnetGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12397,8 +12713,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ModifyCacheSubnetGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyCacheSubnetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12418,16 +12735,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyReplicationGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12443,8 +12762,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ModifyReplicationGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyReplicationGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12465,16 +12785,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PurchaseReservedCacheNodesOfferingResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12488,8 +12810,10 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(PurchaseReservedCacheNodesOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PurchaseReservedCacheNodesOfferingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12507,16 +12831,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RebootCacheClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12531,8 +12857,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RebootCacheClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RebootCacheClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12551,16 +12878,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = TagListMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12575,8 +12904,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12596,16 +12926,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CacheParameterGroupNameMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12621,8 +12953,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ResetCacheParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetCacheParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -12641,16 +12976,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RevokeCacheSecurityGroupIngressResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12664,8 +13001,11 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(RevokeCacheSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RevokeCacheSecurityGroupIngressError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -12683,16 +13023,18 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = TestFailoverResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12707,7 +13049,9 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(TestFailoverError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestFailoverError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

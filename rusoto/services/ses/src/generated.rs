@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -6571,6 +6573,11 @@ impl From<HttpDispatchError> for CloneReceiptRuleSetError {
         CloneReceiptRuleSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CloneReceiptRuleSetError {
+    fn from(err: io::Error) -> CloneReceiptRuleSetError {
+        CloneReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CloneReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6645,6 +6652,11 @@ impl From<CredentialsError> for CreateConfigurationSetError {
 impl From<HttpDispatchError> for CreateConfigurationSetError {
     fn from(err: HttpDispatchError) -> CreateConfigurationSetError {
         CreateConfigurationSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateConfigurationSetError {
+    fn from(err: io::Error) -> CreateConfigurationSetError {
+        CreateConfigurationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateConfigurationSetError {
@@ -6729,6 +6741,11 @@ impl From<HttpDispatchError> for CreateConfigurationSetEventDestinationError {
         CreateConfigurationSetEventDestinationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateConfigurationSetEventDestinationError {
+    fn from(err: io::Error) -> CreateConfigurationSetEventDestinationError {
+        CreateConfigurationSetEventDestinationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateConfigurationSetEventDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6808,6 +6825,11 @@ impl From<CredentialsError> for CreateReceiptFilterError {
 impl From<HttpDispatchError> for CreateReceiptFilterError {
     fn from(err: HttpDispatchError) -> CreateReceiptFilterError {
         CreateReceiptFilterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateReceiptFilterError {
+    fn from(err: io::Error) -> CreateReceiptFilterError {
+        CreateReceiptFilterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateReceiptFilterError {
@@ -6905,6 +6927,11 @@ impl From<HttpDispatchError> for CreateReceiptRuleError {
         CreateReceiptRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateReceiptRuleError {
+    fn from(err: io::Error) -> CreateReceiptRuleError {
+        CreateReceiptRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6986,6 +7013,11 @@ impl From<HttpDispatchError> for CreateReceiptRuleSetError {
         CreateReceiptRuleSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateReceiptRuleSetError {
+    fn from(err: io::Error) -> CreateReceiptRuleSetError {
+        CreateReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7053,6 +7085,11 @@ impl From<CredentialsError> for DeleteConfigurationSetError {
 impl From<HttpDispatchError> for DeleteConfigurationSetError {
     fn from(err: HttpDispatchError) -> DeleteConfigurationSetError {
         DeleteConfigurationSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteConfigurationSetError {
+    fn from(err: io::Error) -> DeleteConfigurationSetError {
+        DeleteConfigurationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteConfigurationSetError {
@@ -7126,6 +7163,11 @@ impl From<HttpDispatchError> for DeleteConfigurationSetEventDestinationError {
         DeleteConfigurationSetEventDestinationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteConfigurationSetEventDestinationError {
+    fn from(err: io::Error) -> DeleteConfigurationSetEventDestinationError {
+        DeleteConfigurationSetEventDestinationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteConfigurationSetEventDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7192,6 +7234,11 @@ impl From<HttpDispatchError> for DeleteIdentityError {
         DeleteIdentityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteIdentityError {
+    fn from(err: io::Error) -> DeleteIdentityError {
+        DeleteIdentityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7252,6 +7299,11 @@ impl From<CredentialsError> for DeleteIdentityPolicyError {
 impl From<HttpDispatchError> for DeleteIdentityPolicyError {
     fn from(err: HttpDispatchError) -> DeleteIdentityPolicyError {
         DeleteIdentityPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteIdentityPolicyError {
+    fn from(err: io::Error) -> DeleteIdentityPolicyError {
+        DeleteIdentityPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteIdentityPolicyError {
@@ -7316,6 +7368,11 @@ impl From<CredentialsError> for DeleteReceiptFilterError {
 impl From<HttpDispatchError> for DeleteReceiptFilterError {
     fn from(err: HttpDispatchError) -> DeleteReceiptFilterError {
         DeleteReceiptFilterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteReceiptFilterError {
+    fn from(err: io::Error) -> DeleteReceiptFilterError {
+        DeleteReceiptFilterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteReceiptFilterError {
@@ -7383,6 +7440,11 @@ impl From<CredentialsError> for DeleteReceiptRuleError {
 impl From<HttpDispatchError> for DeleteReceiptRuleError {
     fn from(err: HttpDispatchError) -> DeleteReceiptRuleError {
         DeleteReceiptRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteReceiptRuleError {
+    fn from(err: io::Error) -> DeleteReceiptRuleError {
+        DeleteReceiptRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteReceiptRuleError {
@@ -7455,6 +7517,11 @@ impl From<HttpDispatchError> for DeleteReceiptRuleSetError {
         DeleteReceiptRuleSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteReceiptRuleSetError {
+    fn from(err: io::Error) -> DeleteReceiptRuleSetError {
+        DeleteReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7520,6 +7587,11 @@ impl From<HttpDispatchError> for DeleteVerifiedEmailAddressError {
         DeleteVerifiedEmailAddressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteVerifiedEmailAddressError {
+    fn from(err: io::Error) -> DeleteVerifiedEmailAddressError {
+        DeleteVerifiedEmailAddressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteVerifiedEmailAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7582,6 +7654,11 @@ impl From<CredentialsError> for DescribeActiveReceiptRuleSetError {
 impl From<HttpDispatchError> for DescribeActiveReceiptRuleSetError {
     fn from(err: HttpDispatchError) -> DescribeActiveReceiptRuleSetError {
         DescribeActiveReceiptRuleSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeActiveReceiptRuleSetError {
+    fn from(err: io::Error) -> DescribeActiveReceiptRuleSetError {
+        DescribeActiveReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeActiveReceiptRuleSetError {
@@ -7649,6 +7726,11 @@ impl From<CredentialsError> for DescribeConfigurationSetError {
 impl From<HttpDispatchError> for DescribeConfigurationSetError {
     fn from(err: HttpDispatchError) -> DescribeConfigurationSetError {
         DescribeConfigurationSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeConfigurationSetError {
+    fn from(err: io::Error) -> DescribeConfigurationSetError {
+        DescribeConfigurationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeConfigurationSetError {
@@ -7722,6 +7804,11 @@ impl From<HttpDispatchError> for DescribeReceiptRuleError {
         DescribeReceiptRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeReceiptRuleError {
+    fn from(err: io::Error) -> DescribeReceiptRuleError {
+        DescribeReceiptRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7791,6 +7878,11 @@ impl From<HttpDispatchError> for DescribeReceiptRuleSetError {
         DescribeReceiptRuleSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeReceiptRuleSetError {
+    fn from(err: io::Error) -> DescribeReceiptRuleSetError {
+        DescribeReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7854,6 +7946,11 @@ impl From<CredentialsError> for GetIdentityDkimAttributesError {
 impl From<HttpDispatchError> for GetIdentityDkimAttributesError {
     fn from(err: HttpDispatchError) -> GetIdentityDkimAttributesError {
         GetIdentityDkimAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetIdentityDkimAttributesError {
+    fn from(err: io::Error) -> GetIdentityDkimAttributesError {
+        GetIdentityDkimAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIdentityDkimAttributesError {
@@ -7920,6 +8017,11 @@ impl From<HttpDispatchError> for GetIdentityMailFromDomainAttributesError {
         GetIdentityMailFromDomainAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetIdentityMailFromDomainAttributesError {
+    fn from(err: io::Error) -> GetIdentityMailFromDomainAttributesError {
+        GetIdentityMailFromDomainAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetIdentityMailFromDomainAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7982,6 +8084,11 @@ impl From<CredentialsError> for GetIdentityNotificationAttributesError {
 impl From<HttpDispatchError> for GetIdentityNotificationAttributesError {
     fn from(err: HttpDispatchError) -> GetIdentityNotificationAttributesError {
         GetIdentityNotificationAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetIdentityNotificationAttributesError {
+    fn from(err: io::Error) -> GetIdentityNotificationAttributesError {
+        GetIdentityNotificationAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIdentityNotificationAttributesError {
@@ -8048,6 +8155,11 @@ impl From<HttpDispatchError> for GetIdentityPoliciesError {
         GetIdentityPoliciesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetIdentityPoliciesError {
+    fn from(err: io::Error) -> GetIdentityPoliciesError {
+        GetIdentityPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetIdentityPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8110,6 +8222,11 @@ impl From<CredentialsError> for GetIdentityVerificationAttributesError {
 impl From<HttpDispatchError> for GetIdentityVerificationAttributesError {
     fn from(err: HttpDispatchError) -> GetIdentityVerificationAttributesError {
         GetIdentityVerificationAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetIdentityVerificationAttributesError {
+    fn from(err: io::Error) -> GetIdentityVerificationAttributesError {
+        GetIdentityVerificationAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIdentityVerificationAttributesError {
@@ -8176,6 +8293,11 @@ impl From<HttpDispatchError> for GetSendQuotaError {
         GetSendQuotaError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetSendQuotaError {
+    fn from(err: io::Error) -> GetSendQuotaError {
+        GetSendQuotaError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetSendQuotaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8236,6 +8358,11 @@ impl From<CredentialsError> for GetSendStatisticsError {
 impl From<HttpDispatchError> for GetSendStatisticsError {
     fn from(err: HttpDispatchError) -> GetSendStatisticsError {
         GetSendStatisticsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSendStatisticsError {
+    fn from(err: io::Error) -> GetSendStatisticsError {
+        GetSendStatisticsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSendStatisticsError {
@@ -8302,6 +8429,11 @@ impl From<HttpDispatchError> for ListConfigurationSetsError {
         ListConfigurationSetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListConfigurationSetsError {
+    fn from(err: io::Error) -> ListConfigurationSetsError {
+        ListConfigurationSetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListConfigurationSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8366,6 +8498,11 @@ impl From<HttpDispatchError> for ListIdentitiesError {
         ListIdentitiesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListIdentitiesError {
+    fn from(err: io::Error) -> ListIdentitiesError {
+        ListIdentitiesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8426,6 +8563,11 @@ impl From<CredentialsError> for ListIdentityPoliciesError {
 impl From<HttpDispatchError> for ListIdentityPoliciesError {
     fn from(err: HttpDispatchError) -> ListIdentityPoliciesError {
         ListIdentityPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListIdentityPoliciesError {
+    fn from(err: io::Error) -> ListIdentityPoliciesError {
+        ListIdentityPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListIdentityPoliciesError {
@@ -8492,6 +8634,11 @@ impl From<HttpDispatchError> for ListReceiptFiltersError {
         ListReceiptFiltersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListReceiptFiltersError {
+    fn from(err: io::Error) -> ListReceiptFiltersError {
+        ListReceiptFiltersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListReceiptFiltersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8556,6 +8703,11 @@ impl From<HttpDispatchError> for ListReceiptRuleSetsError {
         ListReceiptRuleSetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListReceiptRuleSetsError {
+    fn from(err: io::Error) -> ListReceiptRuleSetsError {
+        ListReceiptRuleSetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListReceiptRuleSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8618,6 +8770,11 @@ impl From<CredentialsError> for ListVerifiedEmailAddressesError {
 impl From<HttpDispatchError> for ListVerifiedEmailAddressesError {
     fn from(err: HttpDispatchError) -> ListVerifiedEmailAddressesError {
         ListVerifiedEmailAddressesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListVerifiedEmailAddressesError {
+    fn from(err: io::Error) -> ListVerifiedEmailAddressesError {
+        ListVerifiedEmailAddressesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListVerifiedEmailAddressesError {
@@ -8687,6 +8844,11 @@ impl From<CredentialsError> for PutIdentityPolicyError {
 impl From<HttpDispatchError> for PutIdentityPolicyError {
     fn from(err: HttpDispatchError) -> PutIdentityPolicyError {
         PutIdentityPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutIdentityPolicyError {
+    fn from(err: io::Error) -> PutIdentityPolicyError {
+        PutIdentityPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutIdentityPolicyError {
@@ -8760,6 +8922,11 @@ impl From<HttpDispatchError> for ReorderReceiptRuleSetError {
         ReorderReceiptRuleSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReorderReceiptRuleSetError {
+    fn from(err: io::Error) -> ReorderReceiptRuleSetError {
+        ReorderReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReorderReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8829,6 +8996,11 @@ impl From<CredentialsError> for SendBounceError {
 impl From<HttpDispatchError> for SendBounceError {
     fn from(err: HttpDispatchError) -> SendBounceError {
         SendBounceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendBounceError {
+    fn from(err: io::Error) -> SendBounceError {
+        SendBounceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendBounceError {
@@ -8903,6 +9075,11 @@ impl From<CredentialsError> for SendEmailError {
 impl From<HttpDispatchError> for SendEmailError {
     fn from(err: HttpDispatchError) -> SendEmailError {
         SendEmailError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendEmailError {
+    fn from(err: io::Error) -> SendEmailError {
+        SendEmailError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendEmailError {
@@ -8981,6 +9158,11 @@ impl From<HttpDispatchError> for SendRawEmailError {
         SendRawEmailError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SendRawEmailError {
+    fn from(err: io::Error) -> SendRawEmailError {
+        SendRawEmailError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SendRawEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9049,6 +9231,11 @@ impl From<HttpDispatchError> for SetActiveReceiptRuleSetError {
         SetActiveReceiptRuleSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetActiveReceiptRuleSetError {
+    fn from(err: io::Error) -> SetActiveReceiptRuleSetError {
+        SetActiveReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetActiveReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9112,6 +9299,11 @@ impl From<CredentialsError> for SetIdentityDkimEnabledError {
 impl From<HttpDispatchError> for SetIdentityDkimEnabledError {
     fn from(err: HttpDispatchError) -> SetIdentityDkimEnabledError {
         SetIdentityDkimEnabledError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetIdentityDkimEnabledError {
+    fn from(err: io::Error) -> SetIdentityDkimEnabledError {
+        SetIdentityDkimEnabledError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetIdentityDkimEnabledError {
@@ -9178,6 +9370,11 @@ impl From<HttpDispatchError> for SetIdentityFeedbackForwardingEnabledError {
         SetIdentityFeedbackForwardingEnabledError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetIdentityFeedbackForwardingEnabledError {
+    fn from(err: io::Error) -> SetIdentityFeedbackForwardingEnabledError {
+        SetIdentityFeedbackForwardingEnabledError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetIdentityFeedbackForwardingEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9240,6 +9437,11 @@ impl From<CredentialsError> for SetIdentityHeadersInNotificationsEnabledError {
 impl From<HttpDispatchError> for SetIdentityHeadersInNotificationsEnabledError {
     fn from(err: HttpDispatchError) -> SetIdentityHeadersInNotificationsEnabledError {
         SetIdentityHeadersInNotificationsEnabledError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetIdentityHeadersInNotificationsEnabledError {
+    fn from(err: io::Error) -> SetIdentityHeadersInNotificationsEnabledError {
+        SetIdentityHeadersInNotificationsEnabledError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetIdentityHeadersInNotificationsEnabledError {
@@ -9308,6 +9510,11 @@ impl From<HttpDispatchError> for SetIdentityMailFromDomainError {
         SetIdentityMailFromDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetIdentityMailFromDomainError {
+    fn from(err: io::Error) -> SetIdentityMailFromDomainError {
+        SetIdentityMailFromDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetIdentityMailFromDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9370,6 +9577,11 @@ impl From<CredentialsError> for SetIdentityNotificationTopicError {
 impl From<HttpDispatchError> for SetIdentityNotificationTopicError {
     fn from(err: HttpDispatchError) -> SetIdentityNotificationTopicError {
         SetIdentityNotificationTopicError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetIdentityNotificationTopicError {
+    fn from(err: io::Error) -> SetIdentityNotificationTopicError {
+        SetIdentityNotificationTopicError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetIdentityNotificationTopicError {
@@ -9440,6 +9652,11 @@ impl From<CredentialsError> for SetReceiptRulePositionError {
 impl From<HttpDispatchError> for SetReceiptRulePositionError {
     fn from(err: HttpDispatchError) -> SetReceiptRulePositionError {
         SetReceiptRulePositionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetReceiptRulePositionError {
+    fn from(err: io::Error) -> SetReceiptRulePositionError {
+        SetReceiptRulePositionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetReceiptRulePositionError {
@@ -9518,6 +9735,11 @@ impl From<CredentialsError> for UpdateConfigurationSetEventDestinationError {
 impl From<HttpDispatchError> for UpdateConfigurationSetEventDestinationError {
     fn from(err: HttpDispatchError) -> UpdateConfigurationSetEventDestinationError {
         UpdateConfigurationSetEventDestinationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateConfigurationSetEventDestinationError {
+    fn from(err: io::Error) -> UpdateConfigurationSetEventDestinationError {
+        UpdateConfigurationSetEventDestinationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateConfigurationSetEventDestinationError {
@@ -9614,6 +9836,11 @@ impl From<HttpDispatchError> for UpdateReceiptRuleError {
         UpdateReceiptRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateReceiptRuleError {
+    fn from(err: io::Error) -> UpdateReceiptRuleError {
+        UpdateReceiptRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9684,6 +9911,11 @@ impl From<HttpDispatchError> for VerifyDomainDkimError {
         VerifyDomainDkimError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for VerifyDomainDkimError {
+    fn from(err: io::Error) -> VerifyDomainDkimError {
+        VerifyDomainDkimError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for VerifyDomainDkimError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9744,6 +9976,11 @@ impl From<CredentialsError> for VerifyDomainIdentityError {
 impl From<HttpDispatchError> for VerifyDomainIdentityError {
     fn from(err: HttpDispatchError) -> VerifyDomainIdentityError {
         VerifyDomainIdentityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for VerifyDomainIdentityError {
+    fn from(err: io::Error) -> VerifyDomainIdentityError {
+        VerifyDomainIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for VerifyDomainIdentityError {
@@ -9810,6 +10047,11 @@ impl From<HttpDispatchError> for VerifyEmailAddressError {
         VerifyEmailAddressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for VerifyEmailAddressError {
+    fn from(err: io::Error) -> VerifyEmailAddressError {
+        VerifyEmailAddressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for VerifyEmailAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9872,6 +10114,11 @@ impl From<CredentialsError> for VerifyEmailIdentityError {
 impl From<HttpDispatchError> for VerifyEmailIdentityError {
     fn from(err: HttpDispatchError) -> VerifyEmailIdentityError {
         VerifyEmailIdentityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for VerifyEmailIdentityError {
+    fn from(err: io::Error) -> VerifyEmailIdentityError {
+        VerifyEmailIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for VerifyEmailIdentityError {
@@ -10234,16 +10481,18 @@ impl<P, D> Ses for SesClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CloneReceiptRuleSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10258,8 +10507,9 @@ impl<P, D> Ses for SesClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CloneReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CloneReceiptRuleSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10279,16 +10529,18 @@ impl<P, D> Ses for SesClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateConfigurationSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10304,8 +10556,9 @@ impl<P, D> Ses for SesClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateConfigurationSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateConfigurationSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10322,16 +10575,18 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateConfigurationSetEventDestinationResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10345,8 +10600,10 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(CreateConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -10364,16 +10621,18 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateReceiptFilterResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10388,8 +10647,9 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
                 Ok(result)
             }
             _ => {
-                Err(CreateReceiptFilterError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateReceiptFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10408,16 +10668,18 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateReceiptRuleResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10432,8 +10694,9 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
                 Ok(result)
             }
             _ => {
-                Err(CreateReceiptRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateReceiptRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10453,16 +10716,18 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateReceiptRuleSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10478,8 +10743,9 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
                 Ok(result)
             }
             _ => {
-                Err(CreateReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateReceiptRuleSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10499,16 +10765,18 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteConfigurationSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10524,8 +10792,9 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
                 Ok(result)
             }
             _ => {
-                Err(DeleteConfigurationSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteConfigurationSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10542,16 +10811,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteConfigurationSetEventDestinationResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10565,8 +10836,10 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(DeleteConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -10584,16 +10857,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteIdentityResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10608,8 +10883,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(DeleteIdentityError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10629,16 +10905,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteIdentityPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10654,8 +10932,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(DeleteIdentityPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteIdentityPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10674,16 +10953,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteReceiptFilterResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10698,8 +10979,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(DeleteReceiptFilterError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteReceiptFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10718,16 +11000,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteReceiptRuleResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10742,8 +11026,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(DeleteReceiptRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteReceiptRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10763,16 +11048,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteReceiptRuleSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10788,8 +11075,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(DeleteReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteReceiptRuleSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10808,15 +11096,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteVerifiedEmailAddressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVerifiedEmailAddressError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -10835,16 +11126,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeActiveReceiptRuleSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10858,8 +11151,11 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(DescribeActiveReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeActiveReceiptRuleSetError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -10878,16 +11174,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeConfigurationSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10903,8 +11201,11 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(DescribeConfigurationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConfigurationSetError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -10922,16 +11223,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeReceiptRuleResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10946,8 +11249,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(DescribeReceiptRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReceiptRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -10967,16 +11271,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeReceiptRuleSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10992,8 +11298,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(DescribeReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReceiptRuleSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11013,16 +11320,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetIdentityDkimAttributesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11036,8 +11345,11 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(GetIdentityDkimAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIdentityDkimAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -11057,16 +11369,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetIdentityMailFromDomainAttributesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11080,8 +11394,10 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(GetIdentityMailFromDomainAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIdentityMailFromDomainAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11101,16 +11417,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetIdentityNotificationAttributesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11124,8 +11442,10 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(GetIdentityNotificationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIdentityNotificationAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11143,16 +11463,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetIdentityPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11167,8 +11489,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(GetIdentityPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIdentityPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11189,16 +11512,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetIdentityVerificationAttributesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11212,8 +11537,10 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(GetIdentityVerificationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIdentityVerificationAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11229,16 +11556,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetSendQuotaResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11253,7 +11582,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(GetSendQuotaError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSendQuotaError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11270,16 +11601,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetSendStatisticsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11294,8 +11627,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(GetSendStatisticsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSendStatisticsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11315,16 +11649,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListConfigurationSetsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11340,8 +11676,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(ListConfigurationSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListConfigurationSetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11360,16 +11697,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListIdentitiesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11384,8 +11723,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(ListIdentitiesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListIdentitiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11405,16 +11745,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListIdentityPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11430,8 +11772,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(ListIdentityPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListIdentityPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11450,16 +11793,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListReceiptFiltersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11474,8 +11819,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(ListReceiptFiltersError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListReceiptFiltersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11494,16 +11840,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListReceiptRuleSetsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11518,8 +11866,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(ListReceiptRuleSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListReceiptRuleSetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11538,16 +11887,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListVerifiedEmailAddressesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11561,8 +11912,11 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(ListVerifiedEmailAddressesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListVerifiedEmailAddressesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -11580,16 +11934,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PutIdentityPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11604,8 +11960,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(PutIdentityPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutIdentityPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11625,16 +11982,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReorderReceiptRuleSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11650,8 +12009,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(ReorderReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReorderReceiptRuleSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11670,16 +12030,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SendBounceResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11693,7 +12055,11 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 }
                 Ok(result)
             }
-            _ => Err(SendBounceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendBounceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11709,16 +12075,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SendEmailResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11732,7 +12100,11 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 }
                 Ok(result)
             }
-            _ => Err(SendEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendEmailError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11750,16 +12122,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SendRawEmailResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11774,7 +12148,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(SendRawEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendRawEmailError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11794,16 +12170,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetActiveReceiptRuleSetResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11819,8 +12197,11 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(SetActiveReceiptRuleSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetActiveReceiptRuleSetError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -11839,16 +12220,18 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetIdentityDkimEnabledResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11864,8 +12247,9 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
                 Ok(result)
             }
             _ => {
-                Err(SetIdentityDkimEnabledError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetIdentityDkimEnabledError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -11882,16 +12266,18 @@ fn set_identity_feedback_forwarding_enabled(&self, input: &SetIdentityFeedbackFo
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetIdentityFeedbackForwardingEnabledResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11905,8 +12291,10 @@ fn set_identity_feedback_forwarding_enabled(&self, input: &SetIdentityFeedbackFo
                 Ok(result)
             }
             _ => {
-                            Err(SetIdentityFeedbackForwardingEnabledError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetIdentityFeedbackForwardingEnabledError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11924,16 +12312,18 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetIdentityHeadersInNotificationsEnabledResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11947,8 +12337,10 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
                 Ok(result)
             }
             _ => {
-                            Err(SetIdentityHeadersInNotificationsEnabledError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetIdentityHeadersInNotificationsEnabledError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -11967,16 +12359,18 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetIdentityMailFromDomainResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11990,8 +12384,11 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
                 Ok(result)
             }
             _ => {
-                            Err(SetIdentityMailFromDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetIdentityMailFromDomainError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -12010,16 +12407,18 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetIdentityNotificationTopicResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12033,8 +12432,11 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
                 Ok(result)
             }
             _ => {
-                            Err(SetIdentityNotificationTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetIdentityNotificationTopicError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -12053,16 +12455,18 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetReceiptRulePositionResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12078,8 +12482,9 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
                 Ok(result)
             }
             _ => {
-                Err(SetReceiptRulePositionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetReceiptRulePositionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12096,16 +12501,18 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateConfigurationSetEventDestinationResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12119,8 +12526,10 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
                 Ok(result)
             }
             _ => {
-                            Err(UpdateConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateConfigurationSetEventDestinationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -12138,16 +12547,18 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateReceiptRuleResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12162,8 +12573,9 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
                 Ok(result)
             }
             _ => {
-                Err(UpdateReceiptRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateReceiptRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12182,16 +12594,18 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = VerifyDomainDkimResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12206,8 +12620,9 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
                 Ok(result)
             }
             _ => {
-                Err(VerifyDomainDkimError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(VerifyDomainDkimError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12227,16 +12642,18 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = VerifyDomainIdentityResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12252,8 +12669,9 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
                 Ok(result)
             }
             _ => {
-                Err(VerifyDomainIdentityError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(VerifyDomainIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12272,15 +12690,16 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(VerifyEmailAddressError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(VerifyEmailAddressError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -12299,16 +12718,18 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = VerifyEmailIdentityResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12323,8 +12744,9 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
                 Ok(result)
             }
             _ => {
-                Err(VerifyEmailIdentityError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(VerifyEmailIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

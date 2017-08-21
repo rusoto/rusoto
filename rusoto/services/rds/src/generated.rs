@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -15909,6 +15911,11 @@ impl From<HttpDispatchError> for AddRoleToDBClusterError {
         AddRoleToDBClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddRoleToDBClusterError {
+    fn from(err: io::Error) -> AddRoleToDBClusterError {
+        AddRoleToDBClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddRoleToDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15981,6 +15988,11 @@ impl From<CredentialsError> for AddSourceIdentifierToSubscriptionError {
 impl From<HttpDispatchError> for AddSourceIdentifierToSubscriptionError {
     fn from(err: HttpDispatchError) -> AddSourceIdentifierToSubscriptionError {
         AddSourceIdentifierToSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddSourceIdentifierToSubscriptionError {
+    fn from(err: io::Error) -> AddSourceIdentifierToSubscriptionError {
+        AddSourceIdentifierToSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddSourceIdentifierToSubscriptionError {
@@ -16058,6 +16070,11 @@ impl From<HttpDispatchError> for AddTagsToResourceError {
         AddTagsToResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsToResourceError {
+    fn from(err: io::Error) -> AddTagsToResourceError {
+        AddTagsToResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16126,6 +16143,11 @@ impl From<CredentialsError> for ApplyPendingMaintenanceActionError {
 impl From<HttpDispatchError> for ApplyPendingMaintenanceActionError {
     fn from(err: HttpDispatchError) -> ApplyPendingMaintenanceActionError {
         ApplyPendingMaintenanceActionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ApplyPendingMaintenanceActionError {
+    fn from(err: io::Error) -> ApplyPendingMaintenanceActionError {
+        ApplyPendingMaintenanceActionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ApplyPendingMaintenanceActionError {
@@ -16203,6 +16225,11 @@ impl From<CredentialsError> for AuthorizeDBSecurityGroupIngressError {
 impl From<HttpDispatchError> for AuthorizeDBSecurityGroupIngressError {
     fn from(err: HttpDispatchError) -> AuthorizeDBSecurityGroupIngressError {
         AuthorizeDBSecurityGroupIngressError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AuthorizeDBSecurityGroupIngressError {
+    fn from(err: io::Error) -> AuthorizeDBSecurityGroupIngressError {
+        AuthorizeDBSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AuthorizeDBSecurityGroupIngressError {
@@ -16286,6 +16313,11 @@ impl From<CredentialsError> for CopyDBClusterParameterGroupError {
 impl From<HttpDispatchError> for CopyDBClusterParameterGroupError {
     fn from(err: HttpDispatchError) -> CopyDBClusterParameterGroupError {
         CopyDBClusterParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopyDBClusterParameterGroupError {
+    fn from(err: io::Error) -> CopyDBClusterParameterGroupError {
+        CopyDBClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyDBClusterParameterGroupError {
@@ -16377,6 +16409,11 @@ impl From<HttpDispatchError> for CopyDBClusterSnapshotError {
         CopyDBClusterSnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CopyDBClusterSnapshotError {
+    fn from(err: io::Error) -> CopyDBClusterSnapshotError {
+        CopyDBClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CopyDBClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16454,6 +16491,11 @@ impl From<CredentialsError> for CopyDBParameterGroupError {
 impl From<HttpDispatchError> for CopyDBParameterGroupError {
     fn from(err: HttpDispatchError) -> CopyDBParameterGroupError {
         CopyDBParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopyDBParameterGroupError {
+    fn from(err: io::Error) -> CopyDBParameterGroupError {
+        CopyDBParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyDBParameterGroupError {
@@ -16538,6 +16580,11 @@ impl From<HttpDispatchError> for CopyDBSnapshotError {
         CopyDBSnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CopyDBSnapshotError {
+    fn from(err: io::Error) -> CopyDBSnapshotError {
+        CopyDBSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CopyDBSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16612,6 +16659,11 @@ impl From<CredentialsError> for CopyOptionGroupError {
 impl From<HttpDispatchError> for CopyOptionGroupError {
     fn from(err: HttpDispatchError) -> CopyOptionGroupError {
         CopyOptionGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopyOptionGroupError {
+    fn from(err: io::Error) -> CopyOptionGroupError {
+        CopyOptionGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyOptionGroupError {
@@ -16726,6 +16778,11 @@ impl From<HttpDispatchError> for CreateDBClusterError {
         CreateDBClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDBClusterError {
+    fn from(err: io::Error) -> CreateDBClusterError {
+        CreateDBClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16807,6 +16864,11 @@ impl From<CredentialsError> for CreateDBClusterParameterGroupError {
 impl From<HttpDispatchError> for CreateDBClusterParameterGroupError {
     fn from(err: HttpDispatchError) -> CreateDBClusterParameterGroupError {
         CreateDBClusterParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDBClusterParameterGroupError {
+    fn from(err: io::Error) -> CreateDBClusterParameterGroupError {
+        CreateDBClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBClusterParameterGroupError {
@@ -16892,6 +16954,11 @@ impl From<CredentialsError> for CreateDBClusterSnapshotError {
 impl From<HttpDispatchError> for CreateDBClusterSnapshotError {
     fn from(err: HttpDispatchError) -> CreateDBClusterSnapshotError {
         CreateDBClusterSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDBClusterSnapshotError {
+    fn from(err: io::Error) -> CreateDBClusterSnapshotError {
+        CreateDBClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBClusterSnapshotError {
@@ -17017,6 +17084,11 @@ impl From<CredentialsError> for CreateDBInstanceError {
 impl From<HttpDispatchError> for CreateDBInstanceError {
     fn from(err: HttpDispatchError) -> CreateDBInstanceError {
         CreateDBInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDBInstanceError {
+    fn from(err: io::Error) -> CreateDBInstanceError {
+        CreateDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBInstanceError {
@@ -17153,6 +17225,11 @@ impl From<HttpDispatchError> for CreateDBInstanceReadReplicaError {
         CreateDBInstanceReadReplicaError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDBInstanceReadReplicaError {
+    fn from(err: io::Error) -> CreateDBInstanceReadReplicaError {
+        CreateDBInstanceReadReplicaError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDBInstanceReadReplicaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17247,6 +17324,11 @@ impl From<HttpDispatchError> for CreateDBParameterGroupError {
         CreateDBParameterGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDBParameterGroupError {
+    fn from(err: io::Error) -> CreateDBParameterGroupError {
+        CreateDBParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDBParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17320,6 +17402,11 @@ impl From<CredentialsError> for CreateDBSecurityGroupError {
 impl From<HttpDispatchError> for CreateDBSecurityGroupError {
     fn from(err: HttpDispatchError) -> CreateDBSecurityGroupError {
         CreateDBSecurityGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDBSecurityGroupError {
+    fn from(err: io::Error) -> CreateDBSecurityGroupError {
+        CreateDBSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBSecurityGroupError {
@@ -17399,6 +17486,11 @@ impl From<CredentialsError> for CreateDBSnapshotError {
 impl From<HttpDispatchError> for CreateDBSnapshotError {
     fn from(err: HttpDispatchError) -> CreateDBSnapshotError {
         CreateDBSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDBSnapshotError {
+    fn from(err: io::Error) -> CreateDBSnapshotError {
+        CreateDBSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBSnapshotError {
@@ -17482,6 +17574,11 @@ impl From<CredentialsError> for CreateDBSubnetGroupError {
 impl From<HttpDispatchError> for CreateDBSubnetGroupError {
     fn from(err: HttpDispatchError) -> CreateDBSubnetGroupError {
         CreateDBSubnetGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDBSubnetGroupError {
+    fn from(err: io::Error) -> CreateDBSubnetGroupError {
+        CreateDBSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBSubnetGroupError {
@@ -17574,6 +17671,11 @@ impl From<HttpDispatchError> for CreateEventSubscriptionError {
         CreateEventSubscriptionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateEventSubscriptionError {
+    fn from(err: io::Error) -> CreateEventSubscriptionError {
+        CreateEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17649,6 +17751,11 @@ impl From<CredentialsError> for CreateOptionGroupError {
 impl From<HttpDispatchError> for CreateOptionGroupError {
     fn from(err: HttpDispatchError) -> CreateOptionGroupError {
         CreateOptionGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateOptionGroupError {
+    fn from(err: io::Error) -> CreateOptionGroupError {
+        CreateOptionGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateOptionGroupError {
@@ -17732,6 +17839,11 @@ impl From<HttpDispatchError> for DeleteDBClusterError {
         DeleteDBClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDBClusterError {
+    fn from(err: io::Error) -> DeleteDBClusterError {
+        DeleteDBClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17803,6 +17915,11 @@ impl From<CredentialsError> for DeleteDBClusterParameterGroupError {
 impl From<HttpDispatchError> for DeleteDBClusterParameterGroupError {
     fn from(err: HttpDispatchError) -> DeleteDBClusterParameterGroupError {
         DeleteDBClusterParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDBClusterParameterGroupError {
+    fn from(err: io::Error) -> DeleteDBClusterParameterGroupError {
+        DeleteDBClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBClusterParameterGroupError {
@@ -17877,6 +17994,11 @@ impl From<CredentialsError> for DeleteDBClusterSnapshotError {
 impl From<HttpDispatchError> for DeleteDBClusterSnapshotError {
     fn from(err: HttpDispatchError) -> DeleteDBClusterSnapshotError {
         DeleteDBClusterSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDBClusterSnapshotError {
+    fn from(err: io::Error) -> DeleteDBClusterSnapshotError {
+        DeleteDBClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBClusterSnapshotError {
@@ -17960,6 +18082,11 @@ impl From<HttpDispatchError> for DeleteDBInstanceError {
         DeleteDBInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDBInstanceError {
+    fn from(err: io::Error) -> DeleteDBInstanceError {
+        DeleteDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18031,6 +18158,11 @@ impl From<CredentialsError> for DeleteDBParameterGroupError {
 impl From<HttpDispatchError> for DeleteDBParameterGroupError {
     fn from(err: HttpDispatchError) -> DeleteDBParameterGroupError {
         DeleteDBParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDBParameterGroupError {
+    fn from(err: io::Error) -> DeleteDBParameterGroupError {
+        DeleteDBParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBParameterGroupError {
@@ -18105,6 +18237,11 @@ impl From<HttpDispatchError> for DeleteDBSecurityGroupError {
         DeleteDBSecurityGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDBSecurityGroupError {
+    fn from(err: io::Error) -> DeleteDBSecurityGroupError {
+        DeleteDBSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDBSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18175,6 +18312,11 @@ impl From<CredentialsError> for DeleteDBSnapshotError {
 impl From<HttpDispatchError> for DeleteDBSnapshotError {
     fn from(err: HttpDispatchError) -> DeleteDBSnapshotError {
         DeleteDBSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDBSnapshotError {
+    fn from(err: io::Error) -> DeleteDBSnapshotError {
+        DeleteDBSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBSnapshotError {
@@ -18250,6 +18392,11 @@ impl From<HttpDispatchError> for DeleteDBSubnetGroupError {
         DeleteDBSubnetGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDBSubnetGroupError {
+    fn from(err: io::Error) -> DeleteDBSubnetGroupError {
+        DeleteDBSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDBSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18321,6 +18468,11 @@ impl From<CredentialsError> for DeleteEventSubscriptionError {
 impl From<HttpDispatchError> for DeleteEventSubscriptionError {
     fn from(err: HttpDispatchError) -> DeleteEventSubscriptionError {
         DeleteEventSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteEventSubscriptionError {
+    fn from(err: io::Error) -> DeleteEventSubscriptionError {
+        DeleteEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteEventSubscriptionError {
@@ -18395,6 +18547,11 @@ impl From<HttpDispatchError> for DeleteOptionGroupError {
         DeleteOptionGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteOptionGroupError {
+    fn from(err: io::Error) -> DeleteOptionGroupError {
+        DeleteOptionGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteOptionGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18459,6 +18616,11 @@ impl From<CredentialsError> for DescribeAccountAttributesError {
 impl From<HttpDispatchError> for DescribeAccountAttributesError {
     fn from(err: HttpDispatchError) -> DescribeAccountAttributesError {
         DescribeAccountAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountAttributesError {
+    fn from(err: io::Error) -> DescribeAccountAttributesError {
+        DescribeAccountAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountAttributesError {
@@ -18528,6 +18690,11 @@ impl From<HttpDispatchError> for DescribeCertificatesError {
         DescribeCertificatesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeCertificatesError {
+    fn from(err: io::Error) -> DescribeCertificatesError {
+        DescribeCertificatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18594,6 +18761,11 @@ impl From<CredentialsError> for DescribeDBClusterParameterGroupsError {
 impl From<HttpDispatchError> for DescribeDBClusterParameterGroupsError {
     fn from(err: HttpDispatchError) -> DescribeDBClusterParameterGroupsError {
         DescribeDBClusterParameterGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDBClusterParameterGroupsError {
+    fn from(err: io::Error) -> DescribeDBClusterParameterGroupsError {
+        DescribeDBClusterParameterGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBClusterParameterGroupsError {
@@ -18666,6 +18838,11 @@ impl From<HttpDispatchError> for DescribeDBClusterParametersError {
         DescribeDBClusterParametersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDBClusterParametersError {
+    fn from(err: io::Error) -> DescribeDBClusterParametersError {
+        DescribeDBClusterParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDBClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18732,6 +18909,11 @@ impl From<CredentialsError> for DescribeDBClusterSnapshotAttributesError {
 impl From<HttpDispatchError> for DescribeDBClusterSnapshotAttributesError {
     fn from(err: HttpDispatchError) -> DescribeDBClusterSnapshotAttributesError {
         DescribeDBClusterSnapshotAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDBClusterSnapshotAttributesError {
+    fn from(err: io::Error) -> DescribeDBClusterSnapshotAttributesError {
+        DescribeDBClusterSnapshotAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBClusterSnapshotAttributesError {
@@ -18804,6 +18986,11 @@ impl From<HttpDispatchError> for DescribeDBClusterSnapshotsError {
         DescribeDBClusterSnapshotsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDBClusterSnapshotsError {
+    fn from(err: io::Error) -> DescribeDBClusterSnapshotsError {
+        DescribeDBClusterSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDBClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18872,6 +19059,11 @@ impl From<HttpDispatchError> for DescribeDBClustersError {
         DescribeDBClustersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDBClustersError {
+    fn from(err: io::Error) -> DescribeDBClustersError {
+        DescribeDBClustersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDBClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18935,6 +19127,11 @@ impl From<CredentialsError> for DescribeDBEngineVersionsError {
 impl From<HttpDispatchError> for DescribeDBEngineVersionsError {
     fn from(err: HttpDispatchError) -> DescribeDBEngineVersionsError {
         DescribeDBEngineVersionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDBEngineVersionsError {
+    fn from(err: io::Error) -> DescribeDBEngineVersionsError {
+        DescribeDBEngineVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBEngineVersionsError {
@@ -19002,6 +19199,11 @@ impl From<CredentialsError> for DescribeDBInstancesError {
 impl From<HttpDispatchError> for DescribeDBInstancesError {
     fn from(err: HttpDispatchError) -> DescribeDBInstancesError {
         DescribeDBInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDBInstancesError {
+    fn from(err: io::Error) -> DescribeDBInstancesError {
+        DescribeDBInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBInstancesError {
@@ -19072,6 +19274,11 @@ impl From<HttpDispatchError> for DescribeDBLogFilesError {
         DescribeDBLogFilesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDBLogFilesError {
+    fn from(err: io::Error) -> DescribeDBLogFilesError {
+        DescribeDBLogFilesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDBLogFilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19138,6 +19345,11 @@ impl From<CredentialsError> for DescribeDBParameterGroupsError {
 impl From<HttpDispatchError> for DescribeDBParameterGroupsError {
     fn from(err: HttpDispatchError) -> DescribeDBParameterGroupsError {
         DescribeDBParameterGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDBParameterGroupsError {
+    fn from(err: io::Error) -> DescribeDBParameterGroupsError {
+        DescribeDBParameterGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBParameterGroupsError {
@@ -19208,6 +19420,11 @@ impl From<HttpDispatchError> for DescribeDBParametersError {
         DescribeDBParametersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDBParametersError {
+    fn from(err: io::Error) -> DescribeDBParametersError {
+        DescribeDBParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDBParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19274,6 +19491,11 @@ impl From<CredentialsError> for DescribeDBSecurityGroupsError {
 impl From<HttpDispatchError> for DescribeDBSecurityGroupsError {
     fn from(err: HttpDispatchError) -> DescribeDBSecurityGroupsError {
         DescribeDBSecurityGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDBSecurityGroupsError {
+    fn from(err: io::Error) -> DescribeDBSecurityGroupsError {
+        DescribeDBSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBSecurityGroupsError {
@@ -19344,6 +19566,11 @@ impl From<HttpDispatchError> for DescribeDBSnapshotAttributesError {
         DescribeDBSnapshotAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDBSnapshotAttributesError {
+    fn from(err: io::Error) -> DescribeDBSnapshotAttributesError {
+        DescribeDBSnapshotAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDBSnapshotAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19410,6 +19637,11 @@ impl From<CredentialsError> for DescribeDBSnapshotsError {
 impl From<HttpDispatchError> for DescribeDBSnapshotsError {
     fn from(err: HttpDispatchError) -> DescribeDBSnapshotsError {
         DescribeDBSnapshotsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDBSnapshotsError {
+    fn from(err: io::Error) -> DescribeDBSnapshotsError {
+        DescribeDBSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBSnapshotsError {
@@ -19480,6 +19712,11 @@ impl From<HttpDispatchError> for DescribeDBSubnetGroupsError {
         DescribeDBSubnetGroupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDBSubnetGroupsError {
+    fn from(err: io::Error) -> DescribeDBSubnetGroupsError {
+        DescribeDBSubnetGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDBSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19543,6 +19780,11 @@ impl From<CredentialsError> for DescribeEngineDefaultClusterParametersError {
 impl From<HttpDispatchError> for DescribeEngineDefaultClusterParametersError {
     fn from(err: HttpDispatchError) -> DescribeEngineDefaultClusterParametersError {
         DescribeEngineDefaultClusterParametersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEngineDefaultClusterParametersError {
+    fn from(err: io::Error) -> DescribeEngineDefaultClusterParametersError {
+        DescribeEngineDefaultClusterParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEngineDefaultClusterParametersError {
@@ -19609,6 +19851,11 @@ impl From<HttpDispatchError> for DescribeEngineDefaultParametersError {
         DescribeEngineDefaultParametersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEngineDefaultParametersError {
+    fn from(err: io::Error) -> DescribeEngineDefaultParametersError {
+        DescribeEngineDefaultParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEngineDefaultParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19671,6 +19918,11 @@ impl From<CredentialsError> for DescribeEventCategoriesError {
 impl From<HttpDispatchError> for DescribeEventCategoriesError {
     fn from(err: HttpDispatchError) -> DescribeEventCategoriesError {
         DescribeEventCategoriesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventCategoriesError {
+    fn from(err: io::Error) -> DescribeEventCategoriesError {
+        DescribeEventCategoriesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventCategoriesError {
@@ -19740,6 +19992,11 @@ impl From<HttpDispatchError> for DescribeEventSubscriptionsError {
         DescribeEventSubscriptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEventSubscriptionsError {
+    fn from(err: io::Error) -> DescribeEventSubscriptionsError {
+        DescribeEventSubscriptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19805,6 +20062,11 @@ impl From<HttpDispatchError> for DescribeEventsError {
         DescribeEventsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEventsError {
+    fn from(err: io::Error) -> DescribeEventsError {
+        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19865,6 +20127,11 @@ impl From<CredentialsError> for DescribeOptionGroupOptionsError {
 impl From<HttpDispatchError> for DescribeOptionGroupOptionsError {
     fn from(err: HttpDispatchError) -> DescribeOptionGroupOptionsError {
         DescribeOptionGroupOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeOptionGroupOptionsError {
+    fn from(err: io::Error) -> DescribeOptionGroupOptionsError {
+        DescribeOptionGroupOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeOptionGroupOptionsError {
@@ -19934,6 +20201,11 @@ impl From<HttpDispatchError> for DescribeOptionGroupsError {
         DescribeOptionGroupsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeOptionGroupsError {
+    fn from(err: io::Error) -> DescribeOptionGroupsError {
+        DescribeOptionGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeOptionGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19997,6 +20269,11 @@ impl From<CredentialsError> for DescribeOrderableDBInstanceOptionsError {
 impl From<HttpDispatchError> for DescribeOrderableDBInstanceOptionsError {
     fn from(err: HttpDispatchError) -> DescribeOrderableDBInstanceOptionsError {
         DescribeOrderableDBInstanceOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeOrderableDBInstanceOptionsError {
+    fn from(err: io::Error) -> DescribeOrderableDBInstanceOptionsError {
+        DescribeOrderableDBInstanceOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeOrderableDBInstanceOptionsError {
@@ -20064,6 +20341,11 @@ impl From<CredentialsError> for DescribePendingMaintenanceActionsError {
 impl From<HttpDispatchError> for DescribePendingMaintenanceActionsError {
     fn from(err: HttpDispatchError) -> DescribePendingMaintenanceActionsError {
         DescribePendingMaintenanceActionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribePendingMaintenanceActionsError {
+    fn from(err: io::Error) -> DescribePendingMaintenanceActionsError {
+        DescribePendingMaintenanceActionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribePendingMaintenanceActionsError {
@@ -20134,6 +20416,11 @@ impl From<HttpDispatchError> for DescribeReservedDBInstancesError {
         DescribeReservedDBInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeReservedDBInstancesError {
+    fn from(err: io::Error) -> DescribeReservedDBInstancesError {
+        DescribeReservedDBInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeReservedDBInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20202,6 +20489,11 @@ impl From<HttpDispatchError> for DescribeReservedDBInstancesOfferingsError {
         DescribeReservedDBInstancesOfferingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeReservedDBInstancesOfferingsError {
+    fn from(err: io::Error) -> DescribeReservedDBInstancesOfferingsError {
+        DescribeReservedDBInstancesOfferingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeReservedDBInstancesOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20265,6 +20557,11 @@ impl From<CredentialsError> for DescribeSourceRegionsError {
 impl From<HttpDispatchError> for DescribeSourceRegionsError {
     fn from(err: HttpDispatchError) -> DescribeSourceRegionsError {
         DescribeSourceRegionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSourceRegionsError {
+    fn from(err: io::Error) -> DescribeSourceRegionsError {
+        DescribeSourceRegionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSourceRegionsError {
@@ -20335,6 +20632,11 @@ impl From<CredentialsError> for DownloadDBLogFilePortionError {
 impl From<HttpDispatchError> for DownloadDBLogFilePortionError {
     fn from(err: HttpDispatchError) -> DownloadDBLogFilePortionError {
         DownloadDBLogFilePortionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DownloadDBLogFilePortionError {
+    fn from(err: io::Error) -> DownloadDBLogFilePortionError {
+        DownloadDBLogFilePortionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DownloadDBLogFilePortionError {
@@ -20412,6 +20714,11 @@ impl From<HttpDispatchError> for FailoverDBClusterError {
         FailoverDBClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for FailoverDBClusterError {
+    fn from(err: io::Error) -> FailoverDBClusterError {
+        FailoverDBClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for FailoverDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20486,6 +20793,11 @@ impl From<CredentialsError> for ListTagsForResourceError {
 impl From<HttpDispatchError> for ListTagsForResourceError {
     fn from(err: HttpDispatchError) -> ListTagsForResourceError {
         ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -20590,6 +20902,11 @@ impl From<HttpDispatchError> for ModifyDBClusterError {
         ModifyDBClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyDBClusterError {
+    fn from(err: io::Error) -> ModifyDBClusterError {
+        ModifyDBClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20669,6 +20986,11 @@ impl From<HttpDispatchError> for ModifyDBClusterParameterGroupError {
         ModifyDBClusterParameterGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyDBClusterParameterGroupError {
+    fn from(err: io::Error) -> ModifyDBClusterParameterGroupError {
+        ModifyDBClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20744,6 +21066,11 @@ impl From<CredentialsError> for ModifyDBClusterSnapshotAttributeError {
 impl From<HttpDispatchError> for ModifyDBClusterSnapshotAttributeError {
     fn from(err: HttpDispatchError) -> ModifyDBClusterSnapshotAttributeError {
         ModifyDBClusterSnapshotAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyDBClusterSnapshotAttributeError {
+    fn from(err: io::Error) -> ModifyDBClusterSnapshotAttributeError {
+        ModifyDBClusterSnapshotAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBClusterSnapshotAttributeError {
@@ -20865,6 +21192,11 @@ impl From<HttpDispatchError> for ModifyDBInstanceError {
         ModifyDBInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyDBInstanceError {
+    fn from(err: io::Error) -> ModifyDBInstanceError {
+        ModifyDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20949,6 +21281,11 @@ impl From<HttpDispatchError> for ModifyDBParameterGroupError {
         ModifyDBParameterGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyDBParameterGroupError {
+    fn from(err: io::Error) -> ModifyDBParameterGroupError {
+        ModifyDBParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyDBParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -21016,6 +21353,11 @@ impl From<CredentialsError> for ModifyDBSnapshotError {
 impl From<HttpDispatchError> for ModifyDBSnapshotError {
     fn from(err: HttpDispatchError) -> ModifyDBSnapshotError {
         ModifyDBSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyDBSnapshotError {
+    fn from(err: io::Error) -> ModifyDBSnapshotError {
+        ModifyDBSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBSnapshotError {
@@ -21088,6 +21430,11 @@ impl From<CredentialsError> for ModifyDBSnapshotAttributeError {
 impl From<HttpDispatchError> for ModifyDBSnapshotAttributeError {
     fn from(err: HttpDispatchError) -> ModifyDBSnapshotAttributeError {
         ModifyDBSnapshotAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyDBSnapshotAttributeError {
+    fn from(err: io::Error) -> ModifyDBSnapshotAttributeError {
+        ModifyDBSnapshotAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBSnapshotAttributeError {
@@ -21172,6 +21519,11 @@ impl From<CredentialsError> for ModifyDBSubnetGroupError {
 impl From<HttpDispatchError> for ModifyDBSubnetGroupError {
     fn from(err: HttpDispatchError) -> ModifyDBSubnetGroupError {
         ModifyDBSubnetGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyDBSubnetGroupError {
+    fn from(err: io::Error) -> ModifyDBSubnetGroupError {
+        ModifyDBSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBSubnetGroupError {
@@ -21261,6 +21613,11 @@ impl From<HttpDispatchError> for ModifyEventSubscriptionError {
         ModifyEventSubscriptionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyEventSubscriptionError {
+    fn from(err: io::Error) -> ModifyEventSubscriptionError {
+        ModifyEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -21337,6 +21694,11 @@ impl From<HttpDispatchError> for ModifyOptionGroupError {
         ModifyOptionGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyOptionGroupError {
+    fn from(err: io::Error) -> ModifyOptionGroupError {
+        ModifyOptionGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyOptionGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -21409,6 +21771,11 @@ impl From<HttpDispatchError> for PromoteReadReplicaError {
         PromoteReadReplicaError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PromoteReadReplicaError {
+    fn from(err: io::Error) -> PromoteReadReplicaError {
+        PromoteReadReplicaError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PromoteReadReplicaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -21479,6 +21846,11 @@ impl From<CredentialsError> for PromoteReadReplicaDBClusterError {
 impl From<HttpDispatchError> for PromoteReadReplicaDBClusterError {
     fn from(err: HttpDispatchError) -> PromoteReadReplicaDBClusterError {
         PromoteReadReplicaDBClusterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PromoteReadReplicaDBClusterError {
+    fn from(err: io::Error) -> PromoteReadReplicaDBClusterError {
+        PromoteReadReplicaDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PromoteReadReplicaDBClusterError {
@@ -21556,6 +21928,11 @@ impl From<HttpDispatchError> for PurchaseReservedDBInstancesOfferingError {
         PurchaseReservedDBInstancesOfferingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PurchaseReservedDBInstancesOfferingError {
+    fn from(err: io::Error) -> PurchaseReservedDBInstancesOfferingError {
+        PurchaseReservedDBInstancesOfferingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PurchaseReservedDBInstancesOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -21627,6 +22004,11 @@ impl From<CredentialsError> for RebootDBInstanceError {
 impl From<HttpDispatchError> for RebootDBInstanceError {
     fn from(err: HttpDispatchError) -> RebootDBInstanceError {
         RebootDBInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RebootDBInstanceError {
+    fn from(err: io::Error) -> RebootDBInstanceError {
+        RebootDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RebootDBInstanceError {
@@ -21702,6 +22084,11 @@ impl From<HttpDispatchError> for RemoveRoleFromDBClusterError {
         RemoveRoleFromDBClusterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveRoleFromDBClusterError {
+    fn from(err: io::Error) -> RemoveRoleFromDBClusterError {
+        RemoveRoleFromDBClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveRoleFromDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -21773,6 +22160,11 @@ impl From<CredentialsError> for RemoveSourceIdentifierFromSubscriptionError {
 impl From<HttpDispatchError> for RemoveSourceIdentifierFromSubscriptionError {
     fn from(err: HttpDispatchError) -> RemoveSourceIdentifierFromSubscriptionError {
         RemoveSourceIdentifierFromSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveSourceIdentifierFromSubscriptionError {
+    fn from(err: io::Error) -> RemoveSourceIdentifierFromSubscriptionError {
+        RemoveSourceIdentifierFromSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveSourceIdentifierFromSubscriptionError {
@@ -21852,6 +22244,11 @@ impl From<HttpDispatchError> for RemoveTagsFromResourceError {
         RemoveTagsFromResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveTagsFromResourceError {
+    fn from(err: io::Error) -> RemoveTagsFromResourceError {
+        RemoveTagsFromResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -21923,6 +22320,11 @@ impl From<CredentialsError> for ResetDBClusterParameterGroupError {
 impl From<HttpDispatchError> for ResetDBClusterParameterGroupError {
     fn from(err: HttpDispatchError) -> ResetDBClusterParameterGroupError {
         ResetDBClusterParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResetDBClusterParameterGroupError {
+    fn from(err: io::Error) -> ResetDBClusterParameterGroupError {
+        ResetDBClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetDBClusterParameterGroupError {
@@ -21997,6 +22399,11 @@ impl From<CredentialsError> for ResetDBParameterGroupError {
 impl From<HttpDispatchError> for ResetDBParameterGroupError {
     fn from(err: HttpDispatchError) -> ResetDBParameterGroupError {
         ResetDBParameterGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResetDBParameterGroupError {
+    fn from(err: io::Error) -> ResetDBParameterGroupError {
+        ResetDBParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetDBParameterGroupError {
@@ -22102,6 +22509,11 @@ impl From<CredentialsError> for RestoreDBClusterFromS3Error {
 impl From<HttpDispatchError> for RestoreDBClusterFromS3Error {
     fn from(err: HttpDispatchError) -> RestoreDBClusterFromS3Error {
         RestoreDBClusterFromS3Error::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RestoreDBClusterFromS3Error {
+    fn from(err: io::Error) -> RestoreDBClusterFromS3Error {
+        RestoreDBClusterFromS3Error::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreDBClusterFromS3Error {
@@ -22226,6 +22638,11 @@ impl From<CredentialsError> for RestoreDBClusterFromSnapshotError {
 impl From<HttpDispatchError> for RestoreDBClusterFromSnapshotError {
     fn from(err: HttpDispatchError) -> RestoreDBClusterFromSnapshotError {
         RestoreDBClusterFromSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RestoreDBClusterFromSnapshotError {
+    fn from(err: io::Error) -> RestoreDBClusterFromSnapshotError {
+        RestoreDBClusterFromSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreDBClusterFromSnapshotError {
@@ -22357,6 +22774,11 @@ impl From<CredentialsError> for RestoreDBClusterToPointInTimeError {
 impl From<HttpDispatchError> for RestoreDBClusterToPointInTimeError {
     fn from(err: HttpDispatchError) -> RestoreDBClusterToPointInTimeError {
         RestoreDBClusterToPointInTimeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RestoreDBClusterToPointInTimeError {
+    fn from(err: io::Error) -> RestoreDBClusterToPointInTimeError {
+        RestoreDBClusterToPointInTimeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreDBClusterToPointInTimeError {
@@ -22495,6 +22917,11 @@ impl From<CredentialsError> for RestoreDBInstanceFromDBSnapshotError {
 impl From<HttpDispatchError> for RestoreDBInstanceFromDBSnapshotError {
     fn from(err: HttpDispatchError) -> RestoreDBInstanceFromDBSnapshotError {
         RestoreDBInstanceFromDBSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RestoreDBInstanceFromDBSnapshotError {
+    fn from(err: io::Error) -> RestoreDBInstanceFromDBSnapshotError {
+        RestoreDBInstanceFromDBSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreDBInstanceFromDBSnapshotError {
@@ -22638,6 +23065,11 @@ impl From<HttpDispatchError> for RestoreDBInstanceToPointInTimeError {
         RestoreDBInstanceToPointInTimeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RestoreDBInstanceToPointInTimeError {
+    fn from(err: io::Error) -> RestoreDBInstanceToPointInTimeError {
+        RestoreDBInstanceToPointInTimeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RestoreDBInstanceToPointInTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -22734,6 +23166,11 @@ impl From<CredentialsError> for RevokeDBSecurityGroupIngressError {
 impl From<HttpDispatchError> for RevokeDBSecurityGroupIngressError {
     fn from(err: HttpDispatchError) -> RevokeDBSecurityGroupIngressError {
         RevokeDBSecurityGroupIngressError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RevokeDBSecurityGroupIngressError {
+    fn from(err: io::Error) -> RevokeDBSecurityGroupIngressError {
+        RevokeDBSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RevokeDBSecurityGroupIngressError {
@@ -22838,6 +23275,11 @@ impl From<HttpDispatchError> for StartDBInstanceError {
         StartDBInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartDBInstanceError {
+    fn from(err: io::Error) -> StartDBInstanceError {
+        StartDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -22924,6 +23366,11 @@ impl From<CredentialsError> for StopDBInstanceError {
 impl From<HttpDispatchError> for StopDBInstanceError {
     fn from(err: HttpDispatchError) -> StopDBInstanceError {
         StopDBInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopDBInstanceError {
+    fn from(err: io::Error) -> StopDBInstanceError {
+        StopDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopDBInstanceError {
@@ -23565,15 +24012,16 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AddRoleToDBClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddRoleToDBClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23593,16 +24041,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AddSourceIdentifierToSubscriptionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23616,8 +24066,10 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AddSourceIdentifierToSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddSourceIdentifierToSubscriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -23635,15 +24087,16 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23663,16 +24116,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ApplyPendingMaintenanceActionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23686,8 +24141,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ApplyPendingMaintenanceActionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ApplyPendingMaintenanceActionError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -23706,16 +24164,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AuthorizeDBSecurityGroupIngressResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23729,8 +24189,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(AuthorizeDBSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AuthorizeDBSecurityGroupIngressError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -23749,16 +24212,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CopyDBClusterParameterGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23772,8 +24237,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CopyDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopyDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -23792,16 +24260,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CopyDBClusterSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23816,8 +24286,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CopyDBClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopyDBClusterSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23836,16 +24307,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CopyDBParameterGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23860,8 +24333,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CopyDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopyDBParameterGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23880,16 +24354,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CopyDBSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23904,8 +24380,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CopyDBSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopyDBSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23924,16 +24401,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CopyOptionGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23948,8 +24427,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CopyOptionGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopyOptionGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23968,16 +24448,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDBClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23992,8 +24474,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDBClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDBClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24013,16 +24496,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDBClusterParameterGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24036,8 +24521,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -24056,16 +24544,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDBClusterSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24081,8 +24571,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateDBClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDBClusterSnapshotError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -24100,16 +24593,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDBInstanceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24124,8 +24619,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDBInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDBInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24145,16 +24641,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDBInstanceReadReplicaResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24168,8 +24666,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateDBInstanceReadReplicaError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDBInstanceReadReplicaError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -24188,16 +24689,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDBParameterGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24213,8 +24716,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDBParameterGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24234,16 +24738,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDBSecurityGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24258,8 +24764,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDBSecurityGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDBSecurityGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24278,16 +24785,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDBSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24302,8 +24811,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDBSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDBSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24322,16 +24832,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateDBSubnetGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24346,8 +24858,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDBSubnetGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDBSubnetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24367,16 +24880,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateEventSubscriptionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24392,8 +24907,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -24411,16 +24929,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateOptionGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24435,8 +24955,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateOptionGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateOptionGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24455,16 +24976,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteDBClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24479,8 +25002,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteDBClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDBClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24499,15 +25023,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -24526,16 +25053,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteDBClusterSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24551,8 +25080,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DeleteDBClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDBClusterSnapshotError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -24570,16 +25102,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteDBInstanceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24594,8 +25128,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteDBInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDBInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24614,15 +25149,16 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDBParameterGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24641,15 +25177,16 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteDBSecurityGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDBSecurityGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24668,16 +25205,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteDBSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24692,8 +25231,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteDBSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDBSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24712,15 +25252,16 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteDBSubnetGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDBSubnetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24740,16 +25281,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteEventSubscriptionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24765,8 +25308,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -24784,15 +25330,16 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteOptionGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteOptionGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24812,16 +25359,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AccountAttributesMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24836,8 +25385,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -24855,16 +25407,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CertificateMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24879,8 +25433,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeCertificatesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24900,16 +25455,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBClusterParameterGroupsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24925,8 +25482,10 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeDBClusterParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBClusterParameterGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -24945,16 +25504,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBClusterParameterGroupDetails::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24970,8 +25531,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeDBClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBClusterParametersError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -24991,16 +25555,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeDBClusterSnapshotAttributesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25014,8 +25580,10 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeDBClusterSnapshotAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBClusterSnapshotAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -25034,16 +25602,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBClusterSnapshotMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25058,8 +25628,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeDBClusterSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBClusterSnapshotsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -25077,16 +25650,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBClusterMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25101,8 +25676,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeDBClustersError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBClustersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25122,16 +25698,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBEngineVersionMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25146,8 +25724,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeDBEngineVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBEngineVersionsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -25165,16 +25746,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBInstanceMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25189,8 +25772,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeDBInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25209,16 +25793,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeDBLogFilesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25233,8 +25819,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeDBLogFilesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBLogFilesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25254,16 +25841,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBParameterGroupsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25278,8 +25867,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeDBParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBParameterGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -25297,16 +25889,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBParameterGroupDetails::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25321,8 +25915,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeDBParametersError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25342,16 +25937,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBSecurityGroupMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25366,8 +25963,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeDBSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBSecurityGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -25386,16 +25986,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeDBSnapshotAttributesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25409,8 +26011,11 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeDBSnapshotAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBSnapshotAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -25428,16 +26033,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBSnapshotMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25452,8 +26059,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeDBSnapshotsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBSnapshotsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25472,16 +26080,18 @@ impl<P, D> Rds for RdsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBSubnetGroupMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25496,8 +26106,9 @@ impl<P, D> Rds for RdsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeDBSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDBSubnetGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25514,16 +26125,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeEngineDefaultClusterParametersResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25537,8 +26150,10 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEngineDefaultClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEngineDefaultClusterParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -25557,16 +26172,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeEngineDefaultParametersResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25580,8 +26197,11 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEngineDefaultParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEngineDefaultParametersError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -25600,16 +26220,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EventCategoriesMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25624,8 +26246,11 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -25644,16 +26269,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EventSubscriptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25668,8 +26295,11 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -25687,16 +26317,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EventsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25711,8 +26343,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25732,16 +26365,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = OptionGroupOptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25756,8 +26391,11 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(DescribeOptionGroupOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeOptionGroupOptionsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -25775,16 +26413,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = OptionGroups::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25799,8 +26439,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(DescribeOptionGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeOptionGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25820,16 +26461,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = OrderableDBInstanceOptionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25843,8 +26486,10 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(DescribeOrderableDBInstanceOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeOrderableDBInstanceOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -25863,16 +26508,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PendingMaintenanceActionsMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25888,8 +26535,10 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(DescribePendingMaintenanceActionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePendingMaintenanceActionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -25908,16 +26557,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReservedDBInstanceMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25932,8 +26583,11 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(DescribeReservedDBInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReservedDBInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -25952,16 +26606,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReservedDBInstancesOfferingMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25975,8 +26631,10 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(DescribeReservedDBInstancesOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReservedDBInstancesOfferingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -25994,16 +26652,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SourceRegionMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26018,8 +26678,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(DescribeSourceRegionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSourceRegionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26039,16 +26700,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DownloadDBLogFilePortionDetails::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26064,8 +26727,11 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(DownloadDBLogFilePortionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DownloadDBLogFilePortionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -26083,16 +26749,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = FailoverDBClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26107,8 +26775,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(FailoverDBClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(FailoverDBClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26127,16 +26796,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = TagListMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26151,8 +26822,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26171,16 +26843,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyDBClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26195,8 +26869,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(ModifyDBClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyDBClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26216,16 +26891,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBClusterParameterGroupNameMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26239,8 +26916,11 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(ModifyDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -26259,16 +26939,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyDBClusterSnapshotAttributeResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26282,8 +26964,10 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(ModifyDBClusterSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyDBClusterSnapshotAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -26301,16 +26985,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyDBInstanceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26325,8 +27011,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(ModifyDBInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyDBInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26346,16 +27033,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBParameterGroupNameMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26370,8 +27059,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(ModifyDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyDBParameterGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26390,16 +27080,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyDBSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26414,8 +27106,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(ModifyDBSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyDBSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26435,16 +27128,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyDBSnapshotAttributeResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26460,8 +27155,11 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(ModifyDBSnapshotAttributeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyDBSnapshotAttributeError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -26479,16 +27177,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyDBSubnetGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26503,8 +27203,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(ModifyDBSubnetGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyDBSubnetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26524,16 +27225,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyEventSubscriptionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26549,8 +27252,11 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -26568,16 +27274,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ModifyOptionGroupResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26592,8 +27300,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(ModifyOptionGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyOptionGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26612,16 +27321,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PromoteReadReplicaResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26636,8 +27347,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(PromoteReadReplicaError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PromoteReadReplicaError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26657,16 +27369,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PromoteReadReplicaDBClusterResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26680,8 +27394,11 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(PromoteReadReplicaDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PromoteReadReplicaDBClusterError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -26701,16 +27418,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PurchaseReservedDBInstancesOfferingResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26724,8 +27443,10 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                            Err(PurchaseReservedDBInstancesOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PurchaseReservedDBInstancesOfferingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -26743,16 +27464,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RebootDBInstanceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26767,8 +27490,9 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
                 Ok(result)
             }
             _ => {
-                Err(RebootDBInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RebootDBInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26787,15 +27511,18 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(RemoveRoleFromDBClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveRoleFromDBClusterError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -26811,16 +27538,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RemoveSourceIdentifierFromSubscriptionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26834,8 +27563,10 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                            Err(RemoveSourceIdentifierFromSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveSourceIdentifierFromSubscriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -26853,15 +27584,16 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26881,16 +27613,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBClusterParameterGroupNameMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26904,8 +27638,11 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                            Err(ResetDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetDBClusterParameterGroupError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -26924,16 +27661,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DBParameterGroupNameMessage::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26948,8 +27687,9 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                Err(ResetDBParameterGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetDBParameterGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26969,16 +27709,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RestoreDBClusterFromS3Result::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26994,8 +27736,9 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                Err(RestoreDBClusterFromS3Error::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreDBClusterFromS3Error::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -27015,16 +27758,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RestoreDBClusterFromSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27038,8 +27783,11 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                            Err(RestoreDBClusterFromSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreDBClusterFromSnapshotError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -27058,16 +27806,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RestoreDBClusterToPointInTimeResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27081,8 +27831,11 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                            Err(RestoreDBClusterToPointInTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreDBClusterToPointInTimeError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -27101,16 +27854,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RestoreDBInstanceFromDBSnapshotResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27124,8 +27879,11 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                            Err(RestoreDBInstanceFromDBSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreDBInstanceFromDBSnapshotError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -27144,16 +27902,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RestoreDBInstanceToPointInTimeResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27167,8 +27927,11 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                            Err(RestoreDBInstanceToPointInTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreDBInstanceToPointInTimeError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -27187,16 +27950,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RevokeDBSecurityGroupIngressResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27210,8 +27975,11 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                            Err(RevokeDBSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RevokeDBSecurityGroupIngressError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -27229,16 +27997,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = StartDBInstanceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27253,8 +28023,9 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                Err(StartDBInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartDBInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -27273,16 +28044,18 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = StopDBInstanceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27297,8 +28070,9 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
                 Ok(result)
             }
             _ => {
-                Err(StopDBInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopDBInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

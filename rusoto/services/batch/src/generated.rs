@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -981,6 +983,11 @@ impl From<HttpDispatchError> for CancelJobError {
         CancelJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelJobError {
+    fn from(err: io::Error) -> CancelJobError {
+        CancelJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1061,6 +1068,11 @@ impl From<HttpDispatchError> for CreateComputeEnvironmentError {
         CreateComputeEnvironmentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateComputeEnvironmentError {
+    fn from(err: io::Error) -> CreateComputeEnvironmentError {
+        CreateComputeEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateComputeEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1137,6 +1149,11 @@ impl From<CredentialsError> for CreateJobQueueError {
 impl From<HttpDispatchError> for CreateJobQueueError {
     fn from(err: HttpDispatchError) -> CreateJobQueueError {
         CreateJobQueueError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateJobQueueError {
+    fn from(err: io::Error) -> CreateJobQueueError {
+        CreateJobQueueError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateJobQueueError {
@@ -1219,6 +1236,11 @@ impl From<HttpDispatchError> for DeleteComputeEnvironmentError {
         DeleteComputeEnvironmentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteComputeEnvironmentError {
+    fn from(err: io::Error) -> DeleteComputeEnvironmentError {
+        DeleteComputeEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteComputeEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1295,6 +1317,11 @@ impl From<CredentialsError> for DeleteJobQueueError {
 impl From<HttpDispatchError> for DeleteJobQueueError {
     fn from(err: HttpDispatchError) -> DeleteJobQueueError {
         DeleteJobQueueError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteJobQueueError {
+    fn from(err: io::Error) -> DeleteJobQueueError {
+        DeleteJobQueueError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteJobQueueError {
@@ -1375,6 +1402,11 @@ impl From<CredentialsError> for DeregisterJobDefinitionError {
 impl From<HttpDispatchError> for DeregisterJobDefinitionError {
     fn from(err: HttpDispatchError) -> DeregisterJobDefinitionError {
         DeregisterJobDefinitionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeregisterJobDefinitionError {
+    fn from(err: io::Error) -> DeregisterJobDefinitionError {
+        DeregisterJobDefinitionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeregisterJobDefinitionError {
@@ -1459,6 +1491,11 @@ impl From<HttpDispatchError> for DescribeComputeEnvironmentsError {
         DescribeComputeEnvironmentsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeComputeEnvironmentsError {
+    fn from(err: io::Error) -> DescribeComputeEnvironmentsError {
+        DescribeComputeEnvironmentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeComputeEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1539,6 +1576,11 @@ impl From<CredentialsError> for DescribeJobDefinitionsError {
 impl From<HttpDispatchError> for DescribeJobDefinitionsError {
     fn from(err: HttpDispatchError) -> DescribeJobDefinitionsError {
         DescribeJobDefinitionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeJobDefinitionsError {
+    fn from(err: io::Error) -> DescribeJobDefinitionsError {
+        DescribeJobDefinitionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeJobDefinitionsError {
@@ -1623,6 +1665,11 @@ impl From<HttpDispatchError> for DescribeJobQueuesError {
         DescribeJobQueuesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeJobQueuesError {
+    fn from(err: io::Error) -> DescribeJobQueuesError {
+        DescribeJobQueuesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeJobQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1701,6 +1748,11 @@ impl From<HttpDispatchError> for DescribeJobsError {
         DescribeJobsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeJobsError {
+    fn from(err: io::Error) -> DescribeJobsError {
+        DescribeJobsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1773,6 +1825,11 @@ impl From<CredentialsError> for ListJobsError {
 impl From<HttpDispatchError> for ListJobsError {
     fn from(err: HttpDispatchError) -> ListJobsError {
         ListJobsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListJobsError {
+    fn from(err: io::Error) -> ListJobsError {
+        ListJobsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListJobsError {
@@ -1855,6 +1912,11 @@ impl From<HttpDispatchError> for RegisterJobDefinitionError {
         RegisterJobDefinitionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterJobDefinitionError {
+    fn from(err: io::Error) -> RegisterJobDefinitionError {
+        RegisterJobDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterJobDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1931,6 +1993,11 @@ impl From<HttpDispatchError> for SubmitJobError {
         SubmitJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SubmitJobError {
+    fn from(err: io::Error) -> SubmitJobError {
+        SubmitJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SubmitJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2005,6 +2072,11 @@ impl From<CredentialsError> for TerminateJobError {
 impl From<HttpDispatchError> for TerminateJobError {
     fn from(err: HttpDispatchError) -> TerminateJobError {
         TerminateJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TerminateJobError {
+    fn from(err: io::Error) -> TerminateJobError {
+        TerminateJobError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TerminateJobError {
@@ -2087,6 +2159,11 @@ impl From<HttpDispatchError> for UpdateComputeEnvironmentError {
         UpdateComputeEnvironmentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateComputeEnvironmentError {
+    fn from(err: io::Error) -> UpdateComputeEnvironmentError {
+        UpdateComputeEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateComputeEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2163,6 +2240,11 @@ impl From<CredentialsError> for UpdateJobQueueError {
 impl From<HttpDispatchError> for UpdateJobQueueError {
     fn from(err: HttpDispatchError) -> UpdateJobQueueError {
         UpdateJobQueueError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateJobQueueError {
+    fn from(err: io::Error) -> UpdateJobQueueError {
+        UpdateJobQueueError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateJobQueueError {
@@ -2321,13 +2403,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2341,7 +2423,11 @@ impl<P, D> Batch for BatchClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CancelJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2363,13 +2449,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2384,7 +2470,12 @@ impl<P, D> Batch for BatchClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateComputeEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateComputeEnvironmentError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -2405,13 +2496,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2426,8 +2517,9 @@ impl<P, D> Batch for BatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateJobQueueError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateJobQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2450,13 +2542,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2471,7 +2563,12 @@ impl<P, D> Batch for BatchClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteComputeEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteComputeEnvironmentError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -2492,13 +2589,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2513,8 +2610,9 @@ impl<P, D> Batch for BatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteJobQueueError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteJobQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2537,13 +2635,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2558,7 +2656,12 @@ impl<P, D> Batch for BatchClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeregisterJobDefinitionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterJobDefinitionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -2580,13 +2683,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2601,7 +2704,12 @@ impl<P, D> Batch for BatchClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DescribeComputeEnvironmentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeComputeEnvironmentsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -2623,13 +2731,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2645,8 +2753,9 @@ impl<P, D> Batch for BatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeJobDefinitionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeJobDefinitionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2668,13 +2777,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2689,8 +2798,9 @@ impl<P, D> Batch for BatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeJobQueuesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeJobQueuesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2712,13 +2822,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2733,7 +2843,9 @@ impl<P, D> Batch for BatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2753,13 +2865,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2773,7 +2885,11 @@ impl<P, D> Batch for BatchClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2795,13 +2911,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2817,8 +2933,9 @@ impl<P, D> Batch for BatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RegisterJobDefinitionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterJobDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2838,13 +2955,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2858,7 +2975,11 @@ impl<P, D> Batch for BatchClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(SubmitJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SubmitJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2879,13 +3000,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2900,7 +3021,9 @@ impl<P, D> Batch for BatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(TerminateJobError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TerminateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2923,13 +3046,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2944,7 +3067,12 @@ impl<P, D> Batch for BatchClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateComputeEnvironmentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateComputeEnvironmentError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -2965,13 +3093,13 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -2986,8 +3114,9 @@ impl<P, D> Batch for BatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateJobQueueError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateJobQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

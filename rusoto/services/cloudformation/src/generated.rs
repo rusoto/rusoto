@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -5766,6 +5768,11 @@ impl From<HttpDispatchError> for CancelUpdateStackError {
         CancelUpdateStackError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelUpdateStackError {
+    fn from(err: io::Error) -> CancelUpdateStackError {
+        CancelUpdateStackError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelUpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5832,6 +5839,11 @@ impl From<CredentialsError> for ContinueUpdateRollbackError {
 impl From<HttpDispatchError> for ContinueUpdateRollbackError {
     fn from(err: HttpDispatchError) -> ContinueUpdateRollbackError {
         ContinueUpdateRollbackError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ContinueUpdateRollbackError {
+    fn from(err: io::Error) -> ContinueUpdateRollbackError {
+        ContinueUpdateRollbackError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ContinueUpdateRollbackError {
@@ -5910,6 +5922,11 @@ impl From<CredentialsError> for CreateChangeSetError {
 impl From<HttpDispatchError> for CreateChangeSetError {
     fn from(err: HttpDispatchError) -> CreateChangeSetError {
         CreateChangeSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateChangeSetError {
+    fn from(err: io::Error) -> CreateChangeSetError {
+        CreateChangeSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateChangeSetError {
@@ -5995,6 +6012,11 @@ impl From<HttpDispatchError> for CreateStackError {
         CreateStackError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateStackError {
+    fn from(err: io::Error) -> CreateStackError {
+        CreateStackError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6062,6 +6084,11 @@ impl From<CredentialsError> for DeleteChangeSetError {
 impl From<HttpDispatchError> for DeleteChangeSetError {
     fn from(err: HttpDispatchError) -> DeleteChangeSetError {
         DeleteChangeSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteChangeSetError {
+    fn from(err: io::Error) -> DeleteChangeSetError {
+        DeleteChangeSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteChangeSetError {
@@ -6132,6 +6159,11 @@ impl From<HttpDispatchError> for DeleteStackError {
         DeleteStackError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteStackError {
+    fn from(err: io::Error) -> DeleteStackError {
+        DeleteStackError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6193,6 +6225,11 @@ impl From<CredentialsError> for DescribeAccountLimitsError {
 impl From<HttpDispatchError> for DescribeAccountLimitsError {
     fn from(err: HttpDispatchError) -> DescribeAccountLimitsError {
         DescribeAccountLimitsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountLimitsError {
+    fn from(err: io::Error) -> DescribeAccountLimitsError {
+        DescribeAccountLimitsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountLimitsError {
@@ -6262,6 +6299,11 @@ impl From<HttpDispatchError> for DescribeChangeSetError {
         DescribeChangeSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeChangeSetError {
+    fn from(err: io::Error) -> DescribeChangeSetError {
+        DescribeChangeSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6325,6 +6367,11 @@ impl From<CredentialsError> for DescribeStackEventsError {
 impl From<HttpDispatchError> for DescribeStackEventsError {
     fn from(err: HttpDispatchError) -> DescribeStackEventsError {
         DescribeStackEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeStackEventsError {
+    fn from(err: io::Error) -> DescribeStackEventsError {
+        DescribeStackEventsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeStackEventsError {
@@ -6391,6 +6438,11 @@ impl From<HttpDispatchError> for DescribeStackResourceError {
         DescribeStackResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeStackResourceError {
+    fn from(err: io::Error) -> DescribeStackResourceError {
+        DescribeStackResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeStackResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6453,6 +6505,11 @@ impl From<CredentialsError> for DescribeStackResourcesError {
 impl From<HttpDispatchError> for DescribeStackResourcesError {
     fn from(err: HttpDispatchError) -> DescribeStackResourcesError {
         DescribeStackResourcesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeStackResourcesError {
+    fn from(err: io::Error) -> DescribeStackResourcesError {
+        DescribeStackResourcesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeStackResourcesError {
@@ -6519,6 +6576,11 @@ impl From<HttpDispatchError> for DescribeStacksError {
         DescribeStacksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeStacksError {
+    fn from(err: io::Error) -> DescribeStacksError {
+        DescribeStacksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6579,6 +6641,11 @@ impl From<CredentialsError> for EstimateTemplateCostError {
 impl From<HttpDispatchError> for EstimateTemplateCostError {
     fn from(err: HttpDispatchError) -> EstimateTemplateCostError {
         EstimateTemplateCostError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EstimateTemplateCostError {
+    fn from(err: io::Error) -> EstimateTemplateCostError {
+        EstimateTemplateCostError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EstimateTemplateCostError {
@@ -6659,6 +6726,11 @@ impl From<HttpDispatchError> for ExecuteChangeSetError {
         ExecuteChangeSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ExecuteChangeSetError {
+    fn from(err: io::Error) -> ExecuteChangeSetError {
+        ExecuteChangeSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ExecuteChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6723,6 +6795,11 @@ impl From<CredentialsError> for GetStackPolicyError {
 impl From<HttpDispatchError> for GetStackPolicyError {
     fn from(err: HttpDispatchError) -> GetStackPolicyError {
         GetStackPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetStackPolicyError {
+    fn from(err: io::Error) -> GetStackPolicyError {
+        GetStackPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetStackPolicyError {
@@ -6792,6 +6869,11 @@ impl From<HttpDispatchError> for GetTemplateError {
         GetTemplateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetTemplateError {
+    fn from(err: io::Error) -> GetTemplateError {
+        GetTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6853,6 +6935,11 @@ impl From<CredentialsError> for GetTemplateSummaryError {
 impl From<HttpDispatchError> for GetTemplateSummaryError {
     fn from(err: HttpDispatchError) -> GetTemplateSummaryError {
         GetTemplateSummaryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetTemplateSummaryError {
+    fn from(err: io::Error) -> GetTemplateSummaryError {
+        GetTemplateSummaryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetTemplateSummaryError {
@@ -6919,6 +7006,11 @@ impl From<HttpDispatchError> for ListChangeSetsError {
         ListChangeSetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListChangeSetsError {
+    fn from(err: io::Error) -> ListChangeSetsError {
+        ListChangeSetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListChangeSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6979,6 +7071,11 @@ impl From<CredentialsError> for ListExportsError {
 impl From<HttpDispatchError> for ListExportsError {
     fn from(err: HttpDispatchError) -> ListExportsError {
         ListExportsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListExportsError {
+    fn from(err: io::Error) -> ListExportsError {
+        ListExportsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListExportsError {
@@ -7043,6 +7140,11 @@ impl From<HttpDispatchError> for ListImportsError {
         ListImportsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListImportsError {
+    fn from(err: io::Error) -> ListImportsError {
+        ListImportsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListImportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7103,6 +7205,11 @@ impl From<CredentialsError> for ListStackResourcesError {
 impl From<HttpDispatchError> for ListStackResourcesError {
     fn from(err: HttpDispatchError) -> ListStackResourcesError {
         ListStackResourcesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListStackResourcesError {
+    fn from(err: io::Error) -> ListStackResourcesError {
+        ListStackResourcesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListStackResourcesError {
@@ -7169,6 +7276,11 @@ impl From<HttpDispatchError> for ListStacksError {
         ListStacksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListStacksError {
+    fn from(err: io::Error) -> ListStacksError {
+        ListStacksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7231,6 +7343,11 @@ impl From<HttpDispatchError> for SetStackPolicyError {
         SetStackPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetStackPolicyError {
+    fn from(err: io::Error) -> SetStackPolicyError {
+        SetStackPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetStackPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7291,6 +7408,11 @@ impl From<CredentialsError> for SignalResourceError {
 impl From<HttpDispatchError> for SignalResourceError {
     fn from(err: HttpDispatchError) -> SignalResourceError {
         SignalResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SignalResourceError {
+    fn from(err: io::Error) -> SignalResourceError {
+        SignalResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SignalResourceError {
@@ -7363,6 +7485,11 @@ impl From<HttpDispatchError> for UpdateStackError {
         UpdateStackError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateStackError {
+    fn from(err: io::Error) -> UpdateStackError {
+        UpdateStackError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7425,6 +7552,11 @@ impl From<CredentialsError> for ValidateTemplateError {
 impl From<HttpDispatchError> for ValidateTemplateError {
     fn from(err: HttpDispatchError) -> ValidateTemplateError {
         ValidateTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ValidateTemplateError {
+    fn from(err: io::Error) -> ValidateTemplateError {
+        ValidateTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ValidateTemplateError {
@@ -7635,15 +7767,16 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(CancelUpdateStackError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelUpdateStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7663,16 +7796,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ContinueUpdateRollbackOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7688,8 +7823,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ContinueUpdateRollbackError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ContinueUpdateRollbackError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7708,16 +7844,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateChangeSetOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7732,8 +7870,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateChangeSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateChangeSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7752,16 +7891,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateStackOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7775,7 +7916,11 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7793,16 +7938,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteChangeSetOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7817,8 +7964,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteChangeSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteChangeSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7835,13 +7983,17 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7860,16 +8012,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAccountLimitsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7884,8 +8038,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7904,16 +8059,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeChangeSetOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7928,8 +8085,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeChangeSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeChangeSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7948,16 +8106,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeStackEventsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7972,8 +8132,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeStackEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStackEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7993,16 +8154,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeStackResourceOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8017,8 +8180,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeStackResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStackResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8038,16 +8202,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeStackResourcesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8063,8 +8229,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeStackResourcesError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStackResourcesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8083,16 +8250,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeStacksOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8107,8 +8276,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeStacksError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStacksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8127,16 +8297,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = EstimateTemplateCostOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8151,8 +8323,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(EstimateTemplateCostError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EstimateTemplateCostError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8171,16 +8344,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ExecuteChangeSetOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8195,8 +8370,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ExecuteChangeSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ExecuteChangeSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8215,16 +8391,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetStackPolicyOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8239,8 +8417,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetStackPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetStackPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8259,16 +8438,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetTemplateOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8282,7 +8463,11 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(GetTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTemplateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8300,16 +8485,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetTemplateSummaryOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8324,8 +8511,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetTemplateSummaryError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTemplateSummaryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8344,16 +8532,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListChangeSetsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8368,8 +8558,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListChangeSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListChangeSetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8388,16 +8579,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListExportsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8411,7 +8604,11 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListExportsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListExportsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8429,16 +8626,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListImportsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8452,7 +8651,11 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListImportsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListImportsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8470,16 +8673,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListStackResourcesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8494,8 +8699,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListStackResourcesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListStackResourcesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8512,16 +8718,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListStacksOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8535,7 +8743,11 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListStacksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8551,15 +8763,16 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(SetStackPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetStackPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8576,15 +8789,16 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(SignalResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SignalResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8603,16 +8817,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateStackOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8626,7 +8842,11 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(UpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8644,16 +8864,18 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ValidateTemplateOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8668,8 +8890,9 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ValidateTemplateError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ValidateTemplateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

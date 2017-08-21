@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2201,6 +2203,11 @@ impl From<HttpDispatchError> for DeleteAlarmsError {
         DeleteAlarmsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAlarmsError {
+    fn from(err: io::Error) -> DeleteAlarmsError {
+        DeleteAlarmsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAlarmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2265,6 +2272,11 @@ impl From<CredentialsError> for DescribeAlarmHistoryError {
 impl From<HttpDispatchError> for DescribeAlarmHistoryError {
     fn from(err: HttpDispatchError) -> DescribeAlarmHistoryError {
         DescribeAlarmHistoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAlarmHistoryError {
+    fn from(err: io::Error) -> DescribeAlarmHistoryError {
+        DescribeAlarmHistoryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAlarmHistoryError {
@@ -2337,6 +2349,11 @@ impl From<HttpDispatchError> for DescribeAlarmsError {
         DescribeAlarmsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAlarmsError {
+    fn from(err: io::Error) -> DescribeAlarmsError {
+        DescribeAlarmsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAlarmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2398,6 +2415,11 @@ impl From<CredentialsError> for DescribeAlarmsForMetricError {
 impl From<HttpDispatchError> for DescribeAlarmsForMetricError {
     fn from(err: HttpDispatchError) -> DescribeAlarmsForMetricError {
         DescribeAlarmsForMetricError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAlarmsForMetricError {
+    fn from(err: io::Error) -> DescribeAlarmsForMetricError {
+        DescribeAlarmsForMetricError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAlarmsForMetricError {
@@ -2464,6 +2486,11 @@ impl From<HttpDispatchError> for DisableAlarmActionsError {
         DisableAlarmActionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisableAlarmActionsError {
+    fn from(err: io::Error) -> DisableAlarmActionsError {
+        DisableAlarmActionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisableAlarmActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2526,6 +2553,11 @@ impl From<CredentialsError> for EnableAlarmActionsError {
 impl From<HttpDispatchError> for EnableAlarmActionsError {
     fn from(err: HttpDispatchError) -> EnableAlarmActionsError {
         EnableAlarmActionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EnableAlarmActionsError {
+    fn from(err: io::Error) -> EnableAlarmActionsError {
+        EnableAlarmActionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableAlarmActionsError {
@@ -2602,6 +2634,11 @@ impl From<CredentialsError> for GetMetricStatisticsError {
 impl From<HttpDispatchError> for GetMetricStatisticsError {
     fn from(err: HttpDispatchError) -> GetMetricStatisticsError {
         GetMetricStatisticsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMetricStatisticsError {
+    fn from(err: io::Error) -> GetMetricStatisticsError {
+        GetMetricStatisticsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetMetricStatisticsError {
@@ -2682,6 +2719,11 @@ impl From<HttpDispatchError> for ListMetricsError {
         ListMetricsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListMetricsError {
+    fn from(err: io::Error) -> ListMetricsError {
+        ListMetricsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListMetricsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2749,6 +2791,11 @@ impl From<CredentialsError> for PutMetricAlarmError {
 impl From<HttpDispatchError> for PutMetricAlarmError {
     fn from(err: HttpDispatchError) -> PutMetricAlarmError {
         PutMetricAlarmError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutMetricAlarmError {
+    fn from(err: io::Error) -> PutMetricAlarmError {
+        PutMetricAlarmError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutMetricAlarmError {
@@ -2828,6 +2875,11 @@ impl From<HttpDispatchError> for PutMetricDataError {
         PutMetricDataError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutMetricDataError {
+    fn from(err: io::Error) -> PutMetricDataError {
+        PutMetricDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2902,6 +2954,11 @@ impl From<CredentialsError> for SetAlarmStateError {
 impl From<HttpDispatchError> for SetAlarmStateError {
     fn from(err: HttpDispatchError) -> SetAlarmStateError {
         SetAlarmStateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetAlarmStateError {
+    fn from(err: io::Error) -> SetAlarmStateError {
+        SetAlarmStateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetAlarmStateError {
@@ -3019,14 +3076,16 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteAlarmsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAlarmsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3045,16 +3104,18 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAlarmHistoryOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3069,8 +3130,9 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeAlarmHistoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAlarmHistoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3089,16 +3151,18 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAlarmsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3113,8 +3177,9 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeAlarmsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAlarmsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3134,16 +3199,18 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DescribeAlarmsForMetricOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3159,8 +3226,11 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(DescribeAlarmsForMetricError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAlarmsForMetricError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -3178,15 +3248,16 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DisableAlarmActionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableAlarmActionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3205,15 +3276,16 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(EnableAlarmActionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableAlarmActionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3232,16 +3304,18 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetMetricStatisticsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3256,8 +3330,9 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetMetricStatisticsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetMetricStatisticsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3276,16 +3351,18 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListMetricsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3299,7 +3376,11 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListMetricsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListMetricsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3315,15 +3396,16 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(PutMetricAlarmError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutMetricAlarmError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3340,14 +3422,16 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(PutMetricDataError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutMetricDataError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3364,14 +3448,16 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(SetAlarmStateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetAlarmStateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

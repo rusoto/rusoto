@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1075,6 +1077,11 @@ impl From<HttpDispatchError> for BatchDeleteAttributesError {
         BatchDeleteAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchDeleteAttributesError {
+    fn from(err: io::Error) -> BatchDeleteAttributesError {
+        BatchDeleteAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchDeleteAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1168,6 +1175,11 @@ impl From<HttpDispatchError> for BatchPutAttributesError {
         BatchPutAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchPutAttributesError {
+    fn from(err: io::Error) -> BatchPutAttributesError {
+        BatchPutAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchPutAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1256,6 +1268,11 @@ impl From<HttpDispatchError> for CreateDomainError {
         CreateDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDomainError {
+    fn from(err: io::Error) -> CreateDomainError {
+        CreateDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1337,6 +1354,11 @@ impl From<HttpDispatchError> for DeleteAttributesError {
         DeleteAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAttributesError {
+    fn from(err: io::Error) -> DeleteAttributesError {
+        DeleteAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1406,6 +1428,11 @@ impl From<CredentialsError> for DeleteDomainError {
 impl From<HttpDispatchError> for DeleteDomainError {
     fn from(err: HttpDispatchError) -> DeleteDomainError {
         DeleteDomainError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDomainError {
+    fn from(err: io::Error) -> DeleteDomainError {
+        DeleteDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDomainError {
@@ -1479,6 +1506,11 @@ impl From<CredentialsError> for DomainMetadataError {
 impl From<HttpDispatchError> for DomainMetadataError {
     fn from(err: HttpDispatchError) -> DomainMetadataError {
         DomainMetadataError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DomainMetadataError {
+    fn from(err: io::Error) -> DomainMetadataError {
+        DomainMetadataError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DomainMetadataError {
@@ -1558,6 +1590,11 @@ impl From<HttpDispatchError> for GetAttributesError {
         GetAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetAttributesError {
+    fn from(err: io::Error) -> GetAttributesError {
+        GetAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1631,6 +1668,11 @@ impl From<CredentialsError> for ListDomainsError {
 impl From<HttpDispatchError> for ListDomainsError {
     fn from(err: HttpDispatchError) -> ListDomainsError {
         ListDomainsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDomainsError {
+    fn from(err: io::Error) -> ListDomainsError {
+        ListDomainsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDomainsError {
@@ -1720,6 +1762,11 @@ impl From<CredentialsError> for PutAttributesError {
 impl From<HttpDispatchError> for PutAttributesError {
     fn from(err: HttpDispatchError) -> PutAttributesError {
         PutAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutAttributesError {
+    fn from(err: io::Error) -> PutAttributesError {
+        PutAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutAttributesError {
@@ -1832,6 +1879,11 @@ impl From<CredentialsError> for SelectError {
 impl From<HttpDispatchError> for SelectError {
     fn from(err: HttpDispatchError) -> SelectError {
         SelectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SelectError {
+    fn from(err: io::Error) -> SelectError {
+        SelectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SelectError {
@@ -1951,15 +2003,16 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(BatchDeleteAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchDeleteAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1978,15 +2031,16 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(BatchPutAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchPutAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2003,14 +2057,16 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(CreateDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2029,15 +2085,16 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2054,14 +2111,16 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2080,16 +2139,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DomainMetadataResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2104,8 +2165,9 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DomainMetadataError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DomainMetadataError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2124,16 +2186,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetAttributesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2148,7 +2212,9 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2167,16 +2233,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListDomainsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2190,7 +2258,11 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDomainsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2206,14 +2278,16 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(PutAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2230,16 +2304,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SelectResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2253,7 +2329,11 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(SelectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SelectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

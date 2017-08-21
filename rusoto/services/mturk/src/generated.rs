@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1557,6 +1559,11 @@ impl From<HttpDispatchError> for AcceptQualificationRequestError {
         AcceptQualificationRequestError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AcceptQualificationRequestError {
+    fn from(err: io::Error) -> AcceptQualificationRequestError {
+        AcceptQualificationRequestError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AcceptQualificationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1639,6 +1646,11 @@ impl From<HttpDispatchError> for ApproveAssignmentError {
         ApproveAssignmentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ApproveAssignmentError {
+    fn from(err: io::Error) -> ApproveAssignmentError {
+        ApproveAssignmentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ApproveAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1715,6 +1727,11 @@ impl From<CredentialsError> for AssociateQualificationWithWorkerError {
 impl From<HttpDispatchError> for AssociateQualificationWithWorkerError {
     fn from(err: HttpDispatchError) -> AssociateQualificationWithWorkerError {
         AssociateQualificationWithWorkerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateQualificationWithWorkerError {
+    fn from(err: io::Error) -> AssociateQualificationWithWorkerError {
+        AssociateQualificationWithWorkerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssociateQualificationWithWorkerError {
@@ -1796,6 +1813,11 @@ impl From<HttpDispatchError> for CreateAdditionalAssignmentsForHITError {
         CreateAdditionalAssignmentsForHITError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateAdditionalAssignmentsForHITError {
+    fn from(err: io::Error) -> CreateAdditionalAssignmentsForHITError {
+        CreateAdditionalAssignmentsForHITError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateAdditionalAssignmentsForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1872,6 +1894,11 @@ impl From<HttpDispatchError> for CreateHITError {
         CreateHITError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateHITError {
+    fn from(err: io::Error) -> CreateHITError {
+        CreateHITError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1946,6 +1973,11 @@ impl From<CredentialsError> for CreateHITTypeError {
 impl From<HttpDispatchError> for CreateHITTypeError {
     fn from(err: HttpDispatchError) -> CreateHITTypeError {
         CreateHITTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateHITTypeError {
+    fn from(err: io::Error) -> CreateHITTypeError {
+        CreateHITTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateHITTypeError {
@@ -2026,6 +2058,11 @@ impl From<CredentialsError> for CreateHITWithHITTypeError {
 impl From<HttpDispatchError> for CreateHITWithHITTypeError {
     fn from(err: HttpDispatchError) -> CreateHITWithHITTypeError {
         CreateHITWithHITTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateHITWithHITTypeError {
+    fn from(err: io::Error) -> CreateHITWithHITTypeError {
+        CreateHITWithHITTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateHITWithHITTypeError {
@@ -2110,6 +2147,11 @@ impl From<HttpDispatchError> for CreateQualificationTypeError {
         CreateQualificationTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateQualificationTypeError {
+    fn from(err: io::Error) -> CreateQualificationTypeError {
+        CreateQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2192,6 +2234,11 @@ impl From<HttpDispatchError> for CreateWorkerBlockError {
         CreateWorkerBlockError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateWorkerBlockError {
+    fn from(err: io::Error) -> CreateWorkerBlockError {
+        CreateWorkerBlockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateWorkerBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2266,6 +2313,11 @@ impl From<CredentialsError> for DeleteHITError {
 impl From<HttpDispatchError> for DeleteHITError {
     fn from(err: HttpDispatchError) -> DeleteHITError {
         DeleteHITError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteHITError {
+    fn from(err: io::Error) -> DeleteHITError {
+        DeleteHITError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteHITError {
@@ -2346,6 +2398,11 @@ impl From<CredentialsError> for DeleteQualificationTypeError {
 impl From<HttpDispatchError> for DeleteQualificationTypeError {
     fn from(err: HttpDispatchError) -> DeleteQualificationTypeError {
         DeleteQualificationTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteQualificationTypeError {
+    fn from(err: io::Error) -> DeleteQualificationTypeError {
+        DeleteQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteQualificationTypeError {
@@ -2430,6 +2487,11 @@ impl From<HttpDispatchError> for DeleteWorkerBlockError {
         DeleteWorkerBlockError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteWorkerBlockError {
+    fn from(err: io::Error) -> DeleteWorkerBlockError {
+        DeleteWorkerBlockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteWorkerBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2507,6 +2569,11 @@ impl From<CredentialsError> for DisassociateQualificationFromWorkerError {
 impl From<HttpDispatchError> for DisassociateQualificationFromWorkerError {
     fn from(err: HttpDispatchError) -> DisassociateQualificationFromWorkerError {
         DisassociateQualificationFromWorkerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateQualificationFromWorkerError {
+    fn from(err: io::Error) -> DisassociateQualificationFromWorkerError {
+        DisassociateQualificationFromWorkerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisassociateQualificationFromWorkerError {
@@ -2591,6 +2658,11 @@ impl From<HttpDispatchError> for GetAccountBalanceError {
         GetAccountBalanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetAccountBalanceError {
+    fn from(err: io::Error) -> GetAccountBalanceError {
+        GetAccountBalanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetAccountBalanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2667,6 +2739,11 @@ impl From<CredentialsError> for GetAssignmentError {
 impl From<HttpDispatchError> for GetAssignmentError {
     fn from(err: HttpDispatchError) -> GetAssignmentError {
         GetAssignmentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAssignmentError {
+    fn from(err: io::Error) -> GetAssignmentError {
+        GetAssignmentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAssignmentError {
@@ -2749,6 +2826,11 @@ impl From<HttpDispatchError> for GetFileUploadURLError {
         GetFileUploadURLError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetFileUploadURLError {
+    fn from(err: io::Error) -> GetFileUploadURLError {
+        GetFileUploadURLError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetFileUploadURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2821,6 +2903,11 @@ impl From<CredentialsError> for GetHITError {
 impl From<HttpDispatchError> for GetHITError {
     fn from(err: HttpDispatchError) -> GetHITError {
         GetHITError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetHITError {
+    fn from(err: io::Error) -> GetHITError {
+        GetHITError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHITError {
@@ -2901,6 +2988,11 @@ impl From<CredentialsError> for GetQualificationScoreError {
 impl From<HttpDispatchError> for GetQualificationScoreError {
     fn from(err: HttpDispatchError) -> GetQualificationScoreError {
         GetQualificationScoreError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetQualificationScoreError {
+    fn from(err: io::Error) -> GetQualificationScoreError {
+        GetQualificationScoreError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetQualificationScoreError {
@@ -2985,6 +3077,11 @@ impl From<HttpDispatchError> for GetQualificationTypeError {
         GetQualificationTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetQualificationTypeError {
+    fn from(err: io::Error) -> GetQualificationTypeError {
+        GetQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3065,6 +3162,11 @@ impl From<CredentialsError> for ListAssignmentsForHITError {
 impl From<HttpDispatchError> for ListAssignmentsForHITError {
     fn from(err: HttpDispatchError) -> ListAssignmentsForHITError {
         ListAssignmentsForHITError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAssignmentsForHITError {
+    fn from(err: io::Error) -> ListAssignmentsForHITError {
+        ListAssignmentsForHITError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAssignmentsForHITError {
@@ -3149,6 +3251,11 @@ impl From<HttpDispatchError> for ListBonusPaymentsError {
         ListBonusPaymentsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListBonusPaymentsError {
+    fn from(err: io::Error) -> ListBonusPaymentsError {
+        ListBonusPaymentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListBonusPaymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3223,6 +3330,11 @@ impl From<CredentialsError> for ListHITsError {
 impl From<HttpDispatchError> for ListHITsError {
     fn from(err: HttpDispatchError) -> ListHITsError {
         ListHITsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListHITsError {
+    fn from(err: io::Error) -> ListHITsError {
+        ListHITsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListHITsError {
@@ -3303,6 +3415,11 @@ impl From<CredentialsError> for ListHITsForQualificationTypeError {
 impl From<HttpDispatchError> for ListHITsForQualificationTypeError {
     fn from(err: HttpDispatchError) -> ListHITsForQualificationTypeError {
         ListHITsForQualificationTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListHITsForQualificationTypeError {
+    fn from(err: io::Error) -> ListHITsForQualificationTypeError {
+        ListHITsForQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListHITsForQualificationTypeError {
@@ -3387,6 +3504,11 @@ impl From<HttpDispatchError> for ListQualificationRequestsError {
         ListQualificationRequestsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListQualificationRequestsError {
+    fn from(err: io::Error) -> ListQualificationRequestsError {
+        ListQualificationRequestsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListQualificationRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3469,6 +3591,11 @@ impl From<HttpDispatchError> for ListQualificationTypesError {
         ListQualificationTypesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListQualificationTypesError {
+    fn from(err: io::Error) -> ListQualificationTypesError {
+        ListQualificationTypesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListQualificationTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3545,6 +3672,11 @@ impl From<CredentialsError> for ListReviewPolicyResultsForHITError {
 impl From<HttpDispatchError> for ListReviewPolicyResultsForHITError {
     fn from(err: HttpDispatchError) -> ListReviewPolicyResultsForHITError {
         ListReviewPolicyResultsForHITError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListReviewPolicyResultsForHITError {
+    fn from(err: io::Error) -> ListReviewPolicyResultsForHITError {
+        ListReviewPolicyResultsForHITError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListReviewPolicyResultsForHITError {
@@ -3629,6 +3761,11 @@ impl From<HttpDispatchError> for ListReviewableHITsError {
         ListReviewableHITsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListReviewableHITsError {
+    fn from(err: io::Error) -> ListReviewableHITsError {
+        ListReviewableHITsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListReviewableHITsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3711,6 +3848,11 @@ impl From<HttpDispatchError> for ListWorkerBlocksError {
         ListWorkerBlocksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListWorkerBlocksError {
+    fn from(err: io::Error) -> ListWorkerBlocksError {
+        ListWorkerBlocksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListWorkerBlocksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3785,6 +3927,11 @@ impl From<CredentialsError> for ListWorkersWithQualificationTypeError {
 impl From<HttpDispatchError> for ListWorkersWithQualificationTypeError {
     fn from(err: HttpDispatchError) -> ListWorkersWithQualificationTypeError {
         ListWorkersWithQualificationTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListWorkersWithQualificationTypeError {
+    fn from(err: io::Error) -> ListWorkersWithQualificationTypeError {
+        ListWorkersWithQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListWorkersWithQualificationTypeError {
@@ -3863,6 +4010,11 @@ impl From<CredentialsError> for NotifyWorkersError {
 impl From<HttpDispatchError> for NotifyWorkersError {
     fn from(err: HttpDispatchError) -> NotifyWorkersError {
         NotifyWorkersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for NotifyWorkersError {
+    fn from(err: io::Error) -> NotifyWorkersError {
+        NotifyWorkersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for NotifyWorkersError {
@@ -3945,6 +4097,11 @@ impl From<HttpDispatchError> for RejectAssignmentError {
         RejectAssignmentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RejectAssignmentError {
+    fn from(err: io::Error) -> RejectAssignmentError {
+        RejectAssignmentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RejectAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4025,6 +4182,11 @@ impl From<HttpDispatchError> for RejectQualificationRequestError {
         RejectQualificationRequestError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RejectQualificationRequestError {
+    fn from(err: io::Error) -> RejectQualificationRequestError {
+        RejectQualificationRequestError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RejectQualificationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4099,6 +4261,11 @@ impl From<CredentialsError> for SendBonusError {
 impl From<HttpDispatchError> for SendBonusError {
     fn from(err: HttpDispatchError) -> SendBonusError {
         SendBonusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendBonusError {
+    fn from(err: io::Error) -> SendBonusError {
+        SendBonusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendBonusError {
@@ -4179,6 +4346,11 @@ impl From<CredentialsError> for SendTestEventNotificationError {
 impl From<HttpDispatchError> for SendTestEventNotificationError {
     fn from(err: HttpDispatchError) -> SendTestEventNotificationError {
         SendTestEventNotificationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendTestEventNotificationError {
+    fn from(err: io::Error) -> SendTestEventNotificationError {
+        SendTestEventNotificationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendTestEventNotificationError {
@@ -4263,6 +4435,11 @@ impl From<HttpDispatchError> for UpdateExpirationForHITError {
         UpdateExpirationForHITError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateExpirationForHITError {
+    fn from(err: io::Error) -> UpdateExpirationForHITError {
+        UpdateExpirationForHITError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateExpirationForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4343,6 +4520,11 @@ impl From<CredentialsError> for UpdateHITReviewStatusError {
 impl From<HttpDispatchError> for UpdateHITReviewStatusError {
     fn from(err: HttpDispatchError) -> UpdateHITReviewStatusError {
         UpdateHITReviewStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateHITReviewStatusError {
+    fn from(err: io::Error) -> UpdateHITReviewStatusError {
+        UpdateHITReviewStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateHITReviewStatusError {
@@ -4427,6 +4609,11 @@ impl From<HttpDispatchError> for UpdateHITTypeOfHITError {
         UpdateHITTypeOfHITError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateHITTypeOfHITError {
+    fn from(err: io::Error) -> UpdateHITTypeOfHITError {
+        UpdateHITTypeOfHITError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateHITTypeOfHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4509,6 +4696,11 @@ impl From<HttpDispatchError> for UpdateNotificationSettingsError {
         UpdateNotificationSettingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateNotificationSettingsError {
+    fn from(err: io::Error) -> UpdateNotificationSettingsError {
+        UpdateNotificationSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateNotificationSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4589,6 +4781,11 @@ impl From<CredentialsError> for UpdateQualificationTypeError {
 impl From<HttpDispatchError> for UpdateQualificationTypeError {
     fn from(err: HttpDispatchError) -> UpdateQualificationTypeError {
         UpdateQualificationTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateQualificationTypeError {
+    fn from(err: io::Error) -> UpdateQualificationTypeError {
+        UpdateQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateQualificationTypeError {
@@ -4898,13 +5095,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AcceptQualificationRequestResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AcceptQualificationRequestError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AcceptQualificationRequestResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AcceptQualificationRequestError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -4923,15 +5127,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ApproveAssignmentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ApproveAssignmentResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ApproveAssignmentError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ApproveAssignmentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4952,13 +5159,19 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AssociateQualificationWithWorkerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AssociateQualificationWithWorkerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AssociateQualificationWithWorkerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateQualificationWithWorkerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4979,13 +5192,19 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAdditionalAssignmentsForHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateAdditionalAssignmentsForHITError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateAdditionalAssignmentsForHITResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAdditionalAssignmentsForHITError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5001,13 +5220,21 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateHITError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateHITResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateHITError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5026,14 +5253,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateHITTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateHITTypeResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateHITTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateHITTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5054,15 +5287,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateHITWithHITTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateHITWithHITTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateHITWithHITTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateHITWithHITTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5083,13 +5319,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateQualificationTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateQualificationTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateQualificationTypeError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -5108,15 +5351,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateWorkerBlockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateWorkerBlockResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateWorkerBlockError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateWorkerBlockError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5133,13 +5379,21 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteHITError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteHITResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteHITError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5159,13 +5413,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteQualificationTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteQualificationTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteQualificationTypeError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -5184,15 +5445,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteWorkerBlockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteWorkerBlockResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteWorkerBlockError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteWorkerBlockError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5214,13 +5478,19 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisassociateQualificationFromWorkerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DisassociateQualificationFromWorkerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisassociateQualificationFromWorkerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateQualificationFromWorkerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5236,15 +5506,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAccountBalanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetAccountBalanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetAccountBalanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAccountBalanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5264,14 +5537,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAssignmentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetAssignmentResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetAssignmentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAssignmentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5291,15 +5570,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetFileUploadURLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetFileUploadURLResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetFileUploadURLError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetFileUploadURLError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5316,15 +5600,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetHITResponse>(String::from_utf8_lossy(&response.body)
-                                                              .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetHITResponse>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetHITError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetHITError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5344,15 +5633,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetQualificationScoreResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetQualificationScoreResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetQualificationScoreError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetQualificationScoreError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5373,15 +5665,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetQualificationTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetQualificationTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetQualificationTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5402,15 +5697,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAssignmentsForHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAssignmentsForHITResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListAssignmentsForHITError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAssignmentsForHITError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5430,15 +5728,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListBonusPaymentsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListBonusPaymentsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListBonusPaymentsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBonusPaymentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5455,13 +5756,21 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListHITsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListHITsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListHITsResponse>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListHITsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5481,13 +5790,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListHITsForQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListHITsForQualificationTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListHITsForQualificationTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListHITsForQualificationTypeError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -5507,13 +5823,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListQualificationRequestsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListQualificationRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListQualificationRequestsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListQualificationRequestsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5533,15 +5856,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListQualificationTypesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListQualificationTypesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListQualificationTypesError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListQualificationTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5562,13 +5888,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListReviewPolicyResultsForHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListReviewPolicyResultsForHITError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListReviewPolicyResultsForHITResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListReviewPolicyResultsForHITError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -5587,15 +5920,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListReviewableHITsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListReviewableHITsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListReviewableHITsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListReviewableHITsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5615,15 +5951,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListWorkerBlocksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListWorkerBlocksResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListWorkerBlocksError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListWorkerBlocksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5644,13 +5985,19 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListWorkersWithQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListWorkersWithQualificationTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListWorkersWithQualificationTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListWorkersWithQualificationTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5669,14 +6016,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<NotifyWorkersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<NotifyWorkersResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(NotifyWorkersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(NotifyWorkersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5696,15 +6049,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RejectAssignmentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RejectAssignmentResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RejectAssignmentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RejectAssignmentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5725,13 +6083,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RejectQualificationRequestResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RejectQualificationRequestError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RejectQualificationRequestResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RejectQualificationRequestError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -5747,13 +6112,21 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SendBonusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(SendBonusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SendBonusResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendBonusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5773,13 +6146,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SendTestEventNotificationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(SendTestEventNotificationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SendTestEventNotificationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendTestEventNotificationError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5799,15 +6179,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateExpirationForHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateExpirationForHITResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateExpirationForHITError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateExpirationForHITError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5828,15 +6211,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateHITReviewStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateHITReviewStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateHITReviewStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateHITReviewStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5856,15 +6242,18 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateHITTypeOfHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateHITTypeOfHITResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateHITTypeOfHITError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateHITTypeOfHITError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5885,13 +6274,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateNotificationSettingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateNotificationSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateNotificationSettingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateNotificationSettingsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -5911,13 +6307,20 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateQualificationTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateQualificationTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateQualificationTypeError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 }

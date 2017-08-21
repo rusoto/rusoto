@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1527,6 +1529,11 @@ impl From<HttpDispatchError> for CreateByteMatchSetError {
         CreateByteMatchSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateByteMatchSetError {
+    fn from(err: io::Error) -> CreateByteMatchSetError {
+        CreateByteMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1633,6 +1640,11 @@ impl From<HttpDispatchError> for CreateIPSetError {
         CreateIPSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateIPSetError {
+    fn from(err: io::Error) -> CreateIPSetError {
+        CreateIPSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1732,6 +1744,11 @@ impl From<HttpDispatchError> for CreateRateBasedRuleError {
         CreateRateBasedRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateRateBasedRuleError {
+    fn from(err: io::Error) -> CreateRateBasedRuleError {
+        CreateRateBasedRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateRateBasedRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1828,6 +1845,11 @@ impl From<CredentialsError> for CreateRuleError {
 impl From<HttpDispatchError> for CreateRuleError {
     fn from(err: HttpDispatchError) -> CreateRuleError {
         CreateRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRuleError {
+    fn from(err: io::Error) -> CreateRuleError {
+        CreateRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateRuleError {
@@ -1931,6 +1953,11 @@ impl From<HttpDispatchError> for CreateSizeConstraintSetError {
         CreateSizeConstraintSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateSizeConstraintSetError {
+    fn from(err: io::Error) -> CreateSizeConstraintSetError {
+        CreateSizeConstraintSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2025,6 +2052,11 @@ impl From<CredentialsError> for CreateSqlInjectionMatchSetError {
 impl From<HttpDispatchError> for CreateSqlInjectionMatchSetError {
     fn from(err: HttpDispatchError) -> CreateSqlInjectionMatchSetError {
         CreateSqlInjectionMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSqlInjectionMatchSetError {
+    fn from(err: io::Error) -> CreateSqlInjectionMatchSetError {
+        CreateSqlInjectionMatchSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateSqlInjectionMatchSetError {
@@ -2133,6 +2165,11 @@ impl From<HttpDispatchError> for CreateWebACLError {
         CreateWebACLError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateWebACLError {
+    fn from(err: io::Error) -> CreateWebACLError {
+        CreateWebACLError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2235,6 +2272,11 @@ impl From<CredentialsError> for CreateXssMatchSetError {
 impl From<HttpDispatchError> for CreateXssMatchSetError {
     fn from(err: HttpDispatchError) -> CreateXssMatchSetError {
         CreateXssMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateXssMatchSetError {
+    fn from(err: io::Error) -> CreateXssMatchSetError {
+        CreateXssMatchSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateXssMatchSetError {
@@ -2343,6 +2385,11 @@ impl From<HttpDispatchError> for DeleteByteMatchSetError {
         DeleteByteMatchSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteByteMatchSetError {
+    fn from(err: io::Error) -> DeleteByteMatchSetError {
+        DeleteByteMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2449,6 +2496,11 @@ impl From<HttpDispatchError> for DeleteIPSetError {
         DeleteIPSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteIPSetError {
+    fn from(err: io::Error) -> DeleteIPSetError {
+        DeleteIPSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2551,6 +2603,11 @@ impl From<CredentialsError> for DeleteRateBasedRuleError {
 impl From<HttpDispatchError> for DeleteRateBasedRuleError {
     fn from(err: HttpDispatchError) -> DeleteRateBasedRuleError {
         DeleteRateBasedRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRateBasedRuleError {
+    fn from(err: io::Error) -> DeleteRateBasedRuleError {
+        DeleteRateBasedRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRateBasedRuleError {
@@ -2657,6 +2714,11 @@ impl From<HttpDispatchError> for DeleteRuleError {
         DeleteRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRuleError {
+    fn from(err: io::Error) -> DeleteRuleError {
+        DeleteRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2759,6 +2821,11 @@ impl From<HttpDispatchError> for DeleteSizeConstraintSetError {
         DeleteSizeConstraintSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteSizeConstraintSetError {
+    fn from(err: io::Error) -> DeleteSizeConstraintSetError {
+        DeleteSizeConstraintSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2853,6 +2920,11 @@ impl From<CredentialsError> for DeleteSqlInjectionMatchSetError {
 impl From<HttpDispatchError> for DeleteSqlInjectionMatchSetError {
     fn from(err: HttpDispatchError) -> DeleteSqlInjectionMatchSetError {
         DeleteSqlInjectionMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSqlInjectionMatchSetError {
+    fn from(err: io::Error) -> DeleteSqlInjectionMatchSetError {
+        DeleteSqlInjectionMatchSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSqlInjectionMatchSetError {
@@ -2961,6 +3033,11 @@ impl From<HttpDispatchError> for DeleteWebACLError {
         DeleteWebACLError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteWebACLError {
+    fn from(err: io::Error) -> DeleteWebACLError {
+        DeleteWebACLError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3065,6 +3142,11 @@ impl From<HttpDispatchError> for DeleteXssMatchSetError {
         DeleteXssMatchSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteXssMatchSetError {
+    fn from(err: io::Error) -> DeleteXssMatchSetError {
+        DeleteXssMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteXssMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3156,6 +3238,11 @@ impl From<HttpDispatchError> for GetByteMatchSetError {
         GetByteMatchSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetByteMatchSetError {
+    fn from(err: io::Error) -> GetByteMatchSetError {
+        GetByteMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3230,6 +3317,11 @@ impl From<CredentialsError> for GetChangeTokenError {
 impl From<HttpDispatchError> for GetChangeTokenError {
     fn from(err: HttpDispatchError) -> GetChangeTokenError {
         GetChangeTokenError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetChangeTokenError {
+    fn from(err: io::Error) -> GetChangeTokenError {
+        GetChangeTokenError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetChangeTokenError {
@@ -3309,6 +3401,11 @@ impl From<CredentialsError> for GetChangeTokenStatusError {
 impl From<HttpDispatchError> for GetChangeTokenStatusError {
     fn from(err: HttpDispatchError) -> GetChangeTokenStatusError {
         GetChangeTokenStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetChangeTokenStatusError {
+    fn from(err: io::Error) -> GetChangeTokenStatusError {
+        GetChangeTokenStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetChangeTokenStatusError {
@@ -3394,6 +3491,11 @@ impl From<CredentialsError> for GetIPSetError {
 impl From<HttpDispatchError> for GetIPSetError {
     fn from(err: HttpDispatchError) -> GetIPSetError {
         GetIPSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetIPSetError {
+    fn from(err: io::Error) -> GetIPSetError {
+        GetIPSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIPSetError {
@@ -3482,6 +3584,11 @@ impl From<HttpDispatchError> for GetRateBasedRuleError {
         GetRateBasedRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRateBasedRuleError {
+    fn from(err: io::Error) -> GetRateBasedRuleError {
+        GetRateBasedRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRateBasedRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3563,6 +3670,11 @@ impl From<CredentialsError> for GetRateBasedRuleManagedKeysError {
 impl From<HttpDispatchError> for GetRateBasedRuleManagedKeysError {
     fn from(err: HttpDispatchError) -> GetRateBasedRuleManagedKeysError {
         GetRateBasedRuleManagedKeysError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRateBasedRuleManagedKeysError {
+    fn from(err: io::Error) -> GetRateBasedRuleManagedKeysError {
+        GetRateBasedRuleManagedKeysError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetRateBasedRuleManagedKeysError {
@@ -3652,6 +3764,11 @@ impl From<HttpDispatchError> for GetRuleError {
         GetRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRuleError {
+    fn from(err: io::Error) -> GetRuleError {
+        GetRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3731,6 +3848,11 @@ impl From<CredentialsError> for GetSampledRequestsError {
 impl From<HttpDispatchError> for GetSampledRequestsError {
     fn from(err: HttpDispatchError) -> GetSampledRequestsError {
         GetSampledRequestsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSampledRequestsError {
+    fn from(err: io::Error) -> GetSampledRequestsError {
+        GetSampledRequestsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSampledRequestsError {
@@ -3820,6 +3942,11 @@ impl From<HttpDispatchError> for GetSizeConstraintSetError {
         GetSizeConstraintSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetSizeConstraintSetError {
+    fn from(err: io::Error) -> GetSizeConstraintSetError {
+        GetSizeConstraintSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3904,6 +4031,11 @@ impl From<CredentialsError> for GetSqlInjectionMatchSetError {
 impl From<HttpDispatchError> for GetSqlInjectionMatchSetError {
     fn from(err: HttpDispatchError) -> GetSqlInjectionMatchSetError {
         GetSqlInjectionMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSqlInjectionMatchSetError {
+    fn from(err: io::Error) -> GetSqlInjectionMatchSetError {
+        GetSqlInjectionMatchSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSqlInjectionMatchSetError {
@@ -3992,6 +4124,11 @@ impl From<HttpDispatchError> for GetWebACLError {
         GetWebACLError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetWebACLError {
+    fn from(err: io::Error) -> GetWebACLError {
+        GetWebACLError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4078,6 +4215,11 @@ impl From<HttpDispatchError> for GetXssMatchSetError {
         GetXssMatchSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetXssMatchSetError {
+    fn from(err: io::Error) -> GetXssMatchSetError {
+        GetXssMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetXssMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4157,6 +4299,11 @@ impl From<CredentialsError> for ListByteMatchSetsError {
 impl From<HttpDispatchError> for ListByteMatchSetsError {
     fn from(err: HttpDispatchError) -> ListByteMatchSetsError {
         ListByteMatchSetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListByteMatchSetsError {
+    fn from(err: io::Error) -> ListByteMatchSetsError {
+        ListByteMatchSetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListByteMatchSetsError {
@@ -4239,6 +4386,11 @@ impl From<HttpDispatchError> for ListIPSetsError {
         ListIPSetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListIPSetsError {
+    fn from(err: io::Error) -> ListIPSetsError {
+        ListIPSetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListIPSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4317,6 +4469,11 @@ impl From<CredentialsError> for ListRateBasedRulesError {
 impl From<HttpDispatchError> for ListRateBasedRulesError {
     fn from(err: HttpDispatchError) -> ListRateBasedRulesError {
         ListRateBasedRulesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRateBasedRulesError {
+    fn from(err: io::Error) -> ListRateBasedRulesError {
+        ListRateBasedRulesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRateBasedRulesError {
@@ -4399,6 +4556,11 @@ impl From<HttpDispatchError> for ListRulesError {
         ListRulesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListRulesError {
+    fn from(err: io::Error) -> ListRulesError {
+        ListRulesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4479,6 +4641,11 @@ impl From<HttpDispatchError> for ListSizeConstraintSetsError {
         ListSizeConstraintSetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListSizeConstraintSetsError {
+    fn from(err: io::Error) -> ListSizeConstraintSetsError {
+        ListSizeConstraintSetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListSizeConstraintSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4555,6 +4722,11 @@ impl From<CredentialsError> for ListSqlInjectionMatchSetsError {
 impl From<HttpDispatchError> for ListSqlInjectionMatchSetsError {
     fn from(err: HttpDispatchError) -> ListSqlInjectionMatchSetsError {
         ListSqlInjectionMatchSetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSqlInjectionMatchSetsError {
+    fn from(err: io::Error) -> ListSqlInjectionMatchSetsError {
+        ListSqlInjectionMatchSetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListSqlInjectionMatchSetsError {
@@ -4639,6 +4811,11 @@ impl From<HttpDispatchError> for ListWebACLsError {
         ListWebACLsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListWebACLsError {
+    fn from(err: io::Error) -> ListWebACLsError {
+        ListWebACLsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListWebACLsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4717,6 +4894,11 @@ impl From<CredentialsError> for ListXssMatchSetsError {
 impl From<HttpDispatchError> for ListXssMatchSetsError {
     fn from(err: HttpDispatchError) -> ListXssMatchSetsError {
         ListXssMatchSetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListXssMatchSetsError {
+    fn from(err: io::Error) -> ListXssMatchSetsError {
+        ListXssMatchSetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListXssMatchSetsError {
@@ -4825,6 +5007,11 @@ impl From<CredentialsError> for UpdateByteMatchSetError {
 impl From<HttpDispatchError> for UpdateByteMatchSetError {
     fn from(err: HttpDispatchError) -> UpdateByteMatchSetError {
         UpdateByteMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateByteMatchSetError {
+    fn from(err: io::Error) -> UpdateByteMatchSetError {
+        UpdateByteMatchSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateByteMatchSetError {
@@ -4950,6 +5137,11 @@ impl From<HttpDispatchError> for UpdateIPSetError {
         UpdateIPSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateIPSetError {
+    fn from(err: io::Error) -> UpdateIPSetError {
+        UpdateIPSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5068,6 +5260,11 @@ impl From<CredentialsError> for UpdateRateBasedRuleError {
 impl From<HttpDispatchError> for UpdateRateBasedRuleError {
     fn from(err: HttpDispatchError) -> UpdateRateBasedRuleError {
         UpdateRateBasedRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRateBasedRuleError {
+    fn from(err: io::Error) -> UpdateRateBasedRuleError {
+        UpdateRateBasedRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateRateBasedRuleError {
@@ -5192,6 +5389,11 @@ impl From<HttpDispatchError> for UpdateRuleError {
         UpdateRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateRuleError {
+    fn from(err: io::Error) -> UpdateRuleError {
+        UpdateRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5306,6 +5508,11 @@ impl From<HttpDispatchError> for UpdateSizeConstraintSetError {
         UpdateSizeConstraintSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateSizeConstraintSetError {
+    fn from(err: io::Error) -> UpdateSizeConstraintSetError {
+        UpdateSizeConstraintSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5409,6 +5616,11 @@ impl From<CredentialsError> for UpdateSqlInjectionMatchSetError {
 impl From<HttpDispatchError> for UpdateSqlInjectionMatchSetError {
     fn from(err: HttpDispatchError) -> UpdateSqlInjectionMatchSetError {
         UpdateSqlInjectionMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateSqlInjectionMatchSetError {
+    fn from(err: io::Error) -> UpdateSqlInjectionMatchSetError {
+        UpdateSqlInjectionMatchSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateSqlInjectionMatchSetError {
@@ -5534,6 +5746,11 @@ impl From<HttpDispatchError> for UpdateWebACLError {
         UpdateWebACLError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateWebACLError {
+    fn from(err: io::Error) -> UpdateWebACLError {
+        UpdateWebACLError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5649,6 +5866,11 @@ impl From<CredentialsError> for UpdateXssMatchSetError {
 impl From<HttpDispatchError> for UpdateXssMatchSetError {
     fn from(err: HttpDispatchError) -> UpdateXssMatchSetError {
         UpdateXssMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateXssMatchSetError {
+    fn from(err: io::Error) -> UpdateXssMatchSetError {
+        UpdateXssMatchSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateXssMatchSetError {
@@ -5983,15 +6205,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateByteMatchSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateByteMatchSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6010,13 +6235,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateIPSetResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateIPSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6034,15 +6267,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRateBasedRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateRateBasedRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateRateBasedRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRateBasedRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6061,13 +6297,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateRuleResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6086,13 +6330,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateSizeConstraintSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSizeConstraintSetError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6111,13 +6362,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -6135,14 +6393,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateWebACLResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateWebACLError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6161,15 +6425,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateXssMatchSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateXssMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateXssMatchSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6188,15 +6455,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteByteMatchSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteByteMatchSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6215,13 +6485,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteIPSetResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteIPSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6239,15 +6517,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRateBasedRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRateBasedRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteRateBasedRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRateBasedRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6266,13 +6547,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRuleResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6291,13 +6580,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteSizeConstraintSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSizeConstraintSetError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6316,13 +6612,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -6340,14 +6643,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteWebACLResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteWebACLError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6366,15 +6675,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteXssMatchSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteXssMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteXssMatchSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6393,15 +6705,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetByteMatchSetResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetByteMatchSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6417,15 +6734,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetChangeTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetChangeTokenResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetChangeTokenError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetChangeTokenError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6445,15 +6767,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetChangeTokenStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetChangeTokenStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetChangeTokenStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetChangeTokenStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6470,13 +6795,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetIPSetResponse>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIPSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6494,15 +6827,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRateBasedRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRateBasedRuleResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetRateBasedRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRateBasedRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6523,13 +6861,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRateBasedRuleManagedKeysResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetRateBasedRuleManagedKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRateBasedRuleManagedKeysResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRateBasedRuleManagedKeysError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -6545,15 +6890,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetRuleResponse>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRuleResponse>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6571,15 +6921,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetSampledRequestsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetSampledRequestsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetSampledRequestsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSampledRequestsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6599,15 +6952,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetSizeConstraintSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSizeConstraintSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6627,13 +6983,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6649,13 +7012,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetWebACLResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetWebACLError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6673,15 +7044,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetXssMatchSetResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetXssMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetXssMatchSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6700,15 +7076,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListByteMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListByteMatchSetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListByteMatchSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListByteMatchSetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6727,13 +7106,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListIPSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListIPSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListIPSetsResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListIPSetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6751,15 +7138,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRateBasedRulesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRateBasedRulesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListRateBasedRulesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRateBasedRulesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6776,13 +7166,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRulesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListRulesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRulesResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRulesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6801,15 +7199,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSizeConstraintSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListSizeConstraintSetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListSizeConstraintSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSizeConstraintSetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6829,13 +7230,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSqlInjectionMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListSqlInjectionMatchSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListSqlInjectionMatchSetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSqlInjectionMatchSetsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -6853,13 +7261,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListWebACLsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListWebACLsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListWebACLsResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListWebACLsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6877,15 +7293,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListXssMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListXssMatchSetsResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListXssMatchSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListXssMatchSetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6904,15 +7325,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateByteMatchSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateByteMatchSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6931,13 +7355,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateIPSetResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateIPSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6955,15 +7387,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateRateBasedRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateRateBasedRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateRateBasedRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRateBasedRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6982,13 +7417,21 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateRuleResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7007,13 +7450,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateSizeConstraintSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateSizeConstraintSetError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -7032,13 +7482,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -7056,14 +7513,20 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateWebACLResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateWebACLError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7082,15 +7545,18 @@ impl<P, D> Waf for WafClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateXssMatchSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateXssMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateXssMatchSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

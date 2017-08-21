@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1701,6 +1703,11 @@ impl From<HttpDispatchError> for AllocateStaticIpError {
         AllocateStaticIpError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AllocateStaticIpError {
+    fn from(err: io::Error) -> AllocateStaticIpError {
+        AllocateStaticIpError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AllocateStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1807,6 +1814,11 @@ impl From<CredentialsError> for AttachStaticIpError {
 impl From<HttpDispatchError> for AttachStaticIpError {
     fn from(err: HttpDispatchError) -> AttachStaticIpError {
         AttachStaticIpError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachStaticIpError {
+    fn from(err: io::Error) -> AttachStaticIpError {
+        AttachStaticIpError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AttachStaticIpError {
@@ -1917,6 +1929,11 @@ impl From<HttpDispatchError> for CloseInstancePublicPortsError {
         CloseInstancePublicPortsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CloseInstancePublicPortsError {
+    fn from(err: io::Error) -> CloseInstancePublicPortsError {
+        CloseInstancePublicPortsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CloseInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2023,6 +2040,11 @@ impl From<CredentialsError> for CreateDomainError {
 impl From<HttpDispatchError> for CreateDomainError {
     fn from(err: HttpDispatchError) -> CreateDomainError {
         CreateDomainError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDomainError {
+    fn from(err: io::Error) -> CreateDomainError {
+        CreateDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDomainError {
@@ -2135,6 +2157,11 @@ impl From<HttpDispatchError> for CreateDomainEntryError {
         CreateDomainEntryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDomainEntryError {
+    fn from(err: io::Error) -> CreateDomainEntryError {
+        CreateDomainEntryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2243,6 +2270,11 @@ impl From<CredentialsError> for CreateInstanceSnapshotError {
 impl From<HttpDispatchError> for CreateInstanceSnapshotError {
     fn from(err: HttpDispatchError) -> CreateInstanceSnapshotError {
         CreateInstanceSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateInstanceSnapshotError {
+    fn from(err: io::Error) -> CreateInstanceSnapshotError {
+        CreateInstanceSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateInstanceSnapshotError {
@@ -2357,6 +2389,11 @@ impl From<HttpDispatchError> for CreateInstancesError {
         CreateInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateInstancesError {
+    fn from(err: io::Error) -> CreateInstancesError {
+        CreateInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2459,6 +2496,11 @@ impl From<CredentialsError> for CreateInstancesFromSnapshotError {
 impl From<HttpDispatchError> for CreateInstancesFromSnapshotError {
     fn from(err: HttpDispatchError) -> CreateInstancesFromSnapshotError {
         CreateInstancesFromSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateInstancesFromSnapshotError {
+    fn from(err: io::Error) -> CreateInstancesFromSnapshotError {
+        CreateInstancesFromSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateInstancesFromSnapshotError {
@@ -2571,6 +2613,11 @@ impl From<HttpDispatchError> for CreateKeyPairError {
         CreateKeyPairError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateKeyPairError {
+    fn from(err: io::Error) -> CreateKeyPairError {
+        CreateKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2675,6 +2722,11 @@ impl From<CredentialsError> for DeleteDomainError {
 impl From<HttpDispatchError> for DeleteDomainError {
     fn from(err: HttpDispatchError) -> DeleteDomainError {
         DeleteDomainError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDomainError {
+    fn from(err: io::Error) -> DeleteDomainError {
+        DeleteDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDomainError {
@@ -2787,6 +2839,11 @@ impl From<HttpDispatchError> for DeleteDomainEntryError {
         DeleteDomainEntryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDomainEntryError {
+    fn from(err: io::Error) -> DeleteDomainEntryError {
+        DeleteDomainEntryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2897,6 +2954,11 @@ impl From<HttpDispatchError> for DeleteInstanceError {
         DeleteInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteInstanceError {
+    fn from(err: io::Error) -> DeleteInstanceError {
+        DeleteInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3003,6 +3065,11 @@ impl From<CredentialsError> for DeleteInstanceSnapshotError {
 impl From<HttpDispatchError> for DeleteInstanceSnapshotError {
     fn from(err: HttpDispatchError) -> DeleteInstanceSnapshotError {
         DeleteInstanceSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteInstanceSnapshotError {
+    fn from(err: io::Error) -> DeleteInstanceSnapshotError {
+        DeleteInstanceSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteInstanceSnapshotError {
@@ -3115,6 +3182,11 @@ impl From<HttpDispatchError> for DeleteKeyPairError {
         DeleteKeyPairError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteKeyPairError {
+    fn from(err: io::Error) -> DeleteKeyPairError {
+        DeleteKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3223,6 +3295,11 @@ impl From<HttpDispatchError> for DetachStaticIpError {
         DetachStaticIpError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetachStaticIpError {
+    fn from(err: io::Error) -> DetachStaticIpError {
+        DetachStaticIpError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetachStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3329,6 +3406,11 @@ impl From<CredentialsError> for DownloadDefaultKeyPairError {
 impl From<HttpDispatchError> for DownloadDefaultKeyPairError {
     fn from(err: HttpDispatchError) -> DownloadDefaultKeyPairError {
         DownloadDefaultKeyPairError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DownloadDefaultKeyPairError {
+    fn from(err: io::Error) -> DownloadDefaultKeyPairError {
+        DownloadDefaultKeyPairError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DownloadDefaultKeyPairError {
@@ -3441,6 +3523,11 @@ impl From<HttpDispatchError> for GetActiveNamesError {
         GetActiveNamesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetActiveNamesError {
+    fn from(err: io::Error) -> GetActiveNamesError {
+        GetActiveNamesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetActiveNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3549,6 +3636,11 @@ impl From<HttpDispatchError> for GetBlueprintsError {
         GetBlueprintsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBlueprintsError {
+    fn from(err: io::Error) -> GetBlueprintsError {
+        GetBlueprintsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBlueprintsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3651,6 +3743,11 @@ impl From<CredentialsError> for GetBundlesError {
 impl From<HttpDispatchError> for GetBundlesError {
     fn from(err: HttpDispatchError) -> GetBundlesError {
         GetBundlesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBundlesError {
+    fn from(err: io::Error) -> GetBundlesError {
+        GetBundlesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBundlesError {
@@ -3757,6 +3854,11 @@ impl From<HttpDispatchError> for GetDomainError {
         GetDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDomainError {
+    fn from(err: io::Error) -> GetDomainError {
+        GetDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3859,6 +3961,11 @@ impl From<CredentialsError> for GetDomainsError {
 impl From<HttpDispatchError> for GetDomainsError {
     fn from(err: HttpDispatchError) -> GetDomainsError {
         GetDomainsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDomainsError {
+    fn from(err: io::Error) -> GetDomainsError {
+        GetDomainsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDomainsError {
@@ -3967,6 +4074,11 @@ impl From<HttpDispatchError> for GetInstanceError {
         GetInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetInstanceError {
+    fn from(err: io::Error) -> GetInstanceError {
+        GetInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4073,6 +4185,11 @@ impl From<CredentialsError> for GetInstanceAccessDetailsError {
 impl From<HttpDispatchError> for GetInstanceAccessDetailsError {
     fn from(err: HttpDispatchError) -> GetInstanceAccessDetailsError {
         GetInstanceAccessDetailsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetInstanceAccessDetailsError {
+    fn from(err: io::Error) -> GetInstanceAccessDetailsError {
+        GetInstanceAccessDetailsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetInstanceAccessDetailsError {
@@ -4185,6 +4302,11 @@ impl From<HttpDispatchError> for GetInstanceMetricDataError {
         GetInstanceMetricDataError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetInstanceMetricDataError {
+    fn from(err: io::Error) -> GetInstanceMetricDataError {
+        GetInstanceMetricDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetInstanceMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4293,6 +4415,11 @@ impl From<CredentialsError> for GetInstancePortStatesError {
 impl From<HttpDispatchError> for GetInstancePortStatesError {
     fn from(err: HttpDispatchError) -> GetInstancePortStatesError {
         GetInstancePortStatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetInstancePortStatesError {
+    fn from(err: io::Error) -> GetInstancePortStatesError {
+        GetInstancePortStatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetInstancePortStatesError {
@@ -4405,6 +4532,11 @@ impl From<HttpDispatchError> for GetInstanceSnapshotError {
         GetInstanceSnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetInstanceSnapshotError {
+    fn from(err: io::Error) -> GetInstanceSnapshotError {
+        GetInstanceSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetInstanceSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4513,6 +4645,11 @@ impl From<CredentialsError> for GetInstanceSnapshotsError {
 impl From<HttpDispatchError> for GetInstanceSnapshotsError {
     fn from(err: HttpDispatchError) -> GetInstanceSnapshotsError {
         GetInstanceSnapshotsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetInstanceSnapshotsError {
+    fn from(err: io::Error) -> GetInstanceSnapshotsError {
+        GetInstanceSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetInstanceSnapshotsError {
@@ -4627,6 +4764,11 @@ impl From<HttpDispatchError> for GetInstanceStateError {
         GetInstanceStateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetInstanceStateError {
+    fn from(err: io::Error) -> GetInstanceStateError {
+        GetInstanceStateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetInstanceStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4733,6 +4875,11 @@ impl From<HttpDispatchError> for GetInstancesError {
         GetInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetInstancesError {
+    fn from(err: io::Error) -> GetInstancesError {
+        GetInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4835,6 +4982,11 @@ impl From<CredentialsError> for GetKeyPairError {
 impl From<HttpDispatchError> for GetKeyPairError {
     fn from(err: HttpDispatchError) -> GetKeyPairError {
         GetKeyPairError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetKeyPairError {
+    fn from(err: io::Error) -> GetKeyPairError {
+        GetKeyPairError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetKeyPairError {
@@ -4943,6 +5095,11 @@ impl From<HttpDispatchError> for GetKeyPairsError {
         GetKeyPairsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetKeyPairsError {
+    fn from(err: io::Error) -> GetKeyPairsError {
+        GetKeyPairsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetKeyPairsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5047,6 +5204,11 @@ impl From<CredentialsError> for GetOperationError {
 impl From<HttpDispatchError> for GetOperationError {
     fn from(err: HttpDispatchError) -> GetOperationError {
         GetOperationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetOperationError {
+    fn from(err: io::Error) -> GetOperationError {
+        GetOperationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetOperationError {
@@ -5157,6 +5319,11 @@ impl From<HttpDispatchError> for GetOperationsError {
         GetOperationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetOperationsError {
+    fn from(err: io::Error) -> GetOperationsError {
+        GetOperationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5265,6 +5432,11 @@ impl From<HttpDispatchError> for GetOperationsForResourceError {
         GetOperationsForResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetOperationsForResourceError {
+    fn from(err: io::Error) -> GetOperationsForResourceError {
+        GetOperationsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetOperationsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5369,6 +5541,11 @@ impl From<CredentialsError> for GetRegionsError {
 impl From<HttpDispatchError> for GetRegionsError {
     fn from(err: HttpDispatchError) -> GetRegionsError {
         GetRegionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRegionsError {
+    fn from(err: io::Error) -> GetRegionsError {
+        GetRegionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetRegionsError {
@@ -5477,6 +5654,11 @@ impl From<HttpDispatchError> for GetStaticIpError {
         GetStaticIpError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetStaticIpError {
+    fn from(err: io::Error) -> GetStaticIpError {
+        GetStaticIpError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5581,6 +5763,11 @@ impl From<CredentialsError> for GetStaticIpsError {
 impl From<HttpDispatchError> for GetStaticIpsError {
     fn from(err: HttpDispatchError) -> GetStaticIpsError {
         GetStaticIpsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetStaticIpsError {
+    fn from(err: io::Error) -> GetStaticIpsError {
+        GetStaticIpsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetStaticIpsError {
@@ -5691,6 +5878,11 @@ impl From<HttpDispatchError> for ImportKeyPairError {
         ImportKeyPairError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ImportKeyPairError {
+    fn from(err: io::Error) -> ImportKeyPairError {
+        ImportKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ImportKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5795,6 +5987,11 @@ impl From<CredentialsError> for IsVpcPeeredError {
 impl From<HttpDispatchError> for IsVpcPeeredError {
     fn from(err: HttpDispatchError) -> IsVpcPeeredError {
         IsVpcPeeredError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for IsVpcPeeredError {
+    fn from(err: io::Error) -> IsVpcPeeredError {
+        IsVpcPeeredError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for IsVpcPeeredError {
@@ -5905,6 +6102,11 @@ impl From<HttpDispatchError> for OpenInstancePublicPortsError {
         OpenInstancePublicPortsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for OpenInstancePublicPortsError {
+    fn from(err: io::Error) -> OpenInstancePublicPortsError {
+        OpenInstancePublicPortsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for OpenInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6009,6 +6211,11 @@ impl From<CredentialsError> for PeerVpcError {
 impl From<HttpDispatchError> for PeerVpcError {
     fn from(err: HttpDispatchError) -> PeerVpcError {
         PeerVpcError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PeerVpcError {
+    fn from(err: io::Error) -> PeerVpcError {
+        PeerVpcError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PeerVpcError {
@@ -6117,6 +6324,11 @@ impl From<CredentialsError> for PutInstancePublicPortsError {
 impl From<HttpDispatchError> for PutInstancePublicPortsError {
     fn from(err: HttpDispatchError) -> PutInstancePublicPortsError {
         PutInstancePublicPortsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutInstancePublicPortsError {
+    fn from(err: io::Error) -> PutInstancePublicPortsError {
+        PutInstancePublicPortsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutInstancePublicPortsError {
@@ -6229,6 +6441,11 @@ impl From<HttpDispatchError> for RebootInstanceError {
         RebootInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RebootInstanceError {
+    fn from(err: io::Error) -> RebootInstanceError {
+        RebootInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RebootInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6339,6 +6556,11 @@ impl From<HttpDispatchError> for ReleaseStaticIpError {
         ReleaseStaticIpError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReleaseStaticIpError {
+    fn from(err: io::Error) -> ReleaseStaticIpError {
+        ReleaseStaticIpError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReleaseStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6447,6 +6669,11 @@ impl From<HttpDispatchError> for StartInstanceError {
         StartInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartInstanceError {
+    fn from(err: io::Error) -> StartInstanceError {
+        StartInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6553,6 +6780,11 @@ impl From<HttpDispatchError> for StopInstanceError {
         StopInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StopInstanceError {
+    fn from(err: io::Error) -> StopInstanceError {
+        StopInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StopInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6655,6 +6887,11 @@ impl From<CredentialsError> for UnpeerVpcError {
 impl From<HttpDispatchError> for UnpeerVpcError {
     fn from(err: HttpDispatchError) -> UnpeerVpcError {
         UnpeerVpcError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UnpeerVpcError {
+    fn from(err: io::Error) -> UnpeerVpcError {
+        UnpeerVpcError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UnpeerVpcError {
@@ -6765,6 +7002,11 @@ impl From<CredentialsError> for UpdateDomainEntryError {
 impl From<HttpDispatchError> for UpdateDomainEntryError {
     fn from(err: HttpDispatchError) -> UpdateDomainEntryError {
         UpdateDomainEntryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateDomainEntryError {
+    fn from(err: io::Error) -> UpdateDomainEntryError {
+        UpdateDomainEntryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateDomainEntryError {
@@ -7114,15 +7356,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AllocateStaticIpResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AllocateStaticIpResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AllocateStaticIpError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AllocateStaticIpError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7141,15 +7388,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AttachStaticIpResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AttachStaticIpResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AttachStaticIpError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachStaticIpError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7170,13 +7422,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CloseInstancePublicPortsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CloseInstancePublicPortsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CloseInstancePublicPortsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CloseInstancePublicPortsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -7194,14 +7453,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDomainResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDomainResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7220,15 +7485,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDomainEntryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDomainEntryResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateDomainEntryError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDomainEntryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7248,15 +7518,18 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateInstanceSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateInstanceSnapshotResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateInstanceSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateInstanceSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7275,15 +7548,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateInstancesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateInstancesResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7304,13 +7582,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateInstancesFromSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateInstancesFromSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateInstancesFromSnapshotResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateInstancesFromSnapshotError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -7328,14 +7613,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateKeyPairResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateKeyPairResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateKeyPairError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7354,14 +7645,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDomainResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDomainResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7380,15 +7677,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDomainEntryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDomainEntryResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteDomainEntryError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDomainEntryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7407,15 +7709,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteInstanceResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7435,15 +7742,18 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteInstanceSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteInstanceSnapshotResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteInstanceSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteInstanceSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7462,14 +7772,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteKeyPairResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteKeyPairResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteKeyPairError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7488,15 +7804,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DetachStaticIpResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DetachStaticIpResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DetachStaticIpError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachStaticIpError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7514,15 +7835,18 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DownloadDefaultKeyPairResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DownloadDefaultKeyPairResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DownloadDefaultKeyPairError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DownloadDefaultKeyPairError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7541,15 +7865,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetActiveNamesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetActiveNamesResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetActiveNamesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetActiveNamesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7568,14 +7897,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetBlueprintsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetBlueprintsResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetBlueprintsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBlueprintsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7592,13 +7927,21 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetBundlesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetBundlesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetBundlesResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBundlesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7614,15 +7957,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetDomainResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDomainResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7638,13 +7986,21 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDomainsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDomainsResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDomainsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7662,13 +8018,21 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInstanceResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7688,13 +8052,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInstanceAccessDetailsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetInstanceAccessDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInstanceAccessDetailsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInstanceAccessDetailsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -7713,15 +8084,18 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInstanceMetricDataResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInstanceMetricDataResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetInstanceMetricDataError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInstanceMetricDataError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7741,15 +8115,18 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInstancePortStatesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInstancePortStatesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetInstancePortStatesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInstancePortStatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7768,15 +8145,18 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInstanceSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInstanceSnapshotResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetInstanceSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInstanceSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7795,15 +8175,18 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInstanceSnapshotsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInstanceSnapshotsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetInstanceSnapshotsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInstanceSnapshotsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7822,15 +8205,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInstanceStateResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInstanceStateResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetInstanceStateError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInstanceStateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7849,14 +8237,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInstancesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetInstancesResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7873,13 +8267,21 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetKeyPairResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetKeyPairResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetKeyPairError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7897,13 +8299,21 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetKeyPairsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetKeyPairsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetKeyPairsResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetKeyPairsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7921,14 +8331,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOperationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetOperationResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetOperationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetOperationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7947,14 +8363,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOperationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetOperationsResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetOperationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetOperationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7975,13 +8397,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOperationsForResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetOperationsForResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetOperationsForResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetOperationsForResourceError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -7997,13 +8426,21 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRegionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetRegionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRegionsResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRegionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8021,13 +8458,21 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetStaticIpResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetStaticIpError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetStaticIpResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetStaticIpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8045,14 +8490,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetStaticIpsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetStaticIpsResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetStaticIpsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetStaticIpsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8071,14 +8522,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ImportKeyPairResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ImportKeyPairResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ImportKeyPairError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportKeyPairError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8094,13 +8551,21 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<IsVpcPeeredResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(IsVpcPeeredError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<IsVpcPeeredResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(IsVpcPeeredError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8119,13 +8584,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<OpenInstancePublicPortsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(OpenInstancePublicPortsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<OpenInstancePublicPortsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(OpenInstancePublicPortsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -8140,15 +8612,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<PeerVpcResult>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PeerVpcResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(PeerVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PeerVpcError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8167,15 +8644,18 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutInstancePublicPortsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutInstancePublicPortsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(PutInstancePublicPortsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutInstancePublicPortsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8194,15 +8674,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RebootInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RebootInstanceResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RebootInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RebootInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8221,15 +8706,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ReleaseStaticIpResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ReleaseStaticIpResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ReleaseStaticIpError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReleaseStaticIpError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8248,14 +8738,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartInstanceResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StartInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8274,14 +8770,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopInstanceResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StopInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8297,15 +8799,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<UnpeerVpcResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UnpeerVpcResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(UnpeerVpcError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UnpeerVpcError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8323,15 +8830,20 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDomainEntryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDomainEntryResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateDomainEntryError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDomainEntryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

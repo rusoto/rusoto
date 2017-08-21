@@ -35,10 +35,9 @@ lazy_static! {
 }
 
 
-#[derive(Clone)]
 pub struct HttpResponse {
     pub status: StatusCode,
-    pub body: Vec<u8>,
+    pub body: Box<Read>,
     pub headers: HashMap<String, String>,
 }
 
@@ -119,7 +118,7 @@ impl DispatchSignedRequest for Client {
                 debug!("{}:{}", h.name(), h.value_string());
             }
         }
-        let mut hyper_response = match request.payload {
+        let hyper_response = match request.payload {
             None => {
                 try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send())
             }
@@ -130,13 +129,6 @@ impl DispatchSignedRequest for Client {
                     .send())
             }
         };
-        let mut body: Vec<u8> = Vec::new();
-
-        try!(hyper_response.read_to_end(&mut body));
-
-        if log_enabled!(Debug) {
-            debug!("Response body:\n{:?}", body);
-        }
 
         let mut headers: HashMap<String, String> = HashMap::new();
 
@@ -146,7 +138,7 @@ impl DispatchSignedRequest for Client {
 
         Ok(HttpResponse {
             status: hyper_response.status,
-            body: body,
+            body: Box::new(hyper_response),
             headers: headers,
         })
 

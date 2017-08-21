@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -816,6 +818,11 @@ impl From<HttpDispatchError> for AssociateFleetError {
         AssociateFleetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssociateFleetError {
+    fn from(err: io::Error) -> AssociateFleetError {
+        AssociateFleetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssociateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -916,6 +923,11 @@ impl From<CredentialsError> for CreateFleetError {
 impl From<HttpDispatchError> for CreateFleetError {
     fn from(err: HttpDispatchError) -> CreateFleetError {
         CreateFleetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateFleetError {
+    fn from(err: io::Error) -> CreateFleetError {
+        CreateFleetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateFleetError {
@@ -1022,6 +1034,11 @@ impl From<HttpDispatchError> for CreateStackError {
         CreateStackError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateStackError {
+    fn from(err: io::Error) -> CreateStackError {
+        CreateStackError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1114,6 +1131,11 @@ impl From<HttpDispatchError> for CreateStreamingURLError {
         CreateStreamingURLError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateStreamingURLError {
+    fn from(err: io::Error) -> CreateStreamingURLError {
+        CreateStreamingURLError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateStreamingURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1203,6 +1225,11 @@ impl From<HttpDispatchError> for DeleteFleetError {
         DeleteFleetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteFleetError {
+    fn from(err: io::Error) -> DeleteFleetError {
+        DeleteFleetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1289,6 +1316,11 @@ impl From<HttpDispatchError> for DeleteStackError {
         DeleteStackError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteStackError {
+    fn from(err: io::Error) -> DeleteStackError {
+        DeleteStackError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1365,6 +1397,11 @@ impl From<HttpDispatchError> for DescribeFleetsError {
         DescribeFleetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeFleetsError {
+    fn from(err: io::Error) -> DescribeFleetsError {
+        DescribeFleetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1439,6 +1476,11 @@ impl From<HttpDispatchError> for DescribeImagesError {
         DescribeImagesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeImagesError {
+    fn from(err: io::Error) -> DescribeImagesError {
+        DescribeImagesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1509,6 +1551,11 @@ impl From<CredentialsError> for DescribeSessionsError {
 impl From<HttpDispatchError> for DescribeSessionsError {
     fn from(err: HttpDispatchError) -> DescribeSessionsError {
         DescribeSessionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSessionsError {
+    fn from(err: io::Error) -> DescribeSessionsError {
+        DescribeSessionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSessionsError {
@@ -1583,6 +1630,11 @@ impl From<CredentialsError> for DescribeStacksError {
 impl From<HttpDispatchError> for DescribeStacksError {
     fn from(err: HttpDispatchError) -> DescribeStacksError {
         DescribeStacksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeStacksError {
+    fn from(err: io::Error) -> DescribeStacksError {
+        DescribeStacksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeStacksError {
@@ -1669,6 +1721,11 @@ impl From<HttpDispatchError> for DisassociateFleetError {
         DisassociateFleetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisassociateFleetError {
+    fn from(err: io::Error) -> DisassociateFleetError {
+        DisassociateFleetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisassociateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1742,6 +1799,11 @@ impl From<HttpDispatchError> for ExpireSessionError {
         ExpireSessionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ExpireSessionError {
+    fn from(err: io::Error) -> ExpireSessionError {
+        ExpireSessionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ExpireSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1808,6 +1870,11 @@ impl From<CredentialsError> for ListAssociatedFleetsError {
 impl From<HttpDispatchError> for ListAssociatedFleetsError {
     fn from(err: HttpDispatchError) -> ListAssociatedFleetsError {
         ListAssociatedFleetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAssociatedFleetsError {
+    fn from(err: io::Error) -> ListAssociatedFleetsError {
+        ListAssociatedFleetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAssociatedFleetsError {
@@ -1878,6 +1945,11 @@ impl From<CredentialsError> for ListAssociatedStacksError {
 impl From<HttpDispatchError> for ListAssociatedStacksError {
     fn from(err: HttpDispatchError) -> ListAssociatedStacksError {
         ListAssociatedStacksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAssociatedStacksError {
+    fn from(err: io::Error) -> ListAssociatedStacksError {
+        ListAssociatedStacksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAssociatedStacksError {
@@ -1968,6 +2040,11 @@ impl From<HttpDispatchError> for StartFleetError {
         StartFleetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartFleetError {
+    fn from(err: io::Error) -> StartFleetError {
+        StartFleetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2046,6 +2123,11 @@ impl From<CredentialsError> for StopFleetError {
 impl From<HttpDispatchError> for StopFleetError {
     fn from(err: HttpDispatchError) -> StopFleetError {
         StopFleetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopFleetError {
+    fn from(err: io::Error) -> StopFleetError {
+        StopFleetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopFleetError {
@@ -2158,6 +2240,11 @@ impl From<HttpDispatchError> for UpdateFleetError {
         UpdateFleetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateFleetError {
+    fn from(err: io::Error) -> UpdateFleetError {
+        UpdateFleetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2262,6 +2349,11 @@ impl From<CredentialsError> for UpdateStackError {
 impl From<HttpDispatchError> for UpdateStackError {
     fn from(err: HttpDispatchError) -> UpdateStackError {
         UpdateStackError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateStackError {
+    fn from(err: io::Error) -> UpdateStackError {
+        UpdateStackError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateStackError {
@@ -2430,15 +2522,20 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AssociateFleetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AssociateFleetResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AssociateFleetError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2457,13 +2554,21 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateFleetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateFleetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateFleetResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2481,13 +2586,21 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateStackResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateStackResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2505,15 +2618,20 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateStreamingURLResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateStreamingURLResult>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateStreamingURLError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStreamingURLError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2532,13 +2650,21 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteFleetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteFleetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteFleetResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2556,13 +2682,21 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteStackResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteStackResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2580,15 +2714,20 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeFleetsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeFleetsResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeFleetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeFleetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2607,15 +2746,20 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeImagesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeImagesResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeImagesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeImagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2634,15 +2778,20 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSessionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeSessionsResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeSessionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSessionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2661,15 +2810,20 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStacksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeStacksResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeStacksError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStacksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2688,15 +2842,20 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisassociateFleetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisassociateFleetResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DisassociateFleetError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2715,14 +2874,20 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ExpireSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ExpireSessionResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ExpireSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ExpireSessionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2742,15 +2907,18 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAssociatedFleetsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAssociatedFleetsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListAssociatedFleetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAssociatedFleetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2770,15 +2938,18 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAssociatedStacksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAssociatedStacksResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListAssociatedStacksError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAssociatedStacksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2795,13 +2966,21 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartFleetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StartFleetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartFleetResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2817,15 +2996,20 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<StopFleetResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopFleetResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(StopFleetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2843,13 +3027,21 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateFleetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateFleetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateFleetResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2867,13 +3059,21 @@ impl<P, D> AppStream for AppStreamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateStackResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateStackResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

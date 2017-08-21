@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -801,6 +803,11 @@ impl From<HttpDispatchError> for AddTagsError {
         AddTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsError {
+    fn from(err: io::Error) -> AddTagsError {
+        AddTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -976,6 +983,11 @@ impl From<HttpDispatchError> for CreateTrailError {
         CreateTrailError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateTrailError {
+    fn from(err: io::Error) -> CreateTrailError {
+        CreateTrailError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1080,6 +1092,11 @@ impl From<HttpDispatchError> for DeleteTrailError {
         DeleteTrailError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTrailError {
+    fn from(err: io::Error) -> DeleteTrailError {
+        DeleteTrailError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1159,6 +1176,11 @@ impl From<CredentialsError> for DescribeTrailsError {
 impl From<HttpDispatchError> for DescribeTrailsError {
     fn from(err: HttpDispatchError) -> DescribeTrailsError {
         DescribeTrailsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTrailsError {
+    fn from(err: io::Error) -> DescribeTrailsError {
+        DescribeTrailsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTrailsError {
@@ -1251,6 +1273,11 @@ impl From<HttpDispatchError> for GetEventSelectorsError {
         GetEventSelectorsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetEventSelectorsError {
+    fn from(err: io::Error) -> GetEventSelectorsError {
+        GetEventSelectorsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetEventSelectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1333,6 +1360,11 @@ impl From<CredentialsError> for GetTrailStatusError {
 impl From<HttpDispatchError> for GetTrailStatusError {
     fn from(err: HttpDispatchError) -> GetTrailStatusError {
         GetTrailStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetTrailStatusError {
+    fn from(err: io::Error) -> GetTrailStatusError {
+        GetTrailStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetTrailStatusError {
@@ -1423,6 +1455,11 @@ impl From<CredentialsError> for ListPublicKeysError {
 impl From<HttpDispatchError> for ListPublicKeysError {
     fn from(err: HttpDispatchError) -> ListPublicKeysError {
         ListPublicKeysError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPublicKeysError {
+    fn from(err: io::Error) -> ListPublicKeysError {
+        ListPublicKeysError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPublicKeysError {
@@ -1530,6 +1567,11 @@ impl From<HttpDispatchError> for ListTagsError {
         ListTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTagsError {
+    fn from(err: io::Error) -> ListTagsError {
+        ListTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1623,6 +1665,11 @@ impl From<CredentialsError> for LookupEventsError {
 impl From<HttpDispatchError> for LookupEventsError {
     fn from(err: HttpDispatchError) -> LookupEventsError {
         LookupEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for LookupEventsError {
+    fn from(err: io::Error) -> LookupEventsError {
+        LookupEventsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for LookupEventsError {
@@ -1725,6 +1772,11 @@ impl From<CredentialsError> for PutEventSelectorsError {
 impl From<HttpDispatchError> for PutEventSelectorsError {
     fn from(err: HttpDispatchError) -> PutEventSelectorsError {
         PutEventSelectorsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutEventSelectorsError {
+    fn from(err: io::Error) -> PutEventSelectorsError {
+        PutEventSelectorsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutEventSelectorsError {
@@ -1836,6 +1888,11 @@ impl From<HttpDispatchError> for RemoveTagsError {
         RemoveTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveTagsError {
+    fn from(err: io::Error) -> RemoveTagsError {
+        RemoveTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1926,6 +1983,11 @@ impl From<HttpDispatchError> for StartLoggingError {
         StartLoggingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartLoggingError {
+    fn from(err: io::Error) -> StartLoggingError {
+        StartLoggingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2010,6 +2072,11 @@ impl From<CredentialsError> for StopLoggingError {
 impl From<HttpDispatchError> for StopLoggingError {
     fn from(err: HttpDispatchError) -> StopLoggingError {
         StopLoggingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopLoggingError {
+    fn from(err: io::Error) -> StopLoggingError {
+        StopLoggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopLoggingError {
@@ -2182,6 +2249,11 @@ impl From<HttpDispatchError> for UpdateTrailError {
         UpdateTrailError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateTrailError {
+    fn from(err: io::Error) -> UpdateTrailError {
+        UpdateTrailError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2338,15 +2410,20 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<AddTagsResponse>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddTagsResponse>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2365,13 +2442,21 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTrailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateTrailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateTrailResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTrailError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2390,13 +2475,21 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTrailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteTrailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteTrailResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTrailError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2415,15 +2508,20 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTrailsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTrailsResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeTrailsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTrailsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2442,15 +2540,18 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetEventSelectorsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetEventSelectorsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetEventSelectorsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetEventSelectorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2470,15 +2571,20 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetTrailStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetTrailStatusResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetTrailStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTrailStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2498,15 +2604,20 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPublicKeysResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPublicKeysResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListPublicKeysError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPublicKeysError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2524,13 +2635,21 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2549,14 +2668,20 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<LookupEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<LookupEventsResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(LookupEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(LookupEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2575,15 +2700,18 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutEventSelectorsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutEventSelectorsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(PutEventSelectorsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutEventSelectorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2603,13 +2731,21 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveTagsResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2628,14 +2764,20 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartLoggingResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartLoggingResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StartLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartLoggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2655,13 +2797,21 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopLoggingResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StopLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopLoggingResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopLoggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2680,13 +2830,21 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateTrailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateTrailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateTrailResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateTrailError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

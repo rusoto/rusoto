@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2205,6 +2207,11 @@ impl From<HttpDispatchError> for AddPermissionError {
         AddPermissionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddPermissionError {
+    fn from(err: io::Error) -> AddPermissionError {
+        AddPermissionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2272,6 +2279,11 @@ impl From<CredentialsError> for ChangeMessageVisibilityError {
 impl From<HttpDispatchError> for ChangeMessageVisibilityError {
     fn from(err: HttpDispatchError) -> ChangeMessageVisibilityError {
         ChangeMessageVisibilityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ChangeMessageVisibilityError {
+    fn from(err: io::Error) -> ChangeMessageVisibilityError {
+        ChangeMessageVisibilityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ChangeMessageVisibilityError {
@@ -2352,6 +2364,11 @@ impl From<HttpDispatchError> for ChangeMessageVisibilityBatchError {
         ChangeMessageVisibilityBatchError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ChangeMessageVisibilityBatchError {
+    fn from(err: io::Error) -> ChangeMessageVisibilityBatchError {
+        ChangeMessageVisibilityBatchError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ChangeMessageVisibilityBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2430,6 +2447,11 @@ impl From<HttpDispatchError> for CreateQueueError {
         CreateQueueError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateQueueError {
+    fn from(err: io::Error) -> CreateQueueError {
+        CreateQueueError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2500,6 +2522,11 @@ impl From<CredentialsError> for DeleteMessageError {
 impl From<HttpDispatchError> for DeleteMessageError {
     fn from(err: HttpDispatchError) -> DeleteMessageError {
         DeleteMessageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteMessageError {
+    fn from(err: io::Error) -> DeleteMessageError {
+        DeleteMessageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteMessageError {
@@ -2578,6 +2605,11 @@ impl From<HttpDispatchError> for DeleteMessageBatchError {
         DeleteMessageBatchError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteMessageBatchError {
+    fn from(err: io::Error) -> DeleteMessageBatchError {
+        DeleteMessageBatchError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteMessageBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2646,6 +2678,11 @@ impl From<HttpDispatchError> for DeleteQueueError {
         DeleteQueueError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteQueueError {
+    fn from(err: io::Error) -> DeleteQueueError {
+        DeleteQueueError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2709,6 +2746,11 @@ impl From<CredentialsError> for GetQueueAttributesError {
 impl From<HttpDispatchError> for GetQueueAttributesError {
     fn from(err: HttpDispatchError) -> GetQueueAttributesError {
         GetQueueAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetQueueAttributesError {
+    fn from(err: io::Error) -> GetQueueAttributesError {
+        GetQueueAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetQueueAttributesError {
@@ -2781,6 +2823,11 @@ impl From<HttpDispatchError> for GetQueueUrlError {
         GetQueueUrlError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetQueueUrlError {
+    fn from(err: io::Error) -> GetQueueUrlError {
+        GetQueueUrlError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetQueueUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2847,6 +2894,11 @@ impl From<HttpDispatchError> for ListDeadLetterSourceQueuesError {
         ListDeadLetterSourceQueuesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListDeadLetterSourceQueuesError {
+    fn from(err: io::Error) -> ListDeadLetterSourceQueuesError {
+        ListDeadLetterSourceQueuesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListDeadLetterSourceQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2910,6 +2962,11 @@ impl From<CredentialsError> for ListQueuesError {
 impl From<HttpDispatchError> for ListQueuesError {
     fn from(err: HttpDispatchError) -> ListQueuesError {
         ListQueuesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListQueuesError {
+    fn from(err: io::Error) -> ListQueuesError {
+        ListQueuesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListQueuesError {
@@ -2984,6 +3041,11 @@ impl From<HttpDispatchError> for PurgeQueueError {
         PurgeQueueError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PurgeQueueError {
+    fn from(err: io::Error) -> PurgeQueueError {
+        PurgeQueueError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PurgeQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3053,6 +3115,11 @@ impl From<HttpDispatchError> for ReceiveMessageError {
         ReceiveMessageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReceiveMessageError {
+    fn from(err: io::Error) -> ReceiveMessageError {
+        ReceiveMessageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReceiveMessageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3114,6 +3181,11 @@ impl From<CredentialsError> for RemovePermissionError {
 impl From<HttpDispatchError> for RemovePermissionError {
     fn from(err: HttpDispatchError) -> RemovePermissionError {
         RemovePermissionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemovePermissionError {
+    fn from(err: io::Error) -> RemovePermissionError {
+        RemovePermissionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemovePermissionError {
@@ -3186,6 +3258,11 @@ impl From<CredentialsError> for SendMessageError {
 impl From<HttpDispatchError> for SendMessageError {
     fn from(err: HttpDispatchError) -> SendMessageError {
         SendMessageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendMessageError {
+    fn from(err: io::Error) -> SendMessageError {
+        SendMessageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendMessageError {
@@ -3272,6 +3349,11 @@ impl From<HttpDispatchError> for SendMessageBatchError {
         SendMessageBatchError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SendMessageBatchError {
+    fn from(err: io::Error) -> SendMessageBatchError {
+        SendMessageBatchError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SendMessageBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3341,6 +3423,11 @@ impl From<CredentialsError> for SetQueueAttributesError {
 impl From<HttpDispatchError> for SetQueueAttributesError {
     fn from(err: HttpDispatchError) -> SetQueueAttributesError {
         SetQueueAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetQueueAttributesError {
+    fn from(err: io::Error) -> SetQueueAttributesError {
+        SetQueueAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetQueueAttributesError {
@@ -3494,14 +3581,16 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddPermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3520,15 +3609,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(ChangeMessageVisibilityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ChangeMessageVisibilityError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -3547,16 +3639,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ChangeMessageVisibilityBatchResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3570,8 +3664,11 @@ impl<P, D> Sqs for SqsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ChangeMessageVisibilityBatchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ChangeMessageVisibilityBatchError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -3589,16 +3686,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateQueueResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3612,7 +3711,11 @@ impl<P, D> Sqs for SqsClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3628,14 +3731,16 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteMessageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3654,16 +3759,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteMessageBatchResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3678,8 +3785,9 @@ impl<P, D> Sqs for SqsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteMessageBatchError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteMessageBatchError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3696,13 +3804,17 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3720,16 +3832,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetQueueAttributesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3744,8 +3858,9 @@ impl<P, D> Sqs for SqsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetQueueAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetQueueAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3764,16 +3879,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetQueueUrlResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3787,7 +3904,11 @@ impl<P, D> Sqs for SqsClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(GetQueueUrlError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetQueueUrlError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3806,16 +3927,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListDeadLetterSourceQueuesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3831,8 +3954,11 @@ impl<P, D> Sqs for SqsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListDeadLetterSourceQueuesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDeadLetterSourceQueuesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -3848,16 +3974,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListQueuesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3871,7 +3999,11 @@ impl<P, D> Sqs for SqsClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListQueuesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListQueuesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3887,13 +4019,17 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(PurgeQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PurgeQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3911,16 +4047,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ReceiveMessageResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3935,8 +4073,9 @@ impl<P, D> Sqs for SqsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ReceiveMessageError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReceiveMessageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3955,15 +4094,16 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3982,16 +4122,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SendMessageResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4005,7 +4147,11 @@ impl<P, D> Sqs for SqsClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(SendMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendMessageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4023,16 +4169,18 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SendMessageBatchResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4047,8 +4195,9 @@ impl<P, D> Sqs for SqsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SendMessageBatchError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendMessageBatchError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4067,15 +4216,16 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(SetQueueAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetQueueAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -877,6 +879,11 @@ impl From<HttpDispatchError> for CheckDomainAvailabilityError {
         CheckDomainAvailabilityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CheckDomainAvailabilityError {
+    fn from(err: io::Error) -> CheckDomainAvailabilityError {
+        CheckDomainAvailabilityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CheckDomainAvailabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -962,6 +969,11 @@ impl From<HttpDispatchError> for DeleteTagsForDomainError {
         DeleteTagsForDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTagsForDomainError {
+    fn from(err: io::Error) -> DeleteTagsForDomainError {
+        DeleteTagsForDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTagsForDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1043,6 +1055,11 @@ impl From<CredentialsError> for DisableDomainAutoRenewError {
 impl From<HttpDispatchError> for DisableDomainAutoRenewError {
     fn from(err: HttpDispatchError) -> DisableDomainAutoRenewError {
         DisableDomainAutoRenewError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableDomainAutoRenewError {
+    fn from(err: io::Error) -> DisableDomainAutoRenewError {
+        DisableDomainAutoRenewError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableDomainAutoRenewError {
@@ -1136,6 +1153,11 @@ impl From<HttpDispatchError> for DisableDomainTransferLockError {
         DisableDomainTransferLockError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisableDomainTransferLockError {
+    fn from(err: io::Error) -> DisableDomainTransferLockError {
+        DisableDomainTransferLockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisableDomainTransferLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1224,6 +1246,11 @@ impl From<CredentialsError> for EnableDomainAutoRenewError {
 impl From<HttpDispatchError> for EnableDomainAutoRenewError {
     fn from(err: HttpDispatchError) -> EnableDomainAutoRenewError {
         EnableDomainAutoRenewError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EnableDomainAutoRenewError {
+    fn from(err: io::Error) -> EnableDomainAutoRenewError {
+        EnableDomainAutoRenewError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableDomainAutoRenewError {
@@ -1320,6 +1347,11 @@ impl From<HttpDispatchError> for EnableDomainTransferLockError {
         EnableDomainTransferLockError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableDomainTransferLockError {
+    fn from(err: io::Error) -> EnableDomainTransferLockError {
+        EnableDomainTransferLockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableDomainTransferLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1406,6 +1438,11 @@ impl From<HttpDispatchError> for GetContactReachabilityStatusError {
         GetContactReachabilityStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetContactReachabilityStatusError {
+    fn from(err: io::Error) -> GetContactReachabilityStatusError {
+        GetContactReachabilityStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetContactReachabilityStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1489,6 +1526,11 @@ impl From<HttpDispatchError> for GetDomainDetailError {
         GetDomainDetailError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDomainDetailError {
+    fn from(err: io::Error) -> GetDomainDetailError {
+        GetDomainDetailError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDomainDetailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1569,6 +1611,11 @@ impl From<HttpDispatchError> for GetDomainSuggestionsError {
         GetDomainSuggestionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDomainSuggestionsError {
+    fn from(err: io::Error) -> GetDomainSuggestionsError {
+        GetDomainSuggestionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDomainSuggestionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1646,6 +1693,11 @@ impl From<HttpDispatchError> for GetOperationDetailError {
         GetOperationDetailError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetOperationDetailError {
+    fn from(err: io::Error) -> GetOperationDetailError {
+        GetOperationDetailError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetOperationDetailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1720,6 +1772,11 @@ impl From<HttpDispatchError> for ListDomainsError {
         ListDomainsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListDomainsError {
+    fn from(err: io::Error) -> ListDomainsError {
+        ListDomainsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1792,6 +1849,11 @@ impl From<CredentialsError> for ListOperationsError {
 impl From<HttpDispatchError> for ListOperationsError {
     fn from(err: HttpDispatchError) -> ListOperationsError {
         ListOperationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListOperationsError {
+    fn from(err: io::Error) -> ListOperationsError {
+        ListOperationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListOperationsError {
@@ -1876,6 +1938,11 @@ impl From<CredentialsError> for ListTagsForDomainError {
 impl From<HttpDispatchError> for ListTagsForDomainError {
     fn from(err: HttpDispatchError) -> ListTagsForDomainError {
         ListTagsForDomainError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForDomainError {
+    fn from(err: io::Error) -> ListTagsForDomainError {
+        ListTagsForDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForDomainError {
@@ -1981,6 +2048,11 @@ impl From<HttpDispatchError> for RegisterDomainError {
         RegisterDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterDomainError {
+    fn from(err: io::Error) -> RegisterDomainError {
+        RegisterDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2078,6 +2150,11 @@ impl From<HttpDispatchError> for RenewDomainError {
         RenewDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RenewDomainError {
+    fn from(err: io::Error) -> RenewDomainError {
+        RenewDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RenewDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2158,6 +2235,11 @@ impl From<CredentialsError> for ResendContactReachabilityEmailError {
 impl From<HttpDispatchError> for ResendContactReachabilityEmailError {
     fn from(err: HttpDispatchError) -> ResendContactReachabilityEmailError {
         ResendContactReachabilityEmailError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResendContactReachabilityEmailError {
+    fn from(err: io::Error) -> ResendContactReachabilityEmailError {
+        ResendContactReachabilityEmailError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResendContactReachabilityEmailError {
@@ -2241,6 +2323,11 @@ impl From<CredentialsError> for RetrieveDomainAuthCodeError {
 impl From<HttpDispatchError> for RetrieveDomainAuthCodeError {
     fn from(err: HttpDispatchError) -> RetrieveDomainAuthCodeError {
         RetrieveDomainAuthCodeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RetrieveDomainAuthCodeError {
+    fn from(err: io::Error) -> RetrieveDomainAuthCodeError {
+        RetrieveDomainAuthCodeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RetrieveDomainAuthCodeError {
@@ -2345,6 +2432,11 @@ impl From<HttpDispatchError> for TransferDomainError {
         TransferDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TransferDomainError {
+    fn from(err: io::Error) -> TransferDomainError {
+        TransferDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TransferDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2442,6 +2534,11 @@ impl From<HttpDispatchError> for UpdateDomainContactError {
         UpdateDomainContactError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateDomainContactError {
+    fn from(err: io::Error) -> UpdateDomainContactError {
+        UpdateDomainContactError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateDomainContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2534,6 +2631,11 @@ impl From<CredentialsError> for UpdateDomainContactPrivacyError {
 impl From<HttpDispatchError> for UpdateDomainContactPrivacyError {
     fn from(err: HttpDispatchError) -> UpdateDomainContactPrivacyError {
         UpdateDomainContactPrivacyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateDomainContactPrivacyError {
+    fn from(err: io::Error) -> UpdateDomainContactPrivacyError {
+        UpdateDomainContactPrivacyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateDomainContactPrivacyError {
@@ -2634,6 +2736,11 @@ impl From<HttpDispatchError> for UpdateDomainNameserversError {
         UpdateDomainNameserversError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateDomainNameserversError {
+    fn from(err: io::Error) -> UpdateDomainNameserversError {
+        UpdateDomainNameserversError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateDomainNameserversError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2722,6 +2829,11 @@ impl From<HttpDispatchError> for UpdateTagsForDomainError {
         UpdateTagsForDomainError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateTagsForDomainError {
+    fn from(err: io::Error) -> UpdateTagsForDomainError {
+        UpdateTagsForDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateTagsForDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2796,6 +2908,11 @@ impl From<CredentialsError> for ViewBillingError {
 impl From<HttpDispatchError> for ViewBillingError {
     fn from(err: HttpDispatchError) -> ViewBillingError {
         ViewBillingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ViewBillingError {
+    fn from(err: io::Error) -> ViewBillingError {
+        ViewBillingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ViewBillingError {
@@ -3006,13 +3123,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CheckDomainAvailabilityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CheckDomainAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CheckDomainAvailabilityResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CheckDomainAvailabilityError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -3031,15 +3155,18 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteTagsForDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteTagsForDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTagsForDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3060,15 +3187,18 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisableDomainAutoRenewResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DisableDomainAutoRenewError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableDomainAutoRenewError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3089,13 +3219,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DisableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisableDomainTransferLockResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableDomainTransferLockError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -3115,15 +3252,18 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<EnableDomainAutoRenewResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(EnableDomainAutoRenewError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableDomainAutoRenewError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3144,13 +3284,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(EnableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<EnableDomainTransferLockResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableDomainTransferLockError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -3170,13 +3317,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetContactReachabilityStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetContactReachabilityStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetContactReachabilityStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetContactReachabilityStatusError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -3194,15 +3348,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDomainDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDomainDetailResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetDomainDetailError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDomainDetailError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3223,15 +3382,18 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDomainSuggestionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDomainSuggestionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetDomainSuggestionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDomainSuggestionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3251,15 +3413,18 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOperationDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetOperationDetailResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetOperationDetailError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetOperationDetailError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3278,13 +3443,21 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDomainsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDomainsResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDomainsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3302,15 +3475,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOperationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListOperationsResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListOperationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListOperationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3329,15 +3507,18 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTagsForDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3356,15 +3537,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RegisterDomainResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RegisterDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3383,13 +3569,21 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RenewDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RenewDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RenewDomainResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RenewDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3409,13 +3603,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ResendContactReachabilityEmailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ResendContactReachabilityEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ResendContactReachabilityEmailResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResendContactReachabilityEmailError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -3435,15 +3636,18 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetrieveDomainAuthCodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RetrieveDomainAuthCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RetrieveDomainAuthCodeError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RetrieveDomainAuthCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3462,15 +3666,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TransferDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<TransferDomainResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(TransferDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TransferDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3490,15 +3699,18 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDomainContactResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDomainContactResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateDomainContactError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDomainContactError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3519,13 +3731,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDomainContactPrivacyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateDomainContactPrivacyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDomainContactPrivacyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDomainContactPrivacyError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -3545,13 +3764,20 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDomainNameserversResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateDomainNameserversError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDomainNameserversResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDomainNameserversError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -3570,15 +3796,18 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateTagsForDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateTagsForDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateTagsForDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3597,13 +3826,21 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ViewBillingResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ViewBillingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ViewBillingResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ViewBillingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -156,6 +158,11 @@ impl From<HttpDispatchError> for GenerateDataSetError {
         GenerateDataSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GenerateDataSetError {
+    fn from(err: io::Error) -> GenerateDataSetError {
+        GenerateDataSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GenerateDataSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -226,6 +233,11 @@ impl From<CredentialsError> for StartSupportDataExportError {
 impl From<HttpDispatchError> for StartSupportDataExportError {
     fn from(err: HttpDispatchError) -> StartSupportDataExportError {
         StartSupportDataExportError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartSupportDataExportError {
+    fn from(err: io::Error) -> StartSupportDataExportError {
+        StartSupportDataExportError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StartSupportDataExportError {
@@ -302,15 +314,20 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GenerateDataSetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GenerateDataSetResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GenerateDataSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GenerateDataSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -332,15 +349,18 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartSupportDataExportResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartSupportDataExportResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(StartSupportDataExportError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartSupportDataExportError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

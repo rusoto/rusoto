@@ -41,13 +41,17 @@ impl GenerateProtocol for JsonGenerator {
                     {payload}
                     request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let mut response = try!(self.dispatcher.dispatch(&request));
 
                     match response.status {{
                         StatusCode::Ok => {{
                             {ok_response}
                         }}
-                        _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                        _ => {{
+                            let mut body: Vec<u8> = Vec::new();
+                            try!(response.body.read_to_end(&mut body));
+                            Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref()))
+                        }}
                     }}
                 }}
                 ",
@@ -140,8 +144,13 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Ok(serde_json::from_str::<{}>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())",
-                output_type)
+        format!("
+            {{
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<{}>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }}",
+            output_type)
     } else {
         "Ok(())".to_owned()
     }
