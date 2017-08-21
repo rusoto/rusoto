@@ -462,12 +462,6 @@ mod tests {
     }
 
     #[test]
-    fn get_hostname_happy_path() {
-        let mut request = SignedRequest::new("POST", "sqs", &Region::UsEast1, "/");
-        request.set_hostname(Some("test-hostname".to_string()));
-        assert_eq!("test-hostname", request.hostname());
-    }
-    #[test]
     fn path_percent_encoded() {
         let provider = ProfileProvider::with_configuration("test_resources/multiple_profile_credentials",
                                                            "foo");

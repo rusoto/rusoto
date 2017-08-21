@@ -178,3 +178,30 @@ pub fn default_tls_client() -> Result<Client, TlsError> {
     client.set_redirect_policy(RedirectPolicy::FollowNone);
     Ok(client)
 }
+
+#[cfg(test)]
+mod tests {
+    use Region;
+    use signature::SignedRequest;
+
+    #[test]
+    fn custom_region_http() {
+        let a_region = Region::Custom("http://localhost".to_owned());
+        let request = SignedRequest::new("POST", "sqs", &a_region, "/");
+        assert_eq!("localhost", request.hostname());
+    }
+
+    #[test]
+    fn custom_region_https() {
+        let a_region = Region::Custom("https://localhost".to_owned());
+        let request = SignedRequest::new("POST", "sqs", &a_region, "/");
+        assert_eq!("localhost", request.hostname());
+    }
+
+    #[test]
+    fn custom_region_with_port() {
+        let a_region = Region::Custom("https://localhost:8000".to_owned());
+        let request = SignedRequest::new("POST", "sqs", &a_region, "/");
+        assert_eq!("localhost:8000", request.hostname());
+    }
+}
