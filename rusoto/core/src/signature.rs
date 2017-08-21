@@ -63,10 +63,6 @@ impl SignedRequest {
         self.hostname = hostname;
     }
 
-    pub fn set_scheme(&mut self, scheme: Option<String>) {
-        self.scheme = scheme;
-    }
-
     pub fn set_endpoint_prefix(&mut self, endpoint_prefix: String) {
         self.hostname = Some(build_hostname(&endpoint_prefix, &self.region));
     }
@@ -118,10 +114,7 @@ impl SignedRequest {
     }
 
     pub fn hostname(&self) -> String {
-        match self.hostname {
-            Some(ref h) => h.to_string(),
-            None => build_hostname(&self.service, &self.region),
-        }
+        build_hostname(&self.service, &self.region)
     }
 
     // If the key exists in headers, set it to blank/unoccupied:
