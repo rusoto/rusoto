@@ -87,6 +87,9 @@ path = "../rusoto/services/cognito-idp"
 optional = true
 path = "../rusoto/services/config"
 
+[dependencies.rusoto_credential]
+path = "../rusoto/credential"
+
 [dependencies.rusoto_cur]
 optional = true
 path = "../rusoto/services/cur"

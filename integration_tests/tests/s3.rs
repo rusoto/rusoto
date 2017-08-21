@@ -1,5 +1,6 @@
 #![cfg(feature = "s3")]
 extern crate rusoto_core;
+extern crate rusoto_credential;
 extern crate rusoto_s3;
 extern crate time;
 extern crate hyper;
@@ -11,7 +12,8 @@ use std::fs::File;
 use std::io::Read;
 use time::get_time;
 
-use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::Region;
+use rusoto_credential::StaticProvider;
 use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
@@ -19,7 +21,7 @@ use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectReq
                  CompletedPart, ListObjectsV2Request};
 use rusoto_core::default_tls_client;
 
-type TestClient = S3Client<DefaultCredentialsProvider, Client>;
+type TestClient = S3Client<StaticProvider, Client>;
 
 // Rust is in bad need of an integration test harness
 // This creates the S3 resources needed for a suite of tests,
@@ -28,9 +30,14 @@ type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 fn test_all_the_things() {
     let _ = env_logger::init();
 
+    let minio_playground_creds = StaticProvider::new("TESTKEY".to_owned(),
+                                                     "TESTSECRETKEY".to_owned(), None, None);
+
+    let minio_playground_region = Region::Custom("https://play.minio.io:9000".to_owned());
+
     let client = S3Client::new(default_tls_client().unwrap(),
-                               DefaultCredentialsProvider::new().unwrap(),
-                               Region::UsEast1);
+                               minio_playground_creds,
+                               minio_playground_region);
 
     let test_bucket = format!("rusoto_test_bucket_{}", get_time().sec);
     let filename = format!("test_file_{}", get_time().sec);
@@ -42,68 +49,68 @@ fn test_all_the_things() {
     test_list_buckets(&client);
 
     // create a bucket for these tests
-    test_create_bucket(&client, &test_bucket);
+    // test_create_bucket(&client, &test_bucket);
 
-    // list items v2
-    list_items_in_bucket(&client, &test_bucket);
+    // // list items v2
+    // list_items_in_bucket(&client, &test_bucket);
 
-    // do a multipart upload
-    test_multipart_upload(&client, &test_bucket, &multipart_filename);
+    // // do a multipart upload
+    // test_multipart_upload(&client, &test_bucket, &multipart_filename);
 
-    // modify the bucket's CORS properties
-    test_put_bucket_cors(&client, &test_bucket);
+    // // modify the bucket's CORS properties
+    // test_put_bucket_cors(&client, &test_bucket);
 
-    // PUT an object (no_credentials is an arbitrary choice)
-    test_put_object_with_filename(&client,
-                                  &test_bucket,
-                                  &filename,
-                                  &"tests/sample-data/no_credentials");
+    // // PUT an object (no_credentials is an arbitrary choice)
+    // test_put_object_with_filename(&client,
+    //                               &test_bucket,
+    //                               &filename,
+    //                               &"tests/sample-data/no_credentials");
 
-    // HEAD the object that was PUT
-    test_head_object(&client, &test_bucket, &filename);
+    // // HEAD the object that was PUT
+    // test_head_object(&client, &test_bucket, &filename);
 
-    // GET the object
-    test_get_object(&client, &test_bucket, &filename);
-    test_get_object_range(&client, &test_bucket, &filename);
-    // copy the object to change its settings
-    test_copy_object(&client, &test_bucket, &filename);
+    // // GET the object
+    // test_get_object(&client, &test_bucket, &filename);
+    // test_get_object_range(&client, &test_bucket, &filename);
+    // // copy the object to change its settings
+    // test_copy_object(&client, &test_bucket, &filename);
 
-    // UTF8 filenames
-    test_put_object_with_filename(&client,
-                                  &test_bucket,
-                                  &utf8_filename,
-                                  &"tests/sample-data/no_credentials");
+    // // UTF8 filenames
+    // test_put_object_with_filename(&client,
+    //                               &test_bucket,
+    //                               &utf8_filename,
+    //                               &"tests/sample-data/no_credentials");
 
-    test_copy_object_utf8(&client, &test_bucket, &utf8_filename);
+    // test_copy_object_utf8(&client, &test_bucket, &utf8_filename);
 
-    test_delete_object(&client, &test_bucket, &utf8_filename);
+    // test_delete_object(&client, &test_bucket, &utf8_filename);
 
-    // Binary objects:
-    test_put_object_with_filename(&client,
-                                  &test_bucket,
-                                  &binary_filename,
-                                  &"tests/sample-data/binary-file");
-    test_get_object(&client, &test_bucket, &binary_filename);
+    // // Binary objects:
+    // test_put_object_with_filename(&client,
+    //                               &test_bucket,
+    //                               &binary_filename,
+    //                               &"tests/sample-data/binary-file");
+    // test_get_object(&client, &test_bucket, &binary_filename);
 
-    // paging test requires three items in the bucket, put another item there:
-    // PUT an object (no_credentials is an arbitrary choice)
-    let another_filename = format!("foo{}", filename);
-    test_put_object_with_filename(&client,
-                                  &test_bucket,
-                                  &another_filename,
-                                  &"tests/sample-data/no_credentials");
+    // // paging test requires three items in the bucket, put another item there:
+    // // PUT an object (no_credentials is an arbitrary choice)
+    // let another_filename = format!("foo{}", filename);
+    // test_put_object_with_filename(&client,
+    //                               &test_bucket,
+    //                               &another_filename,
+    //                               &"tests/sample-data/no_credentials");
 
-    // list items with paging
-    list_items_in_bucket_paged(&client, &test_bucket);
+    // // list items with paging
+    // list_items_in_bucket_paged(&client, &test_bucket);
 
-    test_delete_object(&client, &test_bucket, &binary_filename);
-    test_delete_object(&client, &test_bucket, &another_filename);
+    // test_delete_object(&client, &test_bucket, &binary_filename);
+    // test_delete_object(&client, &test_bucket, &another_filename);
 
-    // DELETE the object
-    test_delete_object(&client, &test_bucket, &filename);
+    // // DELETE the object
+    // test_delete_object(&client, &test_bucket, &filename);
 
-    // delete the test bucket
-    test_delete_bucket(&client, &test_bucket);
+    // // delete the test bucket
+    // test_delete_bucket(&client, &test_bucket);
 }
 
 fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
