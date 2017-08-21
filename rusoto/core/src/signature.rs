@@ -415,30 +415,37 @@ fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
     h.as_ref().to_hex().to_string()
 }
 
+fn remove_scheme_from_custom_hostname(hostname: &str) -> String {
+    hostname.replace("http://", "").replace("https://", "")
+}
+
 fn build_hostname(service: &str, region: &Region) -> String {
     //iam has only 1 endpoint, other services have region-based endpoints
     match service {
         "iam" => {
             match *region {
-                Region::Custom(ref hostname) => hostname.to_owned(),
+                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
                 Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
                 _ => format!("{}.amazonaws.com", service),
             }
         }
         "s3" => {
             match *region {
-                Region::Custom(ref hostname) => hostname.to_owned(),
+                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
                 Region::UsEast1 => "s3.amazonaws.com".to_string(),
                 Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
                 _ => format!("s3-{}.amazonaws.com", region),
             }
         }
         "route53" => {
-            "route53.amazonaws.com".to_owned()
+            match *region {
+                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
+                _ => "route53.amazonaws.com".to_owned(),
+            }
         }
         _ => {
             match *region {
-                Region::Custom(ref hostname) => hostname.to_owned(),
+                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
                 Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
                 _ => format!("{}.{}.amazonaws.com", service, region),
             }

@@ -11,7 +11,7 @@ use std::fmt::{Display, Error as FmtError, Formatter};
 
 /// An AWS region.
 /// `Custom` can be used to use a local or otherwise non-AWS endpoint.  This may be used for API-compatible services, such as DynamoDB Local or Ceph.
-/// Example: `Region::Custom("localhost:8000".to_owned())` instead of `Region::UsEast1`.
+/// Example: `Region::Custom("http://localhost:8000".to_owned())` instead of `Region::UsEast1`.
 /// `CnNorth1` is currently untested due to Rusoto maintainers not having access to AWS China.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum Region {
