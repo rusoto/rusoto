@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -949,6 +951,11 @@ impl From<HttpDispatchError> for CreateDeliveryStreamError {
         CreateDeliveryStreamError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDeliveryStreamError {
+    fn from(err: io::Error) -> CreateDeliveryStreamError {
+        CreateDeliveryStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDeliveryStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1032,6 +1039,11 @@ impl From<HttpDispatchError> for DeleteDeliveryStreamError {
         DeleteDeliveryStreamError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDeliveryStreamError {
+    fn from(err: io::Error) -> DeleteDeliveryStreamError {
+        DeleteDeliveryStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDeliveryStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1109,6 +1121,11 @@ impl From<HttpDispatchError> for DescribeDeliveryStreamError {
         DescribeDeliveryStreamError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDeliveryStreamError {
+    fn from(err: io::Error) -> DescribeDeliveryStreamError {
+        DescribeDeliveryStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDeliveryStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1178,6 +1195,11 @@ impl From<CredentialsError> for ListDeliveryStreamsError {
 impl From<HttpDispatchError> for ListDeliveryStreamsError {
     fn from(err: HttpDispatchError) -> ListDeliveryStreamsError {
         ListDeliveryStreamsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDeliveryStreamsError {
+    fn from(err: io::Error) -> ListDeliveryStreamsError {
+        ListDeliveryStreamsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDeliveryStreamsError {
@@ -1261,6 +1283,11 @@ impl From<CredentialsError> for PutRecordError {
 impl From<HttpDispatchError> for PutRecordError {
     fn from(err: HttpDispatchError) -> PutRecordError {
         PutRecordError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutRecordError {
+    fn from(err: io::Error) -> PutRecordError {
+        PutRecordError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutRecordError {
@@ -1347,6 +1374,11 @@ impl From<CredentialsError> for PutRecordBatchError {
 impl From<HttpDispatchError> for PutRecordBatchError {
     fn from(err: HttpDispatchError) -> PutRecordBatchError {
         PutRecordBatchError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutRecordBatchError {
+    fn from(err: io::Error) -> PutRecordBatchError {
+        PutRecordBatchError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutRecordBatchError {
@@ -1438,6 +1470,11 @@ impl From<CredentialsError> for UpdateDestinationError {
 impl From<HttpDispatchError> for UpdateDestinationError {
     fn from(err: HttpDispatchError) -> UpdateDestinationError {
         UpdateDestinationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateDestinationError {
+    fn from(err: io::Error) -> UpdateDestinationError {
+        UpdateDestinationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateDestinationError {
@@ -1543,15 +1580,18 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeliveryStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDeliveryStreamOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateDeliveryStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDeliveryStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1570,15 +1610,18 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDeliveryStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDeliveryStreamOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteDeliveryStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDeliveryStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1598,15 +1641,18 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDeliveryStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDeliveryStreamOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeDeliveryStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDeliveryStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1625,15 +1671,18 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeliveryStreamsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDeliveryStreamsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListDeliveryStreamsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDeliveryStreamsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1650,15 +1699,20 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<PutRecordOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutRecordOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(PutRecordError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutRecordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1676,15 +1730,20 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutRecordBatchOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutRecordBatchOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PutRecordBatchError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutRecordBatchError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1703,15 +1762,20 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDestinationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDestinationOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateDestinationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDestinationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

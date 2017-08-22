@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1423,6 +1425,11 @@ impl From<HttpDispatchError> for AcknowledgeJobError {
         AcknowledgeJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AcknowledgeJobError {
+    fn from(err: io::Error) -> AcknowledgeJobError {
+        AcknowledgeJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AcknowledgeJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1506,6 +1513,11 @@ impl From<HttpDispatchError> for AcknowledgeThirdPartyJobError {
         AcknowledgeThirdPartyJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AcknowledgeThirdPartyJobError {
+    fn from(err: io::Error) -> AcknowledgeThirdPartyJobError {
+        AcknowledgeThirdPartyJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AcknowledgeThirdPartyJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1582,6 +1594,11 @@ impl From<CredentialsError> for CreateCustomActionTypeError {
 impl From<HttpDispatchError> for CreateCustomActionTypeError {
     fn from(err: HttpDispatchError) -> CreateCustomActionTypeError {
         CreateCustomActionTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateCustomActionTypeError {
+    fn from(err: io::Error) -> CreateCustomActionTypeError {
+        CreateCustomActionTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateCustomActionTypeError {
@@ -1685,6 +1702,11 @@ impl From<HttpDispatchError> for CreatePipelineError {
         CreatePipelineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreatePipelineError {
+    fn from(err: io::Error) -> CreatePipelineError {
+        CreatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1759,6 +1781,11 @@ impl From<HttpDispatchError> for DeleteCustomActionTypeError {
         DeleteCustomActionTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteCustomActionTypeError {
+    fn from(err: io::Error) -> DeleteCustomActionTypeError {
+        DeleteCustomActionTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteCustomActionTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1827,6 +1854,11 @@ impl From<CredentialsError> for DeletePipelineError {
 impl From<HttpDispatchError> for DeletePipelineError {
     fn from(err: HttpDispatchError) -> DeletePipelineError {
         DeletePipelineError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeletePipelineError {
+    fn from(err: io::Error) -> DeletePipelineError {
+        DeletePipelineError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeletePipelineError {
@@ -1905,6 +1937,11 @@ impl From<CredentialsError> for DisableStageTransitionError {
 impl From<HttpDispatchError> for DisableStageTransitionError {
     fn from(err: HttpDispatchError) -> DisableStageTransitionError {
         DisableStageTransitionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableStageTransitionError {
+    fn from(err: io::Error) -> DisableStageTransitionError {
+        DisableStageTransitionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableStageTransitionError {
@@ -1989,6 +2026,11 @@ impl From<HttpDispatchError> for EnableStageTransitionError {
         EnableStageTransitionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableStageTransitionError {
+    fn from(err: io::Error) -> EnableStageTransitionError {
+        EnableStageTransitionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableStageTransitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2064,6 +2106,11 @@ impl From<CredentialsError> for GetJobDetailsError {
 impl From<HttpDispatchError> for GetJobDetailsError {
     fn from(err: HttpDispatchError) -> GetJobDetailsError {
         GetJobDetailsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetJobDetailsError {
+    fn from(err: io::Error) -> GetJobDetailsError {
+        GetJobDetailsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetJobDetailsError {
@@ -2145,6 +2192,11 @@ impl From<HttpDispatchError> for GetPipelineError {
         GetPipelineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetPipelineError {
+    fn from(err: io::Error) -> GetPipelineError {
+        GetPipelineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetPipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2223,6 +2275,11 @@ impl From<HttpDispatchError> for GetPipelineExecutionError {
         GetPipelineExecutionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetPipelineExecutionError {
+    fn from(err: io::Error) -> GetPipelineExecutionError {
+        GetPipelineExecutionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetPipelineExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2298,6 +2355,11 @@ impl From<CredentialsError> for GetPipelineStateError {
 impl From<HttpDispatchError> for GetPipelineStateError {
     fn from(err: HttpDispatchError) -> GetPipelineStateError {
         GetPipelineStateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetPipelineStateError {
+    fn from(err: io::Error) -> GetPipelineStateError {
+        GetPipelineStateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetPipelineStateError {
@@ -2382,6 +2444,11 @@ impl From<HttpDispatchError> for GetThirdPartyJobDetailsError {
         GetThirdPartyJobDetailsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetThirdPartyJobDetailsError {
+    fn from(err: io::Error) -> GetThirdPartyJobDetailsError {
+        GetThirdPartyJobDetailsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetThirdPartyJobDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2458,6 +2525,11 @@ impl From<CredentialsError> for ListActionTypesError {
 impl From<HttpDispatchError> for ListActionTypesError {
     fn from(err: HttpDispatchError) -> ListActionTypesError {
         ListActionTypesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListActionTypesError {
+    fn from(err: io::Error) -> ListActionTypesError {
+        ListActionTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListActionTypesError {
@@ -2539,6 +2611,11 @@ impl From<HttpDispatchError> for ListPipelineExecutionsError {
         ListPipelineExecutionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPipelineExecutionsError {
+    fn from(err: io::Error) -> ListPipelineExecutionsError {
+        ListPipelineExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPipelineExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2616,6 +2693,11 @@ impl From<HttpDispatchError> for ListPipelinesError {
         ListPipelinesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPipelinesError {
+    fn from(err: io::Error) -> ListPipelinesError {
+        ListPipelinesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2690,6 +2772,11 @@ impl From<HttpDispatchError> for PollForJobsError {
         PollForJobsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PollForJobsError {
+    fn from(err: io::Error) -> PollForJobsError {
+        PollForJobsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PollForJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2762,6 +2849,11 @@ impl From<CredentialsError> for PollForThirdPartyJobsError {
 impl From<HttpDispatchError> for PollForThirdPartyJobsError {
     fn from(err: HttpDispatchError) -> PollForThirdPartyJobsError {
         PollForThirdPartyJobsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PollForThirdPartyJobsError {
+    fn from(err: io::Error) -> PollForThirdPartyJobsError {
+        PollForThirdPartyJobsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PollForThirdPartyJobsError {
@@ -2848,6 +2940,11 @@ impl From<CredentialsError> for PutActionRevisionError {
 impl From<HttpDispatchError> for PutActionRevisionError {
     fn from(err: HttpDispatchError) -> PutActionRevisionError {
         PutActionRevisionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutActionRevisionError {
+    fn from(err: io::Error) -> PutActionRevisionError {
+        PutActionRevisionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutActionRevisionError {
@@ -2946,6 +3043,11 @@ impl From<HttpDispatchError> for PutApprovalResultError {
         PutApprovalResultError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutApprovalResultError {
+    fn from(err: io::Error) -> PutApprovalResultError {
+        PutApprovalResultError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutApprovalResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3031,6 +3133,11 @@ impl From<HttpDispatchError> for PutJobFailureResultError {
         PutJobFailureResultError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutJobFailureResultError {
+    fn from(err: io::Error) -> PutJobFailureResultError {
+        PutJobFailureResultError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutJobFailureResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3111,6 +3218,11 @@ impl From<CredentialsError> for PutJobSuccessResultError {
 impl From<HttpDispatchError> for PutJobSuccessResultError {
     fn from(err: HttpDispatchError) -> PutJobSuccessResultError {
         PutJobSuccessResultError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutJobSuccessResultError {
+    fn from(err: io::Error) -> PutJobSuccessResultError {
+        PutJobSuccessResultError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutJobSuccessResultError {
@@ -3196,6 +3308,11 @@ impl From<HttpDispatchError> for PutThirdPartyJobFailureResultError {
         PutThirdPartyJobFailureResultError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutThirdPartyJobFailureResultError {
+    fn from(err: io::Error) -> PutThirdPartyJobFailureResultError {
+        PutThirdPartyJobFailureResultError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutThirdPartyJobFailureResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3278,6 +3395,11 @@ impl From<CredentialsError> for PutThirdPartyJobSuccessResultError {
 impl From<HttpDispatchError> for PutThirdPartyJobSuccessResultError {
     fn from(err: HttpDispatchError) -> PutThirdPartyJobSuccessResultError {
         PutThirdPartyJobSuccessResultError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutThirdPartyJobSuccessResultError {
+    fn from(err: io::Error) -> PutThirdPartyJobSuccessResultError {
+        PutThirdPartyJobSuccessResultError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutThirdPartyJobSuccessResultError {
@@ -3371,6 +3493,11 @@ impl From<HttpDispatchError> for RetryStageExecutionError {
         RetryStageExecutionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RetryStageExecutionError {
+    fn from(err: io::Error) -> RetryStageExecutionError {
+        RetryStageExecutionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RetryStageExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3448,6 +3575,11 @@ impl From<CredentialsError> for StartPipelineExecutionError {
 impl From<HttpDispatchError> for StartPipelineExecutionError {
     fn from(err: HttpDispatchError) -> StartPipelineExecutionError {
         StartPipelineExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartPipelineExecutionError {
+    fn from(err: io::Error) -> StartPipelineExecutionError {
+        StartPipelineExecutionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StartPipelineExecutionError {
@@ -3539,6 +3671,11 @@ impl From<CredentialsError> for UpdatePipelineError {
 impl From<HttpDispatchError> for UpdatePipelineError {
     fn from(err: HttpDispatchError) -> UpdatePipelineError {
         UpdatePipelineError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdatePipelineError {
+    fn from(err: io::Error) -> UpdatePipelineError {
+        UpdatePipelineError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdatePipelineError {
@@ -3767,15 +3904,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AcknowledgeJobOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AcknowledgeJobOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AcknowledgeJobError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AcknowledgeJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3796,13 +3938,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AcknowledgeThirdPartyJobOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AcknowledgeThirdPartyJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AcknowledgeThirdPartyJobOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AcknowledgeThirdPartyJobError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -3822,15 +3971,18 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateCustomActionTypeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateCustomActionTypeOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateCustomActionTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCustomActionTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3849,15 +4001,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreatePipelineOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreatePipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3877,13 +4034,14 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteCustomActionTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCustomActionTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3900,13 +4058,14 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeletePipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3926,13 +4085,14 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DisableStageTransitionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableStageTransitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3952,13 +4112,14 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(EnableStageTransitionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableStageTransitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3977,14 +4138,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetJobDetailsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetJobDetailsOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetJobDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetJobDetailsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4003,13 +4170,21 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetPipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetPipelineOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4027,15 +4202,18 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPipelineExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetPipelineExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetPipelineExecutionError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPipelineExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4054,15 +4232,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPipelineStateOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetPipelineStateOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetPipelineStateError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPipelineStateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4083,13 +4266,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetThirdPartyJobDetailsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetThirdPartyJobDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetThirdPartyJobDetailsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetThirdPartyJobDetailsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -4107,15 +4297,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListActionTypesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListActionTypesOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListActionTypesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListActionTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4136,15 +4331,18 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPipelineExecutionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPipelineExecutionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListPipelineExecutionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPipelineExecutionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4163,14 +4361,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPipelinesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPipelinesOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListPipelinesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPipelinesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4189,13 +4393,21 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PollForJobsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(PollForJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PollForJobsOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PollForJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4215,15 +4427,18 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PollForThirdPartyJobsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PollForThirdPartyJobsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(PollForThirdPartyJobsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PollForThirdPartyJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4242,15 +4457,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutActionRevisionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutActionRevisionOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PutActionRevisionError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutActionRevisionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4269,15 +4489,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutApprovalResultOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutApprovalResultOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PutApprovalResultError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutApprovalResultError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4296,13 +4521,14 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(PutJobFailureResultError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutJobFailureResultError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4321,13 +4547,14 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(PutJobSuccessResultError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutJobSuccessResultError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4347,11 +4574,16 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(PutThirdPartyJobFailureResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutThirdPartyJobFailureResultError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -4370,11 +4602,16 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(PutThirdPartyJobSuccessResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutThirdPartyJobSuccessResultError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -4392,15 +4629,18 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetryStageExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RetryStageExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RetryStageExecutionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RetryStageExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4421,15 +4661,18 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartPipelineExecutionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartPipelineExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(StartPipelineExecutionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartPipelineExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4448,15 +4691,20 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdatePipelineOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdatePipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1041,6 +1043,11 @@ impl From<HttpDispatchError> for AllocateConnectionOnInterconnectError {
         AllocateConnectionOnInterconnectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AllocateConnectionOnInterconnectError {
+    fn from(err: io::Error) -> AllocateConnectionOnInterconnectError {
+        AllocateConnectionOnInterconnectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AllocateConnectionOnInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1117,6 +1124,11 @@ impl From<CredentialsError> for AllocateHostedConnectionError {
 impl From<HttpDispatchError> for AllocateHostedConnectionError {
     fn from(err: HttpDispatchError) -> AllocateHostedConnectionError {
         AllocateHostedConnectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AllocateHostedConnectionError {
+    fn from(err: io::Error) -> AllocateHostedConnectionError {
+        AllocateHostedConnectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AllocateHostedConnectionError {
@@ -1197,6 +1209,11 @@ impl From<HttpDispatchError> for AllocatePrivateVirtualInterfaceError {
         AllocatePrivateVirtualInterfaceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AllocatePrivateVirtualInterfaceError {
+    fn from(err: io::Error) -> AllocatePrivateVirtualInterfaceError {
+        AllocatePrivateVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AllocatePrivateVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1273,6 +1290,11 @@ impl From<CredentialsError> for AllocatePublicVirtualInterfaceError {
 impl From<HttpDispatchError> for AllocatePublicVirtualInterfaceError {
     fn from(err: HttpDispatchError) -> AllocatePublicVirtualInterfaceError {
         AllocatePublicVirtualInterfaceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AllocatePublicVirtualInterfaceError {
+    fn from(err: io::Error) -> AllocatePublicVirtualInterfaceError {
+        AllocatePublicVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AllocatePublicVirtualInterfaceError {
@@ -1353,6 +1375,11 @@ impl From<HttpDispatchError> for AssociateConnectionWithLagError {
         AssociateConnectionWithLagError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssociateConnectionWithLagError {
+    fn from(err: io::Error) -> AssociateConnectionWithLagError {
+        AssociateConnectionWithLagError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssociateConnectionWithLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1431,6 +1458,11 @@ impl From<HttpDispatchError> for AssociateHostedConnectionError {
         AssociateHostedConnectionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AssociateHostedConnectionError {
+    fn from(err: io::Error) -> AssociateHostedConnectionError {
+        AssociateHostedConnectionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AssociateHostedConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1507,6 +1539,11 @@ impl From<CredentialsError> for AssociateVirtualInterfaceError {
 impl From<HttpDispatchError> for AssociateVirtualInterfaceError {
     fn from(err: HttpDispatchError) -> AssociateVirtualInterfaceError {
         AssociateVirtualInterfaceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateVirtualInterfaceError {
+    fn from(err: io::Error) -> AssociateVirtualInterfaceError {
+        AssociateVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssociateVirtualInterfaceError {
@@ -1591,6 +1628,11 @@ impl From<HttpDispatchError> for ConfirmConnectionError {
         ConfirmConnectionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ConfirmConnectionError {
+    fn from(err: io::Error) -> ConfirmConnectionError {
+        ConfirmConnectionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ConfirmConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1669,6 +1711,11 @@ impl From<HttpDispatchError> for ConfirmPrivateVirtualInterfaceError {
         ConfirmPrivateVirtualInterfaceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ConfirmPrivateVirtualInterfaceError {
+    fn from(err: io::Error) -> ConfirmPrivateVirtualInterfaceError {
+        ConfirmPrivateVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ConfirmPrivateVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1745,6 +1792,11 @@ impl From<CredentialsError> for ConfirmPublicVirtualInterfaceError {
 impl From<HttpDispatchError> for ConfirmPublicVirtualInterfaceError {
     fn from(err: HttpDispatchError) -> ConfirmPublicVirtualInterfaceError {
         ConfirmPublicVirtualInterfaceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ConfirmPublicVirtualInterfaceError {
+    fn from(err: io::Error) -> ConfirmPublicVirtualInterfaceError {
+        ConfirmPublicVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ConfirmPublicVirtualInterfaceError {
@@ -1829,6 +1881,11 @@ impl From<HttpDispatchError> for CreateBGPPeerError {
         CreateBGPPeerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateBGPPeerError {
+    fn from(err: io::Error) -> CreateBGPPeerError {
+        CreateBGPPeerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateBGPPeerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1907,6 +1964,11 @@ impl From<CredentialsError> for CreateConnectionError {
 impl From<HttpDispatchError> for CreateConnectionError {
     fn from(err: HttpDispatchError) -> CreateConnectionError {
         CreateConnectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateConnectionError {
+    fn from(err: io::Error) -> CreateConnectionError {
+        CreateConnectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateConnectionError {
@@ -1989,6 +2051,11 @@ impl From<HttpDispatchError> for CreateInterconnectError {
         CreateInterconnectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateInterconnectError {
+    fn from(err: io::Error) -> CreateInterconnectError {
+        CreateInterconnectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2069,6 +2136,11 @@ impl From<HttpDispatchError> for CreateLagError {
         CreateLagError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateLagError {
+    fn from(err: io::Error) -> CreateLagError {
+        CreateLagError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2143,6 +2215,11 @@ impl From<CredentialsError> for CreatePrivateVirtualInterfaceError {
 impl From<HttpDispatchError> for CreatePrivateVirtualInterfaceError {
     fn from(err: HttpDispatchError) -> CreatePrivateVirtualInterfaceError {
         CreatePrivateVirtualInterfaceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePrivateVirtualInterfaceError {
+    fn from(err: io::Error) -> CreatePrivateVirtualInterfaceError {
+        CreatePrivateVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePrivateVirtualInterfaceError {
@@ -2221,6 +2298,11 @@ impl From<CredentialsError> for CreatePublicVirtualInterfaceError {
 impl From<HttpDispatchError> for CreatePublicVirtualInterfaceError {
     fn from(err: HttpDispatchError) -> CreatePublicVirtualInterfaceError {
         CreatePublicVirtualInterfaceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePublicVirtualInterfaceError {
+    fn from(err: io::Error) -> CreatePublicVirtualInterfaceError {
+        CreatePublicVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePublicVirtualInterfaceError {
@@ -2305,6 +2387,11 @@ impl From<HttpDispatchError> for DeleteBGPPeerError {
         DeleteBGPPeerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteBGPPeerError {
+    fn from(err: io::Error) -> DeleteBGPPeerError {
+        DeleteBGPPeerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteBGPPeerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2383,6 +2470,11 @@ impl From<CredentialsError> for DeleteConnectionError {
 impl From<HttpDispatchError> for DeleteConnectionError {
     fn from(err: HttpDispatchError) -> DeleteConnectionError {
         DeleteConnectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteConnectionError {
+    fn from(err: io::Error) -> DeleteConnectionError {
+        DeleteConnectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteConnectionError {
@@ -2465,6 +2557,11 @@ impl From<HttpDispatchError> for DeleteInterconnectError {
         DeleteInterconnectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteInterconnectError {
+    fn from(err: io::Error) -> DeleteInterconnectError {
+        DeleteInterconnectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2545,6 +2642,11 @@ impl From<HttpDispatchError> for DeleteLagError {
         DeleteLagError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteLagError {
+    fn from(err: io::Error) -> DeleteLagError {
+        DeleteLagError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2619,6 +2721,11 @@ impl From<CredentialsError> for DeleteVirtualInterfaceError {
 impl From<HttpDispatchError> for DeleteVirtualInterfaceError {
     fn from(err: HttpDispatchError) -> DeleteVirtualInterfaceError {
         DeleteVirtualInterfaceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVirtualInterfaceError {
+    fn from(err: io::Error) -> DeleteVirtualInterfaceError {
+        DeleteVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteVirtualInterfaceError {
@@ -2703,6 +2810,11 @@ impl From<HttpDispatchError> for DescribeConnectionLoaError {
         DescribeConnectionLoaError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeConnectionLoaError {
+    fn from(err: io::Error) -> DescribeConnectionLoaError {
+        DescribeConnectionLoaError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeConnectionLoaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2785,6 +2897,11 @@ impl From<HttpDispatchError> for DescribeConnectionsError {
         DescribeConnectionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeConnectionsError {
+    fn from(err: io::Error) -> DescribeConnectionsError {
+        DescribeConnectionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2862,6 +2979,11 @@ impl From<CredentialsError> for DescribeConnectionsOnInterconnectError {
 impl From<HttpDispatchError> for DescribeConnectionsOnInterconnectError {
     fn from(err: HttpDispatchError) -> DescribeConnectionsOnInterconnectError {
         DescribeConnectionsOnInterconnectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeConnectionsOnInterconnectError {
+    fn from(err: io::Error) -> DescribeConnectionsOnInterconnectError {
+        DescribeConnectionsOnInterconnectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeConnectionsOnInterconnectError {
@@ -2942,6 +3064,11 @@ impl From<HttpDispatchError> for DescribeHostedConnectionsError {
         DescribeHostedConnectionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeHostedConnectionsError {
+    fn from(err: io::Error) -> DescribeHostedConnectionsError {
+        DescribeHostedConnectionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeHostedConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3018,6 +3145,11 @@ impl From<CredentialsError> for DescribeInterconnectLoaError {
 impl From<HttpDispatchError> for DescribeInterconnectLoaError {
     fn from(err: HttpDispatchError) -> DescribeInterconnectLoaError {
         DescribeInterconnectLoaError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeInterconnectLoaError {
+    fn from(err: io::Error) -> DescribeInterconnectLoaError {
+        DescribeInterconnectLoaError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeInterconnectLoaError {
@@ -3102,6 +3234,11 @@ impl From<HttpDispatchError> for DescribeInterconnectsError {
         DescribeInterconnectsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeInterconnectsError {
+    fn from(err: io::Error) -> DescribeInterconnectsError {
+        DescribeInterconnectsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeInterconnectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3184,6 +3321,11 @@ impl From<HttpDispatchError> for DescribeLagsError {
         DescribeLagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeLagsError {
+    fn from(err: io::Error) -> DescribeLagsError {
+        DescribeLagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeLagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3264,6 +3406,11 @@ impl From<HttpDispatchError> for DescribeLoaError {
         DescribeLoaError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeLoaError {
+    fn from(err: io::Error) -> DescribeLoaError {
+        DescribeLoaError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeLoaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3342,6 +3489,11 @@ impl From<CredentialsError> for DescribeLocationsError {
 impl From<HttpDispatchError> for DescribeLocationsError {
     fn from(err: HttpDispatchError) -> DescribeLocationsError {
         DescribeLocationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLocationsError {
+    fn from(err: io::Error) -> DescribeLocationsError {
+        DescribeLocationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLocationsError {
@@ -3426,6 +3578,11 @@ impl From<HttpDispatchError> for DescribeTagsError {
         DescribeTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTagsError {
+    fn from(err: io::Error) -> DescribeTagsError {
+        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3500,6 +3657,11 @@ impl From<CredentialsError> for DescribeVirtualGatewaysError {
 impl From<HttpDispatchError> for DescribeVirtualGatewaysError {
     fn from(err: HttpDispatchError) -> DescribeVirtualGatewaysError {
         DescribeVirtualGatewaysError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVirtualGatewaysError {
+    fn from(err: io::Error) -> DescribeVirtualGatewaysError {
+        DescribeVirtualGatewaysError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeVirtualGatewaysError {
@@ -3580,6 +3742,11 @@ impl From<HttpDispatchError> for DescribeVirtualInterfacesError {
         DescribeVirtualInterfacesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVirtualInterfacesError {
+    fn from(err: io::Error) -> DescribeVirtualInterfacesError {
+        DescribeVirtualInterfacesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVirtualInterfacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3656,6 +3823,11 @@ impl From<CredentialsError> for DisassociateConnectionFromLagError {
 impl From<HttpDispatchError> for DisassociateConnectionFromLagError {
     fn from(err: HttpDispatchError) -> DisassociateConnectionFromLagError {
         DisassociateConnectionFromLagError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateConnectionFromLagError {
+    fn from(err: io::Error) -> DisassociateConnectionFromLagError {
+        DisassociateConnectionFromLagError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisassociateConnectionFromLagError {
@@ -3750,6 +3922,11 @@ impl From<HttpDispatchError> for TagResourceError {
         TagResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3832,6 +4009,11 @@ impl From<HttpDispatchError> for UntagResourceError {
         UntagResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3908,6 +4090,11 @@ impl From<CredentialsError> for UpdateLagError {
 impl From<HttpDispatchError> for UpdateLagError {
     fn from(err: HttpDispatchError) -> UpdateLagError {
         UpdateLagError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateLagError {
+    fn from(err: io::Error) -> UpdateLagError {
+        UpdateLagError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateLagError {
@@ -4190,15 +4377,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(AllocateConnectionOnInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AllocateConnectionOnInterconnectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4216,15 +4408,21 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(AllocateHostedConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AllocateHostedConnectionError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -4244,13 +4442,22 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AllocatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AllocatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -4270,13 +4477,22 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AllocatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AllocatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -4294,15 +4510,21 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(AssociateConnectionWithLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateConnectionWithLagError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -4320,15 +4542,21 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(AssociateHostedConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateHostedConnectionError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -4346,13 +4574,22 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AssociateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -4370,15 +4607,18 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConfirmConnectionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ConfirmConnectionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ConfirmConnectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ConfirmConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4399,13 +4639,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ConfirmPrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ConfirmPrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -4425,13 +4672,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ConfirmPublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ConfirmPublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -4449,14 +4703,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateBGPPeerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateBGPPeerResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateBGPPeerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateBGPPeerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4475,17 +4735,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(CreateConnectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4504,17 +4766,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Interconnect>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Interconnect>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(CreateInterconnectError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateInterconnectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4531,14 +4795,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&body).as_ref()).unwrap())
             }
-            _ => Err(CreateLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLagError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4558,13 +4827,22 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -4584,13 +4862,22 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -4608,14 +4895,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteBGPPeerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteBGPPeerResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteBGPPeerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBGPPeerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4634,17 +4927,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(DeleteConnectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4663,15 +4958,18 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteInterconnectResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteInterconnectResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteInterconnectError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteInterconnectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4688,14 +4986,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&body).as_ref()).unwrap())
             }
-            _ => Err(DeleteLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLagError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4714,15 +5017,18 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteVirtualInterfaceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVirtualInterfaceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4742,15 +5048,18 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConnectionLoaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeConnectionLoaResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeConnectionLoaError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConnectionLoaError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4769,17 +5078,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body)
-                                                           .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(DescribeConnectionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConnectionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4800,15 +5111,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body)
-                                                           .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(DescribeConnectionsOnInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeConnectionsOnInterconnectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4826,15 +5142,21 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body)
-                                                           .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(DescribeHostedConnectionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeHostedConnectionsError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -4853,13 +5175,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInterconnectLoaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInterconnectLoaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeInterconnectLoaResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInterconnectLoaError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -4877,17 +5206,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Interconnects>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Interconnects>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(DescribeInterconnectsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInterconnectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4904,15 +5235,18 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Lags>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Lags>(String::from_utf8_lossy(&body).as_ref()).unwrap())
             }
             _ => {
-                Err(DescribeLagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4929,14 +5263,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Loa>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Loa>(String::from_utf8_lossy(&body).as_ref()).unwrap())
             }
-            _ => Err(DescribeLoaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLoaError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4951,17 +5290,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Locations>(String::from_utf8_lossy(&response.body)
-                                                         .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Locations>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(DescribeLocationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLocationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4980,14 +5321,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTagsResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5003,15 +5350,21 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<VirtualGateways>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<VirtualGateways>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(DescribeVirtualGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVirtualGatewaysError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -5029,13 +5382,22 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterfaces>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeVirtualInterfacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<VirtualInterfaces>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVirtualInterfacesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5055,15 +5417,21 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(DisassociateConnectionFromLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateConnectionFromLagError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -5081,13 +5449,21 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5105,14 +5481,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5129,14 +5511,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&body).as_ref()).unwrap())
             }
-            _ => Err(UpdateLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateLagError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

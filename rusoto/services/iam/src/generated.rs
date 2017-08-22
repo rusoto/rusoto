@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -12125,6 +12127,11 @@ impl From<HttpDispatchError> for AddClientIDToOpenIDConnectProviderError {
         AddClientIDToOpenIDConnectProviderError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddClientIDToOpenIDConnectProviderError {
+    fn from(err: io::Error) -> AddClientIDToOpenIDConnectProviderError {
+        AddClientIDToOpenIDConnectProviderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddClientIDToOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12206,6 +12213,11 @@ impl From<CredentialsError> for AddRoleToInstanceProfileError {
 impl From<HttpDispatchError> for AddRoleToInstanceProfileError {
     fn from(err: HttpDispatchError) -> AddRoleToInstanceProfileError {
         AddRoleToInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddRoleToInstanceProfileError {
+    fn from(err: io::Error) -> AddRoleToInstanceProfileError {
+        AddRoleToInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddRoleToInstanceProfileError {
@@ -12292,6 +12304,11 @@ impl From<HttpDispatchError> for AddUserToGroupError {
         AddUserToGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddUserToGroupError {
+    fn from(err: io::Error) -> AddUserToGroupError {
+        AddUserToGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddUserToGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12375,6 +12392,11 @@ impl From<CredentialsError> for AttachGroupPolicyError {
 impl From<HttpDispatchError> for AttachGroupPolicyError {
     fn from(err: HttpDispatchError) -> AttachGroupPolicyError {
         AttachGroupPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachGroupPolicyError {
+    fn from(err: io::Error) -> AttachGroupPolicyError {
+        AttachGroupPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AttachGroupPolicyError {
@@ -12468,6 +12490,11 @@ impl From<HttpDispatchError> for AttachRolePolicyError {
         AttachRolePolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AttachRolePolicyError {
+    fn from(err: io::Error) -> AttachRolePolicyError {
+        AttachRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AttachRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12553,6 +12580,11 @@ impl From<CredentialsError> for AttachUserPolicyError {
 impl From<HttpDispatchError> for AttachUserPolicyError {
     fn from(err: HttpDispatchError) -> AttachUserPolicyError {
         AttachUserPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachUserPolicyError {
+    fn from(err: io::Error) -> AttachUserPolicyError {
+        AttachUserPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AttachUserPolicyError {
@@ -12647,6 +12679,11 @@ impl From<HttpDispatchError> for ChangePasswordError {
         ChangePasswordError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ChangePasswordError {
+    fn from(err: io::Error) -> ChangePasswordError {
+        ChangePasswordError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ChangePasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12730,6 +12767,11 @@ impl From<HttpDispatchError> for CreateAccessKeyError {
         CreateAccessKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateAccessKeyError {
+    fn from(err: io::Error) -> CreateAccessKeyError {
+        CreateAccessKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12806,6 +12848,11 @@ impl From<CredentialsError> for CreateAccountAliasError {
 impl From<HttpDispatchError> for CreateAccountAliasError {
     fn from(err: HttpDispatchError) -> CreateAccountAliasError {
         CreateAccountAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateAccountAliasError {
+    fn from(err: io::Error) -> CreateAccountAliasError {
+        CreateAccountAliasError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAccountAliasError {
@@ -12895,6 +12942,11 @@ impl From<HttpDispatchError> for CreateGroupError {
         CreateGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateGroupError {
+    fn from(err: io::Error) -> CreateGroupError {
+        CreateGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12968,6 +13020,11 @@ impl From<CredentialsError> for CreateInstanceProfileError {
 impl From<HttpDispatchError> for CreateInstanceProfileError {
     fn from(err: HttpDispatchError) -> CreateInstanceProfileError {
         CreateInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateInstanceProfileError {
+    fn from(err: io::Error) -> CreateInstanceProfileError {
+        CreateInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateInstanceProfileError {
@@ -13058,6 +13115,11 @@ impl From<HttpDispatchError> for CreateLoginProfileError {
         CreateLoginProfileError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateLoginProfileError {
+    fn from(err: io::Error) -> CreateLoginProfileError {
+        CreateLoginProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13137,6 +13199,11 @@ impl From<CredentialsError> for CreateOpenIDConnectProviderError {
 impl From<HttpDispatchError> for CreateOpenIDConnectProviderError {
     fn from(err: HttpDispatchError) -> CreateOpenIDConnectProviderError {
         CreateOpenIDConnectProviderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateOpenIDConnectProviderError {
+    fn from(err: io::Error) -> CreateOpenIDConnectProviderError {
+        CreateOpenIDConnectProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateOpenIDConnectProviderError {
@@ -13230,6 +13297,11 @@ impl From<HttpDispatchError> for CreatePolicyError {
         CreatePolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreatePolicyError {
+    fn from(err: io::Error) -> CreatePolicyError {
+        CreatePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13318,6 +13390,11 @@ impl From<CredentialsError> for CreatePolicyVersionError {
 impl From<HttpDispatchError> for CreatePolicyVersionError {
     fn from(err: HttpDispatchError) -> CreatePolicyVersionError {
         CreatePolicyVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePolicyVersionError {
+    fn from(err: io::Error) -> CreatePolicyVersionError {
+        CreatePolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePolicyVersionError {
@@ -13414,6 +13491,11 @@ impl From<HttpDispatchError> for CreateRoleError {
         CreateRoleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateRoleError {
+    fn from(err: io::Error) -> CreateRoleError {
+        CreateRoleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13499,6 +13581,11 @@ impl From<HttpDispatchError> for CreateSAMLProviderError {
         CreateSAMLProviderError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateSAMLProviderError {
+    fn from(err: io::Error) -> CreateSAMLProviderError {
+        CreateSAMLProviderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13579,6 +13666,11 @@ impl From<HttpDispatchError> for CreateServiceLinkedRoleError {
         CreateServiceLinkedRoleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateServiceLinkedRoleError {
+    fn from(err: io::Error) -> CreateServiceLinkedRoleError {
+        CreateServiceLinkedRoleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateServiceLinkedRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13654,6 +13746,11 @@ impl From<CredentialsError> for CreateServiceSpecificCredentialError {
 impl From<HttpDispatchError> for CreateServiceSpecificCredentialError {
     fn from(err: HttpDispatchError) -> CreateServiceSpecificCredentialError {
         CreateServiceSpecificCredentialError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateServiceSpecificCredentialError {
+    fn from(err: io::Error) -> CreateServiceSpecificCredentialError {
+        CreateServiceSpecificCredentialError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateServiceSpecificCredentialError {
@@ -13743,6 +13840,11 @@ impl From<HttpDispatchError> for CreateUserError {
         CreateUserError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateUserError {
+    fn from(err: io::Error) -> CreateUserError {
+        CreateUserError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13816,6 +13918,11 @@ impl From<CredentialsError> for CreateVirtualMFADeviceError {
 impl From<HttpDispatchError> for CreateVirtualMFADeviceError {
     fn from(err: HttpDispatchError) -> CreateVirtualMFADeviceError {
         CreateVirtualMFADeviceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateVirtualMFADeviceError {
+    fn from(err: io::Error) -> CreateVirtualMFADeviceError {
+        CreateVirtualMFADeviceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateVirtualMFADeviceError {
@@ -13903,6 +14010,11 @@ impl From<HttpDispatchError> for DeactivateMFADeviceError {
         DeactivateMFADeviceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeactivateMFADeviceError {
+    fn from(err: io::Error) -> DeactivateMFADeviceError {
+        DeactivateMFADeviceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeactivateMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13986,6 +14098,11 @@ impl From<HttpDispatchError> for DeleteAccessKeyError {
         DeleteAccessKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAccessKeyError {
+    fn from(err: io::Error) -> DeleteAccessKeyError {
+        DeleteAccessKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14066,6 +14183,11 @@ impl From<HttpDispatchError> for DeleteAccountAliasError {
         DeleteAccountAliasError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAccountAliasError {
+    fn from(err: io::Error) -> DeleteAccountAliasError {
+        DeleteAccountAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAccountAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14140,6 +14262,11 @@ impl From<CredentialsError> for DeleteAccountPasswordPolicyError {
 impl From<HttpDispatchError> for DeleteAccountPasswordPolicyError {
     fn from(err: HttpDispatchError) -> DeleteAccountPasswordPolicyError {
         DeleteAccountPasswordPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteAccountPasswordPolicyError {
+    fn from(err: io::Error) -> DeleteAccountPasswordPolicyError {
+        DeleteAccountPasswordPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteAccountPasswordPolicyError {
@@ -14229,6 +14356,11 @@ impl From<HttpDispatchError> for DeleteGroupError {
         DeleteGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteGroupError {
+    fn from(err: io::Error) -> DeleteGroupError {
+        DeleteGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14310,6 +14442,11 @@ impl From<HttpDispatchError> for DeleteGroupPolicyError {
         DeleteGroupPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteGroupPolicyError {
+    fn from(err: io::Error) -> DeleteGroupPolicyError {
+        DeleteGroupPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14389,6 +14526,11 @@ impl From<CredentialsError> for DeleteInstanceProfileError {
 impl From<HttpDispatchError> for DeleteInstanceProfileError {
     fn from(err: HttpDispatchError) -> DeleteInstanceProfileError {
         DeleteInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteInstanceProfileError {
+    fn from(err: io::Error) -> DeleteInstanceProfileError {
+        DeleteInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteInstanceProfileError {
@@ -14477,6 +14619,11 @@ impl From<HttpDispatchError> for DeleteLoginProfileError {
         DeleteLoginProfileError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteLoginProfileError {
+    fn from(err: io::Error) -> DeleteLoginProfileError {
+        DeleteLoginProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14552,6 +14699,11 @@ impl From<CredentialsError> for DeleteOpenIDConnectProviderError {
 impl From<HttpDispatchError> for DeleteOpenIDConnectProviderError {
     fn from(err: HttpDispatchError) -> DeleteOpenIDConnectProviderError {
         DeleteOpenIDConnectProviderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteOpenIDConnectProviderError {
+    fn from(err: io::Error) -> DeleteOpenIDConnectProviderError {
+        DeleteOpenIDConnectProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteOpenIDConnectProviderError {
@@ -14646,6 +14798,11 @@ impl From<HttpDispatchError> for DeletePolicyError {
         DeletePolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeletePolicyError {
+    fn from(err: io::Error) -> DeletePolicyError {
+        DeletePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14736,6 +14893,11 @@ impl From<CredentialsError> for DeletePolicyVersionError {
 impl From<HttpDispatchError> for DeletePolicyVersionError {
     fn from(err: HttpDispatchError) -> DeletePolicyVersionError {
         DeletePolicyVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeletePolicyVersionError {
+    fn from(err: io::Error) -> DeletePolicyVersionError {
+        DeletePolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeletePolicyVersionError {
@@ -14832,6 +14994,11 @@ impl From<HttpDispatchError> for DeleteRoleError {
         DeleteRoleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRoleError {
+    fn from(err: io::Error) -> DeleteRoleError {
+        DeleteRoleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14915,6 +15082,11 @@ impl From<CredentialsError> for DeleteRolePolicyError {
 impl From<HttpDispatchError> for DeleteRolePolicyError {
     fn from(err: HttpDispatchError) -> DeleteRolePolicyError {
         DeleteRolePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRolePolicyError {
+    fn from(err: io::Error) -> DeleteRolePolicyError {
+        DeleteRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRolePolicyError {
@@ -15003,6 +15175,11 @@ impl From<HttpDispatchError> for DeleteSAMLProviderError {
         DeleteSAMLProviderError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteSAMLProviderError {
+    fn from(err: io::Error) -> DeleteSAMLProviderError {
+        DeleteSAMLProviderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15074,6 +15251,11 @@ impl From<CredentialsError> for DeleteSSHPublicKeyError {
 impl From<HttpDispatchError> for DeleteSSHPublicKeyError {
     fn from(err: HttpDispatchError) -> DeleteSSHPublicKeyError {
         DeleteSSHPublicKeyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSSHPublicKeyError {
+    fn from(err: io::Error) -> DeleteSSHPublicKeyError {
+        DeleteSSHPublicKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSSHPublicKeyError {
@@ -15153,6 +15335,11 @@ impl From<HttpDispatchError> for DeleteServerCertificateError {
         DeleteServerCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteServerCertificateError {
+    fn from(err: io::Error) -> DeleteServerCertificateError {
+        DeleteServerCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15222,6 +15409,11 @@ impl From<CredentialsError> for DeleteServiceSpecificCredentialError {
 impl From<HttpDispatchError> for DeleteServiceSpecificCredentialError {
     fn from(err: HttpDispatchError) -> DeleteServiceSpecificCredentialError {
         DeleteServiceSpecificCredentialError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteServiceSpecificCredentialError {
+    fn from(err: io::Error) -> DeleteServiceSpecificCredentialError {
+        DeleteServiceSpecificCredentialError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteServiceSpecificCredentialError {
@@ -15296,6 +15488,11 @@ impl From<CredentialsError> for DeleteSigningCertificateError {
 impl From<HttpDispatchError> for DeleteSigningCertificateError {
     fn from(err: HttpDispatchError) -> DeleteSigningCertificateError {
         DeleteSigningCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSigningCertificateError {
+    fn from(err: io::Error) -> DeleteSigningCertificateError {
+        DeleteSigningCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSigningCertificateError {
@@ -15385,6 +15582,11 @@ impl From<HttpDispatchError> for DeleteUserError {
         DeleteUserError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteUserError {
+    fn from(err: io::Error) -> DeleteUserError {
+        DeleteUserError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15466,6 +15668,11 @@ impl From<HttpDispatchError> for DeleteUserPolicyError {
         DeleteUserPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteUserPolicyError {
+    fn from(err: io::Error) -> DeleteUserPolicyError {
+        DeleteUserPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15541,6 +15748,11 @@ impl From<CredentialsError> for DeleteVirtualMFADeviceError {
 impl From<HttpDispatchError> for DeleteVirtualMFADeviceError {
     fn from(err: HttpDispatchError) -> DeleteVirtualMFADeviceError {
         DeleteVirtualMFADeviceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVirtualMFADeviceError {
+    fn from(err: io::Error) -> DeleteVirtualMFADeviceError {
+        DeleteVirtualMFADeviceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteVirtualMFADeviceError {
@@ -15629,6 +15841,11 @@ impl From<CredentialsError> for DetachGroupPolicyError {
 impl From<HttpDispatchError> for DetachGroupPolicyError {
     fn from(err: HttpDispatchError) -> DetachGroupPolicyError {
         DetachGroupPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachGroupPolicyError {
+    fn from(err: io::Error) -> DetachGroupPolicyError {
+        DetachGroupPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DetachGroupPolicyError {
@@ -15722,6 +15939,11 @@ impl From<HttpDispatchError> for DetachRolePolicyError {
         DetachRolePolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetachRolePolicyError {
+    fn from(err: io::Error) -> DetachRolePolicyError {
+        DetachRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetachRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15807,6 +16029,11 @@ impl From<CredentialsError> for DetachUserPolicyError {
 impl From<HttpDispatchError> for DetachUserPolicyError {
     fn from(err: HttpDispatchError) -> DetachUserPolicyError {
         DetachUserPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachUserPolicyError {
+    fn from(err: io::Error) -> DetachUserPolicyError {
+        DetachUserPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DetachUserPolicyError {
@@ -15899,6 +16126,11 @@ impl From<HttpDispatchError> for EnableMFADeviceError {
         EnableMFADeviceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableMFADeviceError {
+    fn from(err: io::Error) -> EnableMFADeviceError {
+        EnableMFADeviceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15973,6 +16205,11 @@ impl From<HttpDispatchError> for GenerateCredentialReportError {
         GenerateCredentialReportError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GenerateCredentialReportError {
+    fn from(err: io::Error) -> GenerateCredentialReportError {
+        GenerateCredentialReportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GenerateCredentialReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16044,6 +16281,11 @@ impl From<HttpDispatchError> for GetAccessKeyLastUsedError {
         GetAccessKeyLastUsedError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetAccessKeyLastUsedError {
+    fn from(err: io::Error) -> GetAccessKeyLastUsedError {
+        GetAccessKeyLastUsedError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetAccessKeyLastUsedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16110,6 +16352,11 @@ impl From<CredentialsError> for GetAccountAuthorizationDetailsError {
 impl From<HttpDispatchError> for GetAccountAuthorizationDetailsError {
     fn from(err: HttpDispatchError) -> GetAccountAuthorizationDetailsError {
         GetAccountAuthorizationDetailsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAccountAuthorizationDetailsError {
+    fn from(err: io::Error) -> GetAccountAuthorizationDetailsError {
+        GetAccountAuthorizationDetailsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAccountAuthorizationDetailsError {
@@ -16183,6 +16430,11 @@ impl From<HttpDispatchError> for GetAccountPasswordPolicyError {
         GetAccountPasswordPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetAccountPasswordPolicyError {
+    fn from(err: io::Error) -> GetAccountPasswordPolicyError {
+        GetAccountPasswordPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetAccountPasswordPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16254,6 +16506,11 @@ impl From<HttpDispatchError> for GetAccountSummaryError {
         GetAccountSummaryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetAccountSummaryError {
+    fn from(err: io::Error) -> GetAccountSummaryError {
+        GetAccountSummaryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetAccountSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16320,6 +16577,11 @@ impl From<CredentialsError> for GetContextKeysForCustomPolicyError {
 impl From<HttpDispatchError> for GetContextKeysForCustomPolicyError {
     fn from(err: HttpDispatchError) -> GetContextKeysForCustomPolicyError {
         GetContextKeysForCustomPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetContextKeysForCustomPolicyError {
+    fn from(err: io::Error) -> GetContextKeysForCustomPolicyError {
+        GetContextKeysForCustomPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetContextKeysForCustomPolicyError {
@@ -16391,6 +16653,11 @@ impl From<CredentialsError> for GetContextKeysForPrincipalPolicyError {
 impl From<HttpDispatchError> for GetContextKeysForPrincipalPolicyError {
     fn from(err: HttpDispatchError) -> GetContextKeysForPrincipalPolicyError {
         GetContextKeysForPrincipalPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetContextKeysForPrincipalPolicyError {
+    fn from(err: io::Error) -> GetContextKeysForPrincipalPolicyError {
+        GetContextKeysForPrincipalPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetContextKeysForPrincipalPolicyError {
@@ -16473,6 +16740,11 @@ impl From<HttpDispatchError> for GetCredentialReportError {
         GetCredentialReportError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetCredentialReportError {
+    fn from(err: io::Error) -> GetCredentialReportError {
+        GetCredentialReportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetCredentialReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16551,6 +16823,11 @@ impl From<HttpDispatchError> for GetGroupError {
         GetGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetGroupError {
+    fn from(err: io::Error) -> GetGroupError {
+        GetGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16625,6 +16902,11 @@ impl From<HttpDispatchError> for GetGroupPolicyError {
         GetGroupPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetGroupPolicyError {
+    fn from(err: io::Error) -> GetGroupPolicyError {
+        GetGroupPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16697,6 +16979,11 @@ impl From<CredentialsError> for GetInstanceProfileError {
 impl From<HttpDispatchError> for GetInstanceProfileError {
     fn from(err: HttpDispatchError) -> GetInstanceProfileError {
         GetInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetInstanceProfileError {
+    fn from(err: io::Error) -> GetInstanceProfileError {
+        GetInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetInstanceProfileError {
@@ -16775,6 +17062,11 @@ impl From<HttpDispatchError> for GetLoginProfileError {
         GetLoginProfileError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetLoginProfileError {
+    fn from(err: io::Error) -> GetLoginProfileError {
+        GetLoginProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16846,6 +17138,11 @@ impl From<CredentialsError> for GetOpenIDConnectProviderError {
 impl From<HttpDispatchError> for GetOpenIDConnectProviderError {
     fn from(err: HttpDispatchError) -> GetOpenIDConnectProviderError {
         GetOpenIDConnectProviderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetOpenIDConnectProviderError {
+    fn from(err: io::Error) -> GetOpenIDConnectProviderError {
+        GetOpenIDConnectProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetOpenIDConnectProviderError {
@@ -16930,6 +17227,11 @@ impl From<HttpDispatchError> for GetPolicyError {
         GetPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetPolicyError {
+    fn from(err: io::Error) -> GetPolicyError {
+        GetPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17010,6 +17312,11 @@ impl From<HttpDispatchError> for GetPolicyVersionError {
         GetPolicyVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetPolicyVersionError {
+    fn from(err: io::Error) -> GetPolicyVersionError {
+        GetPolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17085,6 +17392,11 @@ impl From<HttpDispatchError> for GetRoleError {
         GetRoleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRoleError {
+    fn from(err: io::Error) -> GetRoleError {
+        GetRoleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17157,6 +17469,11 @@ impl From<CredentialsError> for GetRolePolicyError {
 impl From<HttpDispatchError> for GetRolePolicyError {
     fn from(err: HttpDispatchError) -> GetRolePolicyError {
         GetRolePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRolePolicyError {
+    fn from(err: io::Error) -> GetRolePolicyError {
+        GetRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetRolePolicyError {
@@ -17238,6 +17555,11 @@ impl From<HttpDispatchError> for GetSAMLProviderError {
         GetSAMLProviderError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetSAMLProviderError {
+    fn from(err: io::Error) -> GetSAMLProviderError {
+        GetSAMLProviderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17311,6 +17633,11 @@ impl From<HttpDispatchError> for GetSSHPublicKeyError {
         GetSSHPublicKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetSSHPublicKeyError {
+    fn from(err: io::Error) -> GetSSHPublicKeyError {
+        GetSSHPublicKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17381,6 +17708,11 @@ impl From<CredentialsError> for GetServerCertificateError {
 impl From<HttpDispatchError> for GetServerCertificateError {
     fn from(err: HttpDispatchError) -> GetServerCertificateError {
         GetServerCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetServerCertificateError {
+    fn from(err: io::Error) -> GetServerCertificateError {
+        GetServerCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetServerCertificateError {
@@ -17459,6 +17791,11 @@ impl From<HttpDispatchError> for GetUserError {
         GetUserError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetUserError {
+    fn from(err: io::Error) -> GetUserError {
+        GetUserError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17531,6 +17868,11 @@ impl From<CredentialsError> for GetUserPolicyError {
 impl From<HttpDispatchError> for GetUserPolicyError {
     fn from(err: HttpDispatchError) -> GetUserPolicyError {
         GetUserPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetUserPolicyError {
+    fn from(err: io::Error) -> GetUserPolicyError {
+        GetUserPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetUserPolicyError {
@@ -17607,6 +17949,11 @@ impl From<HttpDispatchError> for ListAccessKeysError {
         ListAccessKeysError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListAccessKeysError {
+    fn from(err: io::Error) -> ListAccessKeysError {
+        ListAccessKeysError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListAccessKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17674,6 +18021,11 @@ impl From<CredentialsError> for ListAccountAliasesError {
 impl From<HttpDispatchError> for ListAccountAliasesError {
     fn from(err: HttpDispatchError) -> ListAccountAliasesError {
         ListAccountAliasesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAccountAliasesError {
+    fn from(err: io::Error) -> ListAccountAliasesError {
+        ListAccountAliasesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAccountAliasesError {
@@ -17748,6 +18100,11 @@ impl From<CredentialsError> for ListAttachedGroupPoliciesError {
 impl From<HttpDispatchError> for ListAttachedGroupPoliciesError {
     fn from(err: HttpDispatchError) -> ListAttachedGroupPoliciesError {
         ListAttachedGroupPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAttachedGroupPoliciesError {
+    fn from(err: io::Error) -> ListAttachedGroupPoliciesError {
+        ListAttachedGroupPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAttachedGroupPoliciesError {
@@ -17826,6 +18183,11 @@ impl From<HttpDispatchError> for ListAttachedRolePoliciesError {
         ListAttachedRolePoliciesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListAttachedRolePoliciesError {
+    fn from(err: io::Error) -> ListAttachedRolePoliciesError {
+        ListAttachedRolePoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListAttachedRolePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -17900,6 +18262,11 @@ impl From<CredentialsError> for ListAttachedUserPoliciesError {
 impl From<HttpDispatchError> for ListAttachedUserPoliciesError {
     fn from(err: HttpDispatchError) -> ListAttachedUserPoliciesError {
         ListAttachedUserPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAttachedUserPoliciesError {
+    fn from(err: io::Error) -> ListAttachedUserPoliciesError {
+        ListAttachedUserPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAttachedUserPoliciesError {
@@ -17982,6 +18349,11 @@ impl From<HttpDispatchError> for ListEntitiesForPolicyError {
         ListEntitiesForPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListEntitiesForPolicyError {
+    fn from(err: io::Error) -> ListEntitiesForPolicyError {
+        ListEntitiesForPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListEntitiesForPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18059,6 +18431,11 @@ impl From<HttpDispatchError> for ListGroupPoliciesError {
         ListGroupPoliciesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListGroupPoliciesError {
+    fn from(err: io::Error) -> ListGroupPoliciesError {
+        ListGroupPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListGroupPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18128,6 +18505,11 @@ impl From<CredentialsError> for ListGroupsError {
 impl From<HttpDispatchError> for ListGroupsError {
     fn from(err: HttpDispatchError) -> ListGroupsError {
         ListGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListGroupsError {
+    fn from(err: io::Error) -> ListGroupsError {
+        ListGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListGroupsError {
@@ -18203,6 +18585,11 @@ impl From<HttpDispatchError> for ListGroupsForUserError {
         ListGroupsForUserError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListGroupsForUserError {
+    fn from(err: io::Error) -> ListGroupsForUserError {
+        ListGroupsForUserError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListGroupsForUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18270,6 +18657,11 @@ impl From<CredentialsError> for ListInstanceProfilesError {
 impl From<HttpDispatchError> for ListInstanceProfilesError {
     fn from(err: HttpDispatchError) -> ListInstanceProfilesError {
         ListInstanceProfilesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListInstanceProfilesError {
+    fn from(err: io::Error) -> ListInstanceProfilesError {
+        ListInstanceProfilesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListInstanceProfilesError {
@@ -18341,6 +18733,11 @@ impl From<CredentialsError> for ListInstanceProfilesForRoleError {
 impl From<HttpDispatchError> for ListInstanceProfilesForRoleError {
     fn from(err: HttpDispatchError) -> ListInstanceProfilesForRoleError {
         ListInstanceProfilesForRoleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListInstanceProfilesForRoleError {
+    fn from(err: io::Error) -> ListInstanceProfilesForRoleError {
+        ListInstanceProfilesForRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListInstanceProfilesForRoleError {
@@ -18419,6 +18816,11 @@ impl From<HttpDispatchError> for ListMFADevicesError {
         ListMFADevicesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListMFADevicesError {
+    fn from(err: io::Error) -> ListMFADevicesError {
+        ListMFADevicesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListMFADevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18484,6 +18886,11 @@ impl From<CredentialsError> for ListOpenIDConnectProvidersError {
 impl From<HttpDispatchError> for ListOpenIDConnectProvidersError {
     fn from(err: HttpDispatchError) -> ListOpenIDConnectProvidersError {
         ListOpenIDConnectProvidersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListOpenIDConnectProvidersError {
+    fn from(err: io::Error) -> ListOpenIDConnectProvidersError {
+        ListOpenIDConnectProvidersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListOpenIDConnectProvidersError {
@@ -18554,6 +18961,11 @@ impl From<CredentialsError> for ListPoliciesError {
 impl From<HttpDispatchError> for ListPoliciesError {
     fn from(err: HttpDispatchError) -> ListPoliciesError {
         ListPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPoliciesError {
+    fn from(err: io::Error) -> ListPoliciesError {
+        ListPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPoliciesError {
@@ -18634,6 +19046,11 @@ impl From<HttpDispatchError> for ListPolicyVersionsError {
         ListPolicyVersionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPolicyVersionsError {
+    fn from(err: io::Error) -> ListPolicyVersionsError {
+        ListPolicyVersionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPolicyVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18711,6 +19128,11 @@ impl From<HttpDispatchError> for ListRolePoliciesError {
         ListRolePoliciesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListRolePoliciesError {
+    fn from(err: io::Error) -> ListRolePoliciesError {
+        ListRolePoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListRolePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18780,6 +19202,11 @@ impl From<HttpDispatchError> for ListRolesError {
         ListRolesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListRolesError {
+    fn from(err: io::Error) -> ListRolesError {
+        ListRolesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18846,6 +19273,11 @@ impl From<CredentialsError> for ListSAMLProvidersError {
 impl From<HttpDispatchError> for ListSAMLProvidersError {
     fn from(err: HttpDispatchError) -> ListSAMLProvidersError {
         ListSAMLProvidersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSAMLProvidersError {
+    fn from(err: io::Error) -> ListSAMLProvidersError {
+        ListSAMLProvidersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListSAMLProvidersError {
@@ -18918,6 +19350,11 @@ impl From<HttpDispatchError> for ListSSHPublicKeysError {
         ListSSHPublicKeysError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListSSHPublicKeysError {
+    fn from(err: io::Error) -> ListSSHPublicKeysError {
+        ListSSHPublicKeysError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListSSHPublicKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -18984,6 +19421,11 @@ impl From<CredentialsError> for ListServerCertificatesError {
 impl From<HttpDispatchError> for ListServerCertificatesError {
     fn from(err: HttpDispatchError) -> ListServerCertificatesError {
         ListServerCertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListServerCertificatesError {
+    fn from(err: io::Error) -> ListServerCertificatesError {
+        ListServerCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListServerCertificatesError {
@@ -19057,6 +19499,11 @@ impl From<HttpDispatchError> for ListServiceSpecificCredentialsError {
         ListServiceSpecificCredentialsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListServiceSpecificCredentialsError {
+    fn from(err: io::Error) -> ListServiceSpecificCredentialsError {
+        ListServiceSpecificCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListServiceSpecificCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19127,6 +19574,11 @@ impl From<CredentialsError> for ListSigningCertificatesError {
 impl From<HttpDispatchError> for ListSigningCertificatesError {
     fn from(err: HttpDispatchError) -> ListSigningCertificatesError {
         ListSigningCertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSigningCertificatesError {
+    fn from(err: io::Error) -> ListSigningCertificatesError {
+        ListSigningCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListSigningCertificatesError {
@@ -19205,6 +19657,11 @@ impl From<HttpDispatchError> for ListUserPoliciesError {
         ListUserPoliciesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListUserPoliciesError {
+    fn from(err: io::Error) -> ListUserPoliciesError {
+        ListUserPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListUserPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19274,6 +19731,11 @@ impl From<HttpDispatchError> for ListUsersError {
         ListUsersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListUsersError {
+    fn from(err: io::Error) -> ListUsersError {
+        ListUsersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19335,6 +19797,11 @@ impl From<CredentialsError> for ListVirtualMFADevicesError {
 impl From<HttpDispatchError> for ListVirtualMFADevicesError {
     fn from(err: HttpDispatchError) -> ListVirtualMFADevicesError {
         ListVirtualMFADevicesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListVirtualMFADevicesError {
+    fn from(err: io::Error) -> ListVirtualMFADevicesError {
+        ListVirtualMFADevicesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListVirtualMFADevicesError {
@@ -19417,6 +19884,11 @@ impl From<CredentialsError> for PutGroupPolicyError {
 impl From<HttpDispatchError> for PutGroupPolicyError {
     fn from(err: HttpDispatchError) -> PutGroupPolicyError {
         PutGroupPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutGroupPolicyError {
+    fn from(err: io::Error) -> PutGroupPolicyError {
+        PutGroupPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutGroupPolicyError {
@@ -19508,6 +19980,11 @@ impl From<HttpDispatchError> for PutRolePolicyError {
         PutRolePolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutRolePolicyError {
+    fn from(err: io::Error) -> PutRolePolicyError {
+        PutRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19593,6 +20070,11 @@ impl From<HttpDispatchError> for PutUserPolicyError {
         PutUserPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutUserPolicyError {
+    fn from(err: io::Error) -> PutUserPolicyError {
+        PutUserPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19666,6 +20148,11 @@ impl From<CredentialsError> for RemoveClientIDFromOpenIDConnectProviderError {
 impl From<HttpDispatchError> for RemoveClientIDFromOpenIDConnectProviderError {
     fn from(err: HttpDispatchError) -> RemoveClientIDFromOpenIDConnectProviderError {
         RemoveClientIDFromOpenIDConnectProviderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveClientIDFromOpenIDConnectProviderError {
+    fn from(err: io::Error) -> RemoveClientIDFromOpenIDConnectProviderError {
+        RemoveClientIDFromOpenIDConnectProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveClientIDFromOpenIDConnectProviderError {
@@ -19745,6 +20232,11 @@ impl From<CredentialsError> for RemoveRoleFromInstanceProfileError {
 impl From<HttpDispatchError> for RemoveRoleFromInstanceProfileError {
     fn from(err: HttpDispatchError) -> RemoveRoleFromInstanceProfileError {
         RemoveRoleFromInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveRoleFromInstanceProfileError {
+    fn from(err: io::Error) -> RemoveRoleFromInstanceProfileError {
+        RemoveRoleFromInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveRoleFromInstanceProfileError {
@@ -19830,6 +20322,11 @@ impl From<HttpDispatchError> for RemoveUserFromGroupError {
         RemoveUserFromGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveUserFromGroupError {
+    fn from(err: io::Error) -> RemoveUserFromGroupError {
+        RemoveUserFromGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveUserFromGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19898,6 +20395,11 @@ impl From<CredentialsError> for ResetServiceSpecificCredentialError {
 impl From<HttpDispatchError> for ResetServiceSpecificCredentialError {
     fn from(err: HttpDispatchError) -> ResetServiceSpecificCredentialError {
         ResetServiceSpecificCredentialError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResetServiceSpecificCredentialError {
+    fn from(err: io::Error) -> ResetServiceSpecificCredentialError {
+        ResetServiceSpecificCredentialError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetServiceSpecificCredentialError {
@@ -19983,6 +20485,11 @@ impl From<HttpDispatchError> for ResyncMFADeviceError {
         ResyncMFADeviceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ResyncMFADeviceError {
+    fn from(err: io::Error) -> ResyncMFADeviceError {
+        ResyncMFADeviceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ResyncMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20061,6 +20568,11 @@ impl From<HttpDispatchError> for SetDefaultPolicyVersionError {
         SetDefaultPolicyVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetDefaultPolicyVersionError {
+    fn from(err: io::Error) -> SetDefaultPolicyVersionError {
+        SetDefaultPolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetDefaultPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20137,6 +20649,11 @@ impl From<HttpDispatchError> for SimulateCustomPolicyError {
         SimulateCustomPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SimulateCustomPolicyError {
+    fn from(err: io::Error) -> SimulateCustomPolicyError {
+        SimulateCustomPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SimulateCustomPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20210,6 +20727,11 @@ impl From<CredentialsError> for SimulatePrincipalPolicyError {
 impl From<HttpDispatchError> for SimulatePrincipalPolicyError {
     fn from(err: HttpDispatchError) -> SimulatePrincipalPolicyError {
         SimulatePrincipalPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SimulatePrincipalPolicyError {
+    fn from(err: io::Error) -> SimulatePrincipalPolicyError {
+        SimulatePrincipalPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SimulatePrincipalPolicyError {
@@ -20294,6 +20816,11 @@ impl From<HttpDispatchError> for UpdateAccessKeyError {
         UpdateAccessKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateAccessKeyError {
+    fn from(err: io::Error) -> UpdateAccessKeyError {
+        UpdateAccessKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20369,6 +20896,11 @@ impl From<CredentialsError> for UpdateAccountPasswordPolicyError {
 impl From<HttpDispatchError> for UpdateAccountPasswordPolicyError {
     fn from(err: HttpDispatchError) -> UpdateAccountPasswordPolicyError {
         UpdateAccountPasswordPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAccountPasswordPolicyError {
+    fn from(err: io::Error) -> UpdateAccountPasswordPolicyError {
+        UpdateAccountPasswordPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAccountPasswordPolicyError {
@@ -20452,6 +20984,11 @@ impl From<CredentialsError> for UpdateAssumeRolePolicyError {
 impl From<HttpDispatchError> for UpdateAssumeRolePolicyError {
     fn from(err: HttpDispatchError) -> UpdateAssumeRolePolicyError {
         UpdateAssumeRolePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAssumeRolePolicyError {
+    fn from(err: io::Error) -> UpdateAssumeRolePolicyError {
+        UpdateAssumeRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAssumeRolePolicyError {
@@ -20543,6 +21080,11 @@ impl From<HttpDispatchError> for UpdateGroupError {
         UpdateGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateGroupError {
+    fn from(err: io::Error) -> UpdateGroupError {
+        UpdateGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20630,6 +21172,11 @@ impl From<HttpDispatchError> for UpdateLoginProfileError {
         UpdateLoginProfileError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateLoginProfileError {
+    fn from(err: io::Error) -> UpdateLoginProfileError {
+        UpdateLoginProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20708,6 +21255,11 @@ impl From<HttpDispatchError> for UpdateOpenIDConnectProviderThumbprintError {
         UpdateOpenIDConnectProviderThumbprintError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateOpenIDConnectProviderThumbprintError {
+    fn from(err: io::Error) -> UpdateOpenIDConnectProviderThumbprintError {
+        UpdateOpenIDConnectProviderThumbprintError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateOpenIDConnectProviderThumbprintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20784,6 +21336,11 @@ impl From<CredentialsError> for UpdateRoleDescriptionError {
 impl From<HttpDispatchError> for UpdateRoleDescriptionError {
     fn from(err: HttpDispatchError) -> UpdateRoleDescriptionError {
         UpdateRoleDescriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRoleDescriptionError {
+    fn from(err: io::Error) -> UpdateRoleDescriptionError {
+        UpdateRoleDescriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateRoleDescriptionError {
@@ -20873,6 +21430,11 @@ impl From<HttpDispatchError> for UpdateSAMLProviderError {
         UpdateSAMLProviderError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateSAMLProviderError {
+    fn from(err: io::Error) -> UpdateSAMLProviderError {
+        UpdateSAMLProviderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -20944,6 +21506,11 @@ impl From<CredentialsError> for UpdateSSHPublicKeyError {
 impl From<HttpDispatchError> for UpdateSSHPublicKeyError {
     fn from(err: HttpDispatchError) -> UpdateSSHPublicKeyError {
         UpdateSSHPublicKeyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateSSHPublicKeyError {
+    fn from(err: io::Error) -> UpdateSSHPublicKeyError {
+        UpdateSSHPublicKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateSSHPublicKeyError {
@@ -21023,6 +21590,11 @@ impl From<HttpDispatchError> for UpdateServerCertificateError {
         UpdateServerCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateServerCertificateError {
+    fn from(err: io::Error) -> UpdateServerCertificateError {
+        UpdateServerCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -21092,6 +21664,11 @@ impl From<CredentialsError> for UpdateServiceSpecificCredentialError {
 impl From<HttpDispatchError> for UpdateServiceSpecificCredentialError {
     fn from(err: HttpDispatchError) -> UpdateServiceSpecificCredentialError {
         UpdateServiceSpecificCredentialError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateServiceSpecificCredentialError {
+    fn from(err: io::Error) -> UpdateServiceSpecificCredentialError {
+        UpdateServiceSpecificCredentialError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateServiceSpecificCredentialError {
@@ -21166,6 +21743,11 @@ impl From<CredentialsError> for UpdateSigningCertificateError {
 impl From<HttpDispatchError> for UpdateSigningCertificateError {
     fn from(err: HttpDispatchError) -> UpdateSigningCertificateError {
         UpdateSigningCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateSigningCertificateError {
+    fn from(err: io::Error) -> UpdateSigningCertificateError {
+        UpdateSigningCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateSigningCertificateError {
@@ -21258,6 +21840,11 @@ impl From<HttpDispatchError> for UpdateUserError {
         UpdateUserError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateUserError {
+    fn from(err: io::Error) -> UpdateUserError {
+        UpdateUserError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -21344,6 +21931,11 @@ impl From<HttpDispatchError> for UploadSSHPublicKeyError {
         UploadSSHPublicKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UploadSSHPublicKeyError {
+    fn from(err: io::Error) -> UploadSSHPublicKeyError {
+        UploadSSHPublicKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UploadSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -21426,6 +22018,11 @@ impl From<CredentialsError> for UploadServerCertificateError {
 impl From<HttpDispatchError> for UploadServerCertificateError {
     fn from(err: HttpDispatchError) -> UploadServerCertificateError {
         UploadServerCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UploadServerCertificateError {
+    fn from(err: io::Error) -> UploadServerCertificateError {
+        UploadServerCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UploadServerCertificateError {
@@ -21516,6 +22113,11 @@ impl From<CredentialsError> for UploadSigningCertificateError {
 impl From<HttpDispatchError> for UploadSigningCertificateError {
     fn from(err: HttpDispatchError) -> UploadSigningCertificateError {
         UploadSigningCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UploadSigningCertificateError {
+    fn from(err: io::Error) -> UploadSigningCertificateError {
+        UploadSigningCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UploadSigningCertificateError {
@@ -22295,15 +22897,17 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(AddClientIDToOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddClientIDToOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -22321,15 +22925,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(AddRoleToInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddRoleToInstanceProfileError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -22345,15 +22952,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AddUserToGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddUserToGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22372,15 +22980,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AttachGroupPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachGroupPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22399,15 +23008,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AttachRolePolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachRolePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22426,15 +23036,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AttachUserPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachUserPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22451,15 +23062,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ChangePasswordError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ChangePasswordError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22478,16 +23090,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateAccessKeyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22502,8 +23116,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateAccessKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAccessKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22522,15 +23137,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(CreateAccountAliasError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAccountAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22549,16 +23165,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateGroupResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22572,7 +23190,11 @@ impl<P, D> Iam for IamClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -22591,16 +23213,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateInstanceProfileResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22616,8 +23240,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateInstanceProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateInstanceProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22636,16 +23261,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateLoginProfileResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22660,8 +23287,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLoginProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22681,16 +23309,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateOpenIDConnectProviderResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22704,8 +23334,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -22723,16 +23356,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreatePolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22747,7 +23382,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreatePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22766,16 +23403,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreatePolicyVersionResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22790,8 +23429,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22810,16 +23450,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateRoleResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22833,7 +23475,11 @@ impl<P, D> Iam for IamClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRoleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -22851,16 +23497,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateSAMLProviderResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22875,8 +23523,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSAMLProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -22896,16 +23545,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateServiceLinkedRoleResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22921,8 +23572,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateServiceLinkedRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateServiceLinkedRoleError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -22941,16 +23595,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateServiceSpecificCredentialResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22964,8 +23620,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -22983,16 +23642,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateUserResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23006,7 +23667,11 @@ impl<P, D> Iam for IamClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateUserError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -23025,16 +23690,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateVirtualMFADeviceResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23050,8 +23717,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateVirtualMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVirtualMFADeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23070,15 +23738,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeactivateMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeactivateMFADeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23097,15 +23766,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteAccessKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAccessKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23124,15 +23794,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteAccountAliasError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAccountAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23149,15 +23820,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -23173,13 +23847,17 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -23197,15 +23875,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteGroupPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteGroupPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23224,15 +23903,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteInstanceProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteInstanceProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23251,15 +23931,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLoginProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23278,15 +23959,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -23302,14 +23986,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23328,15 +24014,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23353,13 +24040,17 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRoleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -23377,15 +24068,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteRolePolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRolePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23404,15 +24096,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSAMLProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23431,15 +24124,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSSHPublicKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23458,15 +24152,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteServerCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -23484,15 +24181,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -23510,15 +24210,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeleteSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSigningCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -23534,13 +24237,17 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteUserError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -23558,15 +24265,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteUserPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteUserPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23585,15 +24293,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteVirtualMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVirtualMFADeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23612,15 +24321,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DetachGroupPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachGroupPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23639,15 +24349,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DetachRolePolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachRolePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23666,15 +24377,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DetachUserPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachUserPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23693,15 +24405,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(EnableMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableMFADeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23720,16 +24433,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GenerateCredentialReportResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23745,8 +24460,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(GenerateCredentialReportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GenerateCredentialReportError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -23765,16 +24483,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetAccessKeyLastUsedResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23790,8 +24510,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetAccessKeyLastUsedError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAccessKeyLastUsedError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23811,16 +24532,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetAccountAuthorizationDetailsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23834,8 +24557,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(GetAccountAuthorizationDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAccountAuthorizationDetailsError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -23853,16 +24579,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetAccountPasswordPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23878,8 +24606,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(GetAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -23895,16 +24626,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetAccountSummaryResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23919,8 +24652,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetAccountSummaryError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAccountSummaryError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -23940,16 +24674,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetContextKeysForPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23965,8 +24701,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(GetContextKeysForCustomPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetContextKeysForCustomPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -23985,16 +24724,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetContextKeysForPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24010,8 +24751,10 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(GetContextKeysForPrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetContextKeysForPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -24028,16 +24771,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetCredentialReportResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24052,8 +24797,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetCredentialReportError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCredentialReportError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24070,16 +24816,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetGroupResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24093,7 +24841,11 @@ impl<P, D> Iam for IamClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(GetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -24111,16 +24863,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetGroupPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24135,8 +24889,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetGroupPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetGroupPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24155,16 +24910,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetInstanceProfileResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24179,8 +24936,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetInstanceProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetInstanceProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24199,16 +24957,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetLoginProfileResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24223,8 +24983,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLoginProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24244,16 +25005,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetOpenIDConnectProviderResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24269,8 +25032,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(GetOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -24286,16 +25052,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24309,7 +25077,11 @@ impl<P, D> Iam for IamClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(GetPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -24327,16 +25099,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetPolicyVersionResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24351,8 +25125,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24369,16 +25144,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetRoleResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24392,7 +25169,11 @@ impl<P, D> Iam for IamClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(GetRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRoleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -24410,16 +25191,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetRolePolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24434,7 +25217,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRolePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24453,16 +25238,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetSAMLProviderResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24477,8 +25264,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSAMLProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24497,16 +25285,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetSSHPublicKeyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24521,8 +25311,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSSHPublicKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24542,16 +25333,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetServerCertificateResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24567,8 +25360,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetServerCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetServerCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24585,16 +25379,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetUserResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24608,7 +25404,11 @@ impl<P, D> Iam for IamClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(GetUserError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -24626,16 +25426,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetUserPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24650,7 +25452,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetUserPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24669,16 +25473,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListAccessKeysResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24693,8 +25499,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListAccessKeysError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAccessKeysError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24713,16 +25520,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListAccountAliasesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24737,8 +25546,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListAccountAliasesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAccountAliasesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24758,16 +25568,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListAttachedGroupPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24781,8 +25593,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListAttachedGroupPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAttachedGroupPoliciesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -24801,16 +25616,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListAttachedRolePoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24826,8 +25643,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListAttachedRolePoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAttachedRolePoliciesError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -24846,16 +25666,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListAttachedUserPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24871,8 +25693,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListAttachedUserPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAttachedUserPoliciesError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -24891,16 +25716,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListEntitiesForPolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24916,8 +25743,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListEntitiesForPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListEntitiesForPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24936,16 +25764,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListGroupPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24960,8 +25790,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListGroupPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListGroupPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -24980,16 +25811,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListGroupsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25003,7 +25836,11 @@ impl<P, D> Iam for IamClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -25021,16 +25858,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListGroupsForUserResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25045,8 +25884,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListGroupsForUserError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListGroupsForUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25066,16 +25906,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListInstanceProfilesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25091,8 +25933,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListInstanceProfilesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListInstanceProfilesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25112,16 +25955,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListInstanceProfilesForRoleResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25135,8 +25980,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListInstanceProfilesForRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListInstanceProfilesForRoleError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -25154,16 +26002,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListMFADevicesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25178,8 +26028,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListMFADevicesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListMFADevicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25199,16 +26050,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListOpenIDConnectProvidersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25222,8 +26075,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListOpenIDConnectProvidersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListOpenIDConnectProvidersError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -25241,16 +26097,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25265,7 +26123,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25284,16 +26144,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListPolicyVersionsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25308,8 +26170,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25328,16 +26191,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListRolePoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25352,8 +26217,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListRolePoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRolePoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25370,16 +26236,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListRolesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25393,7 +26261,11 @@ impl<P, D> Iam for IamClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListRolesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRolesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -25411,16 +26283,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListSAMLProvidersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25435,8 +26309,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListSAMLProvidersError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSAMLProvidersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25455,16 +26330,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListSSHPublicKeysResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25479,8 +26356,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListSSHPublicKeysError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSSHPublicKeysError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25500,16 +26378,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListServerCertificatesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25525,8 +26405,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListServerCertificatesError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListServerCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25546,16 +26427,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListServiceSpecificCredentialsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25569,8 +26452,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListServiceSpecificCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListServiceSpecificCredentialsError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -25589,16 +26475,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListSigningCertificatesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25614,8 +26502,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListSigningCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSigningCertificatesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -25633,16 +26524,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListUserPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25657,8 +26550,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListUserPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListUserPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25675,16 +26569,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListUsersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25698,7 +26594,11 @@ impl<P, D> Iam for IamClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListUsersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListUsersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -25717,16 +26617,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListVirtualMFADevicesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25742,8 +26644,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListVirtualMFADevicesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListVirtualMFADevicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25760,15 +26663,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(PutGroupPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutGroupPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25785,14 +26689,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(PutRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutRolePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25809,14 +26715,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(PutUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutUserPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25838,15 +26746,17 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(RemoveClientIDFromOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveClientIDFromOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -25864,15 +26774,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(RemoveRoleFromInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveRoleFromInstanceProfileError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -25890,15 +26803,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(RemoveUserFromGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveUserFromGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25918,16 +26832,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ResetServiceSpecificCredentialResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25941,8 +26857,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ResetServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
+            }
         }
     }
 
@@ -25960,15 +26879,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(ResyncMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResyncMFADeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -25987,15 +26907,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -26013,16 +26936,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SimulatePolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26037,8 +26962,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SimulateCustomPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SimulateCustomPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26058,16 +26984,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SimulatePolicyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26082,8 +27010,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(SimulatePrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SimulatePrincipalPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -26101,15 +27032,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(UpdateAccessKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAccessKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26128,15 +27060,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(UpdateAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -26154,15 +27089,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(UpdateAssumeRolePolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAssumeRolePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26179,13 +27115,17 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(UpdateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -26203,15 +27143,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(UpdateLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateLoginProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26231,15 +27172,17 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(UpdateOpenIDConnectProviderThumbprintError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateOpenIDConnectProviderThumbprintError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -26258,16 +27201,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateRoleDescriptionResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26283,8 +27228,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateRoleDescriptionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRoleDescriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26303,16 +27249,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UpdateSAMLProviderResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26327,8 +27275,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateSAMLProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26347,15 +27296,16 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(UpdateSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateSSHPublicKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26374,15 +27324,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(UpdateServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateServerCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -26400,15 +27353,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(UpdateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -26426,15 +27382,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(UpdateSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateSigningCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -26450,13 +27409,17 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(UpdateUserError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -26474,16 +27437,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UploadSSHPublicKeyResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26498,8 +27463,9 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UploadSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UploadSSHPublicKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -26519,16 +27485,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UploadServerCertificateResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26544,8 +27512,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(UploadServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UploadServerCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -26564,16 +27535,18 @@ impl<P, D> Iam for IamClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UploadSigningCertificateResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26589,8 +27562,11 @@ impl<P, D> Iam for IamClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(UploadSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UploadSigningCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 }

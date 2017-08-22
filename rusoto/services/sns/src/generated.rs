@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2611,6 +2613,11 @@ impl From<HttpDispatchError> for AddPermissionError {
         AddPermissionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddPermissionError {
+    fn from(err: io::Error) -> AddPermissionError {
+        AddPermissionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2687,6 +2694,11 @@ impl From<CredentialsError> for CheckIfPhoneNumberIsOptedOutError {
 impl From<HttpDispatchError> for CheckIfPhoneNumberIsOptedOutError {
     fn from(err: HttpDispatchError) -> CheckIfPhoneNumberIsOptedOutError {
         CheckIfPhoneNumberIsOptedOutError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CheckIfPhoneNumberIsOptedOutError {
+    fn from(err: io::Error) -> CheckIfPhoneNumberIsOptedOutError {
+        CheckIfPhoneNumberIsOptedOutError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CheckIfPhoneNumberIsOptedOutError {
@@ -2776,6 +2788,11 @@ impl From<HttpDispatchError> for ConfirmSubscriptionError {
         ConfirmSubscriptionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ConfirmSubscriptionError {
+    fn from(err: io::Error) -> ConfirmSubscriptionError {
+        ConfirmSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ConfirmSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2852,6 +2869,11 @@ impl From<CredentialsError> for CreatePlatformApplicationError {
 impl From<HttpDispatchError> for CreatePlatformApplicationError {
     fn from(err: HttpDispatchError) -> CreatePlatformApplicationError {
         CreatePlatformApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePlatformApplicationError {
+    fn from(err: io::Error) -> CreatePlatformApplicationError {
+        CreatePlatformApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePlatformApplicationError {
@@ -2933,6 +2955,11 @@ impl From<CredentialsError> for CreatePlatformEndpointError {
 impl From<HttpDispatchError> for CreatePlatformEndpointError {
     fn from(err: HttpDispatchError) -> CreatePlatformEndpointError {
         CreatePlatformEndpointError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePlatformEndpointError {
+    fn from(err: io::Error) -> CreatePlatformEndpointError {
+        CreatePlatformEndpointError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePlatformEndpointError {
@@ -3023,6 +3050,11 @@ impl From<HttpDispatchError> for CreateTopicError {
         CreateTopicError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateTopicError {
+    fn from(err: io::Error) -> CreateTopicError {
+        CreateTopicError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3104,6 +3136,11 @@ impl From<HttpDispatchError> for DeleteEndpointError {
         DeleteEndpointError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteEndpointError {
+    fn from(err: io::Error) -> DeleteEndpointError {
+        DeleteEndpointError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3176,6 +3213,11 @@ impl From<CredentialsError> for DeletePlatformApplicationError {
 impl From<HttpDispatchError> for DeletePlatformApplicationError {
     fn from(err: HttpDispatchError) -> DeletePlatformApplicationError {
         DeletePlatformApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeletePlatformApplicationError {
+    fn from(err: io::Error) -> DeletePlatformApplicationError {
+        DeletePlatformApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeletePlatformApplicationError {
@@ -3265,6 +3307,11 @@ impl From<HttpDispatchError> for DeleteTopicError {
         DeleteTopicError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTopicError {
+    fn from(err: io::Error) -> DeleteTopicError {
+        DeleteTopicError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3345,6 +3392,11 @@ impl From<HttpDispatchError> for GetEndpointAttributesError {
         GetEndpointAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetEndpointAttributesError {
+    fn from(err: io::Error) -> GetEndpointAttributesError {
+        GetEndpointAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetEndpointAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3423,6 +3475,11 @@ impl From<CredentialsError> for GetPlatformApplicationAttributesError {
 impl From<HttpDispatchError> for GetPlatformApplicationAttributesError {
     fn from(err: HttpDispatchError) -> GetPlatformApplicationAttributesError {
         GetPlatformApplicationAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetPlatformApplicationAttributesError {
+    fn from(err: io::Error) -> GetPlatformApplicationAttributesError {
+        GetPlatformApplicationAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetPlatformApplicationAttributesError {
@@ -3511,6 +3568,11 @@ impl From<HttpDispatchError> for GetSMSAttributesError {
         GetSMSAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetSMSAttributesError {
+    fn from(err: io::Error) -> GetSMSAttributesError {
+        GetSMSAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetSMSAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3589,6 +3651,11 @@ impl From<CredentialsError> for GetSubscriptionAttributesError {
 impl From<HttpDispatchError> for GetSubscriptionAttributesError {
     fn from(err: HttpDispatchError) -> GetSubscriptionAttributesError {
         GetSubscriptionAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSubscriptionAttributesError {
+    fn from(err: io::Error) -> GetSubscriptionAttributesError {
+        GetSubscriptionAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSubscriptionAttributesError {
@@ -3675,6 +3742,11 @@ impl From<HttpDispatchError> for GetTopicAttributesError {
         GetTopicAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetTopicAttributesError {
+    fn from(err: io::Error) -> GetTopicAttributesError {
+        GetTopicAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetTopicAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3753,6 +3825,11 @@ impl From<CredentialsError> for ListEndpointsByPlatformApplicationError {
 impl From<HttpDispatchError> for ListEndpointsByPlatformApplicationError {
     fn from(err: HttpDispatchError) -> ListEndpointsByPlatformApplicationError {
         ListEndpointsByPlatformApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListEndpointsByPlatformApplicationError {
+    fn from(err: io::Error) -> ListEndpointsByPlatformApplicationError {
+        ListEndpointsByPlatformApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListEndpointsByPlatformApplicationError {
@@ -3837,6 +3914,11 @@ impl From<HttpDispatchError> for ListPhoneNumbersOptedOutError {
         ListPhoneNumbersOptedOutError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPhoneNumbersOptedOutError {
+    fn from(err: io::Error) -> ListPhoneNumbersOptedOutError {
+        ListPhoneNumbersOptedOutError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPhoneNumbersOptedOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3912,6 +3994,11 @@ impl From<CredentialsError> for ListPlatformApplicationsError {
 impl From<HttpDispatchError> for ListPlatformApplicationsError {
     fn from(err: HttpDispatchError) -> ListPlatformApplicationsError {
         ListPlatformApplicationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPlatformApplicationsError {
+    fn from(err: io::Error) -> ListPlatformApplicationsError {
+        ListPlatformApplicationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPlatformApplicationsError {
@@ -3994,6 +4081,11 @@ impl From<HttpDispatchError> for ListSubscriptionsError {
         ListSubscriptionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListSubscriptionsError {
+    fn from(err: io::Error) -> ListSubscriptionsError {
+        ListSubscriptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4073,6 +4165,11 @@ impl From<CredentialsError> for ListSubscriptionsByTopicError {
 impl From<HttpDispatchError> for ListSubscriptionsByTopicError {
     fn from(err: HttpDispatchError) -> ListSubscriptionsByTopicError {
         ListSubscriptionsByTopicError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSubscriptionsByTopicError {
+    fn from(err: io::Error) -> ListSubscriptionsByTopicError {
+        ListSubscriptionsByTopicError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListSubscriptionsByTopicError {
@@ -4158,6 +4255,11 @@ impl From<HttpDispatchError> for ListTopicsError {
         ListTopicsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTopicsError {
+    fn from(err: io::Error) -> ListTopicsError {
+        ListTopicsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTopicsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4239,6 +4341,11 @@ impl From<CredentialsError> for OptInPhoneNumberError {
 impl From<HttpDispatchError> for OptInPhoneNumberError {
     fn from(err: HttpDispatchError) -> OptInPhoneNumberError {
         OptInPhoneNumberError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for OptInPhoneNumberError {
+    fn from(err: io::Error) -> OptInPhoneNumberError {
+        OptInPhoneNumberError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for OptInPhoneNumberError {
@@ -4340,6 +4447,11 @@ impl From<HttpDispatchError> for PublishError {
         PublishError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PublishError {
+    fn from(err: io::Error) -> PublishError {
+        PublishError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PublishError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4427,6 +4539,11 @@ impl From<HttpDispatchError> for RemovePermissionError {
         RemovePermissionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemovePermissionError {
+    fn from(err: io::Error) -> RemovePermissionError {
+        RemovePermissionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4507,6 +4624,11 @@ impl From<HttpDispatchError> for SetEndpointAttributesError {
         SetEndpointAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetEndpointAttributesError {
+    fn from(err: io::Error) -> SetEndpointAttributesError {
+        SetEndpointAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetEndpointAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4585,6 +4707,11 @@ impl From<CredentialsError> for SetPlatformApplicationAttributesError {
 impl From<HttpDispatchError> for SetPlatformApplicationAttributesError {
     fn from(err: HttpDispatchError) -> SetPlatformApplicationAttributesError {
         SetPlatformApplicationAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetPlatformApplicationAttributesError {
+    fn from(err: io::Error) -> SetPlatformApplicationAttributesError {
+        SetPlatformApplicationAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetPlatformApplicationAttributesError {
@@ -4673,6 +4800,11 @@ impl From<HttpDispatchError> for SetSMSAttributesError {
         SetSMSAttributesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetSMSAttributesError {
+    fn from(err: io::Error) -> SetSMSAttributesError {
+        SetSMSAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetSMSAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4751,6 +4883,11 @@ impl From<CredentialsError> for SetSubscriptionAttributesError {
 impl From<HttpDispatchError> for SetSubscriptionAttributesError {
     fn from(err: HttpDispatchError) -> SetSubscriptionAttributesError {
         SetSubscriptionAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetSubscriptionAttributesError {
+    fn from(err: io::Error) -> SetSubscriptionAttributesError {
+        SetSubscriptionAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetSubscriptionAttributesError {
@@ -4835,6 +4972,11 @@ impl From<CredentialsError> for SetTopicAttributesError {
 impl From<HttpDispatchError> for SetTopicAttributesError {
     fn from(err: HttpDispatchError) -> SetTopicAttributesError {
         SetTopicAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetTopicAttributesError {
+    fn from(err: io::Error) -> SetTopicAttributesError {
+        SetTopicAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetTopicAttributesError {
@@ -4928,6 +5070,11 @@ impl From<HttpDispatchError> for SubscribeError {
         SubscribeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SubscribeError {
+    fn from(err: io::Error) -> SubscribeError {
+        SubscribeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SubscribeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5013,6 +5160,11 @@ impl From<CredentialsError> for UnsubscribeError {
 impl From<HttpDispatchError> for UnsubscribeError {
     fn from(err: HttpDispatchError) -> UnsubscribeError {
         UnsubscribeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UnsubscribeError {
+    fn from(err: io::Error) -> UnsubscribeError {
+        UnsubscribeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UnsubscribeError {
@@ -5249,14 +5401,16 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddPermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5276,16 +5430,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CheckIfPhoneNumberIsOptedOutResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5299,8 +5455,11 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CheckIfPhoneNumberIsOptedOutError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CheckIfPhoneNumberIsOptedOutError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -5318,16 +5477,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ConfirmSubscriptionResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5342,8 +5503,9 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ConfirmSubscriptionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ConfirmSubscriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5363,16 +5525,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreatePlatformApplicationResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5386,8 +5550,11 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(CreatePlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePlatformApplicationError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5405,16 +5572,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateEndpointResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5429,8 +5598,9 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreatePlatformEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePlatformEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5449,16 +5619,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateTopicResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5472,7 +5644,11 @@ impl<P, D> Sns for SnsClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(CreateTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTopicError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5488,15 +5664,16 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(DeleteEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5515,15 +5692,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(DeletePlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePlatformApplicationError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5539,13 +5719,17 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(DeleteTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTopicError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5564,16 +5748,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetEndpointAttributesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5589,8 +5775,9 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetEndpointAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetEndpointAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5610,16 +5797,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetPlatformApplicationAttributesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5633,8 +5822,10 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(GetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5652,16 +5843,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetSMSAttributesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5676,8 +5869,9 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetSMSAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSMSAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5697,16 +5891,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetSubscriptionAttributesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5720,8 +5916,11 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(GetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -5739,16 +5938,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetTopicAttributesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5763,8 +5964,9 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetTopicAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTopicAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5785,16 +5987,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListEndpointsByPlatformApplicationResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5808,8 +6012,10 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListEndpointsByPlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListEndpointsByPlatformApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5828,16 +6034,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListPhoneNumbersOptedOutResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5853,8 +6061,11 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListPhoneNumbersOptedOutError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPhoneNumbersOptedOutError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -5873,16 +6084,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListPlatformApplicationsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5898,8 +6111,11 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListPlatformApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPlatformApplicationsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -5917,16 +6133,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListSubscriptionsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5941,8 +6159,9 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListSubscriptionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSubscriptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5962,16 +6181,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListSubscriptionsByTopicResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5987,8 +6208,11 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                            Err(ListSubscriptionsByTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSubscriptionsByTopicError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -6004,16 +6228,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListTopicsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6027,7 +6253,11 @@ impl<P, D> Sns for SnsClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(ListTopicsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTopicsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6045,16 +6275,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = OptInPhoneNumberResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6069,8 +6301,9 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(OptInPhoneNumberError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(OptInPhoneNumberError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6087,16 +6320,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PublishResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6110,7 +6345,11 @@ impl<P, D> Sns for SnsClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(PublishError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PublishError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6128,15 +6367,16 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6155,15 +6395,16 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(SetEndpointAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetEndpointAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6182,15 +6423,17 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(SetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6208,16 +6451,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SetSMSAttributesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6232,8 +6477,9 @@ impl<P, D> Sns for SnsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SetSMSAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetSMSAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6252,15 +6498,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                            Err(SetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -6278,15 +6527,16 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
             _ => {
-                Err(SetTopicAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetTopicAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6303,16 +6553,18 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
 
                 let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = SubscribeResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6326,7 +6578,11 @@ impl<P, D> Sns for SnsClient<P, D>
                 }
                 Ok(result)
             }
-            _ => Err(SubscribeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SubscribeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6342,13 +6598,17 @@ impl<P, D> Sns for SnsClient<P, D>
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
-            _ => Err(UnsubscribeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UnsubscribeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

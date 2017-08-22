@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -917,6 +919,11 @@ impl From<HttpDispatchError> for CompareFacesError {
         CompareFacesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CompareFacesError {
+    fn from(err: io::Error) -> CompareFacesError {
+        CompareFacesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CompareFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1021,6 +1028,11 @@ impl From<HttpDispatchError> for CreateCollectionError {
         CreateCollectionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateCollectionError {
+    fn from(err: io::Error) -> CreateCollectionError {
+        CreateCollectionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1121,6 +1133,11 @@ impl From<CredentialsError> for DeleteCollectionError {
 impl From<HttpDispatchError> for DeleteCollectionError {
     fn from(err: HttpDispatchError) -> DeleteCollectionError {
         DeleteCollectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteCollectionError {
+    fn from(err: io::Error) -> DeleteCollectionError {
+        DeleteCollectionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteCollectionError {
@@ -1225,6 +1242,11 @@ impl From<CredentialsError> for DeleteFacesError {
 impl From<HttpDispatchError> for DeleteFacesError {
     fn from(err: HttpDispatchError) -> DeleteFacesError {
         DeleteFacesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteFacesError {
+    fn from(err: io::Error) -> DeleteFacesError {
+        DeleteFacesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteFacesError {
@@ -1341,6 +1363,11 @@ impl From<HttpDispatchError> for DetectFacesError {
         DetectFacesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetectFacesError {
+    fn from(err: io::Error) -> DetectFacesError {
+        DetectFacesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetectFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1455,6 +1482,11 @@ impl From<HttpDispatchError> for DetectLabelsError {
         DetectLabelsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetectLabelsError {
+    fn from(err: io::Error) -> DetectLabelsError {
+        DetectLabelsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetectLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1567,6 +1599,11 @@ impl From<HttpDispatchError> for DetectModerationLabelsError {
         DetectModerationLabelsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DetectModerationLabelsError {
+    fn from(err: io::Error) -> DetectModerationLabelsError {
+        DetectModerationLabelsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DetectModerationLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1671,6 +1708,11 @@ impl From<CredentialsError> for GetCelebrityInfoError {
 impl From<HttpDispatchError> for GetCelebrityInfoError {
     fn from(err: HttpDispatchError) -> GetCelebrityInfoError {
         GetCelebrityInfoError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCelebrityInfoError {
+    fn from(err: io::Error) -> GetCelebrityInfoError {
+        GetCelebrityInfoError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetCelebrityInfoError {
@@ -1790,6 +1832,11 @@ impl From<HttpDispatchError> for IndexFacesError {
         IndexFacesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for IndexFacesError {
+    fn from(err: io::Error) -> IndexFacesError {
+        IndexFacesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for IndexFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1900,6 +1947,11 @@ impl From<HttpDispatchError> for ListCollectionsError {
         ListCollectionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListCollectionsError {
+    fn from(err: io::Error) -> ListCollectionsError {
+        ListCollectionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListCollectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2006,6 +2058,11 @@ impl From<CredentialsError> for ListFacesError {
 impl From<HttpDispatchError> for ListFacesError {
     fn from(err: HttpDispatchError) -> ListFacesError {
         ListFacesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListFacesError {
+    fn from(err: io::Error) -> ListFacesError {
+        ListFacesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListFacesError {
@@ -2121,6 +2178,11 @@ impl From<HttpDispatchError> for RecognizeCelebritiesError {
         RecognizeCelebritiesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RecognizeCelebritiesError {
+    fn from(err: io::Error) -> RecognizeCelebritiesError {
+        RecognizeCelebritiesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RecognizeCelebritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2227,6 +2289,11 @@ impl From<CredentialsError> for SearchFacesError {
 impl From<HttpDispatchError> for SearchFacesError {
     fn from(err: HttpDispatchError) -> SearchFacesError {
         SearchFacesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SearchFacesError {
+    fn from(err: io::Error) -> SearchFacesError {
+        SearchFacesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SearchFacesError {
@@ -2344,6 +2411,11 @@ impl From<CredentialsError> for SearchFacesByImageError {
 impl From<HttpDispatchError> for SearchFacesByImageError {
     fn from(err: HttpDispatchError) -> SearchFacesByImageError {
         SearchFacesByImageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SearchFacesByImageError {
+    fn from(err: io::Error) -> SearchFacesByImageError {
+        SearchFacesByImageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SearchFacesByImageError {
@@ -2496,14 +2568,20 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CompareFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CompareFacesResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CompareFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CompareFacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2522,15 +2600,20 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateCollectionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateCollectionResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateCollectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCollectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2549,15 +2632,20 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteCollectionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteCollectionResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteCollectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCollectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2576,13 +2664,21 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteFacesResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteFacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2600,13 +2696,21 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DetectFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DetectFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DetectFacesResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetectFacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2624,14 +2728,20 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DetectLabelsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DetectLabelsResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DetectLabelsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetectLabelsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2651,15 +2761,18 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DetectModerationLabelsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DetectModerationLabelsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DetectModerationLabelsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetectModerationLabelsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2678,15 +2791,20 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetCelebrityInfoResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetCelebrityInfoResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetCelebrityInfoError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCelebrityInfoError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2705,13 +2823,21 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<IndexFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(IndexFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<IndexFacesResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(IndexFacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2729,15 +2855,20 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCollectionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListCollectionsResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListCollectionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCollectionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2754,13 +2885,21 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListFacesResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListFacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2778,15 +2917,18 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RecognizeCelebritiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RecognizeCelebritiesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RecognizeCelebritiesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RecognizeCelebritiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2805,13 +2947,21 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SearchFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(SearchFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SearchFacesResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SearchFacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2829,15 +2979,18 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SearchFacesByImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SearchFacesByImageResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(SearchFacesByImageError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SearchFacesByImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

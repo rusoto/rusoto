@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -542,6 +544,11 @@ impl From<HttpDispatchError> for DeleteRuleError {
         DeleteRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRuleError {
+    fn from(err: io::Error) -> DeleteRuleError {
+        DeleteRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -618,6 +625,11 @@ impl From<CredentialsError> for DescribeRuleError {
 impl From<HttpDispatchError> for DescribeRuleError {
     fn from(err: HttpDispatchError) -> DescribeRuleError {
         DescribeRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeRuleError {
+    fn from(err: io::Error) -> DescribeRuleError {
+        DescribeRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeRuleError {
@@ -703,6 +715,11 @@ impl From<HttpDispatchError> for DisableRuleError {
         DisableRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisableRuleError {
+    fn from(err: io::Error) -> DisableRuleError {
+        DisableRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisableRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -785,6 +802,11 @@ impl From<HttpDispatchError> for EnableRuleError {
         EnableRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableRuleError {
+    fn from(err: io::Error) -> EnableRuleError {
+        EnableRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -861,6 +883,11 @@ impl From<HttpDispatchError> for ListRuleNamesByTargetError {
         ListRuleNamesByTargetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListRuleNamesByTargetError {
+    fn from(err: io::Error) -> ListRuleNamesByTargetError {
+        ListRuleNamesByTargetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListRuleNamesByTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -931,6 +958,11 @@ impl From<CredentialsError> for ListRulesError {
 impl From<HttpDispatchError> for ListRulesError {
     fn from(err: HttpDispatchError) -> ListRulesError {
         ListRulesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRulesError {
+    fn from(err: io::Error) -> ListRulesError {
+        ListRulesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRulesError {
@@ -1012,6 +1044,11 @@ impl From<HttpDispatchError> for ListTargetsByRuleError {
         ListTargetsByRuleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTargetsByRuleError {
+    fn from(err: io::Error) -> ListTargetsByRuleError {
+        ListTargetsByRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTargetsByRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1083,6 +1120,11 @@ impl From<CredentialsError> for PutEventsError {
 impl From<HttpDispatchError> for PutEventsError {
     fn from(err: HttpDispatchError) -> PutEventsError {
         PutEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutEventsError {
+    fn from(err: io::Error) -> PutEventsError {
+        PutEventsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutEventsError {
@@ -1168,6 +1210,11 @@ impl From<CredentialsError> for PutRuleError {
 impl From<HttpDispatchError> for PutRuleError {
     fn from(err: HttpDispatchError) -> PutRuleError {
         PutRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutRuleError {
+    fn from(err: io::Error) -> PutRuleError {
+        PutRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutRuleError {
@@ -1258,6 +1305,11 @@ impl From<HttpDispatchError> for PutTargetsError {
         PutTargetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutTargetsError {
+    fn from(err: io::Error) -> PutTargetsError {
+        PutTargetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1345,6 +1397,11 @@ impl From<HttpDispatchError> for RemoveTargetsError {
         RemoveTargetsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveTargetsError {
+    fn from(err: io::Error) -> RemoveTargetsError {
+        RemoveTargetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1424,6 +1481,11 @@ impl From<CredentialsError> for TestEventPatternError {
 impl From<HttpDispatchError> for TestEventPatternError {
     fn from(err: HttpDispatchError) -> TestEventPatternError {
         TestEventPatternError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TestEventPatternError {
+    fn from(err: io::Error) -> TestEventPatternError {
+        TestEventPatternError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TestEventPatternError {
@@ -1543,11 +1605,15 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeleteRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1565,14 +1631,20 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeRuleResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1589,11 +1661,15 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DisableRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1609,11 +1685,15 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(EnableRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1632,15 +1712,18 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRuleNamesByTargetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRuleNamesByTargetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListRuleNamesByTargetError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRuleNamesByTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1657,13 +1740,21 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRulesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListRulesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRulesResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRulesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1681,15 +1772,18 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTargetsByRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTargetsByRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTargetsByRuleError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTargetsByRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1706,13 +1800,21 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(PutEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutEventsResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1728,15 +1830,20 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<PutRuleResponse>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutRuleResponse>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(PutRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1754,13 +1861,21 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutTargetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(PutTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutTargetsResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1778,14 +1893,20 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTargetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveTargetsResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RemoveTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1804,15 +1925,20 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TestEventPatternResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<TestEventPatternResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(TestEventPatternError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestEventPatternError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -218,7 +218,21 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
 
     let result = client.get_object(&get_req).unwrap();
     println!("get object result: {:#?}", result);
-    assert!(result.body.unwrap().len() > 0);
+
+    let mut body: Vec<u8> = Vec::new();
+    let mut buf: [u8; 5] = [0; 5];
+    let mut stream = result.body.unwrap();
+
+    while let Ok(len) = stream.read(&mut buf) {
+        if len == 0 {
+            break;
+        }
+
+        println!("read {} bytes", len);
+        body.extend_from_slice(&buf);
+    }
+
+    assert!(body.len() > 0);
 }
 
 fn test_get_object_range(client: &TestClient, bucket: &str, filename: &str) {

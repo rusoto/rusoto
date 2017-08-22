@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -651,6 +653,11 @@ impl From<HttpDispatchError> for CreateIdentityPoolError {
         CreateIdentityPoolError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateIdentityPoolError {
+    fn from(err: io::Error) -> CreateIdentityPoolError {
+        CreateIdentityPoolError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateIdentityPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -740,6 +747,11 @@ impl From<CredentialsError> for DeleteIdentitiesError {
 impl From<HttpDispatchError> for DeleteIdentitiesError {
     fn from(err: HttpDispatchError) -> DeleteIdentitiesError {
         DeleteIdentitiesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteIdentitiesError {
+    fn from(err: io::Error) -> DeleteIdentitiesError {
+        DeleteIdentitiesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteIdentitiesError {
@@ -836,6 +848,11 @@ impl From<CredentialsError> for DeleteIdentityPoolError {
 impl From<HttpDispatchError> for DeleteIdentityPoolError {
     fn from(err: HttpDispatchError) -> DeleteIdentityPoolError {
         DeleteIdentityPoolError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteIdentityPoolError {
+    fn from(err: io::Error) -> DeleteIdentityPoolError {
+        DeleteIdentityPoolError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteIdentityPoolError {
@@ -938,6 +955,11 @@ impl From<HttpDispatchError> for DescribeIdentityError {
         DescribeIdentityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeIdentityError {
+    fn from(err: io::Error) -> DescribeIdentityError {
+        DescribeIdentityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1034,6 +1056,11 @@ impl From<CredentialsError> for DescribeIdentityPoolError {
 impl From<HttpDispatchError> for DescribeIdentityPoolError {
     fn from(err: HttpDispatchError) -> DescribeIdentityPoolError {
         DescribeIdentityPoolError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeIdentityPoolError {
+    fn from(err: io::Error) -> DescribeIdentityPoolError {
+        DescribeIdentityPoolError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeIdentityPoolError {
@@ -1141,6 +1168,11 @@ impl From<CredentialsError> for GetCredentialsForIdentityError {
 impl From<HttpDispatchError> for GetCredentialsForIdentityError {
     fn from(err: HttpDispatchError) -> GetCredentialsForIdentityError {
         GetCredentialsForIdentityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCredentialsForIdentityError {
+    fn from(err: io::Error) -> GetCredentialsForIdentityError {
+        GetCredentialsForIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetCredentialsForIdentityError {
@@ -1259,6 +1291,11 @@ impl From<HttpDispatchError> for GetIdError {
         GetIdError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetIdError {
+    fn from(err: io::Error) -> GetIdError {
+        GetIdError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetIdError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1363,6 +1400,11 @@ impl From<CredentialsError> for GetIdentityPoolRolesError {
 impl From<HttpDispatchError> for GetIdentityPoolRolesError {
     fn from(err: HttpDispatchError) -> GetIdentityPoolRolesError {
         GetIdentityPoolRolesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetIdentityPoolRolesError {
+    fn from(err: io::Error) -> GetIdentityPoolRolesError {
+        GetIdentityPoolRolesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIdentityPoolRolesError {
@@ -1476,6 +1518,11 @@ impl From<HttpDispatchError> for GetOpenIdTokenError {
         GetOpenIdTokenError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetOpenIdTokenError {
+    fn from(err: io::Error) -> GetOpenIdTokenError {
+        GetOpenIdTokenError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetOpenIdTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1571,6 +1618,11 @@ impl From<CredentialsError> for GetOpenIdTokenForDeveloperIdentityError {
 impl From<HttpDispatchError> for GetOpenIdTokenForDeveloperIdentityError {
     fn from(err: HttpDispatchError) -> GetOpenIdTokenForDeveloperIdentityError {
         GetOpenIdTokenForDeveloperIdentityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetOpenIdTokenForDeveloperIdentityError {
+    fn from(err: io::Error) -> GetOpenIdTokenForDeveloperIdentityError {
+        GetOpenIdTokenForDeveloperIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetOpenIdTokenForDeveloperIdentityError {
@@ -1677,6 +1729,11 @@ impl From<HttpDispatchError> for ListIdentitiesError {
         ListIdentitiesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListIdentitiesError {
+    fn from(err: io::Error) -> ListIdentitiesError {
+        ListIdentitiesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1768,6 +1825,11 @@ impl From<CredentialsError> for ListIdentityPoolsError {
 impl From<HttpDispatchError> for ListIdentityPoolsError {
     fn from(err: HttpDispatchError) -> ListIdentityPoolsError {
         ListIdentityPoolsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListIdentityPoolsError {
+    fn from(err: io::Error) -> ListIdentityPoolsError {
+        ListIdentityPoolsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListIdentityPoolsError {
@@ -1874,6 +1936,11 @@ impl From<HttpDispatchError> for LookupDeveloperIdentityError {
         LookupDeveloperIdentityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for LookupDeveloperIdentityError {
+    fn from(err: io::Error) -> LookupDeveloperIdentityError {
+        LookupDeveloperIdentityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for LookupDeveloperIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1978,6 +2045,11 @@ impl From<CredentialsError> for MergeDeveloperIdentitiesError {
 impl From<HttpDispatchError> for MergeDeveloperIdentitiesError {
     fn from(err: HttpDispatchError) -> MergeDeveloperIdentitiesError {
         MergeDeveloperIdentitiesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for MergeDeveloperIdentitiesError {
+    fn from(err: io::Error) -> MergeDeveloperIdentitiesError {
+        MergeDeveloperIdentitiesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for MergeDeveloperIdentitiesError {
@@ -2089,6 +2161,11 @@ impl From<HttpDispatchError> for SetIdentityPoolRolesError {
         SetIdentityPoolRolesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetIdentityPoolRolesError {
+    fn from(err: io::Error) -> SetIdentityPoolRolesError {
+        SetIdentityPoolRolesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetIdentityPoolRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2194,6 +2271,11 @@ impl From<CredentialsError> for UnlinkDeveloperIdentityError {
 impl From<HttpDispatchError> for UnlinkDeveloperIdentityError {
     fn from(err: HttpDispatchError) -> UnlinkDeveloperIdentityError {
         UnlinkDeveloperIdentityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UnlinkDeveloperIdentityError {
+    fn from(err: io::Error) -> UnlinkDeveloperIdentityError {
+        UnlinkDeveloperIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UnlinkDeveloperIdentityError {
@@ -2305,6 +2387,11 @@ impl From<CredentialsError> for UnlinkIdentityError {
 impl From<HttpDispatchError> for UnlinkIdentityError {
     fn from(err: HttpDispatchError) -> UnlinkIdentityError {
         UnlinkIdentityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UnlinkIdentityError {
+    fn from(err: io::Error) -> UnlinkIdentityError {
+        UnlinkIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UnlinkIdentityError {
@@ -2420,6 +2507,11 @@ impl From<CredentialsError> for UpdateIdentityPoolError {
 impl From<HttpDispatchError> for UpdateIdentityPoolError {
     fn from(err: HttpDispatchError) -> UpdateIdentityPoolError {
         UpdateIdentityPoolError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateIdentityPoolError {
+    fn from(err: io::Error) -> UpdateIdentityPoolError {
+        UpdateIdentityPoolError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateIdentityPoolError {
@@ -2599,17 +2691,19 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(CreateIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateIdentityPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2628,15 +2722,20 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteIdentitiesResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteIdentitiesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteIdentitiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2656,13 +2755,14 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteIdentityPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2681,15 +2781,20 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<IdentityDescription>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<IdentityDescription>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeIdentityError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2709,17 +2814,19 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(DescribeIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeIdentityPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2740,13 +2847,20 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetCredentialsForIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetCredentialsForIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetCredentialsForIdentityResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCredentialsForIdentityError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -2762,15 +2876,20 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetIdResponse>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetIdResponse>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetIdError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIdError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2790,15 +2909,18 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetIdentityPoolRolesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetIdentityPoolRolesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetIdentityPoolRolesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIdentityPoolRolesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2817,15 +2939,20 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOpenIdTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetOpenIdTokenResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetOpenIdTokenError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetOpenIdTokenError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2847,13 +2974,19 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOpenIdTokenForDeveloperIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetOpenIdTokenForDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetOpenIdTokenForDeveloperIdentityResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetOpenIdTokenForDeveloperIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2871,15 +3004,20 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListIdentitiesResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListIdentitiesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListIdentitiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2899,15 +3037,18 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListIdentityPoolsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListIdentityPoolsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListIdentityPoolsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListIdentityPoolsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2928,13 +3069,20 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<LookupDeveloperIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(LookupDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<LookupDeveloperIdentityResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(LookupDeveloperIdentityError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -2954,13 +3102,20 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<MergeDeveloperIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(MergeDeveloperIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<MergeDeveloperIdentitiesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(MergeDeveloperIdentitiesError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -2979,13 +3134,14 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(SetIdentityPoolRolesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetIdentityPoolRolesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3005,11 +3161,16 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(UnlinkDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UnlinkDeveloperIdentityError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -3025,13 +3186,14 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(UnlinkIdentityError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UnlinkIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3051,17 +3213,19 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
             _ => {
-                Err(UpdateIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateIdentityPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -43,7 +43,7 @@ impl GenerateProtocol for RestXmlGenerator {
 
                         request.sign(&try!(self.credentials_provider.credentials()));
 
-                        let response = try!(self.dispatcher.dispatch(&request));
+                        let mut response = try!(self.dispatcher.dispatch(&request));
 
                         match response.status {{
                             StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {{
@@ -51,7 +51,11 @@ impl GenerateProtocol for RestXmlGenerator {
                                 {parse_non_payload}
                                 Ok(result)
                             }},
-                            _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            _ => {{
+                                let mut body: Vec<u8> = Vec::new();
+                                try!(response.body.read_to_end(&mut body));
+                                Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref()))
+                            }}
                         }}
                     }}
                     ",
@@ -109,8 +113,11 @@ impl GenerateProtocol for RestXmlGenerator {
         writeln!(writer, "{}", imports)
     }
 
-    fn generate_struct_attributes(&self, _serialized: bool, _deserialized: bool) -> String {
-        let derived = vec!["Default", "Clone", "Debug"];
+    fn generate_struct_attributes(&self,
+                                  _serialized: bool,
+                                  _deserialized: bool)
+                                  -> String {
+        let derived = vec!["Default", "Debug"];
 
         format!("#[derive({})]", derived.join(","))
     }
@@ -120,7 +127,7 @@ impl GenerateProtocol for RestXmlGenerator {
             return None;
         }
 
-        let ty = get_rust_type(service, name, shape, self.timestamp_type());
+        let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
         Some(format!("
                 pub struct {name}Serializer;
                 impl {name}Serializer {{
@@ -140,7 +147,7 @@ impl GenerateProtocol for RestXmlGenerator {
                              shape: &Shape,
                              service: &Service)
                              -> Option<String> {
-        let ty = get_rust_type(service, name, shape, self.timestamp_type());
+        let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
         Some(xml_payload_parser::generate_deserializer(name, &ty, shape, service))
     }
 

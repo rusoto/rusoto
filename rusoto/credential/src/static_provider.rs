@@ -2,7 +2,7 @@
 //! For those who can't get them from an environment, or a file.
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials};
-use chrono::{Duration, UTC};
+use chrono::{Duration, Utc};
 
 /// Provides AWS credentials from statically/programmatically provided strings.
 #[derive(Clone, Debug)]
@@ -69,7 +69,7 @@ impl StaticProvider {
 impl ProvideAwsCredentials for StaticProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         Ok(AwsCredentials::new(self.aws_access_key_id.clone(), self.aws_secret_access_key.clone(),
-            self.token.clone(), UTC::now() + Duration::seconds(self.valid_for)))
+            self.token.clone(), Utc::now() + Duration::seconds(self.valid_for)))
     }
 }
 
@@ -92,14 +92,14 @@ mod tests {
 
     #[test]
     fn test_static_provider_custom_time_expiration() {
-        let start_time = UTC::now();
+        let start_time = Utc::now();
         let result = StaticProvider::new("fake-key".to_owned(), "fake-secret".to_owned(), None, Some(10000)).credentials();
         assert!(result.is_ok());
         let finalized = result.unwrap();
-        let time_diff = (finalized.expires_at().clone() - start_time).num_minutes();
+        let expires_at = finalized.expires_at().clone();
 
         // Give a wide range of time, just incase there's somehow an immense amount of lag.
-        assert!(time_diff > 100);
-        assert!(time_diff < 200);
+        assert!(start_time + Duration::minutes(100) < expires_at);
+        assert!(expires_at < start_time + Duration::minutes(200));
     }
 }

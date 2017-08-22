@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1464,6 +1466,11 @@ impl From<HttpDispatchError> for CancelJobError {
         CancelJobError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelJobError {
+    fn from(err: io::Error) -> CancelJobError {
+        CancelJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1558,6 +1565,11 @@ impl From<CredentialsError> for CreateJobError {
 impl From<HttpDispatchError> for CreateJobError {
     fn from(err: HttpDispatchError) -> CreateJobError {
         CreateJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateJobError {
+    fn from(err: io::Error) -> CreateJobError {
+        CreateJobError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateJobError {
@@ -1658,6 +1670,11 @@ impl From<HttpDispatchError> for CreatePipelineError {
         CreatePipelineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreatePipelineError {
+    fn from(err: io::Error) -> CreatePipelineError {
+        CreatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1749,6 +1766,11 @@ impl From<CredentialsError> for CreatePresetError {
 impl From<HttpDispatchError> for CreatePresetError {
     fn from(err: HttpDispatchError) -> CreatePresetError {
         CreatePresetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePresetError {
+    fn from(err: io::Error) -> CreatePresetError {
+        CreatePresetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePresetError {
@@ -1848,6 +1870,11 @@ impl From<HttpDispatchError> for DeletePipelineError {
         DeletePipelineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeletePipelineError {
+    fn from(err: io::Error) -> DeletePipelineError {
+        DeletePipelineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeletePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1941,6 +1968,11 @@ impl From<HttpDispatchError> for DeletePresetError {
         DeletePresetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeletePresetError {
+    fn from(err: io::Error) -> DeletePresetError {
+        DeletePresetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeletePresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2031,6 +2063,11 @@ impl From<CredentialsError> for ListJobsByPipelineError {
 impl From<HttpDispatchError> for ListJobsByPipelineError {
     fn from(err: HttpDispatchError) -> ListJobsByPipelineError {
         ListJobsByPipelineError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListJobsByPipelineError {
+    fn from(err: io::Error) -> ListJobsByPipelineError {
+        ListJobsByPipelineError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListJobsByPipelineError {
@@ -2127,6 +2164,11 @@ impl From<HttpDispatchError> for ListJobsByStatusError {
         ListJobsByStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListJobsByStatusError {
+    fn from(err: io::Error) -> ListJobsByStatusError {
+        ListJobsByStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListJobsByStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2214,6 +2256,11 @@ impl From<HttpDispatchError> for ListPipelinesError {
         ListPipelinesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPipelinesError {
+    fn from(err: io::Error) -> ListPipelinesError {
+        ListPipelinesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2298,6 +2345,11 @@ impl From<CredentialsError> for ListPresetsError {
 impl From<HttpDispatchError> for ListPresetsError {
     fn from(err: HttpDispatchError) -> ListPresetsError {
         ListPresetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPresetsError {
+    fn from(err: io::Error) -> ListPresetsError {
+        ListPresetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPresetsError {
@@ -2387,6 +2439,11 @@ impl From<CredentialsError> for ReadJobError {
 impl From<HttpDispatchError> for ReadJobError {
     fn from(err: HttpDispatchError) -> ReadJobError {
         ReadJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ReadJobError {
+    fn from(err: io::Error) -> ReadJobError {
+        ReadJobError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ReadJobError {
@@ -2481,6 +2538,11 @@ impl From<HttpDispatchError> for ReadPipelineError {
         ReadPipelineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReadPipelineError {
+    fn from(err: io::Error) -> ReadPipelineError {
+        ReadPipelineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReadPipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2571,6 +2633,11 @@ impl From<HttpDispatchError> for ReadPresetError {
         ReadPresetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReadPresetError {
+    fn from(err: io::Error) -> ReadPresetError {
+        ReadPresetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReadPresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2659,6 +2726,11 @@ impl From<CredentialsError> for TestRoleError {
 impl From<HttpDispatchError> for TestRoleError {
     fn from(err: HttpDispatchError) -> TestRoleError {
         TestRoleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TestRoleError {
+    fn from(err: io::Error) -> TestRoleError {
+        TestRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TestRoleError {
@@ -2758,6 +2830,11 @@ impl From<HttpDispatchError> for UpdatePipelineError {
         UpdatePipelineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdatePipelineError {
+    fn from(err: io::Error) -> UpdatePipelineError {
+        UpdatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2848,6 +2925,11 @@ impl From<CredentialsError> for UpdatePipelineNotificationsError {
 impl From<HttpDispatchError> for UpdatePipelineNotificationsError {
     fn from(err: HttpDispatchError) -> UpdatePipelineNotificationsError {
         UpdatePipelineNotificationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdatePipelineNotificationsError {
+    fn from(err: io::Error) -> UpdatePipelineNotificationsError {
+        UpdatePipelineNotificationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdatePipelineNotificationsError {
@@ -2948,6 +3030,11 @@ impl From<CredentialsError> for UpdatePipelineStatusError {
 impl From<HttpDispatchError> for UpdatePipelineStatusError {
     fn from(err: HttpDispatchError) -> UpdatePipelineStatusError {
         UpdatePipelineStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdatePipelineStatusError {
+    fn from(err: io::Error) -> UpdatePipelineStatusError {
+        UpdatePipelineStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdatePipelineStatusError {
@@ -3110,13 +3197,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3130,7 +3217,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CancelJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3150,13 +3241,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3170,7 +3261,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3192,13 +3287,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3213,8 +3308,9 @@ impl<P, D> Ets for EtsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreatePipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3237,13 +3333,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3258,7 +3354,9 @@ impl<P, D> Ets for EtsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreatePresetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePresetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3280,13 +3378,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3301,8 +3399,9 @@ impl<P, D> Ets for EtsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeletePipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3324,13 +3423,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3345,7 +3444,9 @@ impl<P, D> Ets for EtsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeletePresetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePresetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3374,13 +3475,13 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3395,8 +3496,9 @@ impl<P, D> Ets for EtsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListJobsByPipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListJobsByPipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3424,13 +3526,13 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3445,8 +3547,9 @@ impl<P, D> Ets for EtsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListJobsByStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListJobsByStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3474,13 +3577,13 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3495,7 +3598,9 @@ impl<P, D> Ets for EtsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListPipelinesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPipelinesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3523,13 +3628,13 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3543,7 +3648,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListPresetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPresetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3561,13 +3670,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3581,7 +3690,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ReadJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReadJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3601,13 +3714,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3622,7 +3735,9 @@ impl<P, D> Ets for EtsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ReadPipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReadPipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3643,13 +3758,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3663,7 +3778,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ReadPresetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReadPresetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3683,13 +3802,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3703,7 +3822,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(TestRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestRoleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3724,13 +3847,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3745,8 +3868,9 @@ impl<P, D> Ets for EtsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdatePipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3770,13 +3894,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3791,7 +3915,12 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdatePipelineNotificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdatePipelineNotificationsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -3814,13 +3943,13 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -3835,8 +3964,9 @@ impl<P, D> Ets for EtsClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdatePipelineStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdatePipelineStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

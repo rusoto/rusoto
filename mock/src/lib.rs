@@ -5,12 +5,13 @@ extern crate hyper;
 extern crate rusoto_core;
 
 use std::fs::File;
+use std::io::Cursor;
 use std::io::Read;
 use std::collections::HashMap;
 
 use rusoto_core::{DispatchSignedRequest, HttpResponse, HttpDispatchError, SignedRequest};
 use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
-use chrono::{Duration, UTC};
+use chrono::{Duration, Utc};
 use hyper::status::StatusCode;
 
 const ONE_DAY: i64 = 86400;
@@ -22,31 +23,29 @@ impl ProvideAwsCredentials for MockCredentialsProvider {
         Ok(AwsCredentials::new("mock_key",
                                "mock_secret",
                                None,
-                               UTC::now() + Duration::seconds(ONE_DAY)))
+                               Utc::now() + Duration::seconds(ONE_DAY)))
     }
 }
 
 pub struct MockRequestDispatcher {
-    mock_response: HttpResponse,
+    status: StatusCode,
+    body: Vec<u8>,
+    headers: HashMap<String, String>,
     request_checker: Option<Box<Fn(&SignedRequest)>>,
 }
 
 impl MockRequestDispatcher {
     pub fn with_status(status: u16) -> MockRequestDispatcher {
-        let response = HttpResponse {
+        MockRequestDispatcher {
             status: StatusCode::from_u16(status),
             body: b"".to_vec(),
             headers: HashMap::new(),
-        };
-
-        MockRequestDispatcher {
-            mock_response: response,
             request_checker: None,
         }
     }
 
     pub fn with_body(mut self, body: &str) -> MockRequestDispatcher {
-        self.mock_response.body = body.as_bytes().to_vec();
+        self.body = body.as_bytes().to_vec();
         self
     }
 
@@ -56,9 +55,8 @@ impl MockRequestDispatcher {
         self
     }
 
-    pub fn with_header<S1, S2>(mut self, key: S1, value: S2) -> MockRequestDispatcher
-        where S1: Into<String>, S2: Into<String> {
-        self.mock_response.headers.insert(key.into(), value.into());
+    pub fn with_header(mut self, key: &str, value: &str) -> MockRequestDispatcher {
+        self.headers.insert(key.into(), value.into());
         self
     }
 }
@@ -68,7 +66,11 @@ impl DispatchSignedRequest for MockRequestDispatcher {
         if self.request_checker.is_some() {
             self.request_checker.as_ref().unwrap()(request);
         }
-        Ok(self.mock_response.clone())
+        Ok(HttpResponse {
+            status: self.status,
+            body: Box::new(Cursor::new(self.body.clone())),
+            headers: self.headers.clone(),
+        })
     }
 }
 

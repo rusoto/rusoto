@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1724,6 +1726,11 @@ impl From<HttpDispatchError> for AddTagsToOnPremisesInstancesError {
         AddTagsToOnPremisesInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsToOnPremisesInstancesError {
+    fn from(err: io::Error) -> AddTagsToOnPremisesInstancesError {
+        AddTagsToOnPremisesInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsToOnPremisesInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1818,6 +1825,11 @@ impl From<HttpDispatchError> for BatchGetApplicationRevisionsError {
         BatchGetApplicationRevisionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchGetApplicationRevisionsError {
+    fn from(err: io::Error) -> BatchGetApplicationRevisionsError {
+        BatchGetApplicationRevisionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchGetApplicationRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1906,6 +1918,11 @@ impl From<CredentialsError> for BatchGetApplicationsError {
 impl From<HttpDispatchError> for BatchGetApplicationsError {
     fn from(err: HttpDispatchError) -> BatchGetApplicationsError {
         BatchGetApplicationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchGetApplicationsError {
+    fn from(err: io::Error) -> BatchGetApplicationsError {
+        BatchGetApplicationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for BatchGetApplicationsError {
@@ -1998,6 +2015,11 @@ impl From<CredentialsError> for BatchGetDeploymentGroupsError {
 impl From<HttpDispatchError> for BatchGetDeploymentGroupsError {
     fn from(err: HttpDispatchError) -> BatchGetDeploymentGroupsError {
         BatchGetDeploymentGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchGetDeploymentGroupsError {
+    fn from(err: io::Error) -> BatchGetDeploymentGroupsError {
+        BatchGetDeploymentGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for BatchGetDeploymentGroupsError {
@@ -2094,6 +2116,11 @@ impl From<HttpDispatchError> for BatchGetDeploymentInstancesError {
         BatchGetDeploymentInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchGetDeploymentInstancesError {
+    fn from(err: io::Error) -> BatchGetDeploymentInstancesError {
+        BatchGetDeploymentInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchGetDeploymentInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2185,6 +2212,11 @@ impl From<HttpDispatchError> for BatchGetDeploymentsError {
         BatchGetDeploymentsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchGetDeploymentsError {
+    fn from(err: io::Error) -> BatchGetDeploymentsError {
+        BatchGetDeploymentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchGetDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2265,6 +2297,11 @@ impl From<CredentialsError> for BatchGetOnPremisesInstancesError {
 impl From<HttpDispatchError> for BatchGetOnPremisesInstancesError {
     fn from(err: HttpDispatchError) -> BatchGetOnPremisesInstancesError {
         BatchGetOnPremisesInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchGetOnPremisesInstancesError {
+    fn from(err: io::Error) -> BatchGetOnPremisesInstancesError {
+        BatchGetOnPremisesInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for BatchGetOnPremisesInstancesError {
@@ -2364,6 +2401,11 @@ impl From<HttpDispatchError> for ContinueDeploymentError {
         ContinueDeploymentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ContinueDeploymentError {
+    fn from(err: io::Error) -> ContinueDeploymentError {
+        ContinueDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ContinueDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2454,6 +2496,11 @@ impl From<CredentialsError> for CreateApplicationError {
 impl From<HttpDispatchError> for CreateApplicationError {
     fn from(err: HttpDispatchError) -> CreateApplicationError {
         CreateApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateApplicationError {
+    fn from(err: io::Error) -> CreateApplicationError {
+        CreateApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -2601,6 +2648,11 @@ impl From<HttpDispatchError> for CreateDeploymentError {
         CreateDeploymentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDeploymentError {
+    fn from(err: io::Error) -> CreateDeploymentError {
+        CreateDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2699,6 +2751,11 @@ impl From<CredentialsError> for CreateDeploymentConfigError {
 impl From<HttpDispatchError> for CreateDeploymentConfigError {
     fn from(err: HttpDispatchError) -> CreateDeploymentConfigError {
         CreateDeploymentConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDeploymentConfigError {
+    fn from(err: io::Error) -> CreateDeploymentConfigError {
+        CreateDeploymentConfigError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDeploymentConfigError {
@@ -2857,6 +2914,11 @@ impl From<HttpDispatchError> for CreateDeploymentGroupError {
         CreateDeploymentGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDeploymentGroupError {
+    fn from(err: io::Error) -> CreateDeploymentGroupError {
+        CreateDeploymentGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDeploymentGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2960,6 +3022,11 @@ impl From<HttpDispatchError> for DeleteApplicationError {
         DeleteApplicationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteApplicationError {
+    fn from(err: io::Error) -> DeleteApplicationError {
+        DeleteApplicationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3044,6 +3111,11 @@ impl From<CredentialsError> for DeleteDeploymentConfigError {
 impl From<HttpDispatchError> for DeleteDeploymentConfigError {
     fn from(err: HttpDispatchError) -> DeleteDeploymentConfigError {
         DeleteDeploymentConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDeploymentConfigError {
+    fn from(err: io::Error) -> DeleteDeploymentConfigError {
+        DeleteDeploymentConfigError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDeploymentConfigError {
@@ -3137,6 +3209,11 @@ impl From<HttpDispatchError> for DeleteDeploymentGroupError {
         DeleteDeploymentGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDeploymentGroupError {
+    fn from(err: io::Error) -> DeleteDeploymentGroupError {
+        DeleteDeploymentGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDeploymentGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3216,6 +3293,11 @@ impl From<CredentialsError> for DeregisterOnPremisesInstanceError {
 impl From<HttpDispatchError> for DeregisterOnPremisesInstanceError {
     fn from(err: HttpDispatchError) -> DeregisterOnPremisesInstanceError {
         DeregisterOnPremisesInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeregisterOnPremisesInstanceError {
+    fn from(err: io::Error) -> DeregisterOnPremisesInstanceError {
+        DeregisterOnPremisesInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeregisterOnPremisesInstanceError {
@@ -3303,6 +3385,11 @@ impl From<CredentialsError> for GetApplicationError {
 impl From<HttpDispatchError> for GetApplicationError {
     fn from(err: HttpDispatchError) -> GetApplicationError {
         GetApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetApplicationError {
+    fn from(err: io::Error) -> GetApplicationError {
+        GetApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetApplicationError {
@@ -3398,6 +3485,11 @@ impl From<HttpDispatchError> for GetApplicationRevisionError {
         GetApplicationRevisionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetApplicationRevisionError {
+    fn from(err: io::Error) -> GetApplicationRevisionError {
+        GetApplicationRevisionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetApplicationRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3489,6 +3581,11 @@ impl From<HttpDispatchError> for GetDeploymentError {
         GetDeploymentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDeploymentError {
+    fn from(err: io::Error) -> GetDeploymentError {
+        GetDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3567,6 +3664,11 @@ impl From<CredentialsError> for GetDeploymentConfigError {
 impl From<HttpDispatchError> for GetDeploymentConfigError {
     fn from(err: HttpDispatchError) -> GetDeploymentConfigError {
         GetDeploymentConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDeploymentConfigError {
+    fn from(err: io::Error) -> GetDeploymentConfigError {
+        GetDeploymentConfigError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDeploymentConfigError {
@@ -3660,6 +3762,11 @@ impl From<CredentialsError> for GetDeploymentGroupError {
 impl From<HttpDispatchError> for GetDeploymentGroupError {
     fn from(err: HttpDispatchError) -> GetDeploymentGroupError {
         GetDeploymentGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDeploymentGroupError {
+    fn from(err: io::Error) -> GetDeploymentGroupError {
+        GetDeploymentGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDeploymentGroupError {
@@ -3762,6 +3869,11 @@ impl From<HttpDispatchError> for GetDeploymentInstanceError {
         GetDeploymentInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDeploymentInstanceError {
+    fn from(err: io::Error) -> GetDeploymentInstanceError {
+        GetDeploymentInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDeploymentInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3847,6 +3959,11 @@ impl From<CredentialsError> for GetOnPremisesInstanceError {
 impl From<HttpDispatchError> for GetOnPremisesInstanceError {
     fn from(err: HttpDispatchError) -> GetOnPremisesInstanceError {
         GetOnPremisesInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetOnPremisesInstanceError {
+    fn from(err: io::Error) -> GetOnPremisesInstanceError {
+        GetOnPremisesInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetOnPremisesInstanceError {
@@ -3958,6 +4075,11 @@ impl From<HttpDispatchError> for ListApplicationRevisionsError {
         ListApplicationRevisionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListApplicationRevisionsError {
+    fn from(err: io::Error) -> ListApplicationRevisionsError {
+        ListApplicationRevisionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListApplicationRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4043,6 +4165,11 @@ impl From<HttpDispatchError> for ListApplicationsError {
         ListApplicationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListApplicationsError {
+    fn from(err: io::Error) -> ListApplicationsError {
+        ListApplicationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4115,6 +4242,11 @@ impl From<CredentialsError> for ListDeploymentConfigsError {
 impl From<HttpDispatchError> for ListDeploymentConfigsError {
     fn from(err: HttpDispatchError) -> ListDeploymentConfigsError {
         ListDeploymentConfigsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDeploymentConfigsError {
+    fn from(err: io::Error) -> ListDeploymentConfigsError {
+        ListDeploymentConfigsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDeploymentConfigsError {
@@ -4200,6 +4332,11 @@ impl From<CredentialsError> for ListDeploymentGroupsError {
 impl From<HttpDispatchError> for ListDeploymentGroupsError {
     fn from(err: HttpDispatchError) -> ListDeploymentGroupsError {
         ListDeploymentGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDeploymentGroupsError {
+    fn from(err: io::Error) -> ListDeploymentGroupsError {
+        ListDeploymentGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDeploymentGroupsError {
@@ -4300,6 +4437,11 @@ impl From<CredentialsError> for ListDeploymentInstancesError {
 impl From<HttpDispatchError> for ListDeploymentInstancesError {
     fn from(err: HttpDispatchError) -> ListDeploymentInstancesError {
         ListDeploymentInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDeploymentInstancesError {
+    fn from(err: io::Error) -> ListDeploymentInstancesError {
+        ListDeploymentInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDeploymentInstancesError {
@@ -4419,6 +4561,11 @@ impl From<HttpDispatchError> for ListDeploymentsError {
         ListDeploymentsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListDeploymentsError {
+    fn from(err: io::Error) -> ListDeploymentsError {
+        ListDeploymentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4500,6 +4647,11 @@ impl From<CredentialsError> for ListGitHubAccountTokenNamesError {
 impl From<HttpDispatchError> for ListGitHubAccountTokenNamesError {
     fn from(err: HttpDispatchError) -> ListGitHubAccountTokenNamesError {
         ListGitHubAccountTokenNamesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListGitHubAccountTokenNamesError {
+    fn from(err: io::Error) -> ListGitHubAccountTokenNamesError {
+        ListGitHubAccountTokenNamesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListGitHubAccountTokenNamesError {
@@ -4585,6 +4737,11 @@ impl From<CredentialsError> for ListOnPremisesInstancesError {
 impl From<HttpDispatchError> for ListOnPremisesInstancesError {
     fn from(err: HttpDispatchError) -> ListOnPremisesInstancesError {
         ListOnPremisesInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListOnPremisesInstancesError {
+    fn from(err: io::Error) -> ListOnPremisesInstancesError {
+        ListOnPremisesInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListOnPremisesInstancesError {
@@ -4676,6 +4833,11 @@ impl From<CredentialsError> for RegisterApplicationRevisionError {
 impl From<HttpDispatchError> for RegisterApplicationRevisionError {
     fn from(err: HttpDispatchError) -> RegisterApplicationRevisionError {
         RegisterApplicationRevisionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterApplicationRevisionError {
+    fn from(err: io::Error) -> RegisterApplicationRevisionError {
+        RegisterApplicationRevisionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterApplicationRevisionError {
@@ -4786,6 +4948,11 @@ impl From<HttpDispatchError> for RegisterOnPremisesInstanceError {
         RegisterOnPremisesInstanceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RegisterOnPremisesInstanceError {
+    fn from(err: io::Error) -> RegisterOnPremisesInstanceError {
+        RegisterOnPremisesInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RegisterOnPremisesInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4885,6 +5052,11 @@ impl From<HttpDispatchError> for RemoveTagsFromOnPremisesInstancesError {
         RemoveTagsFromOnPremisesInstancesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RemoveTagsFromOnPremisesInstancesError {
+    fn from(err: io::Error) -> RemoveTagsFromOnPremisesInstancesError {
+        RemoveTagsFromOnPremisesInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RemoveTagsFromOnPremisesInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4978,6 +5150,11 @@ impl From<CredentialsError> for SkipWaitTimeForInstanceTerminationError {
 impl From<HttpDispatchError> for SkipWaitTimeForInstanceTerminationError {
     fn from(err: HttpDispatchError) -> SkipWaitTimeForInstanceTerminationError {
         SkipWaitTimeForInstanceTerminationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SkipWaitTimeForInstanceTerminationError {
+    fn from(err: io::Error) -> SkipWaitTimeForInstanceTerminationError {
+        SkipWaitTimeForInstanceTerminationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SkipWaitTimeForInstanceTerminationError {
@@ -5076,6 +5253,11 @@ impl From<HttpDispatchError> for StopDeploymentError {
         StopDeploymentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StopDeploymentError {
+    fn from(err: io::Error) -> StopDeploymentError {
+        StopDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StopDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5164,6 +5346,11 @@ impl From<CredentialsError> for UpdateApplicationError {
 impl From<HttpDispatchError> for UpdateApplicationError {
     fn from(err: HttpDispatchError) -> UpdateApplicationError {
         UpdateApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateApplicationError {
+    fn from(err: io::Error) -> UpdateApplicationError {
+        UpdateApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateApplicationError {
@@ -5314,6 +5501,11 @@ impl From<CredentialsError> for UpdateDeploymentGroupError {
 impl From<HttpDispatchError> for UpdateDeploymentGroupError {
     fn from(err: HttpDispatchError) -> UpdateDeploymentGroupError {
         UpdateDeploymentGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateDeploymentGroupError {
+    fn from(err: io::Error) -> UpdateDeploymentGroupError {
+        UpdateDeploymentGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateDeploymentGroupError {
@@ -5643,11 +5835,16 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(AddTagsToOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToOnPremisesInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -5667,13 +5864,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetApplicationRevisionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(BatchGetApplicationRevisionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetApplicationRevisionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetApplicationRevisionsError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -5691,15 +5895,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetApplicationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetApplicationsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(BatchGetApplicationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetApplicationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5720,13 +5927,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetDeploymentGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(BatchGetDeploymentGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetDeploymentGroupsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetDeploymentGroupsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -5746,13 +5960,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetDeploymentInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(BatchGetDeploymentInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetDeploymentInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetDeploymentInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -5770,15 +5991,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetDeploymentsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetDeploymentsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(BatchGetDeploymentsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetDeploymentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5799,13 +6023,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(BatchGetOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetOnPremisesInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -5823,13 +6054,14 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(ContinueDeploymentError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ContinueDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5848,15 +6080,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateApplicationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateApplicationOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5875,15 +6112,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDeploymentOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5903,15 +6145,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeploymentConfigOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDeploymentConfigOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDeploymentConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5931,15 +6176,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDeploymentGroupOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDeploymentGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5958,13 +6206,14 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5983,13 +6232,14 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDeploymentConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6009,15 +6259,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDeploymentGroupOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDeploymentGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6037,11 +6290,16 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeregisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeregisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -6059,15 +6317,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetApplicationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetApplicationOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6087,15 +6350,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetApplicationRevisionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetApplicationRevisionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetApplicationRevisionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetApplicationRevisionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6114,14 +6380,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDeploymentOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6140,15 +6412,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentConfigOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDeploymentConfigOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDeploymentConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6167,15 +6442,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDeploymentGroupOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDeploymentGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6195,15 +6475,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentInstanceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDeploymentInstanceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetDeploymentInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDeploymentInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6223,15 +6506,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOnPremisesInstanceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetOnPremisesInstanceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetOnPremisesInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6252,13 +6538,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListApplicationRevisionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListApplicationRevisionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListApplicationRevisionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListApplicationRevisionsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -6276,15 +6569,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListApplicationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListApplicationsOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListApplicationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListApplicationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6304,15 +6602,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentConfigsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDeploymentConfigsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListDeploymentConfigsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDeploymentConfigsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6331,15 +6632,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDeploymentGroupsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListDeploymentGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDeploymentGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6360,13 +6664,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListDeploymentInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDeploymentInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDeploymentInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6384,15 +6695,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDeploymentsOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListDeploymentsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDeploymentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6413,13 +6729,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListGitHubAccountTokenNamesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListGitHubAccountTokenNamesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListGitHubAccountTokenNamesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListGitHubAccountTokenNamesError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -6439,13 +6762,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListOnPremisesInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListOnPremisesInstancesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -6464,11 +6794,16 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RegisterApplicationRevisionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterApplicationRevisionError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -6487,11 +6822,16 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RegisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -6511,11 +6851,15 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RemoveTagsFromOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromOnPremisesInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6535,11 +6879,15 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(SkipWaitTimeForInstanceTerminationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SkipWaitTimeForInstanceTerminationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -6557,15 +6905,20 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopDeploymentOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StopDeploymentError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6584,13 +6937,14 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6610,15 +6964,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDeploymentGroupOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDeploymentGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

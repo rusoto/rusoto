@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -716,6 +718,11 @@ impl From<HttpDispatchError> for CreateTagsError {
         CreateTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateTagsError {
+    fn from(err: io::Error) -> CreateTagsError {
+        CreateTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -797,6 +804,11 @@ impl From<HttpDispatchError> for CreateWorkspacesError {
         CreateWorkspacesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateWorkspacesError {
+    fn from(err: io::Error) -> CreateWorkspacesError {
+        CreateWorkspacesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -875,6 +887,11 @@ impl From<HttpDispatchError> for DeleteTagsError {
         DeleteTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTagsError {
+    fn from(err: io::Error) -> DeleteTagsError {
+        DeleteTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -950,6 +967,11 @@ impl From<HttpDispatchError> for DescribeTagsError {
         DescribeTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTagsError {
+    fn from(err: io::Error) -> DescribeTagsError {
+        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1020,6 +1042,11 @@ impl From<CredentialsError> for DescribeWorkspaceBundlesError {
 impl From<HttpDispatchError> for DescribeWorkspaceBundlesError {
     fn from(err: HttpDispatchError) -> DescribeWorkspaceBundlesError {
         DescribeWorkspaceBundlesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeWorkspaceBundlesError {
+    fn from(err: io::Error) -> DescribeWorkspaceBundlesError {
+        DescribeWorkspaceBundlesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeWorkspaceBundlesError {
@@ -1094,6 +1121,11 @@ impl From<CredentialsError> for DescribeWorkspaceDirectoriesError {
 impl From<HttpDispatchError> for DescribeWorkspaceDirectoriesError {
     fn from(err: HttpDispatchError) -> DescribeWorkspaceDirectoriesError {
         DescribeWorkspaceDirectoriesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeWorkspaceDirectoriesError {
+    fn from(err: io::Error) -> DescribeWorkspaceDirectoriesError {
+        DescribeWorkspaceDirectoriesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeWorkspaceDirectoriesError {
@@ -1177,6 +1209,11 @@ impl From<HttpDispatchError> for DescribeWorkspacesError {
         DescribeWorkspacesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeWorkspacesError {
+    fn from(err: io::Error) -> DescribeWorkspacesError {
+        DescribeWorkspacesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1251,6 +1288,11 @@ impl From<CredentialsError> for DescribeWorkspacesConnectionStatusError {
 impl From<HttpDispatchError> for DescribeWorkspacesConnectionStatusError {
     fn from(err: HttpDispatchError) -> DescribeWorkspacesConnectionStatusError {
         DescribeWorkspacesConnectionStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeWorkspacesConnectionStatusError {
+    fn from(err: io::Error) -> DescribeWorkspacesConnectionStatusError {
+        DescribeWorkspacesConnectionStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeWorkspacesConnectionStatusError {
@@ -1347,6 +1389,11 @@ impl From<HttpDispatchError> for ModifyWorkspacePropertiesError {
         ModifyWorkspacePropertiesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ModifyWorkspacePropertiesError {
+    fn from(err: io::Error) -> ModifyWorkspacePropertiesError {
+        ModifyWorkspacePropertiesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ModifyWorkspacePropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1424,6 +1471,11 @@ impl From<HttpDispatchError> for RebootWorkspacesError {
         RebootWorkspacesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RebootWorkspacesError {
+    fn from(err: io::Error) -> RebootWorkspacesError {
+        RebootWorkspacesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RebootWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1490,6 +1542,11 @@ impl From<CredentialsError> for RebuildWorkspacesError {
 impl From<HttpDispatchError> for RebuildWorkspacesError {
     fn from(err: HttpDispatchError) -> RebuildWorkspacesError {
         RebuildWorkspacesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RebuildWorkspacesError {
+    fn from(err: io::Error) -> RebuildWorkspacesError {
+        RebuildWorkspacesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RebuildWorkspacesError {
@@ -1562,6 +1619,11 @@ impl From<HttpDispatchError> for StartWorkspacesError {
         StartWorkspacesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartWorkspacesError {
+    fn from(err: io::Error) -> StartWorkspacesError {
+        StartWorkspacesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1630,6 +1692,11 @@ impl From<HttpDispatchError> for StopWorkspacesError {
         StopWorkspacesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StopWorkspacesError {
+    fn from(err: io::Error) -> StopWorkspacesError {
+        StopWorkspacesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StopWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1696,6 +1763,11 @@ impl From<CredentialsError> for TerminateWorkspacesError {
 impl From<HttpDispatchError> for TerminateWorkspacesError {
     fn from(err: HttpDispatchError) -> TerminateWorkspacesError {
         TerminateWorkspacesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TerminateWorkspacesError {
+    fn from(err: io::Error) -> TerminateWorkspacesError {
+        TerminateWorkspacesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TerminateWorkspacesError {
@@ -1839,13 +1911,21 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateTagsResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1863,15 +1943,20 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateWorkspacesResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1888,13 +1973,21 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteTagsResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1912,14 +2005,20 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTagsResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1939,13 +2038,20 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspaceBundlesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeWorkspaceBundlesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeWorkspaceBundlesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeWorkspaceBundlesError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -1965,13 +2071,20 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspaceDirectoriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeWorkspaceDirectoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeWorkspaceDirectoriesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeWorkspaceDirectoriesError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -1989,15 +2102,20 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeWorkspacesResult>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2019,13 +2137,19 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspacesConnectionStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeWorkspacesConnectionStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeWorkspacesConnectionStatusResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeWorkspacesConnectionStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2045,13 +2169,20 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyWorkspacePropertiesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ModifyWorkspacePropertiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ModifyWorkspacePropertiesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyWorkspacePropertiesError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -2069,15 +2200,20 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RebootWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RebootWorkspacesResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RebootWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RebootWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2096,15 +2232,20 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RebuildWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RebuildWorkspacesResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RebuildWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RebuildWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2123,15 +2264,20 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartWorkspacesResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StartWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2150,15 +2296,20 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopWorkspacesResult>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StopWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2177,15 +2328,18 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TerminateWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<TerminateWorkspacesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(TerminateWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TerminateWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

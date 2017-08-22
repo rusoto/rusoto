@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2995,6 +2997,11 @@ impl From<HttpDispatchError> for CreateApiKeyError {
         CreateApiKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateApiKeyError {
+    fn from(err: io::Error) -> CreateApiKeyError {
+        CreateApiKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3094,6 +3101,11 @@ impl From<HttpDispatchError> for CreateAuthorizerError {
         CreateAuthorizerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateAuthorizerError {
+    fn from(err: io::Error) -> CreateAuthorizerError {
+        CreateAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3190,6 +3202,11 @@ impl From<CredentialsError> for CreateBasePathMappingError {
 impl From<HttpDispatchError> for CreateBasePathMappingError {
     fn from(err: HttpDispatchError) -> CreateBasePathMappingError {
         CreateBasePathMappingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateBasePathMappingError {
+    fn from(err: io::Error) -> CreateBasePathMappingError {
+        CreateBasePathMappingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateBasePathMappingError {
@@ -3302,6 +3319,11 @@ impl From<HttpDispatchError> for CreateDeploymentError {
         CreateDeploymentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDeploymentError {
+    fn from(err: io::Error) -> CreateDeploymentError {
+        CreateDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3405,6 +3427,11 @@ impl From<CredentialsError> for CreateDocumentationPartError {
 impl From<HttpDispatchError> for CreateDocumentationPartError {
     fn from(err: HttpDispatchError) -> CreateDocumentationPartError {
         CreateDocumentationPartError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDocumentationPartError {
+    fn from(err: io::Error) -> CreateDocumentationPartError {
+        CreateDocumentationPartError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDocumentationPartError {
@@ -3511,6 +3538,11 @@ impl From<HttpDispatchError> for CreateDocumentationVersionError {
         CreateDocumentationVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDocumentationVersionError {
+    fn from(err: io::Error) -> CreateDocumentationVersionError {
+        CreateDocumentationVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDocumentationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3605,6 +3637,11 @@ impl From<CredentialsError> for CreateDomainNameError {
 impl From<HttpDispatchError> for CreateDomainNameError {
     fn from(err: HttpDispatchError) -> CreateDomainNameError {
         CreateDomainNameError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDomainNameError {
+    fn from(err: io::Error) -> CreateDomainNameError {
+        CreateDomainNameError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDomainNameError {
@@ -3705,6 +3742,11 @@ impl From<HttpDispatchError> for CreateModelError {
         CreateModelError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateModelError {
+    fn from(err: io::Error) -> CreateModelError {
+        CreateModelError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3802,6 +3844,11 @@ impl From<CredentialsError> for CreateRequestValidatorError {
 impl From<HttpDispatchError> for CreateRequestValidatorError {
     fn from(err: HttpDispatchError) -> CreateRequestValidatorError {
         CreateRequestValidatorError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRequestValidatorError {
+    fn from(err: io::Error) -> CreateRequestValidatorError {
+        CreateRequestValidatorError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateRequestValidatorError {
@@ -3909,6 +3956,11 @@ impl From<HttpDispatchError> for CreateResourceError {
         CreateResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateResourceError {
+    fn from(err: io::Error) -> CreateResourceError {
+        CreateResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4001,6 +4053,11 @@ impl From<CredentialsError> for CreateRestApiError {
 impl From<HttpDispatchError> for CreateRestApiError {
     fn from(err: HttpDispatchError) -> CreateRestApiError {
         CreateRestApiError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRestApiError {
+    fn from(err: io::Error) -> CreateRestApiError {
+        CreateRestApiError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateRestApiError {
@@ -4099,6 +4156,11 @@ impl From<CredentialsError> for CreateStageError {
 impl From<HttpDispatchError> for CreateStageError {
     fn from(err: HttpDispatchError) -> CreateStageError {
         CreateStageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateStageError {
+    fn from(err: io::Error) -> CreateStageError {
+        CreateStageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateStageError {
@@ -4205,6 +4267,11 @@ impl From<HttpDispatchError> for CreateUsagePlanError {
         CreateUsagePlanError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateUsagePlanError {
+    fn from(err: io::Error) -> CreateUsagePlanError {
+        CreateUsagePlanError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateUsagePlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4304,6 +4371,11 @@ impl From<HttpDispatchError> for CreateUsagePlanKeyError {
         CreateUsagePlanKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateUsagePlanKeyError {
+    fn from(err: io::Error) -> CreateUsagePlanKeyError {
+        CreateUsagePlanKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateUsagePlanKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4390,6 +4462,11 @@ impl From<CredentialsError> for DeleteApiKeyError {
 impl From<HttpDispatchError> for DeleteApiKeyError {
     fn from(err: HttpDispatchError) -> DeleteApiKeyError {
         DeleteApiKeyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteApiKeyError {
+    fn from(err: io::Error) -> DeleteApiKeyError {
+        DeleteApiKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteApiKeyError {
@@ -4488,6 +4565,11 @@ impl From<HttpDispatchError> for DeleteAuthorizerError {
         DeleteAuthorizerError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteAuthorizerError {
+    fn from(err: io::Error) -> DeleteAuthorizerError {
+        DeleteAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4574,6 +4656,11 @@ impl From<CredentialsError> for DeleteBasePathMappingError {
 impl From<HttpDispatchError> for DeleteBasePathMappingError {
     fn from(err: HttpDispatchError) -> DeleteBasePathMappingError {
         DeleteBasePathMappingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBasePathMappingError {
+    fn from(err: io::Error) -> DeleteBasePathMappingError {
+        DeleteBasePathMappingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBasePathMappingError {
@@ -4669,6 +4756,11 @@ impl From<HttpDispatchError> for DeleteClientCertificateError {
         DeleteClientCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteClientCertificateError {
+    fn from(err: io::Error) -> DeleteClientCertificateError {
+        DeleteClientCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4761,6 +4853,11 @@ impl From<CredentialsError> for DeleteDeploymentError {
 impl From<HttpDispatchError> for DeleteDeploymentError {
     fn from(err: HttpDispatchError) -> DeleteDeploymentError {
         DeleteDeploymentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDeploymentError {
+    fn from(err: io::Error) -> DeleteDeploymentError {
+        DeleteDeploymentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDeploymentError {
@@ -4858,6 +4955,11 @@ impl From<CredentialsError> for DeleteDocumentationPartError {
 impl From<HttpDispatchError> for DeleteDocumentationPartError {
     fn from(err: HttpDispatchError) -> DeleteDocumentationPartError {
         DeleteDocumentationPartError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDocumentationPartError {
+    fn from(err: io::Error) -> DeleteDocumentationPartError {
+        DeleteDocumentationPartError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDocumentationPartError {
@@ -4958,6 +5060,11 @@ impl From<HttpDispatchError> for DeleteDocumentationVersionError {
         DeleteDocumentationVersionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDocumentationVersionError {
+    fn from(err: io::Error) -> DeleteDocumentationVersionError {
+        DeleteDocumentationVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDocumentationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5046,6 +5153,11 @@ impl From<CredentialsError> for DeleteDomainNameError {
 impl From<HttpDispatchError> for DeleteDomainNameError {
     fn from(err: HttpDispatchError) -> DeleteDomainNameError {
         DeleteDomainNameError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDomainNameError {
+    fn from(err: io::Error) -> DeleteDomainNameError {
+        DeleteDomainNameError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDomainNameError {
@@ -5137,6 +5249,11 @@ impl From<CredentialsError> for DeleteIntegrationError {
 impl From<HttpDispatchError> for DeleteIntegrationError {
     fn from(err: HttpDispatchError) -> DeleteIntegrationError {
         DeleteIntegrationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteIntegrationError {
+    fn from(err: io::Error) -> DeleteIntegrationError {
+        DeleteIntegrationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteIntegrationError {
@@ -5238,6 +5355,11 @@ impl From<HttpDispatchError> for DeleteIntegrationResponseError {
         DeleteIntegrationResponseError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteIntegrationResponseError {
+    fn from(err: io::Error) -> DeleteIntegrationResponseError {
+        DeleteIntegrationResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5327,6 +5449,11 @@ impl From<CredentialsError> for DeleteMethodError {
 impl From<HttpDispatchError> for DeleteMethodError {
     fn from(err: HttpDispatchError) -> DeleteMethodError {
         DeleteMethodError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteMethodError {
+    fn from(err: io::Error) -> DeleteMethodError {
+        DeleteMethodError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteMethodError {
@@ -5426,6 +5553,11 @@ impl From<HttpDispatchError> for DeleteMethodResponseError {
         DeleteMethodResponseError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteMethodResponseError {
+    fn from(err: io::Error) -> DeleteMethodResponseError {
+        DeleteMethodResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteMethodResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5520,6 +5652,11 @@ impl From<CredentialsError> for DeleteModelError {
 impl From<HttpDispatchError> for DeleteModelError {
     fn from(err: HttpDispatchError) -> DeleteModelError {
         DeleteModelError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteModelError {
+    fn from(err: io::Error) -> DeleteModelError {
+        DeleteModelError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteModelError {
@@ -5618,6 +5755,11 @@ impl From<CredentialsError> for DeleteRequestValidatorError {
 impl From<HttpDispatchError> for DeleteRequestValidatorError {
     fn from(err: HttpDispatchError) -> DeleteRequestValidatorError {
         DeleteRequestValidatorError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRequestValidatorError {
+    fn from(err: io::Error) -> DeleteRequestValidatorError {
+        DeleteRequestValidatorError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRequestValidatorError {
@@ -5720,6 +5862,11 @@ impl From<HttpDispatchError> for DeleteResourceError {
         DeleteResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteResourceError {
+    fn from(err: io::Error) -> DeleteResourceError {
+        DeleteResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5813,6 +5960,11 @@ impl From<HttpDispatchError> for DeleteRestApiError {
         DeleteRestApiError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRestApiError {
+    fn from(err: io::Error) -> DeleteRestApiError {
+        DeleteRestApiError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRestApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5901,6 +6053,11 @@ impl From<CredentialsError> for DeleteStageError {
 impl From<HttpDispatchError> for DeleteStageError {
     fn from(err: HttpDispatchError) -> DeleteStageError {
         DeleteStageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteStageError {
+    fn from(err: io::Error) -> DeleteStageError {
+        DeleteStageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteStageError {
@@ -5993,6 +6150,11 @@ impl From<CredentialsError> for DeleteUsagePlanError {
 impl From<HttpDispatchError> for DeleteUsagePlanError {
     fn from(err: HttpDispatchError) -> DeleteUsagePlanError {
         DeleteUsagePlanError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteUsagePlanError {
+    fn from(err: io::Error) -> DeleteUsagePlanError {
+        DeleteUsagePlanError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteUsagePlanError {
@@ -6092,6 +6254,11 @@ impl From<HttpDispatchError> for DeleteUsagePlanKeyError {
         DeleteUsagePlanKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteUsagePlanKeyError {
+    fn from(err: io::Error) -> DeleteUsagePlanKeyError {
+        DeleteUsagePlanKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteUsagePlanKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6183,6 +6350,11 @@ impl From<CredentialsError> for FlushStageAuthorizersCacheError {
 impl From<HttpDispatchError> for FlushStageAuthorizersCacheError {
     fn from(err: HttpDispatchError) -> FlushStageAuthorizersCacheError {
         FlushStageAuthorizersCacheError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for FlushStageAuthorizersCacheError {
+    fn from(err: io::Error) -> FlushStageAuthorizersCacheError {
+        FlushStageAuthorizersCacheError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for FlushStageAuthorizersCacheError {
@@ -6279,6 +6451,11 @@ impl From<HttpDispatchError> for FlushStageCacheError {
         FlushStageCacheError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for FlushStageCacheError {
+    fn from(err: io::Error) -> FlushStageCacheError {
+        FlushStageCacheError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for FlushStageCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6366,6 +6543,11 @@ impl From<HttpDispatchError> for GenerateClientCertificateError {
         GenerateClientCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GenerateClientCertificateError {
+    fn from(err: io::Error) -> GenerateClientCertificateError {
+        GenerateClientCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GenerateClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6450,6 +6632,11 @@ impl From<HttpDispatchError> for GetAccountError {
         GetAccountError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetAccountError {
+    fn from(err: io::Error) -> GetAccountError {
+        GetAccountError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6530,6 +6717,11 @@ impl From<CredentialsError> for GetApiKeyError {
 impl From<HttpDispatchError> for GetApiKeyError {
     fn from(err: HttpDispatchError) -> GetApiKeyError {
         GetApiKeyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetApiKeyError {
+    fn from(err: io::Error) -> GetApiKeyError {
+        GetApiKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetApiKeyError {
@@ -6616,6 +6808,11 @@ impl From<HttpDispatchError> for GetApiKeysError {
         GetApiKeysError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetApiKeysError {
+    fn from(err: io::Error) -> GetApiKeysError {
+        GetApiKeysError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetApiKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6700,6 +6897,11 @@ impl From<CredentialsError> for GetAuthorizerError {
 impl From<HttpDispatchError> for GetAuthorizerError {
     fn from(err: HttpDispatchError) -> GetAuthorizerError {
         GetAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAuthorizerError {
+    fn from(err: io::Error) -> GetAuthorizerError {
+        GetAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAuthorizerError {
@@ -6793,6 +6995,11 @@ impl From<HttpDispatchError> for GetAuthorizersError {
         GetAuthorizersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetAuthorizersError {
+    fn from(err: io::Error) -> GetAuthorizersError {
+        GetAuthorizersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetAuthorizersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6878,6 +7085,11 @@ impl From<CredentialsError> for GetBasePathMappingError {
 impl From<HttpDispatchError> for GetBasePathMappingError {
     fn from(err: HttpDispatchError) -> GetBasePathMappingError {
         GetBasePathMappingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBasePathMappingError {
+    fn from(err: io::Error) -> GetBasePathMappingError {
+        GetBasePathMappingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBasePathMappingError {
@@ -6968,6 +7180,11 @@ impl From<HttpDispatchError> for GetBasePathMappingsError {
         GetBasePathMappingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBasePathMappingsError {
+    fn from(err: io::Error) -> GetBasePathMappingsError {
+        GetBasePathMappingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBasePathMappingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7056,6 +7273,11 @@ impl From<HttpDispatchError> for GetClientCertificateError {
         GetClientCertificateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetClientCertificateError {
+    fn from(err: io::Error) -> GetClientCertificateError {
+        GetClientCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7142,6 +7364,11 @@ impl From<CredentialsError> for GetClientCertificatesError {
 impl From<HttpDispatchError> for GetClientCertificatesError {
     fn from(err: HttpDispatchError) -> GetClientCertificatesError {
         GetClientCertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetClientCertificatesError {
+    fn from(err: io::Error) -> GetClientCertificatesError {
+        GetClientCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetClientCertificatesError {
@@ -7237,6 +7464,11 @@ impl From<HttpDispatchError> for GetDeploymentError {
         GetDeploymentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDeploymentError {
+    fn from(err: io::Error) -> GetDeploymentError {
+        GetDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7329,6 +7561,11 @@ impl From<HttpDispatchError> for GetDeploymentsError {
         GetDeploymentsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDeploymentsError {
+    fn from(err: io::Error) -> GetDeploymentsError {
+        GetDeploymentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7414,6 +7651,11 @@ impl From<CredentialsError> for GetDocumentationPartError {
 impl From<HttpDispatchError> for GetDocumentationPartError {
     fn from(err: HttpDispatchError) -> GetDocumentationPartError {
         GetDocumentationPartError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDocumentationPartError {
+    fn from(err: io::Error) -> GetDocumentationPartError {
+        GetDocumentationPartError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDocumentationPartError {
@@ -7509,6 +7751,11 @@ impl From<HttpDispatchError> for GetDocumentationPartsError {
         GetDocumentationPartsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDocumentationPartsError {
+    fn from(err: io::Error) -> GetDocumentationPartsError {
+        GetDocumentationPartsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDocumentationPartsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7596,6 +7843,11 @@ impl From<CredentialsError> for GetDocumentationVersionError {
 impl From<HttpDispatchError> for GetDocumentationVersionError {
     fn from(err: HttpDispatchError) -> GetDocumentationVersionError {
         GetDocumentationVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDocumentationVersionError {
+    fn from(err: io::Error) -> GetDocumentationVersionError {
+        GetDocumentationVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDocumentationVersionError {
@@ -7689,6 +7941,11 @@ impl From<CredentialsError> for GetDocumentationVersionsError {
 impl From<HttpDispatchError> for GetDocumentationVersionsError {
     fn from(err: HttpDispatchError) -> GetDocumentationVersionsError {
         GetDocumentationVersionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDocumentationVersionsError {
+    fn from(err: io::Error) -> GetDocumentationVersionsError {
+        GetDocumentationVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDocumentationVersionsError {
@@ -7785,6 +8042,11 @@ impl From<HttpDispatchError> for GetDomainNameError {
         GetDomainNameError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDomainNameError {
+    fn from(err: io::Error) -> GetDomainNameError {
+        GetDomainNameError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDomainNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -7870,6 +8132,11 @@ impl From<CredentialsError> for GetDomainNamesError {
 impl From<HttpDispatchError> for GetDomainNamesError {
     fn from(err: HttpDispatchError) -> GetDomainNamesError {
         GetDomainNamesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDomainNamesError {
+    fn from(err: io::Error) -> GetDomainNamesError {
+        GetDomainNamesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDomainNamesError {
@@ -7959,6 +8226,11 @@ impl From<HttpDispatchError> for GetExportError {
         GetExportError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetExportError {
+    fn from(err: io::Error) -> GetExportError {
+        GetExportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8044,6 +8316,11 @@ impl From<CredentialsError> for GetIntegrationError {
 impl From<HttpDispatchError> for GetIntegrationError {
     fn from(err: HttpDispatchError) -> GetIntegrationError {
         GetIntegrationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetIntegrationError {
+    fn from(err: io::Error) -> GetIntegrationError {
+        GetIntegrationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIntegrationError {
@@ -8132,6 +8409,11 @@ impl From<HttpDispatchError> for GetIntegrationResponseError {
         GetIntegrationResponseError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetIntegrationResponseError {
+    fn from(err: io::Error) -> GetIntegrationResponseError {
+        GetIntegrationResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8214,6 +8496,11 @@ impl From<CredentialsError> for GetMethodError {
 impl From<HttpDispatchError> for GetMethodError {
     fn from(err: HttpDispatchError) -> GetMethodError {
         GetMethodError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMethodError {
+    fn from(err: io::Error) -> GetMethodError {
+        GetMethodError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetMethodError {
@@ -8302,6 +8589,11 @@ impl From<HttpDispatchError> for GetMethodResponseError {
         GetMethodResponseError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetMethodResponseError {
+    fn from(err: io::Error) -> GetMethodResponseError {
+        GetMethodResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetMethodResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8384,6 +8676,11 @@ impl From<CredentialsError> for GetModelError {
 impl From<HttpDispatchError> for GetModelError {
     fn from(err: HttpDispatchError) -> GetModelError {
         GetModelError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetModelError {
+    fn from(err: io::Error) -> GetModelError {
+        GetModelError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetModelError {
@@ -8477,6 +8774,11 @@ impl From<HttpDispatchError> for GetModelTemplateError {
         GetModelTemplateError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetModelTemplateError {
+    fn from(err: io::Error) -> GetModelTemplateError {
+        GetModelTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetModelTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8565,6 +8867,11 @@ impl From<HttpDispatchError> for GetModelsError {
         GetModelsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetModelsError {
+    fn from(err: io::Error) -> GetModelsError {
+        GetModelsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetModelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8650,6 +8957,11 @@ impl From<CredentialsError> for GetRequestValidatorError {
 impl From<HttpDispatchError> for GetRequestValidatorError {
     fn from(err: HttpDispatchError) -> GetRequestValidatorError {
         GetRequestValidatorError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRequestValidatorError {
+    fn from(err: io::Error) -> GetRequestValidatorError {
+        GetRequestValidatorError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetRequestValidatorError {
@@ -8745,6 +9057,11 @@ impl From<HttpDispatchError> for GetRequestValidatorsError {
         GetRequestValidatorsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRequestValidatorsError {
+    fn from(err: io::Error) -> GetRequestValidatorsError {
+        GetRequestValidatorsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRequestValidatorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -8830,6 +9147,11 @@ impl From<CredentialsError> for GetResourceError {
 impl From<HttpDispatchError> for GetResourceError {
     fn from(err: HttpDispatchError) -> GetResourceError {
         GetResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetResourceError {
+    fn from(err: io::Error) -> GetResourceError {
+        GetResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetResourceError {
@@ -8921,6 +9243,11 @@ impl From<HttpDispatchError> for GetResourcesError {
         GetResourcesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetResourcesError {
+    fn from(err: io::Error) -> GetResourcesError {
+        GetResourcesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9002,6 +9329,11 @@ impl From<CredentialsError> for GetRestApiError {
 impl From<HttpDispatchError> for GetRestApiError {
     fn from(err: HttpDispatchError) -> GetRestApiError {
         GetRestApiError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRestApiError {
+    fn from(err: io::Error) -> GetRestApiError {
+        GetRestApiError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetRestApiError {
@@ -9090,6 +9422,11 @@ impl From<HttpDispatchError> for GetRestApisError {
         GetRestApisError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRestApisError {
+    fn from(err: io::Error) -> GetRestApisError {
+        GetRestApisError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRestApisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9175,6 +9512,11 @@ impl From<HttpDispatchError> for GetSdkError {
         GetSdkError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetSdkError {
+    fn from(err: io::Error) -> GetSdkError {
+        GetSdkError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetSdkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9258,6 +9600,11 @@ impl From<HttpDispatchError> for GetSdkTypeError {
         GetSdkTypeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetSdkTypeError {
+    fn from(err: io::Error) -> GetSdkTypeError {
+        GetSdkTypeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetSdkTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9337,6 +9684,11 @@ impl From<CredentialsError> for GetSdkTypesError {
 impl From<HttpDispatchError> for GetSdkTypesError {
     fn from(err: HttpDispatchError) -> GetSdkTypesError {
         GetSdkTypesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSdkTypesError {
+    fn from(err: io::Error) -> GetSdkTypesError {
+        GetSdkTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSdkTypesError {
@@ -9420,6 +9772,11 @@ impl From<HttpDispatchError> for GetStageError {
         GetStageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetStageError {
+    fn from(err: io::Error) -> GetStageError {
+        GetStageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9500,6 +9857,11 @@ impl From<CredentialsError> for GetStagesError {
 impl From<HttpDispatchError> for GetStagesError {
     fn from(err: HttpDispatchError) -> GetStagesError {
         GetStagesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetStagesError {
+    fn from(err: io::Error) -> GetStagesError {
+        GetStagesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetStagesError {
@@ -9585,6 +9947,11 @@ impl From<CredentialsError> for GetUsageError {
 impl From<HttpDispatchError> for GetUsageError {
     fn from(err: HttpDispatchError) -> GetUsageError {
         GetUsageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetUsageError {
+    fn from(err: io::Error) -> GetUsageError {
+        GetUsageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetUsageError {
@@ -9675,6 +10042,11 @@ impl From<CredentialsError> for GetUsagePlanError {
 impl From<HttpDispatchError> for GetUsagePlanError {
     fn from(err: HttpDispatchError) -> GetUsagePlanError {
         GetUsagePlanError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetUsagePlanError {
+    fn from(err: io::Error) -> GetUsagePlanError {
+        GetUsagePlanError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetUsagePlanError {
@@ -9769,6 +10141,11 @@ impl From<HttpDispatchError> for GetUsagePlanKeyError {
         GetUsagePlanKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetUsagePlanKeyError {
+    fn from(err: io::Error) -> GetUsagePlanKeyError {
+        GetUsagePlanKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetUsagePlanKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -9859,6 +10236,11 @@ impl From<CredentialsError> for GetUsagePlanKeysError {
 impl From<HttpDispatchError> for GetUsagePlanKeysError {
     fn from(err: HttpDispatchError) -> GetUsagePlanKeysError {
         GetUsagePlanKeysError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetUsagePlanKeysError {
+    fn from(err: io::Error) -> GetUsagePlanKeysError {
+        GetUsagePlanKeysError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetUsagePlanKeysError {
@@ -9956,6 +10338,11 @@ impl From<CredentialsError> for GetUsagePlansError {
 impl From<HttpDispatchError> for GetUsagePlansError {
     fn from(err: HttpDispatchError) -> GetUsagePlansError {
         GetUsagePlansError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetUsagePlansError {
+    fn from(err: io::Error) -> GetUsagePlansError {
+        GetUsagePlansError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetUsagePlansError {
@@ -10061,6 +10448,11 @@ impl From<HttpDispatchError> for ImportApiKeysError {
         ImportApiKeysError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ImportApiKeysError {
+    fn from(err: io::Error) -> ImportApiKeysError {
+        ImportApiKeysError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ImportApiKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10158,6 +10550,11 @@ impl From<CredentialsError> for ImportDocumentationPartsError {
 impl From<HttpDispatchError> for ImportDocumentationPartsError {
     fn from(err: HttpDispatchError) -> ImportDocumentationPartsError {
         ImportDocumentationPartsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ImportDocumentationPartsError {
+    fn from(err: io::Error) -> ImportDocumentationPartsError {
+        ImportDocumentationPartsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ImportDocumentationPartsError {
@@ -10260,6 +10657,11 @@ impl From<HttpDispatchError> for ImportRestApiError {
         ImportRestApiError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ImportRestApiError {
+    fn from(err: io::Error) -> ImportRestApiError {
+        ImportRestApiError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ImportRestApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10356,6 +10758,11 @@ impl From<CredentialsError> for PutIntegrationError {
 impl From<HttpDispatchError> for PutIntegrationError {
     fn from(err: HttpDispatchError) -> PutIntegrationError {
         PutIntegrationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutIntegrationError {
+    fn from(err: io::Error) -> PutIntegrationError {
+        PutIntegrationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutIntegrationError {
@@ -10461,6 +10868,11 @@ impl From<HttpDispatchError> for PutIntegrationResponseError {
         PutIntegrationResponseError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutIntegrationResponseError {
+    fn from(err: io::Error) -> PutIntegrationResponseError {
+        PutIntegrationResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10559,6 +10971,11 @@ impl From<CredentialsError> for PutMethodError {
 impl From<HttpDispatchError> for PutMethodError {
     fn from(err: HttpDispatchError) -> PutMethodError {
         PutMethodError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutMethodError {
+    fn from(err: io::Error) -> PutMethodError {
+        PutMethodError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutMethodError {
@@ -10665,6 +11082,11 @@ impl From<HttpDispatchError> for PutMethodResponseError {
         PutMethodResponseError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutMethodResponseError {
+    fn from(err: io::Error) -> PutMethodResponseError {
+        PutMethodResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutMethodResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10765,6 +11187,11 @@ impl From<HttpDispatchError> for PutRestApiError {
         PutRestApiError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutRestApiError {
+    fn from(err: io::Error) -> PutRestApiError {
+        PutRestApiError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutRestApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -10857,6 +11284,11 @@ impl From<CredentialsError> for TestInvokeAuthorizerError {
 impl From<HttpDispatchError> for TestInvokeAuthorizerError {
     fn from(err: HttpDispatchError) -> TestInvokeAuthorizerError {
         TestInvokeAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TestInvokeAuthorizerError {
+    fn from(err: io::Error) -> TestInvokeAuthorizerError {
+        TestInvokeAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TestInvokeAuthorizerError {
@@ -10953,6 +11385,11 @@ impl From<HttpDispatchError> for TestInvokeMethodError {
         TestInvokeMethodError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TestInvokeMethodError {
+    fn from(err: io::Error) -> TestInvokeMethodError {
+        TestInvokeMethodError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TestInvokeMethodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11043,6 +11480,11 @@ impl From<CredentialsError> for UpdateAccountError {
 impl From<HttpDispatchError> for UpdateAccountError {
     fn from(err: HttpDispatchError) -> UpdateAccountError {
         UpdateAccountError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAccountError {
+    fn from(err: io::Error) -> UpdateAccountError {
+        UpdateAccountError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAccountError {
@@ -11138,6 +11580,11 @@ impl From<HttpDispatchError> for UpdateApiKeyError {
         UpdateApiKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateApiKeyError {
+    fn from(err: io::Error) -> UpdateApiKeyError {
+        UpdateApiKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11229,6 +11676,11 @@ impl From<CredentialsError> for UpdateAuthorizerError {
 impl From<HttpDispatchError> for UpdateAuthorizerError {
     fn from(err: HttpDispatchError) -> UpdateAuthorizerError {
         UpdateAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAuthorizerError {
+    fn from(err: io::Error) -> UpdateAuthorizerError {
+        UpdateAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAuthorizerError {
@@ -11328,6 +11780,11 @@ impl From<HttpDispatchError> for UpdateBasePathMappingError {
         UpdateBasePathMappingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateBasePathMappingError {
+    fn from(err: io::Error) -> UpdateBasePathMappingError {
+        UpdateBasePathMappingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateBasePathMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11421,6 +11878,11 @@ impl From<CredentialsError> for UpdateClientCertificateError {
 impl From<HttpDispatchError> for UpdateClientCertificateError {
     fn from(err: HttpDispatchError) -> UpdateClientCertificateError {
         UpdateClientCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateClientCertificateError {
+    fn from(err: io::Error) -> UpdateClientCertificateError {
+        UpdateClientCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateClientCertificateError {
@@ -11520,6 +11982,11 @@ impl From<CredentialsError> for UpdateDeploymentError {
 impl From<HttpDispatchError> for UpdateDeploymentError {
     fn from(err: HttpDispatchError) -> UpdateDeploymentError {
         UpdateDeploymentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateDeploymentError {
+    fn from(err: io::Error) -> UpdateDeploymentError {
+        UpdateDeploymentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateDeploymentError {
@@ -11625,6 +12092,11 @@ impl From<HttpDispatchError> for UpdateDocumentationPartError {
         UpdateDocumentationPartError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateDocumentationPartError {
+    fn from(err: io::Error) -> UpdateDocumentationPartError {
+        UpdateDocumentationPartError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateDocumentationPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11722,6 +12194,11 @@ impl From<CredentialsError> for UpdateDocumentationVersionError {
 impl From<HttpDispatchError> for UpdateDocumentationVersionError {
     fn from(err: HttpDispatchError) -> UpdateDocumentationVersionError {
         UpdateDocumentationVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateDocumentationVersionError {
+    fn from(err: io::Error) -> UpdateDocumentationVersionError {
+        UpdateDocumentationVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateDocumentationVersionError {
@@ -11824,6 +12301,11 @@ impl From<HttpDispatchError> for UpdateDomainNameError {
         UpdateDomainNameError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateDomainNameError {
+    fn from(err: io::Error) -> UpdateDomainNameError {
+        UpdateDomainNameError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateDomainNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11920,6 +12402,11 @@ impl From<CredentialsError> for UpdateIntegrationError {
 impl From<HttpDispatchError> for UpdateIntegrationError {
     fn from(err: HttpDispatchError) -> UpdateIntegrationError {
         UpdateIntegrationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateIntegrationError {
+    fn from(err: io::Error) -> UpdateIntegrationError {
+        UpdateIntegrationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateIntegrationError {
@@ -12022,6 +12509,11 @@ impl From<HttpDispatchError> for UpdateIntegrationResponseError {
         UpdateIntegrationResponseError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateIntegrationResponseError {
+    fn from(err: io::Error) -> UpdateIntegrationResponseError {
+        UpdateIntegrationResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12116,6 +12608,11 @@ impl From<CredentialsError> for UpdateMethodError {
 impl From<HttpDispatchError> for UpdateMethodError {
     fn from(err: HttpDispatchError) -> UpdateMethodError {
         UpdateMethodError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateMethodError {
+    fn from(err: io::Error) -> UpdateMethodError {
+        UpdateMethodError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateMethodError {
@@ -12221,6 +12718,11 @@ impl From<HttpDispatchError> for UpdateMethodResponseError {
         UpdateMethodResponseError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateMethodResponseError {
+    fn from(err: io::Error) -> UpdateMethodResponseError {
+        UpdateMethodResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateMethodResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12318,6 +12820,11 @@ impl From<HttpDispatchError> for UpdateModelError {
         UpdateModelError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateModelError {
+    fn from(err: io::Error) -> UpdateModelError {
+        UpdateModelError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12409,6 +12916,11 @@ impl From<CredentialsError> for UpdateRequestValidatorError {
 impl From<HttpDispatchError> for UpdateRequestValidatorError {
     fn from(err: HttpDispatchError) -> UpdateRequestValidatorError {
         UpdateRequestValidatorError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRequestValidatorError {
+    fn from(err: io::Error) -> UpdateRequestValidatorError {
+        UpdateRequestValidatorError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateRequestValidatorError {
@@ -12510,6 +13022,11 @@ impl From<HttpDispatchError> for UpdateResourceError {
         UpdateResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateResourceError {
+    fn from(err: io::Error) -> UpdateResourceError {
+        UpdateResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12608,6 +13125,11 @@ impl From<HttpDispatchError> for UpdateRestApiError {
         UpdateRestApiError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateRestApiError {
+    fn from(err: io::Error) -> UpdateRestApiError {
+        UpdateRestApiError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateRestApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12702,6 +13224,11 @@ impl From<HttpDispatchError> for UpdateStageError {
         UpdateStageError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateStageError {
+    fn from(err: io::Error) -> UpdateStageError {
+        UpdateStageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12791,6 +13318,11 @@ impl From<CredentialsError> for UpdateUsageError {
 impl From<HttpDispatchError> for UpdateUsageError {
     fn from(err: HttpDispatchError) -> UpdateUsageError {
         UpdateUsageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateUsageError {
+    fn from(err: io::Error) -> UpdateUsageError {
+        UpdateUsageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateUsageError {
@@ -12888,6 +13420,11 @@ impl From<CredentialsError> for UpdateUsagePlanError {
 impl From<HttpDispatchError> for UpdateUsagePlanError {
     fn from(err: HttpDispatchError) -> UpdateUsagePlanError {
         UpdateUsagePlanError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateUsagePlanError {
+    fn from(err: io::Error) -> UpdateUsagePlanError {
+        UpdateUsagePlanError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateUsagePlanError {
@@ -13524,13 +14061,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13545,7 +14082,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateApiKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateApiKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13568,13 +14107,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13589,8 +14128,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateAuthorizerError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAuthorizerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13613,13 +14153,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13634,8 +14174,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateBasePathMappingError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateBasePathMappingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13658,13 +14199,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13679,8 +14220,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13703,13 +14245,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13723,7 +14265,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateDocumentationPartError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDocumentationPartError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -13746,13 +14293,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13766,7 +14313,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateDocumentationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDocumentationVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -13787,13 +14339,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13808,8 +14360,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateDomainNameError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDomainNameError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13830,13 +14383,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13850,7 +14403,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateModelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateModelError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -13872,13 +14429,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13893,8 +14450,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateRequestValidatorError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRequestValidatorError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13918,13 +14476,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13939,8 +14497,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13960,13 +14519,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -13981,7 +14540,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateRestApiError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRestApiError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14002,13 +14563,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -14022,7 +14583,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(CreateStageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -14043,13 +14608,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -14064,8 +14629,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateUsagePlanError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateUsagePlanError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14088,13 +14654,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -14109,8 +14675,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateUsagePlanKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateUsagePlanKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14129,8 +14696,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14140,7 +14706,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteApiKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteApiKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14163,8 +14731,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14174,8 +14741,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteAuthorizerError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAuthorizerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14198,8 +14766,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14209,8 +14776,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteBasePathMappingError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBasePathMappingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14232,8 +14800,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14242,7 +14809,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteClientCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -14264,8 +14836,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14275,8 +14846,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteDeploymentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14299,8 +14871,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14309,7 +14880,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteDocumentationPartError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDocumentationPartError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -14331,8 +14907,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14341,7 +14916,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteDocumentationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDocumentationVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -14362,8 +14942,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14373,8 +14952,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteDomainNameError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDomainNameError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14398,8 +14978,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -14409,8 +14988,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteIntegrationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteIntegrationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14435,8 +15015,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -14445,7 +15024,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteIntegrationResponseError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteIntegrationResponseError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -14466,8 +15050,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -14477,7 +15060,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteMethodError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteMethodError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14502,8 +15087,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -14513,8 +15097,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteMethodResponseError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteMethodResponseError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14535,8 +15120,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14545,7 +15129,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteModelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteModelError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -14567,8 +15155,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14578,8 +15165,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteRequestValidatorError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRequestValidatorError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14600,8 +15188,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14611,8 +15198,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14631,8 +15219,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14642,7 +15229,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteRestApiError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRestApiError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14663,8 +15252,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14673,7 +15261,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteStageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteStageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -14694,8 +15286,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14705,8 +15296,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteUsagePlanError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteUsagePlanError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14729,8 +15321,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14740,8 +15331,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteUsagePlanKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteUsagePlanKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14764,8 +15356,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14774,7 +15365,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(FlushStageAuthorizersCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(FlushStageAuthorizersCacheError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -14796,8 +15392,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -14807,8 +15402,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(FlushStageCacheError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(FlushStageCacheError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14830,13 +15426,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -14850,7 +15446,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GenerateClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GenerateClientCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -14868,13 +15469,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -14888,7 +15489,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetAccountError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAccountError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -14910,13 +15515,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -14930,7 +15535,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetApiKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetApiKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -14964,13 +15573,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -14984,7 +15593,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetApiKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetApiKeysError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -15006,13 +15619,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15027,7 +15640,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetAuthorizerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAuthorizerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15056,13 +15671,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15077,8 +15692,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetAuthorizersError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAuthorizersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15101,13 +15717,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15122,8 +15738,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBasePathMappingError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBasePathMappingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15152,13 +15769,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15173,8 +15790,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBasePathMappingsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBasePathMappingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15196,13 +15814,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15217,8 +15835,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetClientCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetClientCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15246,13 +15865,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15267,8 +15886,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetClientCertificatesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetClientCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15297,13 +15917,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15318,7 +15938,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15347,13 +15969,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15368,8 +15990,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetDeploymentsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDeploymentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15392,13 +16015,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15413,8 +16036,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetDocumentationPartError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDocumentationPartError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15452,13 +16076,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15473,8 +16097,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetDocumentationPartsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDocumentationPartsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15497,13 +16122,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15517,7 +16142,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetDocumentationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDocumentationVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -15546,13 +16176,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15566,7 +16196,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetDocumentationVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDocumentationVersionsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -15587,13 +16222,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15608,7 +16243,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetDomainNameError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDomainNameError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15636,13 +16273,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15657,8 +16294,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetDomainNamesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDomainNamesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15689,14 +16327,17 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
                 let mut result = ExportResponse::default();
-                result.body = Some(response.body);
+
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                result.body = Some(body);
 
                 if let Some(content_disposition) = response.headers.get("Content-Disposition") {
                     let value = content_disposition.to_owned();
@@ -15709,7 +16350,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetExportError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetExportError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -15732,13 +16377,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15753,8 +16398,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetIntegrationError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIntegrationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15779,13 +16425,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15800,8 +16446,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetIntegrationResponseError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIntegrationResponseError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15823,13 +16470,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15843,7 +16490,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetMethodError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetMethodError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -15867,13 +16518,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15888,8 +16539,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetMethodResponseError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetMethodResponseError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -15914,13 +16566,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15934,7 +16586,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetModelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetModelError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -15956,13 +16612,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -15977,8 +16633,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetModelTemplateError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetModelTemplateError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16005,13 +16662,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16025,7 +16682,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetModelsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetModelsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16047,13 +16708,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16068,8 +16729,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetRequestValidatorError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRequestValidatorError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16098,13 +16760,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16119,8 +16781,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetRequestValidatorsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRequestValidatorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16147,13 +16810,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16167,7 +16830,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16198,13 +16865,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16219,7 +16886,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetResourcesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetResourcesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16238,13 +16907,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16258,7 +16927,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetRestApiError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRestApiError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16283,13 +16956,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16303,7 +16976,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetRestApisError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRestApisError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16330,14 +17007,17 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
                 let mut result = SdkResponse::default();
-                result.body = Some(response.body);
+
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                result.body = Some(body);
 
                 if let Some(content_disposition) = response.headers.get("Content-Disposition") {
                     let value = content_disposition.to_owned();
@@ -16350,7 +17030,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetSdkError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSdkError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16368,13 +17052,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16388,7 +17072,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetSdkTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSdkTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16413,13 +17101,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16433,7 +17121,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetSdkTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSdkTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16453,13 +17145,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16473,7 +17165,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetStageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetStageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16496,13 +17192,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16516,7 +17212,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetStagesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetStagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16547,13 +17247,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16567,7 +17267,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetUsageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetUsageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -16586,13 +17290,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16607,7 +17311,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetUsagePlanError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetUsagePlanError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16630,13 +17336,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16651,8 +17357,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetUsagePlanKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetUsagePlanKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16684,13 +17391,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16705,8 +17412,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetUsagePlanKeysError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetUsagePlanKeysError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16737,13 +17445,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16758,7 +17466,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetUsagePlansError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetUsagePlansError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16786,13 +17496,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16807,7 +17517,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ImportApiKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportApiKeysError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16838,13 +17550,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16858,7 +17570,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(ImportDocumentationPartsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportDocumentationPartsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -16887,13 +17604,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16908,7 +17625,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ImportRestApiError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportRestApiError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16933,13 +17652,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -16954,8 +17673,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutIntegrationError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutIntegrationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16981,13 +17701,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17002,8 +17722,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutIntegrationResponseError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutIntegrationResponseError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17026,13 +17747,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17046,7 +17767,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(PutMethodError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutMethodError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -17071,13 +17796,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17092,8 +17817,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutMethodResponseError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutMethodResponseError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17125,13 +17851,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17145,7 +17871,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(PutRestApiError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutRestApiError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -17169,13 +17899,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17190,8 +17920,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(TestInvokeAuthorizerError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestInvokeAuthorizerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17216,13 +17947,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17237,8 +17968,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(TestInvokeMethodError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestInvokeMethodError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17258,13 +17990,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17279,7 +18011,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateAccountError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAccountError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17299,13 +18033,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17320,7 +18054,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateApiKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateApiKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17344,13 +18080,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17365,8 +18101,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateAuthorizerError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAuthorizerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17390,13 +18127,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17411,8 +18148,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateBasePathMappingError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateBasePathMappingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17435,13 +18173,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17455,7 +18193,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateClientCertificateError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -17478,13 +18221,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17499,8 +18242,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateDeploymentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17524,13 +18268,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17544,7 +18288,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateDocumentationPartError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDocumentationPartError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -17568,13 +18317,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17588,7 +18337,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateDocumentationVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDocumentationVersionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -17610,13 +18364,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17631,8 +18385,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateDomainNameError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDomainNameError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17657,13 +18412,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17678,8 +18433,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateIntegrationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateIntegrationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17706,13 +18462,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17726,7 +18482,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateIntegrationResponseError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateIntegrationResponseError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -17748,13 +18509,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17769,7 +18530,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateMethodError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateMethodError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17795,13 +18558,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17816,8 +18579,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateMethodResponseError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateMethodResponseError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17839,13 +18603,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17859,7 +18623,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateModelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateModelError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -17882,13 +18650,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17903,8 +18671,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateRequestValidatorError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRequestValidatorError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17928,13 +18697,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17949,8 +18718,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17970,13 +18740,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -17991,7 +18761,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateRestApiError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRestApiError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18013,13 +18785,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -18033,7 +18805,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateStageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateStageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -18054,13 +18830,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -18074,7 +18850,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(UpdateUsageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateUsageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -18096,13 +18876,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -18117,8 +18897,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UpdateUsagePlanError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateUsagePlanError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

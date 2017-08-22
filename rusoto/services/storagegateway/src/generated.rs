@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2057,6 +2059,11 @@ impl From<HttpDispatchError> for ActivateGatewayError {
         ActivateGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ActivateGatewayError {
+    fn from(err: io::Error) -> ActivateGatewayError {
+        ActivateGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ActivateGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2133,6 +2140,11 @@ impl From<CredentialsError> for AddCacheError {
 impl From<HttpDispatchError> for AddCacheError {
     fn from(err: HttpDispatchError) -> AddCacheError {
         AddCacheError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddCacheError {
+    fn from(err: io::Error) -> AddCacheError {
+        AddCacheError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddCacheError {
@@ -2213,6 +2225,11 @@ impl From<CredentialsError> for AddTagsToResourceError {
 impl From<HttpDispatchError> for AddTagsToResourceError {
     fn from(err: HttpDispatchError) -> AddTagsToResourceError {
         AddTagsToResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddTagsToResourceError {
+    fn from(err: io::Error) -> AddTagsToResourceError {
+        AddTagsToResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddTagsToResourceError {
@@ -2297,6 +2314,11 @@ impl From<HttpDispatchError> for AddUploadBufferError {
         AddUploadBufferError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddUploadBufferError {
+    fn from(err: io::Error) -> AddUploadBufferError {
+        AddUploadBufferError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddUploadBufferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2375,6 +2397,11 @@ impl From<CredentialsError> for AddWorkingStorageError {
 impl From<HttpDispatchError> for AddWorkingStorageError {
     fn from(err: HttpDispatchError) -> AddWorkingStorageError {
         AddWorkingStorageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddWorkingStorageError {
+    fn from(err: io::Error) -> AddWorkingStorageError {
+        AddWorkingStorageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddWorkingStorageError {
@@ -2459,6 +2486,11 @@ impl From<HttpDispatchError> for CancelArchivalError {
         CancelArchivalError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelArchivalError {
+    fn from(err: io::Error) -> CancelArchivalError {
+        CancelArchivalError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelArchivalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2539,6 +2571,11 @@ impl From<HttpDispatchError> for CancelRetrievalError {
         CancelRetrievalError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelRetrievalError {
+    fn from(err: io::Error) -> CancelRetrievalError {
+        CancelRetrievalError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelRetrievalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2613,6 +2650,11 @@ impl From<CredentialsError> for CreateCachediSCSIVolumeError {
 impl From<HttpDispatchError> for CreateCachediSCSIVolumeError {
     fn from(err: HttpDispatchError) -> CreateCachediSCSIVolumeError {
         CreateCachediSCSIVolumeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateCachediSCSIVolumeError {
+    fn from(err: io::Error) -> CreateCachediSCSIVolumeError {
+        CreateCachediSCSIVolumeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateCachediSCSIVolumeError {
@@ -2695,6 +2737,11 @@ impl From<CredentialsError> for CreateNFSFileShareError {
 impl From<HttpDispatchError> for CreateNFSFileShareError {
     fn from(err: HttpDispatchError) -> CreateNFSFileShareError {
         CreateNFSFileShareError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateNFSFileShareError {
+    fn from(err: io::Error) -> CreateNFSFileShareError {
+        CreateNFSFileShareError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateNFSFileShareError {
@@ -2784,6 +2831,11 @@ impl From<HttpDispatchError> for CreateSnapshotError {
         CreateSnapshotError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateSnapshotError {
+    fn from(err: io::Error) -> CreateSnapshotError {
+        CreateSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2865,6 +2917,11 @@ impl From<HttpDispatchError> for CreateSnapshotFromVolumeRecoveryPointError {
         CreateSnapshotFromVolumeRecoveryPointError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateSnapshotFromVolumeRecoveryPointError {
+    fn from(err: io::Error) -> CreateSnapshotFromVolumeRecoveryPointError {
+        CreateSnapshotFromVolumeRecoveryPointError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateSnapshotFromVolumeRecoveryPointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2942,6 +2999,11 @@ impl From<CredentialsError> for CreateStorediSCSIVolumeError {
 impl From<HttpDispatchError> for CreateStorediSCSIVolumeError {
     fn from(err: HttpDispatchError) -> CreateStorediSCSIVolumeError {
         CreateStorediSCSIVolumeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateStorediSCSIVolumeError {
+    fn from(err: io::Error) -> CreateStorediSCSIVolumeError {
+        CreateStorediSCSIVolumeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateStorediSCSIVolumeError {
@@ -3022,6 +3084,11 @@ impl From<CredentialsError> for CreateTapeWithBarcodeError {
 impl From<HttpDispatchError> for CreateTapeWithBarcodeError {
     fn from(err: HttpDispatchError) -> CreateTapeWithBarcodeError {
         CreateTapeWithBarcodeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateTapeWithBarcodeError {
+    fn from(err: io::Error) -> CreateTapeWithBarcodeError {
+        CreateTapeWithBarcodeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTapeWithBarcodeError {
@@ -3106,6 +3173,11 @@ impl From<HttpDispatchError> for CreateTapesError {
         CreateTapesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateTapesError {
+    fn from(err: io::Error) -> CreateTapesError {
+        CreateTapesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3180,6 +3252,11 @@ impl From<CredentialsError> for DeleteBandwidthRateLimitError {
 impl From<HttpDispatchError> for DeleteBandwidthRateLimitError {
     fn from(err: HttpDispatchError) -> DeleteBandwidthRateLimitError {
         DeleteBandwidthRateLimitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBandwidthRateLimitError {
+    fn from(err: io::Error) -> DeleteBandwidthRateLimitError {
+        DeleteBandwidthRateLimitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBandwidthRateLimitError {
@@ -3260,6 +3337,11 @@ impl From<CredentialsError> for DeleteChapCredentialsError {
 impl From<HttpDispatchError> for DeleteChapCredentialsError {
     fn from(err: HttpDispatchError) -> DeleteChapCredentialsError {
         DeleteChapCredentialsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteChapCredentialsError {
+    fn from(err: io::Error) -> DeleteChapCredentialsError {
+        DeleteChapCredentialsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteChapCredentialsError {
@@ -3344,6 +3426,11 @@ impl From<HttpDispatchError> for DeleteFileShareError {
         DeleteFileShareError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteFileShareError {
+    fn from(err: io::Error) -> DeleteFileShareError {
+        DeleteFileShareError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3424,6 +3511,11 @@ impl From<HttpDispatchError> for DeleteGatewayError {
         DeleteGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteGatewayError {
+    fn from(err: io::Error) -> DeleteGatewayError {
+        DeleteGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3498,6 +3590,11 @@ impl From<CredentialsError> for DeleteSnapshotScheduleError {
 impl From<HttpDispatchError> for DeleteSnapshotScheduleError {
     fn from(err: HttpDispatchError) -> DeleteSnapshotScheduleError {
         DeleteSnapshotScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSnapshotScheduleError {
+    fn from(err: io::Error) -> DeleteSnapshotScheduleError {
+        DeleteSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSnapshotScheduleError {
@@ -3580,6 +3677,11 @@ impl From<HttpDispatchError> for DeleteTapeError {
         DeleteTapeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTapeError {
+    fn from(err: io::Error) -> DeleteTapeError {
+        DeleteTapeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTapeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3658,6 +3760,11 @@ impl From<CredentialsError> for DeleteTapeArchiveError {
 impl From<HttpDispatchError> for DeleteTapeArchiveError {
     fn from(err: HttpDispatchError) -> DeleteTapeArchiveError {
         DeleteTapeArchiveError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTapeArchiveError {
+    fn from(err: io::Error) -> DeleteTapeArchiveError {
+        DeleteTapeArchiveError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteTapeArchiveError {
@@ -3742,6 +3849,11 @@ impl From<HttpDispatchError> for DeleteVolumeError {
         DeleteVolumeError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteVolumeError {
+    fn from(err: io::Error) -> DeleteVolumeError {
+        DeleteVolumeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3816,6 +3928,11 @@ impl From<CredentialsError> for DescribeBandwidthRateLimitError {
 impl From<HttpDispatchError> for DescribeBandwidthRateLimitError {
     fn from(err: HttpDispatchError) -> DescribeBandwidthRateLimitError {
         DescribeBandwidthRateLimitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeBandwidthRateLimitError {
+    fn from(err: io::Error) -> DescribeBandwidthRateLimitError {
+        DescribeBandwidthRateLimitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeBandwidthRateLimitError {
@@ -3900,6 +4017,11 @@ impl From<HttpDispatchError> for DescribeCacheError {
         DescribeCacheError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeCacheError {
+    fn from(err: io::Error) -> DescribeCacheError {
+        DescribeCacheError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3974,6 +4096,11 @@ impl From<CredentialsError> for DescribeCachediSCSIVolumesError {
 impl From<HttpDispatchError> for DescribeCachediSCSIVolumesError {
     fn from(err: HttpDispatchError) -> DescribeCachediSCSIVolumesError {
         DescribeCachediSCSIVolumesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCachediSCSIVolumesError {
+    fn from(err: io::Error) -> DescribeCachediSCSIVolumesError {
+        DescribeCachediSCSIVolumesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCachediSCSIVolumesError {
@@ -4054,6 +4181,11 @@ impl From<HttpDispatchError> for DescribeChapCredentialsError {
         DescribeChapCredentialsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeChapCredentialsError {
+    fn from(err: io::Error) -> DescribeChapCredentialsError {
+        DescribeChapCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4132,6 +4264,11 @@ impl From<HttpDispatchError> for DescribeGatewayInformationError {
         DescribeGatewayInformationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeGatewayInformationError {
+    fn from(err: io::Error) -> DescribeGatewayInformationError {
+        DescribeGatewayInformationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeGatewayInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4208,6 +4345,11 @@ impl From<CredentialsError> for DescribeMaintenanceStartTimeError {
 impl From<HttpDispatchError> for DescribeMaintenanceStartTimeError {
     fn from(err: HttpDispatchError) -> DescribeMaintenanceStartTimeError {
         DescribeMaintenanceStartTimeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeMaintenanceStartTimeError {
+    fn from(err: io::Error) -> DescribeMaintenanceStartTimeError {
+        DescribeMaintenanceStartTimeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeMaintenanceStartTimeError {
@@ -4290,6 +4432,11 @@ impl From<HttpDispatchError> for DescribeNFSFileSharesError {
         DescribeNFSFileSharesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeNFSFileSharesError {
+    fn from(err: io::Error) -> DescribeNFSFileSharesError {
+        DescribeNFSFileSharesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeNFSFileSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4368,6 +4515,11 @@ impl From<HttpDispatchError> for DescribeSnapshotScheduleError {
         DescribeSnapshotScheduleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeSnapshotScheduleError {
+    fn from(err: io::Error) -> DescribeSnapshotScheduleError {
+        DescribeSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4444,6 +4596,11 @@ impl From<CredentialsError> for DescribeStorediSCSIVolumesError {
 impl From<HttpDispatchError> for DescribeStorediSCSIVolumesError {
     fn from(err: HttpDispatchError) -> DescribeStorediSCSIVolumesError {
         DescribeStorediSCSIVolumesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeStorediSCSIVolumesError {
+    fn from(err: io::Error) -> DescribeStorediSCSIVolumesError {
+        DescribeStorediSCSIVolumesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeStorediSCSIVolumesError {
@@ -4526,6 +4683,11 @@ impl From<HttpDispatchError> for DescribeTapeArchivesError {
         DescribeTapeArchivesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTapeArchivesError {
+    fn from(err: io::Error) -> DescribeTapeArchivesError {
+        DescribeTapeArchivesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTapeArchivesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4602,6 +4764,11 @@ impl From<CredentialsError> for DescribeTapeRecoveryPointsError {
 impl From<HttpDispatchError> for DescribeTapeRecoveryPointsError {
     fn from(err: HttpDispatchError) -> DescribeTapeRecoveryPointsError {
         DescribeTapeRecoveryPointsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTapeRecoveryPointsError {
+    fn from(err: io::Error) -> DescribeTapeRecoveryPointsError {
+        DescribeTapeRecoveryPointsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTapeRecoveryPointsError {
@@ -4686,6 +4853,11 @@ impl From<HttpDispatchError> for DescribeTapesError {
         DescribeTapesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTapesError {
+    fn from(err: io::Error) -> DescribeTapesError {
+        DescribeTapesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4762,6 +4934,11 @@ impl From<CredentialsError> for DescribeUploadBufferError {
 impl From<HttpDispatchError> for DescribeUploadBufferError {
     fn from(err: HttpDispatchError) -> DescribeUploadBufferError {
         DescribeUploadBufferError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeUploadBufferError {
+    fn from(err: io::Error) -> DescribeUploadBufferError {
+        DescribeUploadBufferError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeUploadBufferError {
@@ -4846,6 +5023,11 @@ impl From<HttpDispatchError> for DescribeVTLDevicesError {
         DescribeVTLDevicesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVTLDevicesError {
+    fn from(err: io::Error) -> DescribeVTLDevicesError {
+        DescribeVTLDevicesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVTLDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4922,6 +5104,11 @@ impl From<CredentialsError> for DescribeWorkingStorageError {
 impl From<HttpDispatchError> for DescribeWorkingStorageError {
     fn from(err: HttpDispatchError) -> DescribeWorkingStorageError {
         DescribeWorkingStorageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeWorkingStorageError {
+    fn from(err: io::Error) -> DescribeWorkingStorageError {
+        DescribeWorkingStorageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeWorkingStorageError {
@@ -5006,6 +5193,11 @@ impl From<HttpDispatchError> for DisableGatewayError {
         DisableGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisableGatewayError {
+    fn from(err: io::Error) -> DisableGatewayError {
+        DisableGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisableGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5084,6 +5276,11 @@ impl From<CredentialsError> for ListFileSharesError {
 impl From<HttpDispatchError> for ListFileSharesError {
     fn from(err: HttpDispatchError) -> ListFileSharesError {
         ListFileSharesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListFileSharesError {
+    fn from(err: io::Error) -> ListFileSharesError {
+        ListFileSharesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListFileSharesError {
@@ -5166,6 +5363,11 @@ impl From<HttpDispatchError> for ListGatewaysError {
         ListGatewaysError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListGatewaysError {
+    fn from(err: io::Error) -> ListGatewaysError {
+        ListGatewaysError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5244,6 +5446,11 @@ impl From<CredentialsError> for ListLocalDisksError {
 impl From<HttpDispatchError> for ListLocalDisksError {
     fn from(err: HttpDispatchError) -> ListLocalDisksError {
         ListLocalDisksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListLocalDisksError {
+    fn from(err: io::Error) -> ListLocalDisksError {
+        ListLocalDisksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListLocalDisksError {
@@ -5326,6 +5533,11 @@ impl From<HttpDispatchError> for ListTagsForResourceError {
         ListTagsForResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5406,6 +5618,11 @@ impl From<HttpDispatchError> for ListTapesError {
         ListTapesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListTapesError {
+    fn from(err: io::Error) -> ListTapesError {
+        ListTapesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5484,6 +5701,11 @@ impl From<HttpDispatchError> for ListVolumeInitiatorsError {
         ListVolumeInitiatorsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListVolumeInitiatorsError {
+    fn from(err: io::Error) -> ListVolumeInitiatorsError {
+        ListVolumeInitiatorsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListVolumeInitiatorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5560,6 +5782,11 @@ impl From<CredentialsError> for ListVolumeRecoveryPointsError {
 impl From<HttpDispatchError> for ListVolumeRecoveryPointsError {
     fn from(err: HttpDispatchError) -> ListVolumeRecoveryPointsError {
         ListVolumeRecoveryPointsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListVolumeRecoveryPointsError {
+    fn from(err: io::Error) -> ListVolumeRecoveryPointsError {
+        ListVolumeRecoveryPointsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListVolumeRecoveryPointsError {
@@ -5644,6 +5871,11 @@ impl From<HttpDispatchError> for ListVolumesError {
         ListVolumesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListVolumesError {
+    fn from(err: io::Error) -> ListVolumesError {
+        ListVolumesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5724,6 +5956,11 @@ impl From<HttpDispatchError> for RefreshCacheError {
         RefreshCacheError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RefreshCacheError {
+    fn from(err: io::Error) -> RefreshCacheError {
+        RefreshCacheError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RefreshCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5798,6 +6035,11 @@ impl From<CredentialsError> for RemoveTagsFromResourceError {
 impl From<HttpDispatchError> for RemoveTagsFromResourceError {
     fn from(err: HttpDispatchError) -> RemoveTagsFromResourceError {
         RemoveTagsFromResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveTagsFromResourceError {
+    fn from(err: io::Error) -> RemoveTagsFromResourceError {
+        RemoveTagsFromResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -5880,6 +6122,11 @@ impl From<HttpDispatchError> for ResetCacheError {
         ResetCacheError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ResetCacheError {
+    fn from(err: io::Error) -> ResetCacheError {
+        ResetCacheError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ResetCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5960,6 +6207,11 @@ impl From<HttpDispatchError> for RetrieveTapeArchiveError {
         RetrieveTapeArchiveError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RetrieveTapeArchiveError {
+    fn from(err: io::Error) -> RetrieveTapeArchiveError {
+        RetrieveTapeArchiveError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RetrieveTapeArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6038,6 +6290,11 @@ impl From<HttpDispatchError> for RetrieveTapeRecoveryPointError {
         RetrieveTapeRecoveryPointError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RetrieveTapeRecoveryPointError {
+    fn from(err: io::Error) -> RetrieveTapeRecoveryPointError {
+        RetrieveTapeRecoveryPointError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RetrieveTapeRecoveryPointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6114,6 +6371,11 @@ impl From<CredentialsError> for SetLocalConsolePasswordError {
 impl From<HttpDispatchError> for SetLocalConsolePasswordError {
     fn from(err: HttpDispatchError) -> SetLocalConsolePasswordError {
         SetLocalConsolePasswordError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetLocalConsolePasswordError {
+    fn from(err: io::Error) -> SetLocalConsolePasswordError {
+        SetLocalConsolePasswordError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetLocalConsolePasswordError {
@@ -6198,6 +6460,11 @@ impl From<HttpDispatchError> for ShutdownGatewayError {
         ShutdownGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ShutdownGatewayError {
+    fn from(err: io::Error) -> ShutdownGatewayError {
+        ShutdownGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ShutdownGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6278,6 +6545,11 @@ impl From<HttpDispatchError> for StartGatewayError {
         StartGatewayError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StartGatewayError {
+    fn from(err: io::Error) -> StartGatewayError {
+        StartGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StartGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6352,6 +6624,11 @@ impl From<CredentialsError> for UpdateBandwidthRateLimitError {
 impl From<HttpDispatchError> for UpdateBandwidthRateLimitError {
     fn from(err: HttpDispatchError) -> UpdateBandwidthRateLimitError {
         UpdateBandwidthRateLimitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateBandwidthRateLimitError {
+    fn from(err: io::Error) -> UpdateBandwidthRateLimitError {
+        UpdateBandwidthRateLimitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateBandwidthRateLimitError {
@@ -6434,6 +6711,11 @@ impl From<HttpDispatchError> for UpdateChapCredentialsError {
         UpdateChapCredentialsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateChapCredentialsError {
+    fn from(err: io::Error) -> UpdateChapCredentialsError {
+        UpdateChapCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6510,6 +6792,11 @@ impl From<CredentialsError> for UpdateGatewayInformationError {
 impl From<HttpDispatchError> for UpdateGatewayInformationError {
     fn from(err: HttpDispatchError) -> UpdateGatewayInformationError {
         UpdateGatewayInformationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateGatewayInformationError {
+    fn from(err: io::Error) -> UpdateGatewayInformationError {
+        UpdateGatewayInformationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateGatewayInformationError {
@@ -6590,6 +6877,11 @@ impl From<HttpDispatchError> for UpdateGatewaySoftwareNowError {
         UpdateGatewaySoftwareNowError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateGatewaySoftwareNowError {
+    fn from(err: io::Error) -> UpdateGatewaySoftwareNowError {
+        UpdateGatewaySoftwareNowError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateGatewaySoftwareNowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6666,6 +6958,11 @@ impl From<CredentialsError> for UpdateMaintenanceStartTimeError {
 impl From<HttpDispatchError> for UpdateMaintenanceStartTimeError {
     fn from(err: HttpDispatchError) -> UpdateMaintenanceStartTimeError {
         UpdateMaintenanceStartTimeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateMaintenanceStartTimeError {
+    fn from(err: io::Error) -> UpdateMaintenanceStartTimeError {
+        UpdateMaintenanceStartTimeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateMaintenanceStartTimeError {
@@ -6750,6 +7047,11 @@ impl From<HttpDispatchError> for UpdateNFSFileShareError {
         UpdateNFSFileShareError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateNFSFileShareError {
+    fn from(err: io::Error) -> UpdateNFSFileShareError {
+        UpdateNFSFileShareError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateNFSFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6826,6 +7128,11 @@ impl From<CredentialsError> for UpdateSnapshotScheduleError {
 impl From<HttpDispatchError> for UpdateSnapshotScheduleError {
     fn from(err: HttpDispatchError) -> UpdateSnapshotScheduleError {
         UpdateSnapshotScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateSnapshotScheduleError {
+    fn from(err: io::Error) -> UpdateSnapshotScheduleError {
+        UpdateSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateSnapshotScheduleError {
@@ -6908,6 +7215,11 @@ impl From<CredentialsError> for UpdateVTLDeviceTypeError {
 impl From<HttpDispatchError> for UpdateVTLDeviceTypeError {
     fn from(err: HttpDispatchError) -> UpdateVTLDeviceTypeError {
         UpdateVTLDeviceTypeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateVTLDeviceTypeError {
+    fn from(err: io::Error) -> UpdateVTLDeviceTypeError {
+        UpdateVTLDeviceTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateVTLDeviceTypeError {
@@ -7358,15 +7670,20 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ActivateGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ActivateGatewayOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ActivateGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ActivateGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7383,15 +7700,20 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<AddCacheOutput>(String::from_utf8_lossy(&response.body)
-                                                              .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddCacheOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(AddCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddCacheError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7409,15 +7731,20 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddTagsToResourceOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7436,15 +7763,20 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddUploadBufferOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AddUploadBufferError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddUploadBufferError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7463,15 +7795,20 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddWorkingStorageOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(AddWorkingStorageError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddWorkingStorageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7490,15 +7827,20 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelArchivalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CancelArchivalOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CancelArchivalError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelArchivalError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7517,15 +7859,20 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelRetrievalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CancelRetrievalOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CancelRetrievalError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelRetrievalError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7546,13 +7893,20 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateCachediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateCachediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateCachediSCSIVolumeOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCachediSCSIVolumeError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -7570,15 +7924,20 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateNFSFileShareOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateNFSFileShareError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateNFSFileShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7597,15 +7956,20 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSnapshotOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateSnapshotOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7623,13 +7987,19 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSnapshotFromVolumeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateSnapshotFromVolumeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateSnapshotFromVolumeRecoveryPointOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateSnapshotFromVolumeRecoveryPointError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7649,13 +8019,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateStorediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateStorediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateStorediSCSIVolumeOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStorediSCSIVolumeError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -7675,15 +8052,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTapeWithBarcodeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateTapeWithBarcodeOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateTapeWithBarcodeError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTapeWithBarcodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7702,13 +8082,21 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateTapesOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTapesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7728,13 +8116,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteBandwidthRateLimitOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBandwidthRateLimitError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -7754,15 +8149,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteChapCredentialsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteChapCredentialsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteChapCredentialsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7781,15 +8179,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteFileShareOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteFileShareError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteFileShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7808,14 +8211,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteGatewayOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7836,15 +8245,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteSnapshotScheduleOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSnapshotScheduleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7861,13 +8273,21 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTapeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteTapeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteTapeOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTapeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7885,15 +8305,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteTapeArchiveOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteTapeArchiveError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTapeArchiveError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7912,14 +8337,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteVolumeOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7940,13 +8371,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeBandwidthRateLimitOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeBandwidthRateLimitError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -7964,14 +8402,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeCacheOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCacheError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7992,13 +8436,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCachediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeCachediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeCachediSCSIVolumesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCachediSCSIVolumesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -8018,13 +8469,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeChapCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeChapCredentialsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeChapCredentialsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -8044,13 +8502,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeGatewayInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeGatewayInformationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeGatewayInformationError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -8070,13 +8535,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeMaintenanceStartTimeOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -8096,15 +8568,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeNFSFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeNFSFileSharesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeNFSFileSharesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeNFSFileSharesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8125,13 +8600,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeSnapshotScheduleOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSnapshotScheduleError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -8151,13 +8633,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStorediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeStorediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeStorediSCSIVolumesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStorediSCSIVolumesError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -8176,15 +8665,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTapeArchivesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTapeArchivesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeTapeArchivesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTapeArchivesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8205,13 +8697,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTapeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeTapeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTapeRecoveryPointsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTapeRecoveryPointsError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -8229,14 +8728,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTapesOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTapesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8256,15 +8761,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeUploadBufferOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeUploadBufferError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeUploadBufferError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8283,15 +8791,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeVTLDevicesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeVTLDevicesOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeVTLDevicesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVTLDevicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8312,15 +8825,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeWorkingStorageOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeWorkingStorageError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeWorkingStorageError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8339,15 +8855,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisableGatewayOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DisableGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8366,15 +8887,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListFileSharesOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListFileSharesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListFileSharesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8393,14 +8919,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListGatewaysOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListGatewaysOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListGatewaysError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8419,15 +8951,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListLocalDisksOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListLocalDisksOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListLocalDisksError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListLocalDisksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8447,15 +8984,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForResourceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8472,15 +9012,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListTapesOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTapesOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(ListTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTapesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8499,15 +9044,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVolumeInitiatorsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListVolumeInitiatorsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListVolumeInitiatorsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListVolumeInitiatorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8528,13 +9076,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVolumeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListVolumeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListVolumeRecoveryPointsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListVolumeRecoveryPointsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -8552,13 +9107,21 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListVolumesOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListVolumesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8576,14 +9139,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RefreshCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RefreshCacheOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RefreshCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RefreshCacheError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8604,15 +9173,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveTagsFromResourceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8629,13 +9201,21 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ResetCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ResetCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ResetCacheOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetCacheError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8654,15 +9234,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetrieveTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RetrieveTapeArchiveOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(RetrieveTapeArchiveError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RetrieveTapeArchiveError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8683,13 +9266,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetrieveTapeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RetrieveTapeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RetrieveTapeRecoveryPointOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RetrieveTapeRecoveryPointError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -8709,13 +9299,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SetLocalConsolePasswordOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(SetLocalConsolePasswordError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SetLocalConsolePasswordOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetLocalConsolePasswordError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -8733,15 +9330,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ShutdownGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ShutdownGatewayOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ShutdownGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ShutdownGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8760,14 +9362,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartGatewayOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(StartGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartGatewayError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8788,13 +9396,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateBandwidthRateLimitOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateBandwidthRateLimitError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -8814,15 +9429,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateChapCredentialsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateChapCredentialsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateChapCredentialsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8843,13 +9461,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateGatewayInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateGatewayInformationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateGatewayInformationError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -8869,13 +9494,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateGatewaySoftwareNowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateGatewaySoftwareNowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateGatewaySoftwareNowOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateGatewaySoftwareNowError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -8895,13 +9527,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateMaintenanceStartTimeOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -8919,15 +9558,20 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateNFSFileShareOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateNFSFileShareError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateNFSFileShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8948,15 +9592,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateSnapshotScheduleOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateSnapshotScheduleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8976,15 +9623,18 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateVTLDeviceTypeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateVTLDeviceTypeOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateVTLDeviceTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateVTLDeviceTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1339,6 +1341,11 @@ impl From<HttpDispatchError> for BatchGetItemError {
         BatchGetItemError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchGetItemError {
+    fn from(err: io::Error) -> BatchGetItemError {
+        BatchGetItemError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchGetItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1426,6 +1433,11 @@ impl From<HttpDispatchError> for BatchWriteItemError {
         BatchWriteItemError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for BatchWriteItemError {
+    fn from(err: io::Error) -> BatchWriteItemError {
+        BatchWriteItemError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for BatchWriteItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1511,6 +1523,11 @@ impl From<CredentialsError> for CreateTableError {
 impl From<HttpDispatchError> for CreateTableError {
     fn from(err: HttpDispatchError) -> CreateTableError {
         CreateTableError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateTableError {
+    fn from(err: io::Error) -> CreateTableError {
+        CreateTableError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTableError {
@@ -1603,6 +1620,11 @@ impl From<CredentialsError> for DeleteItemError {
 impl From<HttpDispatchError> for DeleteItemError {
     fn from(err: HttpDispatchError) -> DeleteItemError {
         DeleteItemError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteItemError {
+    fn from(err: io::Error) -> DeleteItemError {
+        DeleteItemError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteItemError {
@@ -1698,6 +1720,11 @@ impl From<HttpDispatchError> for DeleteTableError {
         DeleteTableError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteTableError {
+    fn from(err: io::Error) -> DeleteTableError {
+        DeleteTableError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1773,6 +1800,11 @@ impl From<CredentialsError> for DescribeLimitsError {
 impl From<HttpDispatchError> for DescribeLimitsError {
     fn from(err: HttpDispatchError) -> DescribeLimitsError {
         DescribeLimitsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLimitsError {
+    fn from(err: io::Error) -> DescribeLimitsError {
+        DescribeLimitsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLimitsError {
@@ -1854,6 +1886,11 @@ impl From<HttpDispatchError> for DescribeTableError {
         DescribeTableError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTableError {
+    fn from(err: io::Error) -> DescribeTableError {
+        DescribeTableError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1932,6 +1969,11 @@ impl From<CredentialsError> for DescribeTimeToLiveError {
 impl From<HttpDispatchError> for DescribeTimeToLiveError {
     fn from(err: HttpDispatchError) -> DescribeTimeToLiveError {
         DescribeTimeToLiveError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTimeToLiveError {
+    fn from(err: io::Error) -> DescribeTimeToLiveError {
+        DescribeTimeToLiveError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTimeToLiveError {
@@ -2019,6 +2061,11 @@ impl From<HttpDispatchError> for GetItemError {
         GetItemError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetItemError {
+    fn from(err: io::Error) -> GetItemError {
+        GetItemError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2091,6 +2138,11 @@ impl From<CredentialsError> for ListTablesError {
 impl From<HttpDispatchError> for ListTablesError {
     fn from(err: HttpDispatchError) -> ListTablesError {
         ListTablesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTablesError {
+    fn from(err: io::Error) -> ListTablesError {
+        ListTablesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTablesError {
@@ -2170,6 +2222,11 @@ impl From<CredentialsError> for ListTagsOfResourceError {
 impl From<HttpDispatchError> for ListTagsOfResourceError {
     fn from(err: HttpDispatchError) -> ListTagsOfResourceError {
         ListTagsOfResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsOfResourceError {
+    fn from(err: io::Error) -> ListTagsOfResourceError {
+        ListTagsOfResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsOfResourceError {
@@ -2267,6 +2324,11 @@ impl From<HttpDispatchError> for PutItemError {
         PutItemError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutItemError {
+    fn from(err: io::Error) -> PutItemError {
+        PutItemError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2353,6 +2415,11 @@ impl From<HttpDispatchError> for QueryError {
         QueryError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for QueryError {
+    fn from(err: io::Error) -> QueryError {
+        QueryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for QueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2435,6 +2502,11 @@ impl From<CredentialsError> for ScanError {
 impl From<HttpDispatchError> for ScanError {
     fn from(err: HttpDispatchError) -> ScanError {
         ScanError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ScanError {
+    fn from(err: io::Error) -> ScanError {
+        ScanError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ScanError {
@@ -2528,6 +2600,11 @@ impl From<HttpDispatchError> for TagResourceError {
         TagResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2618,6 +2695,11 @@ impl From<CredentialsError> for UntagResourceError {
 impl From<HttpDispatchError> for UntagResourceError {
     fn from(err: HttpDispatchError) -> UntagResourceError {
         UntagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -2713,6 +2795,11 @@ impl From<HttpDispatchError> for UpdateItemError {
         UpdateItemError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateItemError {
+    fn from(err: io::Error) -> UpdateItemError {
+        UpdateItemError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2806,6 +2893,11 @@ impl From<HttpDispatchError> for UpdateTableError {
         UpdateTableError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateTableError {
+    fn from(err: io::Error) -> UpdateTableError {
+        UpdateTableError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2896,6 +2988,11 @@ impl From<CredentialsError> for UpdateTimeToLiveError {
 impl From<HttpDispatchError> for UpdateTimeToLiveError {
     fn from(err: HttpDispatchError) -> UpdateTimeToLiveError {
         UpdateTimeToLiveError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateTimeToLiveError {
+    fn from(err: io::Error) -> UpdateTimeToLiveError {
+        UpdateTimeToLiveError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateTimeToLiveError {
@@ -3052,14 +3149,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetItemOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchGetItemOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(BatchGetItemError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchGetItemError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3078,15 +3181,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchWriteItemOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchWriteItemOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(BatchWriteItemError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchWriteItemError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3105,13 +3213,21 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTableOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateTableError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateTableOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3127,13 +3243,21 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteItemOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteItemError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteItemOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteItemError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3151,13 +3275,21 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTableOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteTableOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3172,15 +3304,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLimitsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeLimitsOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3199,14 +3336,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTableOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTableOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3225,15 +3368,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTimeToLiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTimeToLiveOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeTimeToLiveError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTimeToLiveError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3250,15 +3398,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetItemOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetItemOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetItemError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetItemError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3274,13 +3427,21 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTablesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListTablesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTablesOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTablesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3298,15 +3459,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsOfResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsOfResourceOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListTagsOfResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsOfResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3323,15 +3489,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<PutItemOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutItemOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(PutItemError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutItemError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3347,15 +3518,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<QueryOutput>(String::from_utf8_lossy(&response.body)
-                                                           .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<QueryOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(QueryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(QueryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3371,15 +3547,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ScanOutput>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ScanOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(ScanError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ScanError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3395,11 +3576,15 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3415,12 +3600,14 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3437,13 +3624,21 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateItemOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateItemError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateItemOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateItemError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3461,13 +3656,21 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateTableOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateTableError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateTableOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -3485,15 +3688,20 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateTimeToLiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateTimeToLiveOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateTimeToLiveError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateTimeToLiveError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

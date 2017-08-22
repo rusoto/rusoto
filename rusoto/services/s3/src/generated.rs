@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -40,7 +42,7 @@ enum DeserializerNext {
 use md5;
 use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};
 #[doc="Specifies the days since the initiation of an Incomplete Multipart Upload that Lifecycle will wait before permanently removing all parts of the upload."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AbortIncompleteMultipartUpload {
     #[doc="Indicates the number of days that must pass since initiation for Lifecycle to abort an Incomplete Multipart Upload."]
     pub days_after_initiation: Option<i64>,
@@ -104,7 +106,7 @@ impl AbortIncompleteMultipartUploadSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AbortMultipartUploadOutput {
     pub request_charged: Option<String>,
 }
@@ -125,7 +127,7 @@ impl AbortMultipartUploadOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AbortMultipartUploadRequest {
     pub bucket: String,
     pub key: String,
@@ -133,7 +135,7 @@ pub struct AbortMultipartUploadRequest {
     pub upload_id: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AccelerateConfiguration {
     #[doc="The accelerate configuration of the bucket."]
     pub status: Option<String>,
@@ -153,7 +155,7 @@ impl AccelerateConfigurationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AccessControlPolicy {
     #[doc="A list of grants."]
     pub grants: Option<Vec<Grant>>,
@@ -400,7 +402,7 @@ impl AllowedOriginsSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AnalyticsAndOperator {
     #[doc="The prefix to use when evaluating an AND predicate."]
     pub prefix: Option<String>,
@@ -470,7 +472,7 @@ impl AnalyticsAndOperatorSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AnalyticsConfiguration {
     #[doc="The filter used to describe a set of objects for analyses. A filter must have exactly one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided, all objects will be considered in any analysis."]
     pub filter: Option<AnalyticsFilter>,
@@ -576,7 +578,7 @@ impl AnalyticsConfigurationListDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AnalyticsExportDestination {
     #[doc="A destination signifying output to an S3 bucket."]
     pub s3_bucket_destination: AnalyticsS3BucketDestination,
@@ -639,7 +641,7 @@ impl AnalyticsExportDestinationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AnalyticsFilter {
     #[doc="A conjunction (logical AND) of predicates, which is used in evaluating an analytics filter. The operator must have at least two predicates."]
     pub and: Option<AnalyticsAndOperator>,
@@ -744,7 +746,7 @@ impl AnalyticsIdSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct AnalyticsS3BucketDestination {
     #[doc="The Amazon resource name (ARN) of the bucket to which data is exported."]
     pub bucket: String,
@@ -855,6 +857,27 @@ impl AnalyticsS3ExportFileFormatSerializer {
     }
 }
 
+pub struct StreamingBody(Box<Read>);
+
+impl fmt::Debug for StreamingBody {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "<Body: streaming content>")
+    }
+}
+
+impl ::std::ops::Deref for StreamingBody {
+    type Target = Box<Read>;
+
+    fn deref(&self) -> &Box<Read> {
+        &self.0
+    }
+}
+
+impl ::std::ops::DerefMut for StreamingBody {
+    fn deref_mut(&mut self) -> &mut Box<Read> {
+        &mut self.0
+    }
+}
 
 pub struct BodySerializer;
 impl BodySerializer {
@@ -866,7 +889,7 @@ impl BodySerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Bucket {
     #[doc="Date the bucket was created."]
     pub creation_date: Option<String>,
@@ -946,7 +969,7 @@ impl BucketAccelerateStatusSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct BucketLifecycleConfiguration {
     pub rules: Vec<LifecycleRule>,
 }
@@ -988,7 +1011,7 @@ impl BucketLocationConstraintSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct BucketLoggingStatus {
     pub logging_enabled: Option<LoggingEnabled>,
 }
@@ -1123,7 +1146,7 @@ impl BucketsDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CORSConfiguration {
     pub cors_rules: Vec<CORSRule>,
 }
@@ -1140,7 +1163,7 @@ impl CORSConfigurationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CORSRule {
     #[doc="Specifies which headers are allowed in a pre-flight OPTIONS request."]
     pub allowed_headers: Option<Vec<String>>,
@@ -1305,7 +1328,7 @@ impl CloudFunctionSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CloudFunctionConfiguration {
     pub cloud_function: Option<String>,
     pub events: Option<Vec<String>>,
@@ -1429,7 +1452,7 @@ impl CodeDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CommonPrefix {
     pub prefix: Option<String>,
 }
@@ -1504,7 +1527,7 @@ impl CommonPrefixListDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CompleteMultipartUploadOutput {
     pub bucket: Option<String>,
     #[doc="Entity tag of the object."]
@@ -1574,7 +1597,7 @@ impl CompleteMultipartUploadOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CompleteMultipartUploadRequest {
     pub bucket: String,
     pub key: String,
@@ -1583,7 +1606,7 @@ pub struct CompleteMultipartUploadRequest {
     pub upload_id: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CompletedMultipartUpload {
     pub parts: Option<Vec<CompletedPart>>,
 }
@@ -1602,7 +1625,7 @@ impl CompletedMultipartUploadSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CompletedPart {
     #[doc="Entity tag returned when the part was uploaded."]
     pub e_tag: Option<String>,
@@ -1640,7 +1663,7 @@ impl CompletedPartListSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Condition {
     #[doc="The HTTP error code when the redirect is applied. In the event of an error, if the error code equals this value, then the specified redirect is applied. Required when parent element Condition is specified and sibling KeyPrefixEquals is not specified. If both are specified, then both must be true for the redirect to be applied."]
     pub http_error_code_returned_equals: Option<String>,
@@ -1712,7 +1735,7 @@ impl ConditionSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CopyObjectOutput {
     pub copy_object_result: Option<CopyObjectResult>,
     pub copy_source_version_id: Option<String>,
@@ -1774,7 +1797,7 @@ impl CopyObjectOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CopyObjectRequest {
     #[doc="The canned ACL to apply to the object."]
     pub acl: Option<String>,
@@ -1841,7 +1864,7 @@ pub struct CopyObjectRequest {
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CopyObjectResult {
     pub e_tag: Option<String>,
     pub last_modified: Option<String>,
@@ -1893,7 +1916,7 @@ impl CopyObjectResultDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CopyPartResult {
     #[doc="Entity tag of the object."]
     pub e_tag: Option<String>,
@@ -1947,7 +1970,7 @@ impl CopyPartResultDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateBucketConfiguration {
     #[doc="Specifies the region where the bucket will be created. If you don't specify a region, the bucket will be created in US Standard."]
     pub location_constraint: Option<String>,
@@ -1968,7 +1991,7 @@ impl CreateBucketConfigurationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateBucketOutput {
     pub location: Option<String>,
 }
@@ -1989,7 +2012,7 @@ impl CreateBucketOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateBucketRequest {
     #[doc="The canned ACL to apply to the bucket."]
     pub acl: Option<String>,
@@ -2007,7 +2030,7 @@ pub struct CreateBucketRequest {
     pub grant_write_acp: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateMultipartUploadOutput {
     #[doc="Date when multipart upload will become eligible for abort operation by lifecycle."]
     pub abort_date: Option<String>,
@@ -2080,7 +2103,7 @@ impl CreateMultipartUploadOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct CreateMultipartUploadRequest {
     #[doc="The canned ACL to apply to the object."]
     pub acl: Option<String>,
@@ -2214,7 +2237,7 @@ impl DaysAfterInitiationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Delete {
     pub objects: Vec<ObjectIdentifier>,
     #[doc="Element to enable quiet mode for the request. When you add this element, you must set its value to true."]
@@ -2236,7 +2259,7 @@ impl DeleteSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteBucketAnalyticsConfigurationRequest {
     #[doc="The name of the bucket from which an analytics configuration is deleted."]
     pub bucket: String,
@@ -2244,12 +2267,12 @@ pub struct DeleteBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteBucketCorsRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteBucketInventoryConfigurationRequest {
     #[doc="The name of the bucket containing the inventory configuration to delete."]
     pub bucket: String,
@@ -2257,12 +2280,12 @@ pub struct DeleteBucketInventoryConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteBucketLifecycleRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteBucketMetricsConfigurationRequest {
     #[doc="The name of the bucket containing the metrics configuration to delete."]
     pub bucket: String,
@@ -2270,27 +2293,27 @@ pub struct DeleteBucketMetricsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteBucketPolicyRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteBucketReplicationRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteBucketRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteBucketTaggingRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteBucketWebsiteRequest {
     pub bucket: String,
 }
@@ -2309,7 +2332,7 @@ impl DeleteMarkerDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteMarkerEntry {
     #[doc="Specifies whether the object is (true) or is not (false) the latest version of an object."]
     pub is_latest: Option<bool>,
@@ -2422,7 +2445,7 @@ impl DeleteMarkersDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteObjectOutput {
     #[doc="Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker."]
     pub delete_marker: Option<bool>,
@@ -2447,7 +2470,7 @@ impl DeleteObjectOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteObjectRequest {
     pub bucket: String,
     pub key: String,
@@ -2458,7 +2481,7 @@ pub struct DeleteObjectRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteObjectTaggingOutput {
     #[doc="The versionId of the object the tag-set was removed from."]
     pub version_id: Option<String>,
@@ -2480,7 +2503,7 @@ impl DeleteObjectTaggingOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteObjectTaggingRequest {
     pub bucket: String,
     pub key: String,
@@ -2488,7 +2511,7 @@ pub struct DeleteObjectTaggingRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteObjectsOutput {
     pub deleted: Option<Vec<DeletedObject>>,
     pub errors: Option<Vec<S3Error>>,
@@ -2542,7 +2565,7 @@ impl DeleteObjectsOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeleteObjectsRequest {
     pub bucket: String,
     pub delete: Delete,
@@ -2551,7 +2574,7 @@ pub struct DeleteObjectsRequest {
     pub request_payer: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct DeletedObject {
     pub delete_marker: Option<bool>,
     pub delete_marker_version_id: Option<String>,
@@ -2668,7 +2691,7 @@ impl DelimiterSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Destination {
     #[doc="Amazon resource name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule."]
     pub bucket: String,
@@ -2837,7 +2860,7 @@ impl EncodingTypeSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct S3Error {
     pub code: Option<String>,
     pub key: Option<String>,
@@ -2898,7 +2921,7 @@ impl S3ErrorDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ErrorDocument {
     #[doc="The object key name to use when a 4XX class error occurs."]
     pub key: String,
@@ -3179,7 +3202,7 @@ impl FetchOwnerSerializer {
 }
 
 #[doc="Container for key value pair that defines the criteria for the filter rule."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct FilterRule {
     #[doc="Object key name prefix or suffix identifying one or more objects to which the filtering rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide."]
     pub name: Option<String>,
@@ -3340,7 +3363,7 @@ impl FilterRuleValueSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketAccelerateConfigurationOutput {
     #[doc="The accelerate configuration of the bucket."]
     pub status: Option<String>,
@@ -3390,13 +3413,13 @@ impl GetBucketAccelerateConfigurationOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketAccelerateConfigurationRequest {
     #[doc="Name of the bucket for which the accelerate configuration is retrieved."]
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketAclOutput {
     #[doc="A list of grants."]
     pub grants: Option<Vec<Grant>>,
@@ -3448,12 +3471,12 @@ impl GetBucketAclOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketAclRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketAnalyticsConfigurationOutput {
     #[doc="The configuration and any analyses for the analytics filter."]
     pub analytics_configuration: Option<AnalyticsConfiguration>,
@@ -3503,7 +3526,7 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketAnalyticsConfigurationRequest {
     #[doc="The name of the bucket from which an analytics configuration is retrieved."]
     pub bucket: String,
@@ -3511,7 +3534,7 @@ pub struct GetBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketCorsOutput {
     pub cors_rules: Option<Vec<CORSRule>>,
 }
@@ -3558,12 +3581,12 @@ impl GetBucketCorsOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketCorsRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketInventoryConfigurationOutput {
     #[doc="Specifies the inventory configuration."]
     pub inventory_configuration: Option<InventoryConfiguration>,
@@ -3613,7 +3636,7 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketInventoryConfigurationRequest {
     #[doc="The name of the bucket containing the inventory configuration to retrieve."]
     pub bucket: String,
@@ -3621,7 +3644,7 @@ pub struct GetBucketInventoryConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketLifecycleConfigurationOutput {
     pub rules: Option<Vec<LifecycleRule>>,
 }
@@ -3669,12 +3692,12 @@ impl GetBucketLifecycleConfigurationOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketLifecycleConfigurationRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketLifecycleOutput {
     pub rules: Option<Vec<Rule>>,
 }
@@ -3720,12 +3743,12 @@ impl GetBucketLifecycleOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketLifecycleRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketLocationOutput {
     pub location_constraint: Option<String>,
 }
@@ -3743,12 +3766,12 @@ impl GetBucketLocationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketLocationRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketLoggingOutput {
     pub logging_enabled: Option<LoggingEnabled>,
 }
@@ -3796,12 +3819,12 @@ impl GetBucketLoggingOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketLoggingRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketMetricsConfigurationOutput {
     #[doc="Specifies the metrics configuration."]
     pub metrics_configuration: Option<MetricsConfiguration>,
@@ -3851,7 +3874,7 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketMetricsConfigurationRequest {
     #[doc="The name of the bucket containing the metrics configuration to retrieve."]
     pub bucket: String,
@@ -3859,24 +3882,24 @@ pub struct GetBucketMetricsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketNotificationConfigurationRequest {
     #[doc="Name of the bucket to get the notification configuration for."]
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketPolicyOutput {
     #[doc="The bucket policy as a JSON document."]
     pub policy: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketPolicyRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketReplicationOutput {
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
@@ -3922,12 +3945,12 @@ impl GetBucketReplicationOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketReplicationRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketRequestPaymentOutput {
     #[doc="Specifies who pays for the download and request fees."]
     pub payer: Option<String>,
@@ -3974,12 +3997,12 @@ impl GetBucketRequestPaymentOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketRequestPaymentRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketTaggingOutput {
     pub tag_set: Vec<Tag>,
 }
@@ -4025,12 +4048,12 @@ impl GetBucketTaggingOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketTaggingRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketVersioningOutput {
     #[doc="Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned."]
     pub mfa_delete: Option<String>,
@@ -4086,12 +4109,12 @@ impl GetBucketVersioningOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketVersioningRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketWebsiteOutput {
     pub error_document: Option<ErrorDocument>,
     pub index_document: Option<IndexDocument>,
@@ -4157,12 +4180,12 @@ impl GetBucketWebsiteOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetBucketWebsiteRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetObjectAclOutput {
     #[doc="A list of grants."]
     pub grants: Option<Vec<Grant>>,
@@ -4215,7 +4238,7 @@ impl GetObjectAclOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetObjectAclRequest {
     pub bucket: String,
     pub key: String,
@@ -4224,11 +4247,11 @@ pub struct GetObjectAclRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetObjectOutput {
     pub accept_ranges: Option<String>,
     #[doc="Object data."]
-    pub body: Option<Vec<u8>>,
+    pub body: Option<StreamingBody>,
     #[doc="Specifies caching behavior along the request/reply chain."]
     pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
@@ -4280,7 +4303,7 @@ pub struct GetObjectOutput {
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetObjectRequest {
     pub bucket: String,
     #[doc="Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed)."]
@@ -4319,7 +4342,7 @@ pub struct GetObjectRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetObjectTaggingOutput {
     pub tag_set: Vec<Tag>,
     pub version_id: Option<String>,
@@ -4366,27 +4389,27 @@ impl GetObjectTaggingOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetObjectTaggingRequest {
     pub bucket: String,
     pub key: String,
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetObjectTorrentOutput {
-    pub body: Option<Vec<u8>>,
+    pub body: Option<StreamingBody>,
     pub request_charged: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GetObjectTorrentRequest {
     pub bucket: String,
     pub key: String,
     pub request_payer: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct GlacierJobParameters {
     #[doc="Glacier retrieval tier at which the restore will be processed."]
     pub tier: String,
@@ -4404,7 +4427,7 @@ impl GlacierJobParametersSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Grant {
     pub grantee: Option<Grantee>,
     #[doc="Specifies the permission given to the grantee."]
@@ -4474,7 +4497,7 @@ impl GrantSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Grantee {
     #[doc="Screen name of the grantee."]
     pub display_name: Option<String>,
@@ -4625,12 +4648,12 @@ impl GrantsSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct HeadBucketRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct HeadObjectOutput {
     pub accept_ranges: Option<String>,
     #[doc="Specifies caching behavior along the request/reply chain."]
@@ -4696,7 +4719,7 @@ impl HeadObjectOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct HeadObjectRequest {
     pub bucket: String,
     #[doc="Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed)."]
@@ -4823,7 +4846,7 @@ impl IDSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct IndexDocument {
     #[doc="A suffix that is appended to a request that is for a directory on the website endpoint (e.g. if the suffix is index.html and you make a request to samplebucket/images/ the data that is returned will be for the object with the key name images/index.html) The suffix must not be empty and must not include a slash character."]
     pub suffix: String,
@@ -4896,7 +4919,7 @@ impl InitiatedDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Initiator {
     #[doc="Name of the Principal."]
     pub display_name: Option<String>,
@@ -4950,7 +4973,7 @@ impl InitiatorDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct InventoryConfiguration {
     #[doc="Contains information about where to publish the inventory results."]
     pub destination: InventoryDestination,
@@ -5086,7 +5109,7 @@ impl InventoryConfigurationListDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct InventoryDestination {
     #[doc="Contains the bucket name, file format, bucket owner (optional), and prefix (optional) where inventory results are published."]
     pub s3_bucket_destination: InventoryS3BucketDestination,
@@ -5149,7 +5172,7 @@ impl InventoryDestinationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct InventoryFilter {
     #[doc="The prefix that an object must have to be included in the inventory results."]
     pub prefix: String,
@@ -5390,7 +5413,7 @@ impl InventoryOptionalFieldsSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct InventoryS3BucketDestination {
     #[doc="The ID of the account that owns the destination bucket."]
     pub account_id: Option<String>,
@@ -5474,7 +5497,7 @@ impl InventoryS3BucketDestinationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct InventorySchedule {
     #[doc="Specifies how frequently inventory results are produced."]
     pub frequency: String,
@@ -5678,7 +5701,7 @@ impl LambdaFunctionArnSerializer {
 }
 
 #[doc="Container for specifying the AWS Lambda notification configuration."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct LambdaFunctionConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
@@ -5817,7 +5840,7 @@ impl LastModifiedDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct LifecycleConfiguration {
     pub rules: Vec<Rule>,
 }
@@ -5834,7 +5857,7 @@ impl LifecycleConfigurationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct LifecycleExpiration {
     #[doc="Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format."]
     pub date: Option<String>,
@@ -5912,7 +5935,7 @@ impl LifecycleExpirationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct LifecycleRule {
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     pub expiration: Option<LifecycleExpiration>,
@@ -6032,7 +6055,7 @@ impl LifecycleRuleSerializer {
 }
 
 #[doc="This is used in a Lifecycle Rule Filter to apply a logical AND to two or more predicates. The Lifecycle Rule will apply to any object matching all of the predicates configured inside the And operator."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct LifecycleRuleAndOperator {
     pub prefix: Option<String>,
     #[doc="All of these tags must exist in the object's tag set in order for the rule to apply."]
@@ -6102,7 +6125,7 @@ impl LifecycleRuleAndOperatorSerializer {
 }
 
 #[doc="The Filter is used to identify objects that a Lifecycle Rule applies to. A Filter must have exactly one of Prefix, Tag, or And specified."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct LifecycleRuleFilter {
     pub and: Option<LifecycleRuleAndOperator>,
     #[doc="Prefix identifying one or more objects to which the rule applies."]
@@ -6220,7 +6243,7 @@ impl LifecycleRulesSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     #[doc="The list of analytics configurations for a bucket."]
     pub analytics_configuration_list: Option<Vec<AnalyticsConfiguration>>,
@@ -6289,7 +6312,7 @@ impl ListBucketAnalyticsConfigurationsOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListBucketAnalyticsConfigurationsRequest {
     #[doc="The name of the bucket from which analytics configurations are retrieved."]
     pub bucket: String,
@@ -6297,7 +6320,7 @@ pub struct ListBucketAnalyticsConfigurationsRequest {
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListBucketInventoryConfigurationsOutput {
     #[doc="If sent in the request, the marker that is used as a starting point for this inventory configuration list response."]
     pub continuation_token: Option<String>,
@@ -6366,7 +6389,7 @@ impl ListBucketInventoryConfigurationsOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListBucketInventoryConfigurationsRequest {
     #[doc="The name of the bucket containing the inventory configurations to retrieve."]
     pub bucket: String,
@@ -6374,7 +6397,7 @@ pub struct ListBucketInventoryConfigurationsRequest {
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListBucketMetricsConfigurationsOutput {
     #[doc="The marker that is used as a starting point for this metrics configuration list response. This value is present if it was sent in the request."]
     pub continuation_token: Option<String>,
@@ -6443,7 +6466,7 @@ impl ListBucketMetricsConfigurationsOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListBucketMetricsConfigurationsRequest {
     #[doc="The name of the bucket containing the metrics configurations to retrieve."]
     pub bucket: String,
@@ -6451,7 +6474,7 @@ pub struct ListBucketMetricsConfigurationsRequest {
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListBucketsOutput {
     pub buckets: Option<Vec<Bucket>>,
     pub owner: Option<Owner>,
@@ -6502,7 +6525,7 @@ impl ListBucketsOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListMultipartUploadsOutput {
     #[doc="Name of the bucket to which the multipart upload was initiated."]
     pub bucket: Option<String>,
@@ -6621,7 +6644,7 @@ impl ListMultipartUploadsOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListMultipartUploadsRequest {
     pub bucket: String,
     #[doc="Character you use to group keys."]
@@ -6637,7 +6660,7 @@ pub struct ListMultipartUploadsRequest {
     pub upload_id_marker: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListObjectVersionsOutput {
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     pub delete_markers: Option<Vec<DeleteMarkerEntry>>,
@@ -6757,7 +6780,7 @@ impl ListObjectVersionsOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListObjectVersionsRequest {
     pub bucket: String,
     #[doc="A delimiter is a character you use to group keys."]
@@ -6773,7 +6796,7 @@ pub struct ListObjectVersionsRequest {
     pub version_id_marker: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListObjectsOutput {
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     pub contents: Option<Vec<Object>>,
@@ -6872,7 +6895,7 @@ impl ListObjectsOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListObjectsRequest {
     pub bucket: String,
     #[doc="A delimiter is a character you use to group keys."]
@@ -6888,7 +6911,7 @@ pub struct ListObjectsRequest {
     pub request_payer: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListObjectsV2Output {
     #[doc="CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by delimiter"]
     pub common_prefixes: Option<Vec<CommonPrefix>>,
@@ -7008,7 +7031,7 @@ impl ListObjectsV2OutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListObjectsV2Request {
     #[doc="Name of the bucket to list."]
     pub bucket: String,
@@ -7030,7 +7053,7 @@ pub struct ListObjectsV2Request {
     pub start_after: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListPartsOutput {
     #[doc="Date when multipart upload will become eligible for abort operation by lifecycle."]
     pub abort_date: Option<String>,
@@ -7143,7 +7166,7 @@ impl ListPartsOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ListPartsRequest {
     pub bucket: String,
     pub key: String,
@@ -7170,7 +7193,7 @@ impl LocationDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct LoggingEnabled {
     #[doc="Specifies the bucket where you want Amazon S3 to store server access logs. You can have your logs delivered to any bucket that you own, including the same bucket that is being logged. You can also configure multiple buckets to deliver their logs to the same target bucket. In this case you should choose a different TargetPrefix for each source bucket so that the delivered log files can be distinguished by key."]
     pub target_bucket: Option<String>,
@@ -7416,7 +7439,7 @@ impl MessageDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct MetricsAndOperator {
     #[doc="The prefix used when evaluating an AND predicate."]
     pub prefix: Option<String>,
@@ -7486,7 +7509,7 @@ impl MetricsAndOperatorSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct MetricsConfiguration {
     #[doc="Specifies a metrics configuration filter. The metrics configuration will only include objects that meet the filter's criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator)."]
     pub filter: Option<MetricsFilter>,
@@ -7582,7 +7605,7 @@ impl MetricsConfigurationListDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct MetricsFilter {
     #[doc="A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates, and an object must match all of the predicates in order for the filter to apply."]
     pub and: Option<MetricsAndOperator>,
@@ -7687,7 +7710,7 @@ impl MetricsIdSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct MultipartUpload {
     #[doc="Date and time at which the multipart upload was initiated."]
     pub initiated: Option<String>,
@@ -7902,7 +7925,7 @@ impl NextVersionIdMarkerDeserializer {
     }
 }
 #[doc="Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in the object's lifetime."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct NoncurrentVersionExpiration {
     #[doc="Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html\">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide."]
     pub noncurrent_days: Option<i64>,
@@ -7965,7 +7988,7 @@ impl NoncurrentVersionExpirationSerializer {
 }
 
 #[doc="Container for the transition rule that describes when noncurrent objects transition to the STANDARD_IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD_IA or GLACIER storage class at a specific period in the object's lifetime."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct NoncurrentVersionTransition {
     #[doc="Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html\">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide."]
     pub noncurrent_days: Option<i64>,
@@ -8081,7 +8104,7 @@ impl NoncurrentVersionTransitionListSerializer {
 }
 
 #[doc="Container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off on the bucket."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct NotificationConfiguration {
     pub lambda_function_configurations: Option<Vec<LambdaFunctionConfiguration>>,
     pub queue_configurations: Option<Vec<QueueConfiguration>>,
@@ -8160,7 +8183,7 @@ impl NotificationConfigurationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct NotificationConfigurationDeprecated {
     pub cloud_function_configuration: Option<CloudFunctionConfiguration>,
     pub queue_configuration: Option<QueueConfigurationDeprecated>,
@@ -8239,7 +8262,7 @@ impl NotificationConfigurationDeprecatedSerializer {
 }
 
 #[doc="Container for object key name filtering rules. For information about key name filtering, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct NotificationConfigurationFilter {
     pub key: Option<S3KeyFilter>,
 }
@@ -8326,7 +8349,7 @@ impl NotificationIdSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Object {
     pub e_tag: Option<String>,
     pub key: Option<String>,
@@ -8397,7 +8420,7 @@ impl ObjectDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ObjectIdentifier {
     #[doc="Key name of the object to delete."]
     pub key: String,
@@ -8500,7 +8523,7 @@ impl ObjectStorageClassDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ObjectVersion {
     pub e_tag: Option<String>,
     #[doc="Specifies whether the object is (true) or is not (false) the latest version of an object."]
@@ -8652,7 +8675,7 @@ impl ObjectVersionStorageClassDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Owner {
     pub display_name: Option<String>,
     pub id: Option<String>,
@@ -8721,7 +8744,7 @@ impl OwnerSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Part {
     #[doc="Entity tag returned when the part was uploaded."]
     pub e_tag: Option<String>,
@@ -8976,7 +8999,7 @@ impl ProtocolSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketAccelerateConfigurationRequest {
     #[doc="Specifies the Accelerate Configuration you want to set for the bucket."]
     pub accelerate_configuration: AccelerateConfiguration,
@@ -8984,7 +9007,7 @@ pub struct PutBucketAccelerateConfigurationRequest {
     pub bucket: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketAclRequest {
     #[doc="The canned ACL to apply to the bucket."]
     pub acl: Option<String>,
@@ -9003,7 +9026,7 @@ pub struct PutBucketAclRequest {
     pub grant_write_acp: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketAnalyticsConfigurationRequest {
     #[doc="The configuration and any analyses for the analytics filter."]
     pub analytics_configuration: AnalyticsConfiguration,
@@ -9013,14 +9036,14 @@ pub struct PutBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketCorsRequest {
     pub bucket: String,
     pub cors_configuration: CORSConfiguration,
     pub content_md5: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketInventoryConfigurationRequest {
     #[doc="The name of the bucket where the inventory configuration will be stored."]
     pub bucket: String,
@@ -9030,27 +9053,27 @@ pub struct PutBucketInventoryConfigurationRequest {
     pub inventory_configuration: InventoryConfiguration,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketLifecycleConfigurationRequest {
     pub bucket: String,
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketLifecycleRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub lifecycle_configuration: Option<LifecycleConfiguration>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketLoggingRequest {
     pub bucket: String,
     pub bucket_logging_status: BucketLoggingStatus,
     pub content_md5: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketMetricsConfigurationRequest {
     #[doc="The name of the bucket for which the metrics configuration is set."]
     pub bucket: String,
@@ -9060,20 +9083,20 @@ pub struct PutBucketMetricsConfigurationRequest {
     pub metrics_configuration: MetricsConfiguration,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketNotificationConfigurationRequest {
     pub bucket: String,
     pub notification_configuration: NotificationConfiguration,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketNotificationRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub notification_configuration: NotificationConfigurationDeprecated,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketPolicyRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
@@ -9081,28 +9104,28 @@ pub struct PutBucketPolicyRequest {
     pub policy: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketReplicationRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub replication_configuration: ReplicationConfiguration,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketRequestPaymentRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub request_payment_configuration: RequestPaymentConfiguration,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketTaggingRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub tagging: Tagging,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketVersioningRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
@@ -9111,14 +9134,14 @@ pub struct PutBucketVersioningRequest {
     pub versioning_configuration: VersioningConfiguration,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutBucketWebsiteRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub website_configuration: WebsiteConfiguration,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutObjectAclOutput {
     pub request_charged: Option<String>,
 }
@@ -9139,7 +9162,7 @@ impl PutObjectAclOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutObjectAclRequest {
     #[doc="The canned ACL to apply to the object."]
     pub acl: Option<String>,
@@ -9162,7 +9185,7 @@ pub struct PutObjectAclRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutObjectOutput {
     #[doc="Entity tag for the uploaded object."]
     pub e_tag: Option<String>,
@@ -9197,7 +9220,7 @@ impl PutObjectOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutObjectRequest {
     #[doc="The canned ACL to apply to the object."]
     pub acl: Option<String>,
@@ -9252,7 +9275,7 @@ pub struct PutObjectRequest {
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutObjectTaggingOutput {
     pub version_id: Option<String>,
 }
@@ -9273,7 +9296,7 @@ impl PutObjectTaggingOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct PutObjectTaggingRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
@@ -9308,7 +9331,7 @@ impl QueueArnSerializer {
 }
 
 #[doc="Container for specifying an configuration when you want Amazon S3 to publish events to an Amazon Simple Queue Service (Amazon SQS) queue."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct QueueConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
@@ -9387,7 +9410,7 @@ impl QueueConfigurationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct QueueConfigurationDeprecated {
     pub events: Option<Vec<String>>,
     pub id: Option<String>,
@@ -9516,7 +9539,7 @@ impl QuietSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Redirect {
     #[doc="The host name to use in the redirect request."]
     pub host_name: Option<String>,
@@ -9619,7 +9642,7 @@ impl RedirectSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct RedirectAllRequestsTo {
     #[doc="Name of the host where requests will be redirected."]
     pub host_name: String,
@@ -9739,7 +9762,7 @@ impl ReplaceKeyWithSerializer {
 }
 
 #[doc="Container for replication rules. You can add as many as 1,000 rules. Total replication configuration size can be up to 2 MB."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ReplicationConfiguration {
     #[doc="Amazon Resource Name (ARN) of an IAM role for Amazon S3 to assume when replicating the objects."]
     pub role: String,
@@ -9805,7 +9828,7 @@ impl ReplicationConfigurationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct ReplicationRule {
     pub destination: Destination,
     #[doc="Unique identifier for the rule. The value cannot be longer than 255 characters."]
@@ -9952,7 +9975,7 @@ impl ReplicationRulesSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct RequestPaymentConfiguration {
     #[doc="Specifies who pays for the download and request fees."]
     pub payer: String,
@@ -10036,7 +10059,7 @@ impl ResponseExpiresSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct RestoreObjectOutput {
     pub request_charged: Option<String>,
 }
@@ -10057,7 +10080,7 @@ impl RestoreObjectOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct RestoreObjectRequest {
     pub bucket: String,
     pub key: String,
@@ -10066,7 +10089,7 @@ pub struct RestoreObjectRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct RestoreRequest {
     #[doc="Lifetime of the active copy in days"]
     pub days: i64,
@@ -10114,7 +10137,7 @@ impl RoleSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct RoutingRule {
     #[doc="A container for describing a condition that must be met for the specified redirect to apply. For example, 1. If request is for pages in the /docs folder, redirect to the /documents folder. 2. If request results in HTTP error 4xx, redirect request to another host where you might process the error."]
     pub condition: Option<Condition>,
@@ -10239,7 +10262,7 @@ impl RoutingRulesSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Rule {
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     pub expiration: Option<LifecycleExpiration>,
@@ -10396,7 +10419,7 @@ impl RulesSerializer {
 }
 
 #[doc="Container for object key name prefix and suffix filtering rules."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct S3KeyFilter {
     pub filter_rules: Option<Vec<FilterRule>>,
 }
@@ -10522,7 +10545,7 @@ impl StorageClassSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct StorageClassAnalysis {
     #[doc="A container used to describe how data related to the storage class analysis should be exported."]
     pub data_export: Option<StorageClassAnalysisDataExport>,
@@ -10583,7 +10606,7 @@ impl StorageClassAnalysisSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct StorageClassAnalysisDataExport {
     #[doc="The place to store the data for an analysis."]
     pub destination: AnalyticsExportDestination,
@@ -10702,7 +10725,7 @@ impl SuffixSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Tag {
     #[doc="Name of the tag."]
     pub key: String,
@@ -10823,7 +10846,7 @@ impl TagSetSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Tagging {
     pub tag_set: Vec<Tag>,
 }
@@ -10865,7 +10888,7 @@ impl TargetBucketSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TargetGrant {
     pub grantee: Option<Grantee>,
     #[doc="Logging permissions assigned to the Grantee for the bucket."]
@@ -11079,7 +11102,7 @@ impl TopicArnSerializer {
 }
 
 #[doc="Container for specifying the configuration when you want Amazon S3 to publish events to an Amazon Simple Notification Service (Amazon SNS) topic."]
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TopicConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
@@ -11158,7 +11181,7 @@ impl TopicConfigurationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct TopicConfigurationDeprecated {
     pub events: Option<Vec<String>>,
     pub id: Option<String>,
@@ -11277,7 +11300,7 @@ impl TopicConfigurationListSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct Transition {
     #[doc="Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format."]
     pub date: Option<String>,
@@ -11497,7 +11520,7 @@ impl UploadIdMarkerSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UploadPartCopyOutput {
     pub copy_part_result: Option<CopyPartResult>,
     #[doc="The version of the source object that was copied, if you have enabled versioning on the source bucket."]
@@ -11556,7 +11579,7 @@ impl UploadPartCopyOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UploadPartCopyRequest {
     pub bucket: String,
     #[doc="The name of the source bucket and key name of the source object, separated by a slash (/). Must be URL-encoded."]
@@ -11591,7 +11614,7 @@ pub struct UploadPartCopyRequest {
     pub upload_id: String,
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UploadPartOutput {
     #[doc="Entity tag for the uploaded object."]
     pub e_tag: Option<String>,
@@ -11622,7 +11645,7 @@ impl UploadPartOutputDeserializer {
 
     }
 }
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct UploadPartRequest {
     #[doc="Object data."]
     pub body: Option<Vec<u8>>,
@@ -11697,7 +11720,7 @@ impl VersionIdMarkerSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct VersioningConfiguration {
     #[doc="Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned."]
     pub mfa_delete: Option<String>,
@@ -11722,7 +11745,7 @@ impl VersioningConfigurationSerializer {
     }
 }
 
-#[derive(Default,Clone,Debug)]
+#[derive(Default,Debug)]
 pub struct WebsiteConfiguration {
     pub error_document: Option<ErrorDocument>,
     pub index_document: Option<IndexDocument>,
@@ -11806,6 +11829,11 @@ impl From<HttpDispatchError> for AbortMultipartUploadError {
         AbortMultipartUploadError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AbortMultipartUploadError {
+    fn from(err: io::Error) -> AbortMultipartUploadError {
+        AbortMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AbortMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11869,6 +11897,11 @@ impl From<CredentialsError> for CompleteMultipartUploadError {
 impl From<HttpDispatchError> for CompleteMultipartUploadError {
     fn from(err: HttpDispatchError) -> CompleteMultipartUploadError {
         CompleteMultipartUploadError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CompleteMultipartUploadError {
+    fn from(err: io::Error) -> CompleteMultipartUploadError {
+        CompleteMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CompleteMultipartUploadError {
@@ -11936,6 +11969,11 @@ impl From<CredentialsError> for CopyObjectError {
 impl From<HttpDispatchError> for CopyObjectError {
     fn from(err: HttpDispatchError) -> CopyObjectError {
         CopyObjectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopyObjectError {
+    fn from(err: io::Error) -> CopyObjectError {
+        CopyObjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyObjectError {
@@ -12009,6 +12047,11 @@ impl From<HttpDispatchError> for CreateBucketError {
         CreateBucketError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateBucketError {
+    fn from(err: io::Error) -> CreateBucketError {
+        CreateBucketError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12071,6 +12114,11 @@ impl From<CredentialsError> for CreateMultipartUploadError {
 impl From<HttpDispatchError> for CreateMultipartUploadError {
     fn from(err: HttpDispatchError) -> CreateMultipartUploadError {
         CreateMultipartUploadError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateMultipartUploadError {
+    fn from(err: io::Error) -> CreateMultipartUploadError {
+        CreateMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateMultipartUploadError {
@@ -12137,6 +12185,11 @@ impl From<HttpDispatchError> for DeleteBucketError {
         DeleteBucketError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteBucketError {
+    fn from(err: io::Error) -> DeleteBucketError {
+        DeleteBucketError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12197,6 +12250,11 @@ impl From<CredentialsError> for DeleteBucketAnalyticsConfigurationError {
 impl From<HttpDispatchError> for DeleteBucketAnalyticsConfigurationError {
     fn from(err: HttpDispatchError) -> DeleteBucketAnalyticsConfigurationError {
         DeleteBucketAnalyticsConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBucketAnalyticsConfigurationError {
+    fn from(err: io::Error) -> DeleteBucketAnalyticsConfigurationError {
+        DeleteBucketAnalyticsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketAnalyticsConfigurationError {
@@ -12263,6 +12321,11 @@ impl From<HttpDispatchError> for DeleteBucketCorsError {
         DeleteBucketCorsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteBucketCorsError {
+    fn from(err: io::Error) -> DeleteBucketCorsError {
+        DeleteBucketCorsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteBucketCorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12323,6 +12386,11 @@ impl From<CredentialsError> for DeleteBucketInventoryConfigurationError {
 impl From<HttpDispatchError> for DeleteBucketInventoryConfigurationError {
     fn from(err: HttpDispatchError) -> DeleteBucketInventoryConfigurationError {
         DeleteBucketInventoryConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBucketInventoryConfigurationError {
+    fn from(err: io::Error) -> DeleteBucketInventoryConfigurationError {
+        DeleteBucketInventoryConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketInventoryConfigurationError {
@@ -12389,6 +12457,11 @@ impl From<HttpDispatchError> for DeleteBucketLifecycleError {
         DeleteBucketLifecycleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteBucketLifecycleError {
+    fn from(err: io::Error) -> DeleteBucketLifecycleError {
+        DeleteBucketLifecycleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteBucketLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12451,6 +12524,11 @@ impl From<CredentialsError> for DeleteBucketMetricsConfigurationError {
 impl From<HttpDispatchError> for DeleteBucketMetricsConfigurationError {
     fn from(err: HttpDispatchError) -> DeleteBucketMetricsConfigurationError {
         DeleteBucketMetricsConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBucketMetricsConfigurationError {
+    fn from(err: io::Error) -> DeleteBucketMetricsConfigurationError {
+        DeleteBucketMetricsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketMetricsConfigurationError {
@@ -12517,6 +12595,11 @@ impl From<HttpDispatchError> for DeleteBucketPolicyError {
         DeleteBucketPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteBucketPolicyError {
+    fn from(err: io::Error) -> DeleteBucketPolicyError {
+        DeleteBucketPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteBucketPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12579,6 +12662,11 @@ impl From<CredentialsError> for DeleteBucketReplicationError {
 impl From<HttpDispatchError> for DeleteBucketReplicationError {
     fn from(err: HttpDispatchError) -> DeleteBucketReplicationError {
         DeleteBucketReplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBucketReplicationError {
+    fn from(err: io::Error) -> DeleteBucketReplicationError {
+        DeleteBucketReplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketReplicationError {
@@ -12645,6 +12733,11 @@ impl From<HttpDispatchError> for DeleteBucketTaggingError {
         DeleteBucketTaggingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteBucketTaggingError {
+    fn from(err: io::Error) -> DeleteBucketTaggingError {
+        DeleteBucketTaggingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteBucketTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12707,6 +12800,11 @@ impl From<CredentialsError> for DeleteBucketWebsiteError {
 impl From<HttpDispatchError> for DeleteBucketWebsiteError {
     fn from(err: HttpDispatchError) -> DeleteBucketWebsiteError {
         DeleteBucketWebsiteError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBucketWebsiteError {
+    fn from(err: io::Error) -> DeleteBucketWebsiteError {
+        DeleteBucketWebsiteError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketWebsiteError {
@@ -12773,6 +12871,11 @@ impl From<HttpDispatchError> for DeleteObjectError {
         DeleteObjectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteObjectError {
+    fn from(err: io::Error) -> DeleteObjectError {
+        DeleteObjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12833,6 +12936,11 @@ impl From<CredentialsError> for DeleteObjectTaggingError {
 impl From<HttpDispatchError> for DeleteObjectTaggingError {
     fn from(err: HttpDispatchError) -> DeleteObjectTaggingError {
         DeleteObjectTaggingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteObjectTaggingError {
+    fn from(err: io::Error) -> DeleteObjectTaggingError {
+        DeleteObjectTaggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteObjectTaggingError {
@@ -12899,6 +13007,11 @@ impl From<HttpDispatchError> for DeleteObjectsError {
         DeleteObjectsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteObjectsError {
+    fn from(err: io::Error) -> DeleteObjectsError {
+        DeleteObjectsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -12959,6 +13072,11 @@ impl From<CredentialsError> for GetBucketAccelerateConfigurationError {
 impl From<HttpDispatchError> for GetBucketAccelerateConfigurationError {
     fn from(err: HttpDispatchError) -> GetBucketAccelerateConfigurationError {
         GetBucketAccelerateConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBucketAccelerateConfigurationError {
+    fn from(err: io::Error) -> GetBucketAccelerateConfigurationError {
+        GetBucketAccelerateConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketAccelerateConfigurationError {
@@ -13025,6 +13143,11 @@ impl From<HttpDispatchError> for GetBucketAclError {
         GetBucketAclError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBucketAclError {
+    fn from(err: io::Error) -> GetBucketAclError {
+        GetBucketAclError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBucketAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13085,6 +13208,11 @@ impl From<CredentialsError> for GetBucketAnalyticsConfigurationError {
 impl From<HttpDispatchError> for GetBucketAnalyticsConfigurationError {
     fn from(err: HttpDispatchError) -> GetBucketAnalyticsConfigurationError {
         GetBucketAnalyticsConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBucketAnalyticsConfigurationError {
+    fn from(err: io::Error) -> GetBucketAnalyticsConfigurationError {
+        GetBucketAnalyticsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketAnalyticsConfigurationError {
@@ -13151,6 +13279,11 @@ impl From<HttpDispatchError> for GetBucketCorsError {
         GetBucketCorsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBucketCorsError {
+    fn from(err: io::Error) -> GetBucketCorsError {
+        GetBucketCorsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBucketCorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13211,6 +13344,11 @@ impl From<CredentialsError> for GetBucketInventoryConfigurationError {
 impl From<HttpDispatchError> for GetBucketInventoryConfigurationError {
     fn from(err: HttpDispatchError) -> GetBucketInventoryConfigurationError {
         GetBucketInventoryConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBucketInventoryConfigurationError {
+    fn from(err: io::Error) -> GetBucketInventoryConfigurationError {
+        GetBucketInventoryConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketInventoryConfigurationError {
@@ -13277,6 +13415,11 @@ impl From<HttpDispatchError> for GetBucketLifecycleError {
         GetBucketLifecycleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBucketLifecycleError {
+    fn from(err: io::Error) -> GetBucketLifecycleError {
+        GetBucketLifecycleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBucketLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13339,6 +13482,11 @@ impl From<CredentialsError> for GetBucketLifecycleConfigurationError {
 impl From<HttpDispatchError> for GetBucketLifecycleConfigurationError {
     fn from(err: HttpDispatchError) -> GetBucketLifecycleConfigurationError {
         GetBucketLifecycleConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBucketLifecycleConfigurationError {
+    fn from(err: io::Error) -> GetBucketLifecycleConfigurationError {
+        GetBucketLifecycleConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketLifecycleConfigurationError {
@@ -13405,6 +13553,11 @@ impl From<HttpDispatchError> for GetBucketLocationError {
         GetBucketLocationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBucketLocationError {
+    fn from(err: io::Error) -> GetBucketLocationError {
+        GetBucketLocationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBucketLocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13469,6 +13622,11 @@ impl From<HttpDispatchError> for GetBucketLoggingError {
         GetBucketLoggingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBucketLoggingError {
+    fn from(err: io::Error) -> GetBucketLoggingError {
+        GetBucketLoggingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBucketLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13529,6 +13687,11 @@ impl From<CredentialsError> for GetBucketMetricsConfigurationError {
 impl From<HttpDispatchError> for GetBucketMetricsConfigurationError {
     fn from(err: HttpDispatchError) -> GetBucketMetricsConfigurationError {
         GetBucketMetricsConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBucketMetricsConfigurationError {
+    fn from(err: io::Error) -> GetBucketMetricsConfigurationError {
+        GetBucketMetricsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketMetricsConfigurationError {
@@ -13595,6 +13758,11 @@ impl From<HttpDispatchError> for GetBucketNotificationError {
         GetBucketNotificationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBucketNotificationError {
+    fn from(err: io::Error) -> GetBucketNotificationError {
+        GetBucketNotificationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBucketNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13657,6 +13825,11 @@ impl From<CredentialsError> for GetBucketNotificationConfigurationError {
 impl From<HttpDispatchError> for GetBucketNotificationConfigurationError {
     fn from(err: HttpDispatchError) -> GetBucketNotificationConfigurationError {
         GetBucketNotificationConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBucketNotificationConfigurationError {
+    fn from(err: io::Error) -> GetBucketNotificationConfigurationError {
+        GetBucketNotificationConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketNotificationConfigurationError {
@@ -13723,6 +13896,11 @@ impl From<HttpDispatchError> for GetBucketPolicyError {
         GetBucketPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBucketPolicyError {
+    fn from(err: io::Error) -> GetBucketPolicyError {
+        GetBucketPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBucketPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13783,6 +13961,11 @@ impl From<CredentialsError> for GetBucketReplicationError {
 impl From<HttpDispatchError> for GetBucketReplicationError {
     fn from(err: HttpDispatchError) -> GetBucketReplicationError {
         GetBucketReplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBucketReplicationError {
+    fn from(err: io::Error) -> GetBucketReplicationError {
+        GetBucketReplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketReplicationError {
@@ -13849,6 +14032,11 @@ impl From<HttpDispatchError> for GetBucketRequestPaymentError {
         GetBucketRequestPaymentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBucketRequestPaymentError {
+    fn from(err: io::Error) -> GetBucketRequestPaymentError {
+        GetBucketRequestPaymentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBucketRequestPaymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13913,6 +14101,11 @@ impl From<HttpDispatchError> for GetBucketTaggingError {
         GetBucketTaggingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBucketTaggingError {
+    fn from(err: io::Error) -> GetBucketTaggingError {
+        GetBucketTaggingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBucketTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13973,6 +14166,11 @@ impl From<CredentialsError> for GetBucketVersioningError {
 impl From<HttpDispatchError> for GetBucketVersioningError {
     fn from(err: HttpDispatchError) -> GetBucketVersioningError {
         GetBucketVersioningError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBucketVersioningError {
+    fn from(err: io::Error) -> GetBucketVersioningError {
+        GetBucketVersioningError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketVersioningError {
@@ -14039,6 +14237,11 @@ impl From<HttpDispatchError> for GetBucketWebsiteError {
         GetBucketWebsiteError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetBucketWebsiteError {
+    fn from(err: io::Error) -> GetBucketWebsiteError {
+        GetBucketWebsiteError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetBucketWebsiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14102,6 +14305,11 @@ impl From<CredentialsError> for GetObjectError {
 impl From<HttpDispatchError> for GetObjectError {
     fn from(err: HttpDispatchError) -> GetObjectError {
         GetObjectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetObjectError {
+    fn from(err: io::Error) -> GetObjectError {
+        GetObjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetObjectError {
@@ -14170,6 +14378,11 @@ impl From<HttpDispatchError> for GetObjectAclError {
         GetObjectAclError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetObjectAclError {
+    fn from(err: io::Error) -> GetObjectAclError {
+        GetObjectAclError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetObjectAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14233,6 +14446,11 @@ impl From<HttpDispatchError> for GetObjectTaggingError {
         GetObjectTaggingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetObjectTaggingError {
+    fn from(err: io::Error) -> GetObjectTaggingError {
+        GetObjectTaggingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetObjectTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14293,6 +14511,11 @@ impl From<CredentialsError> for GetObjectTorrentError {
 impl From<HttpDispatchError> for GetObjectTorrentError {
     fn from(err: HttpDispatchError) -> GetObjectTorrentError {
         GetObjectTorrentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetObjectTorrentError {
+    fn from(err: io::Error) -> GetObjectTorrentError {
+        GetObjectTorrentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetObjectTorrentError {
@@ -14362,6 +14585,11 @@ impl From<HttpDispatchError> for HeadBucketError {
         HeadBucketError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for HeadBucketError {
+    fn from(err: io::Error) -> HeadBucketError {
+        HeadBucketError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for HeadBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14428,6 +14656,11 @@ impl From<HttpDispatchError> for HeadObjectError {
         HeadObjectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for HeadObjectError {
+    fn from(err: io::Error) -> HeadObjectError {
+        HeadObjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for HeadObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14489,6 +14722,11 @@ impl From<CredentialsError> for ListBucketAnalyticsConfigurationsError {
 impl From<HttpDispatchError> for ListBucketAnalyticsConfigurationsError {
     fn from(err: HttpDispatchError) -> ListBucketAnalyticsConfigurationsError {
         ListBucketAnalyticsConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListBucketAnalyticsConfigurationsError {
+    fn from(err: io::Error) -> ListBucketAnalyticsConfigurationsError {
+        ListBucketAnalyticsConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListBucketAnalyticsConfigurationsError {
@@ -14555,6 +14793,11 @@ impl From<HttpDispatchError> for ListBucketInventoryConfigurationsError {
         ListBucketInventoryConfigurationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListBucketInventoryConfigurationsError {
+    fn from(err: io::Error) -> ListBucketInventoryConfigurationsError {
+        ListBucketInventoryConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListBucketInventoryConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14617,6 +14860,11 @@ impl From<CredentialsError> for ListBucketMetricsConfigurationsError {
 impl From<HttpDispatchError> for ListBucketMetricsConfigurationsError {
     fn from(err: HttpDispatchError) -> ListBucketMetricsConfigurationsError {
         ListBucketMetricsConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListBucketMetricsConfigurationsError {
+    fn from(err: io::Error) -> ListBucketMetricsConfigurationsError {
+        ListBucketMetricsConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListBucketMetricsConfigurationsError {
@@ -14683,6 +14931,11 @@ impl From<HttpDispatchError> for ListBucketsError {
         ListBucketsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListBucketsError {
+    fn from(err: io::Error) -> ListBucketsError {
+        ListBucketsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListBucketsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14743,6 +14996,11 @@ impl From<CredentialsError> for ListMultipartUploadsError {
 impl From<HttpDispatchError> for ListMultipartUploadsError {
     fn from(err: HttpDispatchError) -> ListMultipartUploadsError {
         ListMultipartUploadsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListMultipartUploadsError {
+    fn from(err: io::Error) -> ListMultipartUploadsError {
+        ListMultipartUploadsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListMultipartUploadsError {
@@ -14807,6 +15065,11 @@ impl From<CredentialsError> for ListObjectVersionsError {
 impl From<HttpDispatchError> for ListObjectVersionsError {
     fn from(err: HttpDispatchError) -> ListObjectVersionsError {
         ListObjectVersionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListObjectVersionsError {
+    fn from(err: io::Error) -> ListObjectVersionsError {
+        ListObjectVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListObjectVersionsError {
@@ -14878,6 +15141,11 @@ impl From<HttpDispatchError> for ListObjectsError {
         ListObjectsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListObjectsError {
+    fn from(err: io::Error) -> ListObjectsError {
+        ListObjectsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14946,6 +15214,11 @@ impl From<HttpDispatchError> for ListObjectsV2Error {
         ListObjectsV2Error::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListObjectsV2Error {
+    fn from(err: io::Error) -> ListObjectsV2Error {
+        ListObjectsV2Error::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListObjectsV2Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15009,6 +15282,11 @@ impl From<HttpDispatchError> for ListPartsError {
         ListPartsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListPartsError {
+    fn from(err: io::Error) -> ListPartsError {
+        ListPartsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListPartsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15069,6 +15347,11 @@ impl From<CredentialsError> for PutBucketAccelerateConfigurationError {
 impl From<HttpDispatchError> for PutBucketAccelerateConfigurationError {
     fn from(err: HttpDispatchError) -> PutBucketAccelerateConfigurationError {
         PutBucketAccelerateConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutBucketAccelerateConfigurationError {
+    fn from(err: io::Error) -> PutBucketAccelerateConfigurationError {
+        PutBucketAccelerateConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketAccelerateConfigurationError {
@@ -15135,6 +15418,11 @@ impl From<HttpDispatchError> for PutBucketAclError {
         PutBucketAclError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutBucketAclError {
+    fn from(err: io::Error) -> PutBucketAclError {
+        PutBucketAclError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutBucketAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15195,6 +15483,11 @@ impl From<CredentialsError> for PutBucketAnalyticsConfigurationError {
 impl From<HttpDispatchError> for PutBucketAnalyticsConfigurationError {
     fn from(err: HttpDispatchError) -> PutBucketAnalyticsConfigurationError {
         PutBucketAnalyticsConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutBucketAnalyticsConfigurationError {
+    fn from(err: io::Error) -> PutBucketAnalyticsConfigurationError {
+        PutBucketAnalyticsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketAnalyticsConfigurationError {
@@ -15261,6 +15554,11 @@ impl From<HttpDispatchError> for PutBucketCorsError {
         PutBucketCorsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutBucketCorsError {
+    fn from(err: io::Error) -> PutBucketCorsError {
+        PutBucketCorsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutBucketCorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15321,6 +15619,11 @@ impl From<CredentialsError> for PutBucketInventoryConfigurationError {
 impl From<HttpDispatchError> for PutBucketInventoryConfigurationError {
     fn from(err: HttpDispatchError) -> PutBucketInventoryConfigurationError {
         PutBucketInventoryConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutBucketInventoryConfigurationError {
+    fn from(err: io::Error) -> PutBucketInventoryConfigurationError {
+        PutBucketInventoryConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketInventoryConfigurationError {
@@ -15387,6 +15690,11 @@ impl From<HttpDispatchError> for PutBucketLifecycleError {
         PutBucketLifecycleError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutBucketLifecycleError {
+    fn from(err: io::Error) -> PutBucketLifecycleError {
+        PutBucketLifecycleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutBucketLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15449,6 +15757,11 @@ impl From<CredentialsError> for PutBucketLifecycleConfigurationError {
 impl From<HttpDispatchError> for PutBucketLifecycleConfigurationError {
     fn from(err: HttpDispatchError) -> PutBucketLifecycleConfigurationError {
         PutBucketLifecycleConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutBucketLifecycleConfigurationError {
+    fn from(err: io::Error) -> PutBucketLifecycleConfigurationError {
+        PutBucketLifecycleConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketLifecycleConfigurationError {
@@ -15515,6 +15828,11 @@ impl From<HttpDispatchError> for PutBucketLoggingError {
         PutBucketLoggingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutBucketLoggingError {
+    fn from(err: io::Error) -> PutBucketLoggingError {
+        PutBucketLoggingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutBucketLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15575,6 +15893,11 @@ impl From<CredentialsError> for PutBucketMetricsConfigurationError {
 impl From<HttpDispatchError> for PutBucketMetricsConfigurationError {
     fn from(err: HttpDispatchError) -> PutBucketMetricsConfigurationError {
         PutBucketMetricsConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutBucketMetricsConfigurationError {
+    fn from(err: io::Error) -> PutBucketMetricsConfigurationError {
+        PutBucketMetricsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketMetricsConfigurationError {
@@ -15641,6 +15964,11 @@ impl From<HttpDispatchError> for PutBucketNotificationError {
         PutBucketNotificationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutBucketNotificationError {
+    fn from(err: io::Error) -> PutBucketNotificationError {
+        PutBucketNotificationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutBucketNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15703,6 +16031,11 @@ impl From<CredentialsError> for PutBucketNotificationConfigurationError {
 impl From<HttpDispatchError> for PutBucketNotificationConfigurationError {
     fn from(err: HttpDispatchError) -> PutBucketNotificationConfigurationError {
         PutBucketNotificationConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutBucketNotificationConfigurationError {
+    fn from(err: io::Error) -> PutBucketNotificationConfigurationError {
+        PutBucketNotificationConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketNotificationConfigurationError {
@@ -15769,6 +16102,11 @@ impl From<HttpDispatchError> for PutBucketPolicyError {
         PutBucketPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutBucketPolicyError {
+    fn from(err: io::Error) -> PutBucketPolicyError {
+        PutBucketPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutBucketPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15829,6 +16167,11 @@ impl From<CredentialsError> for PutBucketReplicationError {
 impl From<HttpDispatchError> for PutBucketReplicationError {
     fn from(err: HttpDispatchError) -> PutBucketReplicationError {
         PutBucketReplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutBucketReplicationError {
+    fn from(err: io::Error) -> PutBucketReplicationError {
+        PutBucketReplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketReplicationError {
@@ -15895,6 +16238,11 @@ impl From<HttpDispatchError> for PutBucketRequestPaymentError {
         PutBucketRequestPaymentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutBucketRequestPaymentError {
+    fn from(err: io::Error) -> PutBucketRequestPaymentError {
+        PutBucketRequestPaymentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutBucketRequestPaymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -15959,6 +16307,11 @@ impl From<HttpDispatchError> for PutBucketTaggingError {
         PutBucketTaggingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutBucketTaggingError {
+    fn from(err: io::Error) -> PutBucketTaggingError {
+        PutBucketTaggingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutBucketTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16019,6 +16372,11 @@ impl From<CredentialsError> for PutBucketVersioningError {
 impl From<HttpDispatchError> for PutBucketVersioningError {
     fn from(err: HttpDispatchError) -> PutBucketVersioningError {
         PutBucketVersioningError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutBucketVersioningError {
+    fn from(err: io::Error) -> PutBucketVersioningError {
+        PutBucketVersioningError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketVersioningError {
@@ -16085,6 +16443,11 @@ impl From<HttpDispatchError> for PutBucketWebsiteError {
         PutBucketWebsiteError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutBucketWebsiteError {
+    fn from(err: io::Error) -> PutBucketWebsiteError {
+        PutBucketWebsiteError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutBucketWebsiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16145,6 +16508,11 @@ impl From<CredentialsError> for PutObjectError {
 impl From<HttpDispatchError> for PutObjectError {
     fn from(err: HttpDispatchError) -> PutObjectError {
         PutObjectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutObjectError {
+    fn from(err: io::Error) -> PutObjectError {
+        PutObjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutObjectError {
@@ -16212,6 +16580,11 @@ impl From<HttpDispatchError> for PutObjectAclError {
         PutObjectAclError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutObjectAclError {
+    fn from(err: io::Error) -> PutObjectAclError {
+        PutObjectAclError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutObjectAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16273,6 +16646,11 @@ impl From<CredentialsError> for PutObjectTaggingError {
 impl From<HttpDispatchError> for PutObjectTaggingError {
     fn from(err: HttpDispatchError) -> PutObjectTaggingError {
         PutObjectTaggingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutObjectTaggingError {
+    fn from(err: io::Error) -> PutObjectTaggingError {
+        PutObjectTaggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutObjectTaggingError {
@@ -16340,6 +16718,11 @@ impl From<HttpDispatchError> for RestoreObjectError {
         RestoreObjectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RestoreObjectError {
+    fn from(err: io::Error) -> RestoreObjectError {
+        RestoreObjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RestoreObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16403,6 +16786,11 @@ impl From<HttpDispatchError> for UploadPartError {
         UploadPartError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UploadPartError {
+    fn from(err: io::Error) -> UploadPartError {
+        UploadPartError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UploadPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -16463,6 +16851,11 @@ impl From<CredentialsError> for UploadPartCopyError {
 impl From<HttpDispatchError> for UploadPartCopyError {
     fn from(err: HttpDispatchError) -> UploadPartCopyError {
         UploadPartCopyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UploadPartCopyError {
+    fn from(err: io::Error) -> UploadPartCopyError {
+        UploadPartCopyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UploadPartCopyError {
@@ -16966,7 +17359,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -16974,11 +17367,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = AbortMultipartUploadOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16995,8 +17390,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(AbortMultipartUploadError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AbortMultipartUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17034,7 +17430,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17042,11 +17438,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CompleteMultipartUploadOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17080,7 +17478,12 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(CompleteMultipartUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CompleteMultipartUploadError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -17227,7 +17630,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17235,11 +17638,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CopyObjectOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17293,7 +17698,11 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(CopyObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopyObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -17342,7 +17751,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17350,11 +17759,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateBucketOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17370,7 +17781,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateBucketError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17474,7 +17887,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17482,11 +17895,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = CreateMultipartUploadOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17535,8 +17950,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(CreateMultipartUploadError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateMultipartUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17554,7 +17970,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17565,7 +17981,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBucketError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17589,7 +18007,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17599,7 +18017,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -17620,7 +18042,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17631,8 +18053,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteBucketCorsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBucketCorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17656,7 +18079,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17666,7 +18089,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -17687,7 +18114,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17698,8 +18125,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBucketLifecycleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17722,7 +18150,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17732,7 +18160,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -17753,7 +18185,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17764,8 +18196,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteBucketPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBucketPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17787,7 +18220,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17797,7 +18230,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(DeleteBucketReplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBucketReplicationError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -17818,7 +18256,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17829,8 +18267,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteBucketTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBucketTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17852,7 +18291,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17863,8 +18302,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBucketWebsiteError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17895,7 +18335,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17903,11 +18343,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteObjectOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17931,7 +18373,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -17956,7 +18400,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -17964,11 +18408,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteObjectTaggingOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17985,8 +18431,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteObjectTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteObjectTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18025,7 +18472,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18033,11 +18480,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = DeleteObjectsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18053,7 +18502,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteObjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18076,7 +18527,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18084,11 +18535,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketAccelerateConfigurationOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18099,7 +18552,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -18120,7 +18577,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18128,11 +18585,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketAclOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18145,7 +18604,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBucketAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketAclError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18169,7 +18630,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18177,11 +18638,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketAnalyticsConfigurationOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18192,7 +18655,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -18213,7 +18681,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18221,11 +18689,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketCorsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18238,7 +18708,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketCorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18262,7 +18734,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18270,11 +18742,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketInventoryConfigurationOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18285,7 +18759,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -18306,7 +18785,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18314,11 +18793,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketLifecycleOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18332,8 +18813,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketLifecycleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18356,7 +18838,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18364,11 +18846,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketLifecycleConfigurationOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18379,7 +18863,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -18400,7 +18889,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18408,11 +18897,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketLocationOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18426,8 +18917,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBucketLocationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketLocationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18449,7 +18941,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18457,11 +18949,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketLoggingOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18475,8 +18969,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBucketLoggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketLoggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18500,7 +18995,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18508,11 +19003,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketMetricsConfigurationOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18523,7 +19020,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -18545,7 +19047,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18553,11 +19055,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = NotificationConfigurationDeprecated::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18569,8 +19073,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBucketNotificationError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketNotificationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18593,7 +19098,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18601,11 +19106,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = NotificationConfiguration::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18618,7 +19125,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -18639,22 +19150,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
             StatusCode::NoContent |
             StatusCode::PartialContent => {
 
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
                 let mut result = GetBucketPolicyOutput::default();
-                result.policy = Some(String::from_utf8_lossy(&response.body).into_owned());
+                result.policy = Some(String::from_utf8_lossy(&body).into_owned());
 
 
                 Ok(result)
             }
             _ => {
-                Err(GetBucketPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18676,7 +19191,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18684,11 +19199,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketReplicationOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18702,8 +19219,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBucketReplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketReplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18726,7 +19244,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18734,11 +19252,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketRequestPaymentOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18749,7 +19269,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetBucketRequestPaymentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketRequestPaymentError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -18770,7 +19295,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18778,11 +19303,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketTaggingOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18796,8 +19323,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBucketTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18819,7 +19347,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18827,11 +19355,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketVersioningOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18845,8 +19375,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBucketVersioningError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketVersioningError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18868,7 +19399,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -18876,11 +19407,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetBucketWebsiteOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18894,8 +19427,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetBucketWebsiteError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -18976,15 +19510,17 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
             StatusCode::NoContent |
             StatusCode::PartialContent => {
 
+
+
                 let mut result = GetObjectOutput::default();
-                result.body = Some(response.body);
+                result.body = Some(StreamingBody(response.body));
 
                 if let Some(accept_ranges) = response.headers.get("accept-ranges") {
                     let value = accept_ranges.to_owned();
@@ -19111,7 +19647,11 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(GetObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -19138,7 +19678,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19146,11 +19686,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetObjectAclOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19166,7 +19708,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetObjectAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetObjectAclError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -19191,7 +19735,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19199,11 +19743,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = GetObjectTaggingOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19220,8 +19766,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetObjectTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetObjectTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -19246,15 +19793,17 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
             StatusCode::NoContent |
             StatusCode::PartialContent => {
 
+
+
                 let mut result = GetObjectTorrentOutput::default();
-                result.body = Some(response.body);
+                result.body = Some(StreamingBody(response.body));
 
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
@@ -19263,8 +19812,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(GetObjectTorrentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetObjectTorrentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -19282,7 +19832,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19292,7 +19842,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(HeadBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(HeadBucketError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -19354,7 +19908,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19362,11 +19916,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = HeadObjectOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19492,7 +20048,11 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(HeadObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(HeadObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -19517,7 +20077,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19525,11 +20085,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListBucketAnalyticsConfigurationsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19540,7 +20102,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListBucketAnalyticsConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBucketAnalyticsConfigurationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -19565,7 +20131,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19573,11 +20139,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListBucketInventoryConfigurationsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19588,7 +20156,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListBucketInventoryConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBucketInventoryConfigurationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -19613,7 +20185,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19621,11 +20193,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListBucketMetricsConfigurationsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19636,7 +20210,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListBucketMetricsConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBucketMetricsConfigurationsError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -19653,7 +20232,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19661,11 +20240,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListBucketsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19677,7 +20258,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListBucketsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBucketsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -19716,7 +20301,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19724,11 +20309,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListMultipartUploadsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19742,8 +20329,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListMultipartUploadsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListMultipartUploadsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -19783,7 +20371,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19791,11 +20379,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListObjectVersionsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19809,8 +20399,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListObjectVersionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListObjectVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -19849,7 +20440,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19857,11 +20448,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListObjectsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19873,7 +20466,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(ListObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListObjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -19918,7 +20515,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19926,11 +20523,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListObjectsV2Output::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19943,7 +20542,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListObjectsV2Error::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListObjectsV2Error::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -19972,7 +20573,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -19980,11 +20581,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = ListPartsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20007,7 +20610,11 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(ListPartsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPartsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -20033,7 +20640,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20043,7 +20650,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(PutBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -20101,7 +20712,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20112,7 +20723,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutBucketAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketAclError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -20140,7 +20753,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20150,7 +20763,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(PutBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -20184,7 +20802,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20195,7 +20813,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketCorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -20223,7 +20843,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20233,7 +20853,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(PutBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -20276,7 +20901,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20287,8 +20912,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketLifecycleError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -20330,7 +20956,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20340,7 +20966,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(PutBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -20369,7 +21000,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20380,8 +21011,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutBucketLoggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketLoggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -20409,7 +21041,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20419,7 +21051,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(PutBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
         }
     }
 
@@ -20446,7 +21083,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20457,8 +21094,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutBucketNotificationError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketNotificationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -20487,7 +21125,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20497,7 +21135,11 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(PutBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -20524,7 +21166,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20535,8 +21177,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutBucketPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -20574,7 +21217,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20585,8 +21228,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutBucketReplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketReplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -20614,7 +21258,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20624,7 +21268,12 @@ impl<P, D> S3 for S3Client<P, D>
 
                 Ok(result)
             }
-            _ => Err(PutBucketRequestPaymentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketRequestPaymentError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -20658,7 +21307,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20669,8 +21318,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutBucketTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -20704,7 +21354,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20715,8 +21365,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutBucketVersioningError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketVersioningError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -20746,7 +21397,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20757,8 +21408,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutBucketWebsiteError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -20872,7 +21524,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -20880,11 +21532,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PutObjectOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20937,7 +21591,11 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(PutObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -21004,7 +21662,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -21012,11 +21670,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PutObjectAclOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21032,7 +21692,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutObjectAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutObjectAclError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -21063,7 +21725,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -21071,11 +21733,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = PutObjectTaggingOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21092,8 +21756,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(PutObjectTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutObjectTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -21130,7 +21795,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -21138,11 +21803,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = RestoreObjectOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21158,7 +21825,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(RestoreObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -21208,7 +21877,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -21216,11 +21885,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UploadPartOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21265,7 +21936,11 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 Ok(result)
             }
-            _ => Err(UploadPartError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UploadPartError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -21346,7 +22021,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok |
@@ -21354,11 +22029,13 @@ impl<P, D> S3 for S3Client<P, D>
             StatusCode::PartialContent => {
 
                 let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
-                if response.body.is_empty() {
+                if body.is_empty() {
                     result = UploadPartCopyOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                    let reader = EventReader::new_with_config(body.as_slice(),
                                                               ParserConfig::new()
                                                                   .trim_whitespace(true));
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21405,8 +22082,9 @@ impl<P, D> S3 for S3Client<P, D>
                 Ok(result)
             }
             _ => {
-                Err(UploadPartCopyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UploadPartCopyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

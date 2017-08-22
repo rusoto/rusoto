@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -756,6 +758,11 @@ impl From<HttpDispatchError> for AddAttachmentsToSetError {
         AddAttachmentsToSetError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddAttachmentsToSetError {
+    fn from(err: io::Error) -> AddAttachmentsToSetError {
+        AddAttachmentsToSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddAttachmentsToSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -843,6 +850,11 @@ impl From<CredentialsError> for AddCommunicationToCaseError {
 impl From<HttpDispatchError> for AddCommunicationToCaseError {
     fn from(err: HttpDispatchError) -> AddCommunicationToCaseError {
         AddCommunicationToCaseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddCommunicationToCaseError {
+    fn from(err: io::Error) -> AddCommunicationToCaseError {
+        AddCommunicationToCaseError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddCommunicationToCaseError {
@@ -937,6 +949,11 @@ impl From<HttpDispatchError> for CreateCaseError {
         CreateCaseError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateCaseError {
+    fn from(err: io::Error) -> CreateCaseError {
+        CreateCaseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateCaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1022,6 +1039,11 @@ impl From<HttpDispatchError> for DescribeAttachmentError {
         DescribeAttachmentError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAttachmentError {
+    fn from(err: io::Error) -> DescribeAttachmentError {
+        DescribeAttachmentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAttachmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1105,6 +1127,11 @@ impl From<HttpDispatchError> for DescribeCasesError {
         DescribeCasesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeCasesError {
+    fn from(err: io::Error) -> DescribeCasesError {
+        DescribeCasesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeCasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1181,6 +1208,11 @@ impl From<CredentialsError> for DescribeCommunicationsError {
 impl From<HttpDispatchError> for DescribeCommunicationsError {
     fn from(err: HttpDispatchError) -> DescribeCommunicationsError {
         DescribeCommunicationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCommunicationsError {
+    fn from(err: io::Error) -> DescribeCommunicationsError {
+        DescribeCommunicationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCommunicationsError {
@@ -1260,6 +1292,11 @@ impl From<HttpDispatchError> for DescribeServicesError {
         DescribeServicesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeServicesError {
+    fn from(err: io::Error) -> DescribeServicesError {
+        DescribeServicesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1330,6 +1367,11 @@ impl From<CredentialsError> for DescribeSeverityLevelsError {
 impl From<HttpDispatchError> for DescribeSeverityLevelsError {
     fn from(err: HttpDispatchError) -> DescribeSeverityLevelsError {
         DescribeSeverityLevelsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSeverityLevelsError {
+    fn from(err: io::Error) -> DescribeSeverityLevelsError {
+        DescribeSeverityLevelsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSeverityLevelsError {
@@ -1404,6 +1446,11 @@ impl From<CredentialsError> for DescribeTrustedAdvisorCheckRefreshStatusesError 
 impl From<HttpDispatchError> for DescribeTrustedAdvisorCheckRefreshStatusesError {
     fn from(err: HttpDispatchError) -> DescribeTrustedAdvisorCheckRefreshStatusesError {
         DescribeTrustedAdvisorCheckRefreshStatusesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTrustedAdvisorCheckRefreshStatusesError {
+    fn from(err: io::Error) -> DescribeTrustedAdvisorCheckRefreshStatusesError {
+        DescribeTrustedAdvisorCheckRefreshStatusesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckRefreshStatusesError {
@@ -1485,6 +1532,11 @@ impl From<HttpDispatchError> for DescribeTrustedAdvisorCheckResultError {
         DescribeTrustedAdvisorCheckResultError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTrustedAdvisorCheckResultError {
+    fn from(err: io::Error) -> DescribeTrustedAdvisorCheckResultError {
+        DescribeTrustedAdvisorCheckResultError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTrustedAdvisorCheckResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1558,6 +1610,11 @@ impl From<CredentialsError> for DescribeTrustedAdvisorCheckSummariesError {
 impl From<HttpDispatchError> for DescribeTrustedAdvisorCheckSummariesError {
     fn from(err: HttpDispatchError) -> DescribeTrustedAdvisorCheckSummariesError {
         DescribeTrustedAdvisorCheckSummariesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTrustedAdvisorCheckSummariesError {
+    fn from(err: io::Error) -> DescribeTrustedAdvisorCheckSummariesError {
+        DescribeTrustedAdvisorCheckSummariesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckSummariesError {
@@ -1634,6 +1691,11 @@ impl From<HttpDispatchError> for DescribeTrustedAdvisorChecksError {
         DescribeTrustedAdvisorChecksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeTrustedAdvisorChecksError {
+    fn from(err: io::Error) -> DescribeTrustedAdvisorChecksError {
+        DescribeTrustedAdvisorChecksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeTrustedAdvisorChecksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1706,6 +1768,11 @@ impl From<CredentialsError> for RefreshTrustedAdvisorCheckError {
 impl From<HttpDispatchError> for RefreshTrustedAdvisorCheckError {
     fn from(err: HttpDispatchError) -> RefreshTrustedAdvisorCheckError {
         RefreshTrustedAdvisorCheckError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RefreshTrustedAdvisorCheckError {
+    fn from(err: io::Error) -> RefreshTrustedAdvisorCheckError {
+        RefreshTrustedAdvisorCheckError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RefreshTrustedAdvisorCheckError {
@@ -1787,6 +1854,11 @@ impl From<CredentialsError> for ResolveCaseError {
 impl From<HttpDispatchError> for ResolveCaseError {
     fn from(err: HttpDispatchError) -> ResolveCaseError {
         ResolveCaseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResolveCaseError {
+    fn from(err: io::Error) -> ResolveCaseError {
+        ResolveCaseError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResolveCaseError {
@@ -1934,15 +2006,18 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddAttachmentsToSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddAttachmentsToSetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(AddAttachmentsToSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddAttachmentsToSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1962,15 +2037,18 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddCommunicationToCaseResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddCommunicationToCaseResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(AddCommunicationToCaseError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddCommunicationToCaseError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1989,13 +2067,21 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateCaseResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateCaseError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateCaseResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCaseError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2013,15 +2099,18 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAttachmentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAttachmentResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeAttachmentError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAttachmentError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2040,14 +2129,20 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCasesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeCasesResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeCasesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCasesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2067,15 +2162,18 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCommunicationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeCommunicationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeCommunicationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCommunicationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2094,15 +2192,20 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeServicesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeServicesResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeServicesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeServicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2122,15 +2225,18 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSeverityLevelsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeSeverityLevelsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeSeverityLevelsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSeverityLevelsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2148,13 +2254,19 @@ fn describe_trusted_advisor_check_refresh_statuses(&self, input: &DescribeTruste
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTrustedAdvisorCheckRefreshStatusesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeTrustedAdvisorCheckRefreshStatusesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTrustedAdvisorCheckRefreshStatusesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTrustedAdvisorCheckRefreshStatusesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2175,13 +2287,19 @@ fn describe_trusted_advisor_check_refresh_statuses(&self, input: &DescribeTruste
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTrustedAdvisorCheckResultResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeTrustedAdvisorCheckResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTrustedAdvisorCheckResultResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTrustedAdvisorCheckResultError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2198,13 +2316,19 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTrustedAdvisorCheckSummariesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeTrustedAdvisorCheckSummariesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTrustedAdvisorCheckSummariesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTrustedAdvisorCheckSummariesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2224,13 +2348,20 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTrustedAdvisorChecksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeTrustedAdvisorChecksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTrustedAdvisorChecksResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTrustedAdvisorChecksError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -2250,13 +2381,20 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RefreshTrustedAdvisorCheckResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RefreshTrustedAdvisorCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RefreshTrustedAdvisorCheckResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RefreshTrustedAdvisorCheckError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -2274,13 +2412,21 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ResolveCaseResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ResolveCaseError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ResolveCaseResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResolveCaseError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 }

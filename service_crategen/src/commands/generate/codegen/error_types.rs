@@ -55,6 +55,11 @@ pub trait GenerateErrorTypes {
                         {type_name}::HttpDispatch(err)
                     }}
                 }}
+                impl From<io::Error> for {type_name} {{
+                    fn from(err: io::Error) -> {type_name} {{
+                        {type_name}::HttpDispatch(HttpDispatchError::from(err))
+                    }}
+                }}
                 impl fmt::Display for {type_name} {{
                     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
                         write!(f, \"{{}}\", self.description())

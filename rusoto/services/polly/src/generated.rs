@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -295,6 +297,11 @@ impl From<HttpDispatchError> for DeleteLexiconError {
         DeleteLexiconError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteLexiconError {
+    fn from(err: io::Error) -> DeleteLexiconError {
+        DeleteLexiconError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteLexiconError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -375,6 +382,11 @@ impl From<HttpDispatchError> for DescribeVoicesError {
         DescribeVoicesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeVoicesError {
+    fn from(err: io::Error) -> DescribeVoicesError {
+        DescribeVoicesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeVoicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -451,6 +463,11 @@ impl From<CredentialsError> for GetLexiconError {
 impl From<HttpDispatchError> for GetLexiconError {
     fn from(err: HttpDispatchError) -> GetLexiconError {
         GetLexiconError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLexiconError {
+    fn from(err: io::Error) -> GetLexiconError {
+        GetLexiconError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetLexiconError {
@@ -531,6 +548,11 @@ impl From<CredentialsError> for ListLexiconsError {
 impl From<HttpDispatchError> for ListLexiconsError {
     fn from(err: HttpDispatchError) -> ListLexiconsError {
         ListLexiconsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListLexiconsError {
+    fn from(err: io::Error) -> ListLexiconsError {
+        ListLexiconsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListLexiconsError {
@@ -634,6 +656,11 @@ impl From<CredentialsError> for PutLexiconError {
 impl From<HttpDispatchError> for PutLexiconError {
     fn from(err: HttpDispatchError) -> PutLexiconError {
         PutLexiconError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutLexiconError {
+    fn from(err: io::Error) -> PutLexiconError {
+        PutLexiconError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutLexiconError {
@@ -742,6 +769,11 @@ impl From<HttpDispatchError> for SynthesizeSpeechError {
         SynthesizeSpeechError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SynthesizeSpeechError {
+    fn from(err: io::Error) -> SynthesizeSpeechError {
+        SynthesizeSpeechError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SynthesizeSpeechError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -839,13 +871,13 @@ impl<P, D> Polly for PollyClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -860,7 +892,9 @@ impl<P, D> Polly for PollyClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DeleteLexiconError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLexiconError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -888,13 +922,13 @@ impl<P, D> Polly for PollyClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -909,8 +943,9 @@ impl<P, D> Polly for PollyClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(DescribeVoicesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVoicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -929,13 +964,13 @@ impl<P, D> Polly for PollyClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -949,7 +984,11 @@ impl<P, D> Polly for PollyClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(GetLexiconError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLexiconError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -973,13 +1012,13 @@ impl<P, D> Polly for PollyClient<P, D>
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -994,7 +1033,9 @@ impl<P, D> Polly for PollyClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(ListLexiconsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListLexiconsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1014,13 +1055,13 @@ impl<P, D> Polly for PollyClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
-                let mut body = response.body;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
                 if body == b"{}" {
                     body = b"null".to_vec();
@@ -1034,7 +1075,11 @@ impl<P, D> Polly for PollyClient<P, D>
 
                 Ok(result)
             }
-            _ => Err(PutLexiconError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutLexiconError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -1055,14 +1100,17 @@ impl<P, D> Polly for PollyClient<P, D>
 
 
         request.sign(&self.credentials_provider.credentials()?);
-
-        let response = self.dispatcher.dispatch(&request)?;
+        let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
 
                 let mut result = SynthesizeSpeechOutput::default();
-                result.audio_stream = Some(response.body);
+
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                result.audio_stream = Some(body);
 
                 if let Some(content_type) = response.headers.get("Content-Type") {
                     let value = content_type.to_owned();
@@ -1077,8 +1125,9 @@ impl<P, D> Polly for PollyClient<P, D>
                 Ok(result)
             }
             _ => {
-                Err(SynthesizeSpeechError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SynthesizeSpeechError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

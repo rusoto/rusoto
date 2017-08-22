@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1021,6 +1023,11 @@ impl From<HttpDispatchError> for CancelKeyDeletionError {
         CancelKeyDeletionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelKeyDeletionError {
+    fn from(err: io::Error) -> CancelKeyDeletionError {
+        CancelKeyDeletionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelKeyDeletionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1127,6 +1134,11 @@ impl From<CredentialsError> for CreateAliasError {
 impl From<HttpDispatchError> for CreateAliasError {
     fn from(err: HttpDispatchError) -> CreateAliasError {
         CreateAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateAliasError {
+    fn from(err: io::Error) -> CreateAliasError {
+        CreateAliasError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAliasError {
@@ -1240,6 +1252,11 @@ impl From<HttpDispatchError> for CreateGrantError {
         CreateGrantError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateGrantError {
+    fn from(err: io::Error) -> CreateGrantError {
+        CreateGrantError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1345,6 +1362,11 @@ impl From<CredentialsError> for CreateKeyError {
 impl From<HttpDispatchError> for CreateKeyError {
     fn from(err: HttpDispatchError) -> CreateKeyError {
         CreateKeyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateKeyError {
+    fn from(err: io::Error) -> CreateKeyError {
+        CreateKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateKeyError {
@@ -1456,6 +1478,11 @@ impl From<HttpDispatchError> for DecryptError {
         DecryptError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DecryptError {
+    fn from(err: io::Error) -> DecryptError {
+        DecryptError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DecryptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1548,6 +1575,11 @@ impl From<CredentialsError> for DeleteAliasError {
 impl From<HttpDispatchError> for DeleteAliasError {
     fn from(err: HttpDispatchError) -> DeleteAliasError {
         DeleteAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteAliasError {
+    fn from(err: io::Error) -> DeleteAliasError {
+        DeleteAliasError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteAliasError {
@@ -1648,6 +1680,11 @@ impl From<HttpDispatchError> for DeleteImportedKeyMaterialError {
         DeleteImportedKeyMaterialError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteImportedKeyMaterialError {
+    fn from(err: io::Error) -> DeleteImportedKeyMaterialError {
+        DeleteImportedKeyMaterialError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteImportedKeyMaterialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1742,6 +1779,11 @@ impl From<HttpDispatchError> for DescribeKeyError {
         DescribeKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeKeyError {
+    fn from(err: io::Error) -> DescribeKeyError {
+        DescribeKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1833,6 +1875,11 @@ impl From<CredentialsError> for DisableKeyError {
 impl From<HttpDispatchError> for DisableKeyError {
     fn from(err: HttpDispatchError) -> DisableKeyError {
         DisableKeyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableKeyError {
+    fn from(err: io::Error) -> DisableKeyError {
+        DisableKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableKeyError {
@@ -1943,6 +1990,11 @@ impl From<HttpDispatchError> for DisableKeyRotationError {
         DisableKeyRotationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DisableKeyRotationError {
+    fn from(err: io::Error) -> DisableKeyRotationError {
+        DisableKeyRotationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DisableKeyRotationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2044,6 +2096,11 @@ impl From<CredentialsError> for EnableKeyError {
 impl From<HttpDispatchError> for EnableKeyError {
     fn from(err: HttpDispatchError) -> EnableKeyError {
         EnableKeyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EnableKeyError {
+    fn from(err: io::Error) -> EnableKeyError {
+        EnableKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableKeyError {
@@ -2155,6 +2212,11 @@ impl From<HttpDispatchError> for EnableKeyRotationError {
         EnableKeyRotationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EnableKeyRotationError {
+    fn from(err: io::Error) -> EnableKeyRotationError {
+        EnableKeyRotationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EnableKeyRotationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2264,6 +2326,11 @@ impl From<CredentialsError> for EncryptError {
 impl From<HttpDispatchError> for EncryptError {
     fn from(err: HttpDispatchError) -> EncryptError {
         EncryptError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EncryptError {
+    fn from(err: io::Error) -> EncryptError {
+        EncryptError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EncryptError {
@@ -2382,6 +2449,11 @@ impl From<HttpDispatchError> for GenerateDataKeyError {
         GenerateDataKeyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GenerateDataKeyError {
+    fn from(err: io::Error) -> GenerateDataKeyError {
+        GenerateDataKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GenerateDataKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2486,6 +2558,11 @@ impl From<HttpDispatchError> for GenerateDataKeyWithoutPlaintextError {
         GenerateDataKeyWithoutPlaintextError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GenerateDataKeyWithoutPlaintextError {
+    fn from(err: io::Error) -> GenerateDataKeyWithoutPlaintextError {
+        GenerateDataKeyWithoutPlaintextError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GenerateDataKeyWithoutPlaintextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2572,6 +2649,11 @@ impl From<CredentialsError> for GenerateRandomError {
 impl From<HttpDispatchError> for GenerateRandomError {
     fn from(err: HttpDispatchError) -> GenerateRandomError {
         GenerateRandomError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GenerateRandomError {
+    fn from(err: io::Error) -> GenerateRandomError {
+        GenerateRandomError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GenerateRandomError {
@@ -2665,6 +2747,11 @@ impl From<CredentialsError> for GetKeyPolicyError {
 impl From<HttpDispatchError> for GetKeyPolicyError {
     fn from(err: HttpDispatchError) -> GetKeyPolicyError {
         GetKeyPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetKeyPolicyError {
+    fn from(err: io::Error) -> GetKeyPolicyError {
+        GetKeyPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetKeyPolicyError {
@@ -2770,6 +2857,11 @@ impl From<HttpDispatchError> for GetKeyRotationStatusError {
         GetKeyRotationStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetKeyRotationStatusError {
+    fn from(err: io::Error) -> GetKeyRotationStatusError {
+        GetKeyRotationStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetKeyRotationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2872,6 +2964,11 @@ impl From<CredentialsError> for GetParametersForImportError {
 impl From<HttpDispatchError> for GetParametersForImportError {
     fn from(err: HttpDispatchError) -> GetParametersForImportError {
         GetParametersForImportError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetParametersForImportError {
+    fn from(err: io::Error) -> GetParametersForImportError {
+        GetParametersForImportError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetParametersForImportError {
@@ -3000,6 +3097,11 @@ impl From<HttpDispatchError> for ImportKeyMaterialError {
         ImportKeyMaterialError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ImportKeyMaterialError {
+    fn from(err: io::Error) -> ImportKeyMaterialError {
+        ImportKeyMaterialError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ImportKeyMaterialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3093,6 +3195,11 @@ impl From<CredentialsError> for ListAliasesError {
 impl From<HttpDispatchError> for ListAliasesError {
     fn from(err: HttpDispatchError) -> ListAliasesError {
         ListAliasesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAliasesError {
+    fn from(err: io::Error) -> ListAliasesError {
+        ListAliasesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAliasesError {
@@ -3190,6 +3297,11 @@ impl From<CredentialsError> for ListGrantsError {
 impl From<HttpDispatchError> for ListGrantsError {
     fn from(err: HttpDispatchError) -> ListGrantsError {
         ListGrantsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListGrantsError {
+    fn from(err: io::Error) -> ListGrantsError {
+        ListGrantsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListGrantsError {
@@ -3291,6 +3403,11 @@ impl From<HttpDispatchError> for ListKeyPoliciesError {
         ListKeyPoliciesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListKeyPoliciesError {
+    fn from(err: io::Error) -> ListKeyPoliciesError {
+        ListKeyPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListKeyPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3375,6 +3492,11 @@ impl From<CredentialsError> for ListKeysError {
 impl From<HttpDispatchError> for ListKeysError {
     fn from(err: HttpDispatchError) -> ListKeysError {
         ListKeysError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListKeysError {
+    fn from(err: io::Error) -> ListKeysError {
+        ListKeysError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListKeysError {
@@ -3466,6 +3588,11 @@ impl From<CredentialsError> for ListResourceTagsError {
 impl From<HttpDispatchError> for ListResourceTagsError {
     fn from(err: HttpDispatchError) -> ListResourceTagsError {
         ListResourceTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListResourceTagsError {
+    fn from(err: io::Error) -> ListResourceTagsError {
+        ListResourceTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListResourceTagsError {
@@ -3563,6 +3690,11 @@ impl From<CredentialsError> for ListRetirableGrantsError {
 impl From<HttpDispatchError> for ListRetirableGrantsError {
     fn from(err: HttpDispatchError) -> ListRetirableGrantsError {
         ListRetirableGrantsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRetirableGrantsError {
+    fn from(err: io::Error) -> ListRetirableGrantsError {
+        ListRetirableGrantsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRetirableGrantsError {
@@ -3676,6 +3808,11 @@ impl From<CredentialsError> for PutKeyPolicyError {
 impl From<HttpDispatchError> for PutKeyPolicyError {
     fn from(err: HttpDispatchError) -> PutKeyPolicyError {
         PutKeyPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutKeyPolicyError {
+    fn from(err: io::Error) -> PutKeyPolicyError {
+        PutKeyPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutKeyPolicyError {
@@ -3793,6 +3930,11 @@ impl From<HttpDispatchError> for ReEncryptError {
         ReEncryptError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReEncryptError {
+    fn from(err: io::Error) -> ReEncryptError {
+        ReEncryptError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReEncryptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3898,6 +4040,11 @@ impl From<HttpDispatchError> for RetireGrantError {
         RetireGrantError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RetireGrantError {
+    fn from(err: io::Error) -> RetireGrantError {
+        RetireGrantError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RetireGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4000,6 +4147,11 @@ impl From<HttpDispatchError> for RevokeGrantError {
         RevokeGrantError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RevokeGrantError {
+    fn from(err: io::Error) -> RevokeGrantError {
+        RevokeGrantError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RevokeGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4097,6 +4249,11 @@ impl From<CredentialsError> for ScheduleKeyDeletionError {
 impl From<HttpDispatchError> for ScheduleKeyDeletionError {
     fn from(err: HttpDispatchError) -> ScheduleKeyDeletionError {
         ScheduleKeyDeletionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ScheduleKeyDeletionError {
+    fn from(err: io::Error) -> ScheduleKeyDeletionError {
+        ScheduleKeyDeletionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ScheduleKeyDeletionError {
@@ -4200,6 +4357,11 @@ impl From<HttpDispatchError> for TagResourceError {
         TagResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4297,6 +4459,11 @@ impl From<HttpDispatchError> for UntagResourceError {
         UntagResourceError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4386,6 +4553,11 @@ impl From<CredentialsError> for UpdateAliasError {
 impl From<HttpDispatchError> for UpdateAliasError {
     fn from(err: HttpDispatchError) -> UpdateAliasError {
         UpdateAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAliasError {
+    fn from(err: io::Error) -> UpdateAliasError {
+        UpdateAliasError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAliasError {
@@ -4483,6 +4655,11 @@ impl From<CredentialsError> for UpdateKeyDescriptionError {
 impl From<HttpDispatchError> for UpdateKeyDescriptionError {
     fn from(err: HttpDispatchError) -> UpdateKeyDescriptionError {
         UpdateKeyDescriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateKeyDescriptionError {
+    fn from(err: io::Error) -> UpdateKeyDescriptionError {
+        UpdateKeyDescriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateKeyDescriptionError {
@@ -4731,15 +4908,18 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelKeyDeletionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CancelKeyDeletionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CancelKeyDeletionError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelKeyDeletionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4756,11 +4936,15 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(CreateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4778,13 +4962,21 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateGrantResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateGrantResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateGrantError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4800,13 +4992,21 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateKeyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateKeyResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4822,15 +5022,20 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<DecryptResponse>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DecryptResponse>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(DecryptError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DecryptError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4846,11 +5051,15 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeleteAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4868,11 +5077,16 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeleteImportedKeyMaterialError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteImportedKeyMaterialError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -4890,13 +5104,21 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeKeyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeKeyResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4912,11 +5134,15 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DisableKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4934,13 +5160,14 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DisableKeyRotationError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisableKeyRotationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4957,11 +5184,15 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(EnableKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4979,13 +5210,14 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(EnableKeyRotationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EnableKeyRotationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5002,15 +5234,20 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<EncryptResponse>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<EncryptResponse>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(EncryptError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EncryptError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5028,15 +5265,20 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GenerateDataKeyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GenerateDataKeyResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GenerateDataKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GenerateDataKeyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5057,13 +5299,20 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GenerateDataKeyWithoutPlaintextResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GenerateDataKeyWithoutPlaintextError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GenerateDataKeyWithoutPlaintextResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GenerateDataKeyWithoutPlaintextError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
         }
     }
 
@@ -5081,15 +5330,20 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GenerateRandomResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GenerateRandomResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GenerateRandomError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GenerateRandomError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5108,14 +5362,20 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetKeyPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetKeyPolicyResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetKeyPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetKeyPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5135,15 +5395,18 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetKeyRotationStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetKeyRotationStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetKeyRotationStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetKeyRotationStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5163,15 +5426,18 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetParametersForImportResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetParametersForImportResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetParametersForImportError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetParametersForImportError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5190,15 +5456,18 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ImportKeyMaterialResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ImportKeyMaterialResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ImportKeyMaterialError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ImportKeyMaterialError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5217,13 +5486,21 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAliasesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListAliasesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAliasesResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAliasesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5241,13 +5518,21 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListGrantsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListGrantsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListGrantsResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListGrantsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5265,15 +5550,20 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListKeyPoliciesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListKeyPoliciesResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListKeyPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListKeyPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5290,13 +5580,21 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListKeysResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListKeysResponse>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListKeysError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5314,15 +5612,20 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListResourceTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListResourceTagsResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListResourceTagsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListResourceTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5341,15 +5644,20 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListGrantsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListGrantsResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListRetirableGrantsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRetirableGrantsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5366,12 +5674,14 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(PutKeyPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutKeyPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5388,13 +5698,21 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ReEncryptResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ReEncryptError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ReEncryptResponse>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReEncryptError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5410,11 +5728,15 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RetireGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RetireGrantError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5430,11 +5752,15 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(RevokeGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RevokeGrantError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5452,15 +5778,18 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ScheduleKeyDeletionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ScheduleKeyDeletionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ScheduleKeyDeletionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ScheduleKeyDeletionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5477,11 +5806,15 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5497,12 +5830,14 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -5519,11 +5854,15 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(UpdateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -5541,13 +5880,14 @@ impl<P, D> Kms for KmsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(UpdateKeyDescriptionError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateKeyDescriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

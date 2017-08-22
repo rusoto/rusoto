@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2205,6 +2207,11 @@ impl From<HttpDispatchError> for CreateDevicePoolError {
         CreateDevicePoolError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateDevicePoolError {
+    fn from(err: io::Error) -> CreateDevicePoolError {
+        CreateDevicePoolError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2295,6 +2302,11 @@ impl From<CredentialsError> for CreateNetworkProfileError {
 impl From<HttpDispatchError> for CreateNetworkProfileError {
     fn from(err: HttpDispatchError) -> CreateNetworkProfileError {
         CreateNetworkProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateNetworkProfileError {
+    fn from(err: io::Error) -> CreateNetworkProfileError {
+        CreateNetworkProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateNetworkProfileError {
@@ -2391,6 +2403,11 @@ impl From<HttpDispatchError> for CreateProjectError {
         CreateProjectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateProjectError {
+    fn from(err: io::Error) -> CreateProjectError {
+        CreateProjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2483,6 +2500,11 @@ impl From<HttpDispatchError> for CreateRemoteAccessSessionError {
         CreateRemoteAccessSessionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateRemoteAccessSessionError {
+    fn from(err: io::Error) -> CreateRemoteAccessSessionError {
+        CreateRemoteAccessSessionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2571,6 +2593,11 @@ impl From<CredentialsError> for CreateUploadError {
 impl From<HttpDispatchError> for CreateUploadError {
     fn from(err: HttpDispatchError) -> CreateUploadError {
         CreateUploadError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateUploadError {
+    fn from(err: io::Error) -> CreateUploadError {
+        CreateUploadError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateUploadError {
@@ -2665,6 +2692,11 @@ impl From<HttpDispatchError> for DeleteDevicePoolError {
         DeleteDevicePoolError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteDevicePoolError {
+    fn from(err: io::Error) -> DeleteDevicePoolError {
+        DeleteDevicePoolError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2755,6 +2787,11 @@ impl From<CredentialsError> for DeleteNetworkProfileError {
 impl From<HttpDispatchError> for DeleteNetworkProfileError {
     fn from(err: HttpDispatchError) -> DeleteNetworkProfileError {
         DeleteNetworkProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteNetworkProfileError {
+    fn from(err: io::Error) -> DeleteNetworkProfileError {
+        DeleteNetworkProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteNetworkProfileError {
@@ -2851,6 +2888,11 @@ impl From<HttpDispatchError> for DeleteProjectError {
         DeleteProjectError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteProjectError {
+    fn from(err: io::Error) -> DeleteProjectError {
+        DeleteProjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2943,6 +2985,11 @@ impl From<HttpDispatchError> for DeleteRemoteAccessSessionError {
         DeleteRemoteAccessSessionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRemoteAccessSessionError {
+    fn from(err: io::Error) -> DeleteRemoteAccessSessionError {
+        DeleteRemoteAccessSessionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3031,6 +3078,11 @@ impl From<HttpDispatchError> for DeleteRunError {
         DeleteRunError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRunError {
+    fn from(err: io::Error) -> DeleteRunError {
+        DeleteRunError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3117,6 +3169,11 @@ impl From<CredentialsError> for DeleteUploadError {
 impl From<HttpDispatchError> for DeleteUploadError {
     fn from(err: HttpDispatchError) -> DeleteUploadError {
         DeleteUploadError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteUploadError {
+    fn from(err: io::Error) -> DeleteUploadError {
+        DeleteUploadError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteUploadError {
@@ -3211,6 +3268,11 @@ impl From<HttpDispatchError> for GetAccountSettingsError {
         GetAccountSettingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetAccountSettingsError {
+    fn from(err: io::Error) -> GetAccountSettingsError {
+        GetAccountSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3297,6 +3359,11 @@ impl From<CredentialsError> for GetDeviceError {
 impl From<HttpDispatchError> for GetDeviceError {
     fn from(err: HttpDispatchError) -> GetDeviceError {
         GetDeviceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDeviceError {
+    fn from(err: io::Error) -> GetDeviceError {
+        GetDeviceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetDeviceError {
@@ -3391,6 +3458,11 @@ impl From<HttpDispatchError> for GetDevicePoolError {
         GetDevicePoolError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDevicePoolError {
+    fn from(err: io::Error) -> GetDevicePoolError {
+        GetDevicePoolError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3483,6 +3555,11 @@ impl From<HttpDispatchError> for GetDevicePoolCompatibilityError {
         GetDevicePoolCompatibilityError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetDevicePoolCompatibilityError {
+    fn from(err: io::Error) -> GetDevicePoolCompatibilityError {
+        GetDevicePoolCompatibilityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetDevicePoolCompatibilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3569,6 +3646,11 @@ impl From<CredentialsError> for GetJobError {
 impl From<HttpDispatchError> for GetJobError {
     fn from(err: HttpDispatchError) -> GetJobError {
         GetJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetJobError {
+    fn from(err: io::Error) -> GetJobError {
+        GetJobError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetJobError {
@@ -3661,6 +3743,11 @@ impl From<CredentialsError> for GetNetworkProfileError {
 impl From<HttpDispatchError> for GetNetworkProfileError {
     fn from(err: HttpDispatchError) -> GetNetworkProfileError {
         GetNetworkProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetNetworkProfileError {
+    fn from(err: io::Error) -> GetNetworkProfileError {
+        GetNetworkProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetNetworkProfileError {
@@ -3762,6 +3849,11 @@ impl From<HttpDispatchError> for GetOfferingStatusError {
         GetOfferingStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetOfferingStatusError {
+    fn from(err: io::Error) -> GetOfferingStatusError {
+        GetOfferingStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetOfferingStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3849,6 +3941,11 @@ impl From<CredentialsError> for GetProjectError {
 impl From<HttpDispatchError> for GetProjectError {
     fn from(err: HttpDispatchError) -> GetProjectError {
         GetProjectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetProjectError {
+    fn from(err: io::Error) -> GetProjectError {
+        GetProjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetProjectError {
@@ -3943,6 +4040,11 @@ impl From<HttpDispatchError> for GetRemoteAccessSessionError {
         GetRemoteAccessSessionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRemoteAccessSessionError {
+    fn from(err: io::Error) -> GetRemoteAccessSessionError {
+        GetRemoteAccessSessionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4031,6 +4133,11 @@ impl From<HttpDispatchError> for GetRunError {
         GetRunError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetRunError {
+    fn from(err: io::Error) -> GetRunError {
+        GetRunError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4115,6 +4222,11 @@ impl From<CredentialsError> for GetSuiteError {
 impl From<HttpDispatchError> for GetSuiteError {
     fn from(err: HttpDispatchError) -> GetSuiteError {
         GetSuiteError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSuiteError {
+    fn from(err: io::Error) -> GetSuiteError {
+        GetSuiteError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSuiteError {
@@ -4203,6 +4315,11 @@ impl From<HttpDispatchError> for GetTestError {
         GetTestError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetTestError {
+    fn from(err: io::Error) -> GetTestError {
+        GetTestError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetTestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4287,6 +4404,11 @@ impl From<CredentialsError> for GetUploadError {
 impl From<HttpDispatchError> for GetUploadError {
     fn from(err: HttpDispatchError) -> GetUploadError {
         GetUploadError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetUploadError {
+    fn from(err: io::Error) -> GetUploadError {
+        GetUploadError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetUploadError {
@@ -4375,6 +4497,11 @@ impl From<CredentialsError> for InstallToRemoteAccessSessionError {
 impl From<HttpDispatchError> for InstallToRemoteAccessSessionError {
     fn from(err: HttpDispatchError) -> InstallToRemoteAccessSessionError {
         InstallToRemoteAccessSessionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for InstallToRemoteAccessSessionError {
+    fn from(err: io::Error) -> InstallToRemoteAccessSessionError {
+        InstallToRemoteAccessSessionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for InstallToRemoteAccessSessionError {
@@ -4471,6 +4598,11 @@ impl From<HttpDispatchError> for ListArtifactsError {
         ListArtifactsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListArtifactsError {
+    fn from(err: io::Error) -> ListArtifactsError {
+        ListArtifactsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4563,6 +4695,11 @@ impl From<HttpDispatchError> for ListDevicePoolsError {
         ListDevicePoolsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListDevicePoolsError {
+    fn from(err: io::Error) -> ListDevicePoolsError {
+        ListDevicePoolsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListDevicePoolsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4651,6 +4788,11 @@ impl From<HttpDispatchError> for ListDevicesError {
         ListDevicesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListDevicesError {
+    fn from(err: io::Error) -> ListDevicesError {
+        ListDevicesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4735,6 +4877,11 @@ impl From<CredentialsError> for ListJobsError {
 impl From<HttpDispatchError> for ListJobsError {
     fn from(err: HttpDispatchError) -> ListJobsError {
         ListJobsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListJobsError {
+    fn from(err: io::Error) -> ListJobsError {
+        ListJobsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListJobsError {
@@ -4827,6 +4974,11 @@ impl From<CredentialsError> for ListNetworkProfilesError {
 impl From<HttpDispatchError> for ListNetworkProfilesError {
     fn from(err: HttpDispatchError) -> ListNetworkProfilesError {
         ListNetworkProfilesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListNetworkProfilesError {
+    fn from(err: io::Error) -> ListNetworkProfilesError {
+        ListNetworkProfilesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListNetworkProfilesError {
@@ -4926,6 +5078,11 @@ impl From<CredentialsError> for ListOfferingPromotionsError {
 impl From<HttpDispatchError> for ListOfferingPromotionsError {
     fn from(err: HttpDispatchError) -> ListOfferingPromotionsError {
         ListOfferingPromotionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListOfferingPromotionsError {
+    fn from(err: io::Error) -> ListOfferingPromotionsError {
+        ListOfferingPromotionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListOfferingPromotionsError {
@@ -5028,6 +5185,11 @@ impl From<HttpDispatchError> for ListOfferingTransactionsError {
         ListOfferingTransactionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListOfferingTransactionsError {
+    fn from(err: io::Error) -> ListOfferingTransactionsError {
+        ListOfferingTransactionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListOfferingTransactionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5128,6 +5290,11 @@ impl From<HttpDispatchError> for ListOfferingsError {
         ListOfferingsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListOfferingsError {
+    fn from(err: io::Error) -> ListOfferingsError {
+        ListOfferingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5215,6 +5382,11 @@ impl From<CredentialsError> for ListProjectsError {
 impl From<HttpDispatchError> for ListProjectsError {
     fn from(err: HttpDispatchError) -> ListProjectsError {
         ListProjectsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListProjectsError {
+    fn from(err: io::Error) -> ListProjectsError {
+        ListProjectsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -5309,6 +5481,11 @@ impl From<HttpDispatchError> for ListRemoteAccessSessionsError {
         ListRemoteAccessSessionsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListRemoteAccessSessionsError {
+    fn from(err: io::Error) -> ListRemoteAccessSessionsError {
+        ListRemoteAccessSessionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListRemoteAccessSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5395,6 +5572,11 @@ impl From<CredentialsError> for ListRunsError {
 impl From<HttpDispatchError> for ListRunsError {
     fn from(err: HttpDispatchError) -> ListRunsError {
         ListRunsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRunsError {
+    fn from(err: io::Error) -> ListRunsError {
+        ListRunsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRunsError {
@@ -5485,6 +5667,11 @@ impl From<HttpDispatchError> for ListSamplesError {
         ListSamplesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListSamplesError {
+    fn from(err: io::Error) -> ListSamplesError {
+        ListSamplesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListSamplesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5571,6 +5758,11 @@ impl From<HttpDispatchError> for ListSuitesError {
         ListSuitesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListSuitesError {
+    fn from(err: io::Error) -> ListSuitesError {
+        ListSuitesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListSuitesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5655,6 +5847,11 @@ impl From<CredentialsError> for ListTestsError {
 impl From<HttpDispatchError> for ListTestsError {
     fn from(err: HttpDispatchError) -> ListTestsError {
         ListTestsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTestsError {
+    fn from(err: io::Error) -> ListTestsError {
+        ListTestsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTestsError {
@@ -5749,6 +5946,11 @@ impl From<HttpDispatchError> for ListUniqueProblemsError {
         ListUniqueProblemsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ListUniqueProblemsError {
+    fn from(err: io::Error) -> ListUniqueProblemsError {
+        ListUniqueProblemsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ListUniqueProblemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -5837,6 +6039,11 @@ impl From<CredentialsError> for ListUploadsError {
 impl From<HttpDispatchError> for ListUploadsError {
     fn from(err: HttpDispatchError) -> ListUploadsError {
         ListUploadsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListUploadsError {
+    fn from(err: io::Error) -> ListUploadsError {
+        ListUploadsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListUploadsError {
@@ -5934,6 +6141,11 @@ impl From<CredentialsError> for PurchaseOfferingError {
 impl From<HttpDispatchError> for PurchaseOfferingError {
     fn from(err: HttpDispatchError) -> PurchaseOfferingError {
         PurchaseOfferingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PurchaseOfferingError {
+    fn from(err: io::Error) -> PurchaseOfferingError {
+        PurchaseOfferingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PurchaseOfferingError {
@@ -6034,6 +6246,11 @@ impl From<HttpDispatchError> for RenewOfferingError {
         RenewOfferingError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for RenewOfferingError {
+    fn from(err: io::Error) -> RenewOfferingError {
+        RenewOfferingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for RenewOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6126,6 +6343,11 @@ impl From<CredentialsError> for ScheduleRunError {
 impl From<HttpDispatchError> for ScheduleRunError {
     fn from(err: HttpDispatchError) -> ScheduleRunError {
         ScheduleRunError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ScheduleRunError {
+    fn from(err: io::Error) -> ScheduleRunError {
+        ScheduleRunError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ScheduleRunError {
@@ -6221,6 +6443,11 @@ impl From<HttpDispatchError> for StopRemoteAccessSessionError {
         StopRemoteAccessSessionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for StopRemoteAccessSessionError {
+    fn from(err: io::Error) -> StopRemoteAccessSessionError {
+        StopRemoteAccessSessionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for StopRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6307,6 +6534,11 @@ impl From<CredentialsError> for StopRunError {
 impl From<HttpDispatchError> for StopRunError {
     fn from(err: HttpDispatchError) -> StopRunError {
         StopRunError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopRunError {
+    fn from(err: io::Error) -> StopRunError {
+        StopRunError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopRunError {
@@ -6401,6 +6633,11 @@ impl From<HttpDispatchError> for UpdateDevicePoolError {
         UpdateDevicePoolError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for UpdateDevicePoolError {
+    fn from(err: io::Error) -> UpdateDevicePoolError {
+        UpdateDevicePoolError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for UpdateDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -6491,6 +6728,11 @@ impl From<CredentialsError> for UpdateNetworkProfileError {
 impl From<HttpDispatchError> for UpdateNetworkProfileError {
     fn from(err: HttpDispatchError) -> UpdateNetworkProfileError {
         UpdateNetworkProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateNetworkProfileError {
+    fn from(err: io::Error) -> UpdateNetworkProfileError {
+        UpdateNetworkProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateNetworkProfileError {
@@ -6585,6 +6827,11 @@ impl From<CredentialsError> for UpdateProjectError {
 impl From<HttpDispatchError> for UpdateProjectError {
     fn from(err: HttpDispatchError) -> UpdateProjectError {
         UpdateProjectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateProjectError {
+    fn from(err: io::Error) -> UpdateProjectError {
+        UpdateProjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateProjectError {
@@ -6922,15 +7169,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDevicePoolResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateDevicePoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDevicePoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6949,15 +7201,18 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateNetworkProfileResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(CreateNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateNetworkProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6976,14 +7231,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateProjectResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7004,13 +7265,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateRemoteAccessSessionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRemoteAccessSessionError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -7028,14 +7296,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateUploadResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7054,15 +7328,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDevicePoolResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteDevicePoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDevicePoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7081,15 +7360,18 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteNetworkProfileResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DeleteNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteNetworkProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7108,14 +7390,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteProjectResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7136,13 +7424,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRemoteAccessSessionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRemoteAccessSessionError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -7158,15 +7453,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<DeleteRunResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRunResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(DeleteRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7184,14 +7484,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteUploadResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeleteUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7207,15 +7513,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAccountSettingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetAccountSettingsResult>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7232,15 +7543,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetDeviceResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDeviceResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetDeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7258,14 +7574,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDevicePoolResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDevicePoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7286,13 +7608,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDevicePoolCompatibilityResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetDevicePoolCompatibilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDevicePoolCompatibilityResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDevicePoolCompatibilityError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 
@@ -7308,15 +7637,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetJobResult>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetJobResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7334,15 +7668,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetNetworkProfileResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetNetworkProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7361,15 +7700,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOfferingStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetOfferingStatusResult>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetOfferingStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetOfferingStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7386,13 +7730,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetProjectResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7411,15 +7763,18 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRemoteAccessSessionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRemoteAccessSessionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7436,15 +7791,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetRunResult>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRunResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7460,15 +7820,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetSuiteResult>(String::from_utf8_lossy(&response.body)
-                                                              .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetSuiteResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetSuiteError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSuiteError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7484,15 +7849,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetTestResult>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetTestResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetTestError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTestError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7508,15 +7878,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetUploadResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetUploadResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(GetUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7536,13 +7911,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<InstallToRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(InstallToRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<InstallToRemoteAccessSessionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(InstallToRemoteAccessSessionError::from_body(String::from_utf8_lossy(&body)
+                                                                     .as_ref()))
+            }
         }
     }
 
@@ -7560,14 +7942,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListArtifactsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListArtifactsResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListArtifactsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListArtifactsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7586,15 +7974,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDevicePoolsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDevicePoolsResult>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListDevicePoolsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDevicePoolsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7613,13 +8006,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDevicesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListDevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListDevicesResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListDevicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7635,15 +8036,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&response.body)
-                                                              .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(ListJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7661,15 +8067,18 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListNetworkProfilesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListNetworkProfilesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListNetworkProfilesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListNetworkProfilesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7689,15 +8098,18 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOfferingPromotionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListOfferingPromotionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(ListOfferingPromotionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListOfferingPromotionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7718,13 +8130,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOfferingTransactionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListOfferingTransactionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListOfferingTransactionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListOfferingTransactionsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -7742,14 +8161,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOfferingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListOfferingsResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListOfferingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7768,14 +8193,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListProjectsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListProjectsResult>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListProjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListProjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7796,13 +8227,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRemoteAccessSessionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListRemoteAccessSessionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRemoteAccessSessionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRemoteAccessSessionsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -7818,15 +8256,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListRunsResult>(String::from_utf8_lossy(&response.body)
-                                                              .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRunsResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(ListRunsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRunsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7844,13 +8287,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSamplesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListSamplesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListSamplesResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSamplesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7866,13 +8317,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSuitesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListSuitesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListSuitesResult>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSuitesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7888,15 +8347,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListTestsResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTestsResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(ListTestsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTestsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7914,15 +8378,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListUniqueProblemsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListUniqueProblemsResult>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListUniqueProblemsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListUniqueProblemsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7941,13 +8410,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListUploadsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListUploadsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListUploadsResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListUploadsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -7965,15 +8442,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PurchaseOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PurchaseOfferingResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PurchaseOfferingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PurchaseOfferingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -7992,14 +8474,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RenewOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RenewOfferingResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(RenewOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RenewOfferingError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8018,13 +8506,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ScheduleRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ScheduleRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ScheduleRunResult>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ScheduleRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8044,13 +8540,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StopRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopRemoteAccessSessionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopRemoteAccessSessionError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -8066,15 +8569,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<StopRunResult>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopRunResult>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(StopRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -8092,15 +8600,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDevicePoolResult>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateDevicePoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDevicePoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8119,15 +8632,18 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateNetworkProfileResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(UpdateNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateNetworkProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -8146,14 +8662,20 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateProjectResult>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(UpdateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

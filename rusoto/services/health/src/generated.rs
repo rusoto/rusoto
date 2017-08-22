@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -503,6 +505,11 @@ impl From<HttpDispatchError> for DescribeAffectedEntitiesError {
         DescribeAffectedEntitiesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeAffectedEntitiesError {
+    fn from(err: io::Error) -> DescribeAffectedEntitiesError {
+        DescribeAffectedEntitiesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeAffectedEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -573,6 +580,11 @@ impl From<CredentialsError> for DescribeEntityAggregatesError {
 impl From<HttpDispatchError> for DescribeEntityAggregatesError {
     fn from(err: HttpDispatchError) -> DescribeEntityAggregatesError {
         DescribeEntityAggregatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEntityAggregatesError {
+    fn from(err: io::Error) -> DescribeEntityAggregatesError {
+        DescribeEntityAggregatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEntityAggregatesError {
@@ -646,6 +658,11 @@ impl From<CredentialsError> for DescribeEventAggregatesError {
 impl From<HttpDispatchError> for DescribeEventAggregatesError {
     fn from(err: HttpDispatchError) -> DescribeEventAggregatesError {
         DescribeEventAggregatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventAggregatesError {
+    fn from(err: io::Error) -> DescribeEventAggregatesError {
+        DescribeEventAggregatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventAggregatesError {
@@ -722,6 +739,11 @@ impl From<CredentialsError> for DescribeEventDetailsError {
 impl From<HttpDispatchError> for DescribeEventDetailsError {
     fn from(err: HttpDispatchError) -> DescribeEventDetailsError {
         DescribeEventDetailsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventDetailsError {
+    fn from(err: io::Error) -> DescribeEventDetailsError {
+        DescribeEventDetailsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventDetailsError {
@@ -805,6 +827,11 @@ impl From<HttpDispatchError> for DescribeEventTypesError {
         DescribeEventTypesError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeEventTypesError {
+    fn from(err: io::Error) -> DescribeEventTypesError {
+        DescribeEventTypesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeEventTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -885,6 +912,11 @@ impl From<CredentialsError> for DescribeEventsError {
 impl From<HttpDispatchError> for DescribeEventsError {
     fn from(err: HttpDispatchError) -> DescribeEventsError {
         DescribeEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventsError {
+    fn from(err: io::Error) -> DescribeEventsError {
+        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -987,13 +1019,20 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAffectedEntitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeAffectedEntitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeAffectedEntitiesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAffectedEntitiesError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -1013,13 +1052,20 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEntityAggregatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeEntityAggregatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEntityAggregatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEntityAggregatesError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -1038,13 +1084,20 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEventAggregatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeEventAggregatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEventAggregatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventAggregatesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
         }
     }
 
@@ -1063,15 +1116,18 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEventDetailsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEventDetailsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeEventDetailsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventDetailsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1090,15 +1146,18 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEventTypesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEventTypesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeEventTypesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1117,15 +1176,20 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

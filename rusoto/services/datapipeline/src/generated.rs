@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -750,6 +752,11 @@ impl From<HttpDispatchError> for ActivatePipelineError {
         ActivatePipelineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ActivatePipelineError {
+    fn from(err: io::Error) -> ActivatePipelineError {
+        ActivatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ActivatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -840,6 +847,11 @@ impl From<HttpDispatchError> for AddTagsError {
         AddTagsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for AddTagsError {
+    fn from(err: io::Error) -> AddTagsError {
+        AddTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -920,6 +932,11 @@ impl From<CredentialsError> for CreatePipelineError {
 impl From<HttpDispatchError> for CreatePipelineError {
     fn from(err: HttpDispatchError) -> CreatePipelineError {
         CreatePipelineError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePipelineError {
+    fn from(err: io::Error) -> CreatePipelineError {
+        CreatePipelineError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePipelineError {
@@ -1012,6 +1029,11 @@ impl From<HttpDispatchError> for DeactivatePipelineError {
         DeactivatePipelineError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeactivatePipelineError {
+    fn from(err: io::Error) -> DeactivatePipelineError {
+        DeactivatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeactivatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1099,6 +1121,11 @@ impl From<CredentialsError> for DeletePipelineError {
 impl From<HttpDispatchError> for DeletePipelineError {
     fn from(err: HttpDispatchError) -> DeletePipelineError {
         DeletePipelineError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeletePipelineError {
+    fn from(err: io::Error) -> DeletePipelineError {
+        DeletePipelineError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeletePipelineError {
@@ -1192,6 +1219,11 @@ impl From<HttpDispatchError> for DescribeObjectsError {
         DescribeObjectsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeObjectsError {
+    fn from(err: io::Error) -> DescribeObjectsError {
+        DescribeObjectsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1282,6 +1314,11 @@ impl From<CredentialsError> for DescribePipelinesError {
 impl From<HttpDispatchError> for DescribePipelinesError {
     fn from(err: HttpDispatchError) -> DescribePipelinesError {
         DescribePipelinesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribePipelinesError {
+    fn from(err: io::Error) -> DescribePipelinesError {
+        DescribePipelinesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribePipelinesError {
@@ -1383,6 +1420,11 @@ impl From<HttpDispatchError> for EvaluateExpressionError {
         EvaluateExpressionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for EvaluateExpressionError {
+    fn from(err: io::Error) -> EvaluateExpressionError {
+        EvaluateExpressionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for EvaluateExpressionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1476,6 +1518,11 @@ impl From<HttpDispatchError> for GetPipelineDefinitionError {
         GetPipelineDefinitionError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetPipelineDefinitionError {
+    fn from(err: io::Error) -> GetPipelineDefinitionError {
+        GetPipelineDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetPipelineDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1558,6 +1605,11 @@ impl From<CredentialsError> for ListPipelinesError {
 impl From<HttpDispatchError> for ListPipelinesError {
     fn from(err: HttpDispatchError) -> ListPipelinesError {
         ListPipelinesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPipelinesError {
+    fn from(err: io::Error) -> ListPipelinesError {
+        ListPipelinesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPipelinesError {
@@ -1643,6 +1695,11 @@ impl From<CredentialsError> for PollForTaskError {
 impl From<HttpDispatchError> for PollForTaskError {
     fn from(err: HttpDispatchError) -> PollForTaskError {
         PollForTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PollForTaskError {
+    fn from(err: io::Error) -> PollForTaskError {
+        PollForTaskError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PollForTaskError {
@@ -1732,6 +1789,11 @@ impl From<CredentialsError> for PutPipelineDefinitionError {
 impl From<HttpDispatchError> for PutPipelineDefinitionError {
     fn from(err: HttpDispatchError) -> PutPipelineDefinitionError {
         PutPipelineDefinitionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutPipelineDefinitionError {
+    fn from(err: io::Error) -> PutPipelineDefinitionError {
+        PutPipelineDefinitionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutPipelineDefinitionError {
@@ -1828,6 +1890,11 @@ impl From<HttpDispatchError> for QueryObjectsError {
         QueryObjectsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for QueryObjectsError {
+    fn from(err: io::Error) -> QueryObjectsError {
+        QueryObjectsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for QueryObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1916,6 +1983,11 @@ impl From<CredentialsError> for RemoveTagsError {
 impl From<HttpDispatchError> for RemoveTagsError {
     fn from(err: HttpDispatchError) -> RemoveTagsError {
         RemoveTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveTagsError {
+    fn from(err: io::Error) -> RemoveTagsError {
+        RemoveTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsError {
@@ -2015,6 +2087,11 @@ impl From<HttpDispatchError> for ReportTaskProgressError {
         ReportTaskProgressError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for ReportTaskProgressError {
+    fn from(err: io::Error) -> ReportTaskProgressError {
+        ReportTaskProgressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for ReportTaskProgressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2096,6 +2173,11 @@ impl From<CredentialsError> for ReportTaskRunnerHeartbeatError {
 impl From<HttpDispatchError> for ReportTaskRunnerHeartbeatError {
     fn from(err: HttpDispatchError) -> ReportTaskRunnerHeartbeatError {
         ReportTaskRunnerHeartbeatError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ReportTaskRunnerHeartbeatError {
+    fn from(err: io::Error) -> ReportTaskRunnerHeartbeatError {
+        ReportTaskRunnerHeartbeatError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ReportTaskRunnerHeartbeatError {
@@ -2186,6 +2268,11 @@ impl From<CredentialsError> for SetStatusError {
 impl From<HttpDispatchError> for SetStatusError {
     fn from(err: HttpDispatchError) -> SetStatusError {
         SetStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetStatusError {
+    fn from(err: io::Error) -> SetStatusError {
+        SetStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetStatusError {
@@ -2285,6 +2372,11 @@ impl From<HttpDispatchError> for SetTaskStatusError {
         SetTaskStatusError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for SetTaskStatusError {
+    fn from(err: io::Error) -> SetTaskStatusError {
+        SetTaskStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for SetTaskStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2370,6 +2462,11 @@ impl From<CredentialsError> for ValidatePipelineDefinitionError {
 impl From<HttpDispatchError> for ValidatePipelineDefinitionError {
     fn from(err: HttpDispatchError) -> ValidatePipelineDefinitionError {
         ValidatePipelineDefinitionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ValidatePipelineDefinitionError {
+    fn from(err: io::Error) -> ValidatePipelineDefinitionError {
+        ValidatePipelineDefinitionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ValidatePipelineDefinitionError {
@@ -2544,15 +2641,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ActivatePipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ActivatePipelineOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ActivatePipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ActivatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2569,15 +2671,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&body).as_ref())
+                       .unwrap())
             }
-            _ => Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2595,15 +2702,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreatePipelineOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreatePipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2622,15 +2734,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeactivatePipelineOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeactivatePipelineOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DeactivatePipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeactivatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2647,13 +2764,14 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeletePipelineError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeletePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2672,15 +2790,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeObjectsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeObjectsOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribeObjectsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeObjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2699,15 +2822,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePipelinesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribePipelinesOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(DescribePipelinesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePipelinesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2726,15 +2854,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EvaluateExpressionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<EvaluateExpressionOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(EvaluateExpressionError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(EvaluateExpressionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2754,15 +2887,18 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPipelineDefinitionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetPipelineDefinitionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(GetPipelineDefinitionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPipelineDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2781,14 +2917,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPipelinesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPipelinesOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListPipelinesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPipelinesError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2807,13 +2949,21 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PollForTaskOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(PollForTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PollForTaskOutput>(String::from_utf8_lossy(&body)
+                                                                 .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PollForTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2832,15 +2982,18 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutPipelineDefinitionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutPipelineDefinitionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(PutPipelineDefinitionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutPipelineDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2859,14 +3012,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<QueryObjectsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<QueryObjectsOutput>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(QueryObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(QueryObjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2883,13 +3042,21 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RemoveTagsOutput>(String::from_utf8_lossy(&body)
+                                                                .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2907,15 +3074,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ReportTaskProgressOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ReportTaskProgressOutput>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ReportTaskProgressError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReportTaskProgressError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2935,13 +3107,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ReportTaskRunnerHeartbeatOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ReportTaskRunnerHeartbeatError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ReportTaskRunnerHeartbeatOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ReportTaskRunnerHeartbeatError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
         }
     }
 
@@ -2957,11 +3136,15 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(SetStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -2979,14 +3162,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SetTaskStatusOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SetTaskStatusOutput>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(SetTaskStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetTaskStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3006,13 +3195,20 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ValidatePipelineDefinitionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ValidatePipelineDefinitionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ValidatePipelineDefinitionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ValidatePipelineDefinitionError::from_body(String::from_utf8_lossy(&body)
+                                                                   .as_ref()))
+            }
         }
     }
 }

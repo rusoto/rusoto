@@ -19,6 +19,8 @@ use rusoto_core::region;
 
 use std::fmt;
 use std::error::Error;
+use std::io;
+use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -999,6 +1001,11 @@ impl From<HttpDispatchError> for CancelExportTaskError {
         CancelExportTaskError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CancelExportTaskError {
+    fn from(err: io::Error) -> CancelExportTaskError {
+        CancelExportTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CancelExportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1101,6 +1108,11 @@ impl From<HttpDispatchError> for CreateExportTaskError {
         CreateExportTaskError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateExportTaskError {
+    fn from(err: io::Error) -> CreateExportTaskError {
+        CreateExportTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateExportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1200,6 +1212,11 @@ impl From<HttpDispatchError> for CreateLogGroupError {
         CreateLogGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateLogGroupError {
+    fn from(err: io::Error) -> CreateLogGroupError {
+        CreateLogGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1293,6 +1310,11 @@ impl From<HttpDispatchError> for CreateLogStreamError {
         CreateLogStreamError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for CreateLogStreamError {
+    fn from(err: io::Error) -> CreateLogStreamError {
+        CreateLogStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for CreateLogStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1383,6 +1405,11 @@ impl From<CredentialsError> for DeleteDestinationError {
 impl From<HttpDispatchError> for DeleteDestinationError {
     fn from(err: HttpDispatchError) -> DeleteDestinationError {
         DeleteDestinationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDestinationError {
+    fn from(err: io::Error) -> DeleteDestinationError {
+        DeleteDestinationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDestinationError {
@@ -1479,6 +1506,11 @@ impl From<HttpDispatchError> for DeleteLogGroupError {
         DeleteLogGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteLogGroupError {
+    fn from(err: io::Error) -> DeleteLogGroupError {
+        DeleteLogGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1571,6 +1603,11 @@ impl From<HttpDispatchError> for DeleteLogStreamError {
         DeleteLogStreamError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteLogStreamError {
+    fn from(err: io::Error) -> DeleteLogStreamError {
+        DeleteLogStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteLogStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1661,6 +1698,11 @@ impl From<CredentialsError> for DeleteMetricFilterError {
 impl From<HttpDispatchError> for DeleteMetricFilterError {
     fn from(err: HttpDispatchError) -> DeleteMetricFilterError {
         DeleteMetricFilterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteMetricFilterError {
+    fn from(err: io::Error) -> DeleteMetricFilterError {
+        DeleteMetricFilterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteMetricFilterError {
@@ -1757,6 +1799,11 @@ impl From<HttpDispatchError> for DeleteRetentionPolicyError {
         DeleteRetentionPolicyError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteRetentionPolicyError {
+    fn from(err: io::Error) -> DeleteRetentionPolicyError {
+        DeleteRetentionPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteRetentionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1849,6 +1896,11 @@ impl From<HttpDispatchError> for DeleteSubscriptionFilterError {
         DeleteSubscriptionFilterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DeleteSubscriptionFilterError {
+    fn from(err: io::Error) -> DeleteSubscriptionFilterError {
+        DeleteSubscriptionFilterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DeleteSubscriptionFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1933,6 +1985,11 @@ impl From<HttpDispatchError> for DescribeDestinationsError {
         DescribeDestinationsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeDestinationsError {
+    fn from(err: io::Error) -> DescribeDestinationsError {
+        DescribeDestinationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeDestinationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2015,6 +2072,11 @@ impl From<HttpDispatchError> for DescribeExportTasksError {
         DescribeExportTasksError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeExportTasksError {
+    fn from(err: io::Error) -> DescribeExportTasksError {
+        DescribeExportTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeExportTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2095,6 +2157,11 @@ impl From<CredentialsError> for DescribeLogGroupsError {
 impl From<HttpDispatchError> for DescribeLogGroupsError {
     fn from(err: HttpDispatchError) -> DescribeLogGroupsError {
         DescribeLogGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLogGroupsError {
+    fn from(err: io::Error) -> DescribeLogGroupsError {
+        DescribeLogGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLogGroupsError {
@@ -2182,6 +2249,11 @@ impl From<CredentialsError> for DescribeLogStreamsError {
 impl From<HttpDispatchError> for DescribeLogStreamsError {
     fn from(err: HttpDispatchError) -> DescribeLogStreamsError {
         DescribeLogStreamsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLogStreamsError {
+    fn from(err: io::Error) -> DescribeLogStreamsError {
+        DescribeLogStreamsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLogStreamsError {
@@ -2272,6 +2344,11 @@ impl From<HttpDispatchError> for DescribeMetricFiltersError {
         DescribeMetricFiltersError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for DescribeMetricFiltersError {
+    fn from(err: io::Error) -> DescribeMetricFiltersError {
+        DescribeMetricFiltersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for DescribeMetricFiltersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2352,6 +2429,11 @@ impl From<CredentialsError> for DescribeSubscriptionFiltersError {
 impl From<HttpDispatchError> for DescribeSubscriptionFiltersError {
     fn from(err: HttpDispatchError) -> DescribeSubscriptionFiltersError {
         DescribeSubscriptionFiltersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSubscriptionFiltersError {
+    fn from(err: io::Error) -> DescribeSubscriptionFiltersError {
+        DescribeSubscriptionFiltersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSubscriptionFiltersError {
@@ -2442,6 +2524,11 @@ impl From<HttpDispatchError> for FilterLogEventsError {
         FilterLogEventsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for FilterLogEventsError {
+    fn from(err: io::Error) -> FilterLogEventsError {
+        FilterLogEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for FilterLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2528,6 +2615,11 @@ impl From<HttpDispatchError> for GetLogEventsError {
         GetLogEventsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for GetLogEventsError {
+    fn from(err: io::Error) -> GetLogEventsError {
+        GetLogEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for GetLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2607,6 +2699,11 @@ impl From<CredentialsError> for ListTagsLogGroupError {
 impl From<HttpDispatchError> for ListTagsLogGroupError {
     fn from(err: HttpDispatchError) -> ListTagsLogGroupError {
         ListTagsLogGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsLogGroupError {
+    fn from(err: io::Error) -> ListTagsLogGroupError {
+        ListTagsLogGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsLogGroupError {
@@ -2694,6 +2791,11 @@ impl From<HttpDispatchError> for PutDestinationError {
         PutDestinationError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutDestinationError {
+    fn from(err: io::Error) -> PutDestinationError {
+        PutDestinationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2778,6 +2880,11 @@ impl From<CredentialsError> for PutDestinationPolicyError {
 impl From<HttpDispatchError> for PutDestinationPolicyError {
     fn from(err: HttpDispatchError) -> PutDestinationPolicyError {
         PutDestinationPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutDestinationPolicyError {
+    fn from(err: io::Error) -> PutDestinationPolicyError {
+        PutDestinationPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutDestinationPolicyError {
@@ -2878,6 +2985,11 @@ impl From<HttpDispatchError> for PutLogEventsError {
         PutLogEventsError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutLogEventsError {
+    fn from(err: io::Error) -> PutLogEventsError {
+        PutLogEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -2976,6 +3088,11 @@ impl From<HttpDispatchError> for PutMetricFilterError {
         PutMetricFilterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutMetricFilterError {
+    fn from(err: io::Error) -> PutMetricFilterError {
+        PutMetricFilterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutMetricFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3067,6 +3184,11 @@ impl From<CredentialsError> for PutRetentionPolicyError {
 impl From<HttpDispatchError> for PutRetentionPolicyError {
     fn from(err: HttpDispatchError) -> PutRetentionPolicyError {
         PutRetentionPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutRetentionPolicyError {
+    fn from(err: io::Error) -> PutRetentionPolicyError {
+        PutRetentionPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutRetentionPolicyError {
@@ -3168,6 +3290,11 @@ impl From<HttpDispatchError> for PutSubscriptionFilterError {
         PutSubscriptionFilterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for PutSubscriptionFilterError {
+    fn from(err: io::Error) -> PutSubscriptionFilterError {
+        PutSubscriptionFilterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for PutSubscriptionFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3253,6 +3380,11 @@ impl From<HttpDispatchError> for TagLogGroupError {
         TagLogGroupError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TagLogGroupError {
+    fn from(err: io::Error) -> TagLogGroupError {
+        TagLogGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TagLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3333,6 +3465,11 @@ impl From<HttpDispatchError> for TestMetricFilterError {
         TestMetricFilterError::HttpDispatch(err)
     }
 }
+impl From<io::Error> for TestMetricFilterError {
+    fn from(err: io::Error) -> TestMetricFilterError {
+        TestMetricFilterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
 impl fmt::Display for TestMetricFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -3406,6 +3543,11 @@ impl From<CredentialsError> for UntagLogGroupError {
 impl From<HttpDispatchError> for UntagLogGroupError {
     fn from(err: HttpDispatchError) -> UntagLogGroupError {
         UntagLogGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagLogGroupError {
+    fn from(err: io::Error) -> UntagLogGroupError {
+        UntagLogGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UntagLogGroupError {
@@ -3627,13 +3769,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(CancelExportTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelExportTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3652,15 +3795,20 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateExportTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateExportTaskResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(CreateExportTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateExportTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3677,13 +3825,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(CreateLogGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3702,13 +3851,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(CreateLogStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLogStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3727,13 +3877,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteDestinationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDestinationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3750,13 +3901,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteLogGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3775,13 +3927,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteLogStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLogStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3800,13 +3953,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteMetricFilterError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteMetricFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3825,13 +3979,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(DeleteRetentionPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRetentionPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3850,11 +4005,16 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(DeleteSubscriptionFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSubscriptionFilterError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
         }
     }
 
@@ -3872,15 +4032,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDestinationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDestinationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeDestinationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDestinationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3899,15 +4062,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3926,15 +4092,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLogGroupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeLogGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeLogGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLogGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3953,15 +4122,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLogStreamsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeLogStreamsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeLogStreamsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLogStreamsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -3981,15 +4153,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMetricFiltersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeMetricFiltersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
             _ => {
-                Err(DescribeMetricFiltersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeMetricFiltersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4009,13 +4184,20 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSubscriptionFiltersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeSubscriptionFiltersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeSubscriptionFiltersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeSubscriptionFiltersError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
         }
     }
 
@@ -4033,15 +4215,20 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<FilterLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<FilterLogEventsResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(FilterLogEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(FilterLogEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4060,14 +4247,20 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetLogEventsResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(GetLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLogEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4086,15 +4279,20 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsLogGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsLogGroupResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(ListTagsLogGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4113,15 +4311,20 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutDestinationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutDestinationResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PutDestinationError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutDestinationError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4140,13 +4343,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(PutDestinationPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutDestinationPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4165,14 +4369,20 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutLogEventsResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(PutLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutLogEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4191,13 +4401,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(PutMetricFilterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutMetricFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4216,13 +4427,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(PutRetentionPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutRetentionPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4241,13 +4453,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(PutSubscriptionFilterError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutSubscriptionFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4264,11 +4477,15 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
-            _ => Err(TagLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TagLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
         }
     }
 
@@ -4286,15 +4503,20 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TestMetricFilterResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<TestMetricFilterResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
             _ => {
-                Err(TestMetricFilterError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestMetricFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -4311,12 +4533,14 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => {
-                Err(UntagLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UntagLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
