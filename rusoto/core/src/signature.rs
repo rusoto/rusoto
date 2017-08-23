@@ -31,6 +31,7 @@ pub struct SignedRequest {
     pub path: String,
     pub headers: BTreeMap<String, Vec<Vec<u8>>>,
     pub params: Params,
+    pub scheme: Option<String>,
     pub hostname: Option<String>,
     pub payload: Option<Vec<u8>>,
     pub canonical_query_string: String,
@@ -39,14 +40,15 @@ pub struct SignedRequest {
 
 impl SignedRequest {
     /// Default constructor
-    pub fn new(method: &str, service: &str, region: Region, path: &str) -> SignedRequest {
+    pub fn new(method: &str, service: &str, region: &Region, path: &str) -> SignedRequest {
         SignedRequest {
             method: method.to_string(),
             service: service.to_string(),
-            region: region,
+            region: region.clone(),
             path: path.to_string(),
             headers: BTreeMap::new(),
             params: Params::new(),
+            scheme: None,
             hostname: None,
             payload: None,
             canonical_query_string: String::new(),
@@ -62,7 +64,7 @@ impl SignedRequest {
     }
 
     pub fn set_endpoint_prefix(&mut self, endpoint_prefix: String) {
-        self.hostname = Some(build_hostname(&endpoint_prefix, self.region));
+        self.hostname = Some(build_hostname(&endpoint_prefix, &self.region));
     }
 
     pub fn set_payload(&mut self, payload: Option<Vec<u8>>) {
@@ -93,11 +95,26 @@ impl SignedRequest {
         &self.headers
     }
 
-    pub fn hostname(&self) -> String {
-        match self.hostname {
-            Some(ref h) => h.to_string(),
-            None => build_hostname(&self.service, self.region),
+    pub fn scheme(&self) -> String {
+        match self.scheme {
+            Some(ref p) => p.to_string(),
+            None => {
+                match self.region {
+                    Region::Custom(ref hostname) => {
+                        if hostname.starts_with("http://") {
+                            "http".to_owned()
+                        } else {
+                            "https".to_owned()
+                        }
+                    },
+                    _ => "https".to_owned()
+                }
+            }
         }
+    }
+
+    pub fn hostname(&self) -> String {
+        build_hostname(&self.service, &self.region)
     }
 
     // If the key exists in headers, set it to blank/unoccupied:
@@ -137,7 +154,7 @@ impl SignedRequest {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
-            None => build_hostname(&self.service, self.region),
+            None => build_hostname(&self.service, &self.region),
         };
 
         // Gotta remove and re-add headers since by default they append the value.  If we're following
@@ -391,27 +408,37 @@ fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
     h.as_ref().to_hex().to_string()
 }
 
-fn build_hostname(service: &str, region: Region) -> String {
+fn remove_scheme_from_custom_hostname(hostname: &str) -> String {
+    hostname.replace("http://", "").replace("https://", "")
+}
+
+fn build_hostname(service: &str, region: &Region) -> String {
     //iam has only 1 endpoint, other services have region-based endpoints
     match service {
         "iam" => {
-            match region {
+            match *region {
+                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
                 Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
                 _ => format!("{}.amazonaws.com", service),
             }
         }
         "s3" => {
-            match region {
+            match *region {
+                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
                 Region::UsEast1 => "s3.amazonaws.com".to_string(),
                 Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
                 _ => format!("s3-{}.amazonaws.com", region),
             }
         }
         "route53" => {
-            "route53.amazonaws.com".to_owned()
+            match *region {
+                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
+                _ => "route53.amazonaws.com".to_owned(),
+            }
         }
         _ => {
-            match region {
+            match *region {
+                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
                 Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
                 _ => format!("{}.{}.amazonaws.com", service, region),
             }
@@ -430,23 +457,17 @@ mod tests {
 
     #[test]
     fn get_hostname_none_present() {
-        let request = SignedRequest::new("POST", "sqs", Region::UsEast1, "/");
+        let request = SignedRequest::new("POST", "sqs", &Region::UsEast1, "/");
         assert_eq!("sqs.us-east-1.amazonaws.com", request.hostname());
     }
 
-    #[test]
-    fn get_hostname_happy_path() {
-        let mut request = SignedRequest::new("POST", "sqs", Region::UsEast1, "/");
-        request.set_hostname(Some("test-hostname".to_string()));
-        assert_eq!("test-hostname", request.hostname());
-    }
     #[test]
     fn path_percent_encoded() {
         let provider = ProfileProvider::with_configuration("test_resources/multiple_profile_credentials",
                                                            "foo");
         let mut request = SignedRequest::new("GET",
                                              "s3",
-                                             Region::UsEast1,
+                                             &Region::UsEast1,
                                              "/path with spaces: the sequel");
         request.sign(provider.credentials().as_ref().unwrap());
         assert_eq!("/path%20with%20spaces%3A%20the%20sequel",
@@ -475,7 +496,7 @@ mod tests {
     fn query_percent_encoded() {
         let mut request = SignedRequest::new("GET",
                                              "s3",
-                                             Region::UsEast1,
+                                             &Region::UsEast1,
                                              "/path with spaces: the sequel++");
         request.add_param("key:with@funny&characters",
                           "value with/funny%characters/Рускии");

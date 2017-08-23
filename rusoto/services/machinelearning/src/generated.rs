@@ -4333,7 +4333,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 {
     #[doc="<p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>"]
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.AddTags");
@@ -4365,7 +4365,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         (&self,
          input: &CreateBatchPredictionInput)
          -> Result<CreateBatchPredictionOutput, CreateBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateBatchPrediction");
@@ -4396,7 +4396,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         (&self,
          input: &CreateDataSourceFromRDSInput)
          -> Result<CreateDataSourceFromRDSOutput, CreateDataSourceFromRDSError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateDataSourceFromRDS");
@@ -4428,7 +4428,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         (&self,
          input: &CreateDataSourceFromRedshiftInput)
          -> Result<CreateDataSourceFromRedshiftOutput, CreateDataSourceFromRedshiftError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4461,7 +4461,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         (&self,
          input: &CreateDataSourceFromS3Input)
          -> Result<CreateDataSourceFromS3Output, CreateDataSourceFromS3Error> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateDataSourceFromS3");
@@ -4491,7 +4491,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn create_evaluation(&self,
                          input: &CreateEvaluationInput)
                          -> Result<CreateEvaluationOutput, CreateEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateEvaluation");
@@ -4523,7 +4523,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn create_ml_model(&self,
                        input: &CreateMLModelInput)
                        -> Result<CreateMLModelOutput, CreateMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateMLModel");
@@ -4556,7 +4556,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         (&self,
          input: &CreateRealtimeEndpointInput)
          -> Result<CreateRealtimeEndpointOutput, CreateRealtimeEndpointError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateRealtimeEndpoint");
@@ -4587,7 +4587,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         (&self,
          input: &DeleteBatchPredictionInput)
          -> Result<DeleteBatchPredictionOutput, DeleteBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteBatchPrediction");
@@ -4617,7 +4617,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn delete_data_source(&self,
                           input: &DeleteDataSourceInput)
                           -> Result<DeleteDataSourceOutput, DeleteDataSourceError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteDataSource");
@@ -4649,7 +4649,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn delete_evaluation(&self,
                          input: &DeleteEvaluationInput)
                          -> Result<DeleteEvaluationOutput, DeleteEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteEvaluation");
@@ -4681,7 +4681,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn delete_ml_model(&self,
                        input: &DeleteMLModelInput)
                        -> Result<DeleteMLModelOutput, DeleteMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteMLModel");
@@ -4714,7 +4714,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         (&self,
          input: &DeleteRealtimeEndpointInput)
          -> Result<DeleteRealtimeEndpointOutput, DeleteRealtimeEndpointError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteRealtimeEndpoint");
@@ -4742,7 +4742,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
     #[doc="<p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>"]
     fn delete_tags(&self, input: &DeleteTagsInput) -> Result<DeleteTagsOutput, DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteTags");
@@ -4775,7 +4775,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         (&self,
          input: &DescribeBatchPredictionsInput)
          -> Result<DescribeBatchPredictionsOutput, DescribeBatchPredictionsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeBatchPredictions");
@@ -4806,7 +4806,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn describe_data_sources(&self,
                              input: &DescribeDataSourcesInput)
                              -> Result<DescribeDataSourcesOutput, DescribeDataSourcesError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeDataSources");
@@ -4836,7 +4836,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn describe_evaluations(&self,
                             input: &DescribeEvaluationsInput)
                             -> Result<DescribeEvaluationsOutput, DescribeEvaluationsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeEvaluations");
@@ -4866,7 +4866,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn describe_ml_models(&self,
                           input: &DescribeMLModelsInput)
                           -> Result<DescribeMLModelsOutput, DescribeMLModelsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeMLModels");
@@ -4898,7 +4898,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn describe_tags(&self,
                      input: &DescribeTagsInput)
                      -> Result<DescribeTagsOutput, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeTags");
@@ -4930,7 +4930,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn get_batch_prediction(&self,
                             input: &GetBatchPredictionInput)
                             -> Result<GetBatchPredictionOutput, GetBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetBatchPrediction");
@@ -4962,7 +4962,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn get_data_source(&self,
                        input: &GetDataSourceInput)
                        -> Result<GetDataSourceOutput, GetDataSourceError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetDataSource");
@@ -4994,7 +4994,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn get_evaluation(&self,
                       input: &GetEvaluationInput)
                       -> Result<GetEvaluationOutput, GetEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetEvaluation");
@@ -5024,7 +5024,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
     #[doc="<p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>"]
     fn get_ml_model(&self, input: &GetMLModelInput) -> Result<GetMLModelOutput, GetMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetMLModel");
@@ -5054,7 +5054,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
     #[doc="<p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note>"]
     fn predict(&self, input: &PredictInput) -> Result<PredictOutput, PredictError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.Predict");
@@ -5086,7 +5086,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
         (&self,
          input: &UpdateBatchPredictionInput)
          -> Result<UpdateBatchPredictionOutput, UpdateBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateBatchPrediction");
@@ -5116,7 +5116,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn update_data_source(&self,
                           input: &UpdateDataSourceInput)
                           -> Result<UpdateDataSourceOutput, UpdateDataSourceError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateDataSource");
@@ -5148,7 +5148,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn update_evaluation(&self,
                          input: &UpdateEvaluationInput)
                          -> Result<UpdateEvaluationOutput, UpdateEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateEvaluation");
@@ -5180,7 +5180,7 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
     fn update_ml_model(&self,
                        input: &UpdateMLModelInput)
                        -> Result<UpdateMLModelOutput, UpdateMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", self.region, "/");
+        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateMLModel");

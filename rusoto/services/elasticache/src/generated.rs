@@ -11242,7 +11242,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn add_tags_to_resource(&self,
                             input: &AddTagsToResourceMessage)
                             -> Result<TagListMessage, AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddTagsToResource");
@@ -11291,7 +11291,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
          input: &AuthorizeCacheSecurityGroupIngressMessage)
          -> Result<AuthorizeCacheSecurityGroupIngressResult,
                    AuthorizeCacheSecurityGroupIngressError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AuthorizeCacheSecurityGroupIngress");
@@ -11337,7 +11337,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn copy_snapshot(&self,
                      input: &CopySnapshotMessage)
                      -> Result<CopySnapshotResult, CopySnapshotError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopySnapshot");
@@ -11384,7 +11384,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn create_cache_cluster(&self,
                             input: &CreateCacheClusterMessage)
                             -> Result<CreateCacheClusterResult, CreateCacheClusterError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCacheCluster");
@@ -11432,7 +11432,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &CreateCacheParameterGroupMessage)
          -> Result<CreateCacheParameterGroupResult, CreateCacheParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCacheParameterGroup");
@@ -11482,7 +11482,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &CreateCacheSecurityGroupMessage)
          -> Result<CreateCacheSecurityGroupResult, CreateCacheSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCacheSecurityGroup");
@@ -11532,7 +11532,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &CreateCacheSubnetGroupMessage)
          -> Result<CreateCacheSubnetGroupResult, CreateCacheSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCacheSubnetGroup");
@@ -11581,7 +11581,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &CreateReplicationGroupMessage)
          -> Result<CreateReplicationGroupResult, CreateReplicationGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateReplicationGroup");
@@ -11629,7 +11629,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn create_snapshot(&self,
                        input: &CreateSnapshotMessage)
                        -> Result<CreateSnapshotResult, CreateSnapshotError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateSnapshot");
@@ -11676,7 +11676,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn delete_cache_cluster(&self,
                             input: &DeleteCacheClusterMessage)
                             -> Result<DeleteCacheClusterResult, DeleteCacheClusterError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCacheCluster");
@@ -11723,7 +11723,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn delete_cache_parameter_group(&self,
                                     input: &DeleteCacheParameterGroupMessage)
                                     -> Result<(), DeleteCacheParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCacheParameterGroup");
@@ -11752,7 +11752,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn delete_cache_security_group(&self,
                                    input: &DeleteCacheSecurityGroupMessage)
                                    -> Result<(), DeleteCacheSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCacheSecurityGroup");
@@ -11781,7 +11781,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn delete_cache_subnet_group(&self,
                                  input: &DeleteCacheSubnetGroupMessage)
                                  -> Result<(), DeleteCacheSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCacheSubnetGroup");
@@ -11810,7 +11810,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &DeleteReplicationGroupMessage)
          -> Result<DeleteReplicationGroupResult, DeleteReplicationGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteReplicationGroup");
@@ -11858,7 +11858,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn delete_snapshot(&self,
                        input: &DeleteSnapshotMessage)
                        -> Result<DeleteSnapshotResult, DeleteSnapshotError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteSnapshot");
@@ -11905,7 +11905,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn describe_cache_clusters(&self,
                                input: &DescribeCacheClustersMessage)
                                -> Result<CacheClusterMessage, DescribeCacheClustersError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheClusters");
@@ -11953,7 +11953,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &DescribeCacheEngineVersionsMessage)
          -> Result<CacheEngineVersionMessage, DescribeCacheEngineVersionsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheEngineVersions");
@@ -12002,7 +12002,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &DescribeCacheParameterGroupsMessage)
          -> Result<CacheParameterGroupsMessage, DescribeCacheParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheParameterGroups");
@@ -12051,7 +12051,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &DescribeCacheParametersMessage)
          -> Result<CacheParameterGroupDetails, DescribeCacheParametersError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheParameters");
@@ -12100,7 +12100,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &DescribeCacheSecurityGroupsMessage)
          -> Result<CacheSecurityGroupMessage, DescribeCacheSecurityGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheSecurityGroups");
@@ -12149,7 +12149,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &DescribeCacheSubnetGroupsMessage)
          -> Result<CacheSubnetGroupMessage, DescribeCacheSubnetGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheSubnetGroups");
@@ -12198,7 +12198,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &DescribeEngineDefaultParametersMessage)
          -> Result<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEngineDefaultParameters");
@@ -12245,7 +12245,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn describe_events(&self,
                        input: &DescribeEventsMessage)
                        -> Result<EventsMessage, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEvents");
@@ -12293,7 +12293,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &DescribeReplicationGroupsMessage)
          -> Result<ReplicationGroupMessage, DescribeReplicationGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReplicationGroups");
@@ -12342,7 +12342,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &DescribeReservedCacheNodesMessage)
          -> Result<ReservedCacheNodeMessage, DescribeReservedCacheNodesError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedCacheNodes");
@@ -12391,7 +12391,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &DescribeReservedCacheNodesOfferingsMessage)
          -> Result<ReservedCacheNodesOfferingMessage, DescribeReservedCacheNodesOfferingsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedCacheNodesOfferings");
@@ -12437,7 +12437,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn describe_snapshots(&self,
                           input: &DescribeSnapshotsMessage)
                           -> Result<DescribeSnapshotsListMessage, DescribeSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeSnapshots");
@@ -12486,7 +12486,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &ListAllowedNodeTypeModificationsMessage)
          -> Result<AllowedNodeTypeModificationsMessage, ListAllowedNodeTypeModificationsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListAllowedNodeTypeModifications");
@@ -12532,7 +12532,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceMessage)
                               -> Result<TagListMessage, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListTagsForResource");
@@ -12579,7 +12579,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn modify_cache_cluster(&self,
                             input: &ModifyCacheClusterMessage)
                             -> Result<ModifyCacheClusterResult, ModifyCacheClusterError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyCacheCluster");
@@ -12627,7 +12627,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &ModifyCacheParameterGroupMessage)
          -> Result<CacheParameterGroupNameMessage, ModifyCacheParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyCacheParameterGroup");
@@ -12677,7 +12677,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &ModifyCacheSubnetGroupMessage)
          -> Result<ModifyCacheSubnetGroupResult, ModifyCacheSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyCacheSubnetGroup");
@@ -12726,7 +12726,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &ModifyReplicationGroupMessage)
          -> Result<ModifyReplicationGroupResult, ModifyReplicationGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyReplicationGroup");
@@ -12776,7 +12776,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
          input: &PurchaseReservedCacheNodesOfferingMessage)
          -> Result<PurchaseReservedCacheNodesOfferingResult,
                    PurchaseReservedCacheNodesOfferingError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PurchaseReservedCacheNodesOffering");
@@ -12822,7 +12822,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn reboot_cache_cluster(&self,
                             input: &RebootCacheClusterMessage)
                             -> Result<RebootCacheClusterResult, RebootCacheClusterError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RebootCacheCluster");
@@ -12869,7 +12869,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn remove_tags_from_resource(&self,
                                  input: &RemoveTagsFromResourceMessage)
                                  -> Result<TagListMessage, RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveTagsFromResource");
@@ -12917,7 +12917,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &ResetCacheParameterGroupMessage)
          -> Result<CacheParameterGroupNameMessage, ResetCacheParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResetCacheParameterGroup");
@@ -12967,7 +12967,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         (&self,
          input: &RevokeCacheSecurityGroupIngressMessage)
          -> Result<RevokeCacheSecurityGroupIngressResult, RevokeCacheSecurityGroupIngressError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RevokeCacheSecurityGroupIngress");
@@ -13014,7 +13014,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     fn test_failover(&self,
                      input: &TestFailoverMessage)
                      -> Result<TestFailoverResult, TestFailoverError> {
-        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "TestFailover");

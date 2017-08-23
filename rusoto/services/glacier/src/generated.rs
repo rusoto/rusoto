@@ -4451,7 +4451,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   upload_id = input.upload_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("DELETE", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4484,7 +4484,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("DELETE", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4517,7 +4517,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("POST", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4556,7 +4556,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   upload_id = input.upload_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("POST", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4622,7 +4622,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   lock_id = input.lock_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("POST", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4657,7 +4657,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("PUT", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4705,7 +4705,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   archive_id = input.archive_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("DELETE", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4738,7 +4738,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("DELETE", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4773,7 +4773,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("DELETE", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4809,7 +4809,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("DELETE", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4846,7 +4846,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   job_id = input.job_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4892,7 +4892,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4938,7 +4938,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let request_uri = format!("/{account_id}/policies/data-retrieval",
                                   account_id = input.account_id);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -4985,7 +4985,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   job_id = input.job_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5050,7 +5050,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5096,7 +5096,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5143,7 +5143,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5189,7 +5189,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("POST", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5244,7 +5244,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("POST", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5307,7 +5307,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("POST", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5355,7 +5355,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5414,7 +5414,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5466,7 +5466,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   upload_id = input.upload_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5519,7 +5519,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let request_uri = format!("/{account_id}/provisioned-capacity",
                                   account_id = input.account_id);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5567,7 +5567,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5609,7 +5609,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn list_vaults(&self, input: &ListVaultsInput) -> Result<ListVaultsOutput, ListVaultsError> {
         let request_uri = format!("/{account_id}/vaults", account_id = input.account_id);
 
-        let mut request = SignedRequest::new("GET", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5662,7 +5662,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let request_uri = format!("/{account_id}/provisioned-capacity",
                                   account_id = input.account_id);
 
-        let mut request = SignedRequest::new("POST", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5713,7 +5713,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("POST", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5750,7 +5750,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let request_uri = format!("/{account_id}/policies/data-retrieval",
                                   account_id = input.account_id);
 
-        let mut request = SignedRequest::new("PUT", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5786,7 +5786,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("PUT", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5822,7 +5822,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("PUT", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5858,7 +5858,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("POST", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
@@ -5929,7 +5929,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                                   upload_id = input.upload_id,
                                   vault_name = input.vault_name);
 
-        let mut request = SignedRequest::new("PUT", "glacier", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 

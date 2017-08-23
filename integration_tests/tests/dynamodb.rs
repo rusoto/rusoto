@@ -18,7 +18,8 @@ fn should_parse_error_type() {
     let response = client.list_tables(&request);
     match response {
         Err(ListTablesError::Validation(msg)) => {
-            assert!(msg.contains("Member must have value greater than or equal to 1"))
+            // local dynamodb gives a different error, this matches both:
+            assert!(msg.contains("greater than or equal to 1"))
         }
         _ => panic!("Should have been a Validation error"),
     };

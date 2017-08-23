@@ -12066,7 +12066,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/hostedzone/{id}/associatevpc",
                                   id = input.hosted_zone_id);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12117,7 +12117,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/hostedzone/{id}/rrset/",
                                   id = input.hosted_zone_id);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12169,7 +12169,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                                   resource_id = input.resource_id,
                                   resource_type = input.resource_type);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12217,7 +12217,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                            -> Result<CreateHealthCheckResponse, CreateHealthCheckError> {
         let request_uri = "/2013-04-01/healthcheck";
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12268,7 +12268,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                           -> Result<CreateHostedZoneResponse, CreateHostedZoneError> {
         let request_uri = "/2013-04-01/hostedzone";
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12320,7 +12320,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError> {
         let request_uri = "/2013-04-01/delegationset";
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12370,7 +12370,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                              -> Result<CreateTrafficPolicyResponse, CreateTrafficPolicyError> {
         let request_uri = "/2013-04-01/trafficpolicy";
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12420,7 +12420,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError> {
         let request_uri = "/2013-04-01/trafficpolicyinstance";
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12471,7 +12471,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError> {
         let request_uri = format!("/2013-04-01/trafficpolicy/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12524,7 +12524,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/hostedzone/{id}/authorizevpcassociation",
                                   id = input.hosted_zone_id);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12573,7 +12573,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}",
                                   health_check_id = input.health_check_id);
 
-        let mut request = SignedRequest::new("DELETE", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
 
 
@@ -12623,7 +12623,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                           -> Result<DeleteHostedZoneResponse, DeleteHostedZoneError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("DELETE", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
 
 
@@ -12674,7 +12674,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError> {
         let request_uri = format!("/2013-04-01/delegationset/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("DELETE", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
 
 
@@ -12725,7 +12725,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                                   id = input.id,
                                   version = input.version);
 
-        let mut request = SignedRequest::new("DELETE", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
 
 
@@ -12774,7 +12774,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError> {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("DELETE", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
 
 
@@ -12826,7 +12826,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/hostedzone/{id}/deauthorizevpcassociation",
                                   id = input.hosted_zone_id);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12876,7 +12876,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/hostedzone/{id}/disassociatevpc",
                                   id = input.hosted_zone_id);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -12923,7 +12923,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_change(&self, input: &GetChangeRequest) -> Result<GetChangeResponse, GetChangeError> {
         let request_uri = format!("/2013-04-01/change/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -12972,7 +12972,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                              -> Result<GetCheckerIpRangesResponse, GetCheckerIpRangesError> {
         let request_uri = "/2013-04-01/checkeripranges";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13022,7 +13022,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                         -> Result<GetGeoLocationResponse, GetGeoLocationError> {
         let request_uri = "/2013-04-01/geolocation";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -13083,7 +13083,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}",
                                   health_check_id = input.health_check_id);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13133,7 +13133,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                               -> Result<GetHealthCheckCountResponse, GetHealthCheckCountError> {
         let request_uri = "/2013-04-01/healthcheckcount";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13183,7 +13183,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}/lastfailurereason",
                                   health_check_id = input.health_check_id);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13234,7 +13234,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}/status",
                                   health_check_id = input.health_check_id);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13282,7 +13282,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                        -> Result<GetHostedZoneResponse, GetHostedZoneError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13331,7 +13331,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                              -> Result<GetHostedZoneCountResponse, GetHostedZoneCountError> {
         let request_uri = "/2013-04-01/hostedzonecount";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13382,7 +13382,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<GetReusableDelegationSetResponse, GetReusableDelegationSetError> {
         let request_uri = format!("/2013-04-01/delegationset/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13433,7 +13433,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                                   id = input.id,
                                   version = input.version);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13484,7 +13484,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError> {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13534,7 +13534,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError> {
         let request_uri = "/2013-04-01/trafficpolicyinstancecount";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13583,7 +13583,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                           -> Result<ListGeoLocationsResponse, ListGeoLocationsError> {
         let request_uri = "/2013-04-01/geolocations";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -13646,7 +13646,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                           -> Result<ListHealthChecksResponse, ListHealthChecksError> {
         let request_uri = "/2013-04-01/healthcheck";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -13703,7 +13703,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                          -> Result<ListHostedZonesResponse, ListHostedZonesError> {
         let request_uri = "/2013-04-01/hostedzone";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -13764,7 +13764,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<ListHostedZonesByNameResponse, ListHostedZonesByNameError> {
         let request_uri = "/2013-04-01/hostedzonesbyname";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -13824,7 +13824,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/hostedzone/{id}/rrset",
                                   id = input.hosted_zone_id);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -13886,7 +13886,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<ListReusableDelegationSetsResponse, ListReusableDelegationSetsError> {
         let request_uri = "/2013-04-01/delegationset";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -13944,7 +13944,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                                   resource_id = input.resource_id,
                                   resource_type = input.resource_type);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
 
@@ -13994,7 +13994,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         let request_uri = format!("/2013-04-01/tags/{resource_type}",
                                   resource_type = input.resource_type);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -14042,7 +14042,7 @@ impl<P, D> Route53 for Route53Client<P, D>
                              -> Result<ListTrafficPoliciesResponse, ListTrafficPoliciesError> {
         let request_uri = "/2013-04-01/trafficpolicies";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -14098,7 +14098,7 @@ impl<P, D> Route53 for Route53Client<P, D>
          -> Result<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError> {
         let request_uri = "/2013-04-01/trafficpolicyinstances";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -14158,7 +14158,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> Result<ListTrafficPolicyInstancesByHostedZoneResponse, ListTrafficPolicyInstancesByHostedZoneError>{
         let request_uri = "/2013-04-01/trafficpolicyinstances/hostedzone";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -14219,7 +14219,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
                    ListTrafficPolicyInstancesByPolicyError> {
         let request_uri = "/2013-04-01/trafficpolicyinstances/trafficpolicy";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -14283,7 +14283,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
          -> Result<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError> {
         let request_uri = format!("/2013-04-01/trafficpolicies/{id}/versions", id = input.id);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -14341,7 +14341,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let request_uri = format!("/2013-04-01/hostedzone/{id}/authorizevpcassociation",
                                   id = input.hosted_zone_id);
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -14396,7 +14396,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
                        -> Result<TestDNSAnswerResponse, TestDNSAnswerError> {
         let request_uri = "/2013-04-01/testdnsanswer";
 
-        let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -14459,7 +14459,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}",
                                   health_check_id = input.health_check_id);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -14510,7 +14510,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
          -> Result<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -14562,7 +14562,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
                                   id = input.id,
                                   version = input.version);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 
@@ -14612,7 +14612,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
          -> Result<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError> {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("POST", "route53", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
 
 
 

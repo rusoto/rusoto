@@ -8443,7 +8443,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/accept-certificate-transfer/{certificate_id}",
                                   certificate_id = input.certificate_id);
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8482,7 +8482,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/principal-policies/{policy_name}",
                                   policy_name = input.policy_name);
 
-        let mut request = SignedRequest::new("PUT", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8517,7 +8517,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/things/{thing_name}/principals",
                                   thing_name = input.thing_name);
 
-        let mut request = SignedRequest::new("PUT", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8562,7 +8562,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/cancel-certificate-transfer/{certificate_id}",
                                   certificate_id = input.certificate_id);
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8597,7 +8597,7 @@ impl<P, D> Iot for IotClient<P, D>
          -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError> {
         let request_uri = "/certificates";
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8649,7 +8649,7 @@ impl<P, D> Iot for IotClient<P, D>
          -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError> {
         let request_uri = "/keys-and-certificate";
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8699,7 +8699,7 @@ impl<P, D> Iot for IotClient<P, D>
                      -> Result<CreatePolicyResponse, CreatePolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8745,7 +8745,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/policies/{policy_name}/version",
                                   policy_name = input.policy_name);
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8794,7 +8794,7 @@ impl<P, D> Iot for IotClient<P, D>
                     -> Result<CreateThingResponse, CreateThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8840,7 +8840,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/thing-types/{thing_type_name}",
                                   thing_type_name = input.thing_type_name);
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8885,7 +8885,7 @@ impl<P, D> Iot for IotClient<P, D>
                          -> Result<(), CreateTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8920,7 +8920,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/cacertificate/{ca_certificate_id}",
                                   ca_certificate_id = input.certificate_id);
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8965,7 +8965,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/certificates/{certificate_id}",
                                   certificate_id = input.certificate_id);
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -8996,7 +8996,7 @@ impl<P, D> Iot for IotClient<P, D>
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9031,7 +9031,7 @@ impl<P, D> Iot for IotClient<P, D>
                                   policy_name = input.policy_name,
                                   policy_version_id = input.policy_version_id);
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9064,7 +9064,7 @@ impl<P, D> Iot for IotClient<P, D>
          -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError> {
         let request_uri = "/registrationcode";
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9109,7 +9109,7 @@ impl<P, D> Iot for IotClient<P, D>
                     -> Result<DeleteThingResponse, DeleteThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9158,7 +9158,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/thing-types/{thing_type_name}",
                                   thing_type_name = input.thing_type_name);
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9202,7 +9202,7 @@ impl<P, D> Iot for IotClient<P, D>
                          -> Result<(), DeleteTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9236,7 +9236,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/thing-types/{thing_type_name}/deprecate",
                                   thing_type_name = input.thing_type_name);
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9283,7 +9283,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/cacertificate/{ca_certificate_id}",
                                   ca_certificate_id = input.certificate_id);
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9329,7 +9329,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/certificates/{certificate_id}",
                                   certificate_id = input.certificate_id);
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9371,7 +9371,7 @@ impl<P, D> Iot for IotClient<P, D>
     fn describe_endpoint(&self) -> Result<DescribeEndpointResponse, DescribeEndpointError> {
         let request_uri = "/endpoint";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9415,7 +9415,7 @@ impl<P, D> Iot for IotClient<P, D>
                       -> Result<DescribeThingResponse, DescribeThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9460,7 +9460,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/thing-types/{thing_type_name}",
                                   thing_type_name = input.thing_type_name);
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9505,7 +9505,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/principal-policies/{policy_name}",
                                   policy_name = input.policy_name);
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9540,7 +9540,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/things/{thing_name}/principals",
                                   thing_name = input.thing_name);
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9584,7 +9584,7 @@ impl<P, D> Iot for IotClient<P, D>
                           -> Result<(), DisableTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}/disable", rule_name = input.rule_name);
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9617,7 +9617,7 @@ impl<P, D> Iot for IotClient<P, D>
                          -> Result<(), EnableTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}/enable", rule_name = input.rule_name);
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9648,7 +9648,7 @@ impl<P, D> Iot for IotClient<P, D>
     fn get_logging_options(&self) -> Result<GetLoggingOptionsResponse, GetLoggingOptionsError> {
         let request_uri = "/loggingOptions";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9690,7 +9690,7 @@ impl<P, D> Iot for IotClient<P, D>
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9736,7 +9736,7 @@ impl<P, D> Iot for IotClient<P, D>
                                   policy_name = input.policy_name,
                                   policy_version_id = input.policy_version_id);
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9779,7 +9779,7 @@ impl<P, D> Iot for IotClient<P, D>
                              -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError> {
         let request_uri = "/registrationcode";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9823,7 +9823,7 @@ impl<P, D> Iot for IotClient<P, D>
                       -> Result<GetTopicRuleResponse, GetTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9867,7 +9867,7 @@ impl<P, D> Iot for IotClient<P, D>
                             -> Result<ListCACertificatesResponse, ListCACertificatesError> {
         let request_uri = "/cacertificates";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9921,7 +9921,7 @@ impl<P, D> Iot for IotClient<P, D>
                          -> Result<ListCertificatesResponse, ListCertificatesError> {
         let request_uri = "/certificates";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -9977,7 +9977,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/certificates-by-ca/{ca_certificate_id}",
                                   ca_certificate_id = input.ca_certificate_id);
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10032,7 +10032,7 @@ impl<P, D> Iot for IotClient<P, D>
          -> Result<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError> {
         let request_uri = "/certificates-out-going";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10088,7 +10088,7 @@ impl<P, D> Iot for IotClient<P, D>
                      -> Result<ListPoliciesResponse, ListPoliciesError> {
         let request_uri = "/policies";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10143,7 +10143,7 @@ impl<P, D> Iot for IotClient<P, D>
          -> Result<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError> {
         let request_uri = "/policy-principals";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10198,7 +10198,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/policies/{policy_name}/version",
                                   policy_name = input.policy_name);
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10243,7 +10243,7 @@ impl<P, D> Iot for IotClient<P, D>
          -> Result<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError> {
         let request_uri = "/principal-policies";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10298,7 +10298,7 @@ impl<P, D> Iot for IotClient<P, D>
                              -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError> {
         let request_uri = "/principals/things";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10350,7 +10350,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/things/{thing_name}/principals",
                                   thing_name = input.thing_name);
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10394,7 +10394,7 @@ impl<P, D> Iot for IotClient<P, D>
                         -> Result<ListThingTypesResponse, ListThingTypesError> {
         let request_uri = "/thing-types";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10448,7 +10448,7 @@ impl<P, D> Iot for IotClient<P, D>
                    -> Result<ListThingsResponse, ListThingsError> {
         let request_uri = "/things";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10508,7 +10508,7 @@ impl<P, D> Iot for IotClient<P, D>
                         -> Result<ListTopicRulesResponse, ListTopicRulesError> {
         let request_uri = "/rules";
 
-        let mut request = SignedRequest::new("GET", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10566,7 +10566,7 @@ impl<P, D> Iot for IotClient<P, D>
          -> Result<RegisterCACertificateResponse, RegisterCACertificateError> {
         let request_uri = "/cacertificate";
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10619,7 +10619,7 @@ impl<P, D> Iot for IotClient<P, D>
                             -> Result<RegisterCertificateResponse, RegisterCertificateError> {
         let request_uri = "/certificate/register";
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10665,7 +10665,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/reject-certificate-transfer/{certificate_id}",
                                   certificate_id = input.certificate_id);
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10700,7 +10700,7 @@ impl<P, D> Iot for IotClient<P, D>
                           -> Result<(), ReplaceTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10736,7 +10736,7 @@ impl<P, D> Iot for IotClient<P, D>
                                   policy_name = input.policy_name,
                                   policy_version_id = input.policy_version_id);
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10770,7 +10770,7 @@ impl<P, D> Iot for IotClient<P, D>
                            -> Result<(), SetLoggingOptionsError> {
         let request_uri = "/loggingOptions";
 
-        let mut request = SignedRequest::new("POST", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10805,7 +10805,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/transfer-certificate/{certificate_id}",
                                   certificate_id = input.certificate_id);
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10853,7 +10853,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/cacertificate/{ca_certificate_id}",
                                   ca_certificate_id = input.certificate_id);
 
-        let mut request = SignedRequest::new("PUT", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10894,7 +10894,7 @@ impl<P, D> Iot for IotClient<P, D>
         let request_uri = format!("/certificates/{certificate_id}",
                                   certificate_id = input.certificate_id);
 
-        let mut request = SignedRequest::new("PUT", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -10929,7 +10929,7 @@ impl<P, D> Iot for IotClient<P, D>
                     -> Result<UpdateThingResponse, UpdateThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());

@@ -5774,7 +5774,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn accept_handshake(&self,
                         input: &AcceptHandshakeRequest)
                         -> Result<AcceptHandshakeResponse, AcceptHandshakeError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.AcceptHandshake");
@@ -5804,7 +5804,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
     #[doc="<p>Attaches a policy to a root, an organizational unit, or an individual account. How the policy affects accounts depends on the type of policy:</p> <ul> <li> <p> <b>Service control policy (SCP)</b> - An SCP specifies what permissions can be delegated to users in affected member accounts. The scope of influence for a policy depends on what you attach the policy to:</p> <ul> <li> <p>If you attach an SCP to a root, it affects all accounts in the organization.</p> </li> <li> <p>If you attach an SCP to an OU, it affects all accounts in that OU and in any child OUs.</p> </li> <li> <p>If you attach the policy directly to an account, then it affects only that account.</p> </li> </ul> <p>SCPs essentially are permission \"filters\". When you attach one SCP to a higher level root or OU, and you also attach a different SCP to a child OU or to an account, the child policy can further restrict only the permissions that pass through the parent filter and are available to the child. An SCP that is attached to a child cannot grant a permission that is not already granted by the parent. For example, imagine that the parent SCP allows permissions A, B, C, D, and E. The child SCP allows C, D, E, F, and G. The result is that the accounts affected by the child SCP are allowed to use only C, D, and E. They cannot use A or B because they were filtered out by the child OU. They also cannot use F and G because they were filtered out by the parent OU. They cannot be granted back by the child SCP; child SCPs can only filter the permissions they receive from the parent SCP.</p> <p>AWS Organizations attaches a default SCP named <code>\"FullAWSAccess</code> to every root, OU, and account. This default SCP allows all services and actions, enabling any new child OU or account to inherit the permissions of the parent root or OU. If you detach the default policy, you must replace it with a policy that specifies the permissions that you want to allow in that OU or account.</p> <p>For more information about how Organizations policies permissions work, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html\">Using Service Control Policies</a> in the <i>AWS Organizations User Guide</i>.</p> </li> </ul> <p>This operation can be called only from the organization's master account.</p>"]
     fn attach_policy(&self, input: &AttachPolicyRequest) -> Result<(), AttachPolicyError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.AttachPolicy");
@@ -5830,7 +5830,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn cancel_handshake(&self,
                         input: &CancelHandshakeRequest)
                         -> Result<CancelHandshakeResponse, CancelHandshakeError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.CancelHandshake");
@@ -5862,7 +5862,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn create_account(&self,
                       input: &CreateAccountRequest)
                       -> Result<CreateAccountResponse, CreateAccountError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.CreateAccount");
@@ -5894,7 +5894,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn create_organization(&self,
                            input: &CreateOrganizationRequest)
                            -> Result<CreateOrganizationResponse, CreateOrganizationError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5926,7 +5926,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &CreateOrganizationalUnitRequest)
          -> Result<CreateOrganizationalUnitResponse, CreateOrganizationalUnitError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5958,7 +5958,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn create_policy(&self,
                      input: &CreatePolicyRequest)
                      -> Result<CreatePolicyResponse, CreatePolicyError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.CreatePolicy");
@@ -5990,7 +5990,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn decline_handshake(&self,
                          input: &DeclineHandshakeRequest)
                          -> Result<DeclineHandshakeResponse, DeclineHandshakeError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.DeclineHandshake");
@@ -6020,7 +6020,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
     #[doc="<p>Deletes the organization. You can delete an organization only by using credentials from the master account. The organization must be empty of member accounts, OUs, and policies.</p> <important> <p>If you create any accounts using Organizations operations or the Organizations console, you can't remove those accounts from the organization, which means that you can't delete the organization.</p> </important>"]
     fn delete_organization(&self) -> Result<(), DeleteOrganizationError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6046,7 +6046,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn delete_organizational_unit(&self,
                                   input: &DeleteOrganizationalUnitRequest)
                                   -> Result<(), DeleteOrganizationalUnitError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6072,7 +6072,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
     #[doc="<p>Deletes the specified policy from your organization. Before you perform this operation, you must first detach the policy from all OUs, roots, and accounts.</p> <p>This operation can be called only from the organization's master account.</p>"]
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.DeletePolicy");
@@ -6098,7 +6098,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn describe_account(&self,
                         input: &DescribeAccountRequest)
                         -> Result<DescribeAccountResponse, DescribeAccountError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.DescribeAccount");
@@ -6131,7 +6131,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &DescribeCreateAccountStatusRequest)
          -> Result<DescribeCreateAccountStatusResponse, DescribeCreateAccountStatusError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6163,7 +6163,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn describe_handshake(&self,
                           input: &DescribeHandshakeRequest)
                           -> Result<DescribeHandshakeResponse, DescribeHandshakeError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6193,7 +6193,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     #[doc="<p>Retrieves information about the organization that the user's account belongs to.</p> <p>This operation can be called from any account in the organization.</p>"]
     fn describe_organization(&self)
                              -> Result<DescribeOrganizationResponse, DescribeOrganizationError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6224,7 +6224,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &DescribeOrganizationalUnitRequest)
          -> Result<DescribeOrganizationalUnitResponse, DescribeOrganizationalUnitError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6256,7 +6256,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn describe_policy(&self,
                        input: &DescribePolicyRequest)
                        -> Result<DescribePolicyResponse, DescribePolicyError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.DescribePolicy");
@@ -6286,7 +6286,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
     #[doc="<p>Detaches a policy from a target root, organizational unit, or account. If the policy being detached is a service control policy (SCP), the changes to permissions for IAM users and roles in affected accounts are immediate.</p> <p> <b>Note:</b> Every root, OU, and account must have at least one SCP attached. If you want to replace the default <code>FullAWSAccess</code> policy with one that limits the permissions that can be delegated, then you must attach the replacement policy before you can remove the default one. This is the authorization strategy of <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_about-scps.html#orgs_policies_whitelist\">whitelisting</a>. If you instead attach a second SCP and leave the <code>FullAWSAccess</code> SCP still attached, and specify <code>\"Effect\": \"Deny\"</code> in the second SCP to override the <code>\"Effect\": \"Allow\"</code> in the <code>FullAWSAccess</code> policy (or any other attached SCP), then you are using the authorization strategy of <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_about-scps.html#orgs_policies_blacklist\">blacklisting</a>. </p> <p>This operation can be called only from the organization's master account.</p>"]
     fn detach_policy(&self, input: &DetachPolicyRequest) -> Result<(), DetachPolicyError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.DetachPolicy");
@@ -6312,7 +6312,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn disable_policy_type(&self,
                            input: &DisablePolicyTypeRequest)
                            -> Result<DisablePolicyTypeResponse, DisablePolicyTypeError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6341,7 +6341,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
     #[doc="<p>Enables all features in an organization. This enables the use of organization policies that can restrict the services and actions that can be called in each account. Until you enable all features, you have access only to consolidated billing, and you can't use any of the advanced account administration features that AWS Organizations supports. For more information, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html\">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p> <important> <p>This operation is required only for organizations that were created explicitly with only the consolidated billing features enabled, or that were migrated from a Consolidated Billing account family to Organizations. Calling this operation sends a handshake to every invited account in the organization. The feature set change can be finalized and the additional features enabled only after all administrators in the invited accounts approve the change by accepting the handshake.</p> </important> <p>After all invited member accounts accept the handshake, you finalize the feature set change by accepting the handshake that contains <code>\"Action\": \"ENABLE_ALL_FEATURES\"</code>. This completes the change.</p> <p>After you enable all features in your organization, the master account in the organization can apply policies on all member accounts. These policies can restrict what users and even administrators in those accounts can do. The master account can apply policies that prevent accounts from leaving the organization. Ensure that your account administrators are aware of this.</p> <p>This operation can be called only from the organization's master account. </p>"]
     fn enable_all_features(&self) -> Result<EnableAllFeaturesResponse, EnableAllFeaturesError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6371,7 +6371,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn enable_policy_type(&self,
                           input: &EnablePolicyTypeRequest)
                           -> Result<EnablePolicyTypeResponse, EnablePolicyTypeError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.EnablePolicyType");
@@ -6404,7 +6404,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &InviteAccountToOrganizationRequest)
          -> Result<InviteAccountToOrganizationResponse, InviteAccountToOrganizationError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6434,7 +6434,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
     #[doc="<p>Removes a member account from its parent organization. This version of the operation is performed by the account that wants to leave. To remove a member account as a user in the master account, use <a>RemoveAccountFromOrganization</a> instead.</p> <p>This operation can be called only from a member account in the organization.</p> <important> <ul> <li> <p>The master account in an organization with all features enabled can set service control policies (SCPs) that can restrict what administrators of member accounts can do, including preventing them from successfully calling <code>LeaveOrganization</code> and leaving the organization. </p> </li> <li> <p>If you created the account using the AWS Organizations console, the Organizations API, or the Organizations CLI commands, then you cannot remove the account.</p> </li> <li> <p>You can leave an organization only after you enable IAM user access to billing in your account. For more information, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate\">Activating Access to the Billing and Cost Management Console</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </li> </ul> </important>"]
     fn leave_organization(&self) -> Result<(), LeaveOrganizationError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6460,7 +6460,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn list_accounts(&self,
                      input: &ListAccountsRequest)
                      -> Result<ListAccountsResponse, ListAccountsError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.ListAccounts");
@@ -6493,7 +6493,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &ListAccountsForParentRequest)
          -> Result<ListAccountsForParentResponse, ListAccountsForParentError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6524,7 +6524,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn list_children(&self,
                      input: &ListChildrenRequest)
                      -> Result<ListChildrenResponse, ListChildrenError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.ListChildren");
@@ -6557,7 +6557,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &ListCreateAccountStatusRequest)
          -> Result<ListCreateAccountStatusResponse, ListCreateAccountStatusError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6590,7 +6590,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &ListHandshakesForAccountRequest)
          -> Result<ListHandshakesForAccountResponse, ListHandshakesForAccountError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6623,7 +6623,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &ListHandshakesForOrganizationRequest)
          -> Result<ListHandshakesForOrganizationResponse, ListHandshakesForOrganizationError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6656,7 +6656,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &ListOrganizationalUnitsForParentRequest)
          -> Result<ListOrganizationalUnitsForParentResponse, ListOrganizationalUnitsForParentError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6687,7 +6687,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn list_parents(&self,
                     input: &ListParentsRequest)
                     -> Result<ListParentsResponse, ListParentsError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.ListParents");
@@ -6719,7 +6719,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn list_policies(&self,
                      input: &ListPoliciesRequest)
                      -> Result<ListPoliciesResponse, ListPoliciesError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.ListPolicies");
@@ -6752,7 +6752,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &ListPoliciesForTargetRequest)
          -> Result<ListPoliciesForTargetResponse, ListPoliciesForTargetError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6781,7 +6781,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
     #[doc="<p>Lists the roots that are defined in the current organization.</p> <p>This operation can be called only from the organization's master account.</p>"]
     fn list_roots(&self, input: &ListRootsRequest) -> Result<ListRootsResponse, ListRootsError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.ListRoots");
@@ -6814,7 +6814,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &ListTargetsForPolicyRequest)
          -> Result<ListTargetsForPolicyResponse, ListTargetsForPolicyError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6843,7 +6843,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
 
     #[doc="<p>Moves an account from its current source parent root or OU to the specified destination parent root or OU.</p> <p>This operation can be called only from the organization's master account.</p>"]
     fn move_account(&self, input: &MoveAccountRequest) -> Result<(), MoveAccountError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.MoveAccount");
@@ -6869,7 +6869,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn remove_account_from_organization(&self,
                                         input: &RemoveAccountFromOrganizationRequest)
                                         -> Result<(), RemoveAccountFromOrganizationError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6898,7 +6898,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         (&self,
          input: &UpdateOrganizationalUnitRequest)
          -> Result<UpdateOrganizationalUnitResponse, UpdateOrganizationalUnitError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6930,7 +6930,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
     fn update_policy(&self,
                      input: &UpdatePolicyRequest)
                      -> Result<UpdatePolicyResponse, UpdatePolicyError> {
-        let mut request = SignedRequest::new("POST", "organizations", self.region, "/");
+        let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSOrganizationsV20161128.UpdatePolicy");

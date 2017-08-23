@@ -6675,7 +6675,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn associate_web_acl(&self,
                          input: &AssociateWebACLRequest)
                          -> Result<AssociateWebACLResponse, AssociateWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.AssociateWebACL");
@@ -6707,7 +6707,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn create_byte_match_set(&self,
                              input: &CreateByteMatchSetRequest)
                              -> Result<CreateByteMatchSetResponse, CreateByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6738,7 +6738,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn create_ip_set(&self,
                      input: &CreateIPSetRequest)
                      -> Result<CreateIPSetResponse, CreateIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.CreateIPSet");
@@ -6770,7 +6770,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn create_rate_based_rule(&self,
                               input: &CreateRateBasedRuleRequest)
                               -> Result<CreateRateBasedRuleResponse, CreateRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6801,7 +6801,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn create_rule(&self,
                    input: &CreateRuleRequest)
                    -> Result<CreateRuleResponse, CreateRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.CreateRule");
@@ -6834,7 +6834,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &CreateSizeConstraintSetRequest)
          -> Result<CreateSizeConstraintSetResponse, CreateSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6867,7 +6867,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &CreateSqlInjectionMatchSetRequest)
          -> Result<CreateSqlInjectionMatchSetResponse, CreateSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6899,7 +6899,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn create_web_acl(&self,
                       input: &CreateWebACLRequest)
                       -> Result<CreateWebACLResponse, CreateWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.CreateWebACL");
@@ -6931,7 +6931,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn create_xss_match_set(&self,
                             input: &CreateXssMatchSetRequest)
                             -> Result<CreateXssMatchSetResponse, CreateXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.CreateXssMatchSet");
@@ -6961,7 +6961,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn delete_byte_match_set(&self,
                              input: &DeleteByteMatchSetRequest)
                              -> Result<DeleteByteMatchSetResponse, DeleteByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -6992,7 +6992,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn delete_ip_set(&self,
                      input: &DeleteIPSetRequest)
                      -> Result<DeleteIPSetResponse, DeleteIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.DeleteIPSet");
@@ -7024,7 +7024,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn delete_rate_based_rule(&self,
                               input: &DeleteRateBasedRuleRequest)
                               -> Result<DeleteRateBasedRuleResponse, DeleteRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7055,7 +7055,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn delete_rule(&self,
                    input: &DeleteRuleRequest)
                    -> Result<DeleteRuleResponse, DeleteRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.DeleteRule");
@@ -7088,7 +7088,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &DeleteSizeConstraintSetRequest)
          -> Result<DeleteSizeConstraintSetResponse, DeleteSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7121,7 +7121,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &DeleteSqlInjectionMatchSetRequest)
          -> Result<DeleteSqlInjectionMatchSetResponse, DeleteSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7153,7 +7153,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn delete_web_acl(&self,
                       input: &DeleteWebACLRequest)
                       -> Result<DeleteWebACLResponse, DeleteWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.DeleteWebACL");
@@ -7185,7 +7185,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn delete_xss_match_set(&self,
                             input: &DeleteXssMatchSetRequest)
                             -> Result<DeleteXssMatchSetResponse, DeleteXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.DeleteXssMatchSet");
@@ -7215,7 +7215,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn disassociate_web_acl(&self,
                             input: &DisassociateWebACLRequest)
                             -> Result<DisassociateWebACLResponse, DisassociateWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7246,7 +7246,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn get_byte_match_set(&self,
                           input: &GetByteMatchSetRequest)
                           -> Result<GetByteMatchSetResponse, GetByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetByteMatchSet");
@@ -7276,7 +7276,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
 
     #[doc="<p>When you want to create, update, or delete AWS WAF objects, get a change token and include the change token in the create, update, or delete request. Change tokens ensure that your application doesn't submit conflicting requests to AWS WAF.</p> <p>Each create, update, or delete request must use a unique change token. If your application submits a <code>GetChangeToken</code> request and then submits a second <code>GetChangeToken</code> request before submitting a create, update, or delete request, the second <code>GetChangeToken</code> request returns the same value as the first <code>GetChangeToken</code> request.</p> <p>When you use a change token in a create, update, or delete request, the status of the change token changes to <code>PENDING</code>, which indicates that AWS WAF is propagating the change to all AWS WAF servers. Use <code>GetChangeTokenStatus</code> to determine the status of your change token.</p>"]
     fn get_change_token(&self) -> Result<GetChangeTokenResponse, GetChangeTokenError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetChangeToken");
@@ -7308,7 +7308,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &GetChangeTokenStatusRequest)
          -> Result<GetChangeTokenStatusResponse, GetChangeTokenStatusError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7337,7 +7337,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
 
     #[doc="<p>Returns the <a>IPSet</a> that is specified by <code>IPSetId</code>.</p>"]
     fn get_ip_set(&self, input: &GetIPSetRequest) -> Result<GetIPSetResponse, GetIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetIPSet");
@@ -7369,7 +7369,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn get_rate_based_rule(&self,
                            input: &GetRateBasedRuleRequest)
                            -> Result<GetRateBasedRuleResponse, GetRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetRateBasedRule");
@@ -7402,7 +7402,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &GetRateBasedRuleManagedKeysRequest)
          -> Result<GetRateBasedRuleManagedKeysResponse, GetRateBasedRuleManagedKeysError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7432,7 +7432,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
 
     #[doc="<p>Returns the <a>Rule</a> that is specified by the <code>RuleId</code> that you included in the <code>GetRule</code> request.</p>"]
     fn get_rule(&self, input: &GetRuleRequest) -> Result<GetRuleResponse, GetRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetRule");
@@ -7463,7 +7463,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn get_sampled_requests(&self,
                             input: &GetSampledRequestsRequest)
                             -> Result<GetSampledRequestsResponse, GetSampledRequestsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7495,7 +7495,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &GetSizeConstraintSetRequest)
          -> Result<GetSizeConstraintSetResponse, GetSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7527,7 +7527,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &GetSqlInjectionMatchSetRequest)
          -> Result<GetSqlInjectionMatchSetResponse, GetSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7557,7 +7557,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
 
     #[doc="<p>Returns the <a>WebACL</a> that is specified by <code>WebACLId</code>.</p>"]
     fn get_web_acl(&self, input: &GetWebACLRequest) -> Result<GetWebACLResponse, GetWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetWebACL");
@@ -7590,7 +7590,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &GetWebACLForResourceRequest)
          -> Result<GetWebACLForResourceResponse, GetWebACLForResourceError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7621,7 +7621,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn get_xss_match_set(&self,
                          input: &GetXssMatchSetRequest)
                          -> Result<GetXssMatchSetResponse, GetXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetXssMatchSet");
@@ -7653,7 +7653,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn list_byte_match_sets(&self,
                             input: &ListByteMatchSetsRequest)
                             -> Result<ListByteMatchSetsResponse, ListByteMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListByteMatchSets");
@@ -7683,7 +7683,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn list_ip_sets(&self,
                     input: &ListIPSetsRequest)
                     -> Result<ListIPSetsResponse, ListIPSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListIPSets");
@@ -7715,7 +7715,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn list_rate_based_rules(&self,
                              input: &ListRateBasedRulesRequest)
                              -> Result<ListRateBasedRulesResponse, ListRateBasedRulesError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7747,7 +7747,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &ListResourcesForWebACLRequest)
          -> Result<ListResourcesForWebACLResponse, ListResourcesForWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7776,7 +7776,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
 
     #[doc="<p>Returns an array of <a>RuleSummary</a> objects.</p>"]
     fn list_rules(&self, input: &ListRulesRequest) -> Result<ListRulesResponse, ListRulesError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListRules");
@@ -7809,7 +7809,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &ListSizeConstraintSetsRequest)
          -> Result<ListSizeConstraintSetsResponse, ListSizeConstraintSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7841,7 +7841,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &ListSqlInjectionMatchSetsRequest)
          -> Result<ListSqlInjectionMatchSetsResponse, ListSqlInjectionMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7873,7 +7873,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn list_web_ac_ls(&self,
                       input: &ListWebACLsRequest)
                       -> Result<ListWebACLsResponse, ListWebACLsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListWebACLs");
@@ -7905,7 +7905,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn list_xss_match_sets(&self,
                            input: &ListXssMatchSetsRequest)
                            -> Result<ListXssMatchSetsResponse, ListXssMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListXssMatchSets");
@@ -7937,7 +7937,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn update_byte_match_set(&self,
                              input: &UpdateByteMatchSetRequest)
                              -> Result<UpdateByteMatchSetResponse, UpdateByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7968,7 +7968,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn update_ip_set(&self,
                      input: &UpdateIPSetRequest)
                      -> Result<UpdateIPSetResponse, UpdateIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.UpdateIPSet");
@@ -8000,7 +8000,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn update_rate_based_rule(&self,
                               input: &UpdateRateBasedRuleRequest)
                               -> Result<UpdateRateBasedRuleResponse, UpdateRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8031,7 +8031,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn update_rule(&self,
                    input: &UpdateRuleRequest)
                    -> Result<UpdateRuleResponse, UpdateRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.UpdateRule");
@@ -8064,7 +8064,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &UpdateSizeConstraintSetRequest)
          -> Result<UpdateSizeConstraintSetResponse, UpdateSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8097,7 +8097,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
         (&self,
          input: &UpdateSqlInjectionMatchSetRequest)
          -> Result<UpdateSqlInjectionMatchSetResponse, UpdateSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8129,7 +8129,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn update_web_acl(&self,
                       input: &UpdateWebACLRequest)
                       -> Result<UpdateWebACLResponse, UpdateWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.UpdateWebACL");
@@ -8161,7 +8161,7 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
     fn update_xss_match_set(&self,
                             input: &UpdateXssMatchSetRequest)
                             -> Result<UpdateXssMatchSetResponse, UpdateXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
+        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.UpdateXssMatchSet");

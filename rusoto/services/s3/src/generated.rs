@@ -17346,7 +17346,7 @@ impl<P, D> S3 for S3Client<P, D>
                               -> Result<AbortMultipartUploadOutput, AbortMultipartUploadError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         if let Some(ref request_payer) = input.request_payer {
@@ -17405,7 +17405,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<CompleteMultipartUploadOutput, CompleteMultipartUploadError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("POST", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
 
         if let Some(ref request_payer) = input.request_payer {
@@ -17492,7 +17492,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn copy_object(&self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, CopyObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref acl) = input.acl {
@@ -17713,7 +17713,7 @@ impl<P, D> S3 for S3Client<P, D>
                      -> Result<CreateBucketOutput, CreateBucketError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref acl) = input.acl {
@@ -17796,7 +17796,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<CreateMultipartUploadOutput, CreateMultipartUploadError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("POST", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
 
         if let Some(ref acl) = input.acl {
@@ -17962,7 +17962,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_bucket(&self, input: &DeleteBucketRequest) -> Result<(), DeleteBucketError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
 
@@ -17996,7 +17996,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<(), DeleteBucketAnalyticsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18032,7 +18032,7 @@ impl<P, D> S3 for S3Client<P, D>
                           -> Result<(), DeleteBucketCorsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18068,7 +18068,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<(), DeleteBucketInventoryConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18104,7 +18104,7 @@ impl<P, D> S3 for S3Client<P, D>
                                -> Result<(), DeleteBucketLifecycleError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18139,7 +18139,7 @@ impl<P, D> S3 for S3Client<P, D>
                                            -> Result<(), DeleteBucketMetricsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18175,7 +18175,7 @@ impl<P, D> S3 for S3Client<P, D>
                             -> Result<(), DeleteBucketPolicyError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18210,7 +18210,7 @@ impl<P, D> S3 for S3Client<P, D>
                                  -> Result<(), DeleteBucketReplicationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18246,7 +18246,7 @@ impl<P, D> S3 for S3Client<P, D>
                              -> Result<(), DeleteBucketTaggingError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18281,7 +18281,7 @@ impl<P, D> S3 for S3Client<P, D>
                              -> Result<(), DeleteBucketWebsiteError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18316,7 +18316,7 @@ impl<P, D> S3 for S3Client<P, D>
                      -> Result<DeleteObjectOutput, DeleteObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         if let Some(ref mfa) = input.mfa {
@@ -18387,7 +18387,7 @@ impl<P, D> S3 for S3Client<P, D>
                              -> Result<DeleteObjectTaggingOutput, DeleteObjectTaggingError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18445,7 +18445,7 @@ impl<P, D> S3 for S3Client<P, D>
                       -> Result<DeleteObjectsOutput, DeleteObjectsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("POST", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
 
         if let Some(ref mfa) = input.mfa {
@@ -18517,7 +18517,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18567,7 +18567,7 @@ impl<P, D> S3 for S3Client<P, D>
                       -> Result<GetBucketAclOutput, GetBucketAclError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18619,7 +18619,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18671,7 +18671,7 @@ impl<P, D> S3 for S3Client<P, D>
                        -> Result<GetBucketCorsOutput, GetBucketCorsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18723,7 +18723,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18775,7 +18775,7 @@ impl<P, D> S3 for S3Client<P, D>
                             -> Result<GetBucketLifecycleOutput, GetBucketLifecycleError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18828,7 +18828,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18879,7 +18879,7 @@ impl<P, D> S3 for S3Client<P, D>
                            -> Result<GetBucketLocationOutput, GetBucketLocationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18931,7 +18931,7 @@ impl<P, D> S3 for S3Client<P, D>
                           -> Result<GetBucketLoggingOutput, GetBucketLoggingError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -18984,7 +18984,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -19037,7 +19037,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<NotificationConfigurationDeprecated, GetBucketNotificationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -19088,7 +19088,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<NotificationConfiguration, GetBucketNotificationConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -19140,7 +19140,7 @@ impl<P, D> S3 for S3Client<P, D>
                          -> Result<GetBucketPolicyOutput, GetBucketPolicyError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -19181,7 +19181,7 @@ impl<P, D> S3 for S3Client<P, D>
                               -> Result<GetBucketReplicationOutput, GetBucketReplicationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -19234,7 +19234,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -19285,7 +19285,7 @@ impl<P, D> S3 for S3Client<P, D>
                           -> Result<GetBucketTaggingOutput, GetBucketTaggingError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -19337,7 +19337,7 @@ impl<P, D> S3 for S3Client<P, D>
                              -> Result<GetBucketVersioningOutput, GetBucketVersioningError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -19389,7 +19389,7 @@ impl<P, D> S3 for S3Client<P, D>
                           -> Result<GetBucketWebsiteOutput, GetBucketWebsiteError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -19439,7 +19439,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, GetObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -19662,7 +19662,7 @@ impl<P, D> S3 for S3Client<P, D>
                       -> Result<GetObjectAclOutput, GetObjectAclError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         if let Some(ref request_payer) = input.request_payer {
@@ -19722,7 +19722,7 @@ impl<P, D> S3 for S3Client<P, D>
                           -> Result<GetObjectTaggingOutput, GetObjectTaggingError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -19780,7 +19780,7 @@ impl<P, D> S3 for S3Client<P, D>
                           -> Result<GetObjectTorrentOutput, GetObjectTorrentError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         if let Some(ref request_payer) = input.request_payer {
@@ -19824,7 +19824,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn head_bucket(&self, input: &HeadBucketRequest) -> Result<(), HeadBucketError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("HEAD", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
 
 
@@ -19855,7 +19855,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, HeadObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("HEAD", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -20064,7 +20064,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -20118,7 +20118,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -20172,7 +20172,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -20224,7 +20224,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn list_buckets(&self) -> Result<ListBucketsOutput, ListBucketsError> {
         let request_uri = "/";
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
 
@@ -20273,7 +20273,7 @@ impl<P, D> S3 for S3Client<P, D>
                               -> Result<ListMultipartUploadsOutput, ListMultipartUploadsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -20343,7 +20343,7 @@ impl<P, D> S3 for S3Client<P, D>
                             -> Result<ListObjectVersionsOutput, ListObjectVersionsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -20413,7 +20413,7 @@ impl<P, D> S3 for S3Client<P, D>
                     -> Result<ListObjectsOutput, ListObjectsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         if let Some(ref request_payer) = input.request_payer {
@@ -20481,7 +20481,7 @@ impl<P, D> S3 for S3Client<P, D>
                        -> Result<ListObjectsV2Output, ListObjectsV2Error> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         if let Some(ref request_payer) = input.request_payer {
@@ -20554,7 +20554,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, ListPartsError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
 
         if let Some(ref request_payer) = input.request_payer {
@@ -20625,7 +20625,7 @@ impl<P, D> S3 for S3Client<P, D>
                                            -> Result<(), PutBucketAccelerateConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -20663,7 +20663,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), PutBucketAclError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref acl) = input.acl {
@@ -20737,7 +20737,7 @@ impl<P, D> S3 for S3Client<P, D>
                                           -> Result<(), PutBucketAnalyticsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -20777,7 +20777,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Result<(), PutBucketCorsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -20827,7 +20827,7 @@ impl<P, D> S3 for S3Client<P, D>
                                           -> Result<(), PutBucketInventoryConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -20869,7 +20869,7 @@ impl<P, D> S3 for S3Client<P, D>
                             -> Result<(), PutBucketLifecycleError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -20926,7 +20926,7 @@ impl<P, D> S3 for S3Client<P, D>
                                           -> Result<(), PutBucketLifecycleConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -20982,7 +20982,7 @@ impl<P, D> S3 for S3Client<P, D>
                           -> Result<(), PutBucketLoggingError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -21025,7 +21025,7 @@ impl<P, D> S3 for S3Client<P, D>
                                         -> Result<(), PutBucketMetricsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -21067,7 +21067,7 @@ impl<P, D> S3 for S3Client<P, D>
                                -> Result<(), PutBucketNotificationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -21109,7 +21109,7 @@ impl<P, D> S3 for S3Client<P, D>
          -> Result<(), PutBucketNotificationConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -21150,7 +21150,7 @@ impl<P, D> S3 for S3Client<P, D>
                          -> Result<(), PutBucketPolicyError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -21191,7 +21191,7 @@ impl<P, D> S3 for S3Client<P, D>
                               -> Result<(), PutBucketReplicationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -21242,7 +21242,7 @@ impl<P, D> S3 for S3Client<P, D>
                                   -> Result<(), PutBucketRequestPaymentError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -21284,7 +21284,7 @@ impl<P, D> S3 for S3Client<P, D>
                           -> Result<(), PutBucketTaggingError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -21332,7 +21332,7 @@ impl<P, D> S3 for S3Client<P, D>
                              -> Result<(), PutBucketVersioningError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -21379,7 +21379,7 @@ impl<P, D> S3 for S3Client<P, D>
                           -> Result<(), PutBucketWebsiteError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -21420,7 +21420,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, PutObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref acl) = input.acl {
@@ -21606,7 +21606,7 @@ impl<P, D> S3 for S3Client<P, D>
                       -> Result<PutObjectAclOutput, PutObjectAclError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref acl) = input.acl {
@@ -21706,7 +21706,7 @@ impl<P, D> S3 for S3Client<P, D>
                           -> Result<PutObjectTaggingOutput, PutObjectTaggingError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_md5) = input.content_md5 {
@@ -21770,7 +21770,7 @@ impl<P, D> S3 for S3Client<P, D>
                       -> Result<RestoreObjectOutput, RestoreObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("POST", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
 
         if let Some(ref request_payer) = input.request_payer {
@@ -21837,7 +21837,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn upload_part(&self, input: &UploadPartRequest) -> Result<UploadPartOutput, UploadPartError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
 
         if let Some(ref content_length) = input.content_length {
@@ -21951,7 +21951,7 @@ impl<P, D> S3 for S3Client<P, D>
                         -> Result<UploadPartCopyOutput, UploadPartCopyError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
-        let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
         request.add_header("x-amz-copy-source", &input.copy_source);
 

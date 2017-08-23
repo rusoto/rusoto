@@ -2376,7 +2376,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn create_activity(&self,
                        input: &CreateActivityInput)
                        -> Result<CreateActivityOutput, CreateActivityError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.CreateActivity");
@@ -2408,7 +2408,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn create_state_machine(&self,
                             input: &CreateStateMachineInput)
                             -> Result<CreateStateMachineOutput, CreateStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.CreateStateMachine");
@@ -2440,7 +2440,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn delete_activity(&self,
                        input: &DeleteActivityInput)
                        -> Result<DeleteActivityOutput, DeleteActivityError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DeleteActivity");
@@ -2472,7 +2472,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn delete_state_machine(&self,
                             input: &DeleteStateMachineInput)
                             -> Result<DeleteStateMachineOutput, DeleteStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DeleteStateMachine");
@@ -2504,7 +2504,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn describe_activity(&self,
                          input: &DescribeActivityInput)
                          -> Result<DescribeActivityOutput, DescribeActivityError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeActivity");
@@ -2536,7 +2536,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn describe_execution(&self,
                           input: &DescribeExecutionInput)
                           -> Result<DescribeExecutionOutput, DescribeExecutionError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeExecution");
@@ -2568,7 +2568,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn describe_state_machine(&self,
                               input: &DescribeStateMachineInput)
                               -> Result<DescribeStateMachineOutput, DescribeStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeStateMachine");
@@ -2598,7 +2598,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn get_activity_task(&self,
                          input: &GetActivityTaskInput)
                          -> Result<GetActivityTaskOutput, GetActivityTaskError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.GetActivityTask");
@@ -2630,7 +2630,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn get_execution_history(&self,
                              input: &GetExecutionHistoryInput)
                              -> Result<GetExecutionHistoryOutput, GetExecutionHistoryError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.GetExecutionHistory");
@@ -2660,7 +2660,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn list_activities(&self,
                        input: &ListActivitiesInput)
                        -> Result<ListActivitiesOutput, ListActivitiesError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListActivities");
@@ -2692,7 +2692,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn list_executions(&self,
                        input: &ListExecutionsInput)
                        -> Result<ListExecutionsOutput, ListExecutionsError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListExecutions");
@@ -2724,7 +2724,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn list_state_machines(&self,
                            input: &ListStateMachinesInput)
                            -> Result<ListStateMachinesOutput, ListStateMachinesError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListStateMachines");
@@ -2756,7 +2756,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn send_task_failure(&self,
                          input: &SendTaskFailureInput)
                          -> Result<SendTaskFailureOutput, SendTaskFailureError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskFailure");
@@ -2788,7 +2788,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn send_task_heartbeat(&self,
                            input: &SendTaskHeartbeatInput)
                            -> Result<SendTaskHeartbeatOutput, SendTaskHeartbeatError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskHeartbeat");
@@ -2820,7 +2820,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn send_task_success(&self,
                          input: &SendTaskSuccessInput)
                          -> Result<SendTaskSuccessOutput, SendTaskSuccessError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskSuccess");
@@ -2852,7 +2852,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn start_execution(&self,
                        input: &StartExecutionInput)
                        -> Result<StartExecutionOutput, StartExecutionError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.StartExecution");
@@ -2884,7 +2884,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
     fn stop_execution(&self,
                       input: &StopExecutionInput)
                       -> Result<StopExecutionOutput, StopExecutionError> {
-        let mut request = SignedRequest::new("POST", "states", self.region, "/");
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.StopExecution");

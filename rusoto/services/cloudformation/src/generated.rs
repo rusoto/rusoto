@@ -7758,7 +7758,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn cancel_update_stack(&self,
                            input: &CancelUpdateStackInput)
                            -> Result<(), CancelUpdateStackError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CancelUpdateStack");
@@ -7787,7 +7787,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         (&self,
          input: &ContinueUpdateRollbackInput)
          -> Result<ContinueUpdateRollbackOutput, ContinueUpdateRollbackError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ContinueUpdateRollback");
@@ -7835,7 +7835,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn create_change_set(&self,
                          input: &CreateChangeSetInput)
                          -> Result<CreateChangeSetOutput, CreateChangeSetError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateChangeSet");
@@ -7882,7 +7882,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn create_stack(&self,
                     input: &CreateStackInput)
                     -> Result<CreateStackOutput, CreateStackError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateStack");
@@ -7929,7 +7929,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn delete_change_set(&self,
                          input: &DeleteChangeSetInput)
                          -> Result<DeleteChangeSetOutput, DeleteChangeSetError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteChangeSet");
@@ -7974,7 +7974,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
     #[doc="<p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>"]
     fn delete_stack(&self, input: &DeleteStackInput) -> Result<(), DeleteStackError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteStack");
@@ -8003,7 +8003,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         (&self,
          input: &DescribeAccountLimitsInput)
          -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAccountLimits");
@@ -8050,7 +8050,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn describe_change_set(&self,
                            input: &DescribeChangeSetInput)
                            -> Result<DescribeChangeSetOutput, DescribeChangeSetError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeChangeSet");
@@ -8097,7 +8097,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn describe_stack_events(&self,
                              input: &DescribeStackEventsInput)
                              -> Result<DescribeStackEventsOutput, DescribeStackEventsError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeStackEvents");
@@ -8145,7 +8145,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         (&self,
          input: &DescribeStackResourceInput)
          -> Result<DescribeStackResourceOutput, DescribeStackResourceError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeStackResource");
@@ -8193,7 +8193,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
         (&self,
          input: &DescribeStackResourcesInput)
          -> Result<DescribeStackResourcesOutput, DescribeStackResourcesError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeStackResources");
@@ -8241,7 +8241,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn describe_stacks(&self,
                        input: &DescribeStacksInput)
                        -> Result<DescribeStacksOutput, DescribeStacksError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeStacks");
@@ -8288,7 +8288,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn estimate_template_cost(&self,
                               input: &EstimateTemplateCostInput)
                               -> Result<EstimateTemplateCostOutput, EstimateTemplateCostError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EstimateTemplateCost");
@@ -8335,7 +8335,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn execute_change_set(&self,
                           input: &ExecuteChangeSetInput)
                           -> Result<ExecuteChangeSetOutput, ExecuteChangeSetError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ExecuteChangeSet");
@@ -8382,7 +8382,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn get_stack_policy(&self,
                         input: &GetStackPolicyInput)
                         -> Result<GetStackPolicyOutput, GetStackPolicyError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetStackPolicy");
@@ -8429,7 +8429,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn get_template(&self,
                     input: &GetTemplateInput)
                     -> Result<GetTemplateOutput, GetTemplateError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetTemplate");
@@ -8476,7 +8476,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn get_template_summary(&self,
                             input: &GetTemplateSummaryInput)
                             -> Result<GetTemplateSummaryOutput, GetTemplateSummaryError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetTemplateSummary");
@@ -8523,7 +8523,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn list_change_sets(&self,
                         input: &ListChangeSetsInput)
                         -> Result<ListChangeSetsOutput, ListChangeSetsError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListChangeSets");
@@ -8570,7 +8570,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn list_exports(&self,
                     input: &ListExportsInput)
                     -> Result<ListExportsOutput, ListExportsError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListExports");
@@ -8617,7 +8617,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn list_imports(&self,
                     input: &ListImportsInput)
                     -> Result<ListImportsOutput, ListImportsError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListImports");
@@ -8664,7 +8664,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn list_stack_resources(&self,
                             input: &ListStackResourcesInput)
                             -> Result<ListStackResourcesOutput, ListStackResourcesError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListStackResources");
@@ -8709,7 +8709,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
     #[doc="<p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>"]
     fn list_stacks(&self, input: &ListStacksInput) -> Result<ListStacksOutput, ListStacksError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListStacks");
@@ -8754,7 +8754,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
     #[doc="<p>Sets a stack policy for a specified stack.</p>"]
     fn set_stack_policy(&self, input: &SetStackPolicyInput) -> Result<(), SetStackPolicyError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetStackPolicy");
@@ -8780,7 +8780,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
     #[doc="<p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>"]
     fn signal_resource(&self, input: &SignalResourceInput) -> Result<(), SignalResourceError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SignalResource");
@@ -8808,7 +8808,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn update_stack(&self,
                     input: &UpdateStackInput)
                     -> Result<UpdateStackOutput, UpdateStackError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateStack");
@@ -8855,7 +8855,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     fn validate_template(&self,
                          input: &ValidateTemplateInput)
                          -> Result<ValidateTemplateOutput, ValidateTemplateError> {
-        let mut request = SignedRequest::new("POST", "cloudformation", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ValidateTemplate");

@@ -2024,7 +2024,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn associate_node(&self,
                       input: &AssociateNodeRequest)
                       -> Result<AssociateNodeResponse, AssociateNodeError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.AssociateNode");
@@ -2056,7 +2056,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn create_backup(&self,
                      input: &CreateBackupRequest)
                      -> Result<CreateBackupResponse, CreateBackupError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.CreateBackup");
@@ -2088,7 +2088,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn create_server(&self,
                      input: &CreateServerRequest)
                      -> Result<CreateServerResponse, CreateServerError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.CreateServer");
@@ -2120,7 +2120,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn delete_backup(&self,
                      input: &DeleteBackupRequest)
                      -> Result<DeleteBackupResponse, DeleteBackupError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DeleteBackup");
@@ -2152,7 +2152,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn delete_server(&self,
                      input: &DeleteServerRequest)
                      -> Result<DeleteServerResponse, DeleteServerError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DeleteServer");
@@ -2184,7 +2184,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn describe_account_attributes
         (&self)
          -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2215,7 +2215,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn describe_backups(&self,
                         input: &DescribeBackupsRequest)
                         -> Result<DescribeBackupsResponse, DescribeBackupsError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DescribeBackups");
@@ -2247,7 +2247,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn describe_events(&self,
                        input: &DescribeEventsRequest)
                        -> Result<DescribeEventsResponse, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DescribeEvents");
@@ -2280,7 +2280,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         (&self,
          input: &DescribeNodeAssociationStatusRequest)
          -> Result<DescribeNodeAssociationStatusResponse, DescribeNodeAssociationStatusError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2312,7 +2312,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn describe_servers(&self,
                         input: &DescribeServersRequest)
                         -> Result<DescribeServersResponse, DescribeServersError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DescribeServers");
@@ -2344,7 +2344,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn disassociate_node(&self,
                          input: &DisassociateNodeRequest)
                          -> Result<DisassociateNodeResponse, DisassociateNodeError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DisassociateNode");
@@ -2376,7 +2376,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn restore_server(&self,
                       input: &RestoreServerRequest)
                       -> Result<RestoreServerResponse, RestoreServerError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.RestoreServer");
@@ -2408,7 +2408,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn start_maintenance(&self,
                          input: &StartMaintenanceRequest)
                          -> Result<StartMaintenanceResponse, StartMaintenanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.StartMaintenance");
@@ -2440,7 +2440,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
     fn update_server(&self,
                      input: &UpdateServerRequest)
                      -> Result<UpdateServerResponse, UpdateServerError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.UpdateServer");
@@ -2473,7 +2473,7 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
         (&self,
          input: &UpdateServerEngineAttributesRequest)
          -> Result<UpdateServerEngineAttributesResponse, UpdateServerEngineAttributesError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",

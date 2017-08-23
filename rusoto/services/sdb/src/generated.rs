@@ -1994,7 +1994,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
     fn batch_delete_attributes(&self,
                                input: &BatchDeleteAttributesRequest)
                                -> Result<(), BatchDeleteAttributesError> {
-        let mut request = SignedRequest::new("POST", "sdb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "BatchDeleteAttributes");
@@ -2022,7 +2022,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
     fn batch_put_attributes(&self,
                             input: &BatchPutAttributesRequest)
                             -> Result<(), BatchPutAttributesError> {
-        let mut request = SignedRequest::new("POST", "sdb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "BatchPutAttributes");
@@ -2048,7 +2048,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
 
     #[doc="<p> The <code>CreateDomain</code> operation creates a new domain. The domain name should be unique among the domains associated with the Access Key ID provided in the request. The <code>CreateDomain</code> operation may take 10 or more seconds to complete. </p> <p> The client can create up to 100 domains per account. </p> <p> If the client requires additional domains, go to <a href=\"http://aws.amazon.com/contact-us/simpledb-limit-request/\"> http://aws.amazon.com/contact-us/simpledb-limit-request/</a>. </p>"]
     fn create_domain(&self, input: &CreateDomainRequest) -> Result<(), CreateDomainError> {
-        let mut request = SignedRequest::new("POST", "sdb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDomain");
@@ -2076,7 +2076,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
     fn delete_attributes(&self,
                          input: &DeleteAttributesRequest)
                          -> Result<(), DeleteAttributesError> {
-        let mut request = SignedRequest::new("POST", "sdb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAttributes");
@@ -2102,7 +2102,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
 
     #[doc="<p> The <code>DeleteDomain</code> operation deletes a domain. Any items (and their attributes) in the domain are deleted as well. The <code>DeleteDomain</code> operation might take 10 or more seconds to complete. </p>"]
     fn delete_domain(&self, input: &DeleteDomainRequest) -> Result<(), DeleteDomainError> {
-        let mut request = SignedRequest::new("POST", "sdb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDomain");
@@ -2130,7 +2130,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
     fn domain_metadata(&self,
                        input: &DomainMetadataRequest)
                        -> Result<DomainMetadataResult, DomainMetadataError> {
-        let mut request = SignedRequest::new("POST", "sdb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DomainMetadata");
@@ -2177,7 +2177,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
     fn get_attributes(&self,
                       input: &GetAttributesRequest)
                       -> Result<GetAttributesResult, GetAttributesError> {
-        let mut request = SignedRequest::new("POST", "sdb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetAttributes");
@@ -2224,7 +2224,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
     fn list_domains(&self,
                     input: &ListDomainsRequest)
                     -> Result<ListDomainsResult, ListDomainsError> {
-        let mut request = SignedRequest::new("POST", "sdb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListDomains");
@@ -2269,7 +2269,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
 
     #[doc="<p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ \"first_name\", \"first_value\" }</code> and <code>{ \"first_name\", second_value\" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>"]
     fn put_attributes(&self, input: &PutAttributesRequest) -> Result<(), PutAttributesError> {
-        let mut request = SignedRequest::new("POST", "sdb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutAttributes");
@@ -2295,7 +2295,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
 
     #[doc="<p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>"]
     fn select(&self, input: &SelectRequest) -> Result<SelectResult, SelectError> {
-        let mut request = SignedRequest::new("POST", "sdb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "Select");

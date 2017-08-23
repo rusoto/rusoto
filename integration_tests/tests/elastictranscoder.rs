@@ -42,7 +42,7 @@ impl<P> TestEtsClient<P>
     fn new(credentials_provider: P, region: Region) -> TestEtsClient<P> {
         TestEtsClient {
             credentials_provider: credentials_provider.clone(),
-            region: region,
+            region: region.clone(),
             client: EtsClient::new(default_tls_client().unwrap(), credentials_provider, region),
             s3_client: None,
             input_bucket: None,
@@ -53,7 +53,7 @@ impl<P> TestEtsClient<P>
     fn create_s3_client(&mut self) {
         self.s3_client = Some(S3Client::new(default_tls_client().unwrap(),
                                             self.credentials_provider.clone(),
-                                            self.region));
+                                            self.region.clone()));
     }
 
     fn create_bucket(&mut self) -> String {

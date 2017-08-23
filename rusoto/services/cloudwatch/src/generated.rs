@@ -3067,7 +3067,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
 {
     #[doc="<p>Deletes the specified alarms. In the event of an error, no alarms are deleted.</p>"]
     fn delete_alarms(&self, input: &DeleteAlarmsInput) -> Result<(), DeleteAlarmsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAlarms");
@@ -3095,7 +3095,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
     fn describe_alarm_history(&self,
                               input: &DescribeAlarmHistoryInput)
                               -> Result<DescribeAlarmHistoryOutput, DescribeAlarmHistoryError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAlarmHistory");
@@ -3142,7 +3142,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
     fn describe_alarms(&self,
                        input: &DescribeAlarmsInput)
                        -> Result<DescribeAlarmsOutput, DescribeAlarmsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAlarms");
@@ -3190,7 +3190,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
         (&self,
          input: &DescribeAlarmsForMetricInput)
          -> Result<DescribeAlarmsForMetricOutput, DescribeAlarmsForMetricError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAlarmsForMetric");
@@ -3239,7 +3239,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
     fn disable_alarm_actions(&self,
                              input: &DisableAlarmActionsInput)
                              -> Result<(), DisableAlarmActionsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DisableAlarmActions");
@@ -3267,7 +3267,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
     fn enable_alarm_actions(&self,
                             input: &EnableAlarmActionsInput)
                             -> Result<(), EnableAlarmActionsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableAlarmActions");
@@ -3295,7 +3295,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
     fn get_metric_statistics(&self,
                              input: &GetMetricStatisticsInput)
                              -> Result<GetMetricStatisticsOutput, GetMetricStatisticsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetMetricStatistics");
@@ -3342,7 +3342,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
     fn list_metrics(&self,
                     input: &ListMetricsInput)
                     -> Result<ListMetricsOutput, ListMetricsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListMetrics");
@@ -3387,7 +3387,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
 
     #[doc="<p>Creates or updates an alarm and associates it with the specified metric. Optionally, this operation can associate one or more Amazon SNS resources with the alarm.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is evaluated and its state is set appropriately. Any actions associated with the state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an AWS Identity and Access Management (IAM) user, you must have Amazon EC2 permissions for some operations:</p> <ul> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code> and <code>ec2:RecoverInstances</code> for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions won't be performed. However, if you are later granted the required permissions, the alarm actions that you created earlier will be performed.</p> <p>If you are using an IAM role (for example, an Amazon EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using the AWS Security Token Service (AWS STS), you cannot stop or terminate an Amazon EC2 instance using alarm actions.</p> <p>Note that you must create at least one stop, terminate, or reboot alarm using the Amazon EC2 or CloudWatch console to create the <b>EC2ActionsAccess</b> IAM role. After this IAM role is created, you can create stop, terminate, or reboot alarms using a command-line interface or an API.</p>"]
     fn put_metric_alarm(&self, input: &PutMetricAlarmInput) -> Result<(), PutMetricAlarmError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutMetricAlarm");
@@ -3413,7 +3413,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
 
     #[doc="<p>Publishes metric data points to Amazon CloudWatch. Amazon CloudWatch associates the data points with the specified metric. If the specified metric does not exist, Amazon CloudWatch creates the metric. When Amazon CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (e.g., NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. For more information on specifying dimensions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html\">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you cannot retrieve percentile statistics for this data unless one of the following conditions is true:</p> <ul> <li> <p>The SampleCount of the statistic set is 1</p> </li> <li> <p>The Min and the Max of the statistic set are equal</p> </li> </ul>"]
     fn put_metric_data(&self, input: &PutMetricDataInput) -> Result<(), PutMetricDataError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutMetricData");
@@ -3439,7 +3439,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
 
     #[doc="<p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an Amazon SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens very quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>"]
     fn set_alarm_state(&self, input: &SetAlarmStateInput) -> Result<(), SetAlarmStateError> {
-        let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetAlarmState");

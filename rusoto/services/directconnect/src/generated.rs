@@ -4367,7 +4367,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &AllocateConnectionOnInterconnectRequest)
          -> Result<Connection, AllocateConnectionOnInterconnectError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4399,7 +4399,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn allocate_hosted_connection(&self,
                                   input: &AllocateHostedConnectionRequest)
                                   -> Result<Connection, AllocateHostedConnectionError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.AllocateHostedConnection");
@@ -4432,7 +4432,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &AllocatePrivateVirtualInterfaceRequest)
          -> Result<VirtualInterface, AllocatePrivateVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4467,7 +4467,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &AllocatePublicVirtualInterfaceRequest)
          -> Result<VirtualInterface, AllocatePublicVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4501,7 +4501,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn associate_connection_with_lag(&self,
                                      input: &AssociateConnectionWithLagRequest)
                                      -> Result<Connection, AssociateConnectionWithLagError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.AssociateConnectionWithLag");
@@ -4533,7 +4533,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn associate_hosted_connection(&self,
                                    input: &AssociateHostedConnectionRequest)
                                    -> Result<Connection, AssociateHostedConnectionError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.AssociateHostedConnection");
@@ -4565,7 +4565,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn associate_virtual_interface(&self,
                                    input: &AssociateVirtualInterfaceRequest)
                                    -> Result<VirtualInterface, AssociateVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.AssociateVirtualInterface");
@@ -4598,7 +4598,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn confirm_connection(&self,
                           input: &ConfirmConnectionRequest)
                           -> Result<ConfirmConnectionResponse, ConfirmConnectionError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.ConfirmConnection");
@@ -4629,7 +4629,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &ConfirmPrivateVirtualInterfaceRequest)
          -> Result<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4662,7 +4662,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &ConfirmPublicVirtualInterfaceRequest)
          -> Result<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4694,7 +4694,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn create_bgp_peer(&self,
                        input: &CreateBGPPeerRequest)
                        -> Result<CreateBGPPeerResponse, CreateBGPPeerError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.CreateBGPPeer");
@@ -4726,7 +4726,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn create_connection(&self,
                          input: &CreateConnectionRequest)
                          -> Result<Connection, CreateConnectionError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.CreateConnection");
@@ -4757,7 +4757,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn create_interconnect(&self,
                            input: &CreateInterconnectRequest)
                            -> Result<Interconnect, CreateInterconnectError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.CreateInterconnect");
@@ -4786,7 +4786,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
     #[doc="<p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>"]
     fn create_lag(&self, input: &CreateLagRequest) -> Result<Lag, CreateLagError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.CreateLag");
@@ -4817,7 +4817,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &CreatePrivateVirtualInterfaceRequest)
          -> Result<VirtualInterface, CreatePrivateVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4852,7 +4852,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &CreatePublicVirtualInterfaceRequest)
          -> Result<VirtualInterface, CreatePublicVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4886,7 +4886,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn delete_bgp_peer(&self,
                        input: &DeleteBGPPeerRequest)
                        -> Result<DeleteBGPPeerResponse, DeleteBGPPeerError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteBGPPeer");
@@ -4918,7 +4918,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn delete_connection(&self,
                          input: &DeleteConnectionRequest)
                          -> Result<Connection, DeleteConnectionError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteConnection");
@@ -4949,7 +4949,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn delete_interconnect(&self,
                            input: &DeleteInterconnectRequest)
                            -> Result<DeleteInterconnectResponse, DeleteInterconnectError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteInterconnect");
@@ -4977,7 +4977,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
     #[doc="<p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>"]
     fn delete_lag(&self, input: &DeleteLagRequest) -> Result<Lag, DeleteLagError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteLag");
@@ -5008,7 +5008,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &DeleteVirtualInterfaceRequest)
          -> Result<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteVirtualInterface");
@@ -5039,7 +5039,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &DescribeConnectionLoaRequest)
          -> Result<DescribeConnectionLoaResponse, DescribeConnectionLoaError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeConnectionLoa");
@@ -5069,7 +5069,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn describe_connections(&self,
                             input: &DescribeConnectionsRequest)
                             -> Result<Connections, DescribeConnectionsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeConnections");
@@ -5101,7 +5101,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &DescribeConnectionsOnInterconnectRequest)
          -> Result<Connections, DescribeConnectionsOnInterconnectError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5133,7 +5133,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn describe_hosted_connections(&self,
                                    input: &DescribeHostedConnectionsRequest)
                                    -> Result<Connections, DescribeHostedConnectionsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeHostedConnections");
@@ -5166,7 +5166,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &DescribeInterconnectLoaRequest)
          -> Result<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeInterconnectLoa");
@@ -5197,7 +5197,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn describe_interconnects(&self,
                               input: &DescribeInterconnectsRequest)
                               -> Result<Interconnects, DescribeInterconnectsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeInterconnects");
@@ -5226,7 +5226,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
     #[doc="<p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>"]
     fn describe_lags(&self, input: &DescribeLagsRequest) -> Result<Lags, DescribeLagsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeLags");
@@ -5254,7 +5254,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
     #[doc="<p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
     fn describe_loa(&self, input: &DescribeLoaRequest) -> Result<Loa, DescribeLoaError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeLoa");
@@ -5282,7 +5282,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
     #[doc="<p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>"]
     fn describe_locations(&self) -> Result<Locations, DescribeLocationsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeLocations");
@@ -5312,7 +5312,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn describe_tags(&self,
                      input: &DescribeTagsRequest)
                      -> Result<DescribeTagsResponse, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeTags");
@@ -5342,7 +5342,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
     #[doc="<p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">EC2 CreateVpnGateway</a> action.</p>"]
     fn describe_virtual_gateways(&self) -> Result<VirtualGateways, DescribeVirtualGatewaysError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeVirtualGateways");
@@ -5373,7 +5373,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn describe_virtual_interfaces(&self,
                                    input: &DescribeVirtualInterfacesRequest)
                                    -> Result<VirtualInterfaces, DescribeVirtualInterfacesError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeVirtualInterfaces");
@@ -5407,7 +5407,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         (&self,
          input: &DisassociateConnectionFromLagRequest)
          -> Result<Connection, DisassociateConnectionFromLagError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5440,7 +5440,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn tag_resource(&self,
                     input: &TagResourceRequest)
                     -> Result<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.TagResource");
@@ -5472,7 +5472,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     fn untag_resource(&self,
                       input: &UntagResourceRequest)
                       -> Result<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.UntagResource");
@@ -5502,7 +5502,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
     #[doc="<p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>"]
     fn update_lag(&self, input: &UpdateLagRequest) -> Result<Lag, UpdateLagError> {
-        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.UpdateLag");

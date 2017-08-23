@@ -96,7 +96,7 @@ impl DispatchSignedRequest for Client {
             hyper_headers.set_raw("user-agent".to_owned(), DEFAULT_USER_AGENT.clone());
         }
 
-        let mut final_uri = format!("https://{}{}", request.hostname(), request.canonical_path());
+        let mut final_uri = format!("{}://{}{}", request.scheme(), request.hostname(), request.canonical_path());
         if !request.canonical_query_string().is_empty() {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
         }
@@ -177,4 +177,31 @@ pub fn default_tls_client() -> Result<Client, TlsError> {
     let mut client = Client::with_connector(connector);
     client.set_redirect_policy(RedirectPolicy::FollowNone);
     Ok(client)
+}
+
+#[cfg(test)]
+mod tests {
+    use Region;
+    use signature::SignedRequest;
+
+    #[test]
+    fn custom_region_http() {
+        let a_region = Region::Custom("http://localhost".to_owned());
+        let request = SignedRequest::new("POST", "sqs", &a_region, "/");
+        assert_eq!("localhost", request.hostname());
+    }
+
+    #[test]
+    fn custom_region_https() {
+        let a_region = Region::Custom("https://localhost".to_owned());
+        let request = SignedRequest::new("POST", "sqs", &a_region, "/");
+        assert_eq!("localhost", request.hostname());
+    }
+
+    #[test]
+    fn custom_region_with_port() {
+        let a_region = Region::Custom("https://localhost:8000".to_owned());
+        let request = SignedRequest::new("POST", "sqs", &a_region, "/");
+        assert_eq!("localhost:8000", request.hostname());
+    }
 }

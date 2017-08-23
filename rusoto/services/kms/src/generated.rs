@@ -4899,7 +4899,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn cancel_key_deletion(&self,
                            input: &CancelKeyDeletionRequest)
                            -> Result<CancelKeyDeletionResponse, CancelKeyDeletionError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CancelKeyDeletion");
@@ -4927,7 +4927,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Creates a display name for a customer master key. An alias can be used to identify a key and should be unique. The console enforces a one-to-one mapping between the alias and a key. An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word \"alias\" followed by a forward slash (alias/). An alias that begins with \"aws\" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p> <p>To map an alias to a different key, call <a>UpdateAlias</a>.</p>"]
     fn create_alias(&self, input: &CreateAliasRequest) -> Result<(), CreateAliasError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CreateAlias");
@@ -4953,7 +4953,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn create_grant(&self,
                     input: &CreateGrantRequest)
                     -> Result<CreateGrantResponse, CreateGrantError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CreateGrant");
@@ -4983,7 +4983,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Creates a customer master key (CMK).</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly, but CMKs are more commonly used to encrypt data encryption keys (DEKs), which are used to encrypt raw data. For more information about DEKs and the difference between CMKs and DEKs, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html\">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul>"]
     fn create_key(&self, input: &CreateKeyRequest) -> Result<CreateKeyResponse, CreateKeyError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CreateKey");
@@ -5013,7 +5013,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following functions:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Note that if a caller has been granted access permissions to all keys (through, for example, IAM user policies that grant <code>Decrypt</code> permission on all resources), then ciphertext encrypted by using keys in other accounts where the key grants access to the caller can be decrypted. To remedy this, we recommend that you do not grant <code>Decrypt</code> access in an IAM user policy. Instead grant <code>Decrypt</code> access only in key policies. If you must grant <code>Decrypt</code> access in an IAM user policy, you should scope the resource to specific keys or to specific trusted accounts.</p>"]
     fn decrypt(&self, input: &DecryptRequest) -> Result<DecryptResponse, DecryptError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.Decrypt");
@@ -5042,7 +5042,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Deletes the specified alias. To map an alias to a different key, call <a>UpdateAlias</a>.</p>"]
     fn delete_alias(&self, input: &DeleteAliasRequest) -> Result<(), DeleteAliasError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DeleteAlias");
@@ -5068,7 +5068,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn delete_imported_key_material(&self,
                                     input: &DeleteImportedKeyMaterialRequest)
                                     -> Result<(), DeleteImportedKeyMaterialError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DeleteImportedKeyMaterial");
@@ -5095,7 +5095,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn describe_key(&self,
                     input: &DescribeKeyRequest)
                     -> Result<DescribeKeyResponse, DescribeKeyError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DescribeKey");
@@ -5125,7 +5125,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Sets the state of a customer master key (CMK) to disabled, thereby preventing its use for cryptographic operations. For more information about how key state affects the use of a CMK, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html\">How Key State Affects the Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     fn disable_key(&self, input: &DisableKeyRequest) -> Result<(), DisableKeyError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DisableKey");
@@ -5151,7 +5151,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn disable_key_rotation(&self,
                             input: &DisableKeyRotationRequest)
                             -> Result<(), DisableKeyRotationError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DisableKeyRotation");
@@ -5175,7 +5175,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Marks a key as enabled, thereby permitting its use.</p>"]
     fn enable_key(&self, input: &EnableKeyRequest) -> Result<(), EnableKeyError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.EnableKey");
@@ -5201,7 +5201,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn enable_key_rotation(&self,
                            input: &EnableKeyRotationRequest)
                            -> Result<(), EnableKeyRotationError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.EnableKeyRotation");
@@ -5225,7 +5225,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Encrypts plaintext into ciphertext by using a customer master key. The <code>Encrypt</code> function has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 KB of arbitrary data such as an RSA key, a database password, or other sensitive customer information.</p> </li> <li> <p>If you are moving encrypted data from one region to another, you can use this API to encrypt in the new region the plaintext data key that was used to encrypt the data in the original region. This provides you with an encrypted copy of the data key that can be decrypted in the new region and used there to decrypt the encrypted data.</p> </li> </ul> <p>Unless you are moving encrypted data from one region to another, you don't use this function to encrypt a generated data key within a region. You retrieve data keys already encrypted by calling the <a>GenerateDataKey</a> or <a>GenerateDataKeyWithoutPlaintext</a> function. Data keys don't need to be encrypted again by calling <code>Encrypt</code>.</p> <p>If you want to encrypt data locally in your application, you can use the <code>GenerateDataKey</code> function to return a plaintext data encryption key and a copy of the key encrypted under the customer master key (CMK) of your choosing.</p>"]
     fn encrypt(&self, input: &EncryptRequest) -> Result<EncryptResponse, EncryptError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.Encrypt");
@@ -5256,7 +5256,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn generate_data_key(&self,
                          input: &GenerateDataKeyRequest)
                          -> Result<GenerateDataKeyResponse, GenerateDataKeyError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GenerateDataKey");
@@ -5289,7 +5289,7 @@ impl<P, D> Kms for KmsClient<P, D>
         (&self,
          input: &GenerateDataKeyWithoutPlaintextRequest)
          -> Result<GenerateDataKeyWithoutPlaintextResponse, GenerateDataKeyWithoutPlaintextError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5321,7 +5321,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn generate_random(&self,
                        input: &GenerateRandomRequest)
                        -> Result<GenerateRandomResponse, GenerateRandomError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GenerateRandom");
@@ -5353,7 +5353,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn get_key_policy(&self,
                       input: &GetKeyPolicyRequest)
                       -> Result<GetKeyPolicyResponse, GetKeyPolicyError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GetKeyPolicy");
@@ -5386,7 +5386,7 @@ impl<P, D> Kms for KmsClient<P, D>
         (&self,
          input: &GetKeyRotationStatusRequest)
          -> Result<GetKeyRotationStatusResponse, GetKeyRotationStatusError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GetKeyRotationStatus");
@@ -5417,7 +5417,7 @@ impl<P, D> Kms for KmsClient<P, D>
         (&self,
          input: &GetParametersForImportRequest)
          -> Result<GetParametersForImportResponse, GetParametersForImportError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GetParametersForImport");
@@ -5447,7 +5447,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn import_key_material(&self,
                            input: &ImportKeyMaterialRequest)
                            -> Result<ImportKeyMaterialResponse, ImportKeyMaterialError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ImportKeyMaterial");
@@ -5477,7 +5477,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn list_aliases(&self,
                     input: &ListAliasesRequest)
                     -> Result<ListAliasesResponse, ListAliasesError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListAliases");
@@ -5509,7 +5509,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn list_grants(&self,
                    input: &ListGrantsRequest)
                    -> Result<ListGrantsResponse, ListGrantsError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListGrants");
@@ -5541,7 +5541,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn list_key_policies(&self,
                          input: &ListKeyPoliciesRequest)
                          -> Result<ListKeyPoliciesResponse, ListKeyPoliciesError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListKeyPolicies");
@@ -5571,7 +5571,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Lists the customer master keys.</p>"]
     fn list_keys(&self, input: &ListKeysRequest) -> Result<ListKeysResponse, ListKeysError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListKeys");
@@ -5603,7 +5603,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn list_resource_tags(&self,
                           input: &ListResourceTagsRequest)
                           -> Result<ListResourceTagsResponse, ListResourceTagsError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListResourceTags");
@@ -5635,7 +5635,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn list_retirable_grants(&self,
                              input: &ListRetirableGrantsRequest)
                              -> Result<ListGrantsResponse, ListRetirableGrantsError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListRetirableGrants");
@@ -5665,7 +5665,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Attaches a key policy to the specified customer master key (CMK).</p> <p>For more information about key policies, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html\">Key Policies</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     fn put_key_policy(&self, input: &PutKeyPolicyRequest) -> Result<(), PutKeyPolicyError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.PutKeyPolicy");
@@ -5689,7 +5689,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>\"kms:ReEncrypt*\"</code> permission in your <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html\">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console, but you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p>"]
     fn re_encrypt(&self, input: &ReEncryptRequest) -> Result<ReEncryptResponse, ReEncryptError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ReEncrypt");
@@ -5719,7 +5719,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Retires a grant. To clean up, you can retire a grant when you're done using it. You should revoke a grant when you intend to actively deny operations that depend on it. The following are permitted to call this API:</p> <ul> <li> <p>The AWS account (root user) under which the grant was created</p> </li> <li> <p>The <code>RetiringPrincipal</code>, if present in the grant</p> </li> <li> <p>The <code>GranteePrincipal</code>, if <code>RetireGrant</code> is an operation specified in the grant</p> </li> </ul> <p>You must identify the grant to retire by its grant token or by a combination of the grant ID and the Amazon Resource Name (ARN) of the customer master key (CMK). A grant token is a unique variable-length base64-encoded string. A grant ID is a 64 character unique identifier of a grant. The <a>CreateGrant</a> operation returns both.</p>"]
     fn retire_grant(&self, input: &RetireGrantRequest) -> Result<(), RetireGrantError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.RetireGrant");
@@ -5743,7 +5743,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Revokes a grant. You can revoke a grant to actively deny operations that depend on it.</p>"]
     fn revoke_grant(&self, input: &RevokeGrantRequest) -> Result<(), RevokeGrantError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.RevokeGrant");
@@ -5769,7 +5769,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn schedule_key_deletion(&self,
                              input: &ScheduleKeyDeletionRequest)
                              -> Result<ScheduleKeyDeletionResponse, ScheduleKeyDeletionError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ScheduleKeyDeletion");
@@ -5797,7 +5797,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Adds or overwrites one or more tags for the specified customer master key (CMK). </p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>You cannot use the same tag key more than once per CMK. For example, consider a CMK with one tag whose tag key is <code>Purpose</code> and tag value is <code>Test</code>. If you send a <code>TagResource</code> request for this CMK with a tag key of <code>Purpose</code> and a tag value of <code>Prod</code>, it does not create a second tag. Instead, the original tag is overwritten with the new tag value.</p>"]
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.TagResource");
@@ -5821,7 +5821,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Removes the specified tag or tags from the specified customer master key (CMK). </p> <p>To remove a tag, you specify the tag key for each tag to remove. You do not specify the tag value. To overwrite the tag value for an existing tag, use <a>TagResource</a>.</p>"]
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.UntagResource");
@@ -5845,7 +5845,7 @@ impl<P, D> Kms for KmsClient<P, D>
 
     #[doc="<p>Updates an alias to map it to a different key.</p> <p>An alias is not a property of a key. Therefore, an alias can be mapped to and unmapped from an existing key without changing the properties of the key.</p> <p>An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word \"alias\" followed by a forward slash (alias/). An alias that begins with \"aws\" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p>"]
     fn update_alias(&self, input: &UpdateAliasRequest) -> Result<(), UpdateAliasError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.UpdateAlias");
@@ -5871,7 +5871,7 @@ impl<P, D> Kms for KmsClient<P, D>
     fn update_key_description(&self,
                               input: &UpdateKeyDescriptionRequest)
                               -> Result<(), UpdateKeyDescriptionError> {
-        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.UpdateKeyDescription");

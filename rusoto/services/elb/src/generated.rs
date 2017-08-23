@@ -7991,7 +7991,7 @@ impl<P, D> Elb for ElbClient<P, D>
 {
     #[doc="<p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html\">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddTags");
@@ -8039,7 +8039,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &ApplySecurityGroupsToLoadBalancerInput)
          -> Result<ApplySecurityGroupsToLoadBalancerOutput, ApplySecurityGroupsToLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ApplySecurityGroupsToLoadBalancer");
@@ -8086,7 +8086,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &AttachLoadBalancerToSubnetsInput)
          -> Result<AttachLoadBalancerToSubnetsOutput, AttachLoadBalancerToSubnetsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachLoadBalancerToSubnets");
@@ -8133,7 +8133,7 @@ impl<P, D> Elb for ElbClient<P, D>
     fn configure_health_check(&self,
                               input: &ConfigureHealthCheckInput)
                               -> Result<ConfigureHealthCheckOutput, ConfigureHealthCheckError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ConfigureHealthCheck");
@@ -8181,7 +8181,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &CreateAppCookieStickinessPolicyInput)
          -> Result<CreateAppCookieStickinessPolicyOutput, CreateAppCookieStickinessPolicyError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateAppCookieStickinessPolicy");
@@ -8229,7 +8229,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &CreateLBCookieStickinessPolicyInput)
          -> Result<CreateLBCookieStickinessPolicyOutput, CreateLBCookieStickinessPolicyError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLBCookieStickinessPolicy");
@@ -8276,7 +8276,7 @@ impl<P, D> Elb for ElbClient<P, D>
     fn create_load_balancer(&self,
                             input: &CreateAccessPointInput)
                             -> Result<CreateAccessPointOutput, CreateLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLoadBalancer");
@@ -8324,7 +8324,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &CreateLoadBalancerListenerInput)
          -> Result<CreateLoadBalancerListenerOutput, CreateLoadBalancerListenersError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLoadBalancerListeners");
@@ -8374,7 +8374,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &CreateLoadBalancerPolicyInput)
          -> Result<CreateLoadBalancerPolicyOutput, CreateLoadBalancerPolicyError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLoadBalancerPolicy");
@@ -8423,7 +8423,7 @@ impl<P, D> Elb for ElbClient<P, D>
     fn delete_load_balancer(&self,
                             input: &DeleteAccessPointInput)
                             -> Result<DeleteAccessPointOutput, DeleteLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLoadBalancer");
@@ -8471,7 +8471,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &DeleteLoadBalancerListenerInput)
          -> Result<DeleteLoadBalancerListenerOutput, DeleteLoadBalancerListenersError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLoadBalancerListeners");
@@ -8521,7 +8521,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &DeleteLoadBalancerPolicyInput)
          -> Result<DeleteLoadBalancerPolicyOutput, DeleteLoadBalancerPolicyError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLoadBalancerPolicy");
@@ -8571,7 +8571,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &DeregisterEndPointsInput)
          -> Result<DeregisterEndPointsOutput, DeregisterInstancesFromLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeregisterInstancesFromLoadBalancer");
@@ -8619,7 +8619,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &DescribeAccountLimitsInput)
          -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAccountLimits");
@@ -8667,7 +8667,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &DescribeEndPointStateInput)
          -> Result<DescribeEndPointStateOutput, DescribeInstanceHealthError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeInstanceHealth");
@@ -8715,7 +8715,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &DescribeLoadBalancerAttributesInput)
          -> Result<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancerAttributes");
@@ -8763,7 +8763,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &DescribeLoadBalancerPoliciesInput)
          -> Result<DescribeLoadBalancerPoliciesOutput, DescribeLoadBalancerPoliciesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancerPolicies");
@@ -8811,7 +8811,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &DescribeLoadBalancerPolicyTypesInput)
          -> Result<DescribeLoadBalancerPolicyTypesOutput, DescribeLoadBalancerPolicyTypesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancerPolicyTypes");
@@ -8859,7 +8859,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &DescribeAccessPointsInput)
          -> Result<DescribeAccessPointsOutput, DescribeLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancers");
@@ -8906,7 +8906,7 @@ impl<P, D> Elb for ElbClient<P, D>
     fn describe_tags(&self,
                      input: &DescribeTagsInput)
                      -> Result<DescribeTagsOutput, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTags");
@@ -8954,7 +8954,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &DetachLoadBalancerFromSubnetsInput)
          -> Result<DetachLoadBalancerFromSubnetsOutput, DetachLoadBalancerFromSubnetsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachLoadBalancerFromSubnets");
@@ -9002,7 +9002,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &RemoveAvailabilityZonesInput)
          -> Result<RemoveAvailabilityZonesOutput, DisableAvailabilityZonesForLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DisableAvailabilityZonesForLoadBalancer");
@@ -9051,7 +9051,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &AddAvailabilityZonesInput)
          -> Result<AddAvailabilityZonesOutput, EnableAvailabilityZonesForLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableAvailabilityZonesForLoadBalancer");
@@ -9099,7 +9099,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &ModifyLoadBalancerAttributesInput)
          -> Result<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyLoadBalancerAttributes");
@@ -9147,7 +9147,7 @@ impl<P, D> Elb for ElbClient<P, D>
         (&self,
          input: &RegisterEndPointsInput)
          -> Result<RegisterEndPointsOutput, RegisterInstancesWithLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RegisterInstancesWithLoadBalancer");
@@ -9192,7 +9192,7 @@ impl<P, D> Elb for ElbClient<P, D>
 
     #[doc="<p>Removes one or more tags from the specified load balancer.</p>"]
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveTags");
@@ -9237,7 +9237,7 @@ impl<P, D> Elb for ElbClient<P, D>
 
     #[doc="<p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html\">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
 fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerListenerSSLCertificateInput) -> Result<SetLoadBalancerListenerSSLCertificateOutput, SetLoadBalancerListenerSSLCertificateError>{
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetLoadBalancerListenerSSLCertificate");
@@ -9281,7 +9281,7 @@ fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerList
 
     #[doc="<p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt\">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancer Guide</i>. For more information about Proxy Protocol, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html\">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
 fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerPoliciesForBackendServerInput) -> Result<SetLoadBalancerPoliciesForBackendServerOutput, SetLoadBalancerPoliciesForBackendServerError>{
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetLoadBalancerPoliciesForBackendServer");
@@ -9328,7 +9328,7 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
         (&self,
          input: &SetLoadBalancerPoliciesOfListenerInput)
          -> Result<SetLoadBalancerPoliciesOfListenerOutput, SetLoadBalancerPoliciesOfListenerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetLoadBalancerPoliciesOfListener");
