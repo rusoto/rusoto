@@ -7509,7 +7509,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn build_suggesters(&self,
                         input: &BuildSuggestersRequest)
                         -> Result<BuildSuggestersResponse, BuildSuggestersError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "BuildSuggesters");
@@ -7556,7 +7556,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn create_domain(&self,
                      input: &CreateDomainRequest)
                      -> Result<CreateDomainResponse, CreateDomainError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDomain");
@@ -7604,7 +7604,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         (&self,
          input: &DefineAnalysisSchemeRequest)
          -> Result<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DefineAnalysisScheme");
@@ -7652,7 +7652,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn define_expression(&self,
                          input: &DefineExpressionRequest)
                          -> Result<DefineExpressionResponse, DefineExpressionError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DefineExpression");
@@ -7699,7 +7699,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn define_index_field(&self,
                           input: &DefineIndexFieldRequest)
                           -> Result<DefineIndexFieldResponse, DefineIndexFieldError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DefineIndexField");
@@ -7746,7 +7746,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn define_suggester(&self,
                         input: &DefineSuggesterRequest)
                         -> Result<DefineSuggesterResponse, DefineSuggesterError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DefineSuggester");
@@ -7794,7 +7794,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         (&self,
          input: &DeleteAnalysisSchemeRequest)
          -> Result<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAnalysisScheme");
@@ -7842,7 +7842,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn delete_domain(&self,
                      input: &DeleteDomainRequest)
                      -> Result<DeleteDomainResponse, DeleteDomainError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDomain");
@@ -7889,7 +7889,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn delete_expression(&self,
                          input: &DeleteExpressionRequest)
                          -> Result<DeleteExpressionResponse, DeleteExpressionError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteExpression");
@@ -7936,7 +7936,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn delete_index_field(&self,
                           input: &DeleteIndexFieldRequest)
                           -> Result<DeleteIndexFieldResponse, DeleteIndexFieldError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteIndexField");
@@ -7983,7 +7983,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn delete_suggester(&self,
                         input: &DeleteSuggesterRequest)
                         -> Result<DeleteSuggesterResponse, DeleteSuggesterError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteSuggester");
@@ -8031,7 +8031,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         (&self,
          input: &DescribeAnalysisSchemesRequest)
          -> Result<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAnalysisSchemes");
@@ -8081,7 +8081,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         (&self,
          input: &DescribeAvailabilityOptionsRequest)
          -> Result<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAvailabilityOptions");
@@ -8128,7 +8128,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn describe_domains(&self,
                         input: &DescribeDomainsRequest)
                         -> Result<DescribeDomainsResponse, DescribeDomainsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDomains");
@@ -8175,7 +8175,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn describe_expressions(&self,
                             input: &DescribeExpressionsRequest)
                             -> Result<DescribeExpressionsResponse, DescribeExpressionsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeExpressions");
@@ -8222,7 +8222,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn describe_index_fields(&self,
                              input: &DescribeIndexFieldsRequest)
                              -> Result<DescribeIndexFieldsResponse, DescribeIndexFieldsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeIndexFields");
@@ -8270,7 +8270,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         (&self,
          input: &DescribeScalingParametersRequest)
          -> Result<DescribeScalingParametersResponse, DescribeScalingParametersError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeScalingParameters");
@@ -8318,7 +8318,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         (&self,
          input: &DescribeServiceAccessPoliciesRequest)
          -> Result<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeServiceAccessPolicies");
@@ -8365,7 +8365,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn describe_suggesters(&self,
                            input: &DescribeSuggestersRequest)
                            -> Result<DescribeSuggestersResponse, DescribeSuggestersError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeSuggesters");
@@ -8412,7 +8412,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn index_documents(&self,
                        input: &IndexDocumentsRequest)
                        -> Result<IndexDocumentsResponse, IndexDocumentsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "IndexDocuments");
@@ -8457,7 +8457,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
 
     #[doc="<p>Lists all search domains owned by an account.</p>"]
     fn list_domain_names(&self) -> Result<ListDomainNamesResponse, ListDomainNamesError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListDomainNames");
@@ -8505,7 +8505,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         (&self,
          input: &UpdateAvailabilityOptionsRequest)
          -> Result<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateAvailabilityOptions");
@@ -8553,7 +8553,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         (&self,
          input: &UpdateScalingParametersRequest)
          -> Result<UpdateScalingParametersResponse, UpdateScalingParametersError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateScalingParameters");
@@ -8603,7 +8603,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         (&self,
          input: &UpdateServiceAccessPoliciesRequest)
          -> Result<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateServiceAccessPolicies");

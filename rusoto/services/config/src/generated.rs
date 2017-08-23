@@ -3587,7 +3587,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     fn delete_config_rule(&self,
                           input: &DeleteConfigRuleRequest)
                           -> Result<(), DeleteConfigRuleError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.DeleteConfigRule");
@@ -3613,7 +3613,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     fn delete_configuration_recorder(&self,
                                      input: &DeleteConfigurationRecorderRequest)
                                      -> Result<(), DeleteConfigurationRecorderError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3641,7 +3641,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     fn delete_delivery_channel(&self,
                                input: &DeleteDeliveryChannelRequest)
                                -> Result<(), DeleteDeliveryChannelError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.DeleteDeliveryChannel");
@@ -3668,7 +3668,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &DeleteEvaluationResultsRequest)
          -> Result<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3701,7 +3701,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &DeliverConfigSnapshotRequest)
          -> Result<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.DeliverConfigSnapshot");
@@ -3732,7 +3732,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &DescribeComplianceByConfigRuleRequest)
          -> Result<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3765,7 +3765,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &DescribeComplianceByResourceRequest)
          -> Result<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3799,7 +3799,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
          input: &DescribeConfigRuleEvaluationStatusRequest)
          -> Result<DescribeConfigRuleEvaluationStatusResponse,
                    DescribeConfigRuleEvaluationStatusError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3830,7 +3830,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     fn describe_config_rules(&self,
                              input: &DescribeConfigRulesRequest)
                              -> Result<DescribeConfigRulesResponse, DescribeConfigRulesError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.DescribeConfigRules");
@@ -3862,7 +3862,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
          input: &DescribeConfigurationRecorderStatusRequest)
          -> Result<DescribeConfigurationRecorderStatusResponse,
                    DescribeConfigurationRecorderStatusError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3894,7 +3894,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &DescribeConfigurationRecordersRequest)
          -> Result<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3927,7 +3927,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &DescribeDeliveryChannelStatusRequest)
          -> Result<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3960,7 +3960,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &DescribeDeliveryChannelsRequest)
          -> Result<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3993,7 +3993,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &GetComplianceDetailsByConfigRuleRequest)
          -> Result<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4025,7 +4025,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &GetComplianceDetailsByResourceRequest)
          -> Result<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4057,7 +4057,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     fn get_compliance_summary_by_config_rule
         (&self)
          -> Result<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4089,7 +4089,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
          input: &GetComplianceSummaryByResourceTypeRequest)
          -> Result<GetComplianceSummaryByResourceTypeResponse,
                    GetComplianceSummaryByResourceTypeError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4121,7 +4121,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &GetResourceConfigHistoryRequest)
          -> Result<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4154,7 +4154,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &ListDiscoveredResourcesRequest)
          -> Result<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4184,7 +4184,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
 
     #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
     fn put_config_rule(&self, input: &PutConfigRuleRequest) -> Result<(), PutConfigRuleError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.PutConfigRule");
@@ -4210,7 +4210,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     fn put_configuration_recorder(&self,
                                   input: &PutConfigurationRecorderRequest)
                                   -> Result<(), PutConfigurationRecorderError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4238,7 +4238,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     fn put_delivery_channel(&self,
                             input: &PutDeliveryChannelRequest)
                             -> Result<(), PutDeliveryChannelError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.PutDeliveryChannel");
@@ -4264,7 +4264,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     fn put_evaluations(&self,
                        input: &PutEvaluationsRequest)
                        -> Result<PutEvaluationsResponse, PutEvaluationsError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.PutEvaluations");
@@ -4297,7 +4297,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         (&self,
          input: &StartConfigRulesEvaluationRequest)
          -> Result<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4329,7 +4329,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     fn start_configuration_recorder(&self,
                                     input: &StartConfigurationRecorderRequest)
                                     -> Result<(), StartConfigurationRecorderError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4357,7 +4357,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     fn stop_configuration_recorder(&self,
                                    input: &StopConfigurationRecorderRequest)
                                    -> Result<(), StopConfigurationRecorderError> {
-        let mut request = SignedRequest::new("POST", "config", self.region, "/");
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",

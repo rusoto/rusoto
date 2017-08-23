@@ -3572,7 +3572,7 @@ impl<P, D> Sqs for SqsClient<P, D>
 {
     #[doc="<p>Adds a permission to a queue for a specific <a href=\"http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P\">principal</a>. This allows sharing access to the queue.</p> <p>When you create a queue, you have full control access rights for the queue. Only you, the owner of the queue, can grant or deny permissions to the queue. For more information about these permissions, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p> <note> <p> <code>AddPermission</code> writes an Amazon-SQS-generated policy. If you want to write your own policy, use <code> <a>SetQueueAttributes</a> </code> to upload your policy. For more information about writing your own policy, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AccessPolicyLanguage.html\">Using The Access Policy Language</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
     fn add_permission(&self, input: &AddPermissionRequest) -> Result<(), AddPermissionError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddPermission");
@@ -3600,7 +3600,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn change_message_visibility(&self,
                                  input: &ChangeMessageVisibilityRequest)
                                  -> Result<(), ChangeMessageVisibilityError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ChangeMessageVisibility");
@@ -3630,7 +3630,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         (&self,
          input: &ChangeMessageVisibilityBatchRequest)
          -> Result<ChangeMessageVisibilityBatchResult, ChangeMessageVisibilityBatchError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ChangeMessageVisibilityBatch");
@@ -3677,7 +3677,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn create_queue(&self,
                     input: &CreateQueueRequest)
                     -> Result<CreateQueueResult, CreateQueueError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateQueue");
@@ -3722,7 +3722,7 @@ impl<P, D> Sqs for SqsClient<P, D>
 
     #[doc="<p>Deletes the specified message from the specified queue. You specify the message by using the message's <i>receipt handle</i> and not the <i>MessageId</i> you receive when you send the message. Even if the message is locked by another reader due to the visibility timeout setting, it is still deleted from the queue. If you leave a message in the queue for longer than the queue's configured retention period, Amazon SQS automatically deletes the message. </p> <note> <p> The receipt handle is associated with a specific instance of receiving the message. If you receive a message more than once, the receipt handle you get each time you receive the message is different. If you don't provide the most recently received receipt handle for the message when you use the <code>DeleteMessage</code> action, the request succeeds, but the message might not be deleted.</p> <p>For standard queues, it is possible to receive a message even after you delete it. This might happen on rare occasions if one of the servers storing a copy of the message is unavailable when you send the request to delete the message. The copy remains on the server and might be returned to you on a subsequent receive request. You should ensure that your application is idempotent, so that receiving a message more than once does not cause issues.</p> </note>"]
     fn delete_message(&self, input: &DeleteMessageRequest) -> Result<(), DeleteMessageError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteMessage");
@@ -3750,7 +3750,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn delete_message_batch(&self,
                             input: &DeleteMessageBatchRequest)
                             -> Result<DeleteMessageBatchResult, DeleteMessageBatchError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteMessageBatch");
@@ -3795,7 +3795,7 @@ impl<P, D> Sqs for SqsClient<P, D>
 
     #[doc="<p>Deletes the queue specified by the <code>QueueUrl</code>, even if the queue is empty. If the specified queue doesn't exist, Amazon SQS returns a successful response.</p> <important> <p>Be careful with the <code>DeleteQueue</code> action: When you delete a queue, any messages in the queue are no longer available. </p> </important> <p>When you delete a queue, the deletion process takes up to 60 seconds. Requests you send involving that queue during the 60 seconds might succeed. For example, a <code> <a>SendMessage</a> </code> request might succeed, but after 60 seconds the queue and the message you sent no longer exist.</p> <p>When you delete a queue, you must wait at least 60 seconds before creating a queue with the same name. </p>"]
     fn delete_queue(&self, input: &DeleteQueueRequest) -> Result<(), DeleteQueueError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteQueue");
@@ -3823,7 +3823,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn get_queue_attributes(&self,
                             input: &GetQueueAttributesRequest)
                             -> Result<GetQueueAttributesResult, GetQueueAttributesError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetQueueAttributes");
@@ -3870,7 +3870,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn get_queue_url(&self,
                      input: &GetQueueUrlRequest)
                      -> Result<GetQueueUrlResult, GetQueueUrlError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetQueueUrl");
@@ -3918,7 +3918,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         (&self,
          input: &ListDeadLetterSourceQueuesRequest)
          -> Result<ListDeadLetterSourceQueuesResult, ListDeadLetterSourceQueuesError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListDeadLetterSourceQueues");
@@ -3965,7 +3965,7 @@ impl<P, D> Sqs for SqsClient<P, D>
 
     #[doc="<p>Returns a list of your queues. The maximum number of queues that can be returned is 1,000. If you specify a value for the optional <code>QueueNamePrefix</code> parameter, only queues with a name that begins with the specified value are returned.</p>"]
     fn list_queues(&self, input: &ListQueuesRequest) -> Result<ListQueuesResult, ListQueuesError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListQueues");
@@ -4010,7 +4010,7 @@ impl<P, D> Sqs for SqsClient<P, D>
 
     #[doc="<p>Deletes the messages in a queue specified by the <code>QueueURL</code> parameter.</p> <important> <p>When you use the <code>PurgeQueue</code> action, you can't retrieve a message deleted from a queue.</p> </important> <p>When you purge a queue, the message deletion process takes up to 60 seconds. All messages sent to the queue before calling the <code>PurgeQueue</code> action are deleted. Messages sent to the queue while it is being purged might be deleted. While the queue is being purged, messages sent to the queue before <code>PurgeQueue</code> is called might be received, but are deleted within the next minute.</p>"]
     fn purge_queue(&self, input: &PurgeQueueRequest) -> Result<(), PurgeQueueError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PurgeQueue");
@@ -4038,7 +4038,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn receive_message(&self,
                        input: &ReceiveMessageRequest)
                        -> Result<ReceiveMessageResult, ReceiveMessageError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ReceiveMessage");
@@ -4085,7 +4085,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn remove_permission(&self,
                          input: &RemovePermissionRequest)
                          -> Result<(), RemovePermissionError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemovePermission");
@@ -4113,7 +4113,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn send_message(&self,
                     input: &SendMessageRequest)
                     -> Result<SendMessageResult, SendMessageError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SendMessage");
@@ -4160,7 +4160,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn send_message_batch(&self,
                           input: &SendMessageBatchRequest)
                           -> Result<SendMessageBatchResult, SendMessageBatchError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SendMessageBatch");
@@ -4207,7 +4207,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn set_queue_attributes(&self,
                             input: &SetQueueAttributesRequest)
                             -> Result<(), SetQueueAttributesError> {
-        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetQueueAttributes");

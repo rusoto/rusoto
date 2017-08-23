@@ -5599,7 +5599,7 @@ impl<P, D> Swf for SwfClient<P, D>
         (&self,
          input: &CountClosedWorkflowExecutionsInput)
          -> Result<WorkflowExecutionCount, CountClosedWorkflowExecutionsError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -5634,7 +5634,7 @@ impl<P, D> Swf for SwfClient<P, D>
         (&self,
          input: &CountOpenWorkflowExecutionsInput)
          -> Result<WorkflowExecutionCount, CountOpenWorkflowExecutionsError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -5668,7 +5668,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn count_pending_activity_tasks(&self,
                                     input: &CountPendingActivityTasksInput)
                                     -> Result<PendingTaskCount, CountPendingActivityTasksError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -5702,7 +5702,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn count_pending_decision_tasks(&self,
                                     input: &CountPendingDecisionTasksInput)
                                     -> Result<PendingTaskCount, CountPendingDecisionTasksError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -5736,7 +5736,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn deprecate_activity_type(&self,
                                input: &DeprecateActivityTypeInput)
                                -> Result<(), DeprecateActivityTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -5761,7 +5761,7 @@ impl<P, D> Swf for SwfClient<P, D>
 
     #[doc="<p>Deprecates the specified domain. After a domain has been deprecated it cannot be used to create new workflow executions or register new types. However, you can still use visibility actions on this domain. Deprecating a domain also deprecates all activity and workflow types registered in the domain. Executions that were started before the domain was deprecated will continue to run.</p> <note>This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</note> <p><b>Access Control</b></p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</li> <li>Use an <code>Action</code> element to allow or deny permission to call this action.</li> <li>You cannot use an IAM policy to constrain this action's parameters.</li> </ul> <p>If the caller does not have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <b>cause</b> parameter will be set to OPERATION_NOT_PERMITTED. For details and example IAM policies, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html\">Using IAM to Manage Access to Amazon SWF Workflows</a>.</p>"]
     fn deprecate_domain(&self, input: &DeprecateDomainInput) -> Result<(), DeprecateDomainError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.DeprecateDomain");
@@ -5787,7 +5787,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn deprecate_workflow_type(&self,
                                input: &DeprecateWorkflowTypeInput)
                                -> Result<(), DeprecateWorkflowTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -5814,7 +5814,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn describe_activity_type(&self,
                               input: &DescribeActivityTypeInput)
                               -> Result<ActivityTypeDetail, DescribeActivityTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.DescribeActivityType");
@@ -5846,7 +5846,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn describe_domain(&self,
                        input: &DescribeDomainInput)
                        -> Result<DomainDetail, DescribeDomainError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.DescribeDomain");
@@ -5878,7 +5878,7 @@ impl<P, D> Swf for SwfClient<P, D>
         (&self,
          input: &DescribeWorkflowExecutionInput)
          -> Result<WorkflowExecutionDetail, DescribeWorkflowExecutionError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -5912,7 +5912,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn describe_workflow_type(&self,
                               input: &DescribeWorkflowTypeInput)
                               -> Result<WorkflowTypeDetail, DescribeWorkflowTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.DescribeWorkflowType");
@@ -5944,7 +5944,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn get_workflow_execution_history(&self,
                                       input: &GetWorkflowExecutionHistoryInput)
                                       -> Result<History, GetWorkflowExecutionHistoryError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -5977,7 +5977,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn list_activity_types(&self,
                            input: &ListActivityTypesInput)
                            -> Result<ActivityTypeInfos, ListActivityTypesError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.ListActivityTypes");
@@ -6010,7 +6010,7 @@ impl<P, D> Swf for SwfClient<P, D>
         (&self,
          input: &ListClosedWorkflowExecutionsInput)
          -> Result<WorkflowExecutionInfos, ListClosedWorkflowExecutionsError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -6042,7 +6042,7 @@ impl<P, D> Swf for SwfClient<P, D>
 
     #[doc="<p>Returns the list of domains registered in the account. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the nextPageToken returned by the initial call.</p> <note> This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</note> <p><b>Access Control</b></p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains. The element must be set to <code>arn:aws:swf::AccountID:domain/*</code>, where <i>AccountID</i> is the account ID, with no dashes.</li> <li>Use an <code>Action</code> element to allow or deny permission to call this action.</li> <li>You cannot use an IAM policy to constrain this action's parameters.</li> </ul> <p>If the caller does not have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <b>cause</b> parameter will be set to OPERATION_NOT_PERMITTED. For details and example IAM policies, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html\">Using IAM to Manage Access to Amazon SWF Workflows</a>.</p>"]
     fn list_domains(&self, input: &ListDomainsInput) -> Result<DomainInfos, ListDomainsError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.ListDomains");
@@ -6074,7 +6074,7 @@ impl<P, D> Swf for SwfClient<P, D>
         (&self,
          input: &ListOpenWorkflowExecutionsInput)
          -> Result<WorkflowExecutionInfos, ListOpenWorkflowExecutionsError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -6108,7 +6108,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn list_workflow_types(&self,
                            input: &ListWorkflowTypesInput)
                            -> Result<WorkflowTypeInfos, ListWorkflowTypesError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.ListWorkflowTypes");
@@ -6140,7 +6140,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn poll_for_activity_task(&self,
                               input: &PollForActivityTaskInput)
                               -> Result<ActivityTask, PollForActivityTaskError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.PollForActivityTask");
@@ -6171,7 +6171,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn poll_for_decision_task(&self,
                               input: &PollForDecisionTaskInput)
                               -> Result<DecisionTask, PollForDecisionTaskError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.PollForDecisionTask");
@@ -6203,7 +6203,7 @@ impl<P, D> Swf for SwfClient<P, D>
         (&self,
          input: &RecordActivityTaskHeartbeatInput)
          -> Result<ActivityTaskStatus, RecordActivityTaskHeartbeatError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -6237,7 +6237,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn register_activity_type(&self,
                               input: &RegisterActivityTypeInput)
                               -> Result<(), RegisterActivityTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.RegisterActivityType");
@@ -6261,7 +6261,7 @@ impl<P, D> Swf for SwfClient<P, D>
 
     #[doc="<p>Registers a new domain.</p> <p><b>Access Control</b></p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li>You cannot use an IAM policy to control domain access for this action. The name of the domain being registered is available as the resource of this action.</li> <li>Use an <code>Action</code> element to allow or deny permission to call this action.</li> <li>You cannot use an IAM policy to constrain this action's parameters.</li> </ul> <p>If the caller does not have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <b>cause</b> parameter will be set to OPERATION_NOT_PERMITTED. For details and example IAM policies, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html\">Using IAM to Manage Access to Amazon SWF Workflows</a>.</p>"]
     fn register_domain(&self, input: &RegisterDomainInput) -> Result<(), RegisterDomainError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.RegisterDomain");
@@ -6287,7 +6287,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn register_workflow_type(&self,
                               input: &RegisterWorkflowTypeInput)
                               -> Result<(), RegisterWorkflowTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.RegisterWorkflowType");
@@ -6313,7 +6313,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn request_cancel_workflow_execution(&self,
                                          input: &RequestCancelWorkflowExecutionInput)
                                          -> Result<(), RequestCancelWorkflowExecutionError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -6341,7 +6341,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn respond_activity_task_canceled(&self,
                                       input: &RespondActivityTaskCanceledInput)
                                       -> Result<(), RespondActivityTaskCanceledError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -6369,7 +6369,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn respond_activity_task_completed(&self,
                                        input: &RespondActivityTaskCompletedInput)
                                        -> Result<(), RespondActivityTaskCompletedError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -6397,7 +6397,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn respond_activity_task_failed(&self,
                                     input: &RespondActivityTaskFailedInput)
                                     -> Result<(), RespondActivityTaskFailedError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -6425,7 +6425,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn respond_decision_task_completed(&self,
                                        input: &RespondDecisionTaskCompletedInput)
                                        -> Result<(), RespondDecisionTaskCompletedError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -6453,7 +6453,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn signal_workflow_execution(&self,
                                  input: &SignalWorkflowExecutionInput)
                                  -> Result<(), SignalWorkflowExecutionError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -6481,7 +6481,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn start_workflow_execution(&self,
                                 input: &StartWorkflowExecutionInput)
                                 -> Result<Run, StartWorkflowExecutionError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",
@@ -6512,7 +6512,7 @@ impl<P, D> Swf for SwfClient<P, D>
     fn terminate_workflow_execution(&self,
                                     input: &TerminateWorkflowExecutionInput)
                                     -> Result<(), TerminateWorkflowExecutionError> {
-        let mut request = SignedRequest::new("POST", "swf", self.region, "/");
+        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target",

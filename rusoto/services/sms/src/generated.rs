@@ -1523,7 +1523,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         (&self,
          input: &CreateReplicationJobRequest)
          -> Result<CreateReplicationJobResponse, CreateReplicationJobError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1555,7 +1555,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         (&self,
          input: &DeleteReplicationJobRequest)
          -> Result<DeleteReplicationJobResponse, DeleteReplicationJobError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1585,7 +1585,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     #[doc="The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service."]
     fn delete_server_catalog(&self)
                              -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1616,7 +1616,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         (&self,
          input: &DisassociateConnectorRequest)
          -> Result<DisassociateConnectorResponse, DisassociateConnectorError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1647,7 +1647,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     fn get_connectors(&self,
                       input: &GetConnectorsRequest)
                       -> Result<GetConnectorsResponse, GetConnectorsError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1680,7 +1680,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     fn get_replication_jobs(&self,
                             input: &GetReplicationJobsRequest)
                             -> Result<GetReplicationJobsResponse, GetReplicationJobsError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1711,7 +1711,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     fn get_replication_runs(&self,
                             input: &GetReplicationRunsRequest)
                             -> Result<GetReplicationRunsResponse, GetReplicationRunsError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1742,7 +1742,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     fn get_servers(&self,
                    input: &GetServersRequest)
                    -> Result<GetServersResponse, GetServersError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1774,7 +1774,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     #[doc="The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers."]
     fn import_server_catalog(&self)
                              -> Result<ImportServerCatalogResponse, ImportServerCatalogError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1805,7 +1805,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         (&self,
          input: &StartOnDemandReplicationRunRequest)
          -> Result<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1838,7 +1838,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         (&self,
          input: &UpdateReplicationJobRequest)
          -> Result<UpdateReplicationJobResponse, UpdateReplicationJobError> {
-        let mut request = SignedRequest::new("POST", "sms", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",

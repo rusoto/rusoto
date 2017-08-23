@@ -500,7 +500,7 @@ impl<P, D> MarketplaceMetering for MarketplaceMeteringClient<P, D>
     fn batch_meter_usage(&self,
                          input: &BatchMeterUsageRequest)
                          -> Result<BatchMeterUsageResult, BatchMeterUsageError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", self.region, "/");
+        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
         request.set_endpoint_prefix("metering.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.BatchMeterUsage");
@@ -530,7 +530,7 @@ impl<P, D> MarketplaceMetering for MarketplaceMeteringClient<P, D>
 
     #[doc="<p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account, generally when running from an EC2 instance on the AWS Marketplace.</p>"]
     fn meter_usage(&self, input: &MeterUsageRequest) -> Result<MeterUsageResult, MeterUsageError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", self.region, "/");
+        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
         request.set_endpoint_prefix("metering.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.MeterUsage");
@@ -562,7 +562,7 @@ impl<P, D> MarketplaceMetering for MarketplaceMeteringClient<P, D>
     fn resolve_customer(&self,
                         input: &ResolveCustomerRequest)
                         -> Result<ResolveCustomerResult, ResolveCustomerError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", self.region, "/");
+        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
         request.set_endpoint_prefix("metering.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.ResolveCustomer");

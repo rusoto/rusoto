@@ -2632,7 +2632,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn activate_pipeline(&self,
                          input: &ActivatePipelineInput)
                          -> Result<ActivatePipelineOutput, ActivatePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ActivatePipeline");
@@ -2662,7 +2662,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
     #[doc="<p>Adds or modifies tags for the specified pipeline.</p>"]
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.AddTags");
@@ -2693,7 +2693,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn create_pipeline(&self,
                        input: &CreatePipelineInput)
                        -> Result<CreatePipelineOutput, CreatePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.CreatePipeline");
@@ -2725,7 +2725,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn deactivate_pipeline(&self,
                            input: &DeactivatePipelineInput)
                            -> Result<DeactivatePipelineOutput, DeactivatePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DeactivatePipeline");
@@ -2755,7 +2755,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
     #[doc="<p>Deletes a pipeline, its pipeline definition, and its run history. AWS Data Pipeline attempts to cancel instances associated with the pipeline that are currently being processed by task runners.</p> <p>Deleting a pipeline cannot be undone. You cannot query or restore a deleted pipeline. To temporarily pause a pipeline instead of deleting it, call <a>SetStatus</a> with the status set to <code>PAUSE</code> on individual components. Components that are paused by <a>SetStatus</a> can be resumed.</p>"]
     fn delete_pipeline(&self, input: &DeletePipelineInput) -> Result<(), DeletePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DeletePipeline");
@@ -2781,7 +2781,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn describe_objects(&self,
                         input: &DescribeObjectsInput)
                         -> Result<DescribeObjectsOutput, DescribeObjectsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DescribeObjects");
@@ -2813,7 +2813,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn describe_pipelines(&self,
                           input: &DescribePipelinesInput)
                           -> Result<DescribePipelinesOutput, DescribePipelinesError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DescribePipelines");
@@ -2845,7 +2845,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn evaluate_expression(&self,
                            input: &EvaluateExpressionInput)
                            -> Result<EvaluateExpressionOutput, EvaluateExpressionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.EvaluateExpression");
@@ -2878,7 +2878,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         (&self,
          input: &GetPipelineDefinitionInput)
          -> Result<GetPipelineDefinitionOutput, GetPipelineDefinitionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.GetPipelineDefinition");
@@ -2908,7 +2908,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn list_pipelines(&self,
                       input: &ListPipelinesInput)
                       -> Result<ListPipelinesOutput, ListPipelinesError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ListPipelines");
@@ -2940,7 +2940,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn poll_for_task(&self,
                      input: &PollForTaskInput)
                      -> Result<PollForTaskOutput, PollForTaskError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.PollForTask");
@@ -2973,7 +2973,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         (&self,
          input: &PutPipelineDefinitionInput)
          -> Result<PutPipelineDefinitionOutput, PutPipelineDefinitionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.PutPipelineDefinition");
@@ -3003,7 +3003,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn query_objects(&self,
                      input: &QueryObjectsInput)
                      -> Result<QueryObjectsOutput, QueryObjectsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.QueryObjects");
@@ -3033,7 +3033,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
     #[doc="<p>Removes existing tags from the specified pipeline.</p>"]
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.RemoveTags");
@@ -3065,7 +3065,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn report_task_progress(&self,
                             input: &ReportTaskProgressInput)
                             -> Result<ReportTaskProgressOutput, ReportTaskProgressError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ReportTaskProgress");
@@ -3098,7 +3098,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         (&self,
          input: &ReportTaskRunnerHeartbeatInput)
          -> Result<ReportTaskRunnerHeartbeatOutput, ReportTaskRunnerHeartbeatError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ReportTaskRunnerHeartbeat");
@@ -3127,7 +3127,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
 
     #[doc="<p>Requests that the status of the specified physical or logical pipeline objects be updated in the specified pipeline. This update might not occur immediately, but is eventually consistent. The status that can be set depends on the type of object (for example, DataNode or Activity). You cannot perform this operation on <code>FINISHED</code> pipelines and attempting to do so returns <code>InvalidRequestException</code>.</p>"]
     fn set_status(&self, input: &SetStatusInput) -> Result<(), SetStatusError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.SetStatus");
@@ -3153,7 +3153,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
     fn set_task_status(&self,
                        input: &SetTaskStatusInput)
                        -> Result<SetTaskStatusOutput, SetTaskStatusError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.SetTaskStatus");
@@ -3186,7 +3186,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         (&self,
          input: &ValidatePipelineDefinitionInput)
          -> Result<ValidatePipelineDefinitionOutput, ValidatePipelineDefinitionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", self.region, "/");
+        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ValidatePipelineDefinition");

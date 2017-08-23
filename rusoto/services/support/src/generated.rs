@@ -1997,7 +1997,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
     fn add_attachments_to_set(&self,
                               input: &AddAttachmentsToSetRequest)
                               -> Result<AddAttachmentsToSetResponse, AddAttachmentsToSetError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.AddAttachmentsToSet");
@@ -2028,7 +2028,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         (&self,
          input: &AddCommunicationToCaseRequest)
          -> Result<AddCommunicationToCaseResponse, AddCommunicationToCaseError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.AddCommunicationToCase");
@@ -2058,7 +2058,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
     fn create_case(&self,
                    input: &CreateCaseRequest)
                    -> Result<CreateCaseResponse, CreateCaseError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.CreateCase");
@@ -2090,7 +2090,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
     fn describe_attachment(&self,
                            input: &DescribeAttachmentRequest)
                            -> Result<DescribeAttachmentResponse, DescribeAttachmentError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.DescribeAttachment");
@@ -2120,7 +2120,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
     fn describe_cases(&self,
                       input: &DescribeCasesRequest)
                       -> Result<DescribeCasesResponse, DescribeCasesError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.DescribeCases");
@@ -2153,7 +2153,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         (&self,
          input: &DescribeCommunicationsRequest)
          -> Result<DescribeCommunicationsResponse, DescribeCommunicationsError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.DescribeCommunications");
@@ -2183,7 +2183,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
     fn describe_services(&self,
                          input: &DescribeServicesRequest)
                          -> Result<DescribeServicesResponse, DescribeServicesError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.DescribeServices");
@@ -2216,7 +2216,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         (&self,
          input: &DescribeSeverityLevelsRequest)
          -> Result<DescribeSeverityLevelsResponse, DescribeSeverityLevelsError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.DescribeSeverityLevels");
@@ -2244,7 +2244,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
 
     #[doc="<p>Returns the refresh status of the Trusted Advisor checks that have the specified check IDs. Check IDs can be obtained by calling <a>DescribeTrustedAdvisorChecks</a>.</p> <note> <p>Some checks are refreshed automatically, and their refresh statuses cannot be retrieved by using this operation. Use of the <code>DescribeTrustedAdvisorCheckRefreshStatuses</code> operation for these checks causes an <code>InvalidParameterValue</code> error.</p> </note>"]
 fn describe_trusted_advisor_check_refresh_statuses(&self, input: &DescribeTrustedAdvisorCheckRefreshStatusesRequest)  -> Result<DescribeTrustedAdvisorCheckRefreshStatusesResponse, DescribeTrustedAdvisorCheckRefreshStatusesError>{
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2277,7 +2277,7 @@ fn describe_trusted_advisor_check_refresh_statuses(&self, input: &DescribeTruste
          input: &DescribeTrustedAdvisorCheckResultRequest)
          -> Result<DescribeTrustedAdvisorCheckResultResponse,
                    DescribeTrustedAdvisorCheckResultError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2306,7 +2306,7 @@ fn describe_trusted_advisor_check_refresh_statuses(&self, input: &DescribeTruste
 
     #[doc="<p>Returns the summaries of the results of the Trusted Advisor checks that have the specified check IDs. Check IDs can be obtained by calling <a>DescribeTrustedAdvisorChecks</a>.</p> <p>The response contains an array of <a>TrustedAdvisorCheckSummary</a> objects.</p>"]
 fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdvisorCheckSummariesRequest)  -> Result<DescribeTrustedAdvisorCheckSummariesResponse, DescribeTrustedAdvisorCheckSummariesError>{
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2338,7 +2338,7 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
         (&self,
          input: &DescribeTrustedAdvisorChecksRequest)
          -> Result<DescribeTrustedAdvisorChecksResponse, DescribeTrustedAdvisorChecksError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2371,7 +2371,7 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
         (&self,
          input: &RefreshTrustedAdvisorCheckRequest)
          -> Result<RefreshTrustedAdvisorCheckResponse, RefreshTrustedAdvisorCheckError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2403,7 +2403,7 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
     fn resolve_case(&self,
                     input: &ResolveCaseRequest)
                     -> Result<ResolveCaseResponse, ResolveCaseError> {
-        let mut request = SignedRequest::new("POST", "support", self.region, "/");
+        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.ResolveCase");

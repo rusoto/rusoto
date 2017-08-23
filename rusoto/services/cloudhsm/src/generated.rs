@@ -2512,7 +2512,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn add_tags_to_resource(&self,
                             input: &AddTagsToResourceRequest)
                             -> Result<AddTagsToResourceResponse, AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.AddTagsToResource");
@@ -2542,7 +2542,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn create_hapg(&self,
                    input: &CreateHapgRequest)
                    -> Result<CreateHapgResponse, CreateHapgError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.CreateHapg");
@@ -2572,7 +2572,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
     #[doc="<p>Creates an uninitialized HSM instance.</p> <p>There is an upfront fee charged for each HSM instance that you create with the <a>CreateHsm</a> operation. If you accidentally provision an HSM and want to request a refund, delete the instance using the <a>DeleteHsm</a> operation, go to the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>, create a new case, and select <b>Account and Billing Support</b>.</p> <important> <p>It can take up to 20 minutes to create and provision an HSM. You can monitor the status of the HSM with the <a>DescribeHsm</a> operation. The HSM is ready to be initialized when the status changes to <code>RUNNING</code>.</p> </important>"]
     fn create_hsm(&self, input: &CreateHsmRequest) -> Result<CreateHsmResponse, CreateHsmError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.CreateHsm");
@@ -2604,7 +2604,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn create_luna_client(&self,
                           input: &CreateLunaClientRequest)
                           -> Result<CreateLunaClientResponse, CreateLunaClientError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.CreateLunaClient");
@@ -2636,7 +2636,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn delete_hapg(&self,
                    input: &DeleteHapgRequest)
                    -> Result<DeleteHapgResponse, DeleteHapgError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DeleteHapg");
@@ -2666,7 +2666,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
     #[doc="<p>Deletes an HSM. After completion, this operation cannot be undone and your key material cannot be recovered.</p>"]
     fn delete_hsm(&self, input: &DeleteHsmRequest) -> Result<DeleteHsmResponse, DeleteHsmError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DeleteHsm");
@@ -2698,7 +2698,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn delete_luna_client(&self,
                           input: &DeleteLunaClientRequest)
                           -> Result<DeleteLunaClientResponse, DeleteLunaClientError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DeleteLunaClient");
@@ -2730,7 +2730,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn describe_hapg(&self,
                      input: &DescribeHapgRequest)
                      -> Result<DescribeHapgResponse, DescribeHapgError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DescribeHapg");
@@ -2762,7 +2762,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn describe_hsm(&self,
                     input: &DescribeHsmRequest)
                     -> Result<DescribeHsmResponse, DescribeHsmError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DescribeHsm");
@@ -2794,7 +2794,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn describe_luna_client(&self,
                             input: &DescribeLunaClientRequest)
                             -> Result<DescribeLunaClientResponse, DescribeLunaClientError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DescribeLunaClient");
@@ -2822,7 +2822,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
     #[doc="<p>Gets the configuration files necessary to connect to all high availability partition groups the client is associated with.</p>"]
     fn get_config(&self, input: &GetConfigRequest) -> Result<GetConfigResponse, GetConfigError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.GetConfig");
@@ -2852,7 +2852,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
     #[doc="<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
     fn list_available_zones(&self) -> Result<ListAvailableZonesResponse, ListAvailableZonesError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ListAvailableZones");
@@ -2879,7 +2879,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
     #[doc="<p>Lists the high-availability partition groups for the account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHapgs</a> to retrieve the next set of items.</p>"]
     fn list_hapgs(&self, input: &ListHapgsRequest) -> Result<ListHapgsResponse, ListHapgsError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ListHapgs");
@@ -2909,7 +2909,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
     #[doc="<p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHsms</a> to retrieve the next set of items.</p>"]
     fn list_hsms(&self, input: &ListHsmsRequest) -> Result<ListHsmsResponse, ListHsmsError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ListHsms");
@@ -2941,7 +2941,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn list_luna_clients(&self,
                          input: &ListLunaClientsRequest)
                          -> Result<ListLunaClientsResponse, ListLunaClientsError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ListLunaClients");
@@ -2973,7 +2973,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceRequest)
                               -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3004,7 +3004,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn modify_hapg(&self,
                    input: &ModifyHapgRequest)
                    -> Result<ModifyHapgResponse, ModifyHapgError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ModifyHapg");
@@ -3034,7 +3034,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
     #[doc="<p>Modifies an HSM.</p> <important> <p>This operation can result in the HSM being offline for up to 15 minutes while the AWS CloudHSM service is reconfigured. If you are modifying a production HSM, you should ensure that your AWS CloudHSM service is configured for high availability, and consider executing this operation during a maintenance window.</p> </important>"]
     fn modify_hsm(&self, input: &ModifyHsmRequest) -> Result<ModifyHsmResponse, ModifyHsmError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ModifyHsm");
@@ -3066,7 +3066,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
     fn modify_luna_client(&self,
                           input: &ModifyLunaClientRequest)
                           -> Result<ModifyLunaClientResponse, ModifyLunaClientError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ModifyLunaClient");
@@ -3099,7 +3099,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         (&self,
          input: &RemoveTagsFromResourceRequest)
          -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",

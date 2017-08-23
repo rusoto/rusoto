@@ -4675,7 +4675,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn add_instance_fleet(&self,
                           input: &AddInstanceFleetInput)
                           -> Result<AddInstanceFleetOutput, AddInstanceFleetError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.AddInstanceFleet");
@@ -4707,7 +4707,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn add_instance_groups(&self,
                            input: &AddInstanceGroupsInput)
                            -> Result<AddInstanceGroupsOutput, AddInstanceGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.AddInstanceGroups");
@@ -4739,7 +4739,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn add_job_flow_steps(&self,
                           input: &AddJobFlowStepsInput)
                           -> Result<AddJobFlowStepsOutput, AddJobFlowStepsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.AddJobFlowSteps");
@@ -4769,7 +4769,7 @@ impl<P, D> Emr for EmrClient<P, D>
 
     #[doc="<p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p>"]
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.AddTags");
@@ -4800,7 +4800,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn cancel_steps(&self,
                     input: &CancelStepsInput)
                     -> Result<CancelStepsOutput, CancelStepsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.CancelSteps");
@@ -4833,7 +4833,7 @@ impl<P, D> Emr for EmrClient<P, D>
         (&self,
          input: &CreateSecurityConfigurationInput)
          -> Result<CreateSecurityConfigurationOutput, CreateSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4866,7 +4866,7 @@ impl<P, D> Emr for EmrClient<P, D>
         (&self,
          input: &DeleteSecurityConfigurationInput)
          -> Result<DeleteSecurityConfigurationOutput, DeleteSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4898,7 +4898,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn describe_cluster(&self,
                         input: &DescribeClusterInput)
                         -> Result<DescribeClusterOutput, DescribeClusterError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.DescribeCluster");
@@ -4930,7 +4930,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn describe_job_flows(&self,
                           input: &DescribeJobFlowsInput)
                           -> Result<DescribeJobFlowsOutput, DescribeJobFlowsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.DescribeJobFlows");
@@ -4963,7 +4963,7 @@ impl<P, D> Emr for EmrClient<P, D>
         (&self,
          input: &DescribeSecurityConfigurationInput)
          -> Result<DescribeSecurityConfigurationOutput, DescribeSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4995,7 +4995,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn describe_step(&self,
                      input: &DescribeStepInput)
                      -> Result<DescribeStepOutput, DescribeStepError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.DescribeStep");
@@ -5027,7 +5027,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn list_bootstrap_actions(&self,
                               input: &ListBootstrapActionsInput)
                               -> Result<ListBootstrapActionsOutput, ListBootstrapActionsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListBootstrapActions");
@@ -5057,7 +5057,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn list_clusters(&self,
                      input: &ListClustersInput)
                      -> Result<ListClustersOutput, ListClustersError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListClusters");
@@ -5089,7 +5089,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn list_instance_fleets(&self,
                             input: &ListInstanceFleetsInput)
                             -> Result<ListInstanceFleetsOutput, ListInstanceFleetsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListInstanceFleets");
@@ -5121,7 +5121,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn list_instance_groups(&self,
                             input: &ListInstanceGroupsInput)
                             -> Result<ListInstanceGroupsOutput, ListInstanceGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListInstanceGroups");
@@ -5153,7 +5153,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn list_instances(&self,
                       input: &ListInstancesInput)
                       -> Result<ListInstancesOutput, ListInstancesError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListInstances");
@@ -5186,7 +5186,7 @@ impl<P, D> Emr for EmrClient<P, D>
         (&self,
          input: &ListSecurityConfigurationsInput)
          -> Result<ListSecurityConfigurationsOutput, ListSecurityConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5216,7 +5216,7 @@ impl<P, D> Emr for EmrClient<P, D>
 
     #[doc="<p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>"]
     fn list_steps(&self, input: &ListStepsInput) -> Result<ListStepsOutput, ListStepsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListSteps");
@@ -5247,7 +5247,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn modify_instance_fleet(&self,
                              input: &ModifyInstanceFleetInput)
                              -> Result<(), ModifyInstanceFleetError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ModifyInstanceFleet");
@@ -5273,7 +5273,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn modify_instance_groups(&self,
                               input: &ModifyInstanceGroupsInput)
                               -> Result<(), ModifyInstanceGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ModifyInstanceGroups");
@@ -5299,7 +5299,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn put_auto_scaling_policy(&self,
                                input: &PutAutoScalingPolicyInput)
                                -> Result<PutAutoScalingPolicyOutput, PutAutoScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.PutAutoScalingPolicy");
@@ -5330,7 +5330,7 @@ impl<P, D> Emr for EmrClient<P, D>
         (&self,
          input: &RemoveAutoScalingPolicyInput)
          -> Result<RemoveAutoScalingPolicyOutput, RemoveAutoScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.RemoveAutoScalingPolicy");
@@ -5359,7 +5359,7 @@ impl<P, D> Emr for EmrClient<P, D>
 
     #[doc="<p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>"]
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.RemoveTags");
@@ -5389,7 +5389,7 @@ impl<P, D> Emr for EmrClient<P, D>
 
     #[doc="<p>RunJobFlow creates and starts running a new cluster (job flow). The cluster runs the steps specified. After the steps complete, the cluster stops and the HDFS partition is lost. To prevent loss of data, configure the last step of the job flow to store results in Amazon S3. If the <a>JobFlowInstancesConfig</a> <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to <code>TRUE</code>, the cluster transitions to the WAITING state rather than shutting down after the steps have completed. </p> <p>For additional protection, you can set the <a>JobFlowInstancesConfig</a> <code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the cluster and prevent it from being terminated by API call, user intervention, or in the event of a job flow error.</p> <p>A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/Management/Guide/AddMoreThan256Steps.html\">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>For long running clusters, we recommend that you periodically store your results.</p> <note> <p>The instance fleets configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow request can contain InstanceFleets parameters or InstanceGroups parameters, but not both.</p> </note>"]
     fn run_job_flow(&self, input: &RunJobFlowInput) -> Result<RunJobFlowOutput, RunJobFlowError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.RunJobFlow");
@@ -5421,7 +5421,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn set_termination_protection(&self,
                                   input: &SetTerminationProtectionInput)
                                   -> Result<(), SetTerminationProtectionError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.SetTerminationProtection");
@@ -5448,7 +5448,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn set_visible_to_all_users(&self,
                                 input: &SetVisibleToAllUsersInput)
                                 -> Result<(), SetVisibleToAllUsersError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.SetVisibleToAllUsers");
@@ -5474,7 +5474,7 @@ impl<P, D> Emr for EmrClient<P, D>
     fn terminate_job_flows(&self,
                            input: &TerminateJobFlowsInput)
                            -> Result<(), TerminateJobFlowsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", self.region, "/");
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.TerminateJobFlows");

@@ -7661,7 +7661,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     fn activate_gateway(&self,
                         input: &ActivateGatewayInput)
                         -> Result<ActivateGatewayOutput, ActivateGatewayError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ActivateGateway");
@@ -7691,7 +7691,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
     #[doc="<p>Configures one or more gateway local disks as cache for a gateway. This operation is only supported in the cached volume, tape and file gateway architectures (see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html\">Storage Gateway Concepts</a>).</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add cache, and one or more disk IDs that you want to configure as cache.</p>"]
     fn add_cache(&self, input: &AddCacheInput) -> Result<AddCacheOutput, AddCacheError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddCache");
@@ -7722,7 +7722,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     fn add_tags_to_resource(&self,
                             input: &AddTagsToResourceInput)
                             -> Result<AddTagsToResourceOutput, AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddTagsToResource");
@@ -7754,7 +7754,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     fn add_upload_buffer(&self,
                          input: &AddUploadBufferInput)
                          -> Result<AddUploadBufferOutput, AddUploadBufferError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddUploadBuffer");
@@ -7786,7 +7786,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     fn add_working_storage(&self,
                            input: &AddWorkingStorageInput)
                            -> Result<AddWorkingStorageOutput, AddWorkingStorageError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddWorkingStorage");
@@ -7818,7 +7818,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     fn cancel_archival(&self,
                        input: &CancelArchivalInput)
                        -> Result<CancelArchivalOutput, CancelArchivalError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CancelArchival");
@@ -7850,7 +7850,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     fn cancel_retrieval(&self,
                         input: &CancelRetrievalInput)
                         -> Result<CancelRetrievalOutput, CancelRetrievalError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CancelRetrieval");
@@ -7883,7 +7883,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
         (&self,
          input: &CreateCachediSCSIVolumeInput)
          -> Result<CreateCachediSCSIVolumeOutput, CreateCachediSCSIVolumeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7915,7 +7915,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     fn create_nfs_file_share(&self,
                              input: &CreateNFSFileShareInput)
                              -> Result<CreateNFSFileShareOutput, CreateNFSFileShareError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateNFSFileShare");
@@ -7947,7 +7947,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     fn create_snapshot(&self,
                        input: &CreateSnapshotInput)
                        -> Result<CreateSnapshotOutput, CreateSnapshotError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateSnapshot");
@@ -7977,7 +7977,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
     #[doc="<p>Initiates a snapshot of a gateway from a volume recovery point. This operation is only supported in the cached volume gateway architecture.</p> <p>A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To get a list of volume recovery point for cached volume gateway, use <a>ListVolumeRecoveryPoints</a>.</p> <p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide a description for the snapshot. When the gateway takes a snapshot of the specified volume, the snapshot and its description appear in the AWS Storage Gateway console. In response, the gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note>"]
 fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromVolumeRecoveryPointInput)  -> Result<CreateSnapshotFromVolumeRecoveryPointOutput, CreateSnapshotFromVolumeRecoveryPointError>{
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8009,7 +8009,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &CreateStorediSCSIVolumeInput)
          -> Result<CreateStorediSCSIVolumeOutput, CreateStorediSCSIVolumeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8042,7 +8042,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &CreateTapeWithBarcodeInput)
          -> Result<CreateTapeWithBarcodeOutput, CreateTapeWithBarcodeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8073,7 +8073,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn create_tapes(&self,
                     input: &CreateTapesInput)
                     -> Result<CreateTapesOutput, CreateTapesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateTapes");
@@ -8106,7 +8106,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DeleteBandwidthRateLimitInput)
          -> Result<DeleteBandwidthRateLimitOutput, DeleteBandwidthRateLimitError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8139,7 +8139,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DeleteChapCredentialsInput)
          -> Result<DeleteChapCredentialsOutput, DeleteChapCredentialsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8170,7 +8170,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn delete_file_share(&self,
                          input: &DeleteFileShareInput)
                          -> Result<DeleteFileShareOutput, DeleteFileShareError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteFileShare");
@@ -8202,7 +8202,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn delete_gateway(&self,
                       input: &DeleteGatewayInput)
                       -> Result<DeleteGatewayOutput, DeleteGatewayError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteGateway");
@@ -8235,7 +8235,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DeleteSnapshotScheduleInput)
          -> Result<DeleteSnapshotScheduleOutput, DeleteSnapshotScheduleError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8264,7 +8264,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
     #[doc="<p>Deletes the specified virtual tape. This operation is only supported in the tape gateway architecture.</p>"]
     fn delete_tape(&self, input: &DeleteTapeInput) -> Result<DeleteTapeOutput, DeleteTapeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteTape");
@@ -8296,7 +8296,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn delete_tape_archive(&self,
                            input: &DeleteTapeArchiveInput)
                            -> Result<DeleteTapeArchiveOutput, DeleteTapeArchiveError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteTapeArchive");
@@ -8328,7 +8328,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn delete_volume(&self,
                      input: &DeleteVolumeInput)
                      -> Result<DeleteVolumeOutput, DeleteVolumeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteVolume");
@@ -8361,7 +8361,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DescribeBandwidthRateLimitInput)
          -> Result<DescribeBandwidthRateLimitOutput, DescribeBandwidthRateLimitError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8393,7 +8393,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn describe_cache(&self,
                       input: &DescribeCacheInput)
                       -> Result<DescribeCacheOutput, DescribeCacheError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DescribeCache");
@@ -8426,7 +8426,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DescribeCachediSCSIVolumesInput)
          -> Result<DescribeCachediSCSIVolumesOutput, DescribeCachediSCSIVolumesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8459,7 +8459,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DescribeChapCredentialsInput)
          -> Result<DescribeChapCredentialsOutput, DescribeChapCredentialsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8492,7 +8492,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DescribeGatewayInformationInput)
          -> Result<DescribeGatewayInformationOutput, DescribeGatewayInformationError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8525,7 +8525,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DescribeMaintenanceStartTimeInput)
          -> Result<DescribeMaintenanceStartTimeOutput, DescribeMaintenanceStartTimeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8558,7 +8558,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DescribeNFSFileSharesInput)
          -> Result<DescribeNFSFileSharesOutput, DescribeNFSFileSharesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8590,7 +8590,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DescribeSnapshotScheduleInput)
          -> Result<DescribeSnapshotScheduleOutput, DescribeSnapshotScheduleError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8623,7 +8623,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DescribeStorediSCSIVolumesInput)
          -> Result<DescribeStorediSCSIVolumesOutput, DescribeStorediSCSIVolumesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8655,7 +8655,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn describe_tape_archives(&self,
                               input: &DescribeTapeArchivesInput)
                               -> Result<DescribeTapeArchivesOutput, DescribeTapeArchivesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8687,7 +8687,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DescribeTapeRecoveryPointsInput)
          -> Result<DescribeTapeRecoveryPointsOutput, DescribeTapeRecoveryPointsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8719,7 +8719,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn describe_tapes(&self,
                       input: &DescribeTapesInput)
                       -> Result<DescribeTapesOutput, DescribeTapesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DescribeTapes");
@@ -8751,7 +8751,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn describe_upload_buffer(&self,
                               input: &DescribeUploadBufferInput)
                               -> Result<DescribeUploadBufferOutput, DescribeUploadBufferError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8782,7 +8782,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn describe_vtl_devices(&self,
                             input: &DescribeVTLDevicesInput)
                             -> Result<DescribeVTLDevicesOutput, DescribeVTLDevicesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DescribeVTLDevices");
@@ -8815,7 +8815,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &DescribeWorkingStorageInput)
          -> Result<DescribeWorkingStorageOutput, DescribeWorkingStorageError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8846,7 +8846,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn disable_gateway(&self,
                        input: &DisableGatewayInput)
                        -> Result<DisableGatewayOutput, DisableGatewayError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DisableGateway");
@@ -8878,7 +8878,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn list_file_shares(&self,
                         input: &ListFileSharesInput)
                         -> Result<ListFileSharesOutput, ListFileSharesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListFileShares");
@@ -8910,7 +8910,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn list_gateways(&self,
                      input: &ListGatewaysInput)
                      -> Result<ListGatewaysOutput, ListGatewaysError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListGateways");
@@ -8942,7 +8942,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn list_local_disks(&self,
                         input: &ListLocalDisksInput)
                         -> Result<ListLocalDisksOutput, ListLocalDisksError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListLocalDisks");
@@ -8974,7 +8974,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceInput)
                               -> Result<ListTagsForResourceOutput, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9003,7 +9003,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
     #[doc="<p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes. This operation is only supported in the tape gateway architecture.</p>"]
     fn list_tapes(&self, input: &ListTapesInput) -> Result<ListTapesOutput, ListTapesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListTapes");
@@ -9034,7 +9034,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn list_volume_initiators(&self,
                               input: &ListVolumeInitiatorsInput)
                               -> Result<ListVolumeInitiatorsOutput, ListVolumeInitiatorsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9066,7 +9066,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &ListVolumeRecoveryPointsInput)
          -> Result<ListVolumeRecoveryPointsOutput, ListVolumeRecoveryPointsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9098,7 +9098,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn list_volumes(&self,
                     input: &ListVolumesInput)
                     -> Result<ListVolumesOutput, ListVolumesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListVolumes");
@@ -9130,7 +9130,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn refresh_cache(&self,
                      input: &RefreshCacheInput)
                      -> Result<RefreshCacheOutput, RefreshCacheError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.RefreshCache");
@@ -9163,7 +9163,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &RemoveTagsFromResourceInput)
          -> Result<RemoveTagsFromResourceOutput, RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9192,7 +9192,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
     #[doc="<p>Resets all cache disks that have encountered a error and makes the disks available for reconfiguration as cache storage. If your cache disk encounters a error, the gateway prevents read and write operations on virtual tapes in the gateway. For example, an error can occur when a disk is corrupted or removed from the gateway. When a cache is reset, the gateway loses its cache storage. At this point you can reconfigure the disks as cache disks. This operation is only supported in the cached volume,tape and file gateway architectures.</p> <important> <p>If the cache disk you are resetting contains data that has not been uploaded to Amazon S3 yet, that data can be lost. After you reset cache disks, there will be no configured cache disks left in the gateway, so you must configure at least one new cache disk for your gateway to function properly.</p> </important>"]
     fn reset_cache(&self, input: &ResetCacheInput) -> Result<ResetCacheOutput, ResetCacheError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ResetCache");
@@ -9224,7 +9224,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn retrieve_tape_archive(&self,
                              input: &RetrieveTapeArchiveInput)
                              -> Result<RetrieveTapeArchiveOutput, RetrieveTapeArchiveError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9256,7 +9256,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &RetrieveTapeRecoveryPointInput)
          -> Result<RetrieveTapeRecoveryPointOutput, RetrieveTapeRecoveryPointError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9289,7 +9289,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &SetLocalConsolePasswordInput)
          -> Result<SetLocalConsolePasswordOutput, SetLocalConsolePasswordError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9321,7 +9321,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn shutdown_gateway(&self,
                         input: &ShutdownGatewayInput)
                         -> Result<ShutdownGatewayOutput, ShutdownGatewayError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ShutdownGateway");
@@ -9353,7 +9353,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn start_gateway(&self,
                      input: &StartGatewayInput)
                      -> Result<StartGatewayOutput, StartGatewayError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.StartGateway");
@@ -9386,7 +9386,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &UpdateBandwidthRateLimitInput)
          -> Result<UpdateBandwidthRateLimitOutput, UpdateBandwidthRateLimitError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9419,7 +9419,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &UpdateChapCredentialsInput)
          -> Result<UpdateChapCredentialsOutput, UpdateChapCredentialsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9451,7 +9451,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &UpdateGatewayInformationInput)
          -> Result<UpdateGatewayInformationOutput, UpdateGatewayInformationError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9484,7 +9484,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &UpdateGatewaySoftwareNowInput)
          -> Result<UpdateGatewaySoftwareNowOutput, UpdateGatewaySoftwareNowError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9517,7 +9517,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &UpdateMaintenanceStartTimeInput)
          -> Result<UpdateMaintenanceStartTimeOutput, UpdateMaintenanceStartTimeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9549,7 +9549,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn update_nfs_file_share(&self,
                              input: &UpdateNFSFileShareInput)
                              -> Result<UpdateNFSFileShareOutput, UpdateNFSFileShareError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.UpdateNFSFileShare");
@@ -9582,7 +9582,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
         (&self,
          input: &UpdateSnapshotScheduleInput)
          -> Result<UpdateSnapshotScheduleOutput, UpdateSnapshotScheduleError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9613,7 +9613,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     fn update_vtl_device_type(&self,
                               input: &UpdateVTLDeviceTypeInput)
                               -> Result<UpdateVTLDeviceTypeOutput, UpdateVTLDeviceTypeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",

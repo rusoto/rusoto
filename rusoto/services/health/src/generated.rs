@@ -1009,7 +1009,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
         (&self,
          input: &DescribeAffectedEntitiesRequest)
          -> Result<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError> {
-        let mut request = SignedRequest::new("POST", "health", self.region, "/");
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1042,7 +1042,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
         (&self,
          input: &DescribeEntityAggregatesRequest)
          -> Result<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError> {
-        let mut request = SignedRequest::new("POST", "health", self.region, "/");
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -1075,7 +1075,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
         (&self,
          input: &DescribeEventAggregatesRequest)
          -> Result<DescribeEventAggregatesResponse, DescribeEventAggregatesError> {
-        let mut request = SignedRequest::new("POST", "health", self.region, "/");
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEventAggregates");
@@ -1107,7 +1107,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
         (&self,
          input: &DescribeEventDetailsRequest)
          -> Result<DescribeEventDetailsResponse, DescribeEventDetailsError> {
-        let mut request = SignedRequest::new("POST", "health", self.region, "/");
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEventDetails");
@@ -1137,7 +1137,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
     fn describe_event_types(&self,
                             input: &DescribeEventTypesRequest)
                             -> Result<DescribeEventTypesResponse, DescribeEventTypesError> {
-        let mut request = SignedRequest::new("POST", "health", self.region, "/");
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEventTypes");
@@ -1167,7 +1167,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
     fn describe_events(&self,
                        input: &DescribeEventsRequest)
                        -> Result<DescribeEventsResponse, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "health", self.region, "/");
+        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEvents");

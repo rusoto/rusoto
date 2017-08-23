@@ -2400,7 +2400,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 {
     #[doc="<p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>"]
     fn add_tags(&self, input: &AddTagsRequest) -> Result<AddTagsResponse, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2432,7 +2432,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn create_trail(&self,
                     input: &CreateTrailRequest)
                     -> Result<CreateTrailResponse, CreateTrailError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2465,7 +2465,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn delete_trail(&self,
                     input: &DeleteTrailRequest)
                     -> Result<DeleteTrailResponse, DeleteTrailError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2498,7 +2498,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn describe_trails(&self,
                        input: &DescribeTrailsRequest)
                        -> Result<DescribeTrailsResponse, DescribeTrailsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2531,7 +2531,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn get_event_selectors(&self,
                            input: &GetEventSelectorsRequest)
                            -> Result<GetEventSelectorsResponse, GetEventSelectorsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.GetEventSelectors");
@@ -2561,7 +2561,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn get_trail_status(&self,
                         input: &GetTrailStatusRequest)
                         -> Result<GetTrailStatusResponse, GetTrailStatusError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2594,7 +2594,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn list_public_keys(&self,
                         input: &ListPublicKeysRequest)
                         -> Result<ListPublicKeysResponse, ListPublicKeysError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2625,7 +2625,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
 
     #[doc="<p>Lists the tags for the trail in the current region.</p>"]
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2658,7 +2658,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn lookup_events(&self,
                      input: &LookupEventsRequest)
                      -> Result<LookupEventsResponse, LookupEventsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2691,7 +2691,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn put_event_selectors(&self,
                            input: &PutEventSelectorsRequest)
                            -> Result<PutEventSelectorsResponse, PutEventSelectorsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.PutEventSelectors");
@@ -2721,7 +2721,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn remove_tags(&self,
                    input: &RemoveTagsRequest)
                    -> Result<RemoveTagsResponse, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2754,7 +2754,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn start_logging(&self,
                      input: &StartLoggingRequest)
                      -> Result<StartLoggingResponse, StartLoggingError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2787,7 +2787,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn stop_logging(&self,
                     input: &StopLoggingRequest)
                     -> Result<StopLoggingResponse, StopLoggingError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2820,7 +2820,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
     fn update_trail(&self,
                     input: &UpdateTrailRequest)
                     -> Result<UpdateTrailResponse, UpdateTrailError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", self.region, "/");
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",

@@ -24003,7 +24003,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn add_role_to_db_cluster(&self,
                               input: &AddRoleToDBClusterMessage)
                               -> Result<(), AddRoleToDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddRoleToDBCluster");
@@ -24032,7 +24032,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &AddSourceIdentifierToSubscriptionMessage)
          -> Result<AddSourceIdentifierToSubscriptionResult, AddSourceIdentifierToSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddSourceIdentifierToSubscription");
@@ -24078,7 +24078,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn add_tags_to_resource(&self,
                             input: &AddTagsToResourceMessage)
                             -> Result<(), AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddTagsToResource");
@@ -24107,7 +24107,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &ApplyPendingMaintenanceActionMessage)
          -> Result<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ApplyPendingMaintenanceAction");
@@ -24155,7 +24155,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &AuthorizeDBSecurityGroupIngressMessage)
          -> Result<AuthorizeDBSecurityGroupIngressResult, AuthorizeDBSecurityGroupIngressError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AuthorizeDBSecurityGroupIngress");
@@ -24203,7 +24203,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &CopyDBClusterParameterGroupMessage)
          -> Result<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyDBClusterParameterGroup");
@@ -24251,7 +24251,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &CopyDBClusterSnapshotMessage)
          -> Result<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyDBClusterSnapshot");
@@ -24298,7 +24298,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn copy_db_parameter_group(&self,
                                input: &CopyDBParameterGroupMessage)
                                -> Result<CopyDBParameterGroupResult, CopyDBParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyDBParameterGroup");
@@ -24345,7 +24345,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn copy_db_snapshot(&self,
                         input: &CopyDBSnapshotMessage)
                         -> Result<CopyDBSnapshotResult, CopyDBSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyDBSnapshot");
@@ -24392,7 +24392,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn copy_option_group(&self,
                          input: &CopyOptionGroupMessage)
                          -> Result<CopyOptionGroupResult, CopyOptionGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyOptionGroup");
@@ -24439,7 +24439,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn create_db_cluster(&self,
                          input: &CreateDBClusterMessage)
                          -> Result<CreateDBClusterResult, CreateDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBCluster");
@@ -24487,7 +24487,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &CreateDBClusterParameterGroupMessage)
          -> Result<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBClusterParameterGroup");
@@ -24535,7 +24535,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &CreateDBClusterSnapshotMessage)
          -> Result<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBClusterSnapshot");
@@ -24584,7 +24584,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn create_db_instance(&self,
                           input: &CreateDBInstanceMessage)
                           -> Result<CreateDBInstanceResult, CreateDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBInstance");
@@ -24632,7 +24632,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &CreateDBInstanceReadReplicaMessage)
          -> Result<CreateDBInstanceReadReplicaResult, CreateDBInstanceReadReplicaError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBInstanceReadReplica");
@@ -24680,7 +24680,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &CreateDBParameterGroupMessage)
          -> Result<CreateDBParameterGroupResult, CreateDBParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBParameterGroup");
@@ -24729,7 +24729,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &CreateDBSecurityGroupMessage)
          -> Result<CreateDBSecurityGroupResult, CreateDBSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBSecurityGroup");
@@ -24776,7 +24776,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn create_db_snapshot(&self,
                           input: &CreateDBSnapshotMessage)
                           -> Result<CreateDBSnapshotResult, CreateDBSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBSnapshot");
@@ -24823,7 +24823,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn create_db_subnet_group(&self,
                               input: &CreateDBSubnetGroupMessage)
                               -> Result<CreateDBSubnetGroupResult, CreateDBSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBSubnetGroup");
@@ -24871,7 +24871,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &CreateEventSubscriptionMessage)
          -> Result<CreateEventSubscriptionResult, CreateEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateEventSubscription");
@@ -24920,7 +24920,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn create_option_group(&self,
                            input: &CreateOptionGroupMessage)
                            -> Result<CreateOptionGroupResult, CreateOptionGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateOptionGroup");
@@ -24967,7 +24967,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn delete_db_cluster(&self,
                          input: &DeleteDBClusterMessage)
                          -> Result<DeleteDBClusterResult, DeleteDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBCluster");
@@ -25014,7 +25014,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn delete_db_cluster_parameter_group(&self,
                                          input: &DeleteDBClusterParameterGroupMessage)
                                          -> Result<(), DeleteDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBClusterParameterGroup");
@@ -25044,7 +25044,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &DeleteDBClusterSnapshotMessage)
          -> Result<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBClusterSnapshot");
@@ -25093,7 +25093,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn delete_db_instance(&self,
                           input: &DeleteDBInstanceMessage)
                           -> Result<DeleteDBInstanceResult, DeleteDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBInstance");
@@ -25140,7 +25140,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn delete_db_parameter_group(&self,
                                  input: &DeleteDBParameterGroupMessage)
                                  -> Result<(), DeleteDBParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBParameterGroup");
@@ -25168,7 +25168,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn delete_db_security_group(&self,
                                 input: &DeleteDBSecurityGroupMessage)
                                 -> Result<(), DeleteDBSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBSecurityGroup");
@@ -25196,7 +25196,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn delete_db_snapshot(&self,
                           input: &DeleteDBSnapshotMessage)
                           -> Result<DeleteDBSnapshotResult, DeleteDBSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBSnapshot");
@@ -25243,7 +25243,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn delete_db_subnet_group(&self,
                               input: &DeleteDBSubnetGroupMessage)
                               -> Result<(), DeleteDBSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBSubnetGroup");
@@ -25272,7 +25272,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &DeleteEventSubscriptionMessage)
          -> Result<DeleteEventSubscriptionResult, DeleteEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteEventSubscription");
@@ -25321,7 +25321,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn delete_option_group(&self,
                            input: &DeleteOptionGroupMessage)
                            -> Result<(), DeleteOptionGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteOptionGroup");
@@ -25350,7 +25350,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &DescribeAccountAttributesMessage)
          -> Result<AccountAttributesMessage, DescribeAccountAttributesError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAccountAttributes");
@@ -25398,7 +25398,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn describe_certificates(&self,
                              input: &DescribeCertificatesMessage)
                              -> Result<CertificateMessage, DescribeCertificatesError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCertificates");
@@ -25446,7 +25446,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &DescribeDBClusterParameterGroupsMessage)
          -> Result<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterParameterGroups");
@@ -25495,7 +25495,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &DescribeDBClusterParametersMessage)
          -> Result<DBClusterParameterGroupDetails, DescribeDBClusterParametersError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterParameters");
@@ -25546,7 +25546,7 @@ impl<P, D> Rds for RdsClient<P, D>
          input: &DescribeDBClusterSnapshotAttributesMessage)
          -> Result<DescribeDBClusterSnapshotAttributesResult,
                    DescribeDBClusterSnapshotAttributesError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterSnapshotAttributes");
@@ -25593,7 +25593,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &DescribeDBClusterSnapshotsMessage)
          -> Result<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterSnapshots");
@@ -25641,7 +25641,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn describe_db_clusters(&self,
                             input: &DescribeDBClustersMessage)
                             -> Result<DBClusterMessage, DescribeDBClustersError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusters");
@@ -25689,7 +25689,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &DescribeDBEngineVersionsMessage)
          -> Result<DBEngineVersionMessage, DescribeDBEngineVersionsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBEngineVersions");
@@ -25737,7 +25737,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn describe_db_instances(&self,
                              input: &DescribeDBInstancesMessage)
                              -> Result<DBInstanceMessage, DescribeDBInstancesError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBInstances");
@@ -25784,7 +25784,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn describe_db_log_files(&self,
                              input: &DescribeDBLogFilesMessage)
                              -> Result<DescribeDBLogFilesResponse, DescribeDBLogFilesError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBLogFiles");
@@ -25832,7 +25832,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &DescribeDBParameterGroupsMessage)
          -> Result<DBParameterGroupsMessage, DescribeDBParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBParameterGroups");
@@ -25880,7 +25880,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn describe_db_parameters(&self,
                               input: &DescribeDBParametersMessage)
                               -> Result<DBParameterGroupDetails, DescribeDBParametersError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBParameters");
@@ -25928,7 +25928,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &DescribeDBSecurityGroupsMessage)
          -> Result<DBSecurityGroupMessage, DescribeDBSecurityGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBSecurityGroups");
@@ -25977,7 +25977,7 @@ impl<P, D> Rds for RdsClient<P, D>
         (&self,
          input: &DescribeDBSnapshotAttributesMessage)
          -> Result<DescribeDBSnapshotAttributesResult, DescribeDBSnapshotAttributesError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBSnapshotAttributes");
@@ -26024,7 +26024,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn describe_db_snapshots(&self,
                              input: &DescribeDBSnapshotsMessage)
                              -> Result<DBSnapshotMessage, DescribeDBSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBSnapshots");
@@ -26071,7 +26071,7 @@ impl<P, D> Rds for RdsClient<P, D>
     fn describe_db_subnet_groups(&self,
                                  input: &DescribeDBSubnetGroupsMessage)
                                  -> Result<DBSubnetGroupMessage, DescribeDBSubnetGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBSubnetGroups");
@@ -26116,7 +26116,7 @@ impl<P, D> Rds for RdsClient<P, D>
 
     #[doc="<p>Returns the default engine and system parameter information for the cluster database engine.</p> <p>For more information on Amazon Aurora, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html\">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>"]
 fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefaultClusterParametersMessage) -> Result<DescribeEngineDefaultClusterParametersResult, DescribeEngineDefaultClusterParametersError>{
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEngineDefaultClusterParameters");
@@ -26163,7 +26163,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &DescribeEngineDefaultParametersMessage)
          -> Result<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEngineDefaultParameters");
@@ -26211,7 +26211,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &DescribeEventCategoriesMessage)
          -> Result<EventCategoriesMessage, DescribeEventCategoriesError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEventCategories");
@@ -26260,7 +26260,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &DescribeEventSubscriptionsMessage)
          -> Result<EventSubscriptionsMessage, DescribeEventSubscriptionsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEventSubscriptions");
@@ -26308,7 +26308,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn describe_events(&self,
                        input: &DescribeEventsMessage)
                        -> Result<EventsMessage, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEvents");
@@ -26356,7 +26356,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &DescribeOptionGroupOptionsMessage)
          -> Result<OptionGroupOptionsMessage, DescribeOptionGroupOptionsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeOptionGroupOptions");
@@ -26404,7 +26404,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn describe_option_groups(&self,
                               input: &DescribeOptionGroupsMessage)
                               -> Result<OptionGroups, DescribeOptionGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeOptionGroups");
@@ -26452,7 +26452,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &DescribeOrderableDBInstanceOptionsMessage)
          -> Result<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeOrderableDBInstanceOptions");
@@ -26499,7 +26499,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &DescribePendingMaintenanceActionsMessage)
          -> Result<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribePendingMaintenanceActions");
@@ -26548,7 +26548,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &DescribeReservedDBInstancesMessage)
          -> Result<ReservedDBInstanceMessage, DescribeReservedDBInstancesError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedDBInstances");
@@ -26597,7 +26597,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &DescribeReservedDBInstancesOfferingsMessage)
          -> Result<ReservedDBInstancesOfferingMessage, DescribeReservedDBInstancesOfferingsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedDBInstancesOfferings");
@@ -26643,7 +26643,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn describe_source_regions(&self,
                                input: &DescribeSourceRegionsMessage)
                                -> Result<SourceRegionMessage, DescribeSourceRegionsError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeSourceRegions");
@@ -26691,7 +26691,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &DownloadDBLogFilePortionMessage)
          -> Result<DownloadDBLogFilePortionDetails, DownloadDBLogFilePortionError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DownloadDBLogFilePortion");
@@ -26740,7 +26740,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn failover_db_cluster(&self,
                            input: &FailoverDBClusterMessage)
                            -> Result<FailoverDBClusterResult, FailoverDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "FailoverDBCluster");
@@ -26787,7 +26787,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceMessage)
                               -> Result<TagListMessage, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListTagsForResource");
@@ -26834,7 +26834,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn modify_db_cluster(&self,
                          input: &ModifyDBClusterMessage)
                          -> Result<ModifyDBClusterResult, ModifyDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBCluster");
@@ -26882,7 +26882,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &ModifyDBClusterParameterGroupMessage)
          -> Result<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBClusterParameterGroup");
@@ -26930,7 +26930,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &ModifyDBClusterSnapshotAttributeMessage)
          -> Result<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBClusterSnapshotAttribute");
@@ -26976,7 +26976,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn modify_db_instance(&self,
                           input: &ModifyDBInstanceMessage)
                           -> Result<ModifyDBInstanceResult, ModifyDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBInstance");
@@ -27024,7 +27024,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &ModifyDBParameterGroupMessage)
          -> Result<DBParameterGroupNameMessage, ModifyDBParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBParameterGroup");
@@ -27071,7 +27071,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn modify_db_snapshot(&self,
                           input: &ModifyDBSnapshotMessage)
                           -> Result<ModifyDBSnapshotResult, ModifyDBSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBSnapshot");
@@ -27119,7 +27119,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &ModifyDBSnapshotAttributeMessage)
          -> Result<ModifyDBSnapshotAttributeResult, ModifyDBSnapshotAttributeError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBSnapshotAttribute");
@@ -27168,7 +27168,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn modify_db_subnet_group(&self,
                               input: &ModifyDBSubnetGroupMessage)
                               -> Result<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBSubnetGroup");
@@ -27216,7 +27216,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &ModifyEventSubscriptionMessage)
          -> Result<ModifyEventSubscriptionResult, ModifyEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyEventSubscription");
@@ -27265,7 +27265,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn modify_option_group(&self,
                            input: &ModifyOptionGroupMessage)
                            -> Result<ModifyOptionGroupResult, ModifyOptionGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyOptionGroup");
@@ -27312,7 +27312,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn promote_read_replica(&self,
                             input: &PromoteReadReplicaMessage)
                             -> Result<PromoteReadReplicaResult, PromoteReadReplicaError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PromoteReadReplica");
@@ -27360,7 +27360,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         (&self,
          input: &PromoteReadReplicaDBClusterMessage)
          -> Result<PromoteReadReplicaDBClusterResult, PromoteReadReplicaDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PromoteReadReplicaDBCluster");
@@ -27409,7 +27409,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
          input: &PurchaseReservedDBInstancesOfferingMessage)
          -> Result<PurchaseReservedDBInstancesOfferingResult,
                    PurchaseReservedDBInstancesOfferingError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PurchaseReservedDBInstancesOffering");
@@ -27455,7 +27455,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn reboot_db_instance(&self,
                           input: &RebootDBInstanceMessage)
                           -> Result<RebootDBInstanceResult, RebootDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RebootDBInstance");
@@ -27502,7 +27502,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
     fn remove_role_from_db_cluster(&self,
                                    input: &RemoveRoleFromDBClusterMessage)
                                    -> Result<(), RemoveRoleFromDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveRoleFromDBCluster");
@@ -27529,7 +27529,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
 
     #[doc="<p>Removes a source identifier from an existing RDS event notification subscription.</p>"]
 fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentifierFromSubscriptionMessage) -> Result<RemoveSourceIdentifierFromSubscriptionResult, RemoveSourceIdentifierFromSubscriptionError>{
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveSourceIdentifierFromSubscription");
@@ -27575,7 +27575,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
     fn remove_tags_from_resource(&self,
                                  input: &RemoveTagsFromResourceMessage)
                                  -> Result<(), RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveTagsFromResource");
@@ -27604,7 +27604,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         (&self,
          input: &ResetDBClusterParameterGroupMessage)
          -> Result<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResetDBClusterParameterGroup");
@@ -27652,7 +27652,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         (&self,
          input: &ResetDBParameterGroupMessage)
          -> Result<DBParameterGroupNameMessage, ResetDBParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResetDBParameterGroup");
@@ -27700,7 +27700,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         (&self,
          input: &RestoreDBClusterFromS3Message)
          -> Result<RestoreDBClusterFromS3Result, RestoreDBClusterFromS3Error> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBClusterFromS3");
@@ -27749,7 +27749,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         (&self,
          input: &RestoreDBClusterFromSnapshotMessage)
          -> Result<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBClusterFromSnapshot");
@@ -27797,7 +27797,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         (&self,
          input: &RestoreDBClusterToPointInTimeMessage)
          -> Result<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBClusterToPointInTime");
@@ -27845,7 +27845,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         (&self,
          input: &RestoreDBInstanceFromDBSnapshotMessage)
          -> Result<RestoreDBInstanceFromDBSnapshotResult, RestoreDBInstanceFromDBSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBInstanceFromDBSnapshot");
@@ -27893,7 +27893,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         (&self,
          input: &RestoreDBInstanceToPointInTimeMessage)
          -> Result<RestoreDBInstanceToPointInTimeResult, RestoreDBInstanceToPointInTimeError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBInstanceToPointInTime");
@@ -27941,7 +27941,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         (&self,
          input: &RevokeDBSecurityGroupIngressMessage)
          -> Result<RevokeDBSecurityGroupIngressResult, RevokeDBSecurityGroupIngressError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RevokeDBSecurityGroupIngress");
@@ -27988,7 +27988,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
     fn start_db_instance(&self,
                          input: &StartDBInstanceMessage)
                          -> Result<StartDBInstanceResult, StartDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "StartDBInstance");
@@ -28035,7 +28035,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
     fn stop_db_instance(&self,
                         input: &StopDBInstanceMessage)
                         -> Result<StopDBInstanceResult, StopDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", self.region, "/");
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "StopDBInstance");
