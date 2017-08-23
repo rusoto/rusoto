@@ -33,10 +33,6 @@ impl GenerateProtocol for RestXmlGenerator {
                      "{documentation}
                     #[allow(unused_variables, warnings)]
                     {method_signature} {{
-                        let mut params = Params::new();
-                        let mut request_uri = \"{request_uri}\".to_string();
-
-                        {add_uri_parameters}
                         {modify_uri}
 
                         let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, &request_uri);
@@ -45,7 +41,6 @@ impl GenerateProtocol for RestXmlGenerator {
                         {set_parameters}
                         {build_payload}
 
-                        request.set_params(params);
                         request.sign(&try!(self.credentials_provider.credentials()));
 
                         let mut response = try!(self.dispatcher.dispatch(&request));

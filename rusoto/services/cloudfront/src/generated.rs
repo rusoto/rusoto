@@ -10265,7 +10265,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                    CreateCloudFrontOriginAccessIdentityError> {
         let request_uri = "/2017-03-25/origin-access-identity/cloudfront";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
 
@@ -10323,7 +10323,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                            -> Result<CreateDistributionResult, CreateDistributionError> {
         let request_uri = "/2017-03-25/distribution";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
 
@@ -10386,7 +10386,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
          -> Result<CreateDistributionWithTagsResult, CreateDistributionWithTagsError> {
         let request_uri = "/2017-03-25/distribution";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -10448,7 +10448,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let request_uri = format!("/2017-03-25/distribution/{distribution_id}/invalidation",
                                   distribution_id = input.distribution_id);
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
 
@@ -10507,7 +10507,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
          -> Result<CreateStreamingDistributionResult, CreateStreamingDistributionError> {
         let request_uri = "/2017-03-25/streaming-distribution";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
 
@@ -10568,7 +10568,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                    CreateStreamingDistributionWithTagsError> {
         let request_uri = "/2017-03-25/streaming-distribution";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -10630,7 +10630,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}",
                                   id = input.id);
 
-        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "cloudfront", self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -10666,7 +10666,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                            -> Result<(), DeleteDistributionError> {
         let request_uri = format!("/2017-03-25/distribution/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "cloudfront", self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -10702,7 +10702,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                                      -> Result<(), DeleteStreamingDistributionError> {
         let request_uri = format!("/2017-03-25/streaming-distribution/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "cloudfront", self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -10741,7 +10741,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}",
                                   id = input.id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
 
@@ -10791,7 +10791,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}/config",
                                   id = input.id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
 
@@ -10842,7 +10842,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                         -> Result<GetDistributionResult, GetDistributionError> {
         let request_uri = format!("/2017-03-25/distribution/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
 
@@ -10895,7 +10895,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          -> Result<GetDistributionConfigResult, GetDistributionConfigError> {
         let request_uri = format!("/2017-03-25/distribution/{id}/config", id = input.id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
 
@@ -10948,7 +10948,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                                   distribution_id = input.distribution_id,
                                   id = input.id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
 
@@ -10998,7 +10998,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          -> Result<GetStreamingDistributionResult, GetStreamingDistributionError> {
         let request_uri = format!("/2017-03-25/streaming-distribution/{id}", id = input.id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
 
@@ -11052,7 +11052,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let request_uri = format!("/2017-03-25/streaming-distribution/{id}/config",
                                   id = input.id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
 
@@ -11106,7 +11106,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                    ListCloudFrontOriginAccessIdentitiesError> {
         let request_uri = "/2017-03-25/origin-access-identity/cloudfront";
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -11161,7 +11161,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                           -> Result<ListDistributionsResult, ListDistributionsError> {
         let request_uri = "/2017-03-25/distribution";
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -11220,7 +11220,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let request_uri = format!("/2017-03-25/distributionsByWebACLId/{web_acl_id}",
                                   web_acl_id = input.web_acl_id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -11277,7 +11277,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let request_uri = format!("/2017-03-25/distribution/{distribution_id}/invalidation",
                                   distribution_id = input.distribution_id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -11335,7 +11335,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          -> Result<ListStreamingDistributionsResult, ListStreamingDistributionsError> {
         let request_uri = "/2017-03-25/streaming-distribution";
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -11391,7 +11391,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                               -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
         let request_uri = "/2017-03-25/tagging";
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -11441,7 +11441,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
         let request_uri = "/2017-03-25/tagging";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -11478,7 +11478,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
         let request_uri = "/2017-03-25/tagging";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
         let mut params = Params::new();
@@ -11520,7 +11520,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}/config",
                                   id = input.id);
 
-        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "cloudfront", self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -11577,7 +11577,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                            -> Result<UpdateDistributionResult, UpdateDistributionError> {
         let request_uri = format!("/2017-03-25/distribution/{id}/config", id = input.id);
 
-        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "cloudfront", self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -11640,7 +11640,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let request_uri = format!("/2017-03-25/streaming-distribution/{id}/config",
                                   id = input.id);
 
-        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "cloudfront", self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
