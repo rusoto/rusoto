@@ -114,7 +114,11 @@ impl SignedRequest {
     }
 
     pub fn hostname(&self) -> String {
-        build_hostname(&self.service, &self.region)
+        // hostname may be already set by an endpoint prefix
+        match self.hostname {
+            Some(ref h) => h.to_string(),
+            None => build_hostname(&self.service, &self.region),
+        }
     }
 
     // If the key exists in headers, set it to blank/unoccupied:
