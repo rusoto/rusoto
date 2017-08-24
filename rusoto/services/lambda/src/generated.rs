@@ -3958,8 +3958,6 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn add_permission(&self,
                       input: &AddPermissionRequest)
                       -> Result<AddPermissionResponse, AddPermissionError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/policy",
                                   function_name = input.function_name);
 
@@ -3967,7 +3965,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
         let mut params = Params::new();
         if let Some(ref x) = input.qualifier {
             params.put("Qualifier", x);
@@ -4008,8 +4008,6 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn create_alias(&self,
                     input: &CreateAliasRequest)
                     -> Result<AliasConfiguration, CreateAliasError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/aliases",
                                   function_name = input.function_name);
 
@@ -4017,7 +4015,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -4055,15 +4055,15 @@ impl<P, D> Lambda for LambdaClient<P, D>
         (&self,
          input: &CreateEventSourceMappingRequest)
          -> Result<EventSourceMappingConfiguration, CreateEventSourceMappingError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/2015-03-31/event-source-mappings/";
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -4102,15 +4102,15 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn create_function(&self,
                        input: &CreateFunctionRequest)
                        -> Result<FunctionConfiguration, CreateFunctionError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/2015-03-31/functions";
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -4145,14 +4145,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
     #[doc="<p>Deletes the specified Lambda function alias. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:DeleteAlias action.</p>"]
     fn delete_alias(&self, input: &DeleteAliasRequest) -> Result<(), DeleteAliasError> {
-
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/aliases/{name}",
                                   function_name = input.function_name,
                                   name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4182,13 +4181,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
         (&self,
          input: &DeleteEventSourceMappingRequest)
          -> Result<EventSourceMappingConfiguration, DeleteEventSourceMappingError> {
-
-
         let request_uri = format!("/2015-03-31/event-source-mappings/{uuid}",
                                   uuid = input.uuid);
 
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4228,13 +4226,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
     #[doc="<p>Deletes the specified Lambda function code and configuration.</p> <p>If you are using the versioning feature and you don't specify a function version in your <code>DeleteFunction</code> request, AWS Lambda will delete the function, including all its versions, and any aliases pointing to the function versions. To delete a specific function version, you must provide the function version via the <code>Qualifier</code> parameter. For information about function versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>When you delete a function the associated resource policy is also deleted. You will need to delete the event source mappings explicitly.</p> <p>This operation requires permission for the <code>lambda:DeleteFunction</code> action.</p>"]
     fn delete_function(&self, input: &DeleteFunctionRequest) -> Result<(), DeleteFunctionError> {
-
-
         let request_uri = format!("/2015-03-31/functions/{function_name}",
                                   function_name = input.function_name);
 
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4265,12 +4262,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
     #[doc="<p>Returns a customer's account settings.</p> <p>You can use this operation to retrieve Lambda limits information, such as code size and concurrency limits. For more information about limits, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/limits.html\">AWS Lambda Limits</a>. You can also retrieve resource usage statistics, such as code storage usage and function count.</p>"]
     fn get_account_settings(&self) -> Result<GetAccountSettingsResponse, GetAccountSettingsError> {
-
-
         let request_uri = "/2016-08-19/account-settings/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4308,14 +4304,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
     #[doc="<p>Returns the specified alias information such as the alias ARN, description, and function version it is pointing to. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the <code>lambda:GetAlias</code> action.</p>"]
     fn get_alias(&self, input: &GetAliasRequest) -> Result<AliasConfiguration, GetAliasError> {
-
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/aliases/{name}",
                                   function_name = input.function_name,
                                   name = input.name);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4356,13 +4351,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
         (&self,
          input: &GetEventSourceMappingRequest)
          -> Result<EventSourceMappingConfiguration, GetEventSourceMappingError> {
-
-
         let request_uri = format!("/2015-03-31/event-source-mappings/{uuid}",
                                   uuid = input.uuid);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4403,13 +4397,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn get_function(&self,
                     input: &GetFunctionRequest)
                     -> Result<GetFunctionResponse, GetFunctionError> {
-
-
         let request_uri = format!("/2015-03-31/functions/{function_name}",
                                   function_name = input.function_name);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4454,13 +4447,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
         (&self,
          input: &GetFunctionConfigurationRequest)
          -> Result<FunctionConfiguration, GetFunctionConfigurationError> {
-
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/configuration",
                                   function_name = input.function_name);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4503,13 +4495,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
     #[doc="<p>Returns the resource policy associated with the specified Lambda function.</p> <p> If you are using the versioning feature, you can get the resource policy associated with the specific Lambda function version or alias by specifying the version or alias name using the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>You need permission for the <code>lambda:GetPolicy action.</code> </p>"]
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
-
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/policy",
                                   function_name = input.function_name);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4551,8 +4542,6 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
     #[doc="<p>Invokes a specific Lambda function. For an example, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually\">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>"]
     fn invoke(&self, input: &InvocationRequest) -> Result<InvocationResponse, InvokeError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/invocations",
                                   function_name = input.function_name);
 
@@ -4560,7 +4549,24 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = if let Some(ref payload) = input.payload {
+            Some(payload.to_owned())
+        } else {
+            None
+        };
+        request.set_payload(encoded);
+
+        if let Some(ref client_context) = input.client_context {
+            request.add_header("X-Amz-Client-Context", &client_context.to_string());
+        }
+
+        if let Some(ref invocation_type) = input.invocation_type {
+            request.add_header("X-Amz-Invocation-Type", &invocation_type.to_string());
+        }
+
+        if let Some(ref log_type) = input.log_type {
+            request.add_header("X-Amz-Log-Type", &log_type.to_string());
+        }
         let mut params = Params::new();
         if let Some(ref x) = input.qualifier {
             params.put("Qualifier", x);
@@ -4604,8 +4610,6 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn invoke_async(&self,
                     input: &InvokeAsyncRequest)
                     -> Result<InvokeAsyncResponse, InvokeAsyncError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2014-11-13/functions/{function_name}/invoke-async/",
                                   function_name = input.function_name);
 
@@ -4613,7 +4617,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(input.invoke_args.to_owned());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -4650,13 +4656,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn list_aliases(&self,
                     input: &ListAliasesRequest)
                     -> Result<ListAliasesResponse, ListAliasesError> {
-
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/aliases",
                                   function_name = input.function_name);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4707,12 +4712,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
         (&self,
          input: &ListEventSourceMappingsRequest)
          -> Result<ListEventSourceMappingsResponse, ListEventSourceMappingsError> {
-
-
         let request_uri = "/2015-03-31/event-source-mappings/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4767,12 +4771,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn list_functions(&self,
                       input: &ListFunctionsRequest)
                       -> Result<ListFunctionsResponse, ListFunctionsError> {
-
-
         let request_uri = "/2015-03-31/functions/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4817,12 +4820,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
     #[doc="<p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name).</p>"]
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError> {
-
-
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4863,13 +4865,12 @@ impl<P, D> Lambda for LambdaClient<P, D>
         (&self,
          input: &ListVersionsByFunctionRequest)
          -> Result<ListVersionsByFunctionResponse, ListVersionsByFunctionError> {
-
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/versions",
                                   function_name = input.function_name);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4917,8 +4918,6 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn publish_version(&self,
                        input: &PublishVersionRequest)
                        -> Result<FunctionConfiguration, PublishVersionError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/versions",
                                   function_name = input.function_name);
 
@@ -4926,7 +4925,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -4963,14 +4964,13 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn remove_permission(&self,
                          input: &RemovePermissionRequest)
                          -> Result<(), RemovePermissionError> {
-
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/policy/{statement_id}",
                                   function_name = input.function_name,
                                   statement_id = input.statement_id);
 
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -5001,15 +5001,15 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
     #[doc="<p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. </p>"]
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5033,8 +5033,6 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
     #[doc="<p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). </p>"]
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
-
-
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
@@ -5042,9 +5040,10 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
 
+
         let mut params = Params::new();
         for item in input.tag_keys.iter() {
-            params.put("TagKeys", item);
+            params.put("tagKeys", item);
         }
         request.set_params(params);
 
@@ -5071,8 +5070,6 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn update_alias(&self,
                     input: &UpdateAliasRequest)
                     -> Result<AliasConfiguration, UpdateAliasError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/aliases/{name}",
                                   function_name = input.function_name,
                                   name = input.name);
@@ -5081,7 +5078,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5119,8 +5118,6 @@ impl<P, D> Lambda for LambdaClient<P, D>
         (&self,
          input: &UpdateEventSourceMappingRequest)
          -> Result<EventSourceMappingConfiguration, UpdateEventSourceMappingError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2015-03-31/event-source-mappings/{uuid}",
                                   uuid = input.uuid);
 
@@ -5128,7 +5125,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5167,8 +5166,6 @@ impl<P, D> Lambda for LambdaClient<P, D>
     fn update_function_code(&self,
                             input: &UpdateFunctionCodeRequest)
                             -> Result<FunctionConfiguration, UpdateFunctionCodeError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/code",
                                   function_name = input.function_name);
 
@@ -5176,7 +5173,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5214,8 +5213,6 @@ impl<P, D> Lambda for LambdaClient<P, D>
         (&self,
          input: &UpdateFunctionConfigurationRequest)
          -> Result<FunctionConfiguration, UpdateFunctionConfigurationError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/2015-03-31/functions/{function_name}/configuration",
                                   function_name = input.function_name);
 
@@ -5223,7 +5220,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);

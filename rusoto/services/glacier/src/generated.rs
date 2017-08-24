@@ -4446,8 +4446,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn abort_multipart_upload(&self,
                               input: &AbortMultipartUploadInput)
                               -> Result<(), AbortMultipartUploadError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
                                   account_id = input.account_id,
                                   upload_id = input.upload_id,
@@ -4456,6 +4454,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4481,8 +4480,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
     #[doc="<p>This operation aborts the vault locking process if the vault lock is not in the <code>Locked</code> state. If the vault lock is in the <code>Locked</code> state when this operation is requested, the operation returns an <code>AccessDeniedException</code> error. Aborting the vault locking process removes the vault lock policy from the specified vault. </p> <p>A vault lock is put into the <code>InProgress</code> state by calling <a>InitiateVaultLock</a>. A vault lock is put into the <code>Locked</code> state by calling <a>CompleteVaultLock</a>. You can get the state of a vault lock by calling <a>GetVaultLock</a>. For more information about the vault locking process, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html\">Amazon Glacier Vault Lock</a>. For more information about vault lock policies, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock-policy.html\">Amazon Glacier Access Control with Vault Lock Policies</a>. </p> <p>This operation is idempotent. You can successfully invoke this operation multiple times, if the vault lock is in the <code>InProgress</code> state or if there is no policy associated with the vault.</p>"]
     fn abort_vault_lock(&self, input: &AbortVaultLockInput) -> Result<(), AbortVaultLockError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/lock-policy",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -4490,6 +4487,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4515,9 +4513,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
     #[doc="<p>This operation adds the specified tags to a vault. Each tag is composed of a key and a value. Each vault can have up to 10 tags. If your request would cause the tag limit for the vault to be exceeded, the operation throws the <code>LimitExceededException</code> error. If a tag already exists on the vault under a specified key, the existing key value will be overwritten. For more information about tags, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/tagging.html\">Tagging Amazon Glacier Resources</a>. </p>"]
     fn add_tags_to_vault(&self, input: &AddTagsToVaultInput) -> Result<(), AddTagsToVaultError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
-        let request_uri = format!("/{account_id}/vaults/{vault_name}/tags?operation=add",
+        let request_uri = format!("/{account_id}/vaults/{vault_name}/tags",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
@@ -4525,8 +4521,12 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
 
+        let mut params = Params::new();
+        params.put("operation", "add");
+        request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -4551,8 +4551,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn complete_multipart_upload(&self,
                                  input: &CompleteMultipartUploadInput)
                                  -> Result<ArchiveCreationOutput, CompleteMultipartUploadError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
                                   account_id = input.account_id,
                                   upload_id = input.upload_id,
@@ -4563,6 +4561,14 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
 
+
+        if let Some(ref archive_size) = input.archive_size {
+            request.add_header("x-amz-archive-size", &archive_size.to_string());
+        }
+
+        if let Some(ref checksum) = input.checksum {
+            request.add_header("x-amz-sha256-tree-hash", &checksum.to_string());
+        }
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -4611,8 +4617,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn complete_vault_lock(&self,
                            input: &CompleteVaultLockInput)
                            -> Result<(), CompleteVaultLockError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/lock-policy/{lock_id}",
                                   account_id = input.account_id,
                                   lock_id = input.lock_id,
@@ -4621,6 +4625,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4648,8 +4653,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn create_vault(&self,
                     input: &CreateVaultInput)
                     -> Result<CreateVaultOutput, CreateVaultError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -4657,6 +4660,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("PUT", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4696,8 +4700,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
     #[doc="<p>This operation deletes an archive from a vault. Subsequent requests to initiate a retrieval of this archive will fail. Archive retrievals that are in progress for this archive ID may or may not succeed according to the following scenarios:</p> <ul> <li> <p>If the archive retrieval job is actively preparing the data for download when Amazon Glacier receives the delete archive request, the archival retrieval operation might fail.</p> </li> <li> <p>If the archive retrieval job has successfully prepared the archive for download when Amazon Glacier receives the delete archive request, you will be able to download the output.</p> </li> </ul> <p>This operation is idempotent. Attempting to delete an already-deleted archive does not result in an error.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html\">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/deleting-an-archive.html\">Deleting an Archive in Amazon Glacier</a> and <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-delete.html\">Delete Archive</a> in the <i>Amazon Glacier Developer Guide</i>. </p>"]
     fn delete_archive(&self, input: &DeleteArchiveInput) -> Result<(), DeleteArchiveError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/archives/{archive_id}",
                                   account_id = input.account_id,
                                   archive_id = input.archive_id,
@@ -4706,6 +4708,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4731,8 +4734,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
     #[doc="<p>This operation deletes a vault. Amazon Glacier will delete a vault only if there are no archives in the vault as of the last inventory and there have been no writes to the vault since the last inventory. If either of these conditions is not satisfied, the vault deletion fails (that is, the vault is not removed) and Amazon Glacier returns an error. You can use <a>DescribeVault</a> to return the number of archives in a vault, and you can use <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html\">Initiate a Job (POST jobs)</a> to initiate a new inventory retrieval for a vault. The inventory contains the archive IDs you use to delete archives using <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-delete.html\">Delete Archive (DELETE archive)</a>.</p> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html\">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/deleting-vaults.html\">Deleting a Vault in Amazon Glacier</a> and <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vault-delete.html\">Delete Vault </a> in the <i>Amazon Glacier Developer Guide</i>. </p>"]
     fn delete_vault(&self, input: &DeleteVaultInput) -> Result<(), DeleteVaultError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -4740,6 +4741,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4767,8 +4769,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn delete_vault_access_policy(&self,
                                   input: &DeleteVaultAccessPolicyInput)
                                   -> Result<(), DeleteVaultAccessPolicyError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/access-policy",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -4776,6 +4776,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4804,8 +4805,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn delete_vault_notifications(&self,
                                   input: &DeleteVaultNotificationsInput)
                                   -> Result<(), DeleteVaultNotificationsError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/notification-configuration",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -4813,6 +4812,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("DELETE", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4841,8 +4841,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn describe_job(&self,
                     input: &DescribeJobInput)
                     -> Result<GlacierJobDescription, DescribeJobError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/jobs/{job_id}",
                                   account_id = input.account_id,
                                   job_id = input.job_id,
@@ -4851,6 +4849,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4889,8 +4888,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn describe_vault(&self,
                       input: &DescribeVaultInput)
                       -> Result<DescribeVaultOutput, DescribeVaultError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -4898,6 +4895,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4937,14 +4935,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
         (&self,
          input: &GetDataRetrievalPolicyInput)
          -> Result<GetDataRetrievalPolicyOutput, GetDataRetrievalPolicyError> {
-
-
         let request_uri = format!("/{account_id}/policies/data-retrieval",
                                   account_id = input.account_id);
 
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -4983,8 +4980,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn get_job_output(&self,
                       input: &GetJobOutputInput)
                       -> Result<GetJobOutputOutput, GetJobOutputError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/jobs/{job_id}/output",
                                   account_id = input.account_id,
                                   job_id = input.job_id,
@@ -4995,6 +4990,10 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
 
+
+        if let Some(ref range) = input.range {
+            request.add_header("Range", &range.to_string());
+        }
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5047,8 +5046,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn get_vault_access_policy(&self,
                                input: &GetVaultAccessPolicyInput)
                                -> Result<GetVaultAccessPolicyOutput, GetVaultAccessPolicyError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/access-policy",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5056,6 +5053,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -5094,8 +5092,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn get_vault_lock(&self,
                       input: &GetVaultLockInput)
                       -> Result<GetVaultLockOutput, GetVaultLockError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/lock-policy",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5103,6 +5099,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -5142,8 +5139,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
         (&self,
          input: &GetVaultNotificationsInput)
          -> Result<GetVaultNotificationsOutput, GetVaultNotificationsError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/notification-configuration",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5151,6 +5146,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -5189,8 +5185,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn initiate_job(&self,
                     input: &InitiateJobInput)
                     -> Result<InitiateJobOutput, InitiateJobError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/jobs",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5199,7 +5193,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(&input.job_parameters).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5244,8 +5240,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
         (&self,
          input: &InitiateMultipartUploadInput)
          -> Result<InitiateMultipartUploadOutput, InitiateMultipartUploadError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/multipart-uploads",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5255,6 +5249,15 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
 
+
+        if let Some(ref archive_description) = input.archive_description {
+            request.add_header("x-amz-archive-description",
+                               &archive_description.to_string());
+        }
+
+        if let Some(ref part_size) = input.part_size {
+            request.add_header("x-amz-part-size", &part_size.to_string());
+        }
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5300,8 +5303,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn initiate_vault_lock(&self,
                            input: &InitiateVaultLockInput)
                            -> Result<InitiateVaultLockOutput, InitiateVaultLockError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/lock-policy",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5310,7 +5311,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(&input.policy).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5348,8 +5351,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
     #[doc="<p>This operation lists jobs for a vault, including jobs that are in-progress and jobs that have recently finished.</p> <note> <p>Amazon Glacier retains recently completed jobs for a period before deleting them; however, it eventually removes completed jobs. The output of completed jobs can be retrieved. Retaining completed jobs for a period of time after they have completed enables you to get a job output in the event you miss the job completion notification or your first attempt to download it fails. For example, suppose you start an archive retrieval job to download an archive. After the job completes, you start to download the archive but encounter a network error. In this scenario, you can retry and download the archive while the job exists.</p> </note> <p>To retrieve an archive or retrieve a vault inventory from Amazon Glacier, you first initiate a job, and after the job completes, you download the data. For an archive retrieval, the output is the archive data. For an inventory retrieval, it is the inventory list. The List Job operation returns a list of these jobs sorted by job initiation time.</p> <p>The List Jobs operation supports pagination. You should always check the response <code>Marker</code> field. If there are no more jobs to list, the <code>Marker</code> field is set to <code>null</code>. If there are more jobs to list, the <code>Marker</code> field is set to a non-null value, which you can use to continue the pagination of the list. To return a list of jobs that begins at a specific job, set the marker request parameter to the <code>Marker</code> value for that job that you obtained from a previous List Jobs request.</p> <p>You can set a maximum limit for the number of jobs returned in the response by specifying the <code>limit</code> parameter in the request. The default limit is 1000. The number of jobs returned might be fewer than the limit, but the number of returned jobs never exceeds the limit.</p> <p>Additionally, you can filter the jobs list returned by specifying the optional <code>statuscode</code> parameter or <code>completed</code> parameter, or both. Using the <code>statuscode</code> parameter, you can specify to return only jobs that match either the <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code> status. Using the <code>completed</code> parameter, you can specify to return only jobs that were completed (<code>true</code>) or jobs that were not completed (<code>false</code>).</p> <p>For the underlying REST API, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/api-jobs-get.html\">List Jobs</a>. </p>"]
     fn list_jobs(&self, input: &ListJobsInput) -> Result<ListJobsOutput, ListJobsError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/jobs",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5357,6 +5358,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
         let mut params = Params::new();
@@ -5408,8 +5410,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn list_multipart_uploads(&self,
                               input: &ListMultipartUploadsInput)
                               -> Result<ListMultipartUploadsOutput, ListMultipartUploadsError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/multipart-uploads",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5417,6 +5417,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
         let mut params = Params::new();
@@ -5460,8 +5461,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
     #[doc="<p>This operation lists the parts of an archive that have been uploaded in a specific multipart upload. You can make this request at any time during an in-progress multipart upload before you complete the upload (see <a>CompleteMultipartUpload</a>. List Parts returns an error for completed uploads. The list returned in the List Parts response is sorted by part range. </p> <p>The List Parts operation supports pagination. By default, this operation returns up to 1,000 uploaded parts in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of parts that begins at a specific part, set the <code>marker</code> request parameter to the value you obtained from a previous List Parts request. You can also limit the number of parts returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html\">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html\">Working with Archives in Amazon Glacier</a> and <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-parts.html\">List Parts</a> in the <i>Amazon Glacier Developer Guide</i>.</p>"]
     fn list_parts(&self, input: &ListPartsInput) -> Result<ListPartsOutput, ListPartsError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
                                   account_id = input.account_id,
                                   upload_id = input.upload_id,
@@ -5470,6 +5469,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
         let mut params = Params::new();
@@ -5516,14 +5516,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
         (&self,
          input: &ListProvisionedCapacityInput)
          -> Result<ListProvisionedCapacityOutput, ListProvisionedCapacityError> {
-
-
         let request_uri = format!("/{account_id}/provisioned-capacity",
                                   account_id = input.account_id);
 
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -5564,8 +5563,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn list_tags_for_vault(&self,
                            input: &ListTagsForVaultInput)
                            -> Result<ListTagsForVaultOutput, ListTagsForVaultError> {
-
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/tags",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5573,6 +5570,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -5609,13 +5607,12 @@ impl<P, D> Glacier for GlacierClient<P, D>
 
     #[doc="<p>This operation lists all vaults owned by the calling user's account. The list returned in the response is ASCII-sorted by vault name.</p> <p>By default, this operation returns up to 1,000 items. If there are more vaults to list, the response <code>marker</code> field contains the vault Amazon Resource Name (ARN) at which to continue the list with a new List Vaults request; otherwise, the <code>marker</code> field is <code>null</code>. To return a list of vaults that begins at a specific vault, set the <code>marker</code> request parameter to the vault ARN you obtained from a previous List Vaults request. You can also limit the number of vaults returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html\">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/retrieving-vault-info.html\">Retrieving Vault Metadata in Amazon Glacier</a> and <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vaults-get.html\">List Vaults </a> in the <i>Amazon Glacier Developer Guide</i>. </p>"]
     fn list_vaults(&self, input: &ListVaultsInput) -> Result<ListVaultsOutput, ListVaultsError> {
-
-
         let request_uri = format!("/{account_id}/vaults", account_id = input.account_id);
 
         let mut request = SignedRequest::new("GET", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
         let mut params = Params::new();
@@ -5662,14 +5659,13 @@ impl<P, D> Glacier for GlacierClient<P, D>
         (&self,
          input: &PurchaseProvisionedCapacityInput)
          -> Result<PurchaseProvisionedCapacityOutput, PurchaseProvisionedCapacityError> {
-
-
         let request_uri = format!("/{account_id}/provisioned-capacity",
                                   account_id = input.account_id);
 
         let mut request = SignedRequest::new("POST", "glacier", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
+
 
 
 
@@ -5713,9 +5709,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn remove_tags_from_vault(&self,
                               input: &RemoveTagsFromVaultInput)
                               -> Result<(), RemoveTagsFromVaultError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
-        let request_uri = format!("/{account_id}/vaults/{vault_name}/tags?operation=remove",
+        let request_uri = format!("/{account_id}/vaults/{vault_name}/tags",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
 
@@ -5723,8 +5717,12 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
 
+        let mut params = Params::new();
+        params.put("operation", "remove");
+        request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -5749,8 +5747,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn set_data_retrieval_policy(&self,
                                  input: &SetDataRetrievalPolicyInput)
                                  -> Result<(), SetDataRetrievalPolicyError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/{account_id}/policies/data-retrieval",
                                   account_id = input.account_id);
 
@@ -5758,7 +5754,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5784,8 +5782,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn set_vault_access_policy(&self,
                                input: &SetVaultAccessPolicyInput)
                                -> Result<(), SetVaultAccessPolicyError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/access-policy",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5794,7 +5790,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(&input.policy).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5820,8 +5818,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn set_vault_notifications(&self,
                                input: &SetVaultNotificationsInput)
                                -> Result<(), SetVaultNotificationsError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/notification-configuration",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5830,7 +5826,9 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(&input.vault_notification_config).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5856,8 +5854,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn upload_archive(&self,
                       input: &UploadArchiveInput)
                       -> Result<ArchiveCreationOutput, UploadArchiveError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/archives",
                                   account_id = input.account_id,
                                   vault_name = input.vault_name);
@@ -5866,7 +5862,21 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = if let Some(ref payload) = input.body {
+            Some(payload.to_owned())
+        } else {
+            None
+        };
+        request.set_payload(encoded);
+
+        if let Some(ref archive_description) = input.archive_description {
+            request.add_header("x-amz-archive-description",
+                               &archive_description.to_string());
+        }
+
+        if let Some(ref checksum) = input.checksum {
+            request.add_header("x-amz-sha256-tree-hash", &checksum.to_string());
+        }
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -5914,8 +5924,6 @@ impl<P, D> Glacier for GlacierClient<P, D>
     fn upload_multipart_part(&self,
                              input: &UploadMultipartPartInput)
                              -> Result<UploadMultipartPartOutput, UploadMultipartPartError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/{account_id}/vaults/{vault_name}/multipart-uploads/{upload_id}",
                                   account_id = input.account_id,
                                   upload_id = input.upload_id,
@@ -5925,7 +5933,20 @@ impl<P, D> Glacier for GlacierClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = if let Some(ref payload) = input.body {
+            Some(payload.to_owned())
+        } else {
+            None
+        };
+        request.set_payload(encoded);
+
+        if let Some(ref checksum) = input.checksum {
+            request.add_header("x-amz-sha256-tree-hash", &checksum.to_string());
+        }
+
+        if let Some(ref range) = input.range {
+            request.add_header("Content-Range", &range.to_string());
+        }
 
 
         request.sign(&self.credentials_provider.credentials()?);

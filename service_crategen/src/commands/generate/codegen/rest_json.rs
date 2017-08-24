@@ -1,12 +1,12 @@
 use std::io::Write;
 
-use inflector::Inflector;
-use regex::{Captures, Regex};
 use hyper::status::StatusCode;
+use inflector::Inflector;
 
-use botocore::{Member, Operation, Shape, ShapeType};
+use botocore::{Operation, Shape, ShapeType};
 use ::Service;
-use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser, generate_field_name};
+use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser,
+            rest_request_generator, generate_field_name};
 
 pub struct RestJsonGenerator;
 
@@ -41,31 +41,12 @@ impl GenerateProtocol for RestJsonGenerator {
             // Retrieve the `Shape` for the input for this operation.
             let input_shape = &service.get_shape(input_type).unwrap();
 
-            // Construct a list of format strings which will be used to format
-            // the request URI, mapping the input struct to the URI arguments.
-            let member_uri_strings = generate_shape_member_uri_strings(input_shape);
-
-            // A boolean controlling whether or not the payload should be loaded
-            // into the request.
-            // According to the AWS SDK documentation, requests should only have
-            // a request body for operations with ANY non-URI or non-query
-            // parameters.
-            let load_payload = input_shape.members
-                .as_ref()
-                .unwrap()
-                .iter()
-                .any(|(_, member)| member.location.is_none());
-
-            // Construct a list of strings which will be used to load request
-            // parameters from the input struct into a `Params` vec, which will
-            // then be added to the request.
-            let member_param_strings = generate_shape_member_param_strings(service, input_shape);
+            let (request_uri, _) = rest_request_generator::parse_query_string(&operation.http
+                .request_uri);
 
             writeln!(writer,"
                 {documentation}
                 {method_signature} -> Result<{output_type}, {error_type}> {{
-                    {encode_input}
-
                     {request_uri_formatter}
 
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, &request_uri);
@@ -73,6 +54,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     {set_headers}
                     {modify_endpoint_prefix}
                     {load_payload}
+                    {load_headers}
                     {load_params}
 
                     request.sign(&self.credentials_provider.credentials()?);
@@ -103,15 +85,16 @@ impl GenerateProtocol for RestJsonGenerator {
                 parse_body = generate_body_parser(operation, service),
                 parse_status_code = generate_status_code_parser(operation, service),
                 output_type = output_type,
+                load_headers = rest_request_generator::generate_headers(service, operation).unwrap_or("".to_string()),
                 parse_headers = rest_response_parser::generate_response_headers_parser(service, operation)
                     .unwrap_or_else(|| "".to_owned()),
-                request_uri_formatter = generate_uri_formatter(
-                    &generate_snake_case_uri(&operation.http.request_uri),
-                    &member_uri_strings
-                ),
-                load_payload = generate_payload_loading_string(load_payload),
-                load_params = generate_params_loading_string(&member_param_strings),
-                encode_input = generate_encoding_string(load_payload),
+                request_uri_formatter = rest_request_generator::generate_uri_formatter(
+                    &request_uri,
+                    service,
+                    operation
+                ).unwrap_or("".to_string()),
+                load_payload = generate_payload(service, &input_shape).unwrap_or("".to_string()),
+                load_params = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or("".to_string()),
                 set_headers = generate_headers(service).unwrap_or("".to_string()),
             )?
         }
@@ -122,13 +105,14 @@ impl GenerateProtocol for RestJsonGenerator {
         writeln!(writer, "use serde_json;")?;
 
         // avoid unused imports when building services that don't use params
-        if service.service_type_name() != "Batch" {
+        if service_has_query_parameters(service) {
             writeln!(writer, "use rusoto_core::param::{{Params, ServiceParams}};")?;
         }
 
-        writeln!(writer, "use rusoto_core::signature::SignedRequest;
-        use serde_json::from_str;
-        use serde_json::Value as SerdeJsonValue;")
+        writeln!(writer,
+                 "use rusoto_core::signature::SignedRequest;
+                  use serde_json::from_str;
+                  use serde_json::Value as SerdeJsonValue;")
 
     }
 
@@ -205,170 +189,75 @@ fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
     }
 }
 
-fn generate_encoding_string(load_payload: bool) -> String {
-    if load_payload {
-        "let encoded = serde_json::to_string(input).unwrap();".to_owned()
-    } else {
-        "".to_owned()
-    }
-}
+// Figure out what, if anything, should be sent as the body of the http request
+fn generate_payload(service: &Service, input_shape: &Shape) -> Option<String> {
+    let declare_payload = match input_shape.payload {
 
-fn generate_payload_loading_string(load_payload: bool) -> String {
-    if load_payload {
-        "request.set_payload(Some(encoded.into_bytes()));".to_owned()
-    } else {
-        "".to_owned()
-    }
-}
-
-fn generate_snake_case_uri(request_uri: &str) -> String {
-    lazy_static! {
-        static ref URI_ARGS_REGEX: Regex = Regex::new(r"\{([\w\d]+)\}").unwrap();
-    }
-
-    URI_ARGS_REGEX.replace_all(request_uri, |caps: &Captures| {
-            format!("{{{}}}",
-                    caps.get(1).map(|c| Inflector::to_snake_case(c.as_str())).unwrap())
-        })
-        .to_string()
-}
-
-fn generate_params_loading_string(param_strings: &[String]) -> String {
-    match param_strings.len() {
-        0 => "".to_owned(),
-        _ => {
-            format!("let mut params = Params::new();
-                {param_strings}
-                request.set_params(params);",
-                    param_strings = param_strings.join("\n"))
+        // if the input shape explicitly specifies a payload field, use that
+        Some(ref payload_member_name) => {
+            Some(declared_payload(input_shape, payload_member_name, service))
         }
-    }
-}
 
-fn generate_shape_member_param_strings(service: &Service, shape: &Shape) -> Vec<String> {
-    shape.members
-        .as_ref()
-        .unwrap()
-        .iter()
-        .filter_map(|(member_name, member)| {
-            member.location.as_ref().and_then(|loc| {
-                if !member.deprecated() && loc == "querystring" {
-                    let member_shape = service.shape_for_member(member).unwrap();
-                    Some(generate_param_load_string(member_name, member_shape, shape.required(member_name)))
-                } else {
-                    None
-                }
-            })
-        })
-        .collect::<Vec<String>>()
-}
-
-fn generate_param_load_string(member_name: &str, member_shape: &Shape, is_required: bool) -> String {
-    let field_name = generate_field_name(member_name);
-    match (member_shape.shape_type, is_required) {
-        (ShapeType::List, true) => {
-            format!(
-                "for item in input.{field_name}.iter() {{
-                    params.put(\"{member_name}\", item);
-                }}",
-                member_name = member_name,
-                field_name = field_name)
-        },
-        (ShapeType::List, false) => {
-            format!(
-                "if let Some(ref x) = input.{field_name} {{
-                    for item in x.iter() {{
-                        params.put(\"{member_name}\", item);
-                    }}
-                }}",
-                member_name = member_name,
-                field_name = field_name,
-            )
-        },
-        (ShapeType::Map, true) => {
-            format!(
-                "for (key, val) in input.{field_name}.iter() {{
-                    params.put(key, val);
-                }}",
-                field_name = member_name.to_snake_case())
-        },
-        (ShapeType::Map, false) => {
-            format!(
-                "if let Some(ref x) = input.{field_name} {{
-                    for (key, val) in x.iter() {{
-                        params.put(key, val);
-                    }}
-                }}",
-                field_name = member_name.to_snake_case(),
-            )
-        },
-        (_, true) => {
-            format!(
-                "params.put(\"{member_name}\", &input.{field_name});",
-                member_name = member_name,
-                field_name = field_name)
-        },
-        (_, false) => {
-            format!(
-                "if let Some(ref x) = input.{field_name} {{
-                    params.put(\"{member_name}\", x);
-                }}",
-                member_name = member_name,
-                field_name = field_name,
-            )
-        }
-    }
-}
-
-fn generate_uri_formatter(request_uri: &str, uri_strings: &[String]) -> String {
-    match uri_strings.len() {
-        0 => {
-            format!(
-                "let request_uri = \"{request_uri}\";",
-                request_uri = request_uri,
-            )
-        }
-        _ => {
-            format!("let request_uri = format!(\"{request_uri}\", {uri_strings});",
-                    request_uri = request_uri,
-                    uri_strings = uri_strings.join(", "))
-        }
-    }
-}
-
-fn generate_shape_member_uri_strings(shape: &Shape) -> Vec<String> {
-    shape.members
-        .as_ref()
-        .unwrap()
-        .iter()
-        .filter_map(|(member_name, member)| {
-            generate_member_format_string(&member_name.to_snake_case(), member)
-        })
-        .collect::<Vec<String>>()
-}
-
-fn generate_member_format_string(member_name: &str, member: &Member) -> Option<String> {
-    match member.location {
-        Some(ref x) if x == "uri" => {
-            match member.location_name {
-                Some(ref loc_name) => {
-                    Some(format!(
-                        "{member_name} = input.{field_name}",
-                        field_name = member_name,
-                        member_name = loc_name.to_snake_case(),
-                    ))
-                }
-                None => {
-                    Some(format!(
-                        "{member_name} = input.{field_name}",
-                        field_name = member_name,
-                        member_name = member_name,
-                    ))
-                }
+        // otherwise see if the input_shape itself should be serialized as the payload
+        None => {
+            // only use the input_shape if it has non-query, non-header members
+            // (i.e., location unspecified)
+            if input_shape.members
+                .as_ref()
+                .unwrap()
+                .iter()
+                .any(|(_, member)| member.location.is_none()) {
+                Some("let encoded = Some(serde_json::to_vec(input).unwrap());".to_owned())
+            } else {
+                None
             }
         }
-        Some(_) | None => None,
+    };
+
+    if declare_payload.is_some() {
+        Some(declare_payload.unwrap() + "request.set_payload(encoded);")
+    } else {
+        None
     }
+}
+
+fn declared_payload(input_shape: &Shape, payload_member_name: &str, service: &Service) -> String {
+    let payload_member_shape = &input_shape.members.as_ref().unwrap()[payload_member_name].shape;
+    let payload_shape = &service.get_shape(payload_member_shape)
+        .expect("Shape missing from service definition");
+
+    let field_name = generate_field_name(payload_member_name);
+
+    match payload_shape.shape_type {
+        // if it's a String or a Blob, send it as the raw payload
+        payload_type if payload_type == ShapeType::Blob || payload_type == ShapeType::String => {
+            if input_shape.required(payload_member_name) {
+                format!("let encoded = Some(input.{}.to_owned());", field_name)
+            } else {
+                format!("let encoded = if let Some(ref payload) = input.{} {{
+                            Some(payload.to_owned())
+                        }} else {{
+                            None
+                        }};",
+                        field_name)
+            }
+        }
+
+        // otherwise serialize the payload member as json and use that
+        _ => {
+            format!("let encoded = Some(serde_json::to_vec(&input.{}).unwrap());",
+                    field_name)
+        }
+    }
+}
+
+// Do any input operations in the entire service use query parameters?
+fn service_has_query_parameters(service: &Service) -> bool {
+    service.operations()
+        .iter()
+        .map(|(_, operation)| operation.input_shape())
+        .map(|input_type| service.get_shape(input_type).unwrap())
+        .any(|input_shape| input_shape.has_query_parameters())
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
@@ -385,7 +274,8 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
-    let output_shape = &service.get_shape(shape_name).expect("Shape missing from service definition");
+    let output_shape = &service.get_shape(shape_name)
+        .expect("Shape missing from service definition");
 
     let mut status_code_parser = "".to_string();
 
@@ -393,9 +283,11 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
         if let Some(ref location) = member.location {
             if location == "statusCode" {
                 if output_shape.required(member_name) {
-                    status_code_parser += &format!("result.{} = StatusCode::to_u16(&response.status);", member_name.to_snake_case());
+                    status_code_parser += &format!("result.{} = StatusCode::to_u16(&response.status);",
+                                                   member_name.to_snake_case());
                 } else {
-                    status_code_parser += &format!("result.{} = Some(StatusCode::to_u16(&response.status) as i64);", member_name.to_snake_case());
+                    status_code_parser += &format!("result.{} = Some(StatusCode::to_u16(&response.status) as i64);",
+                                                   member_name.to_snake_case());
                 }
             }
         }
@@ -403,7 +295,6 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
 
     status_code_parser
 }
-
 
 /// Generate code to parse the http response body, either as a JSON object
 /// deserialized with serde, or as a raw payload that's assigned to one of
@@ -419,23 +310,29 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
-    let output_shape = &service.get_shape(shape_name).expect("Shape missing from service definition");
+    let output_shape = &service.get_shape(shape_name)
+        .expect("Shape missing from service definition");
 
     let mutable_result = output_shape.members
-                .as_ref()
-                .unwrap()
-                .iter()
-                .any(|(_, member)| member.location.is_some());
+        .as_ref()
+        .unwrap()
+        .iter()
+        .any(|(_, member)| member.location.is_some());
 
     match output_shape.payload {
         None => json_body_parser(shape_name, mutable_result),
         Some(ref payload_member_name) => {
-            let payload_member_shape = &output_shape.members.as_ref().unwrap()[payload_member_name].shape;
-            let payload_shape = &service.get_shape(payload_member_shape).expect("Shape missing from service definition");
+            let payload_member_shape = &output_shape.members.as_ref().unwrap()[payload_member_name]
+                .shape;
+            let payload_shape = &service.get_shape(payload_member_shape)
+                .expect("Shape missing from service definition");
             match payload_shape.shape_type {
                 payload_type if payload_type == ShapeType::Blob ||
                                 payload_type == ShapeType::String => {
-                    payload_body_parser(payload_type, shape_name, payload_member_name, mutable_result)
+                    payload_body_parser(payload_type,
+                                        shape_name,
+                                        payload_member_name,
+                                        mutable_result)
                 }
                 _ => json_body_parser(shape_name, mutable_result),
             }
@@ -445,7 +342,11 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
 
 /// Take the raw http response body and assign it to the payload field
 /// on the result object
-fn payload_body_parser(payload_type: ShapeType, output_shape: &str, payload_member: &str, mutable_result: bool) -> String {
+fn payload_body_parser(payload_type: ShapeType,
+                       output_shape: &str,
+                       payload_member: &str,
+                       mutable_result: bool)
+                       -> String {
 
     let response_body = match payload_type {
         ShapeType::Blob => "Some(body)",
@@ -460,11 +361,10 @@ fn payload_body_parser(payload_type: ShapeType, output_shape: &str, payload_memb
 
         result.{payload_member} = {response_body};
         ",
-        output_shape = output_shape,
-        payload_member = payload_member.to_snake_case(),
-        response_body = response_body,
-        mutable = if mutable_result { "mut" } else { "" }
-    )
+            output_shape = output_shape,
+            payload_member = payload_member.to_snake_case(),
+            response_body = response_body,
+            mutable = if mutable_result { "mut" } else { "" })
 }
 
 /// Parse the http response body as a JSON object with serde, and use that
@@ -486,6 +386,5 @@ fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
             let {mutable} result = serde_json::from_slice::<{output_shape}>(&body).unwrap();
             ",
             output_shape = output_shape,
-            mutable = if mutable_result { "mut" } else { "" }
-    )
+            mutable = if mutable_result { "mut" } else { "" })
 }

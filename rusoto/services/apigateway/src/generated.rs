@@ -14049,15 +14049,15 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 {
     #[doc="<p>Create an <a>ApiKey</a> resource. </p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html\">AWS CLI</a></div>"]
     fn create_api_key(&self, input: &CreateApiKeyRequest) -> Result<ApiKey, CreateApiKeyError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14094,8 +14094,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn create_authorizer(&self,
                          input: &CreateAuthorizerRequest)
                          -> Result<Authorizer, CreateAuthorizerError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/authorizers",
                                   restapi_id = input.rest_api_id);
 
@@ -14103,7 +14101,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14140,8 +14140,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn create_base_path_mapping(&self,
                                 input: &CreateBasePathMappingRequest)
                                 -> Result<BasePathMapping, CreateBasePathMappingError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/domainnames/{domain_name}/basepathmappings",
                                   domain_name = input.domain_name);
 
@@ -14149,7 +14147,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14186,8 +14186,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn create_deployment(&self,
                          input: &CreateDeploymentRequest)
                          -> Result<Deployment, CreateDeploymentError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/deployments",
                                   restapi_id = input.rest_api_id);
 
@@ -14195,7 +14193,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14232,8 +14232,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn create_documentation_part(&self,
                                  input: &CreateDocumentationPartRequest)
                                  -> Result<DocumentationPart, CreateDocumentationPartError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/parts",
                                   restapi_id = input.rest_api_id);
 
@@ -14241,7 +14239,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14280,8 +14280,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         (&self,
          input: &CreateDocumentationVersionRequest)
          -> Result<DocumentationVersion, CreateDocumentationVersionError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/versions",
                                   restapi_id = input.rest_api_id);
 
@@ -14289,7 +14287,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14327,15 +14327,15 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn create_domain_name(&self,
                           input: &CreateDomainNameRequest)
                           -> Result<DomainName, CreateDomainNameError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/domainnames";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14370,8 +14370,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>"]
     fn create_model(&self, input: &CreateModelRequest) -> Result<Model, CreateModelError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/models",
                                   restapi_id = input.rest_api_id);
 
@@ -14379,7 +14377,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14416,8 +14416,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn create_request_validator(&self,
                                 input: &CreateRequestValidatorRequest)
                                 -> Result<RequestValidator, CreateRequestValidatorError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/requestvalidators",
                                   restapi_id = input.rest_api_id);
 
@@ -14425,7 +14423,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14462,8 +14462,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn create_resource(&self,
                        input: &CreateResourceRequest)
                        -> Result<Resource, CreateResourceError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{parent_id}",
                                   parent_id = input.parent_id,
                                   restapi_id = input.rest_api_id);
@@ -14472,7 +14470,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14507,15 +14507,15 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Creates a new <a>RestApi</a> resource.</p>"]
     fn create_rest_api(&self, input: &CreateRestApiRequest) -> Result<RestApi, CreateRestApiError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14550,8 +14550,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>"]
     fn create_stage(&self, input: &CreateStageRequest) -> Result<Stage, CreateStageError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/stages",
                                   restapi_id = input.rest_api_id);
 
@@ -14559,7 +14557,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14596,15 +14596,15 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn create_usage_plan(&self,
                          input: &CreateUsagePlanRequest)
                          -> Result<UsagePlan, CreateUsagePlanError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/usageplans";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14641,8 +14641,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn create_usage_plan_key(&self,
                              input: &CreateUsagePlanKeyRequest)
                              -> Result<UsagePlanKey, CreateUsagePlanKeyError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/usageplans/{usageplan_id}/keys",
                                   usageplan_id = input.usage_plan_id);
 
@@ -14650,7 +14648,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -14685,12 +14685,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Deletes the <a>ApiKey</a> resource.</p>"]
     fn delete_api_key(&self, input: &DeleteApiKeyRequest) -> Result<(), DeleteApiKeyError> {
-
-
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -14719,14 +14718,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_authorizer(&self,
                          input: &DeleteAuthorizerRequest)
                          -> Result<(), DeleteAuthorizerError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/authorizers/{authorizer_id}",
                                   authorizer_id = input.authorizer_id,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -14755,14 +14753,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_base_path_mapping(&self,
                                 input: &DeleteBasePathMappingRequest)
                                 -> Result<(), DeleteBasePathMappingError> {
-
-
         let request_uri = format!("/domainnames/{domain_name}/basepathmappings/{base_path}",
                                   base_path = input.base_path,
                                   domain_name = input.domain_name);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -14791,13 +14788,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_client_certificate(&self,
                                  input: &DeleteClientCertificateRequest)
                                  -> Result<(), DeleteClientCertificateError> {
-
-
         let request_uri = format!("/clientcertificates/{clientcertificate_id}",
                                   clientcertificate_id = input.client_certificate_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -14827,14 +14823,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_deployment(&self,
                          input: &DeleteDeploymentRequest)
                          -> Result<(), DeleteDeploymentError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/deployments/{deployment_id}",
                                   deployment_id = input.deployment_id,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -14863,14 +14858,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_documentation_part(&self,
                                  input: &DeleteDocumentationPartRequest)
                                  -> Result<(), DeleteDocumentationPartError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/parts/{part_id}",
                                   part_id = input.documentation_part_id,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -14900,14 +14894,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_documentation_version(&self,
                                     input: &DeleteDocumentationVersionRequest)
                                     -> Result<(), DeleteDocumentationVersionError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/versions/{doc_version}",
                                   doc_version = input.documentation_version,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -14937,13 +14930,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_domain_name(&self,
                           input: &DeleteDomainNameRequest)
                           -> Result<(), DeleteDomainNameError> {
-
-
         let request_uri = format!("/domainnames/{domain_name}",
                                   domain_name = input.domain_name);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -14972,8 +14964,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_integration(&self,
                           input: &DeleteIntegrationRequest)
                           -> Result<(), DeleteIntegrationError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -14981,6 +14971,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15009,8 +15000,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_integration_response(&self,
                                    input: &DeleteIntegrationResponseRequest)
                                    -> Result<(), DeleteIntegrationResponseError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -15019,6 +15008,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15046,8 +15036,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Deletes an existing <a>Method</a> resource.</p>"]
     fn delete_method(&self, input: &DeleteMethodRequest) -> Result<(), DeleteMethodError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -15055,6 +15043,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15083,8 +15072,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_method_response(&self,
                               input: &DeleteMethodResponseRequest)
                               -> Result<(), DeleteMethodResponseError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -15093,6 +15080,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15119,14 +15107,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Deletes a model.</p>"]
     fn delete_model(&self, input: &DeleteModelRequest) -> Result<(), DeleteModelError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/models/{model_name}",
                                   model_name = input.model_name,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15155,14 +15142,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_request_validator(&self,
                                 input: &DeleteRequestValidatorRequest)
                                 -> Result<(), DeleteRequestValidatorError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
                                   requestvalidator_id = input.request_validator_id,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15189,14 +15175,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Deletes a <a>Resource</a> resource.</p>"]
     fn delete_resource(&self, input: &DeleteResourceRequest) -> Result<(), DeleteResourceError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}",
                                   resource_id = input.resource_id,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15223,12 +15208,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Deletes the specified API.</p>"]
     fn delete_rest_api(&self, input: &DeleteRestApiRequest) -> Result<(), DeleteRestApiError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15255,14 +15239,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Deletes a <a>Stage</a> resource.</p>"]
     fn delete_stage(&self, input: &DeleteStageRequest) -> Result<(), DeleteStageError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/stages/{stage_name}",
                                   restapi_id = input.rest_api_id,
                                   stage_name = input.stage_name);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15291,13 +15274,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_usage_plan(&self,
                          input: &DeleteUsagePlanRequest)
                          -> Result<(), DeleteUsagePlanError> {
-
-
         let request_uri = format!("/usageplans/{usageplan_id}",
                                   usageplan_id = input.usage_plan_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15326,14 +15308,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn delete_usage_plan_key(&self,
                              input: &DeleteUsagePlanKeyRequest)
                              -> Result<(), DeleteUsagePlanKeyError> {
-
-
         let request_uri = format!("/usageplans/{usageplan_id}/keys/{key_id}",
                                   key_id = input.key_id,
                                   usageplan_id = input.usage_plan_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15362,14 +15343,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn flush_stage_authorizers_cache(&self,
                                      input: &FlushStageAuthorizersCacheRequest)
                                      -> Result<(), FlushStageAuthorizersCacheError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/stages/{stage_name}/cache/authorizers",
                                   restapi_id = input.rest_api_id,
                                   stage_name = input.stage_name);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15399,14 +15379,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn flush_stage_cache(&self,
                          input: &FlushStageCacheRequest)
                          -> Result<(), FlushStageCacheError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/stages/{stage_name}/cache/data",
                                   restapi_id = input.rest_api_id,
                                   stage_name = input.stage_name);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15435,15 +15414,15 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn generate_client_certificate(&self,
                                    input: &GenerateClientCertificateRequest)
                                    -> Result<ClientCertificate, GenerateClientCertificateError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/clientcertificates";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -15479,12 +15458,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Gets information about the current <a>Account</a> resource.</p>"]
     fn get_account(&self) -> Result<Account, GetAccountError> {
-
-
         let request_uri = "/account";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15522,12 +15500,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Gets information about the current <a>ApiKey</a> resource.</p>"]
     fn get_api_key(&self, input: &GetApiKeyRequest) -> Result<ApiKey, GetApiKeyError> {
-
-
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15569,12 +15546,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Gets information about the current <a>ApiKeys</a> resource.</p>"]
     fn get_api_keys(&self, input: &GetApiKeysRequest) -> Result<ApiKeys, GetApiKeysError> {
-
-
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15589,7 +15565,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
             params.put("limit", x);
         }
         if let Some(ref x) = input.name_query {
-            params.put("nameQuery", x);
+            params.put("name", x);
         }
         if let Some(ref x) = input.position {
             params.put("position", x);
@@ -15630,14 +15606,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_authorizer(&self,
                       input: &GetAuthorizerRequest)
                       -> Result<Authorizer, GetAuthorizerError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/authorizers/{authorizer_id}",
                                   authorizer_id = input.authorizer_id,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15677,13 +15652,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_authorizers(&self,
                        input: &GetAuthorizersRequest)
                        -> Result<Authorizers, GetAuthorizersError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/authorizers",
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15730,14 +15704,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_base_path_mapping(&self,
                              input: &GetBasePathMappingRequest)
                              -> Result<BasePathMapping, GetBasePathMappingError> {
-
-
         let request_uri = format!("/domainnames/{domain_name}/basepathmappings/{base_path}",
                                   base_path = input.base_path,
                                   domain_name = input.domain_name);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15777,13 +15750,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_base_path_mappings(&self,
                               input: &GetBasePathMappingsRequest)
                               -> Result<BasePathMappings, GetBasePathMappingsError> {
-
-
         let request_uri = format!("/domainnames/{domain_name}/basepathmappings",
                                   domain_name = input.domain_name);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15830,13 +15802,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_client_certificate(&self,
                               input: &GetClientCertificateRequest)
                               -> Result<ClientCertificate, GetClientCertificateError> {
-
-
         let request_uri = format!("/clientcertificates/{clientcertificate_id}",
                                   clientcertificate_id = input.client_certificate_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15876,12 +15847,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_client_certificates(&self,
                                input: &GetClientCertificatesRequest)
                                -> Result<ClientCertificates, GetClientCertificatesError> {
-
-
         let request_uri = "/clientcertificates";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15928,14 +15898,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_deployment(&self,
                       input: &GetDeploymentRequest)
                       -> Result<Deployment, GetDeploymentError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/deployments/{deployment_id}",
                                   deployment_id = input.deployment_id,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -15981,13 +15950,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_deployments(&self,
                        input: &GetDeploymentsRequest)
                        -> Result<Deployments, GetDeploymentsError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/deployments",
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16034,14 +16002,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_documentation_part(&self,
                               input: &GetDocumentationPartRequest)
                               -> Result<DocumentationPart, GetDocumentationPartError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/parts/{part_id}",
                                   part_id = input.documentation_part_id,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16081,8 +16048,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_documentation_parts(&self,
                                input: &GetDocumentationPartsRequest)
                                -> Result<DocumentationParts, GetDocumentationPartsError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/parts",
                                   restapi_id = input.rest_api_id);
 
@@ -16091,12 +16056,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
+
         let mut params = Params::new();
         if let Some(ref x) = input.limit {
             params.put("limit", x);
         }
         if let Some(ref x) = input.name_query {
-            params.put("nameQuery", x);
+            params.put("name", x);
         }
         if let Some(ref x) = input.path {
             params.put("path", x);
@@ -16143,14 +16109,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_documentation_version(&self,
                                  input: &GetDocumentationVersionRequest)
                                  -> Result<DocumentationVersion, GetDocumentationVersionError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/versions/{doc_version}",
                                   doc_version = input.documentation_version,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16192,13 +16157,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         (&self,
          input: &GetDocumentationVersionsRequest)
          -> Result<DocumentationVersions, GetDocumentationVersionsError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/versions",
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16246,13 +16210,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_domain_name(&self,
                        input: &GetDomainNameRequest)
                        -> Result<DomainName, GetDomainNameError> {
-
-
         let request_uri = format!("/domainnames/{domain_name}",
                                   domain_name = input.domain_name);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16292,12 +16255,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_domain_names(&self,
                         input: &GetDomainNamesRequest)
                         -> Result<DomainNames, GetDomainNamesError> {
-
-
         let request_uri = "/domainnames";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16342,8 +16304,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>"]
     fn get_export(&self, input: &GetExportRequest) -> Result<ExportResponse, GetExportError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/stages/{stage_name}/exports/{export_type}",
                                   export_type = input.export_type,
                                   restapi_id = input.rest_api_id,
@@ -16354,6 +16314,10 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
+
+        if let Some(ref accepts) = input.accepts {
+            request.add_header("Accept", &accepts.to_string());
+        }
         let mut params = Params::new();
         if let Some(ref x) = input.parameters {
             for (key, val) in x.iter() {
@@ -16399,8 +16363,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_integration(&self,
                        input: &GetIntegrationRequest)
                        -> Result<Integration, GetIntegrationError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -16408,6 +16370,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16447,8 +16410,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_integration_response(&self,
                                 input: &GetIntegrationResponseRequest)
                                 -> Result<IntegrationResponse, GetIntegrationResponseError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -16457,6 +16418,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16494,8 +16456,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Describe an existing <a>Method</a> resource.</p>"]
     fn get_method(&self, input: &GetMethodRequest) -> Result<Method, GetMethodError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -16503,6 +16463,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16542,8 +16503,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_method_response(&self,
                            input: &GetMethodResponseRequest)
                            -> Result<MethodResponse, GetMethodResponseError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -16552,6 +16511,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16589,14 +16549,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Describes an existing model defined for a <a>RestApi</a> resource.</p>"]
     fn get_model(&self, input: &GetModelRequest) -> Result<Model, GetModelError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/models/{model_name}",
                                   model_name = input.model_name,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16640,14 +16599,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_model_template(&self,
                           input: &GetModelTemplateRequest)
                           -> Result<Template, GetModelTemplateError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/models/{model_name}/default_template",
                                   model_name = input.model_name,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16685,13 +16643,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>"]
     fn get_models(&self, input: &GetModelsRequest) -> Result<Models, GetModelsError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/models",
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16738,14 +16695,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_request_validator(&self,
                              input: &GetRequestValidatorRequest)
                              -> Result<RequestValidator, GetRequestValidatorError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
                                   requestvalidator_id = input.request_validator_id,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16785,13 +16741,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_request_validators(&self,
                               input: &GetRequestValidatorsRequest)
                               -> Result<RequestValidators, GetRequestValidatorsError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/requestvalidators",
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16836,14 +16791,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Lists information about a resource.</p>"]
     fn get_resource(&self, input: &GetResourceRequest) -> Result<Resource, GetResourceError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}",
                                   resource_id = input.resource_id,
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16887,13 +16841,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Lists information about a collection of <a>Resource</a> resources.</p>"]
     fn get_resources(&self, input: &GetResourcesRequest) -> Result<Resources, GetResourcesError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/resources",
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16943,12 +16896,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Lists the <a>RestApi</a> resource in the collection.</p>"]
     fn get_rest_api(&self, input: &GetRestApiRequest) -> Result<RestApi, GetRestApiError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -16986,12 +16938,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Lists the <a>RestApis</a> resources for your collection.</p>"]
     fn get_rest_apis(&self, input: &GetRestApisRequest) -> Result<RestApis, GetRestApisError> {
-
-
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -17036,8 +16987,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>"]
     fn get_sdk(&self, input: &GetSdkRequest) -> Result<SdkResponse, GetSdkError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/stages/{stage_name}/sdks/{sdk_type}",
                                   restapi_id = input.rest_api_id,
                                   sdk_type = input.sdk_type,
@@ -17045,6 +16994,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -17091,12 +17041,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
     fn get_sdk_type(&self, input: &GetSdkTypeRequest) -> Result<SdkType, GetSdkTypeError> {
-
-
         let request_uri = format!("/sdktypes/{sdktype_id}", sdktype_id = input.id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -17134,12 +17083,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
     fn get_sdk_types(&self, input: &GetSdkTypesRequest) -> Result<SdkTypes, GetSdkTypesError> {
-
-
         let request_uri = "/sdktypes";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -17184,14 +17132,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Gets information about a <a>Stage</a> resource.</p>"]
     fn get_stage(&self, input: &GetStageRequest) -> Result<Stage, GetStageError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/stages/{stage_name}",
                                   restapi_id = input.rest_api_id,
                                   stage_name = input.stage_name);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -17229,13 +17176,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Gets information about one or more <a>Stage</a> resources.</p>"]
     fn get_stages(&self, input: &GetStagesRequest) -> Result<Stages, GetStagesError> {
-
-
         let request_uri = format!("/restapis/{restapi_id}/stages",
                                   restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -17277,13 +17223,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Gets the usage data of a usage plan in a specified time interval.</p>"]
     fn get_usage(&self, input: &GetUsageRequest) -> Result<Usage, GetUsageError> {
-
-
         let request_uri = format!("/usageplans/{usageplan_id}/usage",
                                   usageplan_id = input.usage_plan_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -17333,13 +17278,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Gets a usage plan of a given plan identifier.</p>"]
     fn get_usage_plan(&self, input: &GetUsagePlanRequest) -> Result<UsagePlan, GetUsagePlanError> {
-
-
         let request_uri = format!("/usageplans/{usageplan_id}",
                                   usageplan_id = input.usage_plan_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -17379,14 +17323,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_usage_plan_key(&self,
                           input: &GetUsagePlanKeyRequest)
                           -> Result<UsagePlanKey, GetUsagePlanKeyError> {
-
-
         let request_uri = format!("/usageplans/{usageplan_id}/keys/{key_id}",
                                   key_id = input.key_id,
                                   usageplan_id = input.usage_plan_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -17426,8 +17369,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_usage_plan_keys(&self,
                            input: &GetUsagePlanKeysRequest)
                            -> Result<UsagePlanKeys, GetUsagePlanKeysError> {
-
-
         let request_uri = format!("/usageplans/{usageplan_id}/keys",
                                   usageplan_id = input.usage_plan_id);
 
@@ -17436,12 +17377,13 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
+
         let mut params = Params::new();
         if let Some(ref x) = input.limit {
             params.put("limit", x);
         }
         if let Some(ref x) = input.name_query {
-            params.put("nameQuery", x);
+            params.put("name", x);
         }
         if let Some(ref x) = input.position {
             params.put("position", x);
@@ -17482,12 +17424,11 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn get_usage_plans(&self,
                        input: &GetUsagePlansRequest)
                        -> Result<UsagePlans, GetUsagePlansError> {
-
-
         let request_uri = "/usageplans";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -17537,20 +17478,21 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn import_api_keys(&self,
                        input: &ImportApiKeysRequest)
                        -> Result<ApiKeyIds, ImportApiKeysError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
-        let request_uri = "/apikeys?mode=import";
+        let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(input.body.to_owned());
+        request.set_payload(encoded);
+
         let mut params = Params::new();
         if let Some(ref x) = input.fail_on_warnings {
-            params.put("failOnWarnings", x);
+            params.put("failonwarnings", x);
         }
         params.put("format", &input.format);
+        params.put("mode", "import");
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -17588,8 +17530,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         (&self,
          input: &ImportDocumentationPartsRequest)
          -> Result<DocumentationPartIds, ImportDocumentationPartsError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/parts",
                                   restapi_id = input.rest_api_id);
 
@@ -17597,10 +17537,12 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(input.body.to_owned());
+        request.set_payload(encoded);
+
         let mut params = Params::new();
         if let Some(ref x) = input.fail_on_warnings {
-            params.put("failOnWarnings", x);
+            params.put("failonwarnings", x);
         }
         if let Some(ref x) = input.mode {
             params.put("mode", x);
@@ -17640,24 +17582,25 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>A feature of the Amazon API Gateway control service for creating a new API from an external API definition file.</p>"]
     fn import_rest_api(&self, input: &ImportRestApiRequest) -> Result<RestApi, ImportRestApiError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
-        let request_uri = "/restapis?mode=import";
+        let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(input.body.to_owned());
+        request.set_payload(encoded);
+
         let mut params = Params::new();
         if let Some(ref x) = input.fail_on_warnings {
-            params.put("failOnWarnings", x);
+            params.put("failonwarnings", x);
         }
         if let Some(ref x) = input.parameters {
             for (key, val) in x.iter() {
                 params.put(key, val);
             }
         }
+        params.put("mode", "import");
         request.set_params(params);
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -17694,8 +17637,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn put_integration(&self,
                        input: &PutIntegrationRequest)
                        -> Result<Integration, PutIntegrationError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -17705,7 +17646,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -17742,8 +17685,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn put_integration_response(&self,
                                 input: &PutIntegrationResponseRequest)
                                 -> Result<IntegrationResponse, PutIntegrationResponseError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -17754,7 +17695,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -17789,8 +17732,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Add a method to an existing <a>Resource</a> resource.</p>"]
     fn put_method(&self, input: &PutMethodRequest) -> Result<Method, PutMethodError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -17800,7 +17741,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -17837,8 +17780,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn put_method_response(&self,
                            input: &PutMethodResponseRequest)
                            -> Result<MethodResponse, PutMethodResponseError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -17849,7 +17790,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -17884,18 +17827,18 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>A feature of the Amazon API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>"]
     fn put_rest_api(&self, input: &PutRestApiRequest) -> Result<RestApi, PutRestApiError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(input.body.to_owned());
+        request.set_payload(encoded);
+
         let mut params = Params::new();
         if let Some(ref x) = input.fail_on_warnings {
-            params.put("failOnWarnings", x);
+            params.put("failonwarnings", x);
         }
         if let Some(ref x) = input.mode {
             params.put("mode", x);
@@ -17942,8 +17885,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         (&self,
          input: &TestInvokeAuthorizerRequest)
          -> Result<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/authorizers/{authorizer_id}",
                                   authorizer_id = input.authorizer_id,
                                   restapi_id = input.rest_api_id);
@@ -17952,7 +17893,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -17989,8 +17932,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn test_invoke_method(&self,
                           input: &TestInvokeMethodRequest)
                           -> Result<TestInvokeMethodResponse, TestInvokeMethodError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -18000,7 +17941,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18035,15 +17978,15 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Changes information about the current <a>Account</a> resource.</p>"]
     fn update_account(&self, input: &UpdateAccountRequest) -> Result<Account, UpdateAccountError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/account";
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18078,15 +18021,15 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Changes information about an <a>ApiKey</a> resource.</p>"]
     fn update_api_key(&self, input: &UpdateApiKeyRequest) -> Result<ApiKey, UpdateApiKeyError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18123,8 +18066,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_authorizer(&self,
                          input: &UpdateAuthorizerRequest)
                          -> Result<Authorizer, UpdateAuthorizerError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/authorizers/{authorizer_id}",
                                   authorizer_id = input.authorizer_id,
                                   restapi_id = input.rest_api_id);
@@ -18133,7 +18074,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18170,8 +18113,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_base_path_mapping(&self,
                                 input: &UpdateBasePathMappingRequest)
                                 -> Result<BasePathMapping, UpdateBasePathMappingError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/domainnames/{domain_name}/basepathmappings/{base_path}",
                                   base_path = input.base_path,
                                   domain_name = input.domain_name);
@@ -18180,7 +18121,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18217,8 +18160,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_client_certificate(&self,
                                  input: &UpdateClientCertificateRequest)
                                  -> Result<ClientCertificate, UpdateClientCertificateError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/clientcertificates/{clientcertificate_id}",
                                   clientcertificate_id = input.client_certificate_id);
 
@@ -18226,7 +18167,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18264,8 +18207,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_deployment(&self,
                          input: &UpdateDeploymentRequest)
                          -> Result<Deployment, UpdateDeploymentError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/deployments/{deployment_id}",
                                   deployment_id = input.deployment_id,
                                   restapi_id = input.rest_api_id);
@@ -18274,7 +18215,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18311,8 +18254,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_documentation_part(&self,
                                  input: &UpdateDocumentationPartRequest)
                                  -> Result<DocumentationPart, UpdateDocumentationPartError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/parts/{part_id}",
                                   part_id = input.documentation_part_id,
                                   restapi_id = input.rest_api_id);
@@ -18321,7 +18262,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18360,8 +18303,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         (&self,
          input: &UpdateDocumentationVersionRequest)
          -> Result<DocumentationVersion, UpdateDocumentationVersionError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/documentation/versions/{doc_version}",
                                   doc_version = input.documentation_version,
                                   restapi_id = input.rest_api_id);
@@ -18370,7 +18311,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18408,8 +18351,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_domain_name(&self,
                           input: &UpdateDomainNameRequest)
                           -> Result<DomainName, UpdateDomainNameError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/domainnames/{domain_name}",
                                   domain_name = input.domain_name);
 
@@ -18417,7 +18358,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18454,8 +18397,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_integration(&self,
                           input: &UpdateIntegrationRequest)
                           -> Result<Integration, UpdateIntegrationError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -18465,7 +18406,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18503,8 +18446,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         (&self,
          input: &UpdateIntegrationResponseRequest)
          -> Result<IntegrationResponse, UpdateIntegrationResponseError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -18515,7 +18456,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18551,8 +18494,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Updates an existing <a>Method</a> resource.</p>"]
     fn update_method(&self, input: &UpdateMethodRequest) -> Result<Method, UpdateMethodError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -18562,7 +18503,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18599,8 +18542,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_method_response(&self,
                               input: &UpdateMethodResponseRequest)
                               -> Result<MethodResponse, UpdateMethodResponseError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}",
                                   http_method = input.http_method,
                                   resource_id = input.resource_id,
@@ -18611,7 +18552,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18646,8 +18589,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Changes information about a model.</p>"]
     fn update_model(&self, input: &UpdateModelRequest) -> Result<Model, UpdateModelError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/models/{model_name}",
                                   model_name = input.model_name,
                                   restapi_id = input.rest_api_id);
@@ -18656,7 +18597,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18693,8 +18636,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_request_validator(&self,
                                 input: &UpdateRequestValidatorRequest)
                                 -> Result<RequestValidator, UpdateRequestValidatorError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
                                   requestvalidator_id = input.request_validator_id,
                                   restapi_id = input.rest_api_id);
@@ -18703,7 +18644,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18740,8 +18683,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_resource(&self,
                        input: &UpdateResourceRequest)
                        -> Result<Resource, UpdateResourceError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}",
                                   resource_id = input.resource_id,
                                   restapi_id = input.rest_api_id);
@@ -18750,7 +18691,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18785,15 +18728,15 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Changes information about the specified API.</p>"]
     fn update_rest_api(&self, input: &UpdateRestApiRequest) -> Result<RestApi, UpdateRestApiError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18828,8 +18771,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Changes information about a <a>Stage</a> resource.</p>"]
     fn update_stage(&self, input: &UpdateStageRequest) -> Result<Stage, UpdateStageError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/restapis/{restapi_id}/stages/{stage_name}",
                                   restapi_id = input.rest_api_id,
                                   stage_name = input.stage_name);
@@ -18838,7 +18779,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18873,8 +18816,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
     #[doc="<p>Grants a temporary extension to the reamining quota of a usage plan associated with a specified API key.</p>"]
     fn update_usage(&self, input: &UpdateUsageRequest) -> Result<Usage, UpdateUsageError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/usageplans/{usageplan_id}/keys/{key_id}/usage",
                                   key_id = input.key_id,
                                   usageplan_id = input.usage_plan_id);
@@ -18883,7 +18824,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -18920,8 +18863,6 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     fn update_usage_plan(&self,
                          input: &UpdateUsagePlanRequest)
                          -> Result<UsagePlan, UpdateUsagePlanError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = format!("/usageplans/{usageplan_id}",
                                   usageplan_id = input.usage_plan_id);
 
@@ -18929,7 +18870,9 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);

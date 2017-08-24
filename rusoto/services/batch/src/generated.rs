@@ -2391,15 +2391,15 @@ impl<P, D> Batch for BatchClient<P, D>
 {
     #[doc="<p>Cancels jobs in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no jobs are cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>"]
     fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/canceljob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2437,15 +2437,15 @@ impl<P, D> Batch for BatchClient<P, D>
         (&self,
          input: &CreateComputeEnvironmentRequest)
          -> Result<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/createcomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2484,15 +2484,15 @@ impl<P, D> Batch for BatchClient<P, D>
     fn create_job_queue(&self,
                         input: &CreateJobQueueRequest)
                         -> Result<CreateJobQueueResponse, CreateJobQueueError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/createjobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2530,15 +2530,15 @@ impl<P, D> Batch for BatchClient<P, D>
         (&self,
          input: &DeleteComputeEnvironmentRequest)
          -> Result<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/deletecomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2577,15 +2577,15 @@ impl<P, D> Batch for BatchClient<P, D>
     fn delete_job_queue(&self,
                         input: &DeleteJobQueueRequest)
                         -> Result<DeleteJobQueueResponse, DeleteJobQueueError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/deletejobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2623,15 +2623,15 @@ impl<P, D> Batch for BatchClient<P, D>
         (&self,
          input: &DeregisterJobDefinitionRequest)
          -> Result<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/deregisterjobdefinition";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2671,15 +2671,15 @@ impl<P, D> Batch for BatchClient<P, D>
         (&self,
          input: &DescribeComputeEnvironmentsRequest)
          -> Result<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/describecomputeenvironments";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2719,15 +2719,15 @@ impl<P, D> Batch for BatchClient<P, D>
         (&self,
          input: &DescribeJobDefinitionsRequest)
          -> Result<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/describejobdefinitions";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2765,15 +2765,15 @@ impl<P, D> Batch for BatchClient<P, D>
     fn describe_job_queues(&self,
                            input: &DescribeJobQueuesRequest)
                            -> Result<DescribeJobQueuesResponse, DescribeJobQueuesError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/describejobqueues";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2810,15 +2810,15 @@ impl<P, D> Batch for BatchClient<P, D>
     fn describe_jobs(&self,
                      input: &DescribeJobsRequest)
                      -> Result<DescribeJobsResponse, DescribeJobsError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/describejobs";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2853,15 +2853,15 @@ impl<P, D> Batch for BatchClient<P, D>
 
     #[doc="<p>Returns a list of task jobs for a specified job queue. You can filter the results by job status with the <code>jobStatus</code> parameter.</p>"]
     fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResponse, ListJobsError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/listjobs";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2899,15 +2899,15 @@ impl<P, D> Batch for BatchClient<P, D>
         (&self,
          input: &RegisterJobDefinitionRequest)
          -> Result<RegisterJobDefinitionResponse, RegisterJobDefinitionError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/registerjobdefinition";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2943,15 +2943,15 @@ impl<P, D> Batch for BatchClient<P, D>
 
     #[doc="<p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>"]
     fn submit_job(&self, input: &SubmitJobRequest) -> Result<SubmitJobResponse, SubmitJobError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/submitjob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -2988,15 +2988,15 @@ impl<P, D> Batch for BatchClient<P, D>
     fn terminate_job(&self,
                      input: &TerminateJobRequest)
                      -> Result<TerminateJobResponse, TerminateJobError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/terminatejob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -3034,15 +3034,15 @@ impl<P, D> Batch for BatchClient<P, D>
         (&self,
          input: &UpdateComputeEnvironmentRequest)
          -> Result<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/updatecomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);
@@ -3081,15 +3081,15 @@ impl<P, D> Batch for BatchClient<P, D>
     fn update_job_queue(&self,
                         input: &UpdateJobQueueRequest)
                         -> Result<UpdateJobQueueResponse, UpdateJobQueueError> {
-        let encoded = serde_json::to_string(input).unwrap();
-
         let request_uri = "/v1/updatejobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
-        request.set_payload(Some(encoded.into_bytes()));
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
 
 
         request.sign(&self.credentials_provider.credentials()?);

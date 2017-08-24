@@ -2,7 +2,7 @@ extern crate rusoto_mock;
 
 use ::{Lambda, LambdaClient, InvocationRequest};
 
-use rusoto_core::Region;
+use rusoto_core::{Region, SignedRequest};
 use self::rusoto_mock::*;
 
 /// Ensures that rest-json codegen handles the response body,
@@ -12,10 +12,18 @@ fn should_parse_invocation_response() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body(r#"{"arbitrary":"json"}"#)
         .with_header("X-Amz-Function-Error", "Handled")
-        .with_header("X-Amz-Log-Result", "foo bar baz");
+        .with_header("X-Amz-Log-Result", "foo bar baz")
+        .with_request_checker(|request: &SignedRequest| {
+            assert_eq!("POST", request.method);
+            assert_eq!(Some("raw payload".to_owned().into_bytes()), request.payload);
+            assert_eq!("/2015-03-31/functions/foo/invocations", request.path);
+
+        });
 
     let request = InvocationRequest {
         function_name: "foo".to_owned(),
+        client_context: Some("context".to_owned()),
+        payload: Some("raw payload".to_owned().into_bytes()),
         ..Default::default()
     };
 
