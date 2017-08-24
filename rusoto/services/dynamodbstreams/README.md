@@ -23,7 +23,7 @@ To use `rusoto_dynamodbstreams` in your application, add it as a dependency in y
 
 ```toml
 [dependencies]
-rusoto_dynamodbstreams = "0.27.0"
+rusoto_dynamodbstreams = "0.28.0"
 ```
 
 ## Contributing
