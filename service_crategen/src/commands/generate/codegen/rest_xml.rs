@@ -107,7 +107,7 @@ impl GenerateProtocol for RestXmlGenerator {
         if service.service_type_name() == "S3" {
             imports += "
                 use md5;
-                use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};";
+                use base64;";
         }
 
         writeln!(writer, "{}", imports)
@@ -201,13 +201,8 @@ fn generate_service_specific_code(service: &Service, operation: &Operation) -> O
                 "DeleteObjects" |
                 "PutBucketReplication" => {
                     Some("let digest = md5::compute(&payload);
-                          request.add_header(\"Content-MD5\", &digest.to_base64(Config {
-                                                                                    char_set: CharacterSet::Standard,
-                                                                                    newline: Newline::LF,
-                                                                                    pad: true,
-                                                                                    line_length: None
-                                                                                })
-                          );"
+                          // need to deref digest and then pass that reference:
+                          request.add_header(\"Content-MD5\", &base64::encode(&(*digest)));"
                         .to_owned())
                 }
                 _ => None,

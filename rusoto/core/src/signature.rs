@@ -12,10 +12,10 @@ use std::collections::btree_map::Entry;
 use std::str;
 
 use ring::{digest, hmac};
-use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{utf8_percent_encode, EncodeSet};
+use hex::ToHex;
 
 use param::Params;
 use region::Region;

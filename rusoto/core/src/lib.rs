@@ -46,7 +46,8 @@ extern crate lazy_static;
 #[macro_use]
 extern crate log;
 extern crate ring;
-extern crate rustc_serialize;
+extern crate hex;
+extern crate base64;
 pub extern crate rusoto_credential as credential;
 extern crate serde;
 #[macro_use]
