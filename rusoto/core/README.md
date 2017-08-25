@@ -42,7 +42,7 @@ To use Rusoto in your Rust program built with Cargo, add it as a dependency in y
 
 ``` toml
 [dependencies]
-rusoto_core = "0.24.0"
+rusoto_core = "0.28.0"
 ```
 
 ## Usage
