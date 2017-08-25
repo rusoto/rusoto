@@ -173,7 +173,7 @@ fn test_create_bucket(client: &TestClient, bucket: &str) {
 fn test_delete_bucket(client: &TestClient, bucket: &str) {
     let delete_bucket_req = DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
-    let result = client.delete_bucket(&delete_bucket_req).expect("Couldn't create bucket");
+    let result = client.delete_bucket(&delete_bucket_req).expect("Couldn't delete bucket");
     println!("{:#?}", result);
 }
 
@@ -300,7 +300,7 @@ fn list_items_in_bucket(client: &TestClient, bucket: &str) {
         start_after: Some("foo".to_owned()),
         ..Default::default()
     };
-    let result = client.list_objects_v2(&list_obj_req).expect("Couldn't list items in bucket");
+    let result = client.list_objects_v2(&list_obj_req).expect("Couldn't list items in bucket (v2)");
     println!("Items in bucket: {:#?}", result);
 }
 
