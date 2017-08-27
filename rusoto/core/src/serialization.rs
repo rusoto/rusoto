@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::fmt::{Formatter, Result as FmtResult};
 
-use rustc_serialize::base64::{FromBase64, STANDARD, ToBase64};
+use base64;
 use serde::{Deserializer, Serializer};
 use serde::de::{Error as SerdeError, Visitor};
 
@@ -22,7 +22,7 @@ impl<'de> Visitor<'de> for BlobVisitor {
 
     fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
         where E: SerdeError {
-        v.from_base64().map_err(|err| SerdeError::custom(err.description()))
+        base64::decode(v).map_err(|err| SerdeError::custom(err.description()))
     }
 }
 
@@ -34,7 +34,7 @@ impl<'de> SerdeBlob<'de> for Vec<u8> {
 
     fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
         where S: Serializer {
-        serializer.serialize_str(&self.as_slice().to_base64(STANDARD))
+        serializer.serialize_str(&base64::encode(&self.as_slice()))
     }
 }
 

@@ -114,7 +114,7 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
     };
 
     // start the multipart upload and note the upload_id generated
-    let response = client.create_multipart_upload(&create_multipart_req).unwrap();
+    let response = client.create_multipart_upload(&create_multipart_req).expect("Couldn't create multipart upload");
     println!("{:#?}", response);
     let upload_id = response.upload_id.unwrap();
 
@@ -137,7 +137,7 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
     // upload 2 parts and note the etags generated for them
     let mut completed_parts = Vec::new();
     for req in [part_req1, part_req2].into_iter() {
-        let response = client.upload_part(&req).unwrap();
+        let response = client.upload_part(&req).expect("Couldn't upload a file part");
         println!("{:#?}", response);
         completed_parts.push(CompletedPart {
             e_tag: response.e_tag.clone(),
@@ -156,7 +156,7 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let response = client.complete_multipart_upload(&complete_req).unwrap();
+    let response = client.complete_multipart_upload(&complete_req).expect("Couldn't complete multipart upload");
     println!("{:#?}", response);
 
     // delete the completed file
@@ -166,14 +166,14 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
 fn test_create_bucket(client: &TestClient, bucket: &str) {
     let create_bucket_req = CreateBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
-    let result = client.create_bucket(&create_bucket_req).unwrap();
+    let result = client.create_bucket(&create_bucket_req).expect("Couldn't create bucket");
     println!("{:#?}", result);
 }
 
 fn test_delete_bucket(client: &TestClient, bucket: &str) {
     let delete_bucket_req = DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
-    let result = client.delete_bucket(&delete_bucket_req).unwrap();
+    let result = client.delete_bucket(&delete_bucket_req).expect("Couldn't delete bucket");
     println!("{:#?}", result);
 }
 
@@ -205,7 +205,7 @@ fn test_head_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.head_object(&head_req).unwrap();
+    let result = client.head_object(&head_req).expect("Couldn't HEAD object");
     println!("{:#?}", result);
 }
 
@@ -216,7 +216,7 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.get_object(&get_req).unwrap();
+    let result = client.get_object(&get_req).expect("Couldn't GET object");
     println!("get object result: {:#?}", result);
 
     let mut body: Vec<u8> = Vec::new();
@@ -243,7 +243,7 @@ fn test_get_object_range(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.get_object(&get_req).unwrap();
+    let result = client.get_object(&get_req).expect("Couldn't GET object (range)");
     println!("\nget object range result: {:#?}", result);
     assert_eq!(result.content_length.unwrap(), 2);
 }
@@ -259,7 +259,7 @@ fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.copy_object(&req).unwrap();
+    let result = client.copy_object(&req).expect("Couldn't copy object");
     println!("{:#?}", result);
 }
 
@@ -274,7 +274,7 @@ fn test_copy_object_utf8(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.copy_object(&req).unwrap();
+    let result = client.copy_object(&req).expect("Couldn't copy object (utf8)");
     println!("{:#?}", result);
 }
 
@@ -285,12 +285,12 @@ fn test_delete_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.delete_object(&del_req).unwrap();
+    let result = client.delete_object(&del_req).expect("Couldn't delete object");
     println!("{:#?}", result);
 }
 
 fn test_list_buckets(client: &TestClient) {
-    let result = client.list_buckets().unwrap();
+    let result = client.list_buckets().expect("Couldn't list buckets");
     println!("\nbuckets available: {:#?}", result);
 }
 
@@ -300,7 +300,7 @@ fn list_items_in_bucket(client: &TestClient, bucket: &str) {
         start_after: Some("foo".to_owned()),
         ..Default::default()
     };
-    let result = client.list_objects_v2(&list_obj_req).unwrap();
+    let result = client.list_objects_v2(&list_obj_req).expect("Couldn't list items in bucket (v2)");
     println!("Items in bucket: {:#?}", result);
 }
 
@@ -311,12 +311,12 @@ fn list_items_in_bucket_paged(client: &TestClient, bucket: &str) {
         max_keys: Some(1),
         ..Default::default()
     };
-    let result = client.list_objects_v2(&list_obj_req).unwrap();
+    let result = client.list_objects_v2(&list_obj_req).expect("list objects v2 failed");
     println!("Items in bucket, page 1: {:#?}", result);
     assert!(result.next_continuation_token.is_some());
 
     list_obj_req.continuation_token = result.next_continuation_token;
-    let result = client.list_objects_v2(&list_obj_req).unwrap();
+    let result = client.list_objects_v2(&list_obj_req).expect("list objects v2 paging failed");
     println!("Items in bucket, page 2: {:#?}", result);
     // For the second call it the token is in `continuation_token` not `next_continuation_token`
     assert!(result.continuation_token.is_some());
@@ -341,6 +341,6 @@ fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
         ..Default::default()
     };
 
-    let result = client.put_bucket_cors(&req).unwrap();
+    let result = client.put_bucket_cors(&req).expect("Couldn't apply bucket CORS");
     println!("{:#?}", result);
 }

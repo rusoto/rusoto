@@ -40,7 +40,7 @@ enum DeserializerNext {
     Element(String),
 }
 use md5;
-use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};
+use base64;
 #[doc="Specifies the days since the initiation of an Incomplete Multipart Upload that Lifecycle will wait before permanently removing all parts of the upload."]
 #[derive(Default,Debug)]
 pub struct AbortIncompleteMultipartUpload {
@@ -18461,13 +18461,8 @@ impl<P, D> S3 for S3Client<P, D>
         let mut payload: Vec<u8>;
         payload = DeleteSerializer::serialize("Delete", &input.delete).into_bytes();
         let digest = md5::compute(&payload);
-        request.add_header("Content-MD5",
-                           &digest.to_base64(Config {
-                                                char_set: CharacterSet::Standard,
-                                                newline: Newline::LF,
-                                                pad: true,
-                                                line_length: None,
-                                            }));
+        // need to deref digest and then pass that reference:
+        request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
@@ -20791,13 +20786,8 @@ impl<P, D> S3 for S3Client<P, D>
                                                          &input.cors_configuration)
                 .into_bytes();
         let digest = md5::compute(&payload);
-        request.add_header("Content-MD5",
-                           &digest.to_base64(Config {
-                                                char_set: CharacterSet::Standard,
-                                                newline: Newline::LF,
-                                                pad: true,
-                                                line_length: None,
-                                            }));
+        // need to deref digest and then pass that reference:
+        request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
@@ -20890,13 +20880,8 @@ impl<P, D> S3 for S3Client<P, D>
             payload = Vec::new();
         }
         let digest = md5::compute(&payload);
-        request.add_header("Content-MD5",
-                           &digest.to_base64(Config {
-                                                char_set: CharacterSet::Standard,
-                                                newline: Newline::LF,
-                                                pad: true,
-                                                line_length: None,
-                                            }));
+        // need to deref digest and then pass that reference:
+        request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
@@ -20945,13 +20930,8 @@ impl<P, D> S3 for S3Client<P, D>
             payload = Vec::new();
         }
         let digest = md5::compute(&payload);
-        request.add_header("Content-MD5",
-                           &digest.to_base64(Config {
-                                                char_set: CharacterSet::Standard,
-                                                newline: Newline::LF,
-                                                pad: true,
-                                                line_length: None,
-                                            }));
+        // need to deref digest and then pass that reference:
+        request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
@@ -21206,13 +21186,8 @@ impl<P, D> S3 for S3Client<P, D>
                                                           &input.replication_configuration)
                     .into_bytes();
         let digest = md5::compute(&payload);
-        request.add_header("Content-MD5",
-                           &digest.to_base64(Config {
-                                                char_set: CharacterSet::Standard,
-                                                newline: Newline::LF,
-                                                pad: true,
-                                                line_length: None,
-                                            }));
+        // need to deref digest and then pass that reference:
+        request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
@@ -21296,13 +21271,8 @@ impl<P, D> S3 for S3Client<P, D>
         let mut payload: Vec<u8>;
         payload = TaggingSerializer::serialize("Tagging", &input.tagging).into_bytes();
         let digest = md5::compute(&payload);
-        request.add_header("Content-MD5",
-                           &digest.to_base64(Config {
-                                                char_set: CharacterSet::Standard,
-                                                newline: Newline::LF,
-                                                pad: true,
-                                                line_length: None,
-                                            }));
+        // need to deref digest and then pass that reference:
+        request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
