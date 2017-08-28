@@ -39,6 +39,9 @@ pub struct AttemptContainerDetail {
     #[serde(rename="exitCode")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub exit_code: Option<i64>,
+    #[serde(rename="logStreamName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub log_stream_name: Option<String>,
     #[doc="<p>A short (255 max characters) human-readable string to provide additional details about a running or stopped container.</p>"]
     #[serde(rename="reason")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -226,6 +229,9 @@ pub struct ContainerDetail {
     #[serde(rename="jobRoleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub job_role_arn: Option<String>,
+    #[serde(rename="logStreamName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub log_stream_name: Option<String>,
     #[doc="<p>The number of MiB of memory reserved for the job.</p>"]
     #[serde(rename="memory")]
     #[serde(skip_serializing_if="Option::is_none")]

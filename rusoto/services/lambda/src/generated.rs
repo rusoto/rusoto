@@ -418,6 +418,10 @@ pub struct FunctionConfiguration {
     #[serde(rename="LastModified")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<String>,
+    #[doc="<p>Returns the ARN (Amazon Resource Name) of the master function.</p>"]
+    #[serde(rename="MasterArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub master_arn: Option<String>,
     #[doc="<p>The memory size, in MB, you configured for the function. Must be a multiple of 64 MB.</p>"]
     #[serde(rename="MemorySize")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -677,10 +681,18 @@ pub struct ListEventSourceMappingsResponse {
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListFunctionsRequest {
+    #[doc="<p>Optional string. If not specified, only the unqualified functions ARNs (Amazon Resource Names) will be returned.</p> <p>Valid value:</p> <p> <code>ALL</code> _ Will return all versions, including <code>$LATEST</code> which will have fully qualified ARNs (Amazon Resource Names).</p>"]
+    #[serde(rename="FunctionVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub function_version: Option<String>,
     #[doc="<p>Optional string. An opaque pagination token returned from a previous <code>ListFunctions</code> operation. If present, indicates where to continue the listing. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
+    #[doc="<p>Optional string. If not specified, will return only regular function versions (i.e., non-replicated versions).</p> <p>Valid values are:</p> <p>The region from which the functions are replicated. For example, if you specify <code>us-east-1</code>, only functions replicated from that region will be returned.</p> <p> <code>ALL</code> _ Will return all functions from any region. If specified, you also must specify a valid FunctionVersion parameter.</p>"]
+    #[serde(rename="MasterRegion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub master_region: Option<String>,
     #[doc="<p>Optional integer. Specifies the maximum number of AWS Lambda functions to return in response. This parameter value must be greater than 0.</p>"]
     #[serde(rename="MaxItems")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -921,7 +933,7 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename="Role")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub role: Option<String>,
-    #[doc="<p>The runtime environment for the Lambda function.</p> <p>To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\". To use the Node.js runtime v6.10, set the value to \"nodejs6.10\". To use the Node.js runtime v4.3, set the value to \"nodejs4.3\". To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\".</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can request a one-time extension until June 30, 2017 by going to the Lambda console and following the instructions provided. Failure to do so will result in an invalid parameter value error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note>"]
+    #[doc="<p>The runtime environment for the Lambda function.</p> <p>To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\". To use the Node.js runtime v6.10, set the value to \"nodejs6.10\". To use the Node.js runtime v4.3, set the value to \"nodejs4.3\". To use the Python runtime v3.6, set the value to \"python3.6\".</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can request a one-time extension until June 30, 2017 by going to the Lambda console and following the instructions provided. Failure to do so will result in an invalid parameter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note>"]
     #[serde(rename="Runtime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub runtime: Option<String>,
@@ -2710,6 +2722,8 @@ impl Error for ListEventSourceMappingsError {
 /// Errors returned by ListFunctions
 #[derive(Debug, PartialEq)]
 pub enum ListFunctionsError {
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    InvalidParameterValue(String),
     ///<p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
     ///<p/>
@@ -2738,6 +2752,9 @@ impl ListFunctionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "InvalidParameterValueException" => {
+                        ListFunctionsError::InvalidParameterValue(String::from(error_message))
+                    }
                     "ServiceException" => ListFunctionsError::Service(String::from(error_message)),
                     "TooManyRequestsException" => {
                         ListFunctionsError::TooManyRequests(String::from(error_message))
@@ -2781,6 +2798,7 @@ impl fmt::Display for ListFunctionsError {
 impl Error for ListFunctionsError {
     fn description(&self) -> &str {
         match *self {
+            ListFunctionsError::InvalidParameterValue(ref cause) => cause,
             ListFunctionsError::Service(ref cause) => cause,
             ListFunctionsError::TooManyRequests(ref cause) => cause,
             ListFunctionsError::Validation(ref cause) => cause,
@@ -3865,7 +3883,7 @@ pub trait Lambda {
          -> Result<ListEventSourceMappingsResponse, ListEventSourceMappingsError>;
 
 
-    #[doc="<p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using versioning feature, the response returns list of $LATEST versions of your functions. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
+    #[doc="<p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using the versioning feature, you can list all of your functions or only <code>$LATEST</code> versions. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
     fn list_functions(&self,
                       input: &ListFunctionsRequest)
                       -> Result<ListFunctionsResponse, ListFunctionsError>;
@@ -4767,7 +4785,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
     }
 
 
-    #[doc="<p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using versioning feature, the response returns list of $LATEST versions of your functions. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
+    #[doc="<p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using the versioning feature, you can list all of your functions or only <code>$LATEST</code> versions. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
     fn list_functions(&self,
                       input: &ListFunctionsRequest)
                       -> Result<ListFunctionsResponse, ListFunctionsError> {
@@ -4780,8 +4798,14 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
+        if let Some(ref x) = input.function_version {
+            params.put("FunctionVersion", x);
+        }
         if let Some(ref x) = input.marker {
             params.put("Marker", x);
+        }
+        if let Some(ref x) = input.master_region {
+            params.put("MasterRegion", x);
         }
         if let Some(ref x) = input.max_items {
             params.put("MaxItems", x);

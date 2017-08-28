@@ -860,6 +860,38 @@ pub struct GetComplianceSummaryByResourceTypeResponse {
     pub compliance_summaries_by_resource_type: Option<Vec<ComplianceSummaryByResourceType>>,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetDiscoveredResourceCountsRequest {
+    #[doc="<p>The maximum number of <a>ResourceCount</a> objects returned on each page. The default is 100. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>"]
+    #[serde(rename="limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub limit: Option<i64>,
+    #[doc="<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
+    #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+    #[doc="<p>The comma-separated list that specifies the resource types that you want the AWS Config to return. For example, (<code>\"AWS::EC2::Instance\"</code>, <code>\"AWS::IAM::User\"</code>).</p> <p>If a value for <code>resourceTypes</code> is not specified, AWS Config returns all resource types that AWS Config is recording in the region for your account.</p> <note> <p>If the configuration recorder is turned off, AWS Config returns an empty list of <a>ResourceCount</a> objects. If the configuration recorder is not recording a specific resource type (for example, S3 buckets), that resource type is not returned in the list of <a>ResourceCount</a> objects.</p> </note>"]
+    #[serde(rename="resourceTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_types: Option<Vec<String>>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GetDiscoveredResourceCountsResponse {
+    #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
+    #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+    #[doc="<p>The list of <code>ResourceCount</code> objects. Each object is listed in descending order by the number of resources.</p>"]
+    #[serde(rename="resourceCounts")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_counts: Option<Vec<ResourceCount>>,
+    #[doc="<p>The total number of resources that AWS Config is recording in the region for your account. If you specify resource types in the request, AWS Config returns only the total number of resources for those resource types.</p> <p class=\"title\"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets, for a total of 60 resources.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify the resource type, <code>\"AWS::EC2::Instances\"</code> in the request.</p> </li> <li> <p>AWS Config returns 25 for <code>totalDiscoveredResources</code>.</p> </li> </ol>"]
+    #[serde(rename="totalDiscoveredResources")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub total_discovered_resources: Option<i64>,
+}
+
 #[doc="<p>The input for the <a>GetResourceConfigHistory</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetResourceConfigHistoryRequest {
@@ -1031,6 +1063,19 @@ pub struct Relationship {
     pub resource_type: Option<String>,
 }
 
+#[doc="<p>An object that contains the resource type and the number of resources.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ResourceCount {
+    #[doc="<p>The number of resources.</p>"]
+    #[serde(rename="count")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub count: Option<i64>,
+    #[doc="<p>The resource type, for example <code>\"AWS::EC2::Instance\"</code>.</p>"]
+    #[serde(rename="resourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
 #[doc="<p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ResourceIdentifier {
@@ -1083,7 +1128,7 @@ pub struct Source {
     #[serde(rename="SourceDetails")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub source_details: Option<Vec<SourceDetail>>,
-    #[doc="<p>For AWS Config managed rules, a predefined identifier from a list. For example, <code>IAM_PASSWORD_POLICY</code> is a managed rule. To reference a managed rule, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">Using AWS Managed Config Rules</a>.</p> <p>For custom rules, the identifier is the Amazon Resource Name (ARN) of the rule's AWS Lambda function, such as <code>arn:aws:lambda:us-east-1:123456789012:function:custom_rule_name</code>.</p>"]
+    #[doc="<p>For AWS Config managed rules, a predefined identifier from a list. For example, <code>IAM_PASSWORD_POLICY</code> is a managed rule. To reference a managed rule, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">Using AWS Managed Config Rules</a>.</p> <p>For custom rules, the identifier is the Amazon Resource Name (ARN) of the rule's AWS Lambda function, such as <code>arn:aws:lambda:us-east-2:123456789012:function:custom_rule_name</code>.</p>"]
     #[serde(rename="SourceIdentifier")]
     pub source_identifier: String,
 }
@@ -2540,6 +2585,91 @@ impl Error for GetComplianceSummaryByResourceTypeError {
         }
     }
 }
+/// Errors returned by GetDiscoveredResourceCounts
+#[derive(Debug, PartialEq)]
+pub enum GetDiscoveredResourceCountsError {
+    ///<p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetDiscoveredResourceCountsError {
+    pub fn from_body(body: &str) -> GetDiscoveredResourceCountsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidLimitException" => {
+                        GetDiscoveredResourceCountsError::InvalidLimit(String::from(error_message))
+                    }
+                    "InvalidNextTokenException" => GetDiscoveredResourceCountsError::InvalidNextToken(String::from(error_message)),
+                    "ValidationException" => {
+                        GetDiscoveredResourceCountsError::Validation(error_message.to_string())
+                    }
+                    _ => GetDiscoveredResourceCountsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetDiscoveredResourceCountsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetDiscoveredResourceCountsError {
+    fn from(err: serde_json::error::Error) -> GetDiscoveredResourceCountsError {
+        GetDiscoveredResourceCountsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetDiscoveredResourceCountsError {
+    fn from(err: CredentialsError) -> GetDiscoveredResourceCountsError {
+        GetDiscoveredResourceCountsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetDiscoveredResourceCountsError {
+    fn from(err: HttpDispatchError) -> GetDiscoveredResourceCountsError {
+        GetDiscoveredResourceCountsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDiscoveredResourceCountsError {
+    fn from(err: io::Error) -> GetDiscoveredResourceCountsError {
+        GetDiscoveredResourceCountsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetDiscoveredResourceCountsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetDiscoveredResourceCountsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetDiscoveredResourceCountsError::InvalidLimit(ref cause) => cause,
+            GetDiscoveredResourceCountsError::InvalidNextToken(ref cause) => cause,
+            GetDiscoveredResourceCountsError::Validation(ref cause) => cause,
+            GetDiscoveredResourceCountsError::Credentials(ref err) => err.description(),
+            GetDiscoveredResourceCountsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetDiscoveredResourceCountsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetResourceConfigHistory
 #[derive(Debug, PartialEq)]
 pub enum GetResourceConfigHistoryError {
@@ -3502,14 +3632,21 @@ pub trait ConfigService {
                    GetComplianceSummaryByResourceTypeError>;
 
 
-    #[doc="<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated, and by default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string, and to get the next page of results, run the request again and enter this string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>"]
+    #[doc="<p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class=\"title\"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets)</p> </li> <li> <p>The number of each resource type (25, 20, and 15)</p> </li> <li> <p>The total number of all resources (60)</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you may not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer</p> </li> <li> <p>You just enabled resource recording</p> </li> </ul> <p>It may take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note>"]
+    fn get_discovered_resource_counts
+        (&self,
+         input: &GetDiscoveredResourceCountsRequest)
+         -> Result<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError>;
+
+
+    #[doc="<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>"]
     fn get_resource_config_history
         (&self,
          input: &GetResourceConfigHistoryRequest)
          -> Result<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError>;
 
 
-    #[doc="<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated, and by default AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string, and to get the next page of results, run the request again and enter this string for the <code>nextToken</code> parameter.</p>"]
+    #[doc="<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>"]
     fn list_discovered_resources
         (&self,
          input: &ListDiscoveredResourcesRequest)
@@ -4116,7 +4253,40 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     }
 
 
-    #[doc="<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated, and by default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string, and to get the next page of results, run the request again and enter this string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>"]
+    #[doc="<p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class=\"title\"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets)</p> </li> <li> <p>The number of each resource type (25, 20, and 15)</p> </li> <li> <p>The total number of all resources (60)</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you may not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer</p> </li> <li> <p>You just enabled resource recording</p> </li> </ul> <p>It may take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note>"]
+    fn get_discovered_resource_counts
+        (&self,
+         input: &GetDiscoveredResourceCountsRequest)
+         -> Result<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "StarlingDoveService.GetDiscoveredResourceCounts");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDiscoveredResourceCountsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDiscoveredResourceCountsError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>"]
     fn get_resource_config_history
         (&self,
          input: &GetResourceConfigHistoryRequest)
@@ -4149,7 +4319,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     }
 
 
-    #[doc="<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated, and by default AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string, and to get the next page of results, run the request again and enter this string for the <code>nextToken</code> parameter.</p>"]
+    #[doc="<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>"]
     fn list_discovered_resources
         (&self,
          input: &ListDiscoveredResourcesRequest)

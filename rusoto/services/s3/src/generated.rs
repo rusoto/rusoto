@@ -2144,6 +2144,8 @@ pub struct CreateMultipartUploadRequest {
     pub server_side_encryption: Option<String>,
     #[doc="The type of storage to use for the object. Defaults to 'STANDARD'."]
     pub storage_class: Option<String>,
+    #[doc="The tag-set for the object. The tag-set must be encoded as URL Query parameters"]
+    pub tagging: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
     pub website_redirect_location: Option<String>,
 }
@@ -17874,6 +17876,10 @@ impl<P, D> S3 for S3Client<P, D>
 
         if let Some(ref storage_class) = input.storage_class {
             request.add_header("x-amz-storage-class", &storage_class.to_string());
+        }
+
+        if let Some(ref tagging) = input.tagging {
+            request.add_header("x-amz-tagging", &tagging.to_string());
         }
 
         if let Some(ref website_redirect_location) = input.website_redirect_location {

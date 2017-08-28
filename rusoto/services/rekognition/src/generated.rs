@@ -577,11 +577,11 @@ pub struct Landmark {
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>x-coordinate from the top left of the landmark expressed as the ration of the width of the image. For example, if the images is 700x200 and the x-coordinate of the landmark is at 350 pixels, this value is 0.5. </p>"]
+    #[doc="<p>x-coordinate from the top left of the landmark expressed as the ratio of the width of the image. For example, if the images is 700x200 and the x-coordinate of the landmark is at 350 pixels, this value is 0.5. </p>"]
     #[serde(rename="X")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub x: Option<f32>,
-    #[doc="<p>y-coordinate from the top left of the landmark expressed as the ration of the height of the image. For example, if the images is 700x200 and the y-coordinate of the landmark is at 100 pixels, this value is 0.5.</p>"]
+    #[doc="<p>y-coordinate from the top left of the landmark expressed as the ratio of the height of the image. For example, if the images is 700x200 and the y-coordinate of the landmark is at 100 pixels, this value is 0.5.</p>"]
     #[serde(rename="Y")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub y: Option<f32>,

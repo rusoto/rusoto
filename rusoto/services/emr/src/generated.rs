@@ -109,7 +109,7 @@ pub struct AddTagsInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AddTagsOutput;
 
-#[doc="<p>An application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/emr-mapr.html\">Using the MapR Distribution for Hadoop</a>. Currently supported values are:</p> <ul> <li> <p>\"mapr-m3\" - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>\"mapr-m5\" - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>\"mapr\" with the user arguments specifying \"--edition,m3\" or \"--edition,m5\" - launch the cluster using MapR M3 or M5 Edition, respectively.</p> </li> </ul> <note> <p>In Amazon EMR releases 4.0 and greater, the only accepted parameter is the application name. To pass arguments to applications, you supply a configuration for each application.</p> </note>"]
+#[doc="<p>An application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/emr-mapr.html\">Using the MapR Distribution for Hadoop</a>. Currently supported values are:</p> <ul> <li> <p>\"mapr-m3\" - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>\"mapr-m5\" - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>\"mapr\" with the user arguments specifying \"--edition,m3\" or \"--edition,m5\" - launch the cluster using MapR M3 or M5 Edition, respectively.</p> </li> </ul> <note> <p>In Amazon EMR releases 4.x and later, the only accepted parameter is the application name. To pass arguments to applications, you supply a configuration for each application.</p> </note>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Application {
     #[doc="<p>This option is for advanced users only. This is meta information about third-party applications that third-party vendors use for testing purposes.</p>"]
@@ -295,10 +295,18 @@ pub struct Cluster {
     #[serde(rename="AutoTerminate")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub auto_terminate: Option<bool>,
-    #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The list of Configurations supplied to the EMR cluster.</p>"]
+    #[doc="<p>Applies only to Amazon EMR releases 4.x and later. The list of Configurations supplied to the EMR cluster.</p>"]
     #[serde(rename="Configurations")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub configurations: Option<Vec<Configuration>>,
+    #[doc="<p>Available only in Amazon EMR version 5.7.0 and later. The ID of a custom Amazon EBS-backed Linux AMI if the cluster uses a custom AMI.</p>"]
+    #[serde(rename="CustomAmiId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub custom_ami_id: Option<String>,
+    #[doc="<p>The size, in GiB, of the EBS root device volume of the Linux AMI that is used for each EC2 instance. Available in Amazon EMR version 4.x and later.</p>"]
+    #[serde(rename="EbsRootVolumeSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub ebs_root_volume_size: Option<i64>,
     #[doc="<p>Provides information about the EC2 instances in a cluster grouped by category. For example, key name, subnet ID, IAM instance profile, and so on.</p>"]
     #[serde(rename="Ec2InstanceAttributes")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -327,10 +335,14 @@ pub struct Cluster {
     #[serde(rename="NormalizedInstanceHours")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub normalized_instance_hours: Option<i64>,
-    #[doc="<p>The release label for the Amazon EMR release. For Amazon EMR 3.x and 2.x AMIs, use amiVersion instead instead of ReleaseLabel.</p>"]
+    #[doc="<p>The release label for the Amazon EMR release.</p>"]
     #[serde(rename="ReleaseLabel")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub release_label: Option<String>,
+    #[doc="<p>Applies only when <code>CustomAmiID</code> is used. Specifies the type of updates that are applied from the Amazon Linux AMI package repositories when an instance boots using the AMI.</p>"]
+    #[serde(rename="RepoUpgradeOnBoot")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub repo_upgrade_on_boot: Option<String>,
     #[doc="<p>The AMI version requested for this cluster.</p>"]
     #[serde(rename="RequestedAmiVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -677,11 +689,11 @@ pub struct Ec2InstanceAttributes {
     #[serde(rename="IamInstanceProfile")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<String>,
-    #[doc="<p>Applies to clusters configured with the The list of availability zones to choose from. The service will choose the availability zone with the best mix of available capacity and lowest cost to launch the cluster. If you do not specify this value, the cluster is launched in any availability zone that the customer account has access to.</p>"]
+    #[doc="<p>Applies to clusters configured with the instance fleets option. Specifies one or more Availability Zones in which to launch EC2 cluster instances when the EC2-Classic network configuration is supported. Amazon EMR chooses the Availability Zone with the best fit from among the list of <code>RequestedEc2AvailabilityZones</code>, and then launches all cluster instances within that Availability Zone. If you do not specify this value, Amazon EMR chooses the Availability Zone for you. <code>RequestedEc2SubnetIDs</code> and <code>RequestedEc2AvailabilityZones</code> cannot be specified together.</p>"]
     #[serde(rename="RequestedEc2AvailabilityZones")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub requested_ec_2_availability_zones: Option<Vec<String>>,
-    #[doc="<p>Applies to clusters configured with the instance fleets option. Specifies the unique identifier of one or more Amazon EC2 subnets in which to launch EC2 cluster instances. Amazon EMR chooses the EC2 subnet with the best performance and cost characteristics from among the list of RequestedEc2SubnetIds and launches all cluster instances within that subnet. If this value is not specified, and the account supports EC2-Classic networks, the cluster launches instances in the EC2-Classic network and uses Requested</p>"]
+    #[doc="<p>Applies to clusters configured with the instance fleets option. Specifies the unique identifier of one or more Amazon EC2 subnets in which to launch EC2 cluster instances. Subnets must exist within the same VPC. Amazon EMR chooses the EC2 subnet with the best fit from among the list of <code>RequestedEc2SubnetIds</code>, and then launches all cluster instances within that Subnet. If this value is not specified, and the account and region support EC2-Classic networks, the cluster launches instances in the EC2-Classic network and uses <code>RequestedEc2AvailabilityZones</code> instead of this setting. If EC2-Classic is not supported, and no Subnet is specified, Amazon EMR chooses the subnet for you. <code>RequestedEc2SubnetIDs</code> and <code>RequestedEc2AvailabilityZones</code> cannot be specified together.</p>"]
     #[serde(rename="RequestedEc2SubnetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub requested_ec_2_subnet_ids: Option<Vec<String>>,
@@ -1237,7 +1249,7 @@ pub struct InstanceTypeConfig {
     #[serde(rename="BidPrice")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub bid_price: Option<String>,
-    #[doc="<p>The bid price, as a percentage of On-Demand price, for each EC2 Spot instance as defined by <code>InstanceType</code>. Expressed as a number between 0 and 1000 (for example, 20 specifies 20%). If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>"]
+    #[doc="<p>The bid price, as a percentage of On-Demand price, for each EC2 Spot instance as defined by <code>InstanceType</code>. Expressed as a number (for example, 20 specifies 20%). If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>"]
     #[serde(rename="BidPriceAsPercentageOfOnDemandPrice")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub bid_price_as_percentage_of_on_demand_price: Option<f64>,
@@ -1252,7 +1264,7 @@ pub struct InstanceTypeConfig {
     #[doc="<p>An EC2 instance type, such as <code>m3.xlarge</code>. </p>"]
     #[serde(rename="InstanceType")]
     pub instance_type: String,
-    #[doc="<p>The number of units that a provisioned instance of this type provides toward fulfilling the target capacities defined in <a>InstanceFleetConfig</a>. This value is 1 for a master instance fleet, and must be greater than 0 for core and task instance fleets. </p>"]
+    #[doc="<p>The number of units that a provisioned instance of this type provides toward fulfilling the target capacities defined in <a>InstanceFleetConfig</a>. This value is 1 for a master instance fleet, and must be 1 or greater for core and task instance fleets. Defaults to 1 if not specified. </p>"]
     #[serde(rename="WeightedCapacity")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub weighted_capacity: Option<i64>,
@@ -1294,7 +1306,7 @@ pub struct InstanceTypeSpecification {
 #[doc="<p>A description of a cluster (job flow).</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct JobFlowDetail {
-    #[doc="<p>The version of the AMI used to initialize Amazon EC2 instances in the job flow. For a list of AMI versions currently supported by Amazon EMR, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/EnvironmentConfig_AMIVersion.html#ami-versions-supported\">AMI Versions Supported in EMR</a> in the <i>Amazon EMR Developer Guide.</i> </p>"]
+    #[doc="<p>Used only for version 2.x and 3.x of Amazon EMR. The version of the AMI used to initialize Amazon EC2 instances in the job flow. For a list of AMI versions supported by Amazon EMR, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/EnvironmentConfig_AMIVersion.html#ami-versions-supported\">AMI Versions Supported in EMR</a> in the <i>Amazon EMR Developer Guide.</i> </p>"]
     #[serde(rename="AmiVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub ami_version: Option<String>,
@@ -1833,11 +1845,11 @@ pub struct RunJobFlowInput {
     #[serde(rename="AdditionalInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub additional_info: Option<String>,
-    #[doc="<note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and greater, use ReleaseLabel.</p> </note> <p>The version of the Amazon Machine Image (AMI) to use when launching Amazon EC2 instances in the job flow. The following values are valid:</p> <ul> <li> <p>The version number of the AMI to use, for example, \"2.0.\"</p> </li> </ul> <p>If the AMI supports multiple versions of Hadoop (for example, AMI 1.0 supports both Hadoop 0.18 and 0.20) you can use the <a>JobFlowInstancesConfig</a> <code>HadoopVersion</code> parameter to modify the version of Hadoop from the defaults shown above.</p> <p>For details about the AMI versions currently supported by Amazon Elastic MapReduce, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/EnvironmentConfig_AMIVersion.html#ami-versions-supported\">AMI Versions Supported in Elastic MapReduce</a> in the <i>Amazon Elastic MapReduce Developer Guide.</i> </p> <note> <p>Previously, the EMR AMI version API parameter options allowed you to use latest for the latest AMI version rather than specify a numerical value. Some regions no longer support this deprecated option as they only have a newer release label version of EMR, which requires you to specify an EMR release label release (EMR 4.x or later).</p> </note>"]
+    #[doc="<p>For Amazon EMR AMI versions 3.x and 2.x. For Amazon EMR releases 4.0 and later, the Linux AMI is determined by the <code>ReleaseLabel</code> specified or by <code>CustomAmiID</code>. The version of the Amazon Machine Image (AMI) to use when launching Amazon EC2 instances in the job flow. For details about the AMI versions currently supported in EMR version 3.x and 2.x, see <a href=\"ElasticMapReduce/latest/DeveloperGuide/emr-dg.pdf#nameddest=ami-versions-supported\">AMI Versions Supported in EMR</a> in the <i>Amazon EMR Developer Guide</i>. </p> <p>If the AMI supports multiple versions of Hadoop (for example, AMI 1.0 supports both Hadoop 0.18 and 0.20), you can use the <a>JobFlowInstancesConfig</a> <code>HadoopVersion</code> parameter to modify the version of Hadoop from the defaults shown above.</p> <note> <p>Previously, the EMR AMI version API parameter options allowed you to use latest for the latest AMI version rather than specify a numerical value. Some regions no longer support this deprecated option as they only have a newer release label version of EMR, which requires you to specify an EMR release label release (EMR 4.x or later).</p> </note>"]
     #[serde(rename="AmiVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub ami_version: Option<String>,
-    #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>A list of applications for the cluster. Valid values are: \"Hadoop\", \"Hive\", \"Mahout\", \"Pig\", and \"Spark.\" They are case insensitive.</p>"]
+    #[doc="<p>For Amazon EMR releases 4.0 and later. A list of applications for the cluster. Valid values are: \"Hadoop\", \"Hive\", \"Mahout\", \"Pig\", and \"Spark.\" They are case insensitive.</p>"]
     #[serde(rename="Applications")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub applications: Option<Vec<Application>>,
@@ -1849,10 +1861,18 @@ pub struct RunJobFlowInput {
     #[serde(rename="BootstrapActions")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub bootstrap_actions: Option<Vec<BootstrapActionConfig>>,
-    #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The list of configurations supplied for the EMR cluster you are creating.</p>"]
+    #[doc="<p>For Amazon EMR releases 4.0 and later. The list of configurations supplied for the EMR cluster you are creating.</p>"]
     #[serde(rename="Configurations")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub configurations: Option<Vec<Configuration>>,
+    #[doc="<p>Available only in Amazon EMR version 5.7.0 and later. The ID of a custom Amazon EBS-backed Linux AMI. If specified, Amazon EMR uses this AMI when it launches cluster EC2 instances. For more information about custom AMIs in Amazon EMR, see <a href=\"http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-custom-ami.html\">Using a Custom AMI</a> in the <i>Amazon EMR Management Guide</i>. If omitted, the cluster uses the base Linux AMI for the <code>ReleaseLabel</code> specified. For Amazon EMR versions 2.x and 3.x, use <code>AmiVersion</code> instead.</p> <p>For information about creating a custom AMI, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami-ebs.html\">Creating an Amazon EBS-Backed Linux AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide for Linux Instances</i>. For information about finding an AMI ID, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html\">Finding a Linux AMI</a>. </p>"]
+    #[serde(rename="CustomAmiId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub custom_ami_id: Option<String>,
+    #[doc="<p>The size, in GiB, of the EBS root device volume of the Linux AMI that is used for each EC2 instance. Available in Amazon EMR version 4.x and later.</p>"]
+    #[serde(rename="EbsRootVolumeSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub ebs_root_volume_size: Option<i64>,
     #[doc="<p>A specification of the number and type of Amazon EC2 instances.</p>"]
     #[serde(rename="Instances")]
     pub instances: JobFlowInstancesConfig,
@@ -1867,14 +1887,18 @@ pub struct RunJobFlowInput {
     #[doc="<p>The name of the job flow.</p>"]
     #[serde(rename="Name")]
     pub name: String,
-    #[doc="<note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and greater, use Applications.</p> </note> <p>A list of strings that indicates third-party software to use with the job flow that accepts a user argument list. EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action arguments. For more information, see \"Launch a Job Flow on the MapR Distribution for Hadoop\" in the <a href=\"http://docs.aws.amazon.com/http:/docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf\">Amazon EMR Developer Guide</a>. Supported values are:</p> <ul> <li> <p>\"mapr-m3\" - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>\"mapr-m5\" - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>\"mapr\" with the user arguments specifying \"--edition,m3\" or \"--edition,m5\" - launch the job flow using MapR M3 or M5 Edition respectively.</p> </li> <li> <p>\"mapr-m7\" - launch the cluster using MapR M7 Edition.</p> </li> <li> <p>\"hunk\" - launch the cluster with the Hunk Big Data Analtics Platform.</p> </li> <li> <p>\"hue\"- launch the cluster with Hue installed.</p> </li> <li> <p>\"spark\" - launch the cluster with Apache Spark installed.</p> </li> <li> <p>\"ganglia\" - launch the cluster with the Ganglia Monitoring System installed.</p> </li> </ul>"]
+    #[doc="<note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and later, use Applications.</p> </note> <p>A list of strings that indicates third-party software to use with the job flow that accepts a user argument list. EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action arguments. For more information, see \"Launch a Job Flow on the MapR Distribution for Hadoop\" in the <a href=\"http://docs.aws.amazon.com/http:/docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf\">Amazon EMR Developer Guide</a>. Supported values are:</p> <ul> <li> <p>\"mapr-m3\" - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>\"mapr-m5\" - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>\"mapr\" with the user arguments specifying \"--edition,m3\" or \"--edition,m5\" - launch the job flow using MapR M3 or M5 Edition respectively.</p> </li> <li> <p>\"mapr-m7\" - launch the cluster using MapR M7 Edition.</p> </li> <li> <p>\"hunk\" - launch the cluster with the Hunk Big Data Analtics Platform.</p> </li> <li> <p>\"hue\"- launch the cluster with Hue installed.</p> </li> <li> <p>\"spark\" - launch the cluster with Apache Spark installed.</p> </li> <li> <p>\"ganglia\" - launch the cluster with the Ganglia Monitoring System installed.</p> </li> </ul>"]
     #[serde(rename="NewSupportedProducts")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub new_supported_products: Option<Vec<SupportedProductConfig>>,
-    #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The release label for the Amazon EMR release. For Amazon EMR 3.x and 2.x AMIs, use amiVersion instead instead of ReleaseLabel.</p>"]
+    #[doc="<p> The release label for the Amazon EMR release. For Amazon EMR 3.x and 2.x AMIs, use <code>AmiVersion</code> instead.</p>"]
     #[serde(rename="ReleaseLabel")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub release_label: Option<String>,
+    #[doc="<p>Applies only when <code>CustomAmiID</code> is used. Specifies which updates from the Amazon Linux AMI package repositories to apply automatically when the instance boots using the AMI. If omitted, the default is <code>SECURITY</code>, which indicates that only security updates are applied. If <code>NONE</code> is specified, no updates are applied, and all updates must be applied manually.</p>"]
+    #[serde(rename="RepoUpgradeOnBoot")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub repo_upgrade_on_boot: Option<String>,
     #[doc="<p>Specifies the way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR blacklists and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>"]
     #[serde(rename="ScaleDownBehavior")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1891,7 +1915,7 @@ pub struct RunJobFlowInput {
     #[serde(rename="Steps")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub steps: Option<Vec<StepConfig>>,
-    #[doc="<note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and greater, use Applications.</p> </note> <p>A list of strings that indicates third-party software to use. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-supported-products.html\">Use Third Party Applications with Amazon EMR</a>. Currently supported values are:</p> <ul> <li> <p>\"mapr-m3\" - launch the job flow using MapR M3 Edition.</p> </li> <li> <p>\"mapr-m5\" - launch the job flow using MapR M5 Edition.</p> </li> </ul>"]
+    #[doc="<note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and later, use Applications.</p> </note> <p>A list of strings that indicates third-party software to use. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-supported-products.html\">Use Third Party Applications with Amazon EMR</a>. Currently supported values are:</p> <ul> <li> <p>\"mapr-m3\" - launch the job flow using MapR M3 Edition.</p> </li> <li> <p>\"mapr-m5\" - launch the job flow using MapR M5 Edition.</p> </li> </ul>"]
     #[serde(rename="SupportedProducts")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub supported_products: Option<Vec<String>>,
@@ -2046,7 +2070,7 @@ pub struct SpotProvisioningSpecification {
     #[serde(rename="BlockDurationMinutes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub block_duration_minutes: Option<i64>,
-    #[doc="<p>The action to take when <code>TargetSpotCapacity</code> has not been fulfilled when the <code>TimeoutDurationMinutes</code> has expired. Spot instances are not uprovisioned within the Spot provisioining timeout. Valid values are <code>TERMINATE_CLUSTER</code> and <code>SWITCH_TO_ON_DEMAND</code> to fulfill the remaining capacity.</p>"]
+    #[doc="<p>The action to take when <code>TargetSpotCapacity</code> has not been fulfilled when the <code>TimeoutDurationMinutes</code> has expired. Spot instances are not uprovisioned within the Spot provisioining timeout. Valid values are <code>TERMINATE_CLUSTER</code> and <code>SWITCH_TO_ON_DEMAND</code>. SWITCH_TO_ON_DEMAND specifies that if no Spot instances are available, On-Demand Instances should be provisioned to fulfill any remaining Spot capacity.</p>"]
     #[serde(rename="TimeoutAction")]
     pub timeout_action: String,
     #[doc="<p>The spot provisioning timeout period in minutes. If Spot instances are not provisioned within this time period, the <code>TimeOutAction</code> is taken. Minimum value is 5 and maximum value is 1440. The timeout applies only during initial provisioning, when the cluster is first created.</p>"]
@@ -4577,7 +4601,7 @@ pub trait Emr {
                             -> Result<ListInstanceGroupsOutput, ListInstanceGroupsError>;
 
 
-    #[doc="<p>Provides information about the cluster instances that Amazon EMR provisions on behalf of a user when it creates the cluster. For example, this operation indicates when the EC2 instances reach the Ready state, when instances become available to Amazon EMR to use for jobs, and the IP addresses for cluster instances, etc.</p>"]
+    #[doc="<p>Provides information for all active EC2 instances and EC2 instances terminated in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the following states are considered active: AWAITING_FULFILLMENT, PROVISIONING, BOOTSTRAPPING, RUNNING.</p>"]
     fn list_instances(&self,
                       input: &ListInstancesInput)
                       -> Result<ListInstancesOutput, ListInstancesError>;
@@ -5149,7 +5173,7 @@ impl<P, D> Emr for EmrClient<P, D>
     }
 
 
-    #[doc="<p>Provides information about the cluster instances that Amazon EMR provisions on behalf of a user when it creates the cluster. For example, this operation indicates when the EC2 instances reach the Ready state, when instances become available to Amazon EMR to use for jobs, and the IP addresses for cluster instances, etc.</p>"]
+    #[doc="<p>Provides information for all active EC2 instances and EC2 instances terminated in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the following states are considered active: AWAITING_FULFILLMENT, PROVISIONING, BOOTSTRAPPING, RUNNING.</p>"]
     fn list_instances(&self,
                       input: &ListInstancesInput)
                       -> Result<ListInstancesOutput, ListInstancesError> {

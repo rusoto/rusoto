@@ -599,6 +599,10 @@ pub struct KeyMetadata {
     #[doc="<p>The globally unique identifier for the CMK.</p>"]
     #[serde(rename="KeyId")]
     pub key_id: String,
+    #[doc="<p>The CMK's manager. CMKs are either customer-managed or AWS-managed. For more information about the difference, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys\">Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    #[serde(rename="KeyManager")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub key_manager: Option<String>,
     #[doc="<p>The state of the CMK.</p> <p>For more information about how key state affects the use of a CMK, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html\">How Key State Affects the Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="KeyState")]
     #[serde(skip_serializing_if="Option::is_none")]

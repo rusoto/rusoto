@@ -28,7 +28,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Describes hints for the buffering to perform before delivering data to the destination. Please note that these options are treated as hints, and therefore Firehose may choose to use different values when it is optimal.</p>"]
+#[doc="<p>Describes hints for the buffering to perform before delivering data to the destination. Please note that these options are treated as hints, and therefore Kinesis Firehose may choose to use different values when it is optimal.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BufferingHints {
     #[doc="<p>Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. The default value is 300.</p>"]
@@ -41,7 +41,7 @@ pub struct BufferingHints {
     pub size_in_m_bs: Option<i64>,
 }
 
-#[doc="<p>Describes the CloudWatch logging options for your delivery stream.</p>"]
+#[doc="<p>Describes the Amazon CloudWatch logging options for your delivery stream.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CloudWatchLoggingOptions {
     #[doc="<p>Enables or disables CloudWatch logging.</p>"]
@@ -61,7 +61,7 @@ pub struct CloudWatchLoggingOptions {
 #[doc="<p>Describes a <code>COPY</code> command for Amazon Redshift.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CopyCommand {
-    #[doc="<p>Optional parameters to use with the Amazon Redshift <code>COPY</code> command. For more information, see the \"Optional Parameters\" section of <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_COPY.html\">Amazon Redshift COPY command</a>. Some possible examples that would apply to Firehose are as follows:</p> <p> <code>delimiter '\\t' lzop;</code> - fields are delimited with \"\\t\" (TAB character) and compressed using lzop.</p> <p> <code>delimiter '|</code> - fields are delimited with \"|\" (this is the default delimiter).</p> <p> <code>delimiter '|' escape</code> - the delimiter should be escaped.</p> <p> <code>fixedwidth 'venueid:3,venuename:25,venuecity:12,venuestate:2,venueseats:6'</code> - fields are fixed width in the source, with each width specified after every column in the table.</p> <p> <code>JSON 's3://mybucket/jsonpaths.txt'</code> - data is in JSON format, and the path specified is the format of the data.</p> <p>For more examples, see <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_COPY_command_examples.html\">Amazon Redshift COPY command examples</a>.</p>"]
+    #[doc="<p>Optional parameters to use with the Amazon Redshift <code>COPY</code> command. For more information, see the \"Optional Parameters\" section of <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_COPY.html\">Amazon Redshift COPY command</a>. Some possible examples that would apply to Kinesis Firehose are as follows:</p> <p> <code>delimiter '\\t' lzop;</code> - fields are delimited with \"\\t\" (TAB character) and compressed using lzop.</p> <p> <code>delimiter '|'</code> - fields are delimited with \"|\" (this is the default delimiter).</p> <p> <code>delimiter '|' escape</code> - the delimiter should be escaped.</p> <p> <code>fixedwidth 'venueid:3,venuename:25,venuecity:12,venuestate:2,venueseats:6'</code> - fields are fixed width in the source, with each width specified after every column in the table.</p> <p> <code>JSON 's3://mybucket/jsonpaths.txt'</code> - data is in JSON format, and the path specified is the format of the data.</p> <p>For more examples, see <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_COPY_command_examples.html\">Amazon Redshift COPY command examples</a>.</p>"]
     #[serde(rename="CopyOptions")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub copy_options: Option<String>,
@@ -76,9 +76,13 @@ pub struct CopyCommand {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateDeliveryStreamInput {
-    #[doc="<p>The name of the delivery stream. This name must be unique per AWS account in the same region. You can have multiple delivery streams with the same name if they are in different accounts or different regions.</p>"]
+    #[doc="<p>The name of the delivery stream. This name must be unique per AWS account in the same region. If the delivery streams are in different accounts or different regions, you can have multiple delivery streams with the same name.</p>"]
     #[serde(rename="DeliveryStreamName")]
     pub delivery_stream_name: String,
+    #[doc="<p>The delivery stream type. This parameter can be one of the following values:</p> <ul> <li> <p> <code>DirectPut</code>: Provider applications access the delivery stream directly.</p> </li> <li> <p> <code>KinesisStreamAsSource</code>: The delivery stream uses a Kinesis stream as a source.</p> </li> </ul>"]
+    #[serde(rename="DeliveryStreamType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub delivery_stream_type: Option<String>,
     #[doc="<p>The destination in Amazon ES. You can specify only one destination.</p>"]
     #[serde(rename="ElasticsearchDestinationConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -87,6 +91,10 @@ pub struct CreateDeliveryStreamInput {
     #[serde(rename="ExtendedS3DestinationConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub extended_s3_destination_configuration: Option<ExtendedS3DestinationConfiguration>,
+    #[doc="<p>When a Kinesis stream is used as the source for the delivery stream, a <a>KinesisStreamSourceConfiguration</a> containing the Kinesis stream ARN and the role ARN for the source stream.</p>"]
+    #[serde(rename="KinesisStreamSourceConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub kinesis_stream_source_configuration: Option<KinesisStreamSourceConfiguration>,
     #[doc="<p>The destination in Amazon Redshift. You can specify only one destination.</p>"]
     #[serde(rename="RedshiftDestinationConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -127,6 +135,9 @@ pub struct DeliveryStreamDescription {
     #[doc="<p>The status of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamStatus")]
     pub delivery_stream_status: String,
+    #[doc="<p>The delivery stream type. This can be one of the following values:</p> <ul> <li> <p> <code>DirectPut</code>: Provider applications access the delivery stream directly.</p> </li> <li> <p> <code>KinesisStreamAsSource</code>: The delivery stream uses a Kinesis stream as a source.</p> </li> </ul>"]
+    #[serde(rename="DeliveryStreamType")]
+    pub delivery_stream_type: String,
     #[doc="<p>The destinations.</p>"]
     #[serde(rename="Destinations")]
     pub destinations: Vec<DestinationDescription>,
@@ -137,6 +148,10 @@ pub struct DeliveryStreamDescription {
     #[serde(rename="LastUpdateTimestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub last_update_timestamp: Option<f64>,
+    #[doc="<p>If the <code>DeliveryStreamType</code> parameter is <code>KinesisStreamAsSource</code>, a <a>SourceDescription</a> object describing the source Kinesis stream.</p>"]
+    #[serde(rename="Source")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub source: Option<SourceDescription>,
     #[doc="<p>Each time the destination is updated for a delivery stream, the version ID is changed, and the current version ID is required when updating the destination. This is so that the service knows it is applying the changes to the correct version of the delivery stream.</p>"]
     #[serde(rename="VersionId")]
     pub version_id: String,
@@ -147,7 +162,7 @@ pub struct DescribeDeliveryStreamInput {
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
     pub delivery_stream_name: String,
-    #[doc="<p>The ID of the destination to start returning the destination information. Currently Firehose supports one destination per delivery stream.</p>"]
+    #[doc="<p>The ID of the destination to start returning the destination information. Currently, Kinesis Firehose supports one destination per delivery stream.</p>"]
     #[serde(rename="ExclusiveStartDestinationId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub exclusive_start_destination_id: Option<String>,
@@ -218,7 +233,7 @@ pub struct ElasticsearchDestinationConfiguration {
     #[doc="<p>The Elasticsearch index name.</p>"]
     #[serde(rename="IndexName")]
     pub index_name: String,
-    #[doc="<p>The Elasticsearch index rotation period. Index rotation appends a timestamp to the IndexName to facilitate expiration of old data. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-index-rotation\">Index Rotation for Amazon Elasticsearch Service Destination</a>. The default value is <code>OneDay</code>.</p>"]
+    #[doc="<p>The Elasticsearch index rotation period. Index rotation appends a time stamp to the IndexName to facilitate the expiration of old data. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-index-rotation\">Index Rotation for Amazon Elasticsearch Service Destination</a>. The default value is <code>OneDay</code>.</p>"]
     #[serde(rename="IndexRotationPeriod")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub index_rotation_period: Option<String>,
@@ -226,18 +241,18 @@ pub struct ElasticsearchDestinationConfiguration {
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub processing_configuration: Option<ProcessingConfiguration>,
-    #[doc="<p>The retry behavior in the event that Firehose is unable to deliver documents to Amazon ES. The default value is 300 (5 minutes).</p>"]
+    #[doc="<p>The retry behavior in case Kinesis Firehose is unable to deliver documents to Amazon ES. The default value is 300 (5 minutes).</p>"]
     #[serde(rename="RetryOptions")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub retry_options: Option<ElasticsearchRetryOptions>,
-    #[doc="<p>The ARN of the IAM role to be assumed by Firehose for calling the Amazon ES Configuration API and for indexing documents. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3\">Amazon S3 Bucket Access</a>.</p>"]
+    #[doc="<p>The ARN of the IAM role to be assumed by Kinesis Firehose for calling the Amazon ES Configuration API and for indexing documents. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3\">Amazon S3 Bucket Access</a>.</p>"]
     #[serde(rename="RoleARN")]
     pub role_arn: String,
-    #[doc="<p>Defines how documents should be delivered to Amazon S3. When set to FailedDocumentsOnly, Firehose writes any documents that could not be indexed to the configured Amazon S3 destination, with elasticsearch-failed/ appended to the key prefix. When set to AllDocuments, Firehose delivers all incoming records to Amazon S3, and also writes failed documents with elasticsearch-failed/ appended to the prefix. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-s3-backup\">Amazon S3 Backup for Amazon Elasticsearch Service Destination</a>. Default value is FailedDocumentsOnly.</p>"]
+    #[doc="<p>Defines how documents should be delivered to Amazon S3. When set to FailedDocumentsOnly, Kinesis Firehose writes any documents that could not be indexed to the configured Amazon S3 destination, with elasticsearch-failed/ appended to the key prefix. When set to AllDocuments, Kinesis Firehose delivers all incoming records to Amazon S3, and also writes failed documents with elasticsearch-failed/ appended to the prefix. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-s3-backup\">Amazon S3 Backup for Amazon Elasticsearch Service Destination</a>. Default value is FailedDocumentsOnly.</p>"]
     #[serde(rename="S3BackupMode")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub s3_backup_mode: Option<String>,
-    #[doc="<p>The configuration for the intermediate Amazon S3 location from which Amazon ES obtains data.</p>"]
+    #[doc="<p>The configuration for the backup Amazon S3 location.</p>"]
     #[serde(rename="S3Configuration")]
     pub s3_configuration: S3DestinationConfiguration,
     #[doc="<p>The Elasticsearch type name.</p>"]
@@ -313,7 +328,7 @@ pub struct ElasticsearchDestinationUpdate {
     #[serde(rename="IndexName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub index_name: Option<String>,
-    #[doc="<p>The Elasticsearch index rotation period. Index rotation appends a timestamp to IndexName to facilitate the expiration of old data. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-index-rotation\">Index Rotation for Amazon Elasticsearch Service Destination</a>. Default value is <code>OneDay</code>.</p>"]
+    #[doc="<p>The Elasticsearch index rotation period. Index rotation appends a time stamp to IndexName to facilitate the expiration of old data. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-index-rotation\">Index Rotation for Amazon Elasticsearch Service Destination</a>. Default value is <code>OneDay</code>.</p>"]
     #[serde(rename="IndexRotationPeriod")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub index_rotation_period: Option<String>,
@@ -321,11 +336,11 @@ pub struct ElasticsearchDestinationUpdate {
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub processing_configuration: Option<ProcessingConfiguration>,
-    #[doc="<p>The retry behavior in the event that Firehose is unable to deliver documents to Amazon ES. Default value is 300 (5 minutes).</p>"]
+    #[doc="<p>The retry behavior in case Kinesis Firehose is unable to deliver documents to Amazon ES. The default value is 300 (5 minutes).</p>"]
     #[serde(rename="RetryOptions")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub retry_options: Option<ElasticsearchRetryOptions>,
-    #[doc="<p>The ARN of the IAM role to be assumed by Firehose for calling the Amazon ES Configuration API and for indexing documents. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3\">Amazon S3 Bucket Access</a>.</p>"]
+    #[doc="<p>The ARN of the IAM role to be assumed by Kinesis Firehose for calling the Amazon ES Configuration API and for indexing documents. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3\">Amazon S3 Bucket Access</a>.</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<String>,
@@ -339,10 +354,10 @@ pub struct ElasticsearchDestinationUpdate {
     pub type_name: Option<String>,
 }
 
-#[doc="<p>Configures retry behavior in the event that Firehose is unable to deliver documents to Amazon ES.</p>"]
+#[doc="<p>Configures retry behavior in case Kinesis Firehose is unable to deliver documents to Amazon ES.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticsearchRetryOptions {
-    #[doc="<p>After an initial failure to deliver to Amazon ES, the total amount of time during which Firehose re-attempts delivery (including the first attempt). After this time has elapsed, the failed documents are written to Amazon S3. Default value is 300 seconds (5 minutes). A value of 0 (zero) results in no retries.</p>"]
+    #[doc="<p>After an initial failure to deliver to Amazon ES, the total amount of time during which Kinesis Firehose re-attempts delivery (including the first attempt). After this time has elapsed, the failed documents are written to Amazon S3. Default value is 300 seconds (5 minutes). A value of 0 (zero) results in no retries.</p>"]
     #[serde(rename="DurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub duration_in_seconds: Option<i64>,
@@ -355,7 +370,7 @@ pub struct EncryptionConfiguration {
     #[serde(rename="KMSEncryptionConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub kms_encryption_config: Option<KMSEncryptionConfig>,
-    #[doc="<p>Specifically override existing encryption information to ensure no encryption is used.</p>"]
+    #[doc="<p>Specifically override existing encryption information to ensure that no encryption is used.</p>"]
     #[serde(rename="NoEncryptionConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub no_encryption_config: Option<String>,
@@ -383,7 +398,7 @@ pub struct ExtendedS3DestinationConfiguration {
     #[serde(rename="EncryptionConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub encryption_configuration: Option<EncryptionConfiguration>,
-    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
+    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. If the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
@@ -423,7 +438,7 @@ pub struct ExtendedS3DestinationDescription {
     #[doc="<p>The encryption configuration. If no value is specified, the default is no encryption.</p>"]
     #[serde(rename="EncryptionConfiguration")]
     pub encryption_configuration: EncryptionConfiguration,
-    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
+    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. If the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
@@ -467,7 +482,7 @@ pub struct ExtendedS3DestinationUpdate {
     #[serde(rename="EncryptionConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub encryption_configuration: Option<EncryptionConfiguration>,
-    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
+    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. If the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
@@ -489,6 +504,22 @@ pub struct ExtendedS3DestinationUpdate {
     pub s3_backup_update: Option<S3DestinationUpdate>,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetKinesisStreamInput {
+    #[serde(rename="DeliveryStreamARN")]
+    pub delivery_stream_arn: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GetKinesisStreamOutput {
+    #[serde(rename="CredentialsForReadingKinesisStream")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub credentials_for_reading_kinesis_stream: Option<SessionCredentials>,
+    #[serde(rename="KinesisStreamARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub kinesis_stream_arn: Option<String>,
+}
+
 #[doc="<p>Describes an encryption key for a destination in Amazon S3.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KMSEncryptionConfig {
@@ -497,8 +528,40 @@ pub struct KMSEncryptionConfig {
     pub awskms_key_arn: String,
 }
 
+#[doc="<p>The stream and role ARNs for a Kinesis stream used as the source for a delivery stream.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct KinesisStreamSourceConfiguration {
+    #[doc="<p>The ARN of the source Kinesis stream.</p>"]
+    #[serde(rename="KinesisStreamARN")]
+    pub kinesis_stream_arn: String,
+    #[doc="<p>The ARN of the role that provides access to the source Kinesis stream.</p>"]
+    #[serde(rename="RoleARN")]
+    pub role_arn: String,
+}
+
+#[doc="<p>Details about a Kinesis stream used as the source for a Kinesis Firehose delivery stream.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct KinesisStreamSourceDescription {
+    #[doc="<p>Kinesis Firehose starts retrieving records from the Kinesis stream starting with this time stamp.</p>"]
+    #[serde(rename="DeliveryStartTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub delivery_start_timestamp: Option<f64>,
+    #[doc="<p>The ARN of the source Kinesis stream.</p>"]
+    #[serde(rename="KinesisStreamARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub kinesis_stream_arn: Option<String>,
+    #[doc="<p>The ARN of the role used by the source Kinesis stream.</p>"]
+    #[serde(rename="RoleARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListDeliveryStreamsInput {
+    #[doc="<p>The delivery stream type. This can be one of the following values:</p> <ul> <li> <p> <code>DirectPut</code>: Provider applications access the delivery stream directly.</p> </li> <li> <p> <code>KinesisStreamAsSource</code>: The delivery stream uses a Kinesis stream as a source.</p> </li> </ul> <p>This parameter is optional. If this parameter is omitted, delivery streams of all types are returned.</p>"]
+    #[serde(rename="DeliveryStreamType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub delivery_stream_type: Option<String>,
     #[doc="<p>The name of the delivery stream to start the list with.</p>"]
     #[serde(rename="ExclusiveStartDeliveryStreamName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -642,7 +705,7 @@ pub struct RedshiftDestinationConfiguration {
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub processing_configuration: Option<ProcessingConfiguration>,
-    #[doc="<p>The retry behavior in the event that Firehose is unable to deliver documents to Amazon Redshift. Default value is 3600 (60 minutes).</p>"]
+    #[doc="<p>The retry behavior in case Kinesis Firehose is unable to deliver documents to Amazon Redshift. Default value is 3600 (60 minutes).</p>"]
     #[serde(rename="RetryOptions")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub retry_options: Option<RedshiftRetryOptions>,
@@ -682,7 +745,7 @@ pub struct RedshiftDestinationDescription {
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub processing_configuration: Option<ProcessingConfiguration>,
-    #[doc="<p>The retry behavior in the event that Firehose is unable to deliver documents to Amazon Redshift. Default value is 3600 (60 minutes).</p>"]
+    #[doc="<p>The retry behavior in case Kinesis Firehose is unable to deliver documents to Amazon Redshift. Default value is 3600 (60 minutes).</p>"]
     #[serde(rename="RetryOptions")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub retry_options: Option<RedshiftRetryOptions>,
@@ -728,7 +791,7 @@ pub struct RedshiftDestinationUpdate {
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub processing_configuration: Option<ProcessingConfiguration>,
-    #[doc="<p>The retry behavior in the event that Firehose is unable to deliver documents to Amazon Redshift. Default value is 3600 (60 minutes).</p>"]
+    #[doc="<p>The retry behavior in case Kinesis Firehose is unable to deliver documents to Amazon Redshift. Default value is 3600 (60 minutes).</p>"]
     #[serde(rename="RetryOptions")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub retry_options: Option<RedshiftRetryOptions>,
@@ -754,10 +817,10 @@ pub struct RedshiftDestinationUpdate {
     pub username: Option<String>,
 }
 
-#[doc="<p>Configures retry behavior in the event that Firehose is unable to deliver documents to Amazon Redshift.</p>"]
+#[doc="<p>Configures retry behavior in case Kinesis Firehose is unable to deliver documents to Amazon Redshift.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RedshiftRetryOptions {
-    #[doc="<p>The length of time during which Firehose retries delivery after a failure, starting from the initial request and including the first attempt. The default value is 3600 seconds (60 minutes). Firehose does not retry if the value of <code>DurationInSeconds</code> is 0 (zero) or if the first delivery attempt takes longer than the current value.</p>"]
+    #[doc="<p>The length of time during which Kinesis Firehose retries delivery after a failure, starting from the initial request and including the first attempt. The default value is 3600 seconds (60 minutes). Kinesis Firehose does not retry if the value of <code>DurationInSeconds</code> is 0 (zero) or if the first delivery attempt takes longer than the current value.</p>"]
     #[serde(rename="DurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub duration_in_seconds: Option<i64>,
@@ -785,7 +848,7 @@ pub struct S3DestinationConfiguration {
     #[serde(rename="EncryptionConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub encryption_configuration: Option<EncryptionConfiguration>,
-    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
+    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. If the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
@@ -813,7 +876,7 @@ pub struct S3DestinationDescription {
     #[doc="<p>The encryption configuration. If no value is specified, the default is no encryption.</p>"]
     #[serde(rename="EncryptionConfiguration")]
     pub encryption_configuration: EncryptionConfiguration,
-    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
+    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. If the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
@@ -845,7 +908,7 @@ pub struct S3DestinationUpdate {
     #[serde(rename="EncryptionConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub encryption_configuration: Option<EncryptionConfiguration>,
-    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
+    #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. If the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
@@ -855,9 +918,30 @@ pub struct S3DestinationUpdate {
     pub role_arn: Option<String>,
 }
 
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct SessionCredentials {
+    #[serde(rename="AccessKeyId")]
+    pub access_key_id: String,
+    #[serde(rename="Expiration")]
+    pub expiration: f64,
+    #[serde(rename="SecretAccessKey")]
+    pub secret_access_key: String,
+    #[serde(rename="SessionToken")]
+    pub session_token: String,
+}
+
+#[doc="<p>Details about a Kinesis stream used as the source for a Kinesis Firehose delivery stream.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct SourceDescription {
+    #[doc="<p>The <a>KinesisStreamSourceDescription</a> value for the source Kinesis stream.</p>"]
+    #[serde(rename="KinesisStreamSourceDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub kinesis_stream_source_description: Option<KinesisStreamSourceDescription>,
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateDestinationInput {
-    #[doc="<p>Obtain this value from the <b>VersionId</b> result of <a>DeliveryStreamDescription</a>. This value is required, and helps the service to perform conditional operations. For example, if there is a interleaving update and this value is null, then the update destination fails. After the update is successful, the <b>VersionId</b> value is updated. The service then performs a merge of the old configuration with the new configuration.</p>"]
+    #[doc="<p>Obtain this value from the <b>VersionId</b> result of <a>DeliveryStreamDescription</a>. This value is required, and helps the service to perform conditional operations. For example, if there is an interleaving update and this value is null, then the update destination fails. After the update is successful, the <b>VersionId</b> value is updated. The service then performs a merge of the old configuration with the new configuration.</p>"]
     #[serde(rename="CurrentDeliveryStreamVersionId")]
     pub current_delivery_stream_version_id: String,
     #[doc="<p>The name of the delivery stream.</p>"]
@@ -886,7 +970,7 @@ pub struct UpdateDestinationOutput;
 /// Errors returned by CreateDeliveryStream
 #[derive(Debug, PartialEq)]
 pub enum CreateDeliveryStreamError {
-    ///<p>The specified input parameter has an value that is not valid.</p>
+    ///<p>The specified input parameter has a value that is not valid.</p>
     InvalidArgument(String),
     ///<p>You have already reached the limit for a requested resource.</p>
     LimitExceeded(String),
@@ -1144,6 +1228,97 @@ impl Error for DescribeDeliveryStreamError {
         }
     }
 }
+/// Errors returned by GetKinesisStream
+#[derive(Debug, PartialEq)]
+pub enum GetKinesisStreamError {
+    ///<p>The specified input parameter has a value that is not valid.</p>
+    InvalidArgument(String),
+    ///
+    InvalidStreamType(String),
+    ///<p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetKinesisStreamError {
+    pub fn from_body(body: &str) -> GetKinesisStreamError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidArgumentException" => {
+                        GetKinesisStreamError::InvalidArgument(String::from(error_message))
+                    }
+                    "InvalidStreamTypeException" => {
+                        GetKinesisStreamError::InvalidStreamType(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetKinesisStreamError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetKinesisStreamError::Validation(error_message.to_string())
+                    }
+                    _ => GetKinesisStreamError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetKinesisStreamError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetKinesisStreamError {
+    fn from(err: serde_json::error::Error) -> GetKinesisStreamError {
+        GetKinesisStreamError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetKinesisStreamError {
+    fn from(err: CredentialsError) -> GetKinesisStreamError {
+        GetKinesisStreamError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetKinesisStreamError {
+    fn from(err: HttpDispatchError) -> GetKinesisStreamError {
+        GetKinesisStreamError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetKinesisStreamError {
+    fn from(err: io::Error) -> GetKinesisStreamError {
+        GetKinesisStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetKinesisStreamError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetKinesisStreamError {
+    fn description(&self) -> &str {
+        match *self {
+            GetKinesisStreamError::InvalidArgument(ref cause) => cause,
+            GetKinesisStreamError::InvalidStreamType(ref cause) => cause,
+            GetKinesisStreamError::ResourceNotFound(ref cause) => cause,
+            GetKinesisStreamError::Validation(ref cause) => cause,
+            GetKinesisStreamError::Credentials(ref err) => err.description(),
+            GetKinesisStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetKinesisStreamError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListDeliveryStreams
 #[derive(Debug, PartialEq)]
 pub enum ListDeliveryStreamsError {
@@ -1222,7 +1397,7 @@ impl Error for ListDeliveryStreamsError {
 /// Errors returned by PutRecord
 #[derive(Debug, PartialEq)]
 pub enum PutRecordError {
-    ///<p>The specified input parameter has an value that is not valid.</p>
+    ///<p>The specified input parameter has a value that is not valid.</p>
     InvalidArgument(String),
     ///<p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -1311,7 +1486,7 @@ impl Error for PutRecordError {
 /// Errors returned by PutRecordBatch
 #[derive(Debug, PartialEq)]
 pub enum PutRecordBatchError {
-    ///<p>The specified input parameter has an value that is not valid.</p>
+    ///<p>The specified input parameter has a value that is not valid.</p>
     InvalidArgument(String),
     ///<p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -1404,7 +1579,7 @@ impl Error for PutRecordBatchError {
 pub enum UpdateDestinationError {
     ///<p>Another modification has already happened. Fetch <b>VersionId</b> again and use it to update the destination.</p>
     ConcurrentModification(String),
-    ///<p>The specified input parameter has an value that is not valid.</p>
+    ///<p>The specified input parameter has a value that is not valid.</p>
     InvalidArgument(String),
     ///<p>The resource is already in use and not available for this operation.</p>
     ResourceInUse(String),
@@ -1500,7 +1675,7 @@ impl Error for UpdateDestinationError {
 }
 /// Trait representing the capabilities of the Firehose API. Firehose clients implement this trait.
 pub trait KinesisFirehose {
-    #[doc="<p>Creates a delivery stream.</p> <p>By default, you can create up to 20 delivery streams per region.</p> <p>This is an asynchronous operation that immediately returns. The initial status of the delivery stream is <code>CREATING</code>. After the delivery stream is created, its status is <code>ACTIVE</code> and it now accepts data. Attempts to send data to a delivery stream that is not in the <code>ACTIVE</code> state cause an exception. To check the state of a delivery stream, use <a>DescribeDeliveryStream</a>.</p> <p>A delivery stream is configured with a single destination: Amazon S3, Amazon Elasticsearch Service, or Amazon Redshift. You must specify only one of the following destination configuration parameters: <b>ExtendedS3DestinationConfiguration</b>, <b>S3DestinationConfiguration</b>, <b>ElasticsearchDestinationConfiguration</b>, or <b>RedshiftDestinationConfiguration</b>.</p> <p>When you specify <b>S3DestinationConfiguration</b>, you can also provide the following optional values: <b>BufferingHints</b>, <b>EncryptionConfiguration</b>, and <b>CompressionFormat</b>. By default, if no <b>BufferingHints</b> value is provided, Firehose buffers data up to 5 MB or for 5 minutes, whichever condition is satisfied first. Note that <b>BufferingHints</b> is a hint, so there are some cases where the service cannot adhere to these conditions strictly; for example, record boundaries are such that the size is a little over or under the configured buffering size. By default, no encryption is performed. We strongly recommend that you enable encryption to ensure secure data storage in Amazon S3.</p> <p>A few notes about Amazon Redshift as a destination:</p> <ul> <li> <p>An Amazon Redshift destination requires an S3 bucket as intermediate location, as Firehose first delivers data to S3 and then uses <code>COPY</code> syntax to load data into an Amazon Redshift table. This is specified in the <b>RedshiftDestinationConfiguration.S3Configuration</b> parameter.</p> </li> <li> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified in <b>RedshiftDestinationConfiguration.S3Configuration</b> because the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket doesn't support these compression formats.</p> </li> <li> <p>We strongly recommend that you use the user name and password you provide exclusively with Firehose, and that the permissions for the account are restricted for Amazon Redshift <code>INSERT</code> permissions.</p> </li> </ul> <p>Firehose assumes the IAM role that is configured as part of the destination. The role should allow the Firehose principal to assume the role, and the role should have permissions that allows the service to deliver the data. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3\">Amazon S3 Bucket Access</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
+    #[doc="<p>Creates a delivery stream.</p> <p>By default, you can create up to 20 delivery streams per region.</p> <p>This is an asynchronous operation that immediately returns. The initial status of the delivery stream is <code>CREATING</code>. After the delivery stream is created, its status is <code>ACTIVE</code> and it now accepts data. Attempts to send data to a delivery stream that is not in the <code>ACTIVE</code> state cause an exception. To check the state of a delivery stream, use <a>DescribeDeliveryStream</a>.</p> <p>A Kinesis Firehose delivery stream can be configured to receive records directly from providers using <a>PutRecord</a> or <a>PutRecordBatch</a>, or it can be configured to use an existing Kinesis stream as its source. To specify a Kinesis stream as input, set the <code>DeliveryStreamType</code> parameter to <code>KinesisStreamAsSource</code>, and provide the Kinesis stream ARN and role ARN in the <code>KinesisStreamSourceConfiguration</code> parameter.</p> <p>A delivery stream is configured with a single destination: Amazon S3, Amazon ES, or Amazon Redshift. You must specify only one of the following destination configuration parameters: <b>ExtendedS3DestinationConfiguration</b>, <b>S3DestinationConfiguration</b>, <b>ElasticsearchDestinationConfiguration</b>, or <b>RedshiftDestinationConfiguration</b>.</p> <p>When you specify <b>S3DestinationConfiguration</b>, you can also provide the following optional values: <b>BufferingHints</b>, <b>EncryptionConfiguration</b>, and <b>CompressionFormat</b>. By default, if no <b>BufferingHints</b> value is provided, Kinesis Firehose buffers data up to 5 MB or for 5 minutes, whichever condition is satisfied first. Note that <b>BufferingHints</b> is a hint, so there are some cases where the service cannot adhere to these conditions strictly; for example, record boundaries are such that the size is a little over or under the configured buffering size. By default, no encryption is performed. We strongly recommend that you enable encryption to ensure secure data storage in Amazon S3.</p> <p>A few notes about Amazon Redshift as a destination:</p> <ul> <li> <p>An Amazon Redshift destination requires an S3 bucket as intermediate location, as Kinesis Firehose first delivers data to S3 and then uses <code>COPY</code> syntax to load data into an Amazon Redshift table. This is specified in the <b>RedshiftDestinationConfiguration.S3Configuration</b> parameter.</p> </li> <li> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified in <b>RedshiftDestinationConfiguration.S3Configuration</b> because the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket doesn't support these compression formats.</p> </li> <li> <p>We strongly recommend that you use the user name and password you provide exclusively with Kinesis Firehose, and that the permissions for the account are restricted for Amazon Redshift <code>INSERT</code> permissions.</p> </li> </ul> <p>Kinesis Firehose assumes the IAM role that is configured as part of the destination. The role should allow the Kinesis Firehose principal to assume the role, and the role should have permissions that allow the service to deliver the data. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3\">Amazon S3 Bucket Access</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     fn create_delivery_stream(&self,
                               input: &CreateDeliveryStreamInput)
                               -> Result<CreateDeliveryStreamOutput, CreateDeliveryStreamError>;
@@ -1519,23 +1694,29 @@ pub trait KinesisFirehose {
          -> Result<DescribeDeliveryStreamOutput, DescribeDeliveryStreamError>;
 
 
+
+    fn get_kinesis_stream(&self,
+                          input: &GetKinesisStreamInput)
+                          -> Result<GetKinesisStreamOutput, GetKinesisStreamError>;
+
+
     #[doc="<p>Lists your delivery streams.</p> <p>The number of delivery streams might be too large to return using a single call to <a>ListDeliveryStreams</a>. You can limit the number of delivery streams returned, using the <b>Limit</b> parameter. To determine whether there are more delivery streams to list, check the value of <b>HasMoreDeliveryStreams</b> in the output. If there are more delivery streams to list, you can request them by specifying the name of the last delivery stream returned in the call in the <b>ExclusiveStartDeliveryStreamName</b> parameter of a subsequent call.</p>"]
     fn list_delivery_streams(&self,
                              input: &ListDeliveryStreamsInput)
                              -> Result<ListDeliveryStreamsOutput, ListDeliveryStreamsError>;
 
 
-    #[doc="<p>Writes a single data record into an Amazon Kinesis Firehose delivery stream. To write multiple data records into a delivery stream, use <a>PutRecordBatch</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. Note that if you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits and how to request an increase, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/limits.html\">Amazon Kinesis Firehose Limits</a>. </p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data, for example, a segment from a log file, geographic location data, web site clickstream data, etc.</p> <p>Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\\n</code>) or some other character unique within the data. This allows the consumer application(s) to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecord</a> operation returns a <b>RecordId</b>, which is a unique string assigned to each record. Producer applications can use this ID for purposes such as auditability and investigation.</p> <p>If the <a>PutRecord</a> operation throws a <b>ServiceUnavailableException</b>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream. </p> <p>Data records sent to Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p>"]
+    #[doc="<p>Writes a single data record into an Amazon Kinesis Firehose delivery stream. To write multiple data records into a delivery stream, use <a>PutRecordBatch</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. Note that if you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits and how to request an increase, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/limits.html\">Amazon Kinesis Firehose Limits</a>. </p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data, for example, a segment from a log file, geographic location data, website clickstream data, and so on.</p> <p>Kinesis Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\\n</code>) or some other character unique within the data. This allows the consumer application to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecord</a> operation returns a <b>RecordId</b>, which is a unique string assigned to each record. Producer applications can use this ID for purposes such as auditability and investigation.</p> <p>If the <a>PutRecord</a> operation throws a <b>ServiceUnavailableException</b>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream. </p> <p>Data records sent to Kinesis Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p>"]
     fn put_record(&self, input: &PutRecordInput) -> Result<PutRecordOutput, PutRecordError>;
 
 
-    #[doc="<p>Writes multiple data records into a delivery stream in a single call, which can achieve higher throughput per producer than when writing single records. To write single data records into a delivery stream, use <a>PutRecord</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. Note that if you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/limits.html\">Amazon Kinesis Firehose Limits</a>.</p> <p>Each <a>PutRecordBatch</a> request supports up to 500 records. Each record in the request can be as large as 1,000 KB (before 64-bit encoding), up to a limit of 4 MB for the entire request. These limits cannot be changed.</p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data, for example, a segment from a log file, geographic location data, web site clickstream data, and so on.</p> <p>Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\\n</code>) or some other character unique within the data. This allows the consumer application(s) to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecordBatch</a> response includes a count of failed records, <b>FailedPutCount</b>, and an array of responses, <b>RequestResponses</b>. Each entry in the <b>RequestResponses</b> array provides additional information about the processed record, and directly correlates with a record in the request array using the same ordering, from the top to the bottom. The response array always includes the same number of records as the request array. <b>RequestResponses</b> includes both successfully and unsuccessfully processed records. Firehose attempts to process all records in each <a>PutRecordBatch</a> request. A single record failure does not stop the processing of subsequent records.</p> <p>A successfully processed record includes a <b>RecordId</b> value, which is unique for the record. An unsuccessfully processed record includes <b>ErrorCode</b> and <b>ErrorMessage</b> values. <b>ErrorCode</b> reflects the type of error, and is one of the following values: <code>ServiceUnavailable</code> or <code>InternalFailure</code>. <b>ErrorMessage</b> provides more detailed information about the error.</p> <p>If there is an internal server error or a timeout, the write might have completed or it might have failed. If <b>FailedPutCount</b> is greater than 0, retry the request, resending only those records that might have failed processing. This minimizes the possible duplicate records and also reduces the total bytes sent (and corresponding charges). We recommend that you handle any duplicates at the destination.</p> <p>If <a>PutRecordBatch</a> throws <b>ServiceUnavailableException</b>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream.</p> <p>Data records sent to Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p>"]
+    #[doc="<p>Writes multiple data records into a delivery stream in a single call, which can achieve higher throughput per producer than when writing single records. To write single data records into a delivery stream, use <a>PutRecord</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. If you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/limits.html\">Amazon Kinesis Firehose Limits</a>.</p> <p>Each <a>PutRecordBatch</a> request supports up to 500 records. Each record in the request can be as large as 1,000 KB (before 64-bit encoding), up to a limit of 4 MB for the entire request. These limits cannot be changed.</p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data. For example, it could be a segment from a log file, geographic location data, web site clickstream data, and so on.</p> <p>Kinesis Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\\n</code>) or some other character unique within the data. This allows the consumer application to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecordBatch</a> response includes a count of failed records, <b>FailedPutCount</b>, and an array of responses, <b>RequestResponses</b>. Each entry in the <b>RequestResponses</b> array provides additional information about the processed record. It directly correlates with a record in the request array using the same ordering, from the top to the bottom. The response array always includes the same number of records as the request array. <b>RequestResponses</b> includes both successfully and unsuccessfully processed records. Kinesis Firehose attempts to process all records in each <a>PutRecordBatch</a> request. A single record failure does not stop the processing of subsequent records.</p> <p>A successfully processed record includes a <b>RecordId</b> value, which is unique for the record. An unsuccessfully processed record includes <b>ErrorCode</b> and <b>ErrorMessage</b> values. <b>ErrorCode</b> reflects the type of error, and is one of the following values: <code>ServiceUnavailable</code> or <code>InternalFailure</code>. <b>ErrorMessage</b> provides more detailed information about the error.</p> <p>If there is an internal server error or a timeout, the write might have completed or it might have failed. If <b>FailedPutCount</b> is greater than 0, retry the request, resending only those records that might have failed processing. This minimizes the possible duplicate records and also reduces the total bytes sent (and corresponding charges). We recommend that you handle any duplicates at the destination.</p> <p>If <a>PutRecordBatch</a> throws <b>ServiceUnavailableException</b>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream.</p> <p>Data records sent to Kinesis Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p>"]
     fn put_record_batch(&self,
                         input: &PutRecordBatchInput)
                         -> Result<PutRecordBatchOutput, PutRecordBatchError>;
 
 
-    #[doc="<p>Updates the specified destination of the specified delivery stream.</p> <p>You can use this operation to change the destination type (for example, to replace the Amazon S3 destination with Amazon Redshift) or change the parameters associated with a destination (for example, to change the bucket name of the Amazon S3 destination). The update might not occur immediately. The target delivery stream remains active while the configurations are updated, so data writes to the delivery stream can continue during this process. The updated configurations are usually effective within a few minutes.</p> <p>Note that switching between Amazon ES and other services is not supported. For an Amazon ES destination, you can only update to another Amazon ES destination.</p> <p>If the destination type is the same, Firehose merges the configuration parameters specified with the destination configuration that already exists on the delivery stream. If any of the parameters are not specified in the call, the existing values are retained. For example, in the Amazon S3 destination, if <a>EncryptionConfiguration</a> is not specified then the existing <a>EncryptionConfiguration</a> is maintained on the destination.</p> <p>If the destination type is not the same, for example, changing the destination from Amazon S3 to Amazon Redshift, Firehose does not merge any parameters. In this case, all parameters must be specified.</p> <p>Firehose uses <b>CurrentDeliveryStreamVersionId</b> to avoid race conditions and conflicting merges. This is a required field, and the service updates the configuration only if the existing configuration has a version ID that matches. After the update is applied successfully, the version ID is updated, and can be retrieved using <a>DescribeDeliveryStream</a>. You should use the new version ID to set <b>CurrentDeliveryStreamVersionId</b> in the next call.</p>"]
+    #[doc="<p>Updates the specified destination of the specified delivery stream.</p> <p>You can use this operation to change the destination type (for example, to replace the Amazon S3 destination with Amazon Redshift) or change the parameters associated with a destination (for example, to change the bucket name of the Amazon S3 destination). The update might not occur immediately. The target delivery stream remains active while the configurations are updated, so data writes to the delivery stream can continue during this process. The updated configurations are usually effective within a few minutes.</p> <p>Note that switching between Amazon ES and other services is not supported. For an Amazon ES destination, you can only update to another Amazon ES destination.</p> <p>If the destination type is the same, Kinesis Firehose merges the configuration parameters specified with the destination configuration that already exists on the delivery stream. If any of the parameters are not specified in the call, the existing values are retained. For example, in the Amazon S3 destination, if <a>EncryptionConfiguration</a> is not specified, then the existing <a>EncryptionConfiguration</a> is maintained on the destination.</p> <p>If the destination type is not the same, for example, changing the destination from Amazon S3 to Amazon Redshift, Kinesis Firehose does not merge any parameters. In this case, all parameters must be specified.</p> <p>Kinesis Firehose uses <b>CurrentDeliveryStreamVersionId</b> to avoid race conditions and conflicting merges. This is a required field, and the service updates the configuration only if the existing configuration has a version ID that matches. After the update is applied successfully, the version ID is updated, and can be retrieved using <a>DescribeDeliveryStream</a>. Use the new version ID to set <b>CurrentDeliveryStreamVersionId</b> in the next call.</p>"]
     fn update_destination(&self,
                           input: &UpdateDestinationInput)
                           -> Result<UpdateDestinationOutput, UpdateDestinationError>;
@@ -1567,7 +1748,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
     where P: ProvideAwsCredentials,
           D: DispatchSignedRequest
 {
-    #[doc="<p>Creates a delivery stream.</p> <p>By default, you can create up to 20 delivery streams per region.</p> <p>This is an asynchronous operation that immediately returns. The initial status of the delivery stream is <code>CREATING</code>. After the delivery stream is created, its status is <code>ACTIVE</code> and it now accepts data. Attempts to send data to a delivery stream that is not in the <code>ACTIVE</code> state cause an exception. To check the state of a delivery stream, use <a>DescribeDeliveryStream</a>.</p> <p>A delivery stream is configured with a single destination: Amazon S3, Amazon Elasticsearch Service, or Amazon Redshift. You must specify only one of the following destination configuration parameters: <b>ExtendedS3DestinationConfiguration</b>, <b>S3DestinationConfiguration</b>, <b>ElasticsearchDestinationConfiguration</b>, or <b>RedshiftDestinationConfiguration</b>.</p> <p>When you specify <b>S3DestinationConfiguration</b>, you can also provide the following optional values: <b>BufferingHints</b>, <b>EncryptionConfiguration</b>, and <b>CompressionFormat</b>. By default, if no <b>BufferingHints</b> value is provided, Firehose buffers data up to 5 MB or for 5 minutes, whichever condition is satisfied first. Note that <b>BufferingHints</b> is a hint, so there are some cases where the service cannot adhere to these conditions strictly; for example, record boundaries are such that the size is a little over or under the configured buffering size. By default, no encryption is performed. We strongly recommend that you enable encryption to ensure secure data storage in Amazon S3.</p> <p>A few notes about Amazon Redshift as a destination:</p> <ul> <li> <p>An Amazon Redshift destination requires an S3 bucket as intermediate location, as Firehose first delivers data to S3 and then uses <code>COPY</code> syntax to load data into an Amazon Redshift table. This is specified in the <b>RedshiftDestinationConfiguration.S3Configuration</b> parameter.</p> </li> <li> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified in <b>RedshiftDestinationConfiguration.S3Configuration</b> because the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket doesn't support these compression formats.</p> </li> <li> <p>We strongly recommend that you use the user name and password you provide exclusively with Firehose, and that the permissions for the account are restricted for Amazon Redshift <code>INSERT</code> permissions.</p> </li> </ul> <p>Firehose assumes the IAM role that is configured as part of the destination. The role should allow the Firehose principal to assume the role, and the role should have permissions that allows the service to deliver the data. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3\">Amazon S3 Bucket Access</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
+    #[doc="<p>Creates a delivery stream.</p> <p>By default, you can create up to 20 delivery streams per region.</p> <p>This is an asynchronous operation that immediately returns. The initial status of the delivery stream is <code>CREATING</code>. After the delivery stream is created, its status is <code>ACTIVE</code> and it now accepts data. Attempts to send data to a delivery stream that is not in the <code>ACTIVE</code> state cause an exception. To check the state of a delivery stream, use <a>DescribeDeliveryStream</a>.</p> <p>A Kinesis Firehose delivery stream can be configured to receive records directly from providers using <a>PutRecord</a> or <a>PutRecordBatch</a>, or it can be configured to use an existing Kinesis stream as its source. To specify a Kinesis stream as input, set the <code>DeliveryStreamType</code> parameter to <code>KinesisStreamAsSource</code>, and provide the Kinesis stream ARN and role ARN in the <code>KinesisStreamSourceConfiguration</code> parameter.</p> <p>A delivery stream is configured with a single destination: Amazon S3, Amazon ES, or Amazon Redshift. You must specify only one of the following destination configuration parameters: <b>ExtendedS3DestinationConfiguration</b>, <b>S3DestinationConfiguration</b>, <b>ElasticsearchDestinationConfiguration</b>, or <b>RedshiftDestinationConfiguration</b>.</p> <p>When you specify <b>S3DestinationConfiguration</b>, you can also provide the following optional values: <b>BufferingHints</b>, <b>EncryptionConfiguration</b>, and <b>CompressionFormat</b>. By default, if no <b>BufferingHints</b> value is provided, Kinesis Firehose buffers data up to 5 MB or for 5 minutes, whichever condition is satisfied first. Note that <b>BufferingHints</b> is a hint, so there are some cases where the service cannot adhere to these conditions strictly; for example, record boundaries are such that the size is a little over or under the configured buffering size. By default, no encryption is performed. We strongly recommend that you enable encryption to ensure secure data storage in Amazon S3.</p> <p>A few notes about Amazon Redshift as a destination:</p> <ul> <li> <p>An Amazon Redshift destination requires an S3 bucket as intermediate location, as Kinesis Firehose first delivers data to S3 and then uses <code>COPY</code> syntax to load data into an Amazon Redshift table. This is specified in the <b>RedshiftDestinationConfiguration.S3Configuration</b> parameter.</p> </li> <li> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified in <b>RedshiftDestinationConfiguration.S3Configuration</b> because the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket doesn't support these compression formats.</p> </li> <li> <p>We strongly recommend that you use the user name and password you provide exclusively with Kinesis Firehose, and that the permissions for the account are restricted for Amazon Redshift <code>INSERT</code> permissions.</p> </li> </ul> <p>Kinesis Firehose assumes the IAM role that is configured as part of the destination. The role should allow the Kinesis Firehose principal to assume the role, and the role should have permissions that allow the service to deliver the data. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3\">Amazon S3 Bucket Access</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     fn create_delivery_stream(&self,
                               input: &CreateDeliveryStreamInput)
                               -> Result<CreateDeliveryStreamOutput, CreateDeliveryStreamError> {
@@ -1658,6 +1839,38 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
     }
 
 
+
+    fn get_kinesis_stream(&self,
+                          input: &GetKinesisStreamInput)
+                          -> Result<GetKinesisStreamOutput, GetKinesisStreamError> {
+        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Firehose_20150804.GetKinesisStream");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetKinesisStreamOutput>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetKinesisStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Lists your delivery streams.</p> <p>The number of delivery streams might be too large to return using a single call to <a>ListDeliveryStreams</a>. You can limit the number of delivery streams returned, using the <b>Limit</b> parameter. To determine whether there are more delivery streams to list, check the value of <b>HasMoreDeliveryStreams</b> in the output. If there are more delivery streams to list, you can request them by specifying the name of the last delivery stream returned in the call in the <b>ExclusiveStartDeliveryStreamName</b> parameter of a subsequent call.</p>"]
     fn list_delivery_streams(&self,
                              input: &ListDeliveryStreamsInput)
@@ -1688,7 +1901,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
     }
 
 
-    #[doc="<p>Writes a single data record into an Amazon Kinesis Firehose delivery stream. To write multiple data records into a delivery stream, use <a>PutRecordBatch</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. Note that if you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits and how to request an increase, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/limits.html\">Amazon Kinesis Firehose Limits</a>. </p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data, for example, a segment from a log file, geographic location data, web site clickstream data, etc.</p> <p>Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\\n</code>) or some other character unique within the data. This allows the consumer application(s) to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecord</a> operation returns a <b>RecordId</b>, which is a unique string assigned to each record. Producer applications can use this ID for purposes such as auditability and investigation.</p> <p>If the <a>PutRecord</a> operation throws a <b>ServiceUnavailableException</b>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream. </p> <p>Data records sent to Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p>"]
+    #[doc="<p>Writes a single data record into an Amazon Kinesis Firehose delivery stream. To write multiple data records into a delivery stream, use <a>PutRecordBatch</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. Note that if you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits and how to request an increase, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/limits.html\">Amazon Kinesis Firehose Limits</a>. </p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data, for example, a segment from a log file, geographic location data, website clickstream data, and so on.</p> <p>Kinesis Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\\n</code>) or some other character unique within the data. This allows the consumer application to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecord</a> operation returns a <b>RecordId</b>, which is a unique string assigned to each record. Producer applications can use this ID for purposes such as auditability and investigation.</p> <p>If the <a>PutRecord</a> operation throws a <b>ServiceUnavailableException</b>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream. </p> <p>Data records sent to Kinesis Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p>"]
     fn put_record(&self, input: &PutRecordInput) -> Result<PutRecordOutput, PutRecordError> {
         let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
 
@@ -1717,7 +1930,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
     }
 
 
-    #[doc="<p>Writes multiple data records into a delivery stream in a single call, which can achieve higher throughput per producer than when writing single records. To write single data records into a delivery stream, use <a>PutRecord</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. Note that if you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/limits.html\">Amazon Kinesis Firehose Limits</a>.</p> <p>Each <a>PutRecordBatch</a> request supports up to 500 records. Each record in the request can be as large as 1,000 KB (before 64-bit encoding), up to a limit of 4 MB for the entire request. These limits cannot be changed.</p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data, for example, a segment from a log file, geographic location data, web site clickstream data, and so on.</p> <p>Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\\n</code>) or some other character unique within the data. This allows the consumer application(s) to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecordBatch</a> response includes a count of failed records, <b>FailedPutCount</b>, and an array of responses, <b>RequestResponses</b>. Each entry in the <b>RequestResponses</b> array provides additional information about the processed record, and directly correlates with a record in the request array using the same ordering, from the top to the bottom. The response array always includes the same number of records as the request array. <b>RequestResponses</b> includes both successfully and unsuccessfully processed records. Firehose attempts to process all records in each <a>PutRecordBatch</a> request. A single record failure does not stop the processing of subsequent records.</p> <p>A successfully processed record includes a <b>RecordId</b> value, which is unique for the record. An unsuccessfully processed record includes <b>ErrorCode</b> and <b>ErrorMessage</b> values. <b>ErrorCode</b> reflects the type of error, and is one of the following values: <code>ServiceUnavailable</code> or <code>InternalFailure</code>. <b>ErrorMessage</b> provides more detailed information about the error.</p> <p>If there is an internal server error or a timeout, the write might have completed or it might have failed. If <b>FailedPutCount</b> is greater than 0, retry the request, resending only those records that might have failed processing. This minimizes the possible duplicate records and also reduces the total bytes sent (and corresponding charges). We recommend that you handle any duplicates at the destination.</p> <p>If <a>PutRecordBatch</a> throws <b>ServiceUnavailableException</b>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream.</p> <p>Data records sent to Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p>"]
+    #[doc="<p>Writes multiple data records into a delivery stream in a single call, which can achieve higher throughput per producer than when writing single records. To write single data records into a delivery stream, use <a>PutRecord</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. If you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/limits.html\">Amazon Kinesis Firehose Limits</a>.</p> <p>Each <a>PutRecordBatch</a> request supports up to 500 records. Each record in the request can be as large as 1,000 KB (before 64-bit encoding), up to a limit of 4 MB for the entire request. These limits cannot be changed.</p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data. For example, it could be a segment from a log file, geographic location data, web site clickstream data, and so on.</p> <p>Kinesis Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\\n</code>) or some other character unique within the data. This allows the consumer application to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecordBatch</a> response includes a count of failed records, <b>FailedPutCount</b>, and an array of responses, <b>RequestResponses</b>. Each entry in the <b>RequestResponses</b> array provides additional information about the processed record. It directly correlates with a record in the request array using the same ordering, from the top to the bottom. The response array always includes the same number of records as the request array. <b>RequestResponses</b> includes both successfully and unsuccessfully processed records. Kinesis Firehose attempts to process all records in each <a>PutRecordBatch</a> request. A single record failure does not stop the processing of subsequent records.</p> <p>A successfully processed record includes a <b>RecordId</b> value, which is unique for the record. An unsuccessfully processed record includes <b>ErrorCode</b> and <b>ErrorMessage</b> values. <b>ErrorCode</b> reflects the type of error, and is one of the following values: <code>ServiceUnavailable</code> or <code>InternalFailure</code>. <b>ErrorMessage</b> provides more detailed information about the error.</p> <p>If there is an internal server error or a timeout, the write might have completed or it might have failed. If <b>FailedPutCount</b> is greater than 0, retry the request, resending only those records that might have failed processing. This minimizes the possible duplicate records and also reduces the total bytes sent (and corresponding charges). We recommend that you handle any duplicates at the destination.</p> <p>If <a>PutRecordBatch</a> throws <b>ServiceUnavailableException</b>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream.</p> <p>Data records sent to Kinesis Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p>"]
     fn put_record_batch(&self,
                         input: &PutRecordBatchInput)
                         -> Result<PutRecordBatchOutput, PutRecordBatchError> {
@@ -1749,7 +1962,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
     }
 
 
-    #[doc="<p>Updates the specified destination of the specified delivery stream.</p> <p>You can use this operation to change the destination type (for example, to replace the Amazon S3 destination with Amazon Redshift) or change the parameters associated with a destination (for example, to change the bucket name of the Amazon S3 destination). The update might not occur immediately. The target delivery stream remains active while the configurations are updated, so data writes to the delivery stream can continue during this process. The updated configurations are usually effective within a few minutes.</p> <p>Note that switching between Amazon ES and other services is not supported. For an Amazon ES destination, you can only update to another Amazon ES destination.</p> <p>If the destination type is the same, Firehose merges the configuration parameters specified with the destination configuration that already exists on the delivery stream. If any of the parameters are not specified in the call, the existing values are retained. For example, in the Amazon S3 destination, if <a>EncryptionConfiguration</a> is not specified then the existing <a>EncryptionConfiguration</a> is maintained on the destination.</p> <p>If the destination type is not the same, for example, changing the destination from Amazon S3 to Amazon Redshift, Firehose does not merge any parameters. In this case, all parameters must be specified.</p> <p>Firehose uses <b>CurrentDeliveryStreamVersionId</b> to avoid race conditions and conflicting merges. This is a required field, and the service updates the configuration only if the existing configuration has a version ID that matches. After the update is applied successfully, the version ID is updated, and can be retrieved using <a>DescribeDeliveryStream</a>. You should use the new version ID to set <b>CurrentDeliveryStreamVersionId</b> in the next call.</p>"]
+    #[doc="<p>Updates the specified destination of the specified delivery stream.</p> <p>You can use this operation to change the destination type (for example, to replace the Amazon S3 destination with Amazon Redshift) or change the parameters associated with a destination (for example, to change the bucket name of the Amazon S3 destination). The update might not occur immediately. The target delivery stream remains active while the configurations are updated, so data writes to the delivery stream can continue during this process. The updated configurations are usually effective within a few minutes.</p> <p>Note that switching between Amazon ES and other services is not supported. For an Amazon ES destination, you can only update to another Amazon ES destination.</p> <p>If the destination type is the same, Kinesis Firehose merges the configuration parameters specified with the destination configuration that already exists on the delivery stream. If any of the parameters are not specified in the call, the existing values are retained. For example, in the Amazon S3 destination, if <a>EncryptionConfiguration</a> is not specified, then the existing <a>EncryptionConfiguration</a> is maintained on the destination.</p> <p>If the destination type is not the same, for example, changing the destination from Amazon S3 to Amazon Redshift, Kinesis Firehose does not merge any parameters. In this case, all parameters must be specified.</p> <p>Kinesis Firehose uses <b>CurrentDeliveryStreamVersionId</b> to avoid race conditions and conflicting merges. This is a required field, and the service updates the configuration only if the existing configuration has a version ID that matches. After the update is applied successfully, the version ID is updated, and can be retrieved using <a>DescribeDeliveryStream</a>. Use the new version ID to set <b>CurrentDeliveryStreamVersionId</b> in the next call.</p>"]
     fn update_destination(&self,
                           input: &UpdateDestinationInput)
                           -> Result<UpdateDestinationOutput, UpdateDestinationError> {
