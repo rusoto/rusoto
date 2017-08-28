@@ -11,12 +11,18 @@
     "protocolVersion": "2015-07-09",
     "baseTypeName": "ApiGateway"
   },
+  "application-autoscaling": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2016-02-06",
+    "baseTypeName": "ApplicationAutoScaling"
+  },
   "appstream": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
     "protocolVersion": "2016-12-01",
     "baseTypeName": "AppStream"
-  },
+  },  
   "autoscaling": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
