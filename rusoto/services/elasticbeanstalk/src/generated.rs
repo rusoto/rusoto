@@ -795,7 +795,7 @@ impl ApplicationVersionDescriptionMessageDeserializer {
 pub struct ApplicationVersionDescriptionsMessage {
     #[doc="<p>List of <code>ApplicationVersionDescription</code> objects sorted in order of creation.</p>"]
     pub application_versions: Option<Vec<ApplicationVersionDescription>>,
-    #[doc="<p>For a paginated request, the token that you can pass in a subsequent request to get the next page.</p>"]
+    #[doc="<p>In a paginated request, the token that you can pass in a subsequent request to get the next response page.</p>"]
     pub next_token: Option<String>,
 }
 
@@ -2048,7 +2048,7 @@ impl ConfigurationOptionValueTypeDeserializer {
 pub struct ConfigurationOptionsDescription {
     #[doc="<p> A list of <a>ConfigurationOptionDescription</a>. </p>"]
     pub options: Option<Vec<ConfigurationOptionDescription>>,
-    #[doc="<p>The ARN of the custom platform.</p>"]
+    #[doc="<p>The ARN of the platform.</p>"]
     pub platform_arn: Option<String>,
     #[doc="<p>The name of the solution stack these configuration options belong to.</p>"]
     pub solution_stack_name: Option<String>,
@@ -2123,7 +2123,7 @@ pub struct ConfigurationSettingsDescription {
     pub environment_name: Option<String>,
     #[doc="<p>A list of the configuration options and their values in this configuration set.</p>"]
     pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
-    #[doc="<p>The ARN of the custom platform.</p>"]
+    #[doc="<p>The ARN of the platform.</p>"]
     pub platform_arn: Option<String>,
     #[doc="<p>The name of the solution stack this configuration set uses.</p>"]
     pub solution_stack_name: Option<String>,
@@ -2588,7 +2588,7 @@ pub struct CreateEnvironmentMessage {
     pub cname_prefix: Option<String>,
     #[doc="<p>Describes this environment.</p>"]
     pub description: Option<String>,
-    #[doc="<p>A unique name for the deployment environment. Used in the application URL.</p> <p>Constraint: Must be from 4 to 40 characters in length. The name can contain only letters, numbers, and hyphens. It cannot start or end with a hyphen. This name must be unique in your account. If the specified name already exists, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>Default: If the CNAME parameter is not specified, the environment name becomes part of the CNAME, and therefore part of the visible URL for your application.</p>"]
+    #[doc="<p>A unique name for the deployment environment. Used in the application URL.</p> <p>Constraint: Must be from 4 to 40 characters in length. The name can contain only letters, numbers, and hyphens. It cannot start or end with a hyphen. This name must be unique within a region in your account. If the specified name already exists in the region, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>Default: If the CNAME parameter is not specified, the environment name becomes part of the CNAME, and therefore part of the visible URL for your application.</p>"]
     pub environment_name: Option<String>,
     #[doc="<p>The name of the group to which the target environment belongs. Specify a group name only if the environment's name is specified in an environment manifest and not with the environment name parameter. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html\">Environment Manifest (env.yaml)</a> for details.</p>"]
     pub group_name: Option<String>,
@@ -2596,7 +2596,7 @@ pub struct CreateEnvironmentMessage {
     pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
     #[doc="<p>A list of custom user-defined configuration options to remove from the configuration set for this new environment.</p>"]
     pub options_to_remove: Option<Vec<OptionSpecification>>,
-    #[doc="<p>The ARN of the custom platform.</p>"]
+    #[doc="<p>The ARN of the platform.</p>"]
     pub platform_arn: Option<String>,
     #[doc="<p>This is an alternative to specifying a template name. If specified, AWS Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack.</p>"]
     pub solution_stack_name: Option<String>,
@@ -3136,7 +3136,7 @@ impl DeletePlatformVersionResultDeserializer {
 pub struct Deployment {
     #[doc="<p>The ID of the deployment. This number increases by one each time that you deploy source code or change instance configuration settings.</p>"]
     pub deployment_id: Option<i64>,
-    #[doc="<p>For in-progress deployments, the time that the deloyment started.</p> <p>For completed deployments, the time that the deployment ended.</p>"]
+    #[doc="<p>For in-progress deployments, the time that the deployment started.</p> <p>For completed deployments, the time that the deployment ended.</p>"]
     pub deployment_time: Option<String>,
     #[doc="<p>The status of the deployment:</p> <ul> <li> <p> <code>In Progress</code> : The deployment is in progress.</p> </li> <li> <p> <code>Deployed</code> : The deployment succeeded.</p> </li> <li> <p> <code>Failed</code> : The deployment failed.</p> </li> </ul>"]
     pub status: Option<String>,
@@ -3219,9 +3219,9 @@ impl DeploymentTimestampDeserializer {
 pub struct DescribeApplicationVersionsMessage {
     #[doc="<p>Specify an application name to show only application versions for that application.</p>"]
     pub application_name: Option<String>,
-    #[doc="<p>Specify a maximum number of application versions to paginate in the request.</p>"]
+    #[doc="<p>For a paginated request. Specify a maximum number of application versions to include in each response.</p> <p>If no <code>MaxRecords</code> is specified, all available application versions are retrieved in a single response.</p>"]
     pub max_records: Option<i64>,
-    #[doc="<p>Specify a next token to retrieve the next page in a paginated request.</p>"]
+    #[doc="<p>For a paginated request. Specify a token from a previous response page to retrieve the next response page. All other parameter values must be identical to the ones specified in the initial request.</p> <p>If no <code>NextToken</code> is specified, the first page is retrieved.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Specify a version label to show a specific application version.</p>"]
     pub version_labels: Option<Vec<String>>,
@@ -3724,6 +3724,10 @@ pub struct DescribeEnvironmentsMessage {
     pub include_deleted: Option<bool>,
     #[doc="<p> If specified when <code>IncludeDeleted</code> is set to <code>true</code>, then environments deleted after this date are displayed. </p>"]
     pub included_deleted_back_to: Option<String>,
+    #[doc="<p>For a paginated request. Specify a maximum number of environments to include in each response.</p> <p>If no <code>MaxRecords</code> is specified, all available environments are retrieved in a single response.</p>"]
+    pub max_records: Option<i64>,
+    #[doc="<p>For a paginated request. Specify a token from a previous response page to retrieve the next response page. All other parameter values must be identical to the ones specified in the initial request.</p> <p>If no <code>NextToken</code> is specified, the first page is retrieved.</p>"]
+    pub next_token: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those that are associated with this application version.</p>"]
     pub version_label: Option<String>,
 }
@@ -3758,6 +3762,13 @@ impl DescribeEnvironmentsMessageSerializer {
         if let Some(ref field_value) = obj.included_deleted_back_to {
             params.put(&format!("{}{}", prefix, "IncludedDeletedBackTo"),
                        &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"),
+                       &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         if let Some(ref field_value) = obj.version_label {
             params.put(&format!("{}{}", prefix, "VersionLabel"), &field_value);
@@ -4066,6 +4077,20 @@ impl EndpointURLDeserializer {
 
     }
 }
+struct EnvironmentArnDeserializer;
+impl EnvironmentArnDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Describes the properties of an environment.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct EnvironmentDescription {
@@ -4083,6 +4108,8 @@ pub struct EnvironmentDescription {
     pub description: Option<String>,
     #[doc="<p>For load-balanced, autoscaling environments, the URL to the LoadBalancer. For single-instance environments, the IP address of the instance.</p>"]
     pub endpoint_url: Option<String>,
+    #[doc="<p>The environment's Amazon Resource Name (ARN), which can be used in other API reuqests that require an ARN.</p>"]
+    pub environment_arn: Option<String>,
     #[doc="<p>The ID of this environment.</p>"]
     pub environment_id: Option<String>,
     #[doc="<p>A list of links to other environments in the same group.</p>"]
@@ -4093,7 +4120,7 @@ pub struct EnvironmentDescription {
     pub health: Option<String>,
     #[doc="<p>Returns the health status of the application running in your environment. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">Health Colors and Statuses</a>.</p>"]
     pub health_status: Option<String>,
-    #[doc="<p>The ARN of the custom platform.</p>"]
+    #[doc="<p>The ARN of the platform.</p>"]
     pub platform_arn: Option<String>,
     #[doc="<p>The description of the AWS resources used by this environment.</p>"]
     pub resources: Option<EnvironmentResourcesDescription>,
@@ -4162,6 +4189,11 @@ impl EnvironmentDescriptionDeserializer {
                             obj.endpoint_url =
                                 Some(try!(EndpointURLDeserializer::deserialize("EndpointURL",
                                                                                stack)));
+                        }
+                        "EnvironmentArn" => {
+                            obj.environment_arn =
+                                Some(try!(EnvironmentArnDeserializer::deserialize("EnvironmentArn",
+                                                                                  stack)));
                         }
                         "EnvironmentId" => {
                             obj.environment_id =
@@ -4281,6 +4313,8 @@ impl EnvironmentDescriptionsListDeserializer {
 pub struct EnvironmentDescriptionsMessage {
     #[doc="<p> Returns an <a>EnvironmentDescription</a> list. </p>"]
     pub environments: Option<Vec<EnvironmentDescription>>,
+    #[doc="<p>In a paginated request, the token that you can pass in a subsequent request to get the next response page.</p>"]
+    pub next_token: Option<String>,
 }
 
 struct EnvironmentDescriptionsMessageDeserializer;
@@ -4307,6 +4341,10 @@ impl EnvironmentDescriptionsMessageDeserializer {
                     match &name[..] {
                         "Environments" => {
                             obj.environments = Some(try!(EnvironmentDescriptionsListDeserializer::deserialize("Environments", stack)));
+                        }
+                        "NextToken" => {
+                            obj.next_token = Some(try!(TokenDeserializer::deserialize("NextToken",
+                                                                                      stack)));
                         }
                         _ => skip_tree(stack),
                     }
@@ -4951,7 +4989,7 @@ pub struct EventDescription {
     pub event_date: Option<String>,
     #[doc="<p>The event message.</p>"]
     pub message: Option<String>,
-    #[doc="<p>The ARN of the custom platform.</p>"]
+    #[doc="<p>The ARN of the platform.</p>"]
     pub platform_arn: Option<String>,
     #[doc="<p>The web service request ID for the activity of this event.</p>"]
     pub request_id: Option<String>,

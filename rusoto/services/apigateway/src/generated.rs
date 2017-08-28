@@ -107,7 +107,7 @@ pub struct ApiKeyIds {
 #[doc="<p>Represents a collection of API keys as represented by an <a>ApiKeys</a> resource.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html\">Use API Keys</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ApiKeys {
-    #[doc="<p>The current page of any <a>ApiKey</a> resources in the collection of <a>ApiKey</a> resources.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<ApiKey>>,
@@ -181,7 +181,7 @@ pub struct Authorizer {
 #[doc="<p>Represents a collection of <a>Authorizer</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html\">Enable custom authorization</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Authorizers {
-    #[doc="<p>Gets the current list of <a>Authorizer</a> resources in the collection.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<Authorizer>>,
@@ -197,11 +197,11 @@ pub struct BasePathMapping {
     #[serde(rename="basePath")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub base_path: Option<String>,
-    #[doc="<p>The name of the API.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub rest_api_id: Option<String>,
-    #[doc="<p>The name of the API's stage.</p>"]
+    #[doc="<p>The name of the associated stage.</p>"]
     #[serde(rename="stage")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub stage: Option<String>,
@@ -210,7 +210,7 @@ pub struct BasePathMapping {
 #[doc="<p>Represents a collection of <a>BasePathMapping</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html\">Use Custom Domain Names</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BasePathMappings {
-    #[doc="<p>The current page of any <a>BasePathMapping</a> resources in the collection of base path mapping resources.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<BasePathMapping>>,
@@ -247,7 +247,7 @@ pub struct ClientCertificate {
 #[doc="<p>Represents a collection of <a>ClientCertificate</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html\">Use Client-Side Certificate</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ClientCertificates {
-    #[doc="<p>The current page of any <a>ClientCertificate</a> resources in the collection of <a>ClientCertificate</a> resources.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<ClientCertificate>>,
@@ -322,7 +322,7 @@ pub struct CreateAuthorizerRequest {
     #[serde(rename="providerARNs")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub provider_ar_ns: Option<Vec<String>>,
-    #[doc="<p>The <a>RestApi</a> identifier under which the <a>Authorizer</a> will be created.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>[Required] The type of the authorizer.</p>"]
@@ -340,7 +340,7 @@ pub struct CreateBasePathMappingRequest {
     #[doc="<p>The domain name of the <a>BasePathMapping</a> resource to create.</p>"]
     #[serde(rename="domainName")]
     pub domain_name: String,
-    #[doc="<p>The name of the API that you want to apply this mapping to.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The name of the API's stage that you want to use for this mapping. Leave this blank if you do not want callers to explicitly specify the stage name after any base path name.</p>"]
@@ -364,7 +364,7 @@ pub struct CreateDeploymentRequest {
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The <a>RestApi</a> resource identifier for the <a>Deployment</a> resource to create.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The description of the <a>Stage</a> resource for the <a>Deployment</a> resource to create.</p>"]
@@ -390,7 +390,7 @@ pub struct CreateDocumentationPartRequest {
     #[doc="<p>[Required] The new documentation content map of the targeted API entity. Enclosed key-value pairs are API-specific, but only Swagger-compliant key-value pairs can be exported and, hence, published.</p>"]
     #[serde(rename="properties")]
     pub properties: String,
-    #[doc="<p>[Required] The identifier of an API of the to-be-created documentation part.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -405,7 +405,7 @@ pub struct CreateDocumentationVersionRequest {
     #[doc="<p>[Required] The version identifier of the new snapshot.</p>"]
     #[serde(rename="documentationVersion")]
     pub documentation_version: String,
-    #[doc="<p>[Required] Specifies the API identifier of the to-be-created documentation version.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The stage name to be associated with the new documentation snapshot.</p>"]
@@ -471,7 +471,7 @@ pub struct CreateRequestValidatorRequest {
     #[serde(rename="name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>[Required] The identifier of the <a>RestApi</a> for which the <a>RequestValidator</a> is created.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>A Boolean flag to indicate whether to validate request body according to the configured model schema for the method (<code>true</code>) or not (<code>false</code>).</p>"]
@@ -493,7 +493,7 @@ pub struct CreateResourceRequest {
     #[doc="<p>The last path segment for this resource.</p>"]
     #[serde(rename="pathPart")]
     pub path_part: String,
-    #[doc="<p>The identifier of the <a>RestApi</a> for the resource. </p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -544,7 +544,7 @@ pub struct CreateStageRequest {
     #[serde(rename="documentationVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub documentation_version: Option<String>,
-    #[doc="<p>The identifier of the <a>RestApi</a> resource for the <a>Stage</a> resource to create.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The name for the <a>Stage</a> resource.</p>"]
@@ -608,7 +608,7 @@ pub struct DeleteAuthorizerRequest {
     #[doc="<p>The identifier of the <a>Authorizer</a> resource.</p>"]
     #[serde(rename="authorizerId")]
     pub authorizer_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>Authorizer</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -638,7 +638,7 @@ pub struct DeleteDeploymentRequest {
     #[doc="<p>The identifier of the <a>Deployment</a> resource to delete.</p>"]
     #[serde(rename="deploymentId")]
     pub deployment_id: String,
-    #[doc="<p>The identifier of the <a>RestApi</a> resource for the <a>Deployment</a> resource to delete.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -649,7 +649,7 @@ pub struct DeleteDocumentationPartRequest {
     #[doc="<p>[Required] The identifier of the to-be-deleted documentation part.</p>"]
     #[serde(rename="documentationPartId")]
     pub documentation_part_id: String,
-    #[doc="<p>[Required] Specifies the identifier of an API of the to-be-deleted documentation part.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -660,7 +660,7 @@ pub struct DeleteDocumentationVersionRequest {
     #[doc="<p>[Required] The version identifier of a to-be-deleted documentation snapshot.</p>"]
     #[serde(rename="documentationVersion")]
     pub documentation_version: String,
-    #[doc="<p>[Required] The identifier of an API of a to-be-deleted documentation snapshot.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -673,6 +673,17 @@ pub struct DeleteDomainNameRequest {
     pub domain_name: String,
 }
 
+#[doc="<p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DeleteGatewayResponseRequest {
+    #[doc="<p><p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p></p>"]
+    #[serde(rename="responseType")]
+    pub response_type: String,
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
+    #[serde(rename="restApiId")]
+    pub rest_api_id: String,
+}
+
 #[doc="<p>Represents a delete integration request.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteIntegrationRequest {
@@ -682,7 +693,7 @@ pub struct DeleteIntegrationRequest {
     #[doc="<p>Specifies a delete integration request's resource identifier.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>Specifies a delete integration request's API identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -696,7 +707,7 @@ pub struct DeleteIntegrationResponseRequest {
     #[doc="<p>Specifies a delete integration response request's resource identifier.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>Specifies a delete integration response request's API identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>Specifies a delete integration response request's status code.</p>"]
@@ -713,7 +724,7 @@ pub struct DeleteMethodRequest {
     #[doc="<p>The <a>Resource</a> identifier for the <a>Method</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>Method</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -727,7 +738,7 @@ pub struct DeleteMethodResponseRequest {
     #[doc="<p>The <a>Resource</a> identifier for the <a>MethodResponse</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>MethodResponse</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The status code identifier for the <a>MethodResponse</a> resource.</p>"]
@@ -741,7 +752,7 @@ pub struct DeleteModelRequest {
     #[doc="<p>The name of the model to delete.</p>"]
     #[serde(rename="modelName")]
     pub model_name: String,
-    #[doc="<p>The <a>RestApi</a> under which the model will be deleted.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -752,7 +763,7 @@ pub struct DeleteRequestValidatorRequest {
     #[doc="<p>[Required] The identifier of the <a>RequestValidator</a> to be deleted.</p>"]
     #[serde(rename="requestValidatorId")]
     pub request_validator_id: String,
-    #[doc="<p>[Required] The identifier of the <a>RestApi</a> from which the given <a>RequestValidator</a> is deleted.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -763,7 +774,7 @@ pub struct DeleteResourceRequest {
     #[doc="<p>The identifier of the <a>Resource</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>Resource</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -771,7 +782,7 @@ pub struct DeleteResourceRequest {
 #[doc="<p>Request to delete the specified API from your collection.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteRestApiRequest {
-    #[doc="<p>The ID of the <a>RestApi</a> you want to delete.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -779,7 +790,7 @@ pub struct DeleteRestApiRequest {
 #[doc="<p>Requests Amazon API Gateway to delete a <a>Stage</a> resource.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteStageRequest {
-    #[doc="<p>The identifier of the <a>RestApi</a> resource for the <a>Stage</a> resource to delete.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The name of the <a>Stage</a> resource to delete.</p>"]
@@ -798,7 +809,7 @@ pub struct DeleteUsagePlanKeyRequest {
     pub usage_plan_id: String,
 }
 
-#[doc="<p>The DELETE request to delete a uasge plan of a given plan Id.</p>"]
+#[doc="<p>The DELETE request to delete a usage plan of a given plan Id.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteUsagePlanRequest {
     #[doc="<p>The Id of the to-be-deleted usage plan.</p>"]
@@ -832,7 +843,7 @@ pub struct Deployment {
 #[doc="<p>Represents a collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p> <div class=\"remarks\">To create a new deployment of a <a>RestApi</a>, make a <code>POST</code> request against this resource. To view, update, or delete an existing deployment, make a <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> request, respectively, on a specified <a>Deployment</a> resource.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html\">Deploying an API</a>, <a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html\">AWS CLI</a>, <a href=\"https://aws.amazon.com/tools/\">AWS SDKs</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Deployments {
-    #[doc="<p>The current page of any <a>Deployment</a> resources in the collection of deployment resources.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<Deployment>>,
@@ -898,7 +909,7 @@ pub struct DocumentationPartLocation {
 #[doc="<p>The collection of documentation parts of an API.</p> <div class=\"remarks\"/> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationPart</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DocumentationParts {
-    #[doc="<p>The current page of <a>DocumentationPart</a> resources in the <a>DocumentationParts</a> collection.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<DocumentationPart>>,
@@ -927,7 +938,7 @@ pub struct DocumentationVersion {
 #[doc="<p>The collection of documentation snapshots of an API. </p> <div class=\"remarks\"><p>Use the <a>DocumentationVersions</a> to manage documentation snapshots associated with various API stages.</p></div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersion</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DocumentationVersions {
-    #[doc="<p>The current page of <a>DocumentationVersion</a> items from the <a>DocumentationVersions</a> collection of an API.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<DocumentationVersion>>,
@@ -964,7 +975,7 @@ pub struct DomainName {
 #[doc="<p>Represents a collection of <a>DomainName</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html\">Use Client-Side Certificate</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DomainNames {
-    #[doc="<p>The current page of any <a>DomainName</a> resources in the collection of <a>DomainName</a> resources.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<DomainName>>,
@@ -987,7 +998,7 @@ pub struct ExportResponse {
 #[doc="<p>Request to flush authorizer cache entries on a specified stage.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct FlushStageAuthorizersCacheRequest {
-    #[doc="<p>The API identifier of the stage to flush.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The name of the stage to flush.</p>"]
@@ -998,12 +1009,49 @@ pub struct FlushStageAuthorizersCacheRequest {
 #[doc="<p>Requests Amazon API Gateway to flush a stage's cache.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct FlushStageCacheRequest {
-    #[doc="<p>The API identifier of the stage to flush its cache.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The name of the stage to flush its cache.</p>"]
     #[serde(rename="stageName")]
     pub stage_name: String,
+}
+
+#[doc="<p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class=\"remarks\"> For more information about valid gateway response types, see <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html\">Gateway Response Types Supported by Amazon API Gateway</a> <div class=\"example\"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING_AUTHNETICATION_TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html\", \"name\": \"gatewayresponse\", \"templated\": true }, \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" }, \"gatewayresponse:delete\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" } }, \"defaultResponse\": false, \"responseParameters\": { \"gatewayresponse.header.x-request-path\": \"method.request.path.petId\", \"gatewayresponse.header.Access-Control-Allow-Origin\": \"&apos;a.b.c&apos;\", \"gatewayresponse.header.x-request-query\": \"method.request.querystring.q\", \"gatewayresponse.header.x-request-header\": \"method.request.header.Accept\" }, \"responseTemplates\": { \"application/json\": \"{\\n \\\"message\\\": $context.error.messageString,\\n \\\"type\\\": \\\"$context.error.responseType\\\",\\n \\\"stage\\\": \\\"$context.stage\\\",\\n \\\"resourcePath\\\": \\\"$context.resourcePath\\\",\\n \\\"stageVariables.a\\\": \\\"$stageVariables.a\\\",\\n \\\"statusCode\\\": \\\"&apos;404&apos;\\\"\\n}\" }, \"responseType\": \"MISSING_AUTHENTICATION_TOKEN\", \"statusCode\": \"404\" }</code></pre> <p></p> </div> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html\">Customize Gateway Responses</a> </div>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GatewayResponse {
+    #[doc="<p>A Boolean flag to indicate whether this <a>GatewayResponse</a> is the default gateway response (<code>true</code>) or not (<code>false</code>). A default gateway response is one generated by Amazon API Gateway without any customization by an API developer. </p>"]
+    #[serde(rename="defaultResponse")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub default_response: Option<bool>,
+    #[doc="<p>Response parameters (paths, query strings and headers) of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p>"]
+    #[serde(rename="responseParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    #[doc="<p>Response templates of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p>"]
+    #[serde(rename="responseTemplates")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    #[doc="<p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p>"]
+    #[serde(rename="responseType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub response_type: Option<String>,
+    #[doc="<p>The HTTP status code for this <a>GatewayResponse</a>.</p>"]
+    #[serde(rename="statusCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status_code: Option<String>,
+}
+
+#[doc="<p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class=\"remarks\"> For more information about valid gateway response types, see <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html\">Gateway Response Types Supported by Amazon API Gateway</a> <div class=\"example\"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p></p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html\", \"name\": \"gatewayresponse\", \"templated\": true }, \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses\" }, \"first\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses\" }, \"gatewayresponse:by-type\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"item\": [ { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/THROTTLED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE\" } ] }, \"_embedded\": { \"item\": [ { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INTEGRATION_FAILURE\", \"statusCode\": \"504\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"RESOURCE_NOT_FOUND\", \"statusCode\": \"404\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"REQUEST_TOO_LARGE\", \"statusCode\": \"413\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/THROTTLED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/THROTTLED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"THROTTLED\", \"statusCode\": \"429\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"UNSUPPORTED_MEDIA_TYPE\", \"statusCode\": \"415\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"AUTHORIZER_CONFIGURATION_ERROR\", \"statusCode\": \"500\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"DEFAULT_5XX\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"DEFAULT_4XX\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"BAD_REQUEST_PARAMETERS\", \"statusCode\": \"400\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"BAD_REQUEST_BODY\", \"statusCode\": \"400\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"EXPIRED_TOKEN\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"ACCESS_DENIED\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INVALID_API_KEY\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"UNAUTHORIZED\", \"statusCode\": \"401\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"API_CONFIGURATION_ERROR\", \"statusCode\": \"500\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"QUOTA_EXCEEDED\", \"statusCode\": \"429\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INTEGRATION_TIMEOUT\", \"statusCode\": \"504\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"MISSING_AUTHENTICATION_TOKEN\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INVALID_SIGNATURE\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"AUTHORIZER_FAILURE\", \"statusCode\": \"500\" } ] } }</code></pre> <p></p> </div> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html\">Customize Gateway Responses</a> </div>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GatewayResponses {
+    #[doc="<p>Returns the entire collection, because of no pagination support.</p>"]
+    #[serde(rename="items")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub items: Option<Vec<GatewayResponse>>,
+    #[serde(rename="position")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub position: Option<String>,
 }
 
 #[doc="<p>A request to generate a <a>ClientCertificate</a> resource.</p>"]
@@ -1042,7 +1090,7 @@ pub struct GetApiKeysRequest {
     #[serde(rename="includeValues")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub include_values: Option<bool>,
-    #[doc="<p>The maximum number of <a>ApiKeys</a> to get information about.</p>"]
+    #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<i64>,
@@ -1062,7 +1110,7 @@ pub struct GetAuthorizerRequest {
     #[doc="<p>The identifier of the <a>Authorizer</a> resource.</p>"]
     #[serde(rename="authorizerId")]
     pub authorizer_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>Authorizer</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1078,7 +1126,7 @@ pub struct GetAuthorizersRequest {
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>Authorizers</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1141,7 +1189,7 @@ pub struct GetDeploymentRequest {
     #[serde(rename="embed")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub embed: Option<Vec<String>>,
-    #[doc="<p>The identifier of the <a>RestApi</a> resource for the <a>Deployment</a> resource to get information about.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1157,7 +1205,7 @@ pub struct GetDeploymentsRequest {
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
-    #[doc="<p>The identifier of the <a>RestApi</a> resource for the collection of <a>Deployment</a> resources to get information about.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1165,10 +1213,10 @@ pub struct GetDeploymentsRequest {
 #[doc="<p>Gets a specified documentation part of a given API.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetDocumentationPartRequest {
-    #[doc="<p>[Required] The identifier of the to-be-retrieved documentation part.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="documentationPartId")]
     pub documentation_part_id: String,
-    #[doc="<p>[Required] The identifier of an API of the to-be-retrieved documentation part.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1192,7 +1240,7 @@ pub struct GetDocumentationPartsRequest {
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
-    #[doc="<p>[Required] The identifier of the API of the to-be-retrieved documentation parts.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The type of API entities of the to-be-retrieved documentation parts. </p>"]
@@ -1207,7 +1255,7 @@ pub struct GetDocumentationVersionRequest {
     #[doc="<p>[Required] The version identifier of the to-be-retrieved documentation snapshot.</p>"]
     #[serde(rename="documentationVersion")]
     pub documentation_version: String,
-    #[doc="<p>[Required] The identifier of the API of the to-be-retrieved documentation snapshot.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1223,7 +1271,7 @@ pub struct GetDocumentationVersionsRequest {
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
-    #[doc="<p>[Required] The identifier of an API of the to-be-retrieved documentation versions.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1263,12 +1311,39 @@ pub struct GetExportRequest {
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The identifier of the <a>RestApi</a> to be exported.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The name of the <a>Stage</a> that will be exported.</p>"]
     #[serde(rename="stageName")]
     pub stage_name: String,
+}
+
+#[doc="<p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetGatewayResponseRequest {
+    #[doc="<p><p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p></p>"]
+    #[serde(rename="responseType")]
+    pub response_type: String,
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
+    #[serde(rename="restApiId")]
+    pub rest_api_id: String,
+}
+
+#[doc="<p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetGatewayResponsesRequest {
+    #[doc="<p>The maximum number of returned results per page. The <a>GatewayResponses</a> collection does not support pagination and the limit does not apply here.</p>"]
+    #[serde(rename="limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub limit: Option<i64>,
+    #[doc="<p>The current pagination position in the paged result set. The <a>GatewayResponse</a> collection does not support pagination and the position does not apply here.</p>"]
+    #[serde(rename="position")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub position: Option<String>,
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
+    #[serde(rename="restApiId")]
+    pub rest_api_id: String,
 }
 
 #[doc="<p>Represents a get integration request.</p>"]
@@ -1280,7 +1355,7 @@ pub struct GetIntegrationRequest {
     #[doc="<p>Specifies a get integration request's resource identifier</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>Specifies a get integration request's API identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1294,7 +1369,7 @@ pub struct GetIntegrationResponseRequest {
     #[doc="<p>Specifies a get integration response request's resource identifier.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>Specifies a get integration response request's API identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>Specifies a get integration response request's status code.</p>"]
@@ -1311,7 +1386,7 @@ pub struct GetMethodRequest {
     #[doc="<p>The <a>Resource</a> identifier for the <a>Method</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>Method</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1325,7 +1400,7 @@ pub struct GetMethodResponseRequest {
     #[doc="<p>The <a>Resource</a> identifier for the <a>MethodResponse</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>MethodResponse</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The status code for the <a>MethodResponse</a> resource.</p>"]
@@ -1354,7 +1429,7 @@ pub struct GetModelTemplateRequest {
     #[doc="<p>The name of the model for which to generate a template.</p>"]
     #[serde(rename="modelName")]
     pub model_name: String,
-    #[doc="<p>The ID of the <a>RestApi</a> under which the model exists.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1370,7 +1445,7 @@ pub struct GetModelsRequest {
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
-    #[doc="<p>The <a>RestApi</a> identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1381,7 +1456,7 @@ pub struct GetRequestValidatorRequest {
     #[doc="<p>[Required] The identifier of the <a>RequestValidator</a> to be retrieved.</p>"]
     #[serde(rename="requestValidatorId")]
     pub request_validator_id: String,
-    #[doc="<p>[Required] The identifier of the <a>RestApi</a> to which the specified <a>RequestValidator</a> belongs.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1397,7 +1472,7 @@ pub struct GetRequestValidatorsRequest {
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
-    #[doc="<p>[Required] The identifier of a <a>RestApi</a> to which the <a>RequestValidators</a> collection belongs.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1412,7 +1487,7 @@ pub struct GetResourceRequest {
     #[doc="<p>The identifier for the <a>Resource</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1432,7 +1507,7 @@ pub struct GetResourcesRequest {
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
-    #[doc="<p>The <a>RestApi</a> identifier for the Resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1465,7 +1540,7 @@ pub struct GetSdkRequest {
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The identifier of the <a>RestApi</a> that the SDK will use.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The language for the generated SDK. Currently <code>javascript</code>, <code>android</code>, and <code>objectivec</code> (for iOS) are supported.</p>"]
@@ -1500,7 +1575,7 @@ pub struct GetSdkTypesRequest {
 #[doc="<p>Requests Amazon API Gateway to get information about a <a>Stage</a> resource.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetStageRequest {
-    #[doc="<p>The identifier of the <a>RestApi</a> resource for the <a>Stage</a> resource to get information about.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The name of the <a>Stage</a> resource to get information about.</p>"]
@@ -1515,7 +1590,7 @@ pub struct GetStagesRequest {
     #[serde(rename="deploymentId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_id: Option<String>,
-    #[doc="<p>The stages' API identifiers.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1641,7 +1716,7 @@ pub struct ImportDocumentationPartsRequest {
     #[serde(rename="mode")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub mode: Option<String>,
-    #[doc="<p>[Required] The identifier of an API of the to-be-imported documentation parts.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -1649,7 +1724,7 @@ pub struct ImportDocumentationPartsRequest {
 #[doc="<p>A POST request to import an API to Amazon API Gateway using an input of an API definition file.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ImportRestApiRequest {
-    #[doc="<p>The POST request body containing external API definitions. Currently, only Swagger definition JSON files are supported.</p>"]
+    #[doc="<p>The POST request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>"]
     #[serde(rename="body")]
     #[serde(
                             deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -1661,7 +1736,7 @@ pub struct ImportRestApiRequest {
     #[serde(rename="failOnWarnings")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub fail_on_warnings: Option<bool>,
-    #[doc="<p>Custom header parameters as part of the request.</p>"]
+    #[doc="<p>Custom header parameters as part of the request. For example, to exclude <a>DocumentationParts</a> from an imported API, set <code>ignore=documentation</code> as a <code>parameters</code> value, as in the AWS CLI command of <code>aws apigateway import-rest-api --parameters ignore=documentation --body 'file:///path/to/imported-api-body.json</code>.</p>"]
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1889,7 +1964,7 @@ pub struct Model {
 #[doc="<p>Represents a collection of <a>Model</a> resources.</p> <div class=\"seeAlso\"> <a>Method</a>, <a>MethodResponse</a>, <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html\">Models and Mappings</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Models {
-    #[doc="<p>Gets the current <a>Model</a> resource in the collection.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<Model>>,
@@ -1919,7 +1994,30 @@ pub struct PatchOperation {
     pub value: Option<String>,
 }
 
-#[doc="<p>Represents a put integration request.</p>"]
+#[doc="<p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct PutGatewayResponseRequest {
+    #[doc="<p><p>Response parameters (paths, query strings and headers) of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p></p>"]
+    #[serde(rename="responseParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    #[doc="<p><p>Response templates of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p></p>"]
+    #[serde(rename="responseTemplates")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    #[doc="<p><p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p></p>"]
+    #[serde(rename="responseType")]
+    pub response_type: String,
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
+    #[serde(rename="restApiId")]
+    pub rest_api_id: String,
+    #[doc="The HTTP status code of the <a>GatewayResponse</a>."]
+    #[serde(rename="statusCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status_code: Option<String>,
+}
+
+#[doc="<p>Sets up a method's integration.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutIntegrationRequest {
     #[doc="<p>Specifies a put integration input's cache key parameters.</p>"]
@@ -1960,13 +2058,13 @@ pub struct PutIntegrationRequest {
     #[doc="<p>Specifies a put integration request's resource ID.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>Specifies a put integration request's API identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>Specifies a put integration input's type.</p>"]
     #[serde(rename="type")]
     pub type_: String,
-    #[doc="<p>Specifies a put integration input's Uniform Resource Identifier (URI). When the integration type is HTTP or AWS, this field is required. For integration with Lambda as an AWS service proxy, this value is of the 'arn:aws:apigateway:&lt;region&gt;:lambda:path/2015-03-31/functions/&lt;functionArn&gt;/invocations' format.</p>"]
+    #[doc="<p>Specifies the integration's Uniform Resource Identifier (URI). For HTTP integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href=\"https://en.wikipedia.org/wiki/Uniform_Resource_Identifier\" target=\"_blank\">RFC-3986 specification</a>. For AWS integrations, the URI should be of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:{path|action}/{service_api}</code>. <code>Region</code>, <code>subdomain</code> and <code>service</code> are used to determine the right endpoint. For AWS services that use the <code>Action=</code> query string parameter, <code>service_api</code> should be a valid action for the desired service. For RESTful AWS service APIs, <code>path</code> is used to indicate that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>.</p>"]
     #[serde(rename="uri")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub uri: Option<String>,
@@ -1993,7 +2091,7 @@ pub struct PutIntegrationResponseRequest {
     #[serde(rename="responseTemplates")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Specifies a put integration response request's API identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>Specifies the selection pattern of a put integration response.</p>"]
@@ -2041,7 +2139,7 @@ pub struct PutMethodRequest {
     #[doc="<p>The <a>Resource</a> identifier for the new <a>Method</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the new <a>Method</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2063,7 +2161,7 @@ pub struct PutMethodResponseRequest {
     #[serde(rename="responseParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub response_parameters: Option<::std::collections::HashMap<String, bool>>,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>Method</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The method response's status code.</p>"]
@@ -2074,7 +2172,7 @@ pub struct PutMethodResponseRequest {
 #[doc="<p>A PUT request to update an existing API, with external API definitions specified as the request body.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutRestApiRequest {
-    #[doc="<p>The PUT request body containing external API definitions. Currently, only Swagger definition JSON files are supported.</p>"]
+    #[doc="<p>The PUT request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>"]
     #[serde(rename="body")]
     #[serde(
                             deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -2090,11 +2188,11 @@ pub struct PutRestApiRequest {
     #[serde(rename="mode")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub mode: Option<String>,
-    #[doc="<p>Custom headers supplied as part of the request. </p>"]
+    #[doc="<p>Custom header parameters as part of the request. For example, to exclude <a>DocumentationParts</a> from an imported API, set <code>ignore=documentation</code> as a <code>parameters</code> value, as in the AWS CLI command of <code>aws apigateway import-rest-api --parameters ignore=documentation --body 'file:///path/to/imported-api-body.json</code>.</p>"]
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The identifier of the <a>RestApi</a> to be updated. </p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2140,7 +2238,7 @@ pub struct RequestValidator {
 #[doc="<p>A collection of <a>RequestValidator</a> resources of a given <a>RestApi</a>.</p> <div class=\"remarks\"> <p>In Swagger, the <a>RequestValidators</a> of an API is defined by the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.html\">x-amazon-apigateway-request-validators</a> extension.</p> </div> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html\">Enable Basic Request Validation in API Gateway</a></div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RequestValidators {
-    #[doc="<p>The current page of <a>RequestValidator</a> resources in the <a>RequestValidators</a> collection.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<RequestValidator>>,
@@ -2177,7 +2275,7 @@ pub struct Resource {
 #[doc="<p>Represents a collection of <a>Resource</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Create an API</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Resources {
-    #[doc="<p>Gets the current <a>Resource</a> resource in the collection.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<Resource>>,
@@ -2222,7 +2320,7 @@ pub struct RestApi {
 #[doc="<p>Contains references to your APIs and links that guide you in how to interact with your collection. A collection offers a paginated view of your APIs.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Create an API</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RestApis {
-    #[doc="<p>An array of links to the current page of <a>RestApi</a> resources.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<RestApi>>,
@@ -2291,7 +2389,7 @@ pub struct SdkType {
 #[doc="<p>The collection of <a>SdkType</a> instances.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SdkTypes {
-    #[doc="<p>The set of <a>SdkType</a> items that comprise this view of the <a>SdkTypes</a> collection.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<SdkType>>,
@@ -2356,11 +2454,11 @@ pub struct Stage {
 #[doc="<p>A reference to a unique stage identified in the format <code>{restApiId}/{stage}</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StageKey {
-    #[doc="<p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub rest_api_id: Option<String>,
-    #[doc="<p>The stage name in the <a>RestApi</a> that the stage key references.</p>"]
+    #[doc="<p>The stage name associated with the stage key.</p>"]
     #[serde(rename="stageName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub stage_name: Option<String>,
@@ -2369,7 +2467,7 @@ pub struct StageKey {
 #[doc="<p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/stages.html\">Deploying API in Stages</a></div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Stages {
-    #[doc="<p>An individual <a>Stage</a> resource.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="item")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub item: Option<Vec<Stage>>,
@@ -2406,7 +2504,7 @@ pub struct TestInvokeAuthorizerRequest {
     #[serde(rename="pathWithQueryString")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub path_with_query_string: Option<String>,
-    #[doc="<p>Specifies a test invoke authorizer request's <a>RestApi</a> identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>A key-value map of stage variables to simulate an invocation on a deployed <a>Stage</a>.</p>"]
@@ -2472,7 +2570,7 @@ pub struct TestInvokeMethodRequest {
     #[doc="<p>Specifies a test invoke method request's resource ID.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>Specifies a test invoke method request's API identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>A key-value map of stage variables to simulate an invocation on a deployed <a>Stage</a>.</p>"]
@@ -2550,7 +2648,7 @@ pub struct UpdateAuthorizerRequest {
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>Authorizer</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2592,7 +2690,7 @@ pub struct UpdateDeploymentRequest {
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    #[doc="<p>The replacement identifier of the <a>RestApi</a> resource for the <a>Deployment</a> resource to change information about.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2607,7 +2705,7 @@ pub struct UpdateDocumentationPartRequest {
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    #[doc="<p>[Required] The identifier of an API of the to-be-updated documentation part.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2622,7 +2720,7 @@ pub struct UpdateDocumentationVersionRequest {
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    #[doc="<p>[Required] The identifier of an API of the to-be-updated documentation version.</p>"]
+    #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>..</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2639,6 +2737,21 @@ pub struct UpdateDomainNameRequest {
     pub patch_operations: Option<Vec<PatchOperation>>,
 }
 
+#[doc="<p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct UpdateGatewayResponseRequest {
+    #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
+    #[serde(rename="patchOperations")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub patch_operations: Option<Vec<PatchOperation>>,
+    #[doc="<p><p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p></p>"]
+    #[serde(rename="responseType")]
+    pub response_type: String,
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
+    #[serde(rename="restApiId")]
+    pub rest_api_id: String,
+}
+
 #[doc="<p>Represents an update integration request.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateIntegrationRequest {
@@ -2652,7 +2765,7 @@ pub struct UpdateIntegrationRequest {
     #[doc="<p>Represents an update integration request's resource identifier.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>Represents an update integration request's API identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2670,7 +2783,7 @@ pub struct UpdateIntegrationResponseRequest {
     #[doc="<p>Specifies an update integration response request's resource identifier.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>Specifies an update integration response request's API identifier.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>Specifies an update integration response request's status code.</p>"]
@@ -2691,7 +2804,7 @@ pub struct UpdateMethodRequest {
     #[doc="<p>The <a>Resource</a> identifier for the <a>Method</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>Method</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2709,7 +2822,7 @@ pub struct UpdateMethodResponseRequest {
     #[doc="<p>The <a>Resource</a> identifier for the <a>MethodResponse</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>MethodResponse</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The status code for the <a>MethodResponse</a> resource.</p>"]
@@ -2727,7 +2840,7 @@ pub struct UpdateModelRequest {
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    #[doc="<p>The <a>RestApi</a> identifier under which the model exists.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2742,7 +2855,7 @@ pub struct UpdateRequestValidatorRequest {
     #[doc="<p>[Required] The identifier of <a>RequestValidator</a> to be updated.</p>"]
     #[serde(rename="requestValidatorId")]
     pub request_validator_id: String,
-    #[doc="<p>[Required] The identifier of the <a>RestApi</a> for which the given <a>RequestValidator</a> is updated.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2757,7 +2870,7 @@ pub struct UpdateResourceRequest {
     #[doc="<p>The identifier of the <a>Resource</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
-    #[doc="<p>The <a>RestApi</a> identifier for the <a>Resource</a> resource.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2769,7 +2882,7 @@ pub struct UpdateRestApiRequest {
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    #[doc="<p>The ID of the <a>RestApi</a> you want to update.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
@@ -2781,7 +2894,7 @@ pub struct UpdateStageRequest {
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    #[doc="<p>The identifier of the <a>RestApi</a> resource for the <a>Stage</a> resource to change information about.</p>"]
+    #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The name of the <a>Stage</a> resource to change information about.</p>"]
@@ -2801,7 +2914,7 @@ pub struct UpdateUsagePlanRequest {
     pub usage_plan_id: String,
 }
 
-#[doc="<p>The PATCH request to grant a temporary extension to the reamining quota of a usage plan associated with a specified API key.</p>"]
+#[doc="<p>The PATCH request to grant a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateUsageRequest {
     #[doc="<p>The identifier of the API key associated with the usage plan in which a temporary extension is granted to the remaining quota.</p>"]
@@ -2897,7 +3010,7 @@ pub struct UsagePlanKey {
 #[doc="<p>Represents the collection of usage plan keys added to usage plans for the associated API keys and, possibly, other types of keys.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html\">Create and Use Usage Plans</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UsagePlanKeys {
-    #[doc="<p>Gets the current item of the usage plan keys collection.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<UsagePlanKey>>,
@@ -2909,7 +3022,7 @@ pub struct UsagePlanKeys {
 #[doc="<p>Represents a collection of usage plans for an AWS account.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html\">Create and Use Usage Plans</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UsagePlans {
-    #[doc="<p>Gets the current item when enumerating the collection of <a>UsagePlan</a>.</p>"]
+    #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<UsagePlan>>,
@@ -5175,6 +5288,111 @@ impl Error for DeleteDomainNameError {
             DeleteDomainNameError::Credentials(ref err) => err.description(),
             DeleteDomainNameError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteDomainNameError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteGatewayResponse
+#[derive(Debug, PartialEq)]
+pub enum DeleteGatewayResponseError {
+    ///
+    BadRequest(String),
+    ///
+    Conflict(String),
+    ///
+    NotFound(String),
+    ///
+    TooManyRequests(String),
+    ///
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DeleteGatewayResponseError {
+    pub fn from_body(body: &str) -> DeleteGatewayResponseError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        DeleteGatewayResponseError::BadRequest(String::from(error_message))
+                    }
+                    "ConflictException" => {
+                        DeleteGatewayResponseError::Conflict(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        DeleteGatewayResponseError::NotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        DeleteGatewayResponseError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DeleteGatewayResponseError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteGatewayResponseError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteGatewayResponseError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteGatewayResponseError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteGatewayResponseError {
+    fn from(err: serde_json::error::Error) -> DeleteGatewayResponseError {
+        DeleteGatewayResponseError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteGatewayResponseError {
+    fn from(err: CredentialsError) -> DeleteGatewayResponseError {
+        DeleteGatewayResponseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteGatewayResponseError {
+    fn from(err: HttpDispatchError) -> DeleteGatewayResponseError {
+        DeleteGatewayResponseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteGatewayResponseError {
+    fn from(err: io::Error) -> DeleteGatewayResponseError {
+        DeleteGatewayResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteGatewayResponseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteGatewayResponseError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteGatewayResponseError::BadRequest(ref cause) => cause,
+            DeleteGatewayResponseError::Conflict(ref cause) => cause,
+            DeleteGatewayResponseError::NotFound(ref cause) => cause,
+            DeleteGatewayResponseError::TooManyRequests(ref cause) => cause,
+            DeleteGatewayResponseError::Unauthorized(ref cause) => cause,
+            DeleteGatewayResponseError::Validation(ref cause) => cause,
+            DeleteGatewayResponseError::Credentials(ref err) => err.description(),
+            DeleteGatewayResponseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteGatewayResponseError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -8163,6 +8381,8 @@ pub enum GetExportError {
     ///
     BadRequest(String),
     ///
+    Conflict(String),
+    ///
     NotFound(String),
     ///
     TooManyRequests(String),
@@ -8195,6 +8415,7 @@ impl GetExportError {
                     "BadRequestException" => {
                         GetExportError::BadRequest(String::from(error_message))
                     }
+                    "ConflictException" => GetExportError::Conflict(String::from(error_message)),
                     "NotFoundException" => GetExportError::NotFound(String::from(error_message)),
                     "TooManyRequestsException" => {
                         GetExportError::TooManyRequests(String::from(error_message))
@@ -8240,6 +8461,7 @@ impl Error for GetExportError {
     fn description(&self) -> &str {
         match *self {
             GetExportError::BadRequest(ref cause) => cause,
+            GetExportError::Conflict(ref cause) => cause,
             GetExportError::NotFound(ref cause) => cause,
             GetExportError::TooManyRequests(ref cause) => cause,
             GetExportError::Unauthorized(ref cause) => cause,
@@ -8247,6 +8469,198 @@ impl Error for GetExportError {
             GetExportError::Credentials(ref err) => err.description(),
             GetExportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetExportError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetGatewayResponse
+#[derive(Debug, PartialEq)]
+pub enum GetGatewayResponseError {
+    ///
+    NotFound(String),
+    ///
+    TooManyRequests(String),
+    ///
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetGatewayResponseError {
+    pub fn from_body(body: &str) -> GetGatewayResponseError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NotFoundException" => {
+                        GetGatewayResponseError::NotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        GetGatewayResponseError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        GetGatewayResponseError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetGatewayResponseError::Validation(error_message.to_string())
+                    }
+                    _ => GetGatewayResponseError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetGatewayResponseError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetGatewayResponseError {
+    fn from(err: serde_json::error::Error) -> GetGatewayResponseError {
+        GetGatewayResponseError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetGatewayResponseError {
+    fn from(err: CredentialsError) -> GetGatewayResponseError {
+        GetGatewayResponseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetGatewayResponseError {
+    fn from(err: HttpDispatchError) -> GetGatewayResponseError {
+        GetGatewayResponseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetGatewayResponseError {
+    fn from(err: io::Error) -> GetGatewayResponseError {
+        GetGatewayResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetGatewayResponseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetGatewayResponseError {
+    fn description(&self) -> &str {
+        match *self {
+            GetGatewayResponseError::NotFound(ref cause) => cause,
+            GetGatewayResponseError::TooManyRequests(ref cause) => cause,
+            GetGatewayResponseError::Unauthorized(ref cause) => cause,
+            GetGatewayResponseError::Validation(ref cause) => cause,
+            GetGatewayResponseError::Credentials(ref err) => err.description(),
+            GetGatewayResponseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetGatewayResponseError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetGatewayResponses
+#[derive(Debug, PartialEq)]
+pub enum GetGatewayResponsesError {
+    ///
+    BadRequest(String),
+    ///
+    NotFound(String),
+    ///
+    TooManyRequests(String),
+    ///
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetGatewayResponsesError {
+    pub fn from_body(body: &str) -> GetGatewayResponsesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        GetGatewayResponsesError::BadRequest(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        GetGatewayResponsesError::NotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        GetGatewayResponsesError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        GetGatewayResponsesError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetGatewayResponsesError::Validation(error_message.to_string())
+                    }
+                    _ => GetGatewayResponsesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetGatewayResponsesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetGatewayResponsesError {
+    fn from(err: serde_json::error::Error) -> GetGatewayResponsesError {
+        GetGatewayResponsesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetGatewayResponsesError {
+    fn from(err: CredentialsError) -> GetGatewayResponsesError {
+        GetGatewayResponsesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetGatewayResponsesError {
+    fn from(err: HttpDispatchError) -> GetGatewayResponsesError {
+        GetGatewayResponsesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetGatewayResponsesError {
+    fn from(err: io::Error) -> GetGatewayResponsesError {
+        GetGatewayResponsesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetGatewayResponsesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetGatewayResponsesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetGatewayResponsesError::BadRequest(ref cause) => cause,
+            GetGatewayResponsesError::NotFound(ref cause) => cause,
+            GetGatewayResponsesError::TooManyRequests(ref cause) => cause,
+            GetGatewayResponsesError::Unauthorized(ref cause) => cause,
+            GetGatewayResponsesError::Validation(ref cause) => cause,
+            GetGatewayResponsesError::Credentials(ref err) => err.description(),
+            GetGatewayResponsesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetGatewayResponsesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -9451,6 +9865,8 @@ pub enum GetSdkError {
     ///
     BadRequest(String),
     ///
+    Conflict(String),
+    ///
     NotFound(String),
     ///
     TooManyRequests(String),
@@ -9481,6 +9897,7 @@ impl GetSdkError {
 
                 match *error_type {
                     "BadRequestException" => GetSdkError::BadRequest(String::from(error_message)),
+                    "ConflictException" => GetSdkError::Conflict(String::from(error_message)),
                     "NotFoundException" => GetSdkError::NotFound(String::from(error_message)),
                     "TooManyRequestsException" => {
                         GetSdkError::TooManyRequests(String::from(error_message))
@@ -9526,6 +9943,7 @@ impl Error for GetSdkError {
     fn description(&self) -> &str {
         match *self {
             GetSdkError::BadRequest(ref cause) => cause,
+            GetSdkError::Conflict(ref cause) => cause,
             GetSdkError::NotFound(ref cause) => cause,
             GetSdkError::TooManyRequests(ref cause) => cause,
             GetSdkError::Unauthorized(ref cause) => cause,
@@ -10679,6 +11097,111 @@ impl Error for ImportRestApiError {
             ImportRestApiError::Credentials(ref err) => err.description(),
             ImportRestApiError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ImportRestApiError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by PutGatewayResponse
+#[derive(Debug, PartialEq)]
+pub enum PutGatewayResponseError {
+    ///
+    BadRequest(String),
+    ///
+    LimitExceeded(String),
+    ///
+    NotFound(String),
+    ///
+    TooManyRequests(String),
+    ///
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl PutGatewayResponseError {
+    pub fn from_body(body: &str) -> PutGatewayResponseError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        PutGatewayResponseError::BadRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        PutGatewayResponseError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        PutGatewayResponseError::NotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        PutGatewayResponseError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        PutGatewayResponseError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        PutGatewayResponseError::Validation(error_message.to_string())
+                    }
+                    _ => PutGatewayResponseError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutGatewayResponseError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutGatewayResponseError {
+    fn from(err: serde_json::error::Error) -> PutGatewayResponseError {
+        PutGatewayResponseError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutGatewayResponseError {
+    fn from(err: CredentialsError) -> PutGatewayResponseError {
+        PutGatewayResponseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutGatewayResponseError {
+    fn from(err: HttpDispatchError) -> PutGatewayResponseError {
+        PutGatewayResponseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutGatewayResponseError {
+    fn from(err: io::Error) -> PutGatewayResponseError {
+        PutGatewayResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutGatewayResponseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutGatewayResponseError {
+    fn description(&self) -> &str {
+        match *self {
+            PutGatewayResponseError::BadRequest(ref cause) => cause,
+            PutGatewayResponseError::LimitExceeded(ref cause) => cause,
+            PutGatewayResponseError::NotFound(ref cause) => cause,
+            PutGatewayResponseError::TooManyRequests(ref cause) => cause,
+            PutGatewayResponseError::Unauthorized(ref cause) => cause,
+            PutGatewayResponseError::Validation(ref cause) => cause,
+            PutGatewayResponseError::Credentials(ref err) => err.description(),
+            PutGatewayResponseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutGatewayResponseError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -12326,6 +12849,105 @@ impl Error for UpdateDomainNameError {
         }
     }
 }
+/// Errors returned by UpdateGatewayResponse
+#[derive(Debug, PartialEq)]
+pub enum UpdateGatewayResponseError {
+    ///
+    BadRequest(String),
+    ///
+    NotFound(String),
+    ///
+    TooManyRequests(String),
+    ///
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl UpdateGatewayResponseError {
+    pub fn from_body(body: &str) -> UpdateGatewayResponseError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        UpdateGatewayResponseError::BadRequest(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        UpdateGatewayResponseError::NotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        UpdateGatewayResponseError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        UpdateGatewayResponseError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateGatewayResponseError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateGatewayResponseError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateGatewayResponseError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateGatewayResponseError {
+    fn from(err: serde_json::error::Error) -> UpdateGatewayResponseError {
+        UpdateGatewayResponseError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateGatewayResponseError {
+    fn from(err: CredentialsError) -> UpdateGatewayResponseError {
+        UpdateGatewayResponseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateGatewayResponseError {
+    fn from(err: HttpDispatchError) -> UpdateGatewayResponseError {
+        UpdateGatewayResponseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateGatewayResponseError {
+    fn from(err: io::Error) -> UpdateGatewayResponseError {
+        UpdateGatewayResponseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateGatewayResponseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateGatewayResponseError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateGatewayResponseError::BadRequest(ref cause) => cause,
+            UpdateGatewayResponseError::NotFound(ref cause) => cause,
+            UpdateGatewayResponseError::TooManyRequests(ref cause) => cause,
+            UpdateGatewayResponseError::Unauthorized(ref cause) => cause,
+            UpdateGatewayResponseError::Validation(ref cause) => cause,
+            UpdateGatewayResponseError::Credentials(ref err) => err.description(),
+            UpdateGatewayResponseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateGatewayResponseError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateIntegration
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationError {
@@ -13572,6 +14194,12 @@ pub trait ApiGateway {
                           -> Result<(), DeleteDomainNameError>;
 
 
+    #[doc="<p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>"]
+    fn delete_gateway_response(&self,
+                               input: &DeleteGatewayResponseRequest)
+                               -> Result<(), DeleteGatewayResponseError>;
+
+
     #[doc="<p>Represents a delete integration.</p>"]
     fn delete_integration(&self,
                           input: &DeleteIntegrationRequest)
@@ -13747,6 +14375,18 @@ pub trait ApiGateway {
     fn get_export(&self, input: &GetExportRequest) -> Result<ExportResponse, GetExportError>;
 
 
+    #[doc="<p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
+    fn get_gateway_response(&self,
+                            input: &GetGatewayResponseRequest)
+                            -> Result<GatewayResponse, GetGatewayResponseError>;
+
+
+    #[doc="<p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>"]
+    fn get_gateway_responses(&self,
+                             input: &GetGatewayResponsesRequest)
+                             -> Result<GatewayResponses, GetGatewayResponsesError>;
+
+
     #[doc="<p>Represents a get integration.</p>"]
     fn get_integration(&self,
                        input: &GetIntegrationRequest)
@@ -13874,7 +14514,13 @@ pub trait ApiGateway {
     fn import_rest_api(&self, input: &ImportRestApiRequest) -> Result<RestApi, ImportRestApiError>;
 
 
-    #[doc="<p>Represents a put integration.</p>"]
+    #[doc="<p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>"]
+    fn put_gateway_response(&self,
+                            input: &PutGatewayResponseRequest)
+                            -> Result<GatewayResponse, PutGatewayResponseError>;
+
+
+    #[doc="<p>Sets up a method's integration.</p>"]
     fn put_integration(&self,
                        input: &PutIntegrationRequest)
                        -> Result<Integration, PutIntegrationError>;
@@ -13964,6 +14610,12 @@ pub trait ApiGateway {
                           -> Result<DomainName, UpdateDomainNameError>;
 
 
+    #[doc="<p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
+    fn update_gateway_response(&self,
+                               input: &UpdateGatewayResponseRequest)
+                               -> Result<GatewayResponse, UpdateGatewayResponseError>;
+
+
     #[doc="<p>Represents an update integration.</p>"]
     fn update_integration(&self,
                           input: &UpdateIntegrationRequest)
@@ -14011,7 +14663,7 @@ pub trait ApiGateway {
     fn update_stage(&self, input: &UpdateStageRequest) -> Result<Stage, UpdateStageError>;
 
 
-    #[doc="<p>Grants a temporary extension to the reamining quota of a usage plan associated with a specified API key.</p>"]
+    #[doc="<p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>"]
     fn update_usage(&self, input: &UpdateUsageRequest) -> Result<Usage, UpdateUsageError>;
 
 
@@ -14955,6 +15607,41 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteDomainNameError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>"]
+    fn delete_gateway_response(&self,
+                               input: &DeleteGatewayResponseRequest)
+                               -> Result<(), DeleteGatewayResponseError> {
+        let request_uri = format!("/restapis/{restapi_id}/gatewayresponses/{response_type}",
+                                  response_type = input.response_type,
+                                  restapi_id = input.rest_api_id);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+
+
+
+
+
+        request.sign(&self.credentials_provider.credentials()?);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Accepted => {
+                let result = ();
+
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteGatewayResponseError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -16359,6 +17046,104 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     }
 
 
+    #[doc="<p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
+    fn get_gateway_response(&self,
+                            input: &GetGatewayResponseRequest)
+                            -> Result<GatewayResponse, GetGatewayResponseError> {
+        let request_uri = format!("/restapis/{restapi_id}/gatewayresponses/{response_type}",
+                                  response_type = input.response_type,
+                                  restapi_id = input.rest_api_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+
+
+
+
+
+        request.sign(&self.credentials_provider.credentials()?);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<GatewayResponse>(&body).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetGatewayResponseError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>"]
+    fn get_gateway_responses(&self,
+                             input: &GetGatewayResponsesRequest)
+                             -> Result<GatewayResponses, GetGatewayResponsesError> {
+        let request_uri = format!("/restapis/{restapi_id}/gatewayresponses",
+                                  restapi_id = input.rest_api_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+
+
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.limit {
+            params.put("limit", x);
+        }
+        if let Some(ref x) = input.position {
+            params.put("position", x);
+        }
+        request.set_params(params);
+
+        request.sign(&self.credentials_provider.credentials()?);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<GatewayResponses>(&body).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetGatewayResponsesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Represents a get integration.</p>"]
     fn get_integration(&self,
                        input: &GetIntegrationRequest)
@@ -17633,7 +18418,54 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     }
 
 
-    #[doc="<p>Represents a put integration.</p>"]
+    #[doc="<p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>"]
+    fn put_gateway_response(&self,
+                            input: &PutGatewayResponseRequest)
+                            -> Result<GatewayResponse, PutGatewayResponseError> {
+        let request_uri = format!("/restapis/{restapi_id}/gatewayresponses/{response_type}",
+                                  response_type = input.response_type,
+                                  restapi_id = input.rest_api_id);
+
+        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+
+
+        request.sign(&self.credentials_provider.credentials()?);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Created => {
+
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<GatewayResponse>(&body).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutGatewayResponseError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Sets up a method's integration.</p>"]
     fn put_integration(&self,
                        input: &PutIntegrationRequest)
                        -> Result<Integration, PutIntegrationError> {
@@ -18393,6 +19225,53 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     }
 
 
+    #[doc="<p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
+    fn update_gateway_response(&self,
+                               input: &UpdateGatewayResponseRequest)
+                               -> Result<GatewayResponse, UpdateGatewayResponseError> {
+        let request_uri = format!("/restapis/{restapi_id}/gatewayresponses/{response_type}",
+                                  response_type = input.response_type,
+                                  restapi_id = input.rest_api_id);
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+
+
+        request.sign(&self.credentials_provider.credentials()?);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<GatewayResponse>(&body).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateGatewayResponseError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Represents an update integration.</p>"]
     fn update_integration(&self,
                           input: &UpdateIntegrationRequest)
@@ -18814,7 +19693,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
     }
 
 
-    #[doc="<p>Grants a temporary extension to the reamining quota of a usage plan associated with a specified API key.</p>"]
+    #[doc="<p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>"]
     fn update_usage(&self, input: &UpdateUsageRequest) -> Result<Usage, UpdateUsageError> {
         let request_uri = format!("/usageplans/{usageplan_id}/keys/{key_id}/usage",
                                   key_id = input.key_id,

@@ -671,6 +671,8 @@ impl AddressListDeserializer {
 #[doc="<p>Contains the parameters for AllocateAddress.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AllocateAddressRequest {
+    #[doc="<p>[EC2-VPC] The Elastic IP address to recover.</p>"]
+    pub address: Option<String>,
     #[doc="<p>Set to <code>vpc</code> to allocate the address for use with instances in a VPC.</p> <p>Default: The address is for use with instances in EC2-Classic.</p>"]
     pub domain: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
@@ -687,6 +689,9 @@ impl AllocateAddressRequestSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.address {
+            params.put(&format!("{}{}", prefix, "Address"), &field_value);
+        }
         if let Some(ref field_value) = obj.domain {
             params.put(&format!("{}{}", prefix, "Domain"), &field_value);
         }
@@ -4551,6 +4556,78 @@ impl CreateCustomerGatewayResultDeserializer {
 
     }
 }
+#[doc="<p>Contains the parameters for CreateDefaultVpc.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct CreateDefaultVpcRequest {
+    #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    pub dry_run: Option<bool>,
+}
+
+
+/// Serialize `CreateDefaultVpcRequest` contents to a `SignedRequest`.
+struct CreateDefaultVpcRequestSerializer;
+impl CreateDefaultVpcRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateDefaultVpcRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+        }
+
+    }
+}
+
+#[doc="<p>Contains the output of CreateDefaultVpc.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct CreateDefaultVpcResult {
+    #[doc="<p>Information about the VPC.</p>"]
+    pub vpc: Option<Vpc>,
+}
+
+struct CreateDefaultVpcResultDeserializer;
+impl CreateDefaultVpcResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<CreateDefaultVpcResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CreateDefaultVpcResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "vpc" => {
+                            obj.vpc = Some(try!(VpcDeserializer::deserialize("vpc", stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Contains the parameters for CreateDhcpOptions.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct CreateDhcpOptionsRequest {
@@ -5430,6 +5507,96 @@ impl CreateNetworkAclResultDeserializer {
                             obj.network_acl =
                                 Some(try!(NetworkAclDeserializer::deserialize("networkAcl",
                                                                               stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+#[doc="<p>Contains the parameters for CreateNetworkInterfacePermission.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct CreateNetworkInterfacePermissionRequest {
+    #[doc="<p>The AWS account ID.</p>"]
+    pub aws_account_id: Option<String>,
+    #[doc="<p>The AWS service. Currently not supported.</p>"]
+    pub aws_service: Option<String>,
+    #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    pub dry_run: Option<bool>,
+    #[doc="<p>The ID of the network interface.</p>"]
+    pub network_interface_id: String,
+    #[doc="<p>The type of permission to grant.</p>"]
+    pub permission: String,
+}
+
+
+/// Serialize `CreateNetworkInterfacePermissionRequest` contents to a `SignedRequest`.
+struct CreateNetworkInterfacePermissionRequestSerializer;
+impl CreateNetworkInterfacePermissionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateNetworkInterfacePermissionRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.aws_account_id {
+            params.put(&format!("{}{}", prefix, "AwsAccountId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.aws_service {
+            params.put(&format!("{}{}", prefix, "AwsService"), &field_value);
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+        }
+        params.put(&format!("{}{}", prefix, "NetworkInterfaceId"),
+                   &obj.network_interface_id);
+        params.put(&format!("{}{}", prefix, "Permission"), &obj.permission);
+
+    }
+}
+
+#[doc="<p>Contains the output of CreateNetworkInterfacePermission.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct CreateNetworkInterfacePermissionResult {
+    #[doc="<p>Information about the permission for the network interface.</p>"]
+    pub interface_permission: Option<NetworkInterfacePermission>,
+}
+
+struct CreateNetworkInterfacePermissionResultDeserializer;
+impl CreateNetworkInterfacePermissionResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<CreateNetworkInterfacePermissionResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CreateNetworkInterfacePermissionResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "interfacePermission" => {
+                            obj.interface_permission = Some(try!(NetworkInterfacePermissionDeserializer::deserialize("interfacePermission", stack)));
                         }
                         _ => skip_tree(stack),
                     }
@@ -7483,6 +7650,89 @@ impl DeleteNetworkAclRequestSerializer {
     }
 }
 
+#[doc="<p>Contains the parameters for DeleteNetworkInterfacePermission.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct DeleteNetworkInterfacePermissionRequest {
+    #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    pub dry_run: Option<bool>,
+    #[doc="<p>Specify <code>true</code> to remove the permission even if the network interface is attached to an instance.</p>"]
+    pub force: Option<bool>,
+    #[doc="<p>The ID of the network interface permission.</p>"]
+    pub network_interface_permission_id: String,
+}
+
+
+/// Serialize `DeleteNetworkInterfacePermissionRequest` contents to a `SignedRequest`.
+struct DeleteNetworkInterfacePermissionRequestSerializer;
+impl DeleteNetworkInterfacePermissionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteNetworkInterfacePermissionRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.force {
+            params.put(&format!("{}{}", prefix, "Force"), &field_value.to_string());
+        }
+        params.put(&format!("{}{}", prefix, "NetworkInterfacePermissionId"),
+                   &obj.network_interface_permission_id);
+
+    }
+}
+
+#[doc="<p>Contains the output for DeleteNetworkInterfacePermission.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct DeleteNetworkInterfacePermissionResult {
+    #[doc="<p>Returns <code>true</code> if the request succeeds, otherwise returns an error.</p>"]
+    pub return_: Option<bool>,
+}
+
+struct DeleteNetworkInterfacePermissionResultDeserializer;
+impl DeleteNetworkInterfacePermissionResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<DeleteNetworkInterfacePermissionResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DeleteNetworkInterfacePermissionResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "return" => {
+                            obj.return_ = Some(try!(BooleanDeserializer::deserialize("return",
+                                                                                     stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Contains the parameters for DeleteNetworkInterface.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DeleteNetworkInterfaceRequest {
@@ -8912,6 +9162,115 @@ impl DescribeEgressOnlyInternetGatewaysResultDeserializer {
                     match &name[..] {
                         "egressOnlyInternetGatewaySet" => {
                             obj.egress_only_internet_gateways = Some(try!(EgressOnlyInternetGatewayListDeserializer::deserialize("egressOnlyInternetGatewaySet", stack)));
+                        }
+                        "nextToken" => {
+                            obj.next_token = Some(try!(StringDeserializer::deserialize("nextToken",
+                                                                                       stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+#[derive(Default,Debug,Clone)]
+pub struct DescribeElasticGpusRequest {
+    #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    pub dry_run: Option<bool>,
+    #[doc="<p>One or more Elastic GPU IDs.</p>"]
+    pub elastic_gpu_ids: Option<Vec<String>>,
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone in which the Elastic GPU resides.</p> </li> <li> <p> <code>elastic-gpu-health</code> - The status of the Elastic GPU (<code>OK</code> | <code>IMPAIRED</code>).</p> </li> <li> <p> <code>elastic-gpu-state</code> - The state of the Elastic GPU (<code>ATTACHED</code>).</p> </li> <li> <p> <code>elastic-gpu-type</code> - The type of Elastic GPU; for example, <code>eg1.medium</code>.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance to which the Elastic GPU is associated.</p> </li> </ul>"]
+    pub filters: Option<Vec<Filter>>,
+    #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000.</p>"]
+    pub max_results: Option<i64>,
+    #[doc="<p>The token to request the next page of results.</p>"]
+    pub next_token: Option<String>,
+}
+
+
+/// Serialize `DescribeElasticGpusRequest` contents to a `SignedRequest`.
+struct DescribeElasticGpusRequestSerializer;
+impl DescribeElasticGpusRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeElasticGpusRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.elastic_gpu_ids {
+            ElasticGpuIdSetSerializer::serialize(params,
+                                                 &format!("{}{}", prefix, "ElasticGpuId"),
+                                                 field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(params,
+                                            &format!("{}{}", prefix, "Filter"),
+                                            field_value);
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"),
+                       &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct DescribeElasticGpusResult {
+    #[doc="<p>Information about the Elastic GPUs.</p>"]
+    pub elastic_gpu_set: Option<Vec<ElasticGpus>>,
+    #[doc="<p>The total number of items to return. If the total number of items available is more than the value specified in max-items then a Next-Token will be provided in the output that you can use to resume pagination.</p>"]
+    pub max_results: Option<i64>,
+    #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    pub next_token: Option<String>,
+}
+
+struct DescribeElasticGpusResultDeserializer;
+impl DescribeElasticGpusResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<DescribeElasticGpusResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeElasticGpusResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "elasticGpuSet" => {
+                            obj.elastic_gpu_set =
+                                Some(try!(ElasticGpuSetDeserializer::deserialize("elasticGpuSet",
+                                                                                 stack)));
+                        }
+                        "maxResults" => {
+                            obj.max_results = Some(try!(IntegerDeserializer::deserialize("maxResults",
+                                                                                         stack)));
                         }
                         "nextToken" => {
                             obj.next_token = Some(try!(StringDeserializer::deserialize("nextToken",
@@ -10940,6 +11299,109 @@ impl DescribeNetworkInterfaceAttributeResultDeserializer {
 
     }
 }
+#[doc="<p>Contains the parameters for DescribeNetworkInterfacePermissions.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct DescribeNetworkInterfacePermissionsRequest {
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>network-interface-permission.network-interface-permission-id</code> - The ID of the permission.</p> </li> <li> <p> <code>network-interface-permission.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface-permission.aws-account-id</code> - The AWS account ID.</p> </li> <li> <p> <code>network-interface-permission.aws-service</code> - The AWS service.</p> </li> <li> <p> <code>network-interface-permission.permission</code> - The type of permission (<code>INSTANCE-ATTACH</code> | <code>EIP-ASSOCIATE</code>).</p> </li> </ul>"]
+    pub filters: Option<Vec<Filter>>,
+    #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. If this parameter is not specified, up to 50 results are returned by default.</p>"]
+    pub max_results: Option<i64>,
+    #[doc="<p>One or more network interface permission IDs.</p>"]
+    pub network_interface_permission_ids: Option<Vec<String>>,
+    #[doc="<p>The token to request the next page of results.</p>"]
+    pub next_token: Option<String>,
+}
+
+
+/// Serialize `DescribeNetworkInterfacePermissionsRequest` contents to a `SignedRequest`.
+struct DescribeNetworkInterfacePermissionsRequestSerializer;
+impl DescribeNetworkInterfacePermissionsRequestSerializer {
+    fn serialize(params: &mut Params,
+                 name: &str,
+                 obj: &DescribeNetworkInterfacePermissionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(params,
+                                            &format!("{}{}", prefix, "Filter"),
+                                            field_value);
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"),
+                       &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.network_interface_permission_ids {
+            NetworkInterfacePermissionIdListSerializer::serialize(params,
+                                                                  &format!("{}{}",
+                                                                          prefix,
+                                                                          "NetworkInterfacePermissionId"),
+                                                                  field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+
+    }
+}
+
+#[doc="<p>Contains the output for DescribeNetworkInterfacePermissions.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct DescribeNetworkInterfacePermissionsResult {
+    #[doc="<p>The network interface permissions.</p>"]
+    pub network_interface_permissions: Option<Vec<NetworkInterfacePermission>>,
+    #[doc="<p>The token to use to retrieve the next page of results.</p>"]
+    pub next_token: Option<String>,
+}
+
+struct DescribeNetworkInterfacePermissionsResultDeserializer;
+impl DescribeNetworkInterfacePermissionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<DescribeNetworkInterfacePermissionsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeNetworkInterfacePermissionsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "networkInterfacePermissions" => {
+                            obj.network_interface_permissions = Some(try!(NetworkInterfacePermissionListDeserializer::deserialize("networkInterfacePermissions", stack)));
+                        }
+                        "nextToken" => {
+                            obj.next_token = Some(try!(StringDeserializer::deserialize("nextToken",
+                                                                                       stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Contains the parameters for DescribeNetworkInterfaces.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNetworkInterfacesRequest {
@@ -12356,7 +12818,7 @@ impl DescribeSnapshotAttributeResultDeserializer {
 pub struct DescribeSnapshotsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<bool>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>description</code> - A description of the snapshot.</p> </li> <li> <p> <code>owner-alias</code> - Value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM consolew.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the snapshot.</p> </li> <li> <p> <code>progress</code> - The progress of the snapshot, as a percentage (for example, 80%).</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot ID.</p> </li> <li> <p> <code>start-time</code> - The time stamp when the snapshot was initiated.</p> </li> <li> <p> <code>status</code> - The status of the snapshot (<code>pending</code> | <code>completed</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The ID of the volume the snapshot is for.</p> </li> <li> <p> <code>volume-size</code> - The size of the volume, in GiB.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>description</code> - A description of the snapshot.</p> </li> <li> <p> <code>owner-alias</code> - Value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the snapshot.</p> </li> <li> <p> <code>progress</code> - The progress of the snapshot, as a percentage (for example, 80%).</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot ID.</p> </li> <li> <p> <code>start-time</code> - The time stamp when the snapshot was initiated.</p> </li> <li> <p> <code>status</code> - The status of the snapshot (<code>pending</code> | <code>completed</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The ID of the volume the snapshot is for.</p> </li> <li> <p> <code>volume-size</code> - The size of the volume, in GiB.</p> </li> </ul>"]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of snapshot results returned by <code>DescribeSnapshots</code> in paginated output. When this parameter is used, <code>DescribeSnapshots</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeSnapshots</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. If this parameter is not used, then <code>DescribeSnapshots</code> returns all results. You cannot specify this parameter and the snapshot IDs parameter in the same request.</p>"]
     pub max_results: Option<i64>,
@@ -16109,6 +16571,366 @@ impl EgressOnlyInternetGatewayListDeserializer {
 
     }
 }
+#[doc="<p>Describes the association between an instance and an Elastic GPU.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct ElasticGpuAssociation {
+    #[doc="<p>The ID of the association.</p>"]
+    pub elastic_gpu_association_id: Option<String>,
+    #[doc="<p>The state of the association between the instance and the Elastic GPU.</p>"]
+    pub elastic_gpu_association_state: Option<String>,
+    #[doc="<p>The time the Elastic GPU was associated with the instance.</p>"]
+    pub elastic_gpu_association_time: Option<String>,
+    #[doc="<p>The ID of the Elastic GPU.</p>"]
+    pub elastic_gpu_id: Option<String>,
+}
+
+struct ElasticGpuAssociationDeserializer;
+impl ElasticGpuAssociationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ElasticGpuAssociation, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ElasticGpuAssociation::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "elasticGpuAssociationId" => {
+                            obj.elastic_gpu_association_id =
+                                Some(try!(StringDeserializer::deserialize("elasticGpuAssociationId",
+                                                                          stack)));
+                        }
+                        "elasticGpuAssociationState" => {
+                            obj.elastic_gpu_association_state =
+                                Some(try!(StringDeserializer::deserialize("elasticGpuAssociationState",
+                                                                          stack)));
+                        }
+                        "elasticGpuAssociationTime" => {
+                            obj.elastic_gpu_association_time =
+                                Some(try!(StringDeserializer::deserialize("elasticGpuAssociationTime",
+                                                                          stack)));
+                        }
+                        "elasticGpuId" => {
+                            obj.elastic_gpu_id = Some(try!(StringDeserializer::deserialize("elasticGpuId",
+                                                                                           stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+struct ElasticGpuAssociationListDeserializer;
+impl ElasticGpuAssociationListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<ElasticGpuAssociation>, XmlParseError> {
+
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(ElasticGpuAssociationDeserializer::deserialize("item",
+                                                                                     stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+
+    }
+}
+#[doc="<p>Describes the status of an Elastic GPU.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct ElasticGpuHealth {
+    #[doc="<p>The health status.</p>"]
+    pub status: Option<String>,
+}
+
+struct ElasticGpuHealthDeserializer;
+impl ElasticGpuHealthDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ElasticGpuHealth, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ElasticGpuHealth::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "status" => {
+                            obj.status =
+                                Some(try!(ElasticGpuStatusDeserializer::deserialize("status",
+                                                                                    stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+
+/// Serialize `ElasticGpuIdSet` contents to a `SignedRequest`.
+struct ElasticGpuIdSetSerializer;
+impl ElasticGpuIdSetSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct ElasticGpuSetDeserializer;
+impl ElasticGpuSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<ElasticGpus>, XmlParseError> {
+
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(ElasticGpusDeserializer::deserialize("member", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+
+    }
+}
+#[doc="<p>A specification for an Elastic GPU.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct ElasticGpuSpecification {
+    #[doc="<p>The type of Elastic GPU.</p>"]
+    pub type_: String,
+}
+
+
+/// Serialize `ElasticGpuSpecification` contents to a `SignedRequest`.
+struct ElasticGpuSpecificationSerializer;
+impl ElasticGpuSpecificationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ElasticGpuSpecification) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Type"), &obj.type_);
+
+    }
+}
+
+
+/// Serialize `ElasticGpuSpecifications` contents to a `SignedRequest`.
+struct ElasticGpuSpecificationsSerializer;
+impl ElasticGpuSpecificationsSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ElasticGpuSpecification>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            ElasticGpuSpecificationSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+struct ElasticGpuStateDeserializer;
+impl ElasticGpuStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+struct ElasticGpuStatusDeserializer;
+impl ElasticGpuStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+#[doc="<p>Describes an Elastic GPU.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct ElasticGpus {
+    #[doc="<p>The Availability Zone in the which the Elastic GPU resides.</p>"]
+    pub availability_zone: Option<String>,
+    #[doc="<p>The status of the Elastic GPU.</p>"]
+    pub elastic_gpu_health: Option<ElasticGpuHealth>,
+    #[doc="<p>The ID of the Elastic GPU.</p>"]
+    pub elastic_gpu_id: Option<String>,
+    #[doc="<p>The state of the Elastic GPU.</p>"]
+    pub elastic_gpu_state: Option<String>,
+    #[doc="<p>The type of Elastic GPU.</p>"]
+    pub elastic_gpu_type: Option<String>,
+    #[doc="<p>The ID of the instance to which the Elastic GPU is attached.</p>"]
+    pub instance_id: Option<String>,
+}
+
+struct ElasticGpusDeserializer;
+impl ElasticGpusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ElasticGpus, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ElasticGpus::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "availabilityZone" => {
+                            obj.availability_zone =
+                                Some(try!(StringDeserializer::deserialize("availabilityZone",
+                                                                          stack)));
+                        }
+                        "elasticGpuHealth" => {
+                            obj.elastic_gpu_health =
+                                Some(try!(ElasticGpuHealthDeserializer::deserialize("elasticGpuHealth",
+                                                                                    stack)));
+                        }
+                        "elasticGpuId" => {
+                            obj.elastic_gpu_id = Some(try!(StringDeserializer::deserialize("elasticGpuId",
+                                                                                           stack)));
+                        }
+                        "elasticGpuState" => {
+                            obj.elastic_gpu_state =
+                                Some(try!(ElasticGpuStateDeserializer::deserialize("elasticGpuState",
+                                                                                   stack)));
+                        }
+                        "elasticGpuType" => {
+                            obj.elastic_gpu_type =
+                                Some(try!(StringDeserializer::deserialize("elasticGpuType",
+                                                                          stack)));
+                        }
+                        "instanceId" => {
+                            obj.instance_id = Some(try!(StringDeserializer::deserialize("instanceId",
+                                                                                        stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Contains the parameters for EnableVgwRoutePropagation.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct EnableVgwRoutePropagationRequest {
@@ -18529,8 +19351,8 @@ impl HostReservationSetDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(try!(HostReservationDeserializer::deserialize("member", stack)));
+                    if name == "item" {
+                        obj.push(try!(HostReservationDeserializer::deserialize("item", stack)));
                     } else {
                         skip_tree(stack);
                     }
@@ -20639,6 +21461,8 @@ pub struct Instance {
     pub client_token: Option<String>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p>"]
     pub ebs_optimized: Option<bool>,
+    #[doc="<p>The Elastic GPU associated with the instance.</p>"]
+    pub elastic_gpu_associations: Option<Vec<ElasticGpuAssociation>>,
     #[doc="<p>Specifies whether enhanced networking with ENA is enabled.</p>"]
     pub ena_support: Option<bool>,
     #[doc="<p>The hypervisor type of the instance.</p>"]
@@ -20749,6 +21573,9 @@ impl InstanceDeserializer {
                         "ebsOptimized" => {
                             obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize("ebsOptimized",
                                                                                            stack)));
+                        }
+                        "elasticGpuAssociationSet" => {
+                            obj.elastic_gpu_associations = Some(try!(ElasticGpuAssociationListDeserializer::deserialize("elasticGpuAssociationSet", stack)));
                         }
                         "enaSupport" => {
                             obj.ena_support = Some(try!(BooleanDeserializer::deserialize("enaSupport",
@@ -23042,6 +23869,20 @@ impl IntegerDeserializer {
 
     }
 }
+struct InterfacePermissionTypeDeserializer;
+impl InterfacePermissionTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Describes an Internet gateway.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct InternetGateway {
@@ -24637,7 +25478,7 @@ pub struct ModifyInstanceAttributeRequest {
     pub attribute: Option<String>,
     #[doc="<p>Modifies the <code>DeleteOnTermination</code> attribute for volumes that are currently attached. The volume must be owned by the caller. If no value is specified for <code>DeleteOnTermination</code>, the default is <code>true</code> and the volume is deleted when the instance is terminated.</p> <p>To add instance store volumes to an Amazon EBS-backed instance, you must add them when you launch the instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html#Using_OverridingAMIBDM\">Updating the Block Device Mapping when Launching an Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     pub block_device_mappings: Option<Vec<InstanceBlockDeviceMappingSpecification>>,
-    #[doc="<p>If the value is <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. You cannot use this paramater for Spot Instances.</p>"]
+    #[doc="<p>If the value is <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. You cannot use this parameter for Spot Instances.</p>"]
     pub disable_api_termination: Option<AttributeBooleanValue>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<bool>,
@@ -27000,6 +27841,211 @@ impl NetworkInterfaceListDeserializer {
                 }
             }
         }
+
+        Ok(obj)
+
+    }
+}
+#[doc="<p>Describes a permission for a network interface.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct NetworkInterfacePermission {
+    #[doc="<p>The AWS account ID.</p>"]
+    pub aws_account_id: Option<String>,
+    #[doc="<p>The AWS service.</p>"]
+    pub aws_service: Option<String>,
+    #[doc="<p>The ID of the network interface.</p>"]
+    pub network_interface_id: Option<String>,
+    #[doc="<p>The ID of the network interface permission.</p>"]
+    pub network_interface_permission_id: Option<String>,
+    #[doc="<p>The type of permission.</p>"]
+    pub permission: Option<String>,
+    #[doc="<p>Information about the state of the permission.</p>"]
+    pub permission_state: Option<NetworkInterfacePermissionState>,
+}
+
+struct NetworkInterfacePermissionDeserializer;
+impl NetworkInterfacePermissionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<NetworkInterfacePermission, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = NetworkInterfacePermission::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "awsAccountId" => {
+                            obj.aws_account_id = Some(try!(StringDeserializer::deserialize("awsAccountId",
+                                                                                           stack)));
+                        }
+                        "awsService" => {
+                            obj.aws_service = Some(try!(StringDeserializer::deserialize("awsService",
+                                                                                        stack)));
+                        }
+                        "networkInterfaceId" => {
+                            obj.network_interface_id =
+                                Some(try!(StringDeserializer::deserialize("networkInterfaceId",
+                                                                          stack)));
+                        }
+                        "networkInterfacePermissionId" => {
+                            obj.network_interface_permission_id =
+                                Some(try!(StringDeserializer::deserialize("networkInterfacePermissionId",
+                                                                          stack)));
+                        }
+                        "permission" => {
+                            obj.permission =
+                                Some(try!(InterfacePermissionTypeDeserializer::deserialize("permission",
+                                                                                           stack)));
+                        }
+                        "permissionState" => {
+                            obj.permission_state = Some(try!(NetworkInterfacePermissionStateDeserializer::deserialize("permissionState", stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+
+/// Serialize `NetworkInterfacePermissionIdList` contents to a `SignedRequest`.
+struct NetworkInterfacePermissionIdListSerializer;
+impl NetworkInterfacePermissionIdListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct NetworkInterfacePermissionListDeserializer;
+impl NetworkInterfacePermissionListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<NetworkInterfacePermission>, XmlParseError> {
+
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(NetworkInterfacePermissionDeserializer::deserialize("item",
+                                                                                          stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+
+    }
+}
+#[doc="<p>Describes the state of a network interface permission.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct NetworkInterfacePermissionState {
+    #[doc="<p>The state of the permission.</p>"]
+    pub state: Option<String>,
+    #[doc="<p>A status message, if applicable.</p>"]
+    pub status_message: Option<String>,
+}
+
+struct NetworkInterfacePermissionStateDeserializer;
+impl NetworkInterfacePermissionStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<NetworkInterfacePermissionState, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = NetworkInterfacePermissionState::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "state" => {
+                            obj.state = Some(try!(NetworkInterfacePermissionStateCodeDeserializer::deserialize("state", stack)));
+                        }
+                        "statusMessage" => {
+                            obj.status_message = Some(try!(StringDeserializer::deserialize("statusMessage",
+                                                                                           stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+struct NetworkInterfacePermissionStateCodeDeserializer;
+impl NetworkInterfacePermissionStateCodeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
 
         Ok(obj)
 
@@ -33050,6 +34096,8 @@ pub struct RunInstancesRequest {
     pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p> <p>Default: <code>false</code> </p>"]
     pub ebs_optimized: Option<bool>,
+    #[doc="<p>An Elastic GPU to associate with the instance.</p>"]
+    pub elastic_gpu_specification: Option<Vec<ElasticGpuSpecification>>,
     #[doc="<p>The IAM instance profile.</p>"]
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     #[doc="<p>The ID of the AMI, which you can get by calling <a>DescribeImages</a>.</p>"]
@@ -33125,6 +34173,13 @@ impl RunInstancesRequestSerializer {
         if let Some(ref field_value) = obj.ebs_optimized {
             params.put(&format!("{}{}", prefix, "EbsOptimized"),
                        &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.elastic_gpu_specification {
+            ElasticGpuSpecificationsSerializer::serialize(params,
+                                                          &format!("{}{}",
+                                                                  prefix,
+                                                                  "ElasticGpuSpecification"),
+                                                          field_value);
         }
         if let Some(ref field_value) = obj.iam_instance_profile {
             IamInstanceProfileSpecificationSerializer::serialize(params,
@@ -35341,6 +36396,8 @@ pub struct SpotFleetLaunchSpecification {
     pub spot_price: Option<String>,
     #[doc="<p>The ID of the subnet in which to launch the instances. To specify multiple subnets, separate them using commas; for example, \"subnet-a61dafcf, subnet-65ea5f08\".</p>"]
     pub subnet_id: Option<String>,
+    #[doc="<p>The tags to apply during creation.</p>"]
+    pub tag_specifications: Option<Vec<SpotFleetTagSpecification>>,
     #[doc="<p>The user data to make available to the instances. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
     pub user_data: Option<String>,
     #[doc="<p>The number of units provided by the specified instance type. These are the same units that you chose to set the target capacity in terms (instances or a performance characteristic such as vCPUs, memory, or I/O).</p> <p>If the target capacity divided by this value is not a whole number, we round the number of instances to the next whole number. If this value is not specified, the default is 1.</p>"]
@@ -35432,6 +36489,9 @@ impl SpotFleetLaunchSpecificationDeserializer {
                         "subnetId" => {
                             obj.subnet_id = Some(try!(StringDeserializer::deserialize("subnetId",
                                                                                       stack)));
+                        }
+                        "tagSpecificationSet" => {
+                            obj.tag_specifications = Some(try!(SpotFleetTagSpecificationListDeserializer::deserialize("tagSpecificationSet", stack)));
                         }
                         "userData" => {
                             obj.user_data = Some(try!(StringDeserializer::deserialize("userData",
@@ -35531,6 +36591,13 @@ impl SpotFleetLaunchSpecificationSerializer {
         }
         if let Some(ref field_value) = obj.subnet_id {
             params.put(&format!("{}{}", prefix, "SubnetId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tag_specifications {
+            SpotFleetTagSpecificationListSerializer::serialize(params,
+                                                               &format!("{}{}",
+                                                                       prefix,
+                                                                       "TagSpecificationSet"),
+                                                               field_value);
         }
         if let Some(ref field_value) = obj.user_data {
             params.put(&format!("{}{}", prefix, "UserData"), &field_value);
@@ -35906,6 +36973,135 @@ impl SpotFleetRequestConfigSetDeserializer {
 
     }
 }
+#[doc="<p>The tags for a Spot fleet resource.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct SpotFleetTagSpecification {
+    #[doc="<p>The type of resource. Currently, the only resource type that is supported is <code>instance</code>.</p>"]
+    pub resource_type: Option<String>,
+    #[doc="<p>The tags.</p>"]
+    pub tags: Option<Vec<Tag>>,
+}
+
+struct SpotFleetTagSpecificationDeserializer;
+impl SpotFleetTagSpecificationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SpotFleetTagSpecification, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = SpotFleetTagSpecification::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "resourceType" => {
+                            obj.resource_type =
+                                Some(try!(ResourceTypeDeserializer::deserialize("resourceType",
+                                                                                stack)));
+                        }
+                        "tag" => {
+                            obj.tags = Some(try!(TagListDeserializer::deserialize("tag", stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+
+/// Serialize `SpotFleetTagSpecification` contents to a `SignedRequest`.
+struct SpotFleetTagSpecificationSerializer;
+impl SpotFleetTagSpecificationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SpotFleetTagSpecification) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.resource_type {
+            params.put(&format!("{}{}", prefix, "ResourceType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+
+    }
+}
+
+struct SpotFleetTagSpecificationListDeserializer;
+impl SpotFleetTagSpecificationListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<SpotFleetTagSpecification>, XmlParseError> {
+
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(SpotFleetTagSpecificationDeserializer::deserialize("item",
+                                                                                         stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+
+    }
+}
+
+/// Serialize `SpotFleetTagSpecificationList` contents to a `SignedRequest`.
+struct SpotFleetTagSpecificationListSerializer;
+impl SpotFleetTagSpecificationListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<SpotFleetTagSpecification>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            SpotFleetTagSpecificationSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
 #[doc="<p>Describes a Spot instance request.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct SpotInstanceRequest {
@@ -43635,6 +44831,73 @@ impl Error for CreateCustomerGatewayError {
         }
     }
 }
+/// Errors returned by CreateDefaultVpc
+#[derive(Debug, PartialEq)]
+pub enum CreateDefaultVpcError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl CreateDefaultVpcError {
+    pub fn from_body(body: &str) -> CreateDefaultVpcError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => CreateDefaultVpcError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateDefaultVpcError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateDefaultVpcError {
+    fn from(err: XmlParseError) -> CreateDefaultVpcError {
+        let XmlParseError(message) = err;
+        CreateDefaultVpcError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateDefaultVpcError {
+    fn from(err: CredentialsError) -> CreateDefaultVpcError {
+        CreateDefaultVpcError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateDefaultVpcError {
+    fn from(err: HttpDispatchError) -> CreateDefaultVpcError {
+        CreateDefaultVpcError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDefaultVpcError {
+    fn from(err: io::Error) -> CreateDefaultVpcError {
+        CreateDefaultVpcError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateDefaultVpcError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDefaultVpcError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDefaultVpcError::Validation(ref cause) => cause,
+            CreateDefaultVpcError::Credentials(ref err) => err.description(),
+            CreateDefaultVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateDefaultVpcError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateDhcpOptions
 #[derive(Debug, PartialEq)]
 pub enum CreateDhcpOptionsError {
@@ -44448,6 +45711,75 @@ impl Error for CreateNetworkInterfaceError {
                 dispatch_error.description()
             }
             CreateNetworkInterfaceError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateNetworkInterfacePermission
+#[derive(Debug, PartialEq)]
+pub enum CreateNetworkInterfacePermissionError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl CreateNetworkInterfacePermissionError {
+    pub fn from_body(body: &str) -> CreateNetworkInterfacePermissionError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => CreateNetworkInterfacePermissionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateNetworkInterfacePermissionError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateNetworkInterfacePermissionError {
+    fn from(err: XmlParseError) -> CreateNetworkInterfacePermissionError {
+        let XmlParseError(message) = err;
+        CreateNetworkInterfacePermissionError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateNetworkInterfacePermissionError {
+    fn from(err: CredentialsError) -> CreateNetworkInterfacePermissionError {
+        CreateNetworkInterfacePermissionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateNetworkInterfacePermissionError {
+    fn from(err: HttpDispatchError) -> CreateNetworkInterfacePermissionError {
+        CreateNetworkInterfacePermissionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateNetworkInterfacePermissionError {
+    fn from(err: io::Error) -> CreateNetworkInterfacePermissionError {
+        CreateNetworkInterfacePermissionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateNetworkInterfacePermissionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateNetworkInterfacePermissionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateNetworkInterfacePermissionError::Validation(ref cause) => cause,
+            CreateNetworkInterfacePermissionError::Credentials(ref err) => err.description(),
+            CreateNetworkInterfacePermissionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateNetworkInterfacePermissionError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -46221,6 +47553,75 @@ impl Error for DeleteNetworkInterfaceError {
         }
     }
 }
+/// Errors returned by DeleteNetworkInterfacePermission
+#[derive(Debug, PartialEq)]
+pub enum DeleteNetworkInterfacePermissionError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DeleteNetworkInterfacePermissionError {
+    pub fn from_body(body: &str) -> DeleteNetworkInterfacePermissionError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => DeleteNetworkInterfacePermissionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteNetworkInterfacePermissionError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteNetworkInterfacePermissionError {
+    fn from(err: XmlParseError) -> DeleteNetworkInterfacePermissionError {
+        let XmlParseError(message) = err;
+        DeleteNetworkInterfacePermissionError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteNetworkInterfacePermissionError {
+    fn from(err: CredentialsError) -> DeleteNetworkInterfacePermissionError {
+        DeleteNetworkInterfacePermissionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteNetworkInterfacePermissionError {
+    fn from(err: HttpDispatchError) -> DeleteNetworkInterfacePermissionError {
+        DeleteNetworkInterfacePermissionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteNetworkInterfacePermissionError {
+    fn from(err: io::Error) -> DeleteNetworkInterfacePermissionError {
+        DeleteNetworkInterfacePermissionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteNetworkInterfacePermissionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteNetworkInterfacePermissionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteNetworkInterfacePermissionError::Validation(ref cause) => cause,
+            DeleteNetworkInterfacePermissionError::Credentials(ref err) => err.description(),
+            DeleteNetworkInterfacePermissionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteNetworkInterfacePermissionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeletePlacementGroup
 #[derive(Debug, PartialEq)]
 pub enum DeletePlacementGroupError {
@@ -47928,6 +49329,75 @@ impl Error for DescribeEgressOnlyInternetGatewaysError {
         }
     }
 }
+/// Errors returned by DescribeElasticGpus
+#[derive(Debug, PartialEq)]
+pub enum DescribeElasticGpusError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeElasticGpusError {
+    pub fn from_body(body: &str) -> DescribeElasticGpusError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => DescribeElasticGpusError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeElasticGpusError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeElasticGpusError {
+    fn from(err: XmlParseError) -> DescribeElasticGpusError {
+        let XmlParseError(message) = err;
+        DescribeElasticGpusError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeElasticGpusError {
+    fn from(err: CredentialsError) -> DescribeElasticGpusError {
+        DescribeElasticGpusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeElasticGpusError {
+    fn from(err: HttpDispatchError) -> DescribeElasticGpusError {
+        DescribeElasticGpusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeElasticGpusError {
+    fn from(err: io::Error) -> DescribeElasticGpusError {
+        DescribeElasticGpusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeElasticGpusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeElasticGpusError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeElasticGpusError::Validation(ref cause) => cause,
+            DescribeElasticGpusError::Credentials(ref err) => err.description(),
+            DescribeElasticGpusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeElasticGpusError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeExportTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeExportTasksError {
@@ -49433,6 +50903,75 @@ impl Error for DescribeNetworkInterfaceAttributeError {
                 dispatch_error.description()
             }
             DescribeNetworkInterfaceAttributeError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeNetworkInterfacePermissions
+#[derive(Debug, PartialEq)]
+pub enum DescribeNetworkInterfacePermissionsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeNetworkInterfacePermissionsError {
+    pub fn from_body(body: &str) -> DescribeNetworkInterfacePermissionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => DescribeNetworkInterfacePermissionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeNetworkInterfacePermissionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeNetworkInterfacePermissionsError {
+    fn from(err: XmlParseError) -> DescribeNetworkInterfacePermissionsError {
+        let XmlParseError(message) = err;
+        DescribeNetworkInterfacePermissionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeNetworkInterfacePermissionsError {
+    fn from(err: CredentialsError) -> DescribeNetworkInterfacePermissionsError {
+        DescribeNetworkInterfacePermissionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeNetworkInterfacePermissionsError {
+    fn from(err: HttpDispatchError) -> DescribeNetworkInterfacePermissionsError {
+        DescribeNetworkInterfacePermissionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeNetworkInterfacePermissionsError {
+    fn from(err: io::Error) -> DescribeNetworkInterfacePermissionsError {
+        DescribeNetworkInterfacePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeNetworkInterfacePermissionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeNetworkInterfacePermissionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeNetworkInterfacePermissionsError::Validation(ref cause) => cause,
+            DescribeNetworkInterfacePermissionsError::Credentials(ref err) => err.description(),
+            DescribeNetworkInterfacePermissionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeNetworkInterfacePermissionsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -57192,7 +58731,7 @@ pub trait Ec2 {
          -> Result<AcceptVpcPeeringConnectionResult, AcceptVpcPeeringConnectionError>;
 
 
-    #[doc="<p>Acquires an Elastic IP address.</p> <p>An Elastic IP address is for use either in the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[doc="<p>Allocates an Elastic IP address.</p> <p>An Elastic IP address is for use either in the EC2-Classic platform or in a VPC. By default, you can allocate 5 Elastic IP addresses for EC2-Classic per region and 5 Elastic IP addresses for EC2-VPC per region.</p> <p>If you release an Elastic IP address for use in a VPC, you might be able to recover it. To recover an Elastic IP address that you released, specify it in the <code>Address</code> parameter. Note that you cannot recover an Elastic IP address that you released after it is allocated to another AWS account.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn allocate_address(&self,
                         input: &AllocateAddressRequest)
                         -> Result<AllocateAddressResult, AllocateAddressError>;
@@ -57373,6 +58912,12 @@ pub trait Ec2 {
          -> Result<CreateCustomerGatewayResult, CreateCustomerGatewayError>;
 
 
+    #[doc="<p>Creates a default VPC with a size <code>/16</code> IPv4 CIDR block and a default subnet in each Availability Zone. For more information about the components of a default VPC, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html\">Default VPC and Default Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. You cannot specify the components of the default VPC yourself.</p> <p>You can create a default VPC if you deleted your previous default VPC. You cannot have more than one default VPC per region. </p> <p>If your account supports EC2-Classic, you cannot use this action to create a default VPC in a region that supports EC2-Classic. If you want a default VPC in a region that supports EC2-Classic, see \"I really want a default VPC for my existing EC2 account. Is that possible?\" in the <a href=\"http://aws.amazon.com/vpc/faqs/#Default_VPCs\">Default VPCs FAQ</a>.</p>"]
+    fn create_default_vpc(&self,
+                          input: &CreateDefaultVpcRequest)
+                          -> Result<CreateDefaultVpcResult, CreateDefaultVpcError>;
+
+
     #[doc="<p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. If you want your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an Internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
     fn create_dhcp_options(&self,
                            input: &CreateDhcpOptionsRequest)
@@ -57445,6 +58990,13 @@ pub trait Ec2 {
         (&self,
          input: &CreateNetworkInterfaceRequest)
          -> Result<CreateNetworkInterfaceResult, CreateNetworkInterfaceError>;
+
+
+    #[doc="<p>Grants an AWS authorized partner account permission to attach the specified network interface to an instance in their account.</p> <p>You can grant permission to a single AWS account only, and only one account at a time.</p>"]
+    fn create_network_interface_permission
+        (&self,
+         input: &CreateNetworkInterfacePermissionRequest)
+         -> Result<CreateNetworkInterfacePermissionResult, CreateNetworkInterfacePermissionError>;
 
 
     #[doc="<p>Creates a placement group that you launch cluster instances into. You must give the group a name that's unique within the scope of your account.</p> <p>For more information about placement groups and cluster instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html\">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
@@ -57599,6 +59151,13 @@ pub trait Ec2 {
                                 -> Result<(), DeleteNetworkInterfaceError>;
 
 
+    #[doc="<p>Deletes a permission for a network interface. By default, you cannot delete the permission if the account for which you're removing the permission has attached the network interface to an instance. However, you can force delete the permission, regardless of any attachment.</p>"]
+    fn delete_network_interface_permission
+        (&self,
+         input: &DeleteNetworkInterfacePermissionRequest)
+         -> Result<DeleteNetworkInterfacePermissionResult, DeleteNetworkInterfacePermissionError>;
+
+
     #[doc="<p>Deletes the specified placement group. You must terminate all instances in the placement group before you can delete the placement group. For more information about placement groups and cluster instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html\">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn delete_placement_group(&self,
                               input: &DeletePlacementGroupRequest)
@@ -57678,7 +59237,7 @@ pub trait Ec2 {
                           -> Result<(), DeleteVpnGatewayError>;
 
 
-    #[doc="<p>Deregisters the specified AMI. After you deregister an AMI, it can't be used to launch new instances.</p> <p>This command does not delete the AMI.</p>"]
+    #[doc="<p>Deregisters the specified AMI. After you deregister an AMI, it can't be used to launch new instances; however, it doesn't affect any instances that you've already launched from the AMI. You'll continue to incur usage costs for those instances until you terminate them.</p> <p>When you deregister an Amazon EBS-backed AMI, it doesn't affect the snapshot that was created for the root volume of the instance during the AMI creation process. When you deregister an instance store-backed AMI, it doesn't affect the files that you uploaded to Amazon S3 when you created the AMI.</p>"]
     fn deregister_image(&self, input: &DeregisterImageRequest) -> Result<(), DeregisterImageError>;
 
 
@@ -57741,6 +59300,12 @@ pub trait Ec2 {
          input: &DescribeEgressOnlyInternetGatewaysRequest)
          -> Result<DescribeEgressOnlyInternetGatewaysResult,
                    DescribeEgressOnlyInternetGatewaysError>;
+
+
+    #[doc="<p>Describes the Elastic GPUs associated with your instances. For more information about Elastic GPUs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-gpus.html\">Amazon EC2 Elastic GPUs</a>.</p>"]
+    fn describe_elastic_gpus(&self,
+                             input: &DescribeElasticGpusRequest)
+                             -> Result<DescribeElasticGpusResult, DescribeElasticGpusError>;
 
 
     #[doc="<p>Describes one or more of your export tasks.</p>"]
@@ -57830,7 +59395,7 @@ pub trait Ec2 {
                                    -> Result<InstanceAttribute, DescribeInstanceAttributeError>;
 
 
-    #[doc="<p>Describes the status of one or more instances. By default, only running instances are described, unless specified otherwise.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html\">Status Checks for Your Instances</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html\">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html\">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html\">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul>"]
+    #[doc="<p>Describes the status of one or more instances. By default, only running instances are described, unless you specifically indicate to return the status of all instances.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html\">Status Checks for Your Instances</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html\">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html\">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html\">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul>"]
     fn describe_instance_status
         (&self,
          input: &DescribeInstanceStatusRequest)
@@ -57880,6 +59445,14 @@ pub trait Ec2 {
         (&self,
          input: &DescribeNetworkInterfaceAttributeRequest)
          -> Result<DescribeNetworkInterfaceAttributeResult, DescribeNetworkInterfaceAttributeError>;
+
+
+    #[doc="<p>Describes the permissions for your network interfaces. </p>"]
+    fn describe_network_interface_permissions
+        (&self,
+         input: &DescribeNetworkInterfacePermissionsRequest)
+         -> Result<DescribeNetworkInterfacePermissionsResult,
+                   DescribeNetworkInterfacePermissionsError>;
 
 
     #[doc="<p>Describes one or more of your network interfaces.</p>"]
@@ -58440,7 +60013,7 @@ pub trait Ec2 {
          -> Result<RejectVpcPeeringConnectionResult, RejectVpcPeeringConnectionError>;
 
 
-    #[doc="<p>Releases the specified Elastic IP address.</p> <p>After releasing an Elastic IP address, it is released to the IP address pool and might be unavailable to you. Be sure to update your DNS records and any servers or devices that communicate with the address. If you attempt to release an Elastic IP address that you already released, you'll get an <code>AuthFailure</code> error if the address is already allocated to another AWS account.</p> <p>[EC2-Classic, default VPC] Releasing an Elastic IP address automatically disassociates it from any instance that it's associated with. To disassociate an Elastic IP address without releasing it, use <a>DisassociateAddress</a>.</p> <p>[Nondefault VPC] You must use <a>DisassociateAddress</a> to disassociate the Elastic IP address before you try to release it. Otherwise, Amazon EC2 returns an error (<code>InvalidIPAddress.InUse</code>).</p>"]
+    #[doc="<p>Releases the specified Elastic IP address.</p> <p>[EC2-Classic, default VPC] Releasing an Elastic IP address automatically disassociates it from any instance that it's associated with. To disassociate an Elastic IP address without releasing it, use <a>DisassociateAddress</a>.</p> <p>[Nondefault VPC] You must use <a>DisassociateAddress</a> to disassociate the Elastic IP address before you can release it. Otherwise, Amazon EC2 returns an error (<code>InvalidIPAddress.InUse</code>).</p> <p>After releasing an Elastic IP address, it is released to the IP address pool. Be sure to update your DNS records and any servers or devices that communicate with the address. If you attempt to release an Elastic IP address that you already released, you'll get an <code>AuthFailure</code> error if the address is already allocated to another AWS account.</p> <p>[EC2-VPC] After you release an Elastic IP address for use in a VPC, you might be able to recover it. For more information, see <a>AllocateAddress</a>.</p>"]
     fn release_address(&self, input: &ReleaseAddressRequest) -> Result<(), ReleaseAddressError>;
 
 
@@ -58537,7 +60110,7 @@ pub trait Ec2 {
                                     -> Result<(), RevokeSecurityGroupEgressError>;
 
 
-    #[doc="<p>Removes one or more ingress rules from a security group. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be removed.</p> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>"]
+    #[doc="<p>Removes one or more ingress rules from a security group. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be removed.</p> <note> <p>[EC2-Classic security groups only] If the values you specify do not match the existing rule's values, no error is returned. Use <a>DescribeSecurityGroups</a> to verify that the rule has been removed.</p> </note> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>"]
     fn revoke_security_group_ingress(&self,
                                      input: &RevokeSecurityGroupIngressRequest)
                                      -> Result<(), RevokeSecurityGroupIngressError>;
@@ -58707,7 +60280,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Acquires an Elastic IP address.</p> <p>An Elastic IP address is for use either in the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[doc="<p>Allocates an Elastic IP address.</p> <p>An Elastic IP address is for use either in the EC2-Classic platform or in a VPC. By default, you can allocate 5 Elastic IP addresses for EC2-Classic per region and 5 Elastic IP addresses for EC2-VPC per region.</p> <p>If you release an Elastic IP address for use in a VPC, you might be able to recover it. To recover an Elastic IP address that you released, specify it in the <code>Address</code> parameter. Note that you cannot recover an Elastic IP address that you released after it is allocated to another AWS account.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn allocate_address(&self,
                         input: &AllocateAddressRequest)
                         -> Result<AllocateAddressResult, AllocateAddressError> {
@@ -59884,6 +61457,51 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
+    #[doc="<p>Creates a default VPC with a size <code>/16</code> IPv4 CIDR block and a default subnet in each Availability Zone. For more information about the components of a default VPC, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html\">Default VPC and Default Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. You cannot specify the components of the default VPC yourself.</p> <p>You can create a default VPC if you deleted your previous default VPC. You cannot have more than one default VPC per region. </p> <p>If your account supports EC2-Classic, you cannot use this action to create a default VPC in a region that supports EC2-Classic. If you want a default VPC in a region that supports EC2-Classic, see \"I really want a default VPC for my existing EC2 account. Is that possible?\" in the <a href=\"http://aws.amazon.com/vpc/faqs/#Default_VPCs\">Default VPCs FAQ</a>.</p>"]
+    fn create_default_vpc(&self,
+                          input: &CreateDefaultVpcRequest)
+                          -> Result<CreateDefaultVpcResult, CreateDefaultVpcError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateDefaultVpc");
+        params.put("Version", "2016-11-15");
+        CreateDefaultVpcRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CreateDefaultVpcResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result =
+                        try!(CreateDefaultVpcResultDeserializer::deserialize(&actual_tag_name,
+                                                                             &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDefaultVpcError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. If you want your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an Internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
     fn create_dhcp_options(&self,
                            input: &CreateDhcpOptionsRequest)
@@ -60393,6 +62011,50 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateNetworkInterfaceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Grants an AWS authorized partner account permission to attach the specified network interface to an instance in their account.</p> <p>You can grant permission to a single AWS account only, and only one account at a time.</p>"]
+    fn create_network_interface_permission
+        (&self,
+         input: &CreateNetworkInterfacePermissionRequest)
+         -> Result<CreateNetworkInterfacePermissionResult, CreateNetworkInterfacePermissionError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateNetworkInterfacePermission");
+        params.put("Version", "2016-11-15");
+        CreateNetworkInterfacePermissionRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CreateNetworkInterfacePermissionResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(CreateNetworkInterfacePermissionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateNetworkInterfacePermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -61383,6 +63045,50 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
+    #[doc="<p>Deletes a permission for a network interface. By default, you cannot delete the permission if the account for which you're removing the permission has attached the network interface to an instance. However, you can force delete the permission, regardless of any attachment.</p>"]
+    fn delete_network_interface_permission
+        (&self,
+         input: &DeleteNetworkInterfacePermissionRequest)
+         -> Result<DeleteNetworkInterfacePermissionResult, DeleteNetworkInterfacePermissionError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteNetworkInterfacePermission");
+        params.put("Version", "2016-11-15");
+        DeleteNetworkInterfacePermissionRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DeleteNetworkInterfacePermissionResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DeleteNetworkInterfacePermissionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteNetworkInterfacePermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Deletes the specified placement group. You must terminate all instances in the placement group before you can delete the placement group. For more information about placement groups and cluster instances, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html\">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn delete_placement_group(&self,
                               input: &DeletePlacementGroupRequest)
@@ -61827,7 +63533,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Deregisters the specified AMI. After you deregister an AMI, it can't be used to launch new instances.</p> <p>This command does not delete the AMI.</p>"]
+    #[doc="<p>Deregisters the specified AMI. After you deregister an AMI, it can't be used to launch new instances; however, it doesn't affect any instances that you've already launched from the AMI. You'll continue to incur usage costs for those instances until you terminate them.</p> <p>When you deregister an Amazon EBS-backed AMI, it doesn't affect the snapshot that was created for the root volume of the instance during the AMI creation process. When you deregister an instance store-backed AMI, it doesn't affect the files that you uploaded to Amazon S3 when you created the AMI.</p>"]
     fn deregister_image(&self, input: &DeregisterImageRequest) -> Result<(), DeregisterImageError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
@@ -62253,6 +63959,51 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeEgressOnlyInternetGatewaysError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Describes the Elastic GPUs associated with your instances. For more information about Elastic GPUs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-gpus.html\">Amazon EC2 Elastic GPUs</a>.</p>"]
+    fn describe_elastic_gpus(&self,
+                             input: &DescribeElasticGpusRequest)
+                             -> Result<DescribeElasticGpusResult, DescribeElasticGpusError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeElasticGpus");
+        params.put("Version", "2016-11-15");
+        DescribeElasticGpusRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeElasticGpusResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result =
+                        try!(DescribeElasticGpusResultDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeElasticGpusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -62880,7 +64631,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
     }
 
 
-    #[doc="<p>Describes the status of one or more instances. By default, only running instances are described, unless specified otherwise.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html\">Status Checks for Your Instances</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html\">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html\">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html\">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul>"]
+    #[doc="<p>Describes the status of one or more instances. By default, only running instances are described, unless you specifically indicate to return the status of all instances.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html\">Status Checks for Your Instances</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html\">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html\">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html\">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul>"]
     fn describe_instance_status
         (&self,
          input: &DescribeInstanceStatusRequest)
@@ -63233,6 +64984,51 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeNetworkInterfaceAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Describes the permissions for your network interfaces. </p>"]
+    fn describe_network_interface_permissions
+        (&self,
+         input: &DescribeNetworkInterfacePermissionsRequest)
+         -> Result<DescribeNetworkInterfacePermissionsResult,
+                   DescribeNetworkInterfacePermissionsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeNetworkInterfacePermissions");
+        params.put("Version", "2016-11-15");
+        DescribeNetworkInterfacePermissionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeNetworkInterfacePermissionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DescribeNetworkInterfacePermissionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeNetworkInterfacePermissionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -66856,7 +68652,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
     }
 
 
-    #[doc="<p>Releases the specified Elastic IP address.</p> <p>After releasing an Elastic IP address, it is released to the IP address pool and might be unavailable to you. Be sure to update your DNS records and any servers or devices that communicate with the address. If you attempt to release an Elastic IP address that you already released, you'll get an <code>AuthFailure</code> error if the address is already allocated to another AWS account.</p> <p>[EC2-Classic, default VPC] Releasing an Elastic IP address automatically disassociates it from any instance that it's associated with. To disassociate an Elastic IP address without releasing it, use <a>DisassociateAddress</a>.</p> <p>[Nondefault VPC] You must use <a>DisassociateAddress</a> to disassociate the Elastic IP address before you try to release it. Otherwise, Amazon EC2 returns an error (<code>InvalidIPAddress.InUse</code>).</p>"]
+    #[doc="<p>Releases the specified Elastic IP address.</p> <p>[EC2-Classic, default VPC] Releasing an Elastic IP address automatically disassociates it from any instance that it's associated with. To disassociate an Elastic IP address without releasing it, use <a>DisassociateAddress</a>.</p> <p>[Nondefault VPC] You must use <a>DisassociateAddress</a> to disassociate the Elastic IP address before you can release it. Otherwise, Amazon EC2 returns an error (<code>InvalidIPAddress.InUse</code>).</p> <p>After releasing an Elastic IP address, it is released to the IP address pool. Be sure to update your DNS records and any servers or devices that communicate with the address. If you attempt to release an Elastic IP address that you already released, you'll get an <code>AuthFailure</code> error if the address is already allocated to another AWS account.</p> <p>[EC2-VPC] After you release an Elastic IP address for use in a VPC, you might be able to recover it. For more information, see <a>AllocateAddress</a>.</p>"]
     fn release_address(&self, input: &ReleaseAddressRequest) -> Result<(), ReleaseAddressError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
@@ -67420,7 +69216,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
     }
 
 
-    #[doc="<p>Removes one or more ingress rules from a security group. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be removed.</p> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>"]
+    #[doc="<p>Removes one or more ingress rules from a security group. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be removed.</p> <note> <p>[EC2-Classic security groups only] If the values you specify do not match the existing rule's values, no error is returned. Use <a>DescribeSecurityGroups</a> to verify that the rule has been removed.</p> </note> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>"]
     fn revoke_security_group_ingress(&self,
                                      input: &RevokeSecurityGroupIngressRequest)
                                      -> Result<(), RevokeSecurityGroupIngressError> {

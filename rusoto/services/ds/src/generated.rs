@@ -277,6 +277,7 @@ pub struct CreateMicrosoftADRequest {
     #[serde(rename="ShortName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub short_name: Option<String>,
+    #[doc="<p>Contains VPC information for the <a>CreateDirectory</a> or <a>CreateMicrosoftAD</a> operation.</p>"]
     #[serde(rename="VpcSettings")]
     pub vpc_settings: DirectoryVpcSettings,
 }
@@ -481,6 +482,37 @@ pub struct DescribeDirectoriesResult {
     pub next_token: Option<String>,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DescribeDomainControllersRequest {
+    #[doc="<p>Identifier of the directory for which to retrieve the domain controller information.</p>"]
+    #[serde(rename="DirectoryId")]
+    pub directory_id: String,
+    #[doc="<p>A list of identifiers for the domain controllers whose information will be provided.</p>"]
+    #[serde(rename="DomainControllerIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub domain_controller_ids: Option<Vec<String>>,
+    #[doc="<p>The maximum number of items to return.</p>"]
+    #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub limit: Option<i64>,
+    #[doc="<p>The <i>DescribeDomainControllers.NextToken</i> value from a previous call to <a>DescribeDomainControllers</a>. Pass null if this is the first call. </p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DescribeDomainControllersResult {
+    #[doc="<p>List of the <a>DomainController</a> objects that were retrieved.</p>"]
+    #[serde(rename="DomainControllers")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub domain_controllers: Option<Vec<DomainController>>,
+    #[doc="<p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to <a>DescribeDomainControllers</a> retrieve the next set of items.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 #[doc="<p>Describes event topics.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeEventTopicsRequest {
@@ -636,6 +668,10 @@ pub struct DirectoryDescription {
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
+    #[doc="<p>The desired number of domain controllers in the directory if the directory is Microsoft AD.</p>"]
+    #[serde(rename="DesiredNumberOfDomainControllers")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub desired_number_of_domain_controllers: Option<i64>,
     #[doc="<p>The directory identifier.</p>"]
     #[serde(rename="DirectoryId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -798,6 +834,51 @@ pub struct DisableSsoRequest {
 #[doc="<p>Contains the results of the <a>DisableSso</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DisableSsoResult;
+
+#[doc="<p>Contains information about the domain controllers for a specified directory.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DomainController {
+    #[doc="<p>The Availability Zone where the domain controller is located.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub availability_zone: Option<String>,
+    #[doc="<p>Identifier of the directory where the domain controller resides.</p>"]
+    #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub directory_id: Option<String>,
+    #[doc="<p>The IP address of the domain controller.</p>"]
+    #[serde(rename="DnsIpAddr")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub dns_ip_addr: Option<String>,
+    #[doc="<p>Identifies a specific domain controller in the directory.</p>"]
+    #[serde(rename="DomainControllerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub domain_controller_id: Option<String>,
+    #[doc="<p>Specifies when the domain controller was created.</p>"]
+    #[serde(rename="LaunchTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub launch_time: Option<f64>,
+    #[doc="<p>The status of the domain controller.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status: Option<String>,
+    #[doc="<p>The date and time that the status was last updated.</p>"]
+    #[serde(rename="StatusLastUpdatedDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status_last_updated_date_time: Option<f64>,
+    #[doc="<p>A description of the domain controller state.</p>"]
+    #[serde(rename="StatusReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status_reason: Option<String>,
+    #[doc="<p>Identifier of the subnet in the VPC that contains the domain controller.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subnet_id: Option<String>,
+    #[doc="<p>The identifier of the VPC that contains the domain controller.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub vpc_id: Option<String>,
+}
 
 #[doc="<p>Contains the inputs for the <a>EnableRadius</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1278,6 +1359,19 @@ pub struct UpdateConditionalForwarderRequest {
 #[doc="<p>The result of an UpdateConditionalForwarder request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateConditionalForwarderResult;
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct UpdateNumberOfDomainControllersRequest {
+    #[doc="<p>The number of domain controllers desired in the directory.</p>"]
+    #[serde(rename="DesiredNumber")]
+    pub desired_number: i64,
+    #[doc="<p>Identifier of the directory to which the domain controllers will be added or removed.</p>"]
+    #[serde(rename="DirectoryId")]
+    pub directory_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct UpdateNumberOfDomainControllersResult;
 
 #[doc="<p>Contains the inputs for the <a>UpdateRadius</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -3133,6 +3227,109 @@ impl Error for DescribeDirectoriesError {
         }
     }
 }
+/// Errors returned by DescribeDomainControllers
+#[derive(Debug, PartialEq)]
+pub enum DescribeDomainControllersError {
+    ///<p>A client exception has occurred.</p>
+    Client(String),
+    ///<p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    ///<p>The <i>NextToken</i> value is not valid.</p>
+    InvalidNextToken(String),
+    ///<p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    ///<p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    ///<p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeDomainControllersError {
+    pub fn from_body(body: &str) -> DescribeDomainControllersError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ClientException" => {
+                        DescribeDomainControllersError::Client(String::from(error_message))
+                    }
+                    "EntityDoesNotExistException" => DescribeDomainControllersError::EntityDoesNotExist(String::from(error_message)),
+                    "InvalidNextTokenException" => DescribeDomainControllersError::InvalidNextToken(String::from(error_message)),
+                    "InvalidParameterException" => DescribeDomainControllersError::InvalidParameter(String::from(error_message)),
+                    "ServiceException" => {
+                        DescribeDomainControllersError::Service(String::from(error_message))
+                    }
+                    "UnsupportedOperationException" => DescribeDomainControllersError::UnsupportedOperation(String::from(error_message)),
+                    "ValidationException" => {
+                        DescribeDomainControllersError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeDomainControllersError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeDomainControllersError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeDomainControllersError {
+    fn from(err: serde_json::error::Error) -> DescribeDomainControllersError {
+        DescribeDomainControllersError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeDomainControllersError {
+    fn from(err: CredentialsError) -> DescribeDomainControllersError {
+        DescribeDomainControllersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeDomainControllersError {
+    fn from(err: HttpDispatchError) -> DescribeDomainControllersError {
+        DescribeDomainControllersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDomainControllersError {
+    fn from(err: io::Error) -> DescribeDomainControllersError {
+        DescribeDomainControllersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeDomainControllersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDomainControllersError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDomainControllersError::Client(ref cause) => cause,
+            DescribeDomainControllersError::EntityDoesNotExist(ref cause) => cause,
+            DescribeDomainControllersError::InvalidNextToken(ref cause) => cause,
+            DescribeDomainControllersError::InvalidParameter(ref cause) => cause,
+            DescribeDomainControllersError::Service(ref cause) => cause,
+            DescribeDomainControllersError::UnsupportedOperation(ref cause) => cause,
+            DescribeDomainControllersError::Validation(ref cause) => cause,
+            DescribeDomainControllersError::Credentials(ref err) => err.description(),
+            DescribeDomainControllersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeDomainControllersError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeEventTopics
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventTopicsError {
@@ -4919,6 +5116,113 @@ impl Error for UpdateConditionalForwarderError {
         }
     }
 }
+/// Errors returned by UpdateNumberOfDomainControllers
+#[derive(Debug, PartialEq)]
+pub enum UpdateNumberOfDomainControllersError {
+    ///<p>A client exception has occurred.</p>
+    Client(String),
+    ///<p>The specified directory is unavailable or could not be found.</p>
+    DirectoryUnavailable(String),
+    ///<p>The maximum allowed number of domain controllers per directory was exceeded. The default limit per directory is 20 domain controllers.</p>
+    DomainControllerLimitExceeded(String),
+    ///<p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    ///<p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    ///<p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    ///<p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl UpdateNumberOfDomainControllersError {
+    pub fn from_body(body: &str) -> UpdateNumberOfDomainControllersError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ClientException" => {
+                        UpdateNumberOfDomainControllersError::Client(String::from(error_message))
+                    }
+                    "DirectoryUnavailableException" => UpdateNumberOfDomainControllersError::DirectoryUnavailable(String::from(error_message)),
+                    "DomainControllerLimitExceededException" => UpdateNumberOfDomainControllersError::DomainControllerLimitExceeded(String::from(error_message)),
+                    "EntityDoesNotExistException" => UpdateNumberOfDomainControllersError::EntityDoesNotExist(String::from(error_message)),
+                    "InvalidParameterException" => UpdateNumberOfDomainControllersError::InvalidParameter(String::from(error_message)),
+                    "ServiceException" => {
+                        UpdateNumberOfDomainControllersError::Service(String::from(error_message))
+                    }
+                    "UnsupportedOperationException" => UpdateNumberOfDomainControllersError::UnsupportedOperation(String::from(error_message)),
+                    "ValidationException" => {
+                        UpdateNumberOfDomainControllersError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateNumberOfDomainControllersError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateNumberOfDomainControllersError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateNumberOfDomainControllersError {
+    fn from(err: serde_json::error::Error) -> UpdateNumberOfDomainControllersError {
+        UpdateNumberOfDomainControllersError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateNumberOfDomainControllersError {
+    fn from(err: CredentialsError) -> UpdateNumberOfDomainControllersError {
+        UpdateNumberOfDomainControllersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateNumberOfDomainControllersError {
+    fn from(err: HttpDispatchError) -> UpdateNumberOfDomainControllersError {
+        UpdateNumberOfDomainControllersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateNumberOfDomainControllersError {
+    fn from(err: io::Error) -> UpdateNumberOfDomainControllersError {
+        UpdateNumberOfDomainControllersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateNumberOfDomainControllersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateNumberOfDomainControllersError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateNumberOfDomainControllersError::Client(ref cause) => cause,
+            UpdateNumberOfDomainControllersError::DirectoryUnavailable(ref cause) => cause,
+            UpdateNumberOfDomainControllersError::DomainControllerLimitExceeded(ref cause) => cause,
+            UpdateNumberOfDomainControllersError::EntityDoesNotExist(ref cause) => cause,
+            UpdateNumberOfDomainControllersError::InvalidParameter(ref cause) => cause,
+            UpdateNumberOfDomainControllersError::Service(ref cause) => cause,
+            UpdateNumberOfDomainControllersError::UnsupportedOperation(ref cause) => cause,
+            UpdateNumberOfDomainControllersError::Validation(ref cause) => cause,
+            UpdateNumberOfDomainControllersError::Credentials(ref err) => err.description(),
+            UpdateNumberOfDomainControllersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateNumberOfDomainControllersError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateRadius
 #[derive(Debug, PartialEq)]
 pub enum UpdateRadiusError {
@@ -5225,6 +5529,13 @@ pub trait DirectoryService {
                             -> Result<DescribeDirectoriesResult, DescribeDirectoriesError>;
 
 
+    #[doc="<p>Provides information about any domain controllers in your directory.</p>"]
+    fn describe_domain_controllers
+        (&self,
+         input: &DescribeDomainControllersRequest)
+         -> Result<DescribeDomainControllersResult, DescribeDomainControllersError>;
+
+
     #[doc="<p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>"]
     fn describe_event_topics(&self,
                              input: &DescribeEventTopicsRequest)
@@ -5327,6 +5638,13 @@ pub trait DirectoryService {
         (&self,
          input: &UpdateConditionalForwarderRequest)
          -> Result<UpdateConditionalForwarderResult, UpdateConditionalForwarderError>;
+
+
+    #[doc="<p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>"]
+    fn update_number_of_domain_controllers
+        (&self,
+         input: &UpdateNumberOfDomainControllersRequest)
+         -> Result<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError>;
 
 
     #[doc="<p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>"]
@@ -5946,6 +6264,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
     }
 
 
+    #[doc="<p>Provides information about any domain controllers in your directory.</p>"]
+    fn describe_domain_controllers
+        (&self,
+         input: &DescribeDomainControllersRequest)
+         -> Result<DescribeDomainControllersResult, DescribeDomainControllersError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "DirectoryService_20150416.DescribeDomainControllers");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDomainControllersResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDomainControllersError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>"]
     fn describe_event_topics(&self,
                              input: &DescribeEventTopicsRequest)
@@ -6509,6 +6860,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateConditionalForwarderError::from_body(String::from_utf8_lossy(&body)
                                                                    .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>"]
+    fn update_number_of_domain_controllers
+        (&self,
+         input: &UpdateNumberOfDomainControllersRequest)
+         -> Result<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "DirectoryService_20150416.UpdateNumberOfDomainControllers");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateNumberOfDomainControllersResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateNumberOfDomainControllersError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
             }
         }
     }
