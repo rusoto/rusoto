@@ -2,7 +2,7 @@
 //!
 //! Wraps the `hyper` library to send PUT, POST, DELETE and GET requests.
 
-extern crate lazy_static;
+//extern crate lazy_static;
 
 use std::env;
 use std::io::Read;
