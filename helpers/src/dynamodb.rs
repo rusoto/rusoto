@@ -183,6 +183,21 @@ macro_rules! val {
 	);
 }
 
+/// Shorthand for specifying a dynamodb item
+#[macro_export]
+macro_rules! ddb_item {
+    ($($p:tt: $t:tt => $x:expr),*) => {
+        hashmap!{
+            $(
+                String::from(stringify!($p)) => AttributeValue {
+                    $t: Some($x),
+                    ..Default::default()
+                },
+            )*
+        }
+    }
+}
+
 // TODO: make a macro from this?
 pub fn get_str_from_attribute(attr: &AttributeValue) -> Option<&str> {
     match attr.b {
