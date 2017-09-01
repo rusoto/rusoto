@@ -23,6 +23,7 @@ fn should_put_metric_data() {
                                timestamp: None,
                                unit: Some("Bytes".to_string()),
                                value: Some(1.0),
+                               ..Default::default()
                            }];
     let request = PutMetricDataInput {
         namespace: "TestNamespace".to_string(),
