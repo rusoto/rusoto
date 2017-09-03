@@ -330,6 +330,10 @@ pub struct PutRecordInput {
 #[doc="<p>Represents the output for <code>PutRecord</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PutRecordOutput {
+    #[doc="<p>The encryption type to use on the record. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records in the stream.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed KMS key.</p> </li> </ul>"]
+    #[serde(rename="EncryptionType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub encryption_type: Option<String>,
     #[doc="<p>The sequence number identifier that was assigned to the put data record. The sequence number for the record is unique across all records in the stream. A sequence number is the identifier associated with every record put into the stream.</p>"]
     #[serde(rename="SequenceNumber")]
     pub sequence_number: String,
@@ -352,6 +356,10 @@ pub struct PutRecordsInput {
 #[doc="<p> <code>PutRecords</code> results.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PutRecordsOutput {
+    #[doc="<p>The encryption type used on the records. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records using a customer-managed KMS key.</p> </li> </ul>"]
+    #[serde(rename="EncryptionType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub encryption_type: Option<String>,
     #[doc="<p>The number of unsuccessfully processed records in a <code>PutRecords</code> request.</p>"]
     #[serde(rename="FailedRecordCount")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -417,10 +425,14 @@ pub struct Record {
                             default,
                         )]
     pub data: Vec<u8>,
+    #[doc="<p>The encryption type used on the record. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records in the stream.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed KMS key.</p> </li> </ul>"]
+    #[serde(rename="EncryptionType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub encryption_type: Option<String>,
     #[doc="<p>Identifies which shard in the stream the data record is assigned to.</p>"]
     #[serde(rename="PartitionKey")]
     pub partition_key: String,
-    #[doc="<p>The unique identifier of the record in the stream.</p>"]
+    #[doc="<p>The unique identifier of the record within its shard.</p>"]
     #[serde(rename="SequenceNumber")]
     pub sequence_number: String,
 }
@@ -484,15 +496,49 @@ pub struct SplitShardInput {
     pub stream_name: String,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct StartStreamEncryptionInput {
+    #[doc="<p>The encryption type to use. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Not valid for this operation. An <code>InvalidOperationException</code> will be thrown.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed KMS key.</p> </li> </ul>"]
+    #[serde(rename="EncryptionType")]
+    pub encryption_type: String,
+    #[doc="<p>The GUID for the customer-managed KMS key to use for encryption. You can also use a Kinesis-owned master key by specifying the alias <code>aws/kinesis</code>.</p>"]
+    #[serde(rename="KeyId")]
+    pub key_id: String,
+    #[doc="<p>The name of the stream for which to start encrypting records.</p>"]
+    #[serde(rename="StreamName")]
+    pub stream_name: String,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct StopStreamEncryptionInput {
+    #[doc="<p>The encryption type. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Not valid for this operation. An <code>InvalidOperationException</code> will be thrown.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed KMS key.</p> </li> </ul>"]
+    #[serde(rename="EncryptionType")]
+    pub encryption_type: String,
+    #[doc="<p>The GUID for the customer-managed key that was used for encryption.</p>"]
+    #[serde(rename="KeyId")]
+    pub key_id: String,
+    #[doc="<p>The name of the stream on which to stop encrypting records.</p>"]
+    #[serde(rename="StreamName")]
+    pub stream_name: String,
+}
+
 #[doc="<p>Represents the output for <a>DescribeStream</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StreamDescription {
+    #[doc="<p>The server-side encryption type used on the stream. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records in the stream.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed KMS key.</p> </li> </ul>"]
+    #[serde(rename="EncryptionType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub encryption_type: Option<String>,
     #[doc="<p>Represents the current enhanced monitoring settings of the stream.</p>"]
     #[serde(rename="EnhancedMonitoring")]
     pub enhanced_monitoring: Vec<EnhancedMetrics>,
     #[doc="<p>If set to <code>true</code>, more shards in the stream are available to describe.</p>"]
     #[serde(rename="HasMoreShards")]
     pub has_more_shards: bool,
+    #[doc="<p>The GUID for the customer-managed KMS key used for encryption on the stream.</p>"]
+    #[serde(rename="KeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub key_id: Option<String>,
     #[doc="<p>The current retention period, in hours.</p>"]
     #[serde(rename="RetentionPeriodHours")]
     pub retention_period_hours: i64,
@@ -1281,6 +1327,18 @@ pub enum GetRecordsError {
     ExpiredIterator(String),
     ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
     InvalidArgument(String),
+    ///<p>The ciphertext references a key that doesn't exist or that you don't have access to.</p>
+    KMSAccessDenied(String),
+    ///<p>The request was rejected because the specified CMK isn't enabled.</p>
+    KMSDisabled(String),
+    ///<p>The request was rejected because the state of the specified resource isn't valid for this request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSInvalidState(String),
+    ///<p>The request was rejected because the specified entity or resource couldn't be found.</p>
+    KMSNotFound(String),
+    ///<p>The AWS access key ID needs a subscription for the service.</p>
+    KMSOptInRequired(String),
+    ///<p>The request was denied due to request throttling. For more information about throttling, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSThrottling(String),
     ///<p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>, and <a href="http://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
     ProvisionedThroughputExceeded(String),
     ///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
@@ -1314,6 +1372,24 @@ impl GetRecordsError {
                     }
                     "InvalidArgumentException" => {
                         GetRecordsError::InvalidArgument(String::from(error_message))
+                    }
+                    "KMSAccessDeniedException" => {
+                        GetRecordsError::KMSAccessDenied(String::from(error_message))
+                    }
+                    "KMSDisabledException" => {
+                        GetRecordsError::KMSDisabled(String::from(error_message))
+                    }
+                    "KMSInvalidStateException" => {
+                        GetRecordsError::KMSInvalidState(String::from(error_message))
+                    }
+                    "KMSNotFoundException" => {
+                        GetRecordsError::KMSNotFound(String::from(error_message))
+                    }
+                    "KMSOptInRequired" => {
+                        GetRecordsError::KMSOptInRequired(String::from(error_message))
+                    }
+                    "KMSThrottlingException" => {
+                        GetRecordsError::KMSThrottling(String::from(error_message))
                     }
                     "ProvisionedThroughputExceededException" => {
                         GetRecordsError::ProvisionedThroughputExceeded(String::from(error_message))
@@ -1360,6 +1436,12 @@ impl Error for GetRecordsError {
         match *self {
             GetRecordsError::ExpiredIterator(ref cause) => cause,
             GetRecordsError::InvalidArgument(ref cause) => cause,
+            GetRecordsError::KMSAccessDenied(ref cause) => cause,
+            GetRecordsError::KMSDisabled(ref cause) => cause,
+            GetRecordsError::KMSInvalidState(ref cause) => cause,
+            GetRecordsError::KMSNotFound(ref cause) => cause,
+            GetRecordsError::KMSOptInRequired(ref cause) => cause,
+            GetRecordsError::KMSThrottling(ref cause) => cause,
             GetRecordsError::ProvisionedThroughputExceeded(ref cause) => cause,
             GetRecordsError::ResourceNotFound(ref cause) => cause,
             GetRecordsError::Validation(ref cause) => cause,
@@ -1819,6 +1901,18 @@ impl Error for MergeShardsError {
 pub enum PutRecordError {
     ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
     InvalidArgument(String),
+    ///<p>The ciphertext references a key that doesn't exist or that you don't have access to.</p>
+    KMSAccessDenied(String),
+    ///<p>The request was rejected because the specified CMK isn't enabled.</p>
+    KMSDisabled(String),
+    ///<p>The request was rejected because the state of the specified resource isn't valid for this request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSInvalidState(String),
+    ///<p>The request was rejected because the specified entity or resource couldn't be found.</p>
+    KMSNotFound(String),
+    ///<p>The AWS access key ID needs a subscription for the service.</p>
+    KMSOptInRequired(String),
+    ///<p>The request was denied due to request throttling. For more information about throttling, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSThrottling(String),
     ///<p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>, and <a href="http://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
     ProvisionedThroughputExceeded(String),
     ///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
@@ -1849,6 +1943,24 @@ impl PutRecordError {
                 match *error_type {
                     "InvalidArgumentException" => {
                         PutRecordError::InvalidArgument(String::from(error_message))
+                    }
+                    "KMSAccessDeniedException" => {
+                        PutRecordError::KMSAccessDenied(String::from(error_message))
+                    }
+                    "KMSDisabledException" => {
+                        PutRecordError::KMSDisabled(String::from(error_message))
+                    }
+                    "KMSInvalidStateException" => {
+                        PutRecordError::KMSInvalidState(String::from(error_message))
+                    }
+                    "KMSNotFoundException" => {
+                        PutRecordError::KMSNotFound(String::from(error_message))
+                    }
+                    "KMSOptInRequired" => {
+                        PutRecordError::KMSOptInRequired(String::from(error_message))
+                    }
+                    "KMSThrottlingException" => {
+                        PutRecordError::KMSThrottling(String::from(error_message))
                     }
                     "ProvisionedThroughputExceededException" => {
                         PutRecordError::ProvisionedThroughputExceeded(String::from(error_message))
@@ -1894,6 +2006,12 @@ impl Error for PutRecordError {
     fn description(&self) -> &str {
         match *self {
             PutRecordError::InvalidArgument(ref cause) => cause,
+            PutRecordError::KMSAccessDenied(ref cause) => cause,
+            PutRecordError::KMSDisabled(ref cause) => cause,
+            PutRecordError::KMSInvalidState(ref cause) => cause,
+            PutRecordError::KMSNotFound(ref cause) => cause,
+            PutRecordError::KMSOptInRequired(ref cause) => cause,
+            PutRecordError::KMSThrottling(ref cause) => cause,
             PutRecordError::ProvisionedThroughputExceeded(ref cause) => cause,
             PutRecordError::ResourceNotFound(ref cause) => cause,
             PutRecordError::Validation(ref cause) => cause,
@@ -1908,6 +2026,18 @@ impl Error for PutRecordError {
 pub enum PutRecordsError {
     ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
     InvalidArgument(String),
+    ///<p>The ciphertext references a key that doesn't exist or that you don't have access to.</p>
+    KMSAccessDenied(String),
+    ///<p>The request was rejected because the specified CMK isn't enabled.</p>
+    KMSDisabled(String),
+    ///<p>The request was rejected because the state of the specified resource isn't valid for this request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSInvalidState(String),
+    ///<p>The request was rejected because the specified entity or resource couldn't be found.</p>
+    KMSNotFound(String),
+    ///<p>The AWS access key ID needs a subscription for the service.</p>
+    KMSOptInRequired(String),
+    ///<p>The request was denied due to request throttling. For more information about throttling, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSThrottling(String),
     ///<p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>, and <a href="http://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
     ProvisionedThroughputExceeded(String),
     ///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
@@ -1938,6 +2068,24 @@ impl PutRecordsError {
                 match *error_type {
                     "InvalidArgumentException" => {
                         PutRecordsError::InvalidArgument(String::from(error_message))
+                    }
+                    "KMSAccessDeniedException" => {
+                        PutRecordsError::KMSAccessDenied(String::from(error_message))
+                    }
+                    "KMSDisabledException" => {
+                        PutRecordsError::KMSDisabled(String::from(error_message))
+                    }
+                    "KMSInvalidStateException" => {
+                        PutRecordsError::KMSInvalidState(String::from(error_message))
+                    }
+                    "KMSNotFoundException" => {
+                        PutRecordsError::KMSNotFound(String::from(error_message))
+                    }
+                    "KMSOptInRequired" => {
+                        PutRecordsError::KMSOptInRequired(String::from(error_message))
+                    }
+                    "KMSThrottlingException" => {
+                        PutRecordsError::KMSThrottling(String::from(error_message))
                     }
                     "ProvisionedThroughputExceededException" => {
                         PutRecordsError::ProvisionedThroughputExceeded(String::from(error_message))
@@ -1983,6 +2131,12 @@ impl Error for PutRecordsError {
     fn description(&self) -> &str {
         match *self {
             PutRecordsError::InvalidArgument(ref cause) => cause,
+            PutRecordsError::KMSAccessDenied(ref cause) => cause,
+            PutRecordsError::KMSDisabled(ref cause) => cause,
+            PutRecordsError::KMSInvalidState(ref cause) => cause,
+            PutRecordsError::KMSNotFound(ref cause) => cause,
+            PutRecordsError::KMSOptInRequired(ref cause) => cause,
+            PutRecordsError::KMSThrottling(ref cause) => cause,
             PutRecordsError::ProvisionedThroughputExceeded(ref cause) => cause,
             PutRecordsError::ResourceNotFound(ref cause) => cause,
             PutRecordsError::Validation(ref cause) => cause,
@@ -2186,6 +2340,240 @@ impl Error for SplitShardError {
         }
     }
 }
+/// Errors returned by StartStreamEncryption
+#[derive(Debug, PartialEq)]
+pub enum StartStreamEncryptionError {
+    ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+    InvalidArgument(String),
+    ///<p>The ciphertext references a key that doesn't exist or that you don't have access to.</p>
+    KMSAccessDenied(String),
+    ///<p>The request was rejected because the specified CMK isn't enabled.</p>
+    KMSDisabled(String),
+    ///<p>The request was rejected because the state of the specified resource isn't valid for this request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSInvalidState(String),
+    ///<p>The request was rejected because the specified entity or resource couldn't be found.</p>
+    KMSNotFound(String),
+    ///<p>The AWS access key ID needs a subscription for the service.</p>
+    KMSOptInRequired(String),
+    ///<p>The request was denied due to request throttling. For more information about throttling, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSThrottling(String),
+    ///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
+    LimitExceeded(String),
+    ///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
+    ResourceInUse(String),
+    ///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl StartStreamEncryptionError {
+    pub fn from_body(body: &str) -> StartStreamEncryptionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidArgumentException" => {
+                        StartStreamEncryptionError::InvalidArgument(String::from(error_message))
+                    }
+                    "KMSAccessDeniedException" => {
+                        StartStreamEncryptionError::KMSAccessDenied(String::from(error_message))
+                    }
+                    "KMSDisabledException" => {
+                        StartStreamEncryptionError::KMSDisabled(String::from(error_message))
+                    }
+                    "KMSInvalidStateException" => {
+                        StartStreamEncryptionError::KMSInvalidState(String::from(error_message))
+                    }
+                    "KMSNotFoundException" => {
+                        StartStreamEncryptionError::KMSNotFound(String::from(error_message))
+                    }
+                    "KMSOptInRequired" => {
+                        StartStreamEncryptionError::KMSOptInRequired(String::from(error_message))
+                    }
+                    "KMSThrottlingException" => {
+                        StartStreamEncryptionError::KMSThrottling(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        StartStreamEncryptionError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceInUseException" => {
+                        StartStreamEncryptionError::ResourceInUse(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        StartStreamEncryptionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StartStreamEncryptionError::Validation(error_message.to_string())
+                    }
+                    _ => StartStreamEncryptionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StartStreamEncryptionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StartStreamEncryptionError {
+    fn from(err: serde_json::error::Error) -> StartStreamEncryptionError {
+        StartStreamEncryptionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartStreamEncryptionError {
+    fn from(err: CredentialsError) -> StartStreamEncryptionError {
+        StartStreamEncryptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartStreamEncryptionError {
+    fn from(err: HttpDispatchError) -> StartStreamEncryptionError {
+        StartStreamEncryptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartStreamEncryptionError {
+    fn from(err: io::Error) -> StartStreamEncryptionError {
+        StartStreamEncryptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartStreamEncryptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartStreamEncryptionError {
+    fn description(&self) -> &str {
+        match *self {
+            StartStreamEncryptionError::InvalidArgument(ref cause) => cause,
+            StartStreamEncryptionError::KMSAccessDenied(ref cause) => cause,
+            StartStreamEncryptionError::KMSDisabled(ref cause) => cause,
+            StartStreamEncryptionError::KMSInvalidState(ref cause) => cause,
+            StartStreamEncryptionError::KMSNotFound(ref cause) => cause,
+            StartStreamEncryptionError::KMSOptInRequired(ref cause) => cause,
+            StartStreamEncryptionError::KMSThrottling(ref cause) => cause,
+            StartStreamEncryptionError::LimitExceeded(ref cause) => cause,
+            StartStreamEncryptionError::ResourceInUse(ref cause) => cause,
+            StartStreamEncryptionError::ResourceNotFound(ref cause) => cause,
+            StartStreamEncryptionError::Validation(ref cause) => cause,
+            StartStreamEncryptionError::Credentials(ref err) => err.description(),
+            StartStreamEncryptionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartStreamEncryptionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StopStreamEncryption
+#[derive(Debug, PartialEq)]
+pub enum StopStreamEncryptionError {
+    ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+    InvalidArgument(String),
+    ///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
+    LimitExceeded(String),
+    ///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
+    ResourceInUse(String),
+    ///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl StopStreamEncryptionError {
+    pub fn from_body(body: &str) -> StopStreamEncryptionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidArgumentException" => {
+                        StopStreamEncryptionError::InvalidArgument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        StopStreamEncryptionError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceInUseException" => {
+                        StopStreamEncryptionError::ResourceInUse(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        StopStreamEncryptionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StopStreamEncryptionError::Validation(error_message.to_string())
+                    }
+                    _ => StopStreamEncryptionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StopStreamEncryptionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StopStreamEncryptionError {
+    fn from(err: serde_json::error::Error) -> StopStreamEncryptionError {
+        StopStreamEncryptionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopStreamEncryptionError {
+    fn from(err: CredentialsError) -> StopStreamEncryptionError {
+        StopStreamEncryptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopStreamEncryptionError {
+    fn from(err: HttpDispatchError) -> StopStreamEncryptionError {
+        StopStreamEncryptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopStreamEncryptionError {
+    fn from(err: io::Error) -> StopStreamEncryptionError {
+        StopStreamEncryptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopStreamEncryptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopStreamEncryptionError {
+    fn description(&self) -> &str {
+        match *self {
+            StopStreamEncryptionError::InvalidArgument(ref cause) => cause,
+            StopStreamEncryptionError::LimitExceeded(ref cause) => cause,
+            StopStreamEncryptionError::ResourceInUse(ref cause) => cause,
+            StopStreamEncryptionError::ResourceNotFound(ref cause) => cause,
+            StopStreamEncryptionError::Validation(ref cause) => cause,
+            StopStreamEncryptionError::Credentials(ref err) => err.description(),
+            StopStreamEncryptionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StopStreamEncryptionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateShardCount
 #[derive(Debug, PartialEq)]
 pub enum UpdateShardCountError {
@@ -2359,11 +2747,11 @@ pub trait Kinesis {
     fn merge_shards(&self, input: &MergeShardsInput) -> Result<(), MergeShardsError>;
 
 
-    #[doc="<p>Writes a single data record into an Amazon Kinesis stream. Call <code>PutRecord</code> to send data into the stream for real-time ingestion and subsequent processing, one record at a time. Each shard can support writes up to 1,000 records per second, up to a maximum data write total of 1 MB per second.</p> <p>You must specify the name of the stream that captures, stores, and transports the data; a partition key; and the data blob itself.</p> <p>The data blob can be any type of data; for example, a segment from a log file, geographic/location data, website clickstream data, and so on.</p> <p>The partition key is used by Amazon Kinesis to distribute data across shards. Amazon Kinesis segregates the data records that belong to a stream into multiple shards, using the partition key associated with each data record to determine which shard a given data record belongs to.</p> <p>Partition keys are Unicode strings, with a maximum length limit of 256 characters for each key. An MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards using the hash key ranges of the shards. You can override hashing the partition key to determine the shard by explicitly specifying a hash value using the <code>ExplicitHashKey</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p> <code>PutRecord</code> returns the shard ID of where the data record was placed and the sequence number that was assigned to the data record.</p> <p>Sequence numbers increase over time and are specific to a shard within a stream, not across all shards within a stream. To guarantee strictly increasing ordering, write serially to a shard and use the <code>SequenceNumberForOrdering</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>If a <code>PutRecord</code> request cannot be processed because of insufficient provisioned throughput on the shard involved in the request, <code>PutRecord</code> throws <code>ProvisionedThroughputExceededException</code>. </p> <p>Data records are accessible for only 24 hours from the time that they are added to a stream.</p>"]
+    #[doc="<p>Writes a single data record into an Amazon Kinesis stream. Call <code>PutRecord</code> to send data into the stream for real-time ingestion and subsequent processing, one record at a time. Each shard can support writes up to 1,000 records per second, up to a maximum data write total of 1 MB per second.</p> <p>You must specify the name of the stream that captures, stores, and transports the data; a partition key; and the data blob itself.</p> <p>The data blob can be any type of data; for example, a segment from a log file, geographic/location data, website clickstream data, and so on.</p> <p>The partition key is used by Amazon Kinesis to distribute data across shards. Amazon Kinesis segregates the data records that belong to a stream into multiple shards, using the partition key associated with each data record to determine which shard a given data record belongs to.</p> <p>Partition keys are Unicode strings, with a maximum length limit of 256 characters for each key. An MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards using the hash key ranges of the shards. You can override hashing the partition key to determine the shard by explicitly specifying a hash value using the <code>ExplicitHashKey</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p> <code>PutRecord</code> returns the shard ID of where the data record was placed and the sequence number that was assigned to the data record.</p> <p>Sequence numbers increase over time and are specific to a shard within a stream, not across all shards within a stream. To guarantee strictly increasing ordering, write serially to a shard and use the <code>SequenceNumberForOrdering</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>If a <code>PutRecord</code> request cannot be processed because of insufficient provisioned throughput on the shard involved in the request, <code>PutRecord</code> throws <code>ProvisionedThroughputExceededException</code>. </p> <p>By default, data records are accessible for 24 hours from the time that they are added to a stream. You can use <a>IncreaseStreamRetentionPeriod</a> or <a>DecreaseStreamRetentionPeriod</a> to modify this retention period.</p>"]
     fn put_record(&self, input: &PutRecordInput) -> Result<PutRecordOutput, PutRecordError>;
 
 
-    #[doc="<p>Writes multiple data records into an Amazon Kinesis stream in a single call (also referred to as a <code>PutRecords</code> request). Use this operation to send data into the stream for data ingestion and processing. </p> <p>Each <code>PutRecords</code> request can support up to 500 records. Each record in the request can be as large as 1 MB, up to a limit of 5 MB for the entire request, including partition keys. Each shard can support writes up to 1,000 records per second, up to a maximum data write total of 1 MB per second.</p> <p>You must specify the name of the stream that captures, stores, and transports the data; and an array of request <code>Records</code>, with each record in the array requiring a partition key and data blob. The record size limit applies to the total size of the partition key and data blob.</p> <p>The data blob can be any type of data; for example, a segment from a log file, geographic/location data, website clickstream data, and so on.</p> <p>The partition key is used by Amazon Kinesis as input to a hash function that maps the partition key and associated data to a specific shard. An MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards. As a result of this hashing mechanism, all data records with the same partition key map to the same shard within the stream. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>Each record in the <code>Records</code> array may include an optional parameter, <code>ExplicitHashKey</code>, which overrides the partition key to shard mapping. This parameter allows a data producer to determine explicitly the shard where the record is stored. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-putrecords\">Adding Multiple Records with PutRecords</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>The <code>PutRecords</code> response includes an array of response <code>Records</code>. Each record in the response array directly correlates with a record in the request array using natural ordering, from the top to the bottom of the request and response. The response <code>Records</code> array always includes the same number of records as the request array.</p> <p>The response <code>Records</code> array includes both successfully and unsuccessfully processed records. Amazon Kinesis attempts to process all records in each <code>PutRecords</code> request. A single record failure does not stop the processing of subsequent records.</p> <p>A successfully-processed record includes <code>ShardId</code> and <code>SequenceNumber</code> values. The <code>ShardId</code> parameter identifies the shard in the stream where the record is stored. The <code>SequenceNumber</code> parameter is an identifier assigned to the put record, unique to all records in the stream.</p> <p>An unsuccessfully-processed record includes <code>ErrorCode</code> and <code>ErrorMessage</code> values. <code>ErrorCode</code> reflects the type of error and can be one of the following values: <code>ProvisionedThroughputExceededException</code> or <code>InternalFailure</code>. <code>ErrorMessage</code> provides more detailed information about the <code>ProvisionedThroughputExceededException</code> exception including the account ID, stream name, and shard ID of the record that was throttled. For more information about partially successful responses, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-add-data-to-stream.html#kinesis-using-sdk-java-putrecords\">Adding Multiple Records with PutRecords</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>By default, data records are accessible for only 24 hours from the time that they are added to an Amazon Kinesis stream. This retention period can be modified using the <a>DecreaseStreamRetentionPeriod</a> and <a>IncreaseStreamRetentionPeriod</a> operations.</p>"]
+    #[doc="<p>Writes multiple data records into an Amazon Kinesis stream in a single call (also referred to as a <code>PutRecords</code> request). Use this operation to send data into the stream for data ingestion and processing. </p> <p>Each <code>PutRecords</code> request can support up to 500 records. Each record in the request can be as large as 1 MB, up to a limit of 5 MB for the entire request, including partition keys. Each shard can support writes up to 1,000 records per second, up to a maximum data write total of 1 MB per second.</p> <p>You must specify the name of the stream that captures, stores, and transports the data; and an array of request <code>Records</code>, with each record in the array requiring a partition key and data blob. The record size limit applies to the total size of the partition key and data blob.</p> <p>The data blob can be any type of data; for example, a segment from a log file, geographic/location data, website clickstream data, and so on.</p> <p>The partition key is used by Amazon Kinesis as input to a hash function that maps the partition key and associated data to a specific shard. An MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards. As a result of this hashing mechanism, all data records with the same partition key map to the same shard within the stream. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>Each record in the <code>Records</code> array may include an optional parameter, <code>ExplicitHashKey</code>, which overrides the partition key to shard mapping. This parameter allows a data producer to determine explicitly the shard where the record is stored. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-putrecords\">Adding Multiple Records with PutRecords</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>The <code>PutRecords</code> response includes an array of response <code>Records</code>. Each record in the response array directly correlates with a record in the request array using natural ordering, from the top to the bottom of the request and response. The response <code>Records</code> array always includes the same number of records as the request array.</p> <p>The response <code>Records</code> array includes both successfully and unsuccessfully processed records. Amazon Kinesis attempts to process all records in each <code>PutRecords</code> request. A single record failure does not stop the processing of subsequent records.</p> <p>A successfully-processed record includes <code>ShardId</code> and <code>SequenceNumber</code> values. The <code>ShardId</code> parameter identifies the shard in the stream where the record is stored. The <code>SequenceNumber</code> parameter is an identifier assigned to the put record, unique to all records in the stream.</p> <p>An unsuccessfully-processed record includes <code>ErrorCode</code> and <code>ErrorMessage</code> values. <code>ErrorCode</code> reflects the type of error and can be one of the following values: <code>ProvisionedThroughputExceededException</code> or <code>InternalFailure</code>. <code>ErrorMessage</code> provides more detailed information about the <code>ProvisionedThroughputExceededException</code> exception including the account ID, stream name, and shard ID of the record that was throttled. For more information about partially successful responses, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-add-data-to-stream.html#kinesis-using-sdk-java-putrecords\">Adding Multiple Records with PutRecords</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>By default, data records are accessible for 24 hours from the time that they are added to a stream. You can use <a>IncreaseStreamRetentionPeriod</a> or <a>DecreaseStreamRetentionPeriod</a> to modify this retention period.</p>"]
     fn put_records(&self, input: &PutRecordsInput) -> Result<PutRecordsOutput, PutRecordsError>;
 
 
@@ -2377,7 +2765,19 @@ pub trait Kinesis {
     fn split_shard(&self, input: &SplitShardInput) -> Result<(), SplitShardError>;
 
 
-    #[doc="<p>Updates the shard count of the specified stream to the specified number of shards.</p> <p>Updating the shard count is an asynchronous operation. Upon receiving the request, Amazon Kinesis returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Amazon Kinesis sets the status of the stream back to <code>ACTIVE</code>. Depending on the size of the stream, the scaling action could take a few minutes to complete. You can continue to read and write data to your stream while its status is <code>UPDATING</code>.</p> <p>To update the shard count, Amazon Kinesis performs splits and merges and individual shards. This can cause short-lived shards to be created, in addition to the final shards. We recommend that you double or halve the shard count, as this results in the fewest number of splits or merges.</p> <p>This operation has a rate limit of twice per rolling 24 hour period. You cannot scale above double your current shard count, scale below half your current shard count, or exceed the shard limits for your account.</p> <p>For the default limits for an AWS account, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html\">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>. If you need to increase a limit, <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">contact AWS Support</a>.</p>"]
+    #[doc="<p>Enables or updates server-side encryption using an AWS KMS key for a specified stream. </p> <p>Starting encryption is an asynchronous operation. Upon receiving the request, Amazon Kinesis returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Amazon Kinesis sets the status of the stream back to <code>ACTIVE</code>. Updating or applying encryption normally takes a few seconds to complete but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code>, records written to the stream will begin to be encrypted. </p> <p>API Limits: You can successfully apply a new AWS KMS key for server-side encryption 25 times in a rolling 24 hour period.</p> <p>Note: It can take up to 5 seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are encrypted. After you’ve enabled encryption, you can verify encryption was applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>"]
+    fn start_stream_encryption(&self,
+                               input: &StartStreamEncryptionInput)
+                               -> Result<(), StartStreamEncryptionError>;
+
+
+    #[doc="<p>Disables server-side encryption for a specified stream. </p> <p>Stopping encryption is an asynchronous operation. Upon receiving the request, Amazon Kinesis returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Amazon Kinesis sets the status of the stream back to <code>ACTIVE</code>. Stopping encryption normally takes a few seconds to complete but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code> records written to the stream will no longer be encrypted by the Amazon Kinesis Streams service. </p> <p>API Limits: You can successfully disable server-side encryption 25 times in a rolling 24 hour period. </p> <p>Note: It can take up to 5 seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are no longer subject to encryption. After you’ve disabled encryption, you can verify encryption was not applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>"]
+    fn stop_stream_encryption(&self,
+                              input: &StopStreamEncryptionInput)
+                              -> Result<(), StopStreamEncryptionError>;
+
+
+    #[doc="<p>Updates the shard count of the specified stream to the specified number of shards.</p> <p>Updating the shard count is an asynchronous operation. Upon receiving the request, Amazon Kinesis returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Amazon Kinesis sets the status of the stream back to <code>ACTIVE</code>. Depending on the size of the stream, the scaling action could take a few minutes to complete. You can continue to read and write data to your stream while its status is <code>UPDATING</code>.</p> <p>To update the shard count, Amazon Kinesis performs splits or merges on individual shards. This can cause short-lived shards to be created, in addition to the final shards. We recommend that you double or halve the shard count, as this results in the fewest number of splits or merges.</p> <p>This operation has the following limits, which are per region per account unless otherwise noted:</p> <ul> <li> <p>scale more than twice per rolling 24 hour period</p> </li> <li> <p>scale up above double your current shard count</p> </li> <li> <p>scale down below half your current shard count</p> </li> <li> <p>scale up above 200 shards in a stream</p> </li> <li> <p>scale a stream with more than 200 shards down unless the result is less than 200 shards</p> </li> <li> <p>scale up above the shard limits for your account</p> </li> <li> <p/> </li> </ul> <p>For the default limits for an AWS account, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html\">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>. If you need to increase a limit, <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">contact AWS Support</a>.</p>"]
     fn update_shard_count(&self,
                           input: &UpdateShardCountInput)
                           -> Result<UpdateShardCountOutput, UpdateShardCountError>;
@@ -2816,7 +3216,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
     }
 
 
-    #[doc="<p>Writes a single data record into an Amazon Kinesis stream. Call <code>PutRecord</code> to send data into the stream for real-time ingestion and subsequent processing, one record at a time. Each shard can support writes up to 1,000 records per second, up to a maximum data write total of 1 MB per second.</p> <p>You must specify the name of the stream that captures, stores, and transports the data; a partition key; and the data blob itself.</p> <p>The data blob can be any type of data; for example, a segment from a log file, geographic/location data, website clickstream data, and so on.</p> <p>The partition key is used by Amazon Kinesis to distribute data across shards. Amazon Kinesis segregates the data records that belong to a stream into multiple shards, using the partition key associated with each data record to determine which shard a given data record belongs to.</p> <p>Partition keys are Unicode strings, with a maximum length limit of 256 characters for each key. An MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards using the hash key ranges of the shards. You can override hashing the partition key to determine the shard by explicitly specifying a hash value using the <code>ExplicitHashKey</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p> <code>PutRecord</code> returns the shard ID of where the data record was placed and the sequence number that was assigned to the data record.</p> <p>Sequence numbers increase over time and are specific to a shard within a stream, not across all shards within a stream. To guarantee strictly increasing ordering, write serially to a shard and use the <code>SequenceNumberForOrdering</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>If a <code>PutRecord</code> request cannot be processed because of insufficient provisioned throughput on the shard involved in the request, <code>PutRecord</code> throws <code>ProvisionedThroughputExceededException</code>. </p> <p>Data records are accessible for only 24 hours from the time that they are added to a stream.</p>"]
+    #[doc="<p>Writes a single data record into an Amazon Kinesis stream. Call <code>PutRecord</code> to send data into the stream for real-time ingestion and subsequent processing, one record at a time. Each shard can support writes up to 1,000 records per second, up to a maximum data write total of 1 MB per second.</p> <p>You must specify the name of the stream that captures, stores, and transports the data; a partition key; and the data blob itself.</p> <p>The data blob can be any type of data; for example, a segment from a log file, geographic/location data, website clickstream data, and so on.</p> <p>The partition key is used by Amazon Kinesis to distribute data across shards. Amazon Kinesis segregates the data records that belong to a stream into multiple shards, using the partition key associated with each data record to determine which shard a given data record belongs to.</p> <p>Partition keys are Unicode strings, with a maximum length limit of 256 characters for each key. An MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards using the hash key ranges of the shards. You can override hashing the partition key to determine the shard by explicitly specifying a hash value using the <code>ExplicitHashKey</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p> <code>PutRecord</code> returns the shard ID of where the data record was placed and the sequence number that was assigned to the data record.</p> <p>Sequence numbers increase over time and are specific to a shard within a stream, not across all shards within a stream. To guarantee strictly increasing ordering, write serially to a shard and use the <code>SequenceNumberForOrdering</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>If a <code>PutRecord</code> request cannot be processed because of insufficient provisioned throughput on the shard involved in the request, <code>PutRecord</code> throws <code>ProvisionedThroughputExceededException</code>. </p> <p>By default, data records are accessible for 24 hours from the time that they are added to a stream. You can use <a>IncreaseStreamRetentionPeriod</a> or <a>DecreaseStreamRetentionPeriod</a> to modify this retention period.</p>"]
     fn put_record(&self, input: &PutRecordInput) -> Result<PutRecordOutput, PutRecordError> {
         let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
 
@@ -2845,7 +3245,7 @@ impl<P, D> Kinesis for KinesisClient<P, D>
     }
 
 
-    #[doc="<p>Writes multiple data records into an Amazon Kinesis stream in a single call (also referred to as a <code>PutRecords</code> request). Use this operation to send data into the stream for data ingestion and processing. </p> <p>Each <code>PutRecords</code> request can support up to 500 records. Each record in the request can be as large as 1 MB, up to a limit of 5 MB for the entire request, including partition keys. Each shard can support writes up to 1,000 records per second, up to a maximum data write total of 1 MB per second.</p> <p>You must specify the name of the stream that captures, stores, and transports the data; and an array of request <code>Records</code>, with each record in the array requiring a partition key and data blob. The record size limit applies to the total size of the partition key and data blob.</p> <p>The data blob can be any type of data; for example, a segment from a log file, geographic/location data, website clickstream data, and so on.</p> <p>The partition key is used by Amazon Kinesis as input to a hash function that maps the partition key and associated data to a specific shard. An MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards. As a result of this hashing mechanism, all data records with the same partition key map to the same shard within the stream. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>Each record in the <code>Records</code> array may include an optional parameter, <code>ExplicitHashKey</code>, which overrides the partition key to shard mapping. This parameter allows a data producer to determine explicitly the shard where the record is stored. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-putrecords\">Adding Multiple Records with PutRecords</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>The <code>PutRecords</code> response includes an array of response <code>Records</code>. Each record in the response array directly correlates with a record in the request array using natural ordering, from the top to the bottom of the request and response. The response <code>Records</code> array always includes the same number of records as the request array.</p> <p>The response <code>Records</code> array includes both successfully and unsuccessfully processed records. Amazon Kinesis attempts to process all records in each <code>PutRecords</code> request. A single record failure does not stop the processing of subsequent records.</p> <p>A successfully-processed record includes <code>ShardId</code> and <code>SequenceNumber</code> values. The <code>ShardId</code> parameter identifies the shard in the stream where the record is stored. The <code>SequenceNumber</code> parameter is an identifier assigned to the put record, unique to all records in the stream.</p> <p>An unsuccessfully-processed record includes <code>ErrorCode</code> and <code>ErrorMessage</code> values. <code>ErrorCode</code> reflects the type of error and can be one of the following values: <code>ProvisionedThroughputExceededException</code> or <code>InternalFailure</code>. <code>ErrorMessage</code> provides more detailed information about the <code>ProvisionedThroughputExceededException</code> exception including the account ID, stream name, and shard ID of the record that was throttled. For more information about partially successful responses, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-add-data-to-stream.html#kinesis-using-sdk-java-putrecords\">Adding Multiple Records with PutRecords</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>By default, data records are accessible for only 24 hours from the time that they are added to an Amazon Kinesis stream. This retention period can be modified using the <a>DecreaseStreamRetentionPeriod</a> and <a>IncreaseStreamRetentionPeriod</a> operations.</p>"]
+    #[doc="<p>Writes multiple data records into an Amazon Kinesis stream in a single call (also referred to as a <code>PutRecords</code> request). Use this operation to send data into the stream for data ingestion and processing. </p> <p>Each <code>PutRecords</code> request can support up to 500 records. Each record in the request can be as large as 1 MB, up to a limit of 5 MB for the entire request, including partition keys. Each shard can support writes up to 1,000 records per second, up to a maximum data write total of 1 MB per second.</p> <p>You must specify the name of the stream that captures, stores, and transports the data; and an array of request <code>Records</code>, with each record in the array requiring a partition key and data blob. The record size limit applies to the total size of the partition key and data blob.</p> <p>The data blob can be any type of data; for example, a segment from a log file, geographic/location data, website clickstream data, and so on.</p> <p>The partition key is used by Amazon Kinesis as input to a hash function that maps the partition key and associated data to a specific shard. An MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards. As a result of this hashing mechanism, all data records with the same partition key map to the same shard within the stream. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream\">Adding Data to a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>Each record in the <code>Records</code> array may include an optional parameter, <code>ExplicitHashKey</code>, which overrides the partition key to shard mapping. This parameter allows a data producer to determine explicitly the shard where the record is stored. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-putrecords\">Adding Multiple Records with PutRecords</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>The <code>PutRecords</code> response includes an array of response <code>Records</code>. Each record in the response array directly correlates with a record in the request array using natural ordering, from the top to the bottom of the request and response. The response <code>Records</code> array always includes the same number of records as the request array.</p> <p>The response <code>Records</code> array includes both successfully and unsuccessfully processed records. Amazon Kinesis attempts to process all records in each <code>PutRecords</code> request. A single record failure does not stop the processing of subsequent records.</p> <p>A successfully-processed record includes <code>ShardId</code> and <code>SequenceNumber</code> values. The <code>ShardId</code> parameter identifies the shard in the stream where the record is stored. The <code>SequenceNumber</code> parameter is an identifier assigned to the put record, unique to all records in the stream.</p> <p>An unsuccessfully-processed record includes <code>ErrorCode</code> and <code>ErrorMessage</code> values. <code>ErrorCode</code> reflects the type of error and can be one of the following values: <code>ProvisionedThroughputExceededException</code> or <code>InternalFailure</code>. <code>ErrorMessage</code> provides more detailed information about the <code>ProvisionedThroughputExceededException</code> exception including the account ID, stream name, and shard ID of the record that was throttled. For more information about partially successful responses, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-add-data-to-stream.html#kinesis-using-sdk-java-putrecords\">Adding Multiple Records with PutRecords</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>By default, data records are accessible for 24 hours from the time that they are added to a stream. You can use <a>IncreaseStreamRetentionPeriod</a> or <a>DecreaseStreamRetentionPeriod</a> to modify this retention period.</p>"]
     fn put_records(&self, input: &PutRecordsInput) -> Result<PutRecordsOutput, PutRecordsError> {
         let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
 
@@ -2925,7 +3325,59 @@ impl<P, D> Kinesis for KinesisClient<P, D>
     }
 
 
-    #[doc="<p>Updates the shard count of the specified stream to the specified number of shards.</p> <p>Updating the shard count is an asynchronous operation. Upon receiving the request, Amazon Kinesis returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Amazon Kinesis sets the status of the stream back to <code>ACTIVE</code>. Depending on the size of the stream, the scaling action could take a few minutes to complete. You can continue to read and write data to your stream while its status is <code>UPDATING</code>.</p> <p>To update the shard count, Amazon Kinesis performs splits and merges and individual shards. This can cause short-lived shards to be created, in addition to the final shards. We recommend that you double or halve the shard count, as this results in the fewest number of splits or merges.</p> <p>This operation has a rate limit of twice per rolling 24 hour period. You cannot scale above double your current shard count, scale below half your current shard count, or exceed the shard limits for your account.</p> <p>For the default limits for an AWS account, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html\">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>. If you need to increase a limit, <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">contact AWS Support</a>.</p>"]
+    #[doc="<p>Enables or updates server-side encryption using an AWS KMS key for a specified stream. </p> <p>Starting encryption is an asynchronous operation. Upon receiving the request, Amazon Kinesis returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Amazon Kinesis sets the status of the stream back to <code>ACTIVE</code>. Updating or applying encryption normally takes a few seconds to complete but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code>, records written to the stream will begin to be encrypted. </p> <p>API Limits: You can successfully apply a new AWS KMS key for server-side encryption 25 times in a rolling 24 hour period.</p> <p>Note: It can take up to 5 seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are encrypted. After you’ve enabled encryption, you can verify encryption was applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>"]
+    fn start_stream_encryption(&self,
+                               input: &StartStreamEncryptionInput)
+                               -> Result<(), StartStreamEncryptionError> {
+        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Kinesis_20131202.StartStreamEncryption");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartStreamEncryptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Disables server-side encryption for a specified stream. </p> <p>Stopping encryption is an asynchronous operation. Upon receiving the request, Amazon Kinesis returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Amazon Kinesis sets the status of the stream back to <code>ACTIVE</code>. Stopping encryption normally takes a few seconds to complete but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code> records written to the stream will no longer be encrypted by the Amazon Kinesis Streams service. </p> <p>API Limits: You can successfully disable server-side encryption 25 times in a rolling 24 hour period. </p> <p>Note: It can take up to 5 seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are no longer subject to encryption. After you’ve disabled encryption, you can verify encryption was not applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>"]
+    fn stop_stream_encryption(&self,
+                              input: &StopStreamEncryptionInput)
+                              -> Result<(), StopStreamEncryptionError> {
+        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Kinesis_20131202.StopStreamEncryption");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopStreamEncryptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Updates the shard count of the specified stream to the specified number of shards.</p> <p>Updating the shard count is an asynchronous operation. Upon receiving the request, Amazon Kinesis returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Amazon Kinesis sets the status of the stream back to <code>ACTIVE</code>. Depending on the size of the stream, the scaling action could take a few minutes to complete. You can continue to read and write data to your stream while its status is <code>UPDATING</code>.</p> <p>To update the shard count, Amazon Kinesis performs splits or merges on individual shards. This can cause short-lived shards to be created, in addition to the final shards. We recommend that you double or halve the shard count, as this results in the fewest number of splits or merges.</p> <p>This operation has the following limits, which are per region per account unless otherwise noted:</p> <ul> <li> <p>scale more than twice per rolling 24 hour period</p> </li> <li> <p>scale up above double your current shard count</p> </li> <li> <p>scale down below half your current shard count</p> </li> <li> <p>scale up above 200 shards in a stream</p> </li> <li> <p>scale a stream with more than 200 shards down unless the result is less than 200 shards</p> </li> <li> <p>scale up above the shard limits for your account</p> </li> <li> <p/> </li> </ul> <p>For the default limits for an AWS account, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html\">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>. If you need to increase a limit, <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">contact AWS Support</a>.</p>"]
     fn update_shard_count(&self,
                           input: &UpdateShardCountInput)
                           -> Result<UpdateShardCountOutput, UpdateShardCountError> {

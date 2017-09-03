@@ -36,6 +36,25 @@ pub struct DeleteRuleRequest {
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
+pub struct DescribeEventBusRequest;
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DescribeEventBusResponse {
+    #[doc="<p>The Amazon Resource Name (ARN) of the account permitted to write events to the current account.</p>"]
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub arn: Option<String>,
+    #[doc="<p>The name of the event bus. Currently, this is always <code>default</code>.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>The policy that enables the external account to send events to your account.</p>"]
+    #[serde(rename="Policy")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub policy: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeRuleRequest {
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="Name")]
@@ -264,6 +283,19 @@ pub struct PutEventsResultEntry {
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
+pub struct PutPermissionRequest {
+    #[doc="<p>The action that you are enabling the other account to perform. Currently, this must be <code>events:PutEvents</code>.</p>"]
+    #[serde(rename="Action")]
+    pub action: String,
+    #[doc="<p>The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify \"*\" to permit any account to put events to your default event bus.</p> <p>If you specify \"*\", avoid creating rules that may match undesirable events. To create more secure rules, make sure that the event pattern for each rule contains an <code>account</code> field with a specific account ID from which to receive events. Rules with an account field do not match any events sent from other accounts.</p>"]
+    #[serde(rename="Principal")]
+    pub principal: String,
+    #[doc="<p>An identifier string for the external account that you are granting permissions to. If you later want to revoke the permission for this external account, specify this <code>StatementId</code> when you run <a>RemovePermission</a>.</p>"]
+    #[serde(rename="StatementId")]
+    pub statement_id: String,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
 pub struct PutRuleRequest {
     #[doc="<p>A description of the rule.</p>"]
     #[serde(rename="Description")]
@@ -280,7 +312,7 @@ pub struct PutRuleRequest {
     #[serde(rename="RoleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>The scheduling expression. For example, \"cron(0 20 * * ? *)\", \"rate(5 minutes)\".</p>"]
+    #[doc="<p>The scheduling expression. For example, \"cron(0 20 * * ? *)\" or \"rate(5 minutes)\".</p>"]
     #[serde(rename="ScheduleExpression")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_expression: Option<String>,
@@ -335,6 +367,13 @@ pub struct PutTargetsResultEntry {
     #[serde(rename="TargetId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub target_id: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct RemovePermissionRequest {
+    #[doc="<p>The statement ID corresponding to the account that is no longer allowed to put events to the default event bus.</p>"]
+    #[serde(rename="StatementId")]
+    pub statement_id: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -566,12 +605,97 @@ impl Error for DeleteRuleError {
         }
     }
 }
+/// Errors returned by DescribeEventBus
+#[derive(Debug, PartialEq)]
+pub enum DescribeEventBusError {
+    ///<p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    ///<p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeEventBusError {
+    pub fn from_body(body: &str) -> DescribeEventBusError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalException" => {
+                        DescribeEventBusError::Internal(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeEventBusError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeEventBusError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeEventBusError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeEventBusError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeEventBusError {
+    fn from(err: serde_json::error::Error) -> DescribeEventBusError {
+        DescribeEventBusError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeEventBusError {
+    fn from(err: CredentialsError) -> DescribeEventBusError {
+        DescribeEventBusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeEventBusError {
+    fn from(err: HttpDispatchError) -> DescribeEventBusError {
+        DescribeEventBusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventBusError {
+    fn from(err: io::Error) -> DescribeEventBusError {
+        DescribeEventBusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeEventBusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeEventBusError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeEventBusError::Internal(ref cause) => cause,
+            DescribeEventBusError::ResourceNotFound(ref cause) => cause,
+            DescribeEventBusError::Validation(ref cause) => cause,
+            DescribeEventBusError::Credentials(ref err) => err.description(),
+            DescribeEventBusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeEventBusError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeRule
 #[derive(Debug, PartialEq)]
 pub enum DescribeRuleError {
     ///<p>This exception occurs due to unexpected causes.</p>
     Internal(String),
-    ///<p>The rule does not exist.</p>
+    ///<p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -656,7 +780,7 @@ pub enum DisableRuleError {
     ConcurrentModification(String),
     ///<p>This exception occurs due to unexpected causes.</p>
     Internal(String),
-    ///<p>The rule does not exist.</p>
+    ///<p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -745,7 +869,7 @@ pub enum EnableRuleError {
     ConcurrentModification(String),
     ///<p>This exception occurs due to unexpected causes.</p>
     Internal(String),
-    ///<p>The rule does not exist.</p>
+    ///<p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -986,7 +1110,7 @@ impl Error for ListRulesError {
 pub enum ListTargetsByRuleError {
     ///<p>This exception occurs due to unexpected causes.</p>
     Internal(String),
-    ///<p>The rule does not exist.</p>
+    ///<p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1143,6 +1267,97 @@ impl Error for PutEventsError {
         }
     }
 }
+/// Errors returned by PutPermission
+#[derive(Debug, PartialEq)]
+pub enum PutPermissionError {
+    ///<p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    ///<p>The event bus policy is too long. For more information, see the limits.</p>
+    PolicyLengthExceeded(String),
+    ///<p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl PutPermissionError {
+    pub fn from_body(body: &str) -> PutPermissionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalException" => {
+                        PutPermissionError::Internal(String::from(error_message))
+                    }
+                    "PolicyLengthExceededException" => {
+                        PutPermissionError::PolicyLengthExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        PutPermissionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        PutPermissionError::Validation(error_message.to_string())
+                    }
+                    _ => PutPermissionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutPermissionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutPermissionError {
+    fn from(err: serde_json::error::Error) -> PutPermissionError {
+        PutPermissionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutPermissionError {
+    fn from(err: CredentialsError) -> PutPermissionError {
+        PutPermissionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutPermissionError {
+    fn from(err: HttpDispatchError) -> PutPermissionError {
+        PutPermissionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutPermissionError {
+    fn from(err: io::Error) -> PutPermissionError {
+        PutPermissionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutPermissionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutPermissionError {
+    fn description(&self) -> &str {
+        match *self {
+            PutPermissionError::Internal(ref cause) => cause,
+            PutPermissionError::PolicyLengthExceeded(ref cause) => cause,
+            PutPermissionError::ResourceNotFound(ref cause) => cause,
+            PutPermissionError::Validation(ref cause) => cause,
+            PutPermissionError::Credentials(ref err) => err.description(),
+            PutPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            PutPermissionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutRule
 #[derive(Debug, PartialEq)]
 pub enum PutRuleError {
@@ -1245,7 +1460,7 @@ pub enum PutTargetsError {
     Internal(String),
     ///<p>You tried to create more rules or add more targets to a rule than is allowed.</p>
     LimitExceeded(String),
-    ///<p>The rule does not exist.</p>
+    ///<p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1329,6 +1544,91 @@ impl Error for PutTargetsError {
         }
     }
 }
+/// Errors returned by RemovePermission
+#[derive(Debug, PartialEq)]
+pub enum RemovePermissionError {
+    ///<p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    ///<p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl RemovePermissionError {
+    pub fn from_body(body: &str) -> RemovePermissionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalException" => {
+                        RemovePermissionError::Internal(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        RemovePermissionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        RemovePermissionError::Validation(error_message.to_string())
+                    }
+                    _ => RemovePermissionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => RemovePermissionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for RemovePermissionError {
+    fn from(err: serde_json::error::Error) -> RemovePermissionError {
+        RemovePermissionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RemovePermissionError {
+    fn from(err: CredentialsError) -> RemovePermissionError {
+        RemovePermissionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RemovePermissionError {
+    fn from(err: HttpDispatchError) -> RemovePermissionError {
+        RemovePermissionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemovePermissionError {
+    fn from(err: io::Error) -> RemovePermissionError {
+        RemovePermissionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RemovePermissionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RemovePermissionError {
+    fn description(&self) -> &str {
+        match *self {
+            RemovePermissionError::Internal(ref cause) => cause,
+            RemovePermissionError::ResourceNotFound(ref cause) => cause,
+            RemovePermissionError::Validation(ref cause) => cause,
+            RemovePermissionError::Credentials(ref err) => err.description(),
+            RemovePermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            RemovePermissionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by RemoveTargets
 #[derive(Debug, PartialEq)]
 pub enum RemoveTargetsError {
@@ -1336,7 +1636,7 @@ pub enum RemoveTargetsError {
     ConcurrentModification(String),
     ///<p>This exception occurs due to unexpected causes.</p>
     Internal(String),
-    ///<p>The rule does not exist.</p>
+    ///<p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1511,6 +1811,10 @@ pub trait CloudWatchEvents {
     fn delete_rule(&self, input: &DeleteRuleRequest) -> Result<(), DeleteRuleError>;
 
 
+    #[doc="<p>Displays the external AWS accounts that are permitted to write events to your account using your account's event bus, and the associated policy. To enable your account to receive events from other accounts, use <a>PutPermission</a>.</p>"]
+    fn describe_event_bus(&self) -> Result<DescribeEventBusResponse, DescribeEventBusError>;
+
+
     #[doc="<p>Describes the specified rule.</p>"]
     fn describe_rule(&self,
                      input: &DescribeRuleRequest)
@@ -1546,14 +1850,24 @@ pub trait CloudWatchEvents {
     fn put_events(&self, input: &PutEventsRequest) -> Result<PutEventsResponse, PutEventsError>;
 
 
+    #[doc="<p>Running <code>PutPermission</code> permits the specified AWS account to put events to your account's default <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to your default event bus. </p> <p>For another account to send events to your account, that external account must have a CloudWatch Events rule with your account's default event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your default event bus, run <code>PutPermission</code> once for each of these accounts.</p>"]
+    fn put_permission(&self, input: &PutPermissionRequest) -> Result<(), PutPermissionError>;
+
+
     #[doc="<p>Creates or updates the specified rule. Rules are enabled by default, or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Please allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an EventPattern or ScheduleExpression. Rules with EventPatterns are triggered when a matching event is observed. Rules with ScheduleExpressions self-trigger based on the given schedule. A rule can have both an EventPattern and a ScheduleExpression, in which case the rule triggers on matching events as well as on a schedule.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p>"]
     fn put_rule(&self, input: &PutRuleRequest) -> Result<PutRuleResponse, PutRuleError>;
 
 
-    #[doc="<p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered. Example targets include EC2 instances, AWS Lambda functions, Amazon Kinesis streams, Amazon ECS tasks, AWS Step Functions state machines, and built-in targets. Note that creating rules with built-in targets is supported only in the AWS Management Console.</p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is an Amazon Kinesis stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, CloudWatch Events relies on resource-based policies. For EC2 instances, Amazon Kinesis streams, and AWS Step Functions state machines, CloudWatch Events relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTarget</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/auth-and-access-control-cwe.html\">Authentication and Access Control</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p> <b>Input</b>, <b>InputPath</b> and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON form (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>Input</code>, <code>InputPath</code>, or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>"]
+    #[doc="<p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for CloudWatch Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Streams in Amazon Kinesis Streams</p> </li> <li> <p>Delivery streams in Amazon Kinesis Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues</p> </li> </ul> <p>Note that creating rules with built-in targets is supported only in the AWS Management Console.</p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is an Amazon Kinesis stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, CloudWatch Events relies on resource-based policies. For EC2 instances, Amazon Kinesis streams, and AWS Step Functions state machines, CloudWatch Events relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/auth-and-access-control-cwe.html\">Authentication and Access Control</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> when you run <code>PutTargets</code>. For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b> and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON form (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>Input</code>, <code>InputPath</code>, or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>"]
     fn put_targets(&self,
                    input: &PutTargetsRequest)
                    -> Result<PutTargetsResponse, PutTargetsError>;
+
+
+    #[doc="<p>Revokes the permission of another AWS account to be able to put events to your default event bus. Specify the account to revoke by the <code>StatementId</code> value that you associated with the account when you granted it permission with <code>PutPermission</code>. You can find the <code>StatementId</code> by using <a>DescribeEventBus</a>.</p>"]
+    fn remove_permission(&self,
+                         input: &RemovePermissionRequest)
+                         -> Result<(), RemovePermissionError>;
 
 
     #[doc="<p>Removes the specified targets from the specified rule. When the rule is triggered, those targets are no longer be invoked.</p> <p>When you remove a target, when the associated rule triggers, removed targets might continue to be invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>"]
@@ -1613,6 +1927,35 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Displays the external AWS accounts that are permitted to write events to your account using your account's event bus, and the associated policy. To enable your account to receive events from other accounts, use <a>PutPermission</a>.</p>"]
+    fn describe_event_bus(&self) -> Result<DescribeEventBusResponse, DescribeEventBusError> {
+        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSEvents.DescribeEventBus");
+        request.set_payload(Some(b"{}".to_vec()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeEventBusResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventBusError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -1819,6 +2162,30 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
     }
 
 
+    #[doc="<p>Running <code>PutPermission</code> permits the specified AWS account to put events to your account's default <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to your default event bus. </p> <p>For another account to send events to your account, that external account must have a CloudWatch Events rule with your account's default event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your default event bus, run <code>PutPermission</code> once for each of these accounts.</p>"]
+    fn put_permission(&self, input: &PutPermissionRequest) -> Result<(), PutPermissionError> {
+        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSEvents.PutPermission");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutPermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Creates or updates the specified rule. Rules are enabled by default, or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Please allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an EventPattern or ScheduleExpression. Rules with EventPatterns are triggered when a matching event is observed. Rules with ScheduleExpressions self-trigger based on the given schedule. A rule can have both an EventPattern and a ScheduleExpression, in which case the rule triggers on matching events as well as on a schedule.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p>"]
     fn put_rule(&self, input: &PutRuleRequest) -> Result<PutRuleResponse, PutRuleError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
@@ -1848,7 +2215,7 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
     }
 
 
-    #[doc="<p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered. Example targets include EC2 instances, AWS Lambda functions, Amazon Kinesis streams, Amazon ECS tasks, AWS Step Functions state machines, and built-in targets. Note that creating rules with built-in targets is supported only in the AWS Management Console.</p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is an Amazon Kinesis stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, CloudWatch Events relies on resource-based policies. For EC2 instances, Amazon Kinesis streams, and AWS Step Functions state machines, CloudWatch Events relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTarget</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/auth-and-access-control-cwe.html\">Authentication and Access Control</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p> <b>Input</b>, <b>InputPath</b> and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON form (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>Input</code>, <code>InputPath</code>, or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>"]
+    #[doc="<p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for CloudWatch Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Streams in Amazon Kinesis Streams</p> </li> <li> <p>Delivery streams in Amazon Kinesis Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues</p> </li> </ul> <p>Note that creating rules with built-in targets is supported only in the AWS Management Console.</p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is an Amazon Kinesis stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, CloudWatch Events relies on resource-based policies. For EC2 instances, Amazon Kinesis streams, and AWS Step Functions state machines, CloudWatch Events relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/auth-and-access-control-cwe.html\">Authentication and Access Control</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> when you run <code>PutTargets</code>. For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b> and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON form (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>Input</code>, <code>InputPath</code>, or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>"]
     fn put_targets(&self,
                    input: &PutTargetsRequest)
                    -> Result<PutTargetsResponse, PutTargetsError> {
@@ -1875,6 +2242,32 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(PutTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Revokes the permission of another AWS account to be able to put events to your default event bus. Specify the account to revoke by the <code>StatementId</code> value that you associated with the account when you granted it permission with <code>PutPermission</code>. You can find the <code>StatementId</code> by using <a>DescribeEventBus</a>.</p>"]
+    fn remove_permission(&self,
+                         input: &RemovePermissionRequest)
+                         -> Result<(), RemovePermissionError> {
+        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSEvents.RemovePermission");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

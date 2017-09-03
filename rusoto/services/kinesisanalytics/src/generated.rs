@@ -30,13 +30,13 @@ use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AddApplicationCloudWatchLoggingOptionRequest {
-    #[doc="<p>The Amazon Kinesis Analytics application name.</p>"]
+    #[doc="<p>The Kinesis Analytics application name.</p>"]
     #[serde(rename="ApplicationName")]
     pub application_name: String,
-    #[doc="<p>Provide the CloudWatch log stream ARN and the IAM role ARN. Note: To write application messages to CloudWatch, the IAM role used must have the <code>PutLogEvents</code> policy action enabled. </p>"]
+    #[doc="<p>Provides the CloudWatch log stream Amazon Resource Name (ARN) and the IAM role ARN. Note: To write application messages to CloudWatch, the IAM role that is used must have the <code>PutLogEvents</code> policy action enabled.</p>"]
     #[serde(rename="CloudWatchLoggingOption")]
     pub cloud_watch_logging_option: CloudWatchLoggingOption,
-    #[doc="<p>The version ID of the Amazon Kinesis Analytics application.</p>"]
+    #[doc="<p>The version ID of the Kinesis Analytics application.</p>"]
     #[serde(rename="CurrentApplicationVersionId")]
     pub current_application_version_id: i64,
 }
@@ -121,7 +121,7 @@ pub struct ApplicationDetail {
     #[doc="<p>Provides the current application version.</p>"]
     #[serde(rename="ApplicationVersionId")]
     pub application_version_id: i64,
-    #[doc="<p>Describes the CloudWatch log streams configured to receive application messages. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-monitor-configuration.html\">Monitoring Configuration Errors</a>. </p>"]
+    #[doc="<p>Describes the CloudWatch log streams that are configured to receive application messages. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html\">Working with Amazon CloudWatch Logs</a>. </p>"]
     #[serde(rename="CloudWatchLoggingOptionDescriptions")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_watch_logging_option_descriptions:
@@ -198,13 +198,13 @@ pub struct CSVMappingParameters {
     pub record_row_delimiter: String,
 }
 
-#[doc="<p>Provides a description of CloudWatch logging options, including the log stream ARN and the role ARN.</p>"]
+#[doc="<p>Provides a description of CloudWatch logging options, including the log stream Amazon Resource Name (ARN) and the role ARN.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CloudWatchLoggingOption {
     #[doc="<p>ARN of the CloudWatch log to receive application messages.</p>"]
     #[serde(rename="LogStreamARN")]
     pub log_stream_arn: String,
-    #[doc="<p>IAM ARN of the role to use to send application messages. Note: To write application messages to CloudWatch, the IAM role used must have the <code>PutLogEvents</code> policy action enabled.</p>"]
+    #[doc="<p>IAM ARN of the role to use to send application messages. Note: To write application messages to CloudWatch, the IAM role that is used must have the <code>PutLogEvents</code> policy action enabled.</p>"]
     #[serde(rename="RoleARN")]
     pub role_arn: String,
 }
@@ -254,7 +254,7 @@ pub struct CreateApplicationRequest {
     #[doc="<p>Name of your Amazon Kinesis Analytics application (for example, <code>sample-app</code>).</p>"]
     #[serde(rename="ApplicationName")]
     pub application_name: String,
-    #[doc="<p>Use this parameter to configure a CloudWatch log stream to monitor application configuration errors. For more information, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-monitor-configuration.html\">Monitoring Configuration Errors</a>.</p>"]
+    #[doc="<p>Use this parameter to configure a CloudWatch log stream to monitor application configuration errors. For more information, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html\">Working with Amazon CloudWatch Logs</a>.</p>"]
     #[serde(rename="CloudWatchLoggingOptions")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_watch_logging_options: Option<Vec<CloudWatchLoggingOption>>,
@@ -278,13 +278,13 @@ pub struct CreateApplicationResponse {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
-    #[doc="<p>The Amazon Kinesis Analytics application name.</p>"]
+    #[doc="<p>The Kinesis Analytics application name.</p>"]
     #[serde(rename="ApplicationName")]
     pub application_name: String,
     #[doc="<p>The <code>CloudWatchLoggingOptionId</code> of the CloudWatch logging option to delete. You can use the <a>DescribeApplication</a> operation to get the <code>CloudWatchLoggingOptionId</code>. </p>"]
     #[serde(rename="CloudWatchLoggingOptionId")]
     pub cloud_watch_logging_option_id: String,
-    #[doc="<p>The version ID of the Amazon Kinesis Analytics application.</p>"]
+    #[doc="<p>The version ID of the Kinesis Analytics application.</p>"]
     #[serde(rename="CurrentApplicationVersionId")]
     pub current_application_version_id: i64,
 }
@@ -407,11 +407,11 @@ pub struct Input {
     #[doc="<p>Describes the format of the data in the streaming source, and how each data element maps to corresponding columns in the in-application stream that is being created.</p> <p>Also used to describe the format of the reference data source.</p>"]
     #[serde(rename="InputSchema")]
     pub input_schema: SourceSchema,
-    #[doc="<p>If the streaming source is an Amazon Kinesis Firehose delivery stream, identifies the Firehose delivery stream's ARN and an IAM role that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>"]
+    #[doc="<p>If the streaming source is an Amazon Kinesis Firehose delivery stream, identifies the Firehose delivery stream's ARN and an IAM role that enables Amazon Kinesis Analytics to access the stream on your behalf.</p> <p>Note: Either <code>KinesisStreamsInput</code> or <code>KinesisFirehoseInput</code> is required.</p>"]
     #[serde(rename="KinesisFirehoseInput")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub kinesis_firehose_input: Option<KinesisFirehoseInput>,
-    #[doc="<p>If the streaming source is an Amazon Kinesis stream, identifies the stream's Amazon Resource Name (ARN) and an IAM role that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>"]
+    #[doc="<p>If the streaming source is an Amazon Kinesis stream, identifies the stream's Amazon Resource Name (ARN) and an IAM role that enables Amazon Kinesis Analytics to access the stream on your behalf.</p> <p>Note: Either <code>KinesisStreamsInput</code> or <code>KinesisFirehoseInput</code> is required.</p>"]
     #[serde(rename="KinesisStreamsInput")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub kinesis_streams_input: Option<KinesisStreamsInput>,
@@ -542,7 +542,7 @@ pub struct InputUpdate {
 #[doc="<p>Provides additional mapping information when JSON is the record format on the streaming source.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JSONMappingParameters {
-    #[doc="<p>Path to the top-level parent that contains the records.</p> <p>For example, consider the following JSON record:</p> <p>In the <code>RecordRowPath</code>, <code>\"$\"</code> refers to the root and path <code>\"$.vehicle.Model\"</code> refers to the specific <code>\"Model\"</code> key in the JSON.</p>"]
+    #[doc="<p>Path to the top-level parent that contains the records.</p>"]
     #[serde(rename="RecordRowPath")]
     pub record_row_path: String,
 }
@@ -1071,6 +1071,8 @@ impl Error for AddApplicationCloudWatchLoggingOptionError {
 /// Errors returned by AddApplicationInput
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationInputError {
+    ///<p>User-provided application code (query) is invalid. This can be a simple syntax error.</p>
+    CodeValidation(String),
     ///<p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
     ConcurrentModification(String),
     ///<p>Specified input parameter value is invalid.</p>
@@ -1103,6 +1105,9 @@ impl AddApplicationInputError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "CodeValidationException" => {
+                        AddApplicationInputError::CodeValidation(String::from(error_message))
+                    }
                     "ConcurrentModificationException" => AddApplicationInputError::ConcurrentModification(String::from(error_message)),
                     "InvalidArgumentException" => {
                         AddApplicationInputError::InvalidArgument(String::from(error_message))
@@ -1152,6 +1157,7 @@ impl fmt::Display for AddApplicationInputError {
 impl Error for AddApplicationInputError {
     fn description(&self) -> &str {
         match *self {
+            AddApplicationInputError::CodeValidation(ref cause) => cause,
             AddApplicationInputError::ConcurrentModification(ref cause) => cause,
             AddApplicationInputError::InvalidArgument(ref cause) => cause,
             AddApplicationInputError::ResourceInUse(ref cause) => cause,
@@ -1916,6 +1922,8 @@ pub enum DiscoverInputSchemaError {
     InvalidArgument(String),
     ///<p>Discovery failed to get a record from the streaming source because of the Amazon Kinesis Streams ProvisionedThroughputExceededException. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html">GetRecords</a> in the Amazon Kinesis Streams API Reference.</p>
     ResourceProvisionedThroughputExceeded(String),
+    ///<p>The service is unavailable, back off and retry the operation. </p>
+    ServiceUnavailable(String),
     ///<p>Data format is not valid, Amazon Kinesis Analytics is not able to detect schema for the given streaming source.</p>
     UnableToDetectSchema(String),
     /// An error occurred dispatching the HTTP request
@@ -1946,6 +1954,9 @@ impl DiscoverInputSchemaError {
                         DiscoverInputSchemaError::InvalidArgument(String::from(error_message))
                     }
                     "ResourceProvisionedThroughputExceededException" => DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        DiscoverInputSchemaError::ServiceUnavailable(String::from(error_message))
+                    }
                     "UnableToDetectSchemaException" => {
                         DiscoverInputSchemaError::UnableToDetectSchema(String::from(error_message))
                     }
@@ -1990,6 +2001,7 @@ impl Error for DiscoverInputSchemaError {
         match *self {
             DiscoverInputSchemaError::InvalidArgument(ref cause) => cause,
             DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(ref cause) => cause,
+            DiscoverInputSchemaError::ServiceUnavailable(ref cause) => cause,
             DiscoverInputSchemaError::UnableToDetectSchema(ref cause) => cause,
             DiscoverInputSchemaError::Validation(ref cause) => cause,
             DiscoverInputSchemaError::Credentials(ref err) => err.description(),
@@ -2360,7 +2372,7 @@ impl Error for UpdateApplicationError {
 }
 /// Trait representing the capabilities of the Kinesis Analytics API. Kinesis Analytics clients implement this trait.
 pub trait KinesisAnalytics {
-    #[doc="<p>Adds a CloudWatch log stream to monitor application configuration errors. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-monitor-configuration.html\">Monitoring Configuration Errors</a>.</p>"]
+    #[doc="<p>Adds a CloudWatch log stream to monitor application configuration errors. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html\">Working with Amazon CloudWatch Logs</a>.</p>"]
     fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloudWatchLoggingOptionRequest)  -> Result<AddApplicationCloudWatchLoggingOptionResponse, AddApplicationCloudWatchLoggingOptionError>;
 
 
@@ -2397,7 +2409,7 @@ pub trait KinesisAnalytics {
                           -> Result<DeleteApplicationResponse, DeleteApplicationError>;
 
 
-    #[doc="<p>Deletes a CloudWatch log stream from an application. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-monitor-configuration.html\">Monitoring Configuration Errors</a>.</p>"]
+    #[doc="<p>Deletes a CloudWatch log stream from an application. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html\">Working with Amazon CloudWatch Logs</a>.</p>"]
     fn delete_application_cloud_watch_logging_option(&self, input: &DeleteApplicationCloudWatchLoggingOptionRequest)  -> Result<DeleteApplicationCloudWatchLoggingOptionResponse, DeleteApplicationCloudWatchLoggingOptionError>;
 
 
@@ -2474,7 +2486,7 @@ impl<P, D> KinesisAnalytics for KinesisAnalyticsClient<P, D>
     where P: ProvideAwsCredentials,
           D: DispatchSignedRequest
 {
-    #[doc="<p>Adds a CloudWatch log stream to monitor application configuration errors. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-monitor-configuration.html\">Monitoring Configuration Errors</a>.</p>"]
+    #[doc="<p>Adds a CloudWatch log stream to monitor application configuration errors. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html\">Working with Amazon CloudWatch Logs</a>.</p>"]
 fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloudWatchLoggingOptionRequest)  -> Result<AddApplicationCloudWatchLoggingOptionResponse, AddApplicationCloudWatchLoggingOptionError>{
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
@@ -2661,7 +2673,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
     }
 
 
-    #[doc="<p>Deletes a CloudWatch log stream from an application. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-monitor-configuration.html\">Monitoring Configuration Errors</a>.</p>"]
+    #[doc="<p>Deletes a CloudWatch log stream from an application. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html\">Working with Amazon CloudWatch Logs</a>.</p>"]
 fn delete_application_cloud_watch_logging_option(&self, input: &DeleteApplicationCloudWatchLoggingOptionRequest)  -> Result<DeleteApplicationCloudWatchLoggingOptionResponse, DeleteApplicationCloudWatchLoggingOptionError>{
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
