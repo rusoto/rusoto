@@ -380,20 +380,29 @@ fn generate_struct<P>(service: &Service,
             protocol_generator.generate_struct_attributes(serialized, deserialized);
         // Serde attributes are only needed if deriving the Serialize or Deserialize trait
         let need_serde_attrs = struct_attributes.contains("erialize");
-        format!(
+        let mut output = format!(
             "{attributes}
             pub struct {name} {{
                 {struct_fields}
-            }}
-            impl {name} {{
-                {attr_helpers}
-            }}
-            ",
+            }}",
             attributes = struct_attributes,
             name = name,
             struct_fields = generate_struct_fields(service, shape, name, need_serde_attrs, protocol_generator),
-            attr_helpers = generate_attr_helpers(service, shape, name, protocol_generator)
-        )
+        );
+
+        // if the field is serialized, then it is used somewhere as an input
+        // in this case we want to generate helpers
+        if serialized {
+            output.push_str(&format!(
+                "impl {name} {{
+                    {attr_helpers}
+                }}",
+                name = name,
+                attr_helpers = generate_attr_helpers(service, shape, name, protocol_generator)
+            ));
+        }
+
+        output
     }
 }
 
