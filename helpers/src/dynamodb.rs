@@ -183,7 +183,6 @@ macro_rules! val {
 	);
 }
 
-#[macro_export]
 /// Create a **HashMap** from a list of key-value pairs
 ///
 /// ## Example
@@ -201,6 +200,7 @@ macro_rules! val {
 /// assert_eq!(map.get("c"), None);
 /// # }
 /// ```
+#[macro_export]
 macro_rules! hashmap {
     (@single $($x:tt)*) => (());
     (@count $($rest:expr),*) => (<[()]>::len(&[$(hashmap!(@single $rest)),*]));
