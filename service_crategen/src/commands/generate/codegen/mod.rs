@@ -487,13 +487,18 @@ fn generate_attr_helpers<P: GenerateProtocol>(service: &Service,
                                     protocol_generator.timestamp_type());
         let name = generate_field_name(member_name);
 
-        let wrapped_value = match shape.required(member_name) {
-            true => "value.into()",
-            false => "Some(value.into())"
-        };
+        let mut wrapped_value;
+        let mut wrapping_info;
+        if shape.required(member_name) {
+            wrapped_value = "value.into()";
+            wrapping_info = "";
+        } else {
+            wrapped_value = "Some(value.into())";
+            wrapping_info = "wrapping it with `Some()` and ";
+        }
 
         functions.push(format!(
-            "/// Sets `{name}`.
+            "/// Sets `{name}`, {wrapping}invoking `.into()` to convert to the required type.
              ///
              /// Equivalent to `{shape}.{name} = {value};`.
             pub fn {name}<ValueType: Into<{type}>>(mut self, value: ValueType) -> Self {{
@@ -503,7 +508,8 @@ fn generate_attr_helpers<P: GenerateProtocol>(service: &Service,
             name = name,
             shape = shape_name,
             type = rs_type,
-            value = wrapped_value
+            value = wrapped_value,
+            wrapping = wrapping_info
         ));
 
         if shape.required(member_name) {
