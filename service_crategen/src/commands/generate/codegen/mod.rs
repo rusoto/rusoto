@@ -460,6 +460,7 @@ fn generate_attr_helpers<P: GenerateProtocol>(service: &Service,
                                                -> String {
 
     let mut functions: Vec<String> = Vec::new();
+    let mut constructor_types: Vec<String> = Vec::new();
     let mut constructor_params: Vec<String> = Vec::new();
     let mut constructor_body: Vec<String> = Vec::new();
 
@@ -478,40 +479,48 @@ fn generate_attr_helpers<P: GenerateProtocol>(service: &Service,
         let name = generate_field_name(member_name);
 
         let wrapped_value = match shape.required(member_name) {
-            true => "value",
-            false => "Some(value)"
+            true => "value.into()",
+            false => "Some(value.into())"
         };
 
         functions.push(format!(
-            "pub fn {name} (mut self, value: {type}) -> Self {{
+            "/// Sets `{name}`.
+             ///
+             /// Equivalent to `{shape}.{name} = {value};`.
+            pub fn {name}<ValueType: Into<{type}>>(mut self, value: ValueType) -> Self {{
                 self.{name} = {value};
                 self
             }}",
             name = name,
+            shape = shape_name,
             type = rs_type,
             value = wrapped_value
         ));
 
         if shape.required(member_name) {
-            constructor_params.push(format!("{}: {}", name, rs_type));
-            constructor_body.push(format!("{0}: {0},", name));
+            constructor_types.push(format!("{}Type: Into<{}>", member_name, rs_type));
+            constructor_params.push(format!("{}: {}Type", name, member_name));
+            constructor_body.push(format!("{0}: {0}.into(),", name));
         }
     }
 
     // shadow the vectors with their string equivelants
+    let constructor_types = constructor_types.join(", ");
     let constructor_params = constructor_params.join(", ");
     let constructor_body = constructor_body.join("\n");
 
     // add the constructor function
     functions.push(format!(
-        "pub fn new ({params}) -> {shape} {{
+        "/// Returns a new instance of {shape} with optional fields set to `None`.
+        pub fn new<{types}>({params}) -> {shape} {{
             {shape} {{
                 {body}
                 ..Default::default()
             }}
         }}",
-        shape = shape_name,
+        types = constructor_types,
         params = constructor_params,
+        shape = shape_name,
         body = constructor_body
     ));
 
