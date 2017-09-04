@@ -123,6 +123,7 @@ fn generate<P, E>(writer: &mut FileWriter,
         use std::error::Error;
         use std::io;
         use std::io::Read;
+        use std::default::Default;
         use rusoto_core::request::HttpDispatchError;
         use rusoto_core::credential::{{CredentialsError, ProvideAwsCredentials}};
     ")?;
@@ -384,10 +385,14 @@ fn generate_struct<P>(service: &Service,
             pub struct {name} {{
                 {struct_fields}
             }}
+            impl {name} {{
+                {attr_helpers}
+            }}
             ",
             attributes = struct_attributes,
             name = name,
             struct_fields = generate_struct_fields(service, shape, name, need_serde_attrs, protocol_generator),
+            attr_helpers = generate_attr_helpers(service, shape, name, protocol_generator)
         )
     }
 }
@@ -433,6 +438,7 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
                                     &member_shape,
                                     member.streaming() && !is_input_shape(service, shape_name),
                                     protocol_generator.timestamp_type());
+
         let name = generate_field_name(member_name);
 
         if shape.required(member_name) {
@@ -445,6 +451,72 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
 
         Some(lines.join("\n"))
     }).collect::<Vec<String>>().join("\n")
+}
+
+fn generate_attr_helpers<P: GenerateProtocol>(service: &Service,
+                                               shape: &Shape,
+                                               shape_name: &str,
+                                               protocol_generator: &P)
+                                               -> String {
+
+    let mut functions: Vec<String> = Vec::new();
+    let mut constructor_params: Vec<String> = Vec::new();
+    let mut constructor_body: Vec<String> = Vec::new();
+
+    for (member_name, member) in shape.members.as_ref().unwrap().iter() {
+        // skip deprecated properties
+        if member.deprecated == Some(true) {
+            continue;
+        }
+
+        let member_shape = service.shape_for_member(member).unwrap();
+        let rs_type = get_rust_type(service,
+                                    &member.shape,
+                                    &member_shape,
+                                    member.streaming() && !is_input_shape(service, shape_name),
+                                    protocol_generator.timestamp_type());
+        let name = generate_field_name(member_name);
+
+        let wrapped_value = match shape.required(member_name) {
+            true => "value",
+            false => "Some(value)"
+        };
+
+        functions.push(format!(
+            "pub fn {name} (mut self, value: {type}) -> Self {{
+                self.{name} = {value};
+                self
+            }}",
+            name = name,
+            type = rs_type,
+            value = wrapped_value
+        ));
+
+        if shape.required(member_name) {
+            constructor_params.push(format!("{}: {}", name, rs_type));
+            constructor_body.push(format!("{0}: {0},", name));
+        }
+    }
+
+    // shadow the vectors with their string equivelants
+    let constructor_params = constructor_params.join(", ");
+    let constructor_body = constructor_body.join("\n");
+
+    // add the constructor function
+    functions.push(format!(
+        "pub fn new ({params}) -> {shape} {{
+            {shape} {{
+                {body}
+                ..Default::default()
+            }}
+        }}",
+        shape = shape_name,
+        params = constructor_params,
+        body = constructor_body
+    ));
+
+    // return all the functions joined by a newline
+    functions.join("\n")
 }
 
 fn error_type_name(name: &str) -> String {
