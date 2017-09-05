@@ -222,13 +222,16 @@ macro_rules! hashmap {
 #[macro_export]
 macro_rules! ddb_item {
     ($($p:tt: $t:tt => $x:expr),*) => {
-        hashmap!{
-            $(
-                String::from(stringify!($p)) => AttributeValue {
-                    $t: Some($x),
-                    ..Default::default()
-                },
-            )*
+        {
+            use rusoto_dynamodb::AttributeValue;
+            hashmap!{
+                $(
+                    String::from(stringify!($p)) => AttributeValue {
+                        $t: Some($x),
+                        ..Default::default()
+                    },
+                )*
+            }
         }
     }
 }
