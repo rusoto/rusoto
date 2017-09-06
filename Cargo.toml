@@ -15,7 +15,9 @@ name = "rusoto"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
 version = "0.24.1"
-maintenance = "deprecated"
+
+[badges]
+maintenance = {status = "deprecated"}
 
 [build-dependencies]
 rustc_version = "0.1.7"
@@ -34,7 +36,7 @@ lazy_static = "0.2.1"
 log = "0.3.6"
 md5 = "0.3.2"
 regex = "0.2.1"
-ring = "0.7"
+ring = "0.12"
 rustc-serialize = "0.3.19"
 serde = "0.9.5"
 serde_derive = "0.9.5"
