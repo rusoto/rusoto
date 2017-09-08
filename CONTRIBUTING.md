@@ -1,6 +1,17 @@
 # Contributing to Rusoto
 
-### Setting up build environment (only needed once)
+### General information
+
+Any contribution intentionally submitted for inclusion in the work by you shall be licensed under the MIT license, without any additional terms or conditions.
+
+Pull requests (PRs) should follow these guidelines:
+* Include an entry in the [CHANGELOG](CHANGELOG.md).
+* Generated code should be included in the PR.  Putting the codegen changes in a separate commit is preferred.
+* Tests are highly encouraged.
+
+The project follows the code of conduct as specified in [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md).
+
+### Setting up the build environment (only needed once)
 
 See minimum version of Rust required in [README](README.md).
 
@@ -34,12 +45,9 @@ To run only the in-crate unit tests, which don't call out to AWS, include the `-
 
 For more verbose test output, you can run `cargo test --verbose --features FEATURE -- --nocapture`.
 
-**Warning**: When building or testing with `--features all` the build/test can require upwards of 5 GB of memory. You can limit the number of features to build at once to prevent running out of memory. That can be achieved using the `--features` flag, e.g. `cargo build --features packagea && cargo build --features packageb`. See [rusoto.org](https://www.rusoto.org/supported-aws-services.html) for a table of available services and their Cargo feature names. 
-
 ### Rust code generation from boto core service definitions:
 
-See [Cargo.toml](codegen/Cargo.toml) and [build.rs](codegen/build.rs) in the
-rusoto_codegen subcrate.
+See the [README](service_crategen/README.md) in the service_crategen subcrate.
 
 ## Clippy
 
