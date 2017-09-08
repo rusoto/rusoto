@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 (Please put an entry here in each PR)
+- Added CHANGELOG
+- Updated CONTRIBUTING to explain PR process
 
 ## [0.28.0] - 2017-08-25
 
