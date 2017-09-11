@@ -1,8 +1,7 @@
 sudo: required
 dist: trusty
+
 language: rust
-# cache dependencies: https://docs.travis-ci.com/user/caching/#Rust-Cargo-cache
-cache: cargo
 # run builds for all the trains (and more)
 rust:
   - stable
@@ -11,9 +10,38 @@ rust:
 os:
   - linux
   - osx
+
+# cache dependencies: https://docs.travis-ci.com/user/caching/#Rust-Cargo-cache
+cache: cargo
 cache:
   directories:
     - $HOME/.cargo
+
+env:
+  global:
+    - RUST_BACKTRACE=1
+# TODO: Enable SCCache
+#    - SCCACHE_ERROR_LOG=/tmp/sccache.log
+#    - RUSTC_WRAPPER=/usr/local/bin/sccache
+#    - SCCACHE_BUCKET=rusoto-ci-sccache
+#    - AWS_ACCESS_KEY_ID=""
+    # AWS_SECRET_ACCESS_KEY=...
+#    - secure: ""
+
+    # GH_TOKEN...
+    - secure: zcYaxF4IGX+8XnSnG9Sh3q05rp+XX8Fc7gRLM3VcSpaNNd6tvNNxvjZNAn6gySuaoKBApCIMFAKHgfpO46DHqBjxU7ONnFW3xRGfi4f4VCx7+bagRmrMfxZPcDgZ0tZRs4S+0mALkYmvjhJmymQIAOUmz0LEezKsiVhh5qlkC/GLKaQzaU6Hy6u2+pymU9jfFt14O1s3e+UyyYeY22Bo6PZoRxdSDhLjvDZQQNxMx5CmCZHU7j3sH6aYRCltOdiYNTR3TB7GKrVJt6kn/q2SKwUxPDFvBpmE1v4NZr26262mZtBtUvxIUwTgPritntSPLm/qcNAKP93P9Bleq0QJXSDDOxl4Jf+Vpi1MUdf6MvacRVLsXInKJvNHDztBgmrLnkXWF70EmAwV9MjuGRhzjXCWhxVq/I0nebIdJHgJH195OpBa2jdeh6E0Xf6NOQ6N1S5vCyhotFIswwFAaff0znZw3je/iM7jxSPlRCMpxXkSjRVTbvoqDGIpNvxqs8WYDCpOTmDHz0rdOqvumIQFVt/i9Vk5gwNrZBOeOppjYg8jP0E0PHglfeU05SojgWBNbpn9j6JzTdPWbNhOE/HXNzTbHf5S9khqcI324c9bllOYAi0qrpBt1hawnuYi8cURpm64sYGODVhIt1fkqcqD6Nlv4uARF/+U4jWHGgPzBRQ=
+
+# TODO: Enable SCCache
+#install:
+#  - |
+#      case "$TRAVIS_OS_NAME" in
+#        linux)
+#          curl -fo /usr/local/bin/sccache https://path/to/linux/sccache && chmod +x /usr/local/bin/sccache
+#          ;;
+#        osx)
+#          curl -fo /usr/local/bin/sccache https://path/to/osx/sccache && chmod +x /usr/local/bin/sccache
+#          ;;
+#      esac
 script:
   - |
       echo "Generating service crates..." &&
@@ -23,9 +51,9 @@ script:
   - echo "Running Rusoto tests" && cargo update && cargo test --lib --all -v
   - |
       echo "Building integration tests" &&
-      ( cd integration_tests && \
-        cargo test --features "all" --no-run && \
-        cd .. )
+        ( cd integration_tests && \
+          cargo test --features "all" --no-run && \
+          cd .. )
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -41,18 +69,19 @@ after_success:
         && git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages \
         && cd ..
       fi
-env:
-  global:
-    - RUST_BACKTRACE=1
-    # encrypted Github token for doc upload
-    - secure: zcYaxF4IGX+8XnSnG9Sh3q05rp+XX8Fc7gRLM3VcSpaNNd6tvNNxvjZNAn6gySuaoKBApCIMFAKHgfpO46DHqBjxU7ONnFW3xRGfi4f4VCx7+bagRmrMfxZPcDgZ0tZRs4S+0mALkYmvjhJmymQIAOUmz0LEezKsiVhh5qlkC/GLKaQzaU6Hy6u2+pymU9jfFt14O1s3e+UyyYeY22Bo6PZoRxdSDhLjvDZQQNxMx5CmCZHU7j3sH6aYRCltOdiYNTR3TB7GKrVJt6kn/q2SKwUxPDFvBpmE1v4NZr26262mZtBtUvxIUwTgPritntSPLm/qcNAKP93P9Bleq0QJXSDDOxl4Jf+Vpi1MUdf6MvacRVLsXInKJvNHDztBgmrLnkXWF70EmAwV9MjuGRhzjXCWhxVq/I0nebIdJHgJH195OpBa2jdeh6E0Xf6NOQ6N1S5vCyhotFIswwFAaff0znZw3je/iM7jxSPlRCMpxXkSjRVTbvoqDGIpNvxqs8WYDCpOTmDHz0rdOqvumIQFVt/i9Vk5gwNrZBOeOppjYg8jP0E0PHglfeU05SojgWBNbpn9j6JzTdPWbNhOE/HXNzTbHf5S9khqcI324c9bllOYAi0qrpBt1hawnuYi8cURpm64sYGODVhIt1fkqcqD6Nlv4uARF/+U4jWHGgPzBRQ=
+# TODO: Enable SCCache
+#after_failure:
+#  - echo "### Build Failed, Echoing SCCache Log\n"
+#  - cat /tmp/sccache.log
 
 branches:
   only:
     - master
     - auto
+
 notifications:
   email: false
+
 matrix:
   fast_finish: true
   allow_failures:
