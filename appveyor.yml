@@ -6,13 +6,21 @@ environment:
   global:
     # This will be used as part of the zipfile name
     PROJECT_NAME: rusoto
+# TODO: Enable SCCache
+#    SCCACHE_BUCKET: rusoto-ci-sccache
+#    AWS_ACCESS_KEY_ID: ""
+#    AWS_SECRET_ACCESS_KEY:
+#      secure: ""
+
   matrix:
     - TARGET: x86_64-pc-windows-msvc
       CHANNEL: stable
     - TARGET: x86_64-pc-windows-msvc
       CHANNEL: beta
+
 cache:
   - 'C:\Users\appveyor\.cargo'
+
 # Install Rust and Cargo
 # (Based on from https://github.com/rust-lang/libc/blob/master/appveyor.yml)
 install:
@@ -22,6 +30,11 @@ install:
   - rustc -Vv
   - cargo -V
   - git submodule update --init --recursive
+# TODO: Enable SCCache
+#  - appveyor DownloadFile https://path/to/windows/sccache
+#  - mv sccache sccache.exe
+#  - set PATH=%PATH%;%CD%
+#  - set SCCACHE_ERROR_LOG=%CD%/sccache.log
 
 build: off
 test_script:
@@ -30,6 +43,10 @@ test_script:
   - cd integration_tests
   - cargo test --features "all" --no-run
   - cd ..
+
+#TODO: Enable SCCache
+#on_failure:
+#  - cat %CD%\sccache.log || exit 0
 
 branches:
   only:
