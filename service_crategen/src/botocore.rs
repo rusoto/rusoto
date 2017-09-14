@@ -87,6 +87,8 @@ pub struct Input {
     pub documentation: Option<String>,
     #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
+    #[serde(rename="xmlNamespace")]
+    pub xml_namespace: Option<XmlNamespace>,
 }
 
 #[derive(Debug, Deserialize)]
