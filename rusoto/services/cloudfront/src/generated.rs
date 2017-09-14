@@ -148,7 +148,7 @@ impl AliasListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(StringSerializer::serialize(name, element));
+            parts.push(StringSerializer::serialize("String", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -350,7 +350,7 @@ impl AwsAccountNumberListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(StringSerializer::serialize(name, element));
+            parts.push(StringSerializer::serialize("String", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -589,7 +589,7 @@ impl CacheBehaviorListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(CacheBehaviorSerializer::serialize(name, element));
+            parts.push(CacheBehaviorSerializer::serialize("CacheBehavior", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -1091,7 +1091,7 @@ impl CookieNameListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(StringSerializer::serialize(name, element));
+            parts.push(StringSerializer::serialize("String", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -1747,7 +1747,7 @@ impl CustomErrorResponseListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(CustomErrorResponseSerializer::serialize(name, element));
+            parts.push(CustomErrorResponseSerializer::serialize("CustomErrorResponse", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -3430,7 +3430,7 @@ impl HeaderListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(StringSerializer::serialize(name, element));
+            parts.push(StringSerializer::serialize("String", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -4113,7 +4113,8 @@ impl LambdaFunctionAssociationListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(LambdaFunctionAssociationSerializer::serialize(name, element));
+            parts.push(LambdaFunctionAssociationSerializer::serialize("LambdaFunctionAssociation",
+                                                                      element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -4591,7 +4592,7 @@ impl LocationListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(StringSerializer::serialize(name, element));
+            parts.push(StringSerializer::serialize("String", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -4777,7 +4778,7 @@ impl MethodsListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(MethodSerializer::serialize(name, element));
+            parts.push(MethodSerializer::serialize("Method", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -5033,7 +5034,7 @@ impl OriginCustomHeadersListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(OriginCustomHeaderSerializer::serialize(name, element));
+            parts.push(OriginCustomHeaderSerializer::serialize("OriginCustomHeader", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -5089,7 +5090,7 @@ impl OriginListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(OriginSerializer::serialize(name, element));
+            parts.push(OriginSerializer::serialize("Origin", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -5308,7 +5309,7 @@ impl PathListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(StringSerializer::serialize(name, element));
+            parts.push(StringSerializer::serialize("String", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -5527,7 +5528,7 @@ impl QueryStringCacheKeysListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(StringSerializer::serialize(name, element));
+            parts.push(StringSerializer::serialize("String", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -5936,7 +5937,7 @@ impl SslProtocolsListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(SslProtocolSerializer::serialize(name, element));
+            parts.push(SslProtocolSerializer::serialize("SslProtocol", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -6590,7 +6591,7 @@ impl TagKeyListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(TagKeySerializer::serialize(name, element));
+            parts.push(TagKeySerializer::serialize("TagKey", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -6667,7 +6668,7 @@ impl TagListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(TagSerializer::serialize(name, element));
+            parts.push(TagSerializer::serialize("Tag", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
