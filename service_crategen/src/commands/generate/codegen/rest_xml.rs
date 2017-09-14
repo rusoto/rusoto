@@ -315,7 +315,7 @@ fn generate_list_serializer(shape: &Shape) -> String {
 
     serializer += &format!("
         for element in obj {{
-            parts.push({element_type}Serializer::serialize(name, element));
+            parts.push({element_type}Serializer::serialize(\"{element_type}\", element));
         }}",
                            element_type = element_type);
 
