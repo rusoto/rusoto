@@ -26,10 +26,13 @@ use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 
 use std::str::FromStr;
+use std::io::Write;
 use xml::reader::ParserConfig;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
+use xml;
 use xml::EventReader;
+use xml::EventWriter;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
@@ -95,14 +98,20 @@ impl AbortIncompleteMultipartUploadDeserializer {
 pub struct AbortIncompleteMultipartUploadSerializer;
 impl AbortIncompleteMultipartUploadSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AbortIncompleteMultipartUpload) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &AbortIncompleteMultipartUpload)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.days_after_initiation {
-            serialized += &format!("<DaysAfterInitiation>{value}</DaysAfterInitiation>",
-                    value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("DaysAfterInitiation"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -145,13 +154,20 @@ pub struct AccelerateConfiguration {
 pub struct AccelerateConfigurationSerializer;
 impl AccelerateConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AccelerateConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &AccelerateConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            serialized += &format!("<Status>{value}</Status>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Status"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -166,16 +182,20 @@ pub struct AccessControlPolicy {
 pub struct AccessControlPolicySerializer;
 impl AccessControlPolicySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AccessControlPolicy) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &AccessControlPolicy)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.grants {
-            serialized += &GrantsSerializer::serialize("AccessControlList", value);
+            &GrantsSerializer::serialize(&mut writer, "AccessControlList", value)?;
         }
         if let Some(ref value) = obj.owner {
-            serialized += &OwnerSerializer::serialize("Owner", value);
+            &OwnerSerializer::serialize(&mut writer, "Owner", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -197,10 +217,17 @@ impl AccountIdDeserializer {
 pub struct AccountIdSerializer;
 impl AccountIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -222,10 +249,17 @@ impl AllowedHeaderDeserializer {
 pub struct AllowedHeaderSerializer;
 impl AllowedHeaderSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -261,12 +295,17 @@ impl AllowedHeadersDeserializer {
 pub struct AllowedHeadersSerializer;
 impl AllowedHeadersSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<String>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(AllowedHeaderSerializer::serialize(name, element));
+            AllowedHeaderSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -288,10 +327,17 @@ impl AllowedMethodDeserializer {
 pub struct AllowedMethodSerializer;
 impl AllowedMethodSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -327,12 +373,17 @@ impl AllowedMethodsDeserializer {
 pub struct AllowedMethodsSerializer;
 impl AllowedMethodsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<String>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(AllowedMethodSerializer::serialize(name, element));
+            AllowedMethodSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -354,10 +405,17 @@ impl AllowedOriginDeserializer {
 pub struct AllowedOriginSerializer;
 impl AllowedOriginSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -393,12 +451,17 @@ impl AllowedOriginsDeserializer {
 pub struct AllowedOriginsSerializer;
 impl AllowedOriginsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<String>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(AllowedOriginSerializer::serialize(name, element));
+            AllowedOriginSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -459,16 +522,23 @@ impl AnalyticsAndOperatorDeserializer {
 pub struct AnalyticsAndOperatorSerializer;
 impl AnalyticsAndOperatorSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AnalyticsAndOperator) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &AnalyticsAndOperator)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            serialized += &format!("<Prefix>{value}</Prefix>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.tags {
-            serialized += &TagSetSerializer::serialize("Tag", value);
+            &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -537,16 +607,24 @@ impl AnalyticsConfigurationDeserializer {
 pub struct AnalyticsConfigurationSerializer;
 impl AnalyticsConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AnalyticsConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &AnalyticsConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.filter {
-            serialized += &AnalyticsFilterSerializer::serialize("Filter", value);
+            &AnalyticsFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        serialized += &format!("<Id>{value}</Id>", value = obj.id);
-        serialized += &StorageClassAnalysisSerializer::serialize("StorageClassAnalysis",
-                                                                 &obj.storage_class_analysis);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.id)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        StorageClassAnalysisSerializer::serialize(&mut writer,
+                                                  "StorageClassAnalysis",
+                                                  &obj.storage_class_analysis)?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -631,13 +709,17 @@ impl AnalyticsExportDestinationDeserializer {
 pub struct AnalyticsExportDestinationSerializer;
 impl AnalyticsExportDestinationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AnalyticsExportDestination) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized +=
-            &AnalyticsS3BucketDestinationSerializer::serialize("S3BucketDestination",
-                                                               &obj.s3_bucket_destination);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &AnalyticsExportDestination)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        AnalyticsS3BucketDestinationSerializer::serialize(&mut writer,
+                                                          "S3BucketDestination",
+                                                          &obj.s3_bucket_destination)?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -705,19 +787,26 @@ impl AnalyticsFilterDeserializer {
 pub struct AnalyticsFilterSerializer;
 impl AnalyticsFilterSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AnalyticsFilter) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &AnalyticsFilter)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.and {
-            serialized += &AnalyticsAndOperatorSerializer::serialize("And", value);
+            &AnalyticsAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            serialized += &format!("<Prefix>{value}</Prefix>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.tag {
-            serialized += &TagSerializer::serialize("Tag", value);
+            &TagSerializer::serialize(&mut writer, "Tag", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -739,10 +828,17 @@ impl AnalyticsIdDeserializer {
 pub struct AnalyticsIdSerializer;
 impl AnalyticsIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -817,18 +913,36 @@ impl AnalyticsS3BucketDestinationDeserializer {
 pub struct AnalyticsS3BucketDestinationSerializer;
 impl AnalyticsS3BucketDestinationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AnalyticsS3BucketDestination) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Bucket>{value}</Bucket>", value = obj.bucket);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &AnalyticsS3BucketDestination)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("Bucket"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.bucket)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.bucket_account_id {
-            serialized += &format!("<BucketAccountId>{value}</BucketAccountId>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("BucketAccountId"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("<Format>{value}</Format>", value = obj.format);
+        writer
+            .write(xml::writer::XmlEvent::start_element("Format"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.format)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.prefix {
-            serialized += &format!("<Prefix>{value}</Prefix>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -850,10 +964,17 @@ impl AnalyticsS3ExportFileFormatDeserializer {
 pub struct AnalyticsS3ExportFileFormatSerializer;
 impl AnalyticsS3ExportFileFormatSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -882,10 +1003,17 @@ impl ::std::ops::DerefMut for StreamingBody {
 pub struct BodySerializer;
 impl BodySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<u8>) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = String::from_utf8(obj.to_vec()).expect("Not a UTF-8 string"))
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<u8>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = String::from_utf8(obj.to_vec()).expect("Not a UTF-8 string"))))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -962,10 +1090,17 @@ impl BucketAccelerateStatusDeserializer {
 pub struct BucketAccelerateStatusSerializer;
 impl BucketAccelerateStatusSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -978,11 +1113,15 @@ pub struct BucketLifecycleConfiguration {
 pub struct BucketLifecycleConfigurationSerializer;
 impl BucketLifecycleConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &BucketLifecycleConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &LifecycleRulesSerializer::serialize("Rule", &obj.rules);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &BucketLifecycleConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        LifecycleRulesSerializer::serialize(&mut writer, "Rule", &obj.rules)?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -1004,10 +1143,17 @@ impl BucketLocationConstraintDeserializer {
 pub struct BucketLocationConstraintSerializer;
 impl BucketLocationConstraintSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -1020,13 +1166,17 @@ pub struct BucketLoggingStatus {
 pub struct BucketLoggingStatusSerializer;
 impl BucketLoggingStatusSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &BucketLoggingStatus) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &BucketLoggingStatus)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.logging_enabled {
-            serialized += &LoggingEnabledSerializer::serialize("LoggingEnabled", value);
+            &LoggingEnabledSerializer::serialize(&mut writer, "LoggingEnabled", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -1048,10 +1198,17 @@ impl BucketLogsPermissionDeserializer {
 pub struct BucketLogsPermissionSerializer;
 impl BucketLogsPermissionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -1073,10 +1230,17 @@ impl BucketNameDeserializer {
 pub struct BucketNameSerializer;
 impl BucketNameSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -1098,10 +1262,17 @@ impl BucketVersioningStatusDeserializer {
 pub struct BucketVersioningStatusSerializer;
 impl BucketVersioningStatusSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -1155,11 +1326,15 @@ pub struct CORSConfiguration {
 pub struct CORSConfigurationSerializer;
 impl CORSConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CORSConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &CORSRulesSerializer::serialize("CORSRule", &obj.cors_rules);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &CORSConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        CORSRulesSerializer::serialize(&mut writer, "CORSRule", &obj.cors_rules)?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -1244,21 +1419,28 @@ impl CORSRuleDeserializer {
 pub struct CORSRuleSerializer;
 impl CORSRuleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CORSRule) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &CORSRule)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.allowed_headers {
-            serialized += &AllowedHeadersSerializer::serialize("AllowedHeader", value);
+            &AllowedHeadersSerializer::serialize(&mut writer, "AllowedHeader", value)?;
         }
-        serialized += &AllowedMethodsSerializer::serialize("AllowedMethod", &obj.allowed_methods);
-        serialized += &AllowedOriginsSerializer::serialize("AllowedOrigin", &obj.allowed_origins);
+        AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethod", &obj.allowed_methods)?;
+        AllowedOriginsSerializer::serialize(&mut writer, "AllowedOrigin", &obj.allowed_origins)?;
         if let Some(ref value) = obj.expose_headers {
-            serialized += &ExposeHeadersSerializer::serialize("ExposeHeader", value);
+            &ExposeHeadersSerializer::serialize(&mut writer, "ExposeHeader", value)?;
         }
         if let Some(ref value) = obj.max_age_seconds {
-            serialized += &format!("<MaxAgeSeconds>{value}</MaxAgeSeconds>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("MaxAgeSeconds"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -1294,12 +1476,17 @@ impl CORSRulesDeserializer {
 pub struct CORSRulesSerializer;
 impl CORSRulesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<CORSRule>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<CORSRule>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(CORSRuleSerializer::serialize(name, element));
+            CORSRuleSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -1321,10 +1508,17 @@ impl CloudFunctionDeserializer {
 pub struct CloudFunctionSerializer;
 impl CloudFunctionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -1394,22 +1588,34 @@ impl CloudFunctionConfigurationDeserializer {
 pub struct CloudFunctionConfigurationSerializer;
 impl CloudFunctionConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CloudFunctionConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &CloudFunctionConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.cloud_function {
-            serialized += &format!("<CloudFunction>{value}</CloudFunction>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("CloudFunction"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.events {
-            serialized += &EventListSerializer::serialize("Event", value);
+            &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            serialized += &format!("<Id>{value}</Id>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.invocation_role {
-            serialized += &format!("<InvocationRole>{value}</InvocationRole>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("InvocationRole"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -1431,10 +1637,17 @@ impl CloudFunctionInvocationRoleDeserializer {
 pub struct CloudFunctionInvocationRoleSerializer;
 impl CloudFunctionInvocationRoleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -1615,13 +1828,17 @@ pub struct CompletedMultipartUpload {
 pub struct CompletedMultipartUploadSerializer;
 impl CompletedMultipartUploadSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CompletedMultipartUpload) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &CompletedMultipartUpload)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.parts {
-            serialized += &CompletedPartListSerializer::serialize("Part", value);
+            &CompletedPartListSerializer::serialize(&mut writer, "Part", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -1637,16 +1854,25 @@ pub struct CompletedPart {
 pub struct CompletedPartSerializer;
 impl CompletedPartSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CompletedPart) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &CompletedPart)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.e_tag {
-            serialized += &format!("<ETag>{value}</ETag>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("ETag"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.part_number {
-            serialized += &format!("<PartNumber>{value}</PartNumber>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("PartNumber"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -1654,12 +1880,17 @@ impl CompletedPartSerializer {
 pub struct CompletedPartListSerializer;
 impl CompletedPartListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<CompletedPart>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<CompletedPart>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(CompletedPartSerializer::serialize(name, element));
+            CompletedPartSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -1721,17 +1952,26 @@ impl ConditionDeserializer {
 pub struct ConditionSerializer;
 impl ConditionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Condition) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Condition)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.http_error_code_returned_equals {
-            serialized += &format!("<HttpErrorCodeReturnedEquals>{value}</HttpErrorCodeReturnedEquals>",
-                    value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("HttpErrorCodeReturnedEquals"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.key_prefix_equals {
-            serialized += &format!("<KeyPrefixEquals>{value}</KeyPrefixEquals>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("KeyPrefixEquals"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -1980,14 +2220,20 @@ pub struct CreateBucketConfiguration {
 pub struct CreateBucketConfigurationSerializer;
 impl CreateBucketConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CreateBucketConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &CreateBucketConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.location_constraint {
-            serialized += &format!("<LocationConstraint>{value}</LocationConstraint>",
-                    value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("LocationConstraint"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -2182,10 +2428,17 @@ impl DateDeserializer {
 pub struct DateSerializer;
 impl DateSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -2207,10 +2460,17 @@ impl DaysDeserializer {
 pub struct DaysSerializer;
 impl DaysSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &i64) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &i64)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -2232,10 +2492,17 @@ impl DaysAfterInitiationDeserializer {
 pub struct DaysAfterInitiationSerializer;
 impl DaysAfterInitiationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &i64) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &i64)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -2250,14 +2517,20 @@ pub struct Delete {
 pub struct DeleteSerializer;
 impl DeleteSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Delete) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &ObjectIdentifierListSerializer::serialize("Object", &obj.objects);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Delete)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        ObjectIdentifierListSerializer::serialize(&mut writer, "Object", &obj.objects)?;
         if let Some(ref value) = obj.quiet {
-            serialized += &format!("<Quiet>{value}</Quiet>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Quiet"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -2686,10 +2959,17 @@ impl DelimiterDeserializer {
 pub struct DelimiterSerializer;
 impl DelimiterSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -2751,14 +3031,25 @@ impl DestinationDeserializer {
 pub struct DestinationSerializer;
 impl DestinationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Destination) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Bucket>{value}</Bucket>", value = obj.bucket);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Destination)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("Bucket"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.bucket)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.storage_class {
-            serialized += &format!("<StorageClass>{value}</StorageClass>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("StorageClass"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -2780,10 +3071,17 @@ impl DisplayNameDeserializer {
 pub struct DisplayNameSerializer;
 impl DisplayNameSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -2805,10 +3103,17 @@ impl ETagDeserializer {
 pub struct ETagSerializer;
 impl ETagSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -2830,10 +3135,17 @@ impl EmailAddressDeserializer {
 pub struct EmailAddressSerializer;
 impl EmailAddressSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -2855,10 +3167,17 @@ impl EncodingTypeDeserializer {
 pub struct EncodingTypeSerializer;
 impl EncodingTypeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -2974,11 +3293,18 @@ impl ErrorDocumentDeserializer {
 pub struct ErrorDocumentSerializer;
 impl ErrorDocumentSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ErrorDocument) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Key>{value}</Key>", value = obj.key);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &ErrorDocument)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::start_element("Key"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.key)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -3028,10 +3354,17 @@ impl EventDeserializer {
 pub struct EventSerializer;
 impl EventSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -3067,12 +3400,17 @@ impl EventListDeserializer {
 pub struct EventListSerializer;
 impl EventListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<String>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(EventSerializer::serialize(name, element));
+            EventSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -3094,10 +3432,17 @@ impl ExpirationStatusDeserializer {
 pub struct ExpirationStatusSerializer;
 impl ExpirationStatusSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -3119,10 +3464,17 @@ impl ExpiredObjectDeleteMarkerDeserializer {
 pub struct ExpiredObjectDeleteMarkerSerializer;
 impl ExpiredObjectDeleteMarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &bool) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &bool)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -3144,10 +3496,17 @@ impl ExposeHeaderDeserializer {
 pub struct ExposeHeaderSerializer;
 impl ExposeHeaderSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -3183,12 +3542,17 @@ impl ExposeHeadersDeserializer {
 pub struct ExposeHeadersSerializer;
 impl ExposeHeadersSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<String>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(ExposeHeaderSerializer::serialize(name, element));
+            ExposeHeaderSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -3196,10 +3560,17 @@ impl ExposeHeadersSerializer {
 pub struct FetchOwnerSerializer;
 impl FetchOwnerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &bool) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &bool)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -3261,16 +3632,24 @@ impl FilterRuleDeserializer {
 pub struct FilterRuleSerializer;
 impl FilterRuleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &FilterRule) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &FilterRule)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.name {
-            serialized += &format!("<Name>{value}</Name>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Name"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.value {
-            serialized += &format!("<Value>{value}</Value>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Value"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -3306,12 +3685,17 @@ impl FilterRuleListDeserializer {
 pub struct FilterRuleListSerializer;
 impl FilterRuleListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<FilterRule>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<FilterRule>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(FilterRuleSerializer::serialize(name, element));
+            FilterRuleSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -3333,10 +3717,17 @@ impl FilterRuleNameDeserializer {
 pub struct FilterRuleNameSerializer;
 impl FilterRuleNameSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -3358,10 +3749,17 @@ impl FilterRuleValueDeserializer {
 pub struct FilterRuleValueSerializer;
 impl FilterRuleValueSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -4421,11 +4819,18 @@ pub struct GlacierJobParameters {
 pub struct GlacierJobParametersSerializer;
 impl GlacierJobParametersSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &GlacierJobParameters) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Tier>{value}</Tier>", value = obj.tier);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &GlacierJobParameters)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::start_element("Tier"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.tier)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -4486,16 +4891,23 @@ impl GrantDeserializer {
 pub struct GrantSerializer;
 impl GrantSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Grant) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Grant)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.grantee {
-            serialized += &GranteeSerializer::serialize("Grantee", value);
+            &GranteeSerializer::serialize(&mut writer, "Grantee", value)?;
         }
         if let Some(ref value) = obj.permission {
-            serialized += &format!("<Permission>{value}</Permission>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Permission"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -4574,23 +4986,41 @@ impl GranteeDeserializer {
 pub struct GranteeSerializer;
 impl GranteeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Grantee) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Grantee)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.display_name {
-            serialized += &format!("<DisplayName>{value}</DisplayName>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("DisplayName"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.email_address {
-            serialized += &format!("<EmailAddress>{value}</EmailAddress>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("EmailAddress"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.id {
-            serialized += &format!("<ID>{value}</ID>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("<xsi:type>{value}</xsi:type>", value = obj.type_);
+        writer
+            .write(xml::writer::XmlEvent::start_element("xsi:type"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.type_)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.uri {
-            serialized += &format!("<URI>{value}</URI>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("URI"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -4639,14 +5069,18 @@ impl GrantsDeserializer {
 pub struct GrantsSerializer;
 impl GrantsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<Grant>) -> String {
-        let mut parts: Vec<String> = Vec::new();
-        parts.push(format!("<{}>", name));
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<Grant>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
-            parts.push(GrantSerializer::serialize("Grant", element));
+            GrantSerializer::serialize(writer, "Grant", element)?;
         }
-        parts.push(format!("</{}>", name));
-        parts.join("")
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
     }
 }
 
@@ -4766,10 +5200,17 @@ impl HostNameDeserializer {
 pub struct HostNameSerializer;
 impl HostNameSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -4791,10 +5232,17 @@ impl HttpErrorCodeReturnedEqualsDeserializer {
 pub struct HttpErrorCodeReturnedEqualsSerializer;
 impl HttpErrorCodeReturnedEqualsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -4816,10 +5264,17 @@ impl HttpRedirectCodeDeserializer {
 pub struct HttpRedirectCodeSerializer;
 impl HttpRedirectCodeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -4841,10 +5296,17 @@ impl IDDeserializer {
 pub struct IDSerializer;
 impl IDSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -4899,11 +5361,19 @@ impl IndexDocumentDeserializer {
 pub struct IndexDocumentSerializer;
 impl IndexDocumentSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &IndexDocument) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Suffix>{value}</Suffix>", value = obj.suffix);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &IndexDocument)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("Suffix"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.suffix)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -5064,22 +5534,38 @@ impl InventoryConfigurationDeserializer {
 pub struct InventoryConfigurationSerializer;
 impl InventoryConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventoryConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &InventoryDestinationSerializer::serialize("Destination", &obj.destination);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &InventoryConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        InventoryDestinationSerializer::serialize(&mut writer, "Destination", &obj.destination)?;
         if let Some(ref value) = obj.filter {
-            serialized += &InventoryFilterSerializer::serialize("Filter", value);
+            &InventoryFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        serialized += &format!("<Id>{value}</Id>", value = obj.id);
-        serialized += &format!("<IncludedObjectVersions>{value}</IncludedObjectVersions>",
-                value = obj.included_object_versions);
-        serialized += &format!("<IsEnabled>{value}</IsEnabled>", value = obj.is_enabled);
+        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.id)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("IncludedObjectVersions"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}",
+                                                             value =
+                                                                 obj.included_object_versions)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("IsEnabled"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.is_enabled)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.optional_fields {
-            serialized += &InventoryOptionalFieldsSerializer::serialize("OptionalFields", value);
+            &InventoryOptionalFieldsSerializer::serialize(&mut writer, "OptionalFields", value)?;
         }
-        serialized += &InventoryScheduleSerializer::serialize("Schedule", &obj.schedule);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        InventoryScheduleSerializer::serialize(&mut writer, "Schedule", &obj.schedule)?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -5164,13 +5650,17 @@ impl InventoryDestinationDeserializer {
 pub struct InventoryDestinationSerializer;
 impl InventoryDestinationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventoryDestination) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized +=
-            &InventoryS3BucketDestinationSerializer::serialize("S3BucketDestination",
-                                                               &obj.s3_bucket_destination);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &InventoryDestination)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        InventoryS3BucketDestinationSerializer::serialize(&mut writer,
+                                                          "S3BucketDestination",
+                                                          &obj.s3_bucket_destination)?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -5225,11 +5715,19 @@ impl InventoryFilterDeserializer {
 pub struct InventoryFilterSerializer;
 impl InventoryFilterSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventoryFilter) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Prefix>{value}</Prefix>", value = obj.prefix);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &InventoryFilter)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.prefix)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -5251,10 +5749,17 @@ impl InventoryFormatDeserializer {
 pub struct InventoryFormatSerializer;
 impl InventoryFormatSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -5276,10 +5781,17 @@ impl InventoryFrequencyDeserializer {
 pub struct InventoryFrequencySerializer;
 impl InventoryFrequencySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -5301,10 +5813,17 @@ impl InventoryIdDeserializer {
 pub struct InventoryIdSerializer;
 impl InventoryIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -5326,10 +5845,17 @@ impl InventoryIncludedObjectVersionsDeserializer {
 pub struct InventoryIncludedObjectVersionsSerializer;
 impl InventoryIncludedObjectVersionsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -5351,10 +5877,17 @@ impl InventoryOptionalFieldDeserializer {
 pub struct InventoryOptionalFieldSerializer;
 impl InventoryOptionalFieldSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -5404,14 +5937,18 @@ impl InventoryOptionalFieldsDeserializer {
 pub struct InventoryOptionalFieldsSerializer;
 impl InventoryOptionalFieldsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
-        let mut parts: Vec<String> = Vec::new();
-        parts.push(format!("<{}>", name));
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<String>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
-            parts.push(InventoryOptionalFieldSerializer::serialize("Field", element));
+            InventoryOptionalFieldSerializer::serialize(writer, "Field", element)?;
         }
-        parts.push(format!("</{}>", name));
-        parts.join("")
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
     }
 }
 
@@ -5484,18 +6021,36 @@ impl InventoryS3BucketDestinationDeserializer {
 pub struct InventoryS3BucketDestinationSerializer;
 impl InventoryS3BucketDestinationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventoryS3BucketDestination) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &InventoryS3BucketDestination)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.account_id {
-            serialized += &format!("<AccountId>{value}</AccountId>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("AccountId"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("<Bucket>{value}</Bucket>", value = obj.bucket);
-        serialized += &format!("<Format>{value}</Format>", value = obj.format);
+        writer
+            .write(xml::writer::XmlEvent::start_element("Bucket"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.bucket)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("Format"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.format)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.prefix {
-            serialized += &format!("<Prefix>{value}</Prefix>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -5552,11 +6107,19 @@ impl InventoryScheduleDeserializer {
 pub struct InventoryScheduleSerializer;
 impl InventoryScheduleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventorySchedule) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Frequency>{value}</Frequency>", value = obj.frequency);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &InventorySchedule)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("Frequency"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.frequency)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -5578,10 +6141,17 @@ impl IsEnabledDeserializer {
 pub struct IsEnabledSerializer;
 impl IsEnabledSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &bool) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &bool)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -5645,10 +6215,17 @@ impl KeyMarkerDeserializer {
 pub struct KeyMarkerSerializer;
 impl KeyMarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -5670,10 +6247,17 @@ impl KeyPrefixEqualsDeserializer {
 pub struct KeyPrefixEqualsSerializer;
 impl KeyPrefixEqualsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -5695,10 +6279,17 @@ impl LambdaFunctionArnDeserializer {
 pub struct LambdaFunctionArnSerializer;
 impl LambdaFunctionArnSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -5769,19 +6360,29 @@ impl LambdaFunctionConfigurationDeserializer {
 pub struct LambdaFunctionConfigurationSerializer;
 impl LambdaFunctionConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LambdaFunctionConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &EventListSerializer::serialize("Event", &obj.events);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &LambdaFunctionConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        EventListSerializer::serialize(&mut writer, "Event", &obj.events)?;
         if let Some(ref value) = obj.filter {
-            serialized += &NotificationConfigurationFilterSerializer::serialize("Filter", value);
+            &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            serialized += &format!("<Id>{value}</Id>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("<CloudFunction>{value}</CloudFunction>",
-                value = obj.lambda_function_arn);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer
+            .write(xml::writer::XmlEvent::start_element("CloudFunction"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}",
+                                                             value = obj.lambda_function_arn)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -5819,12 +6420,17 @@ impl LambdaFunctionConfigurationListDeserializer {
 pub struct LambdaFunctionConfigurationListSerializer;
 impl LambdaFunctionConfigurationListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<LambdaFunctionConfiguration>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<LambdaFunctionConfiguration>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(LambdaFunctionConfigurationSerializer::serialize(name, element));
+            LambdaFunctionConfigurationSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -5851,11 +6457,15 @@ pub struct LifecycleConfiguration {
 pub struct LifecycleConfigurationSerializer;
 impl LifecycleConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LifecycleConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &RulesSerializer::serialize("Rule", &obj.rules);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &LifecycleConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        RulesSerializer::serialize(&mut writer, "Rule", &obj.rules)?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -5920,20 +6530,30 @@ impl LifecycleExpirationDeserializer {
 pub struct LifecycleExpirationSerializer;
 impl LifecycleExpirationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LifecycleExpiration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &LifecycleExpiration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.date {
-            serialized += &format!("<Date>{value}</Date>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Date"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.days {
-            serialized += &format!("<Days>{value}</Days>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.expired_object_delete_marker {
-            serialized += &format!("<ExpiredObjectDeleteMarker>{value}</ExpiredObjectDeleteMarker>",
-                    value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("ExpiredObjectDeleteMarker"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -6024,35 +6644,48 @@ impl LifecycleRuleDeserializer {
 pub struct LifecycleRuleSerializer;
 impl LifecycleRuleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LifecycleRule) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &LifecycleRule)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.abort_incomplete_multipart_upload {
-            serialized += &AbortIncompleteMultipartUploadSerializer::serialize("AbortIncompleteMultipartUpload",
-                                                                               value);
+            &AbortIncompleteMultipartUploadSerializer::serialize(&mut writer,
+                                                                 "AbortIncompleteMultipartUpload",
+                                                                 value)?;
         }
         if let Some(ref value) = obj.expiration {
-            serialized += &LifecycleExpirationSerializer::serialize("Expiration", value);
+            &LifecycleExpirationSerializer::serialize(&mut writer, "Expiration", value)?;
         }
         if let Some(ref value) = obj.filter {
-            serialized += &LifecycleRuleFilterSerializer::serialize("Filter", value);
+            &LifecycleRuleFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            serialized += &format!("<ID>{value}</ID>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.noncurrent_version_expiration {
-            serialized += &NoncurrentVersionExpirationSerializer::serialize("NoncurrentVersionExpiration",
-                                                                            value);
+            &NoncurrentVersionExpirationSerializer::serialize(&mut writer,
+                                                              "NoncurrentVersionExpiration",
+                                                              value)?;
         }
         if let Some(ref value) = obj.noncurrent_version_transitions {
-            serialized += &NoncurrentVersionTransitionListSerializer::serialize("NoncurrentVersionTransition",
-                                                                                value);
+            &NoncurrentVersionTransitionListSerializer::serialize(&mut writer,
+                                                                  "NoncurrentVersionTransition",
+                                                                  value)?;
         }
-        serialized += &format!("<Status>{value}</Status>", value = obj.status);
+        writer
+            .write(xml::writer::XmlEvent::start_element("Status"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.status)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.transitions {
-            serialized += &TransitionListSerializer::serialize("Transition", value);
+            &TransitionListSerializer::serialize(&mut writer, "Transition", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -6113,16 +6746,23 @@ impl LifecycleRuleAndOperatorDeserializer {
 pub struct LifecycleRuleAndOperatorSerializer;
 impl LifecycleRuleAndOperatorSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LifecycleRuleAndOperator) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &LifecycleRuleAndOperator)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            serialized += &format!("<Prefix>{value}</Prefix>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.tags {
-            serialized += &TagSetSerializer::serialize("Tag", value);
+            &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -6188,19 +6828,26 @@ impl LifecycleRuleFilterDeserializer {
 pub struct LifecycleRuleFilterSerializer;
 impl LifecycleRuleFilterSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LifecycleRuleFilter) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &LifecycleRuleFilter)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.and {
-            serialized += &LifecycleRuleAndOperatorSerializer::serialize("And", value);
+            &LifecycleRuleAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            serialized += &format!("<Prefix>{value}</Prefix>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.tag {
-            serialized += &TagSerializer::serialize("Tag", value);
+            &TagSerializer::serialize(&mut writer, "Tag", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -6236,12 +6883,17 @@ impl LifecycleRulesDeserializer {
 pub struct LifecycleRulesSerializer;
 impl LifecycleRulesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<LifecycleRule>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<LifecycleRule>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(LifecycleRuleSerializer::serialize(name, element));
+            LifecycleRuleSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -7261,19 +7913,29 @@ impl LoggingEnabledDeserializer {
 pub struct LoggingEnabledSerializer;
 impl LoggingEnabledSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LoggingEnabled) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &LoggingEnabled)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.target_bucket {
-            serialized += &format!("<TargetBucket>{value}</TargetBucket>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("TargetBucket"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.target_grants {
-            serialized += &TargetGrantsSerializer::serialize("TargetGrants", value);
+            &TargetGrantsSerializer::serialize(&mut writer, "TargetGrants", value)?;
         }
         if let Some(ref value) = obj.target_prefix {
-            serialized += &format!("<TargetPrefix>{value}</TargetPrefix>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("TargetPrefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -7281,10 +7943,17 @@ impl LoggingEnabledSerializer {
 pub struct MFADeleteSerializer;
 impl MFADeleteSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -7320,10 +7989,17 @@ impl MarkerDeserializer {
 pub struct MarkerSerializer;
 impl MarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -7345,10 +8021,17 @@ impl MaxAgeSecondsDeserializer {
 pub struct MaxAgeSecondsSerializer;
 impl MaxAgeSecondsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &i64) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &i64)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -7370,10 +8053,17 @@ impl MaxKeysDeserializer {
 pub struct MaxKeysSerializer;
 impl MaxKeysSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &i64) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &i64)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -7395,10 +8085,17 @@ impl MaxPartsDeserializer {
 pub struct MaxPartsSerializer;
 impl MaxPartsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &i64) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &i64)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -7420,10 +8117,17 @@ impl MaxUploadsDeserializer {
 pub struct MaxUploadsSerializer;
 impl MaxUploadsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &i64) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &i64)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -7498,16 +8202,23 @@ impl MetricsAndOperatorDeserializer {
 pub struct MetricsAndOperatorSerializer;
 impl MetricsAndOperatorSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MetricsAndOperator) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &MetricsAndOperator)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            serialized += &format!("<Prefix>{value}</Prefix>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.tags {
-            serialized += &TagSetSerializer::serialize("Tag", value);
+            &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -7568,14 +8279,21 @@ impl MetricsConfigurationDeserializer {
 pub struct MetricsConfigurationSerializer;
 impl MetricsConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MetricsConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &MetricsConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.filter {
-            serialized += &MetricsFilterSerializer::serialize("Filter", value);
+            &MetricsFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        serialized += &format!("<Id>{value}</Id>", value = obj.id);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.id)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -7671,19 +8389,26 @@ impl MetricsFilterDeserializer {
 pub struct MetricsFilterSerializer;
 impl MetricsFilterSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MetricsFilter) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &MetricsFilter)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.and {
-            serialized += &MetricsAndOperatorSerializer::serialize("And", value);
+            &MetricsAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            serialized += &format!("<Prefix>{value}</Prefix>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.tag {
-            serialized += &TagSerializer::serialize("Tag", value);
+            &TagSerializer::serialize(&mut writer, "Tag", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -7705,10 +8430,17 @@ impl MetricsIdDeserializer {
 pub struct MetricsIdSerializer;
 impl MetricsIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -7807,10 +8539,17 @@ impl MultipartUploadIdDeserializer {
 pub struct MultipartUploadIdSerializer;
 impl MultipartUploadIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -7979,13 +8718,20 @@ impl NoncurrentVersionExpirationDeserializer {
 pub struct NoncurrentVersionExpirationSerializer;
 impl NoncurrentVersionExpirationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &NoncurrentVersionExpiration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &NoncurrentVersionExpiration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.noncurrent_days {
-            serialized += &format!("<NoncurrentDays>{value}</NoncurrentDays>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("NoncurrentDays"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -8049,16 +8795,26 @@ impl NoncurrentVersionTransitionDeserializer {
 pub struct NoncurrentVersionTransitionSerializer;
 impl NoncurrentVersionTransitionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &NoncurrentVersionTransition) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &NoncurrentVersionTransition)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.noncurrent_days {
-            serialized += &format!("<NoncurrentDays>{value}</NoncurrentDays>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("NoncurrentDays"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.storage_class {
-            serialized += &format!("<StorageClass>{value}</StorageClass>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("StorageClass"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -8096,12 +8852,17 @@ impl NoncurrentVersionTransitionListDeserializer {
 pub struct NoncurrentVersionTransitionListSerializer;
 impl NoncurrentVersionTransitionListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<NoncurrentVersionTransition>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<NoncurrentVersionTransition>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(NoncurrentVersionTransitionSerializer::serialize(name, element));
+            NoncurrentVersionTransitionSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -8168,20 +8929,25 @@ impl NotificationConfigurationDeserializer {
 pub struct NotificationConfigurationSerializer;
 impl NotificationConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &NotificationConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &NotificationConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.lambda_function_configurations {
-            serialized += &LambdaFunctionConfigurationListSerializer::serialize("CloudFunctionConfiguration",
-                                                                                value);
+            &LambdaFunctionConfigurationListSerializer::serialize(&mut writer,
+                                                                  "CloudFunctionConfiguration",
+                                                                  value)?;
         }
         if let Some(ref value) = obj.queue_configurations {
-            serialized += &QueueConfigurationListSerializer::serialize("QueueConfiguration", value);
+            &QueueConfigurationListSerializer::serialize(&mut writer, "QueueConfiguration", value)?;
         }
         if let Some(ref value) = obj.topic_configurations {
-            serialized += &TopicConfigurationListSerializer::serialize("TopicConfiguration", value);
+            &TopicConfigurationListSerializer::serialize(&mut writer, "TopicConfiguration", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -8244,22 +9010,29 @@ impl NotificationConfigurationDeprecatedDeserializer {
 pub struct NotificationConfigurationDeprecatedSerializer;
 impl NotificationConfigurationDeprecatedSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &NotificationConfigurationDeprecated) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &NotificationConfigurationDeprecated)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.cloud_function_configuration {
-            serialized += &CloudFunctionConfigurationSerializer::serialize("CloudFunctionConfiguration",
-                                                                           value);
+            &CloudFunctionConfigurationSerializer::serialize(&mut writer,
+                                                             "CloudFunctionConfiguration",
+                                                             value)?;
         }
         if let Some(ref value) = obj.queue_configuration {
-            serialized += &QueueConfigurationDeprecatedSerializer::serialize("QueueConfiguration",
-                                                                             value);
+            &QueueConfigurationDeprecatedSerializer::serialize(&mut writer,
+                                                               "QueueConfiguration",
+                                                               value)?;
         }
         if let Some(ref value) = obj.topic_configuration {
-            serialized += &TopicConfigurationDeprecatedSerializer::serialize("TopicConfiguration",
-                                                                             value);
+            &TopicConfigurationDeprecatedSerializer::serialize(&mut writer,
+                                                               "TopicConfiguration",
+                                                               value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -8316,13 +9089,17 @@ impl NotificationConfigurationFilterDeserializer {
 pub struct NotificationConfigurationFilterSerializer;
 impl NotificationConfigurationFilterSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &NotificationConfigurationFilter) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &NotificationConfigurationFilter)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.key {
-            serialized += &S3KeyFilterSerializer::serialize("S3Key", value);
+            &S3KeyFilterSerializer::serialize(&mut writer, "S3Key", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -8344,10 +9121,17 @@ impl NotificationIdDeserializer {
 pub struct NotificationIdSerializer;
 impl NotificationIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -8434,14 +9218,24 @@ pub struct ObjectIdentifier {
 pub struct ObjectIdentifierSerializer;
 impl ObjectIdentifierSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ObjectIdentifier) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Key>{value}</Key>", value = obj.key);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &ObjectIdentifier)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::start_element("Key"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.key)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.version_id {
-            serialized += &format!("<VersionId>{value}</VersionId>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("VersionId"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -8449,12 +9243,17 @@ impl ObjectIdentifierSerializer {
 pub struct ObjectIdentifierListSerializer;
 impl ObjectIdentifierListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<ObjectIdentifier>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<ObjectIdentifier>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(ObjectIdentifierSerializer::serialize(name, element));
+            ObjectIdentifierSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -8476,10 +9275,17 @@ impl ObjectKeyDeserializer {
 pub struct ObjectKeySerializer;
 impl ObjectKeySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -8628,10 +9434,17 @@ impl ObjectVersionIdDeserializer {
 pub struct ObjectVersionIdSerializer;
 impl ObjectVersionIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -8733,16 +9546,25 @@ impl OwnerDeserializer {
 pub struct OwnerSerializer;
 impl OwnerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Owner) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Owner)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.display_name {
-            serialized += &format!("<DisplayName>{value}</DisplayName>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("DisplayName"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.id {
-            serialized += &format!("<ID>{value}</ID>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -8830,10 +9652,17 @@ impl PartNumberDeserializer {
 pub struct PartNumberSerializer;
 impl PartNumberSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &i64) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &i64)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -8855,10 +9684,17 @@ impl PartNumberMarkerDeserializer {
 pub struct PartNumberMarkerSerializer;
 impl PartNumberMarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &i64) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &i64)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -8908,10 +9744,17 @@ impl PayerDeserializer {
 pub struct PayerSerializer;
 impl PayerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -8933,10 +9776,17 @@ impl PermissionDeserializer {
 pub struct PermissionSerializer;
 impl PermissionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -8944,10 +9794,17 @@ impl PermissionSerializer {
 pub struct PolicySerializer;
 impl PolicySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -8969,10 +9826,17 @@ impl PrefixDeserializer {
 pub struct PrefixSerializer;
 impl PrefixSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -8994,10 +9858,17 @@ impl ProtocolDeserializer {
 pub struct ProtocolSerializer;
 impl ProtocolSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -9325,10 +10196,17 @@ impl QueueArnDeserializer {
 pub struct QueueArnSerializer;
 impl QueueArnSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -9397,18 +10275,27 @@ impl QueueConfigurationDeserializer {
 pub struct QueueConfigurationSerializer;
 impl QueueConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &QueueConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &EventListSerializer::serialize("Event", &obj.events);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &QueueConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        EventListSerializer::serialize(&mut writer, "Event", &obj.events)?;
         if let Some(ref value) = obj.filter {
-            serialized += &NotificationConfigurationFilterSerializer::serialize("Filter", value);
+            &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            serialized += &format!("<Id>{value}</Id>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("<Queue>{value}</Queue>", value = obj.queue_arn);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::start_element("Queue"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.queue_arn)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -9473,19 +10360,27 @@ impl QueueConfigurationDeprecatedDeserializer {
 pub struct QueueConfigurationDeprecatedSerializer;
 impl QueueConfigurationDeprecatedSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &QueueConfigurationDeprecated) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &QueueConfigurationDeprecated)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.events {
-            serialized += &EventListSerializer::serialize("Event", value);
+            &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            serialized += &format!("<Id>{value}</Id>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.queue {
-            serialized += &format!("<Queue>{value}</Queue>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Queue"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -9521,12 +10416,17 @@ impl QueueConfigurationListDeserializer {
 pub struct QueueConfigurationListSerializer;
 impl QueueConfigurationListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<QueueConfiguration>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<QueueConfiguration>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(QueueConfigurationSerializer::serialize(name, element));
+            QueueConfigurationSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -9534,10 +10434,17 @@ impl QueueConfigurationListSerializer {
 pub struct QuietSerializer;
 impl QuietSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &bool) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &bool)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -9620,27 +10527,44 @@ impl RedirectDeserializer {
 pub struct RedirectSerializer;
 impl RedirectSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Redirect) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Redirect)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.host_name {
-            serialized += &format!("<HostName>{value}</HostName>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("HostName"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.http_redirect_code {
-            serialized += &format!("<HttpRedirectCode>{value}</HttpRedirectCode>",
-                    value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("HttpRedirectCode"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.protocol {
-            serialized += &format!("<Protocol>{value}</Protocol>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Protocol"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.replace_key_prefix_with {
-            serialized += &format!("<ReplaceKeyPrefixWith>{value}</ReplaceKeyPrefixWith>",
-                    value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("ReplaceKeyPrefixWith"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.replace_key_with {
-            serialized += &format!("<ReplaceKeyWith>{value}</ReplaceKeyWith>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("ReplaceKeyWith"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -9702,14 +10626,25 @@ impl RedirectAllRequestsToDeserializer {
 pub struct RedirectAllRequestsToSerializer;
 impl RedirectAllRequestsToSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &RedirectAllRequestsTo) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<HostName>{value}</HostName>", value = obj.host_name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &RedirectAllRequestsTo)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("HostName"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.host_name)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.protocol {
-            serialized += &format!("<Protocol>{value}</Protocol>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Protocol"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -9731,10 +10666,17 @@ impl ReplaceKeyPrefixWithDeserializer {
 pub struct ReplaceKeyPrefixWithSerializer;
 impl ReplaceKeyPrefixWithSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -9756,10 +10698,17 @@ impl ReplaceKeyWithDeserializer {
 pub struct ReplaceKeyWithSerializer;
 impl ReplaceKeyWithSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -9821,12 +10770,19 @@ impl ReplicationConfigurationDeserializer {
 pub struct ReplicationConfigurationSerializer;
 impl ReplicationConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ReplicationConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Role>{value}</Role>", value = obj.role);
-        serialized += &ReplicationRulesSerializer::serialize("Rule", &obj.rules);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &ReplicationConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::start_element("Role"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.role)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        ReplicationRulesSerializer::serialize(&mut writer, "Rule", &obj.rules)?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -9898,16 +10854,30 @@ impl ReplicationRuleDeserializer {
 pub struct ReplicationRuleSerializer;
 impl ReplicationRuleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ReplicationRule) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &DestinationSerializer::serialize("Destination", &obj.destination);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &ReplicationRule)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        DestinationSerializer::serialize(&mut writer, "Destination", &obj.destination)?;
         if let Some(ref value) = obj.id {
-            serialized += &format!("<ID>{value}</ID>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("<Prefix>{value}</Prefix>", value = obj.prefix);
-        serialized += &format!("<Status>{value}</Status>", value = obj.status);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer
+            .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.prefix)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("Status"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.status)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -9929,10 +10899,17 @@ impl ReplicationRuleStatusDeserializer {
 pub struct ReplicationRuleStatusSerializer;
 impl ReplicationRuleStatusSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -9968,12 +10945,17 @@ impl ReplicationRulesDeserializer {
 pub struct ReplicationRulesSerializer;
 impl ReplicationRulesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<ReplicationRule>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<ReplicationRule>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(ReplicationRuleSerializer::serialize(name, element));
+            ReplicationRuleSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -9987,11 +10969,18 @@ pub struct RequestPaymentConfiguration {
 pub struct RequestPaymentConfigurationSerializer;
 impl RequestPaymentConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &RequestPaymentConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Payer>{value}</Payer>", value = obj.payer);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &RequestPaymentConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::start_element("Payer"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.payer)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -9999,10 +10988,17 @@ impl RequestPaymentConfigurationSerializer {
 pub struct ResponseCacheControlSerializer;
 impl ResponseCacheControlSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10010,10 +11006,17 @@ impl ResponseCacheControlSerializer {
 pub struct ResponseContentDispositionSerializer;
 impl ResponseContentDispositionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10021,10 +11024,17 @@ impl ResponseContentDispositionSerializer {
 pub struct ResponseContentEncodingSerializer;
 impl ResponseContentEncodingSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10032,10 +11042,17 @@ impl ResponseContentEncodingSerializer {
 pub struct ResponseContentLanguageSerializer;
 impl ResponseContentLanguageSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10043,10 +11060,17 @@ impl ResponseContentLanguageSerializer {
 pub struct ResponseContentTypeSerializer;
 impl ResponseContentTypeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10054,10 +11078,17 @@ impl ResponseContentTypeSerializer {
 pub struct ResponseExpiresSerializer;
 impl ResponseExpiresSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10103,14 +11134,21 @@ pub struct RestoreRequest {
 pub struct RestoreRequestSerializer;
 impl RestoreRequestSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &RestoreRequest) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Days>{value}</Days>", value = obj.days);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &RestoreRequest)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::start_element("Days"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.days)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.glacier_job_parameters {
-            serialized += &GlacierJobParametersSerializer::serialize("GlacierJobParameters", value);
+            &GlacierJobParametersSerializer::serialize(&mut writer, "GlacierJobParameters", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -10132,10 +11170,17 @@ impl RoleDeserializer {
 pub struct RoleSerializer;
 impl RoleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10197,14 +11242,18 @@ impl RoutingRuleDeserializer {
 pub struct RoutingRuleSerializer;
 impl RoutingRuleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &RoutingRule) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &RoutingRule)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.condition {
-            serialized += &ConditionSerializer::serialize("Condition", value);
+            &ConditionSerializer::serialize(&mut writer, "Condition", value)?;
         }
-        serialized += &RedirectSerializer::serialize("Redirect", &obj.redirect);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        RedirectSerializer::serialize(&mut writer, "Redirect", &obj.redirect)?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -10253,14 +11302,18 @@ impl RoutingRulesDeserializer {
 pub struct RoutingRulesSerializer;
 impl RoutingRulesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<RoutingRule>) -> String {
-        let mut parts: Vec<String> = Vec::new();
-        parts.push(format!("<{}>", name));
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<RoutingRule>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
-            parts.push(RoutingRuleSerializer::serialize("RoutingRule", element));
+            RoutingRuleSerializer::serialize(writer, "RoutingRule", element)?;
         }
-        parts.push(format!("</{}>", name));
-        parts.join("")
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
     }
 }
 
@@ -10349,33 +11402,50 @@ impl RuleDeserializer {
 pub struct RuleSerializer;
 impl RuleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Rule) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Rule)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.abort_incomplete_multipart_upload {
-            serialized += &AbortIncompleteMultipartUploadSerializer::serialize("AbortIncompleteMultipartUpload",
-                                                                               value);
+            &AbortIncompleteMultipartUploadSerializer::serialize(&mut writer,
+                                                                 "AbortIncompleteMultipartUpload",
+                                                                 value)?;
         }
         if let Some(ref value) = obj.expiration {
-            serialized += &LifecycleExpirationSerializer::serialize("Expiration", value);
+            &LifecycleExpirationSerializer::serialize(&mut writer, "Expiration", value)?;
         }
         if let Some(ref value) = obj.id {
-            serialized += &format!("<ID>{value}</ID>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.noncurrent_version_expiration {
-            serialized += &NoncurrentVersionExpirationSerializer::serialize("NoncurrentVersionExpiration",
-                                                                            value);
+            &NoncurrentVersionExpirationSerializer::serialize(&mut writer,
+                                                              "NoncurrentVersionExpiration",
+                                                              value)?;
         }
         if let Some(ref value) = obj.noncurrent_version_transition {
-            serialized += &NoncurrentVersionTransitionSerializer::serialize("NoncurrentVersionTransition",
-                                                                            value);
+            &NoncurrentVersionTransitionSerializer::serialize(&mut writer,
+                                                              "NoncurrentVersionTransition",
+                                                              value)?;
         }
-        serialized += &format!("<Prefix>{value}</Prefix>", value = obj.prefix);
-        serialized += &format!("<Status>{value}</Status>", value = obj.status);
+        writer
+            .write(xml::writer::XmlEvent::start_element("Prefix"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.prefix)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("Status"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.status)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.transition {
-            serialized += &TransitionSerializer::serialize("Transition", value);
+            &TransitionSerializer::serialize(&mut writer, "Transition", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -10411,12 +11481,17 @@ impl RulesDeserializer {
 pub struct RulesSerializer;
 impl RulesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<Rule>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<Rule>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(RuleSerializer::serialize(name, element));
+            RuleSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -10473,13 +11548,17 @@ impl S3KeyFilterDeserializer {
 pub struct S3KeyFilterSerializer;
 impl S3KeyFilterSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &S3KeyFilter) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &S3KeyFilter)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.filter_rules {
-            serialized += &FilterRuleListSerializer::serialize("FilterRule", value);
+            &FilterRuleListSerializer::serialize(&mut writer, "FilterRule", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -10515,10 +11594,17 @@ impl StartAfterDeserializer {
 pub struct StartAfterSerializer;
 impl StartAfterSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10540,10 +11626,17 @@ impl StorageClassDeserializer {
 pub struct StorageClassSerializer;
 impl StorageClassSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10598,13 +11691,17 @@ impl StorageClassAnalysisDeserializer {
 pub struct StorageClassAnalysisSerializer;
 impl StorageClassAnalysisSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &StorageClassAnalysis) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &StorageClassAnalysis)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.data_export {
-            serialized += &StorageClassAnalysisDataExportSerializer::serialize("DataExport", value);
+            &StorageClassAnalysisDataExportSerializer::serialize(&mut writer, "DataExport", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -10666,14 +11763,23 @@ impl StorageClassAnalysisDataExportDeserializer {
 pub struct StorageClassAnalysisDataExportSerializer;
 impl StorageClassAnalysisDataExportSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &StorageClassAnalysisDataExport) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &AnalyticsExportDestinationSerializer::serialize("Destination",
-                                                                       &obj.destination);
-        serialized += &format!("<OutputSchemaVersion>{value}</OutputSchemaVersion>",
-                value = obj.output_schema_version);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &StorageClassAnalysisDataExport)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        AnalyticsExportDestinationSerializer::serialize(&mut writer,
+                                                        "Destination",
+                                                        &obj.destination)?;
+        writer
+            .write(xml::writer::XmlEvent::start_element("OutputSchemaVersion"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}",
+                                                             value = obj.output_schema_version)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -10695,10 +11801,17 @@ impl StorageClassAnalysisSchemaVersionDeserializer {
 pub struct StorageClassAnalysisSchemaVersionSerializer;
 impl StorageClassAnalysisSchemaVersionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10720,10 +11833,17 @@ impl SuffixDeserializer {
 pub struct SuffixSerializer;
 impl SuffixSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10783,12 +11903,22 @@ impl TagDeserializer {
 pub struct TagSerializer;
 impl TagSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Tag) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &format!("<Key>{value}</Key>", value = obj.key);
-        serialized += &format!("<Value>{value}</Value>", value = obj.value);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Tag)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::start_element("Key"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.key)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::start_element("Value"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.value)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -10837,14 +11967,18 @@ impl TagSetDeserializer {
 pub struct TagSetSerializer;
 impl TagSetSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<Tag>) -> String {
-        let mut parts: Vec<String> = Vec::new();
-        parts.push(format!("<{}>", name));
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<Tag>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
-            parts.push(TagSerializer::serialize("Tag", element));
+            TagSerializer::serialize(writer, "Tag", element)?;
         }
-        parts.push(format!("</{}>", name));
-        parts.join("")
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
     }
 }
 
@@ -10857,11 +11991,15 @@ pub struct Tagging {
 pub struct TaggingSerializer;
 impl TaggingSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Tagging) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &TagSetSerializer::serialize("TagSet", &obj.tag_set);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Tagging)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        TagSetSerializer::serialize(&mut writer, "TagSet", &obj.tag_set)?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -10883,10 +12021,17 @@ impl TargetBucketDeserializer {
 pub struct TargetBucketSerializer;
 impl TargetBucketSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -10948,16 +12093,23 @@ impl TargetGrantDeserializer {
 pub struct TargetGrantSerializer;
 impl TargetGrantSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TargetGrant) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &TargetGrant)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.grantee {
-            serialized += &GranteeSerializer::serialize("Grantee", value);
+            &GranteeSerializer::serialize(&mut writer, "Grantee", value)?;
         }
         if let Some(ref value) = obj.permission {
-            serialized += &format!("<Permission>{value}</Permission>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Permission"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -11006,14 +12158,18 @@ impl TargetGrantsDeserializer {
 pub struct TargetGrantsSerializer;
 impl TargetGrantsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<TargetGrant>) -> String {
-        let mut parts: Vec<String> = Vec::new();
-        parts.push(format!("<{}>", name));
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<TargetGrant>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
-            parts.push(TargetGrantSerializer::serialize("Grant", element));
+            TargetGrantSerializer::serialize(writer, "Grant", element)?;
         }
-        parts.push(format!("</{}>", name));
-        parts.join("")
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
     }
 }
 
@@ -11035,10 +12191,17 @@ impl TargetPrefixDeserializer {
 pub struct TargetPrefixSerializer;
 impl TargetPrefixSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -11046,10 +12209,17 @@ impl TargetPrefixSerializer {
 pub struct TierSerializer;
 impl TierSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -11071,10 +12241,17 @@ impl TokenDeserializer {
 pub struct TokenSerializer;
 impl TokenSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -11096,10 +12273,17 @@ impl TopicArnDeserializer {
 pub struct TopicArnSerializer;
 impl TopicArnSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -11168,18 +12352,27 @@ impl TopicConfigurationDeserializer {
 pub struct TopicConfigurationSerializer;
 impl TopicConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TopicConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
-        serialized += &EventListSerializer::serialize("Event", &obj.events);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &TopicConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        EventListSerializer::serialize(&mut writer, "Event", &obj.events)?;
         if let Some(ref value) = obj.filter {
-            serialized += &NotificationConfigurationFilterSerializer::serialize("Filter", value);
+            &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            serialized += &format!("<Id>{value}</Id>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("<Topic>{value}</Topic>", value = obj.topic_arn);
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::start_element("Topic"))?;
+        writer
+            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.topic_arn)))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -11245,19 +12438,27 @@ impl TopicConfigurationDeprecatedDeserializer {
 pub struct TopicConfigurationDeprecatedSerializer;
 impl TopicConfigurationDeprecatedSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TopicConfigurationDeprecated) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &TopicConfigurationDeprecated)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.events {
-            serialized += &EventListSerializer::serialize("Event", value);
+            &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            serialized += &format!("<Id>{value}</Id>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.topic {
-            serialized += &format!("<Topic>{value}</Topic>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Topic"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -11293,12 +12494,17 @@ impl TopicConfigurationListDeserializer {
 pub struct TopicConfigurationListSerializer;
 impl TopicConfigurationListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<TopicConfiguration>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<TopicConfiguration>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(TopicConfigurationSerializer::serialize(name, element));
+            TopicConfigurationSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -11365,19 +12571,30 @@ impl TransitionDeserializer {
 pub struct TransitionSerializer;
 impl TransitionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Transition) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Transition)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.date {
-            serialized += &format!("<Date>{value}</Date>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Date"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.days {
-            serialized += &format!("<Days>{value}</Days>", value = value);
+            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.storage_class {
-            serialized += &format!("<StorageClass>{value}</StorageClass>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("StorageClass"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -11413,12 +12630,17 @@ impl TransitionListDeserializer {
 pub struct TransitionListSerializer;
 impl TransitionListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Vec<Transition>) -> String {
-        let mut parts: Vec<String> = Vec::new();
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &Vec<Transition>)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
         for element in obj {
-            parts.push(TransitionSerializer::serialize(name, element));
+            TransitionSerializer::serialize(writer, name, element)?;
         }
-        parts.join("")
+        Ok(())
     }
 }
 
@@ -11440,10 +12662,17 @@ impl TransitionStorageClassDeserializer {
 pub struct TransitionStorageClassSerializer;
 impl TransitionStorageClassSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -11465,10 +12694,17 @@ impl TypeDeserializer {
 pub struct TypeSerializer;
 impl TypeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -11490,10 +12726,17 @@ impl URIDeserializer {
 pub struct URISerializer;
 impl URISerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -11515,10 +12758,17 @@ impl UploadIdMarkerDeserializer {
 pub struct UploadIdMarkerSerializer;
 impl UploadIdMarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -11690,10 +12940,17 @@ impl ValueDeserializer {
 pub struct ValueSerializer;
 impl ValueSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -11715,10 +12972,17 @@ impl VersionIdMarkerDeserializer {
 pub struct VersionIdMarkerSerializer;
 impl VersionIdMarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &String) -> String {
-        format!("<{name}>{value}</{name}>",
-                name = name,
-                value = obj.to_string())
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &String)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+
     }
 }
 
@@ -11734,16 +12998,26 @@ pub struct VersioningConfiguration {
 pub struct VersioningConfigurationSerializer;
 impl VersioningConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &VersioningConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &VersioningConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.mfa_delete {
-            serialized += &format!("<MfaDelete>{value}</MfaDelete>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("MfaDelete"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.status {
-            serialized += &format!("<Status>{value}</Status>", value = value);
+            writer
+                .write(xml::writer::XmlEvent::start_element("Status"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -11759,23 +13033,28 @@ pub struct WebsiteConfiguration {
 pub struct WebsiteConfigurationSerializer;
 impl WebsiteConfigurationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &WebsiteConfiguration) -> String {
-        let mut serialized = format!("<{name}>", name = name);
+    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
+                        name: &str,
+                        obj: &WebsiteConfiguration)
+                        -> Result<(), xml::writer::Error>
+        where W: Write
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.error_document {
-            serialized += &ErrorDocumentSerializer::serialize("ErrorDocument", value);
+            &ErrorDocumentSerializer::serialize(&mut writer, "ErrorDocument", value)?;
         }
         if let Some(ref value) = obj.index_document {
-            serialized += &IndexDocumentSerializer::serialize("IndexDocument", value);
+            &IndexDocumentSerializer::serialize(&mut writer, "IndexDocument", value)?;
         }
         if let Some(ref value) = obj.redirect_all_requests_to {
-            serialized += &RedirectAllRequestsToSerializer::serialize("RedirectAllRequestsTo",
-                                                                      value);
+            &RedirectAllRequestsToSerializer::serialize(&mut writer,
+                                                        "RedirectAllRequestsTo",
+                                                        value)?;
         }
         if let Some(ref value) = obj.routing_rules {
-            serialized += &RoutingRulesSerializer::serialize("RoutingRules", value);
+            &RoutingRulesSerializer::serialize(&mut writer, "RoutingRules", value)?;
         }
-        serialized += &format!("</{name}>", name = name);
-        serialized
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
@@ -17418,12 +18697,11 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
         let mut payload: Vec<u8>;
         if input.multipart_upload.is_some() {
-            payload = CompletedMultipartUploadSerializer::serialize("CompleteMultipartUpload",
-                                                                    input
-                                                                        .multipart_upload
-                                                                        .as_ref()
-                                                                        .unwrap())
-                    .into_bytes();
+            let mut writer = EventWriter::new(Vec::new());
+            CompletedMultipartUploadSerializer::serialize(&mut writer,
+                                                          "CompleteMultipartUpload",
+                                                          input.multipart_upload.as_ref().unwrap());
+            payload = writer.into_inner();
         } else {
             payload = Vec::new();
         }
@@ -17744,7 +19022,14 @@ impl<P, D> S3 for S3Client<P, D>
 
         let mut payload: Vec<u8>;
         if input.create_bucket_configuration.is_some() {
-            payload = CreateBucketConfigurationSerializer::serialize("CreateBucketConfiguration", input.create_bucket_configuration.as_ref().unwrap()).into_bytes();
+            let mut writer = EventWriter::new(Vec::new());
+            CreateBucketConfigurationSerializer::serialize(&mut writer,
+                                                           "CreateBucketConfiguration",
+                                                           input
+                                                               .create_bucket_configuration
+                                                               .as_ref()
+                                                               .unwrap());
+            payload = writer.into_inner();
         } else {
             payload = Vec::new();
         }
@@ -18465,7 +19750,9 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("delete");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = DeleteSerializer::serialize("Delete", &input.delete).into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        DeleteSerializer::serialize(&mut writer, "Delete", &input.delete);
+        payload = writer.into_inner();
         let digest = md5::compute(&payload);
         // need to deref digest and then pass that reference:
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
@@ -20633,9 +21920,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("accelerate");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = AccelerateConfigurationSerializer::serialize("AccelerateConfiguration",
-                                                               &input.accelerate_configuration)
-                .into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        AccelerateConfigurationSerializer::serialize(&mut writer,
+                                                     "AccelerateConfiguration",
+                                                     &input.accelerate_configuration);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -20699,12 +21988,11 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
         let mut payload: Vec<u8>;
         if input.access_control_policy.is_some() {
-            payload = AccessControlPolicySerializer::serialize("AccessControlPolicy",
-                                                               input
-                                                                   .access_control_policy
-                                                                   .as_ref()
-                                                                   .unwrap())
-                    .into_bytes();
+            let mut writer = EventWriter::new(Vec::new());
+            AccessControlPolicySerializer::serialize(&mut writer,
+                                                     "AccessControlPolicy",
+                                                     input.access_control_policy.as_ref().unwrap());
+            payload = writer.into_inner();
         } else {
             payload = Vec::new();
         }
@@ -20746,9 +22034,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("analytics");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = AnalyticsConfigurationSerializer::serialize("AnalyticsConfiguration",
-                                                              &input.analytics_configuration)
-                .into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        AnalyticsConfigurationSerializer::serialize(&mut writer,
+                                                    "AnalyticsConfiguration",
+                                                    &input.analytics_configuration);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -20788,9 +22078,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("cors");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = CORSConfigurationSerializer::serialize("CORSConfiguration",
-                                                         &input.cors_configuration)
-                .into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        CORSConfigurationSerializer::serialize(&mut writer,
+                                               "CORSConfiguration",
+                                               &input.cors_configuration);
+        payload = writer.into_inner();
         let digest = md5::compute(&payload);
         // need to deref digest and then pass that reference:
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
@@ -20831,9 +22123,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("inventory");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = InventoryConfigurationSerializer::serialize("InventoryConfiguration",
-                                                              &input.inventory_configuration)
-                .into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        InventoryConfigurationSerializer::serialize(&mut writer,
+                                                    "InventoryConfiguration",
+                                                    &input.inventory_configuration);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -20876,12 +22170,14 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
         let mut payload: Vec<u8>;
         if input.lifecycle_configuration.is_some() {
-            payload = LifecycleConfigurationSerializer::serialize("LifecycleConfiguration",
-                                                                  input
-                                                                      .lifecycle_configuration
-                                                                      .as_ref()
-                                                                      .unwrap())
-                    .into_bytes();
+            let mut writer = EventWriter::new(Vec::new());
+            LifecycleConfigurationSerializer::serialize(&mut writer,
+                                                        "LifecycleConfiguration",
+                                                        input
+                                                            .lifecycle_configuration
+                                                            .as_ref()
+                                                            .unwrap());
+            payload = writer.into_inner();
         } else {
             payload = Vec::new();
         }
@@ -20925,13 +22221,14 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
         let mut payload: Vec<u8>;
         if input.lifecycle_configuration.is_some() {
-            payload =
-                BucketLifecycleConfigurationSerializer::serialize("LifecycleConfiguration",
-                                                                  input
-                                                                      .lifecycle_configuration
-                                                                      .as_ref()
-                                                                      .unwrap())
-                        .into_bytes();
+            let mut writer = EventWriter::new(Vec::new());
+            BucketLifecycleConfigurationSerializer::serialize(&mut writer,
+                                                              "LifecycleConfiguration",
+                                                              input
+                                                                  .lifecycle_configuration
+                                                                  .as_ref()
+                                                                  .unwrap());
+            payload = writer.into_inner();
         } else {
             payload = Vec::new();
         }
@@ -20978,9 +22275,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("logging");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = BucketLoggingStatusSerializer::serialize("BucketLoggingStatus",
-                                                           &input.bucket_logging_status)
-                .into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        BucketLoggingStatusSerializer::serialize(&mut writer,
+                                                 "BucketLoggingStatus",
+                                                 &input.bucket_logging_status);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -21019,9 +22318,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("metrics");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = MetricsConfigurationSerializer::serialize("MetricsConfiguration",
-                                                            &input.metrics_configuration)
-                .into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        MetricsConfigurationSerializer::serialize(&mut writer,
+                                                  "MetricsConfiguration",
+                                                  &input.metrics_configuration);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -21063,7 +22364,9 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("notification");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = NotificationConfigurationDeprecatedSerializer::serialize("NotificationConfigurationDeprecated", &input.notification_configuration).into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        NotificationConfigurationDeprecatedSerializer::serialize(&mut writer, "NotificationConfigurationDeprecated", &input.notification_configuration);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -21102,10 +22405,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("notification");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload =
-            NotificationConfigurationSerializer::serialize("NotificationConfiguration",
-                                                           &input.notification_configuration)
-                    .into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        NotificationConfigurationSerializer::serialize(&mut writer,
+                                                       "NotificationConfiguration",
+                                                       &input.notification_configuration);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -21146,7 +22450,9 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("policy");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = PolicySerializer::serialize("Policy", &input.policy).into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        PolicySerializer::serialize(&mut writer, "Policy", &input.policy);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -21187,10 +22493,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("replication");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload =
-            ReplicationConfigurationSerializer::serialize("ReplicationConfiguration",
-                                                          &input.replication_configuration)
-                    .into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        ReplicationConfigurationSerializer::serialize(&mut writer,
+                                                      "ReplicationConfiguration",
+                                                      &input.replication_configuration);
+        payload = writer.into_inner();
         let digest = md5::compute(&payload);
         // need to deref digest and then pass that reference:
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
@@ -21233,7 +22540,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("requestPayment");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = RequestPaymentConfigurationSerializer::serialize("RequestPaymentConfiguration", &input.request_payment_configuration).into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        RequestPaymentConfigurationSerializer::serialize(&mut writer,
+                                                         "RequestPaymentConfiguration",
+                                                         &input.request_payment_configuration);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -21275,7 +22586,9 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("tagging");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = TaggingSerializer::serialize("Tagging", &input.tagging).into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        TaggingSerializer::serialize(&mut writer, "Tagging", &input.tagging);
+        payload = writer.into_inner();
         let digest = md5::compute(&payload);
         // need to deref digest and then pass that reference:
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
@@ -21322,9 +22635,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("versioning");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = VersioningConfigurationSerializer::serialize("VersioningConfiguration",
-                                                               &input.versioning_configuration)
-                .into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        VersioningConfigurationSerializer::serialize(&mut writer,
+                                                     "VersioningConfiguration",
+                                                     &input.versioning_configuration);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -21365,9 +22680,11 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("website");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = WebsiteConfigurationSerializer::serialize("WebsiteConfiguration",
-                                                            &input.website_configuration)
-                .into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        WebsiteConfigurationSerializer::serialize(&mut writer,
+                                                  "WebsiteConfiguration",
+                                                  &input.website_configuration);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -21624,12 +22941,11 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
         let mut payload: Vec<u8>;
         if input.access_control_policy.is_some() {
-            payload = AccessControlPolicySerializer::serialize("AccessControlPolicy",
-                                                               input
-                                                                   .access_control_policy
-                                                                   .as_ref()
-                                                                   .unwrap())
-                    .into_bytes();
+            let mut writer = EventWriter::new(Vec::new());
+            AccessControlPolicySerializer::serialize(&mut writer,
+                                                     "AccessControlPolicy",
+                                                     input.access_control_policy.as_ref().unwrap());
+            payload = writer.into_inner();
         } else {
             payload = Vec::new();
         }
@@ -21695,7 +23011,9 @@ impl<P, D> S3 for S3Client<P, D>
         params.put_key("tagging");
         request.set_params(params);
         let mut payload: Vec<u8>;
-        payload = TaggingSerializer::serialize("Tagging", &input.tagging).into_bytes();
+        let mut writer = EventWriter::new(Vec::new());
+        TaggingSerializer::serialize(&mut writer, "Tagging", &input.tagging);
+        payload = writer.into_inner();
 
         request.set_payload(Some(payload));
 
@@ -21760,9 +23078,11 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
         let mut payload: Vec<u8>;
         if input.restore_request.is_some() {
-            payload = RestoreRequestSerializer::serialize("RestoreRequest",
-                                                          input.restore_request.as_ref().unwrap())
-                    .into_bytes();
+            let mut writer = EventWriter::new(Vec::new());
+            RestoreRequestSerializer::serialize(&mut writer,
+                                                "RestoreRequest",
+                                                input.restore_request.as_ref().unwrap());
+            payload = writer.into_inner();
         } else {
             payload = Vec::new();
         }
