@@ -50,8 +50,6 @@ extern crate hex;
 extern crate base64;
 pub extern crate rusoto_credential as credential;
 extern crate serde;
-#[macro_use]
-extern crate serde_derive;
 extern crate time;
 extern crate url;
 extern crate xml;
