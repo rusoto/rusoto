@@ -6,6 +6,8 @@
 - Added CHANGELOG
 - Updated CONTRIBUTING to explain PR process
 - Added Athena service
+- Added X-Ray service
+- Updated Credentials crate to use hyper 0.11 (aka the Async IO Update).
 
 ## [0.28.0] - 2017-08-25
 

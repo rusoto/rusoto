@@ -492,5 +492,11 @@
     "coreVersion": "0.28.0",
     "protocolVersion": "2015-04-08",
     "baseTypeName": "Workspaces"
+  },
+  "xray": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2016-04-12",
+    "baseTypeName": "XRay"
   }
 }

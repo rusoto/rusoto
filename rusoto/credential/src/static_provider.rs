@@ -20,7 +20,12 @@ pub struct StaticProvider {
 impl StaticProvider {
     /// Creates a new Static Provider. This should be used when you want to statically, or programmatically
     /// provide access to AWS.
-    pub fn new(access_key: String, secret_access_key: String, token: Option<String>, valid_for: Option<i64>) -> StaticProvider {
+    pub fn new(
+        access_key: String,
+        secret_access_key: String,
+        token: Option<String>,
+        valid_for: Option<i64>,
+    ) -> StaticProvider {
         StaticProvider {
             aws_access_key_id: access_key,
             aws_secret_access_key: secret_access_key,
@@ -68,32 +73,48 @@ impl StaticProvider {
 
 impl ProvideAwsCredentials for StaticProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        Ok(AwsCredentials::new(self.aws_access_key_id.clone(), self.aws_secret_access_key.clone(),
-            self.token.clone(), Utc::now() + Duration::seconds(self.valid_for)))
+        Ok(AwsCredentials::new(
+            self.aws_access_key_id.clone(),
+            self.aws_secret_access_key.clone(),
+            self.token.clone(),
+            Utc::now() + Duration::seconds(self.valid_for),
+        ))
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use {ProvideAwsCredentials};
+    use ProvideAwsCredentials;
     use super::*;
 
     #[test]
     fn test_static_provider_creation() {
-        let result = StaticProvider::new("fake-key".to_owned(), "fake-secret".to_owned(), Some("token".to_owned()), Some(300)).credentials();
+        let result = StaticProvider::new(
+            "fake-key".to_owned(),
+            "fake-secret".to_owned(),
+            Some("token".to_owned()),
+            Some(300),
+        ).credentials();
         assert!(result.is_ok());
     }
 
     #[test]
     fn test_static_provider_minimal_creation() {
-        let result = StaticProvider::new_minimal("fake-key-2".to_owned(), "fake-secret-2".to_owned()).credentials();
+        let result =
+            StaticProvider::new_minimal("fake-key-2".to_owned(), "fake-secret-2".to_owned())
+                .credentials();
         assert!(result.is_ok());
     }
 
     #[test]
     fn test_static_provider_custom_time_expiration() {
         let start_time = Utc::now();
-        let result = StaticProvider::new("fake-key".to_owned(), "fake-secret".to_owned(), None, Some(10000)).credentials();
+        let result = StaticProvider::new(
+            "fake-key".to_owned(),
+            "fake-secret".to_owned(),
+            None,
+            Some(10000),
+        ).credentials();
         assert!(result.is_ok());
         let finalized = result.unwrap();
         let expires_at = finalized.expires_at().clone();
