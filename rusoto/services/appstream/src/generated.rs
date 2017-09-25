@@ -35,7 +35,7 @@ pub struct Application {
     #[serde(rename="DisplayName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>An application can be disabled after image creation if there is a problem.</p>"]
+    #[doc="<p>If there is a problem, an application can be disabled after image creation.</p>"]
     #[serde(rename="Enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<bool>,
@@ -102,6 +102,27 @@ pub struct ComputeCapacityStatus {
     pub running: Option<i64>,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct CreateDirectoryConfigRequest {
+    #[doc="<p>The fully qualified name of the directory, such as corp.example.com</p>"]
+    #[serde(rename="DirectoryName")]
+    pub directory_name: String,
+    #[doc="<p>The list of the distinguished names of organizational units to place computer accounts in.</p>"]
+    #[serde(rename="OrganizationalUnitDistinguishedNames")]
+    pub organizational_unit_distinguished_names: Vec<String>,
+    #[doc="<p>The <i>AccountName</i> and <i>AccountPassword</i> values for the service account, which are used by the streaming instance to connect to the directory.</p>"]
+    #[serde(rename="ServiceAccountCredentials")]
+    pub service_account_credentials: ServiceAccountCredentials,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct CreateDirectoryConfigResult {
+    #[doc="<p>Directory configuration details.</p>"]
+    #[serde(rename="DirectoryConfig")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub directory_config: Option<DirectoryConfig>,
+}
+
 #[doc="<p>Contains the parameters for the new fleet to create.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateFleetRequest {
@@ -120,14 +141,18 @@ pub struct CreateFleetRequest {
     #[serde(rename="DisplayName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>Enables or disables default Internet access for the fleet.</p>"]
+    #[doc="<p>The <i>DirectoryName</i> and <i>OrganizationalUnitDistinguishedName</i> values, which are used to join domains for the AppStream 2.0 streaming instances.</p>"]
+    #[serde(rename="DomainJoinInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub domain_join_info: Option<DomainJoinInfo>,
+    #[doc="<p>Enables or disables default internet access for the fleet.</p>"]
     #[serde(rename="EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
     #[doc="<p>Unique name of the image used by the fleet.</p>"]
     #[serde(rename="ImageName")]
     pub image_name: String,
-    #[doc="<p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type.</p>"]
+    #[doc="<p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type. Available instance types are:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> </ul>"]
     #[serde(rename="InstanceType")]
     pub instance_type: String,
     #[doc="<p>The maximum time for which a streaming session can run. The input can be any numeric value in seconds between 600 and 57600.</p>"]
@@ -205,7 +230,7 @@ pub struct CreateStreamingURLRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateStreamingURLResult {
-    #[doc="<p>Elapsed seconds after the Unix epoch, at which time this URL expires.</p>"]
+    #[doc="<p>Elapsed seconds after the Unix epoch, when this URL expires.</p>"]
     #[serde(rename="Expires")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub expires: Option<f64>,
@@ -214,6 +239,16 @@ pub struct CreateStreamingURLResult {
     #[serde(skip_serializing_if="Option::is_none")]
     pub streaming_url: Option<String>,
 }
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DeleteDirectoryConfigRequest {
+    #[doc="<p>The name of the directory configuration to be deleted.</p>"]
+    #[serde(rename="DirectoryName")]
+    pub directory_name: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DeleteDirectoryConfigResult;
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteFleetRequest {
@@ -234,6 +269,34 @@ pub struct DeleteStackRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeleteStackResult;
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DescribeDirectoryConfigsRequest {
+    #[doc="<p>A specific list of directory names.</p>"]
+    #[serde(rename="DirectoryNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub directory_names: Option<Vec<String>>,
+    #[doc="<p>The size of each page of results.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_results: Option<i64>,
+    #[doc="<p>The DescribeDirectoryConfigsResult.NextToken from a previous call to DescribeDirectoryConfigs. If this is the first call, pass null.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DescribeDirectoryConfigsResult {
+    #[doc="<p>The list of directory configurations.</p>"]
+    #[serde(rename="DirectoryConfigs")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub directory_configs: Option<Vec<DirectoryConfig>>,
+    #[doc="<p>If not null, more results are available. To retrieve the next set of items, pass this value for the NextToken parameter in a subsequent call to DescribeDirectoryConfigs.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+}
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeFleetsRequest {
@@ -337,6 +400,26 @@ pub struct DescribeStacksResult {
     pub stacks: Option<Vec<Stack>>,
 }
 
+#[doc="<p>Full directory configuration details, which are used to join domains for the AppStream 2.0 streaming instances.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DirectoryConfig {
+    #[doc="<p>The time stamp when the directory configuration was created within AppStream 2.0.</p>"]
+    #[serde(rename="CreatedTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub created_time: Option<f64>,
+    #[doc="<p>The fully qualified name of the directory, such as corp.example.com</p>"]
+    #[serde(rename="DirectoryName")]
+    pub directory_name: String,
+    #[doc="<p>The list of the distinguished names of organizational units in which to place computer accounts.</p>"]
+    #[serde(rename="OrganizationalUnitDistinguishedNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub organizational_unit_distinguished_names: Option<Vec<String>>,
+    #[doc="<p>The <i>AccountName</i> and <i>AccountPassword</i> of the service account, to be used by the streaming instance to connect to the directory.</p>"]
+    #[serde(rename="ServiceAccountCredentials")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub service_account_credentials: Option<ServiceAccountCredentials>,
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DisassociateFleetRequest {
     #[doc="<p>The name of the fleet to disassociate.</p>"]
@@ -349,6 +432,19 @@ pub struct DisassociateFleetRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DisassociateFleetResult;
+
+#[doc="<p>The <i>DirectoryName</i> and <i>OrganizationalUnitDistinguishedName</i> values, which are used to join domains for the AppStream 2.0 streaming instances.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct DomainJoinInfo {
+    #[doc="<p>The fully qualified name of the directory, such as corp.example.com</p>"]
+    #[serde(rename="DirectoryName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub directory_name: Option<String>,
+    #[doc="<p>The distinguished name of the organizational unit to place the computer account in.</p>"]
+    #[serde(rename="OrganizationalUnitDistinguishedName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub organizational_unit_distinguished_name: Option<String>,
+}
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ExpireSessionRequest {
@@ -385,7 +481,11 @@ pub struct Fleet {
     #[serde(rename="DisplayName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>Whether default Internet access is enabled for the fleet. </p>"]
+    #[doc="<p>The <i>DirectoryName</i> and <i>OrganizationalUnitDistinguishedName</i> values, which are used to join domains for the AppStream 2.0 streaming instances.</p>"]
+    #[serde(rename="DomainJoinInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub domain_join_info: Option<DomainJoinInfo>,
+    #[doc="<p>Whether default internet access is enabled for the fleet. </p>"]
     #[serde(rename="EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
@@ -443,7 +543,7 @@ pub struct Image {
     #[serde(rename="BaseImageArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub base_image_arn: Option<String>,
-    #[doc="<p>The timestamp when the image was created.</p>"]
+    #[doc="<p>The time stamp when the image was created.</p>"]
     #[serde(rename="CreatedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub created_time: Option<f64>,
@@ -470,7 +570,7 @@ pub struct Image {
     #[serde(rename="PublicBaseImageReleasedDate")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub public_base_image_released_date: Option<f64>,
-    #[doc="<p>The image starts in the <b>PENDING</b> state, and then moves to <b>AVAILABLE</b> if image creation succeeds and <b>FAILED</b> if image creation has failed.</p>"]
+    #[doc="<p>The image starts in the <b>PENDING</b> state. If image creation succeeds, it moves to <b>AVAILABLE</b>. If image creation fails, it moves to <b>FAILED</b>.</p>"]
     #[serde(rename="State")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
@@ -545,6 +645,17 @@ pub struct ListAssociatedStacksResult {
     pub next_token: Option<String>,
 }
 
+#[doc="<p>The <i>AccountName</i> and <i>AccountPassword</i> of the service account, to be used by the streaming instance to connect to the directory.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct ServiceAccountCredentials {
+    #[doc="<p>The user name of an account in the directory that is used by AppStream 2.0 streaming instances to connect to the directory. This account must have the following privileges: create computer objects, join computers to the domain, change/reset the password on descendant computer objects for the organizational units specified.</p>"]
+    #[serde(rename="AccountName")]
+    pub account_name: String,
+    #[doc="<p>The password for the user account for directory actions.</p>"]
+    #[serde(rename="AccountPassword")]
+    pub account_password: String,
+}
+
 #[doc="<p>Contains the parameters for a streaming session.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Session {
@@ -576,7 +687,7 @@ pub struct Stack {
     #[serde(rename="Arn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The timestamp when the stack was created.</p>"]
+    #[doc="<p>The time stamp when the stack was created.</p>"]
     #[serde(rename="CreatedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub created_time: Option<f64>,
@@ -647,6 +758,29 @@ pub struct StorageConnector {
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
+pub struct UpdateDirectoryConfigRequest {
+    #[doc="<p>The name of the existing directory configuration to be updated.</p>"]
+    #[serde(rename="DirectoryName")]
+    pub directory_name: String,
+    #[doc="<p>The list of the distinguished names of organizational units to place computer accounts in.</p>"]
+    #[serde(rename="OrganizationalUnitDistinguishedNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub organizational_unit_distinguished_names: Option<Vec<String>>,
+    #[doc="<p>The <i>AccountName</i> and <i>AccountPassword</i> values for the service account, which are used by the streaming instance to connect to the directory</p>"]
+    #[serde(rename="ServiceAccountCredentials")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub service_account_credentials: Option<ServiceAccountCredentials>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct UpdateDirectoryConfigResult {
+    #[doc="<p>The updated directory configuration details.</p>"]
+    #[serde(rename="DirectoryConfig")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub directory_config: Option<DirectoryConfig>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateFleetRequest {
     #[doc="<p>Fleet attributes to be deleted.</p>"]
     #[serde(rename="AttributesToDelete")]
@@ -668,7 +802,11 @@ pub struct UpdateFleetRequest {
     #[serde(rename="DisplayName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>Enables or disables default Internet access for the fleet.</p>"]
+    #[doc="<p>The <i>DirectoryName</i> and <i>OrganizationalUnitDistinguishedName</i> values, which are used to join domains for the AppStream 2.0 streaming instances.</p>"]
+    #[serde(rename="DomainJoinInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub domain_join_info: Option<DomainJoinInfo>,
+    #[doc="<p>Enables or disables default internet access for the fleet.</p>"]
     #[serde(rename="EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
@@ -676,7 +814,7 @@ pub struct UpdateFleetRequest {
     #[serde(rename="ImageName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub image_name: Option<String>,
-    #[doc="<p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type.</p>"]
+    #[doc="<p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type. Available instance types are:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> </ul>"]
     #[serde(rename="InstanceType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
@@ -754,6 +892,8 @@ pub enum AssociateFleetError {
     IncompatibleImage(String),
     ///<p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
+    ///<p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
     ///<p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -788,6 +928,9 @@ impl AssociateFleetError {
                     }
                     "LimitExceededException" => {
                         AssociateFleetError::LimitExceeded(String::from(error_message))
+                    }
+                    "OperationNotPermittedException" => {
+                        AssociateFleetError::OperationNotPermitted(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         AssociateFleetError::ResourceNotFound(String::from(error_message))
@@ -834,6 +977,7 @@ impl Error for AssociateFleetError {
             AssociateFleetError::ConcurrentModification(ref cause) => cause,
             AssociateFleetError::IncompatibleImage(ref cause) => cause,
             AssociateFleetError::LimitExceeded(ref cause) => cause,
+            AssociateFleetError::OperationNotPermitted(ref cause) => cause,
             AssociateFleetError::ResourceNotFound(ref cause) => cause,
             AssociateFleetError::Validation(ref cause) => cause,
             AssociateFleetError::Credentials(ref err) => err.description(),
@@ -842,11 +986,100 @@ impl Error for AssociateFleetError {
         }
     }
 }
+/// Errors returned by CreateDirectoryConfig
+#[derive(Debug, PartialEq)]
+pub enum CreateDirectoryConfigError {
+    ///<p>The requested limit exceeds the permitted limit for an account.</p>
+    LimitExceeded(String),
+    ///<p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl CreateDirectoryConfigError {
+    pub fn from_body(body: &str) -> CreateDirectoryConfigError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "LimitExceededException" => {
+                        CreateDirectoryConfigError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => CreateDirectoryConfigError::ResourceAlreadyExists(String::from(error_message)),
+                    "ValidationException" => {
+                        CreateDirectoryConfigError::Validation(error_message.to_string())
+                    }
+                    _ => CreateDirectoryConfigError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateDirectoryConfigError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateDirectoryConfigError {
+    fn from(err: serde_json::error::Error) -> CreateDirectoryConfigError {
+        CreateDirectoryConfigError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateDirectoryConfigError {
+    fn from(err: CredentialsError) -> CreateDirectoryConfigError {
+        CreateDirectoryConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateDirectoryConfigError {
+    fn from(err: HttpDispatchError) -> CreateDirectoryConfigError {
+        CreateDirectoryConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDirectoryConfigError {
+    fn from(err: io::Error) -> CreateDirectoryConfigError {
+        CreateDirectoryConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateDirectoryConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDirectoryConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDirectoryConfigError::LimitExceeded(ref cause) => cause,
+            CreateDirectoryConfigError::ResourceAlreadyExists(ref cause) => cause,
+            CreateDirectoryConfigError::Validation(ref cause) => cause,
+            CreateDirectoryConfigError::Credentials(ref err) => err.description(),
+            CreateDirectoryConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateDirectoryConfigError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateFleet
 #[derive(Debug, PartialEq)]
 pub enum CreateFleetError {
     ///<p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
+    ///<p>The image does not support storage connectors.</p>
+    IncompatibleImage(String),
+    ///<p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    InvalidParameterCombination(String),
     ///<p>The specified role is invalid.</p>
     InvalidRole(String),
     ///<p>The requested limit exceeds the permitted limit for an account.</p>
@@ -883,6 +1116,12 @@ impl CreateFleetError {
                 match *error_type {
                     "ConcurrentModificationException" => {
                         CreateFleetError::ConcurrentModification(String::from(error_message))
+                    }
+                    "IncompatibleImageException" => {
+                        CreateFleetError::IncompatibleImage(String::from(error_message))
+                    }
+                    "InvalidParameterCombinationException" => {
+                        CreateFleetError::InvalidParameterCombination(String::from(error_message))
                     }
                     "InvalidRoleException" => {
                         CreateFleetError::InvalidRole(String::from(error_message))
@@ -939,6 +1178,8 @@ impl Error for CreateFleetError {
     fn description(&self) -> &str {
         match *self {
             CreateFleetError::ConcurrentModification(ref cause) => cause,
+            CreateFleetError::IncompatibleImage(ref cause) => cause,
+            CreateFleetError::InvalidParameterCombination(ref cause) => cause,
             CreateFleetError::InvalidRole(ref cause) => cause,
             CreateFleetError::LimitExceeded(ref cause) => cause,
             CreateFleetError::ResourceAlreadyExists(ref cause) => cause,
@@ -1157,6 +1398,93 @@ impl Error for CreateStreamingURLError {
         }
     }
 }
+/// Errors returned by DeleteDirectoryConfig
+#[derive(Debug, PartialEq)]
+pub enum DeleteDirectoryConfigError {
+    ///<p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    ///<p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DeleteDirectoryConfigError {
+    pub fn from_body(body: &str) -> DeleteDirectoryConfigError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceInUseException" => {
+                        DeleteDirectoryConfigError::ResourceInUse(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteDirectoryConfigError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteDirectoryConfigError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteDirectoryConfigError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteDirectoryConfigError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteDirectoryConfigError {
+    fn from(err: serde_json::error::Error) -> DeleteDirectoryConfigError {
+        DeleteDirectoryConfigError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteDirectoryConfigError {
+    fn from(err: CredentialsError) -> DeleteDirectoryConfigError {
+        DeleteDirectoryConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteDirectoryConfigError {
+    fn from(err: HttpDispatchError) -> DeleteDirectoryConfigError {
+        DeleteDirectoryConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDirectoryConfigError {
+    fn from(err: io::Error) -> DeleteDirectoryConfigError {
+        DeleteDirectoryConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteDirectoryConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteDirectoryConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteDirectoryConfigError::ResourceInUse(ref cause) => cause,
+            DeleteDirectoryConfigError::ResourceNotFound(ref cause) => cause,
+            DeleteDirectoryConfigError::Validation(ref cause) => cause,
+            DeleteDirectoryConfigError::Credentials(ref err) => err.description(),
+            DeleteDirectoryConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteDirectoryConfigError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteFleet
 #[derive(Debug, PartialEq)]
 pub enum DeleteFleetError {
@@ -1336,6 +1664,87 @@ impl Error for DeleteStackError {
             DeleteStackError::Credentials(ref err) => err.description(),
             DeleteStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteStackError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeDirectoryConfigs
+#[derive(Debug, PartialEq)]
+pub enum DescribeDirectoryConfigsError {
+    ///<p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeDirectoryConfigsError {
+    pub fn from_body(body: &str) -> DescribeDirectoryConfigsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotFoundException" => {
+                        DescribeDirectoryConfigsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeDirectoryConfigsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeDirectoryConfigsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeDirectoryConfigsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeDirectoryConfigsError {
+    fn from(err: serde_json::error::Error) -> DescribeDirectoryConfigsError {
+        DescribeDirectoryConfigsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeDirectoryConfigsError {
+    fn from(err: CredentialsError) -> DescribeDirectoryConfigsError {
+        DescribeDirectoryConfigsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeDirectoryConfigsError {
+    fn from(err: HttpDispatchError) -> DescribeDirectoryConfigsError {
+        DescribeDirectoryConfigsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDirectoryConfigsError {
+    fn from(err: io::Error) -> DescribeDirectoryConfigsError {
+        DescribeDirectoryConfigsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeDirectoryConfigsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDirectoryConfigsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDirectoryConfigsError::ResourceNotFound(ref cause) => cause,
+            DescribeDirectoryConfigsError::Validation(ref cause) => cause,
+            DescribeDirectoryConfigsError::Credentials(ref err) => err.description(),
+            DescribeDirectoryConfigsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeDirectoryConfigsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2147,6 +2556,97 @@ impl Error for StopFleetError {
         }
     }
 }
+/// Errors returned by UpdateDirectoryConfig
+#[derive(Debug, PartialEq)]
+pub enum UpdateDirectoryConfigError {
+    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    ConcurrentModification(String),
+    ///<p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    ///<p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl UpdateDirectoryConfigError {
+    pub fn from_body(body: &str) -> UpdateDirectoryConfigError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConcurrentModificationException" => UpdateDirectoryConfigError::ConcurrentModification(String::from(error_message)),
+                    "ResourceInUseException" => {
+                        UpdateDirectoryConfigError::ResourceInUse(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateDirectoryConfigError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateDirectoryConfigError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateDirectoryConfigError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateDirectoryConfigError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateDirectoryConfigError {
+    fn from(err: serde_json::error::Error) -> UpdateDirectoryConfigError {
+        UpdateDirectoryConfigError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateDirectoryConfigError {
+    fn from(err: CredentialsError) -> UpdateDirectoryConfigError {
+        UpdateDirectoryConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateDirectoryConfigError {
+    fn from(err: HttpDispatchError) -> UpdateDirectoryConfigError {
+        UpdateDirectoryConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateDirectoryConfigError {
+    fn from(err: io::Error) -> UpdateDirectoryConfigError {
+        UpdateDirectoryConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateDirectoryConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateDirectoryConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateDirectoryConfigError::ConcurrentModification(ref cause) => cause,
+            UpdateDirectoryConfigError::ResourceInUse(ref cause) => cause,
+            UpdateDirectoryConfigError::ResourceNotFound(ref cause) => cause,
+            UpdateDirectoryConfigError::Validation(ref cause) => cause,
+            UpdateDirectoryConfigError::Credentials(ref err) => err.description(),
+            UpdateDirectoryConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateDirectoryConfigError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateFleet
 #[derive(Debug, PartialEq)]
 pub enum UpdateFleetError {
@@ -2160,6 +2660,8 @@ pub enum UpdateFleetError {
     InvalidRole(String),
     ///<p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
+    ///<p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
     ///<p>The specified resource is in use.</p>
     ResourceInUse(String),
     ///<p>The specified resource exists and is not in use, but isn't available.</p>
@@ -2204,6 +2706,9 @@ impl UpdateFleetError {
                     }
                     "LimitExceededException" => {
                         UpdateFleetError::LimitExceeded(String::from(error_message))
+                    }
+                    "OperationNotPermittedException" => {
+                        UpdateFleetError::OperationNotPermitted(String::from(error_message))
                     }
                     "ResourceInUseException" => {
                         UpdateFleetError::ResourceInUse(String::from(error_message))
@@ -2258,6 +2763,7 @@ impl Error for UpdateFleetError {
             UpdateFleetError::InvalidParameterCombination(ref cause) => cause,
             UpdateFleetError::InvalidRole(ref cause) => cause,
             UpdateFleetError::LimitExceeded(ref cause) => cause,
+            UpdateFleetError::OperationNotPermitted(ref cause) => cause,
             UpdateFleetError::ResourceInUse(ref cause) => cause,
             UpdateFleetError::ResourceNotAvailable(ref cause) => cause,
             UpdateFleetError::ResourceNotFound(ref cause) => cause,
@@ -2385,6 +2891,13 @@ pub trait AppStream {
                        -> Result<AssociateFleetResult, AssociateFleetError>;
 
 
+    #[doc="<p>Creates a directory configuration with the given parameters.</p>"]
+    fn create_directory_config
+        (&self,
+         input: &CreateDirectoryConfigRequest)
+         -> Result<CreateDirectoryConfigResult, CreateDirectoryConfigError>;
+
+
     #[doc="<p>Creates a new fleet.</p>"]
     fn create_fleet(&self,
                     input: &CreateFleetRequest)
@@ -2403,6 +2916,13 @@ pub trait AppStream {
                             -> Result<CreateStreamingURLResult, CreateStreamingURLError>;
 
 
+    #[doc="<p>Deletes the directory configuration with the given parameters.</p>"]
+    fn delete_directory_config
+        (&self,
+         input: &DeleteDirectoryConfigRequest)
+         -> Result<DeleteDirectoryConfigResult, DeleteDirectoryConfigError>;
+
+
     #[doc="<p>Deletes a fleet.</p>"]
     fn delete_fleet(&self,
                     input: &DeleteFleetRequest)
@@ -2413,6 +2933,13 @@ pub trait AppStream {
     fn delete_stack(&self,
                     input: &DeleteStackRequest)
                     -> Result<DeleteStackResult, DeleteStackError>;
+
+
+    #[doc="<p>Returns a list describing the specified directory configurations.</p>"]
+    fn describe_directory_configs
+        (&self,
+         input: &DescribeDirectoryConfigsRequest)
+         -> Result<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError>;
 
 
     #[doc="<p>If fleet names are provided, this operation describes the specified fleets; otherwise, all the fleets in the account are described.</p>"]
@@ -2427,13 +2954,13 @@ pub trait AppStream {
                        -> Result<DescribeImagesResult, DescribeImagesError>;
 
 
-    #[doc="<p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. Pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>"]
+    #[doc="<p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. To retrieve the next set of items, pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>"]
     fn describe_sessions(&self,
                          input: &DescribeSessionsRequest)
                          -> Result<DescribeSessionsResult, DescribeSessionsError>;
 
 
-    #[doc="<p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. Pass the <code>nextToken</code> value in a subsequent call to this operation to retrieve the next set of items.</p>"]
+    #[doc="<p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. To retrieve the next set of items, pass the <code>nextToken</code> value in a subsequent call to this operation.</p>"]
     fn describe_stacks(&self,
                        input: &DescribeStacksRequest)
                        -> Result<DescribeStacksResult, DescribeStacksError>;
@@ -2469,6 +2996,13 @@ pub trait AppStream {
 
     #[doc="<p>Stops a fleet.</p>"]
     fn stop_fleet(&self, input: &StopFleetRequest) -> Result<StopFleetResult, StopFleetError>;
+
+
+    #[doc="<p>Updates the directory configuration with the given parameters.</p>"]
+    fn update_directory_config
+        (&self,
+         input: &UpdateDirectoryConfigRequest)
+         -> Result<UpdateDirectoryConfigResult, UpdateDirectoryConfigError>;
 
 
     #[doc="<p>Updates an existing fleet. All the attributes except the fleet name can be updated in the <b>STOPPED</b> state. When a fleet is in the <b>RUNNING</b> state, only <code>DisplayName</code> and <code>ComputeCapacity</code> can be updated. A fleet cannot be updated in a status of <b>STARTING</b> or <b>STOPPING</b>.</p>"]
@@ -2536,6 +3070,38 @@ impl<P, D> AppStream for AppStreamClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(AssociateFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Creates a directory configuration with the given parameters.</p>"]
+    fn create_directory_config
+        (&self,
+         input: &CreateDirectoryConfigRequest)
+         -> Result<CreateDirectoryConfigResult, CreateDirectoryConfigError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "PhotonAdminProxyService.CreateDirectoryConfig");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDirectoryConfigResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDirectoryConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -2637,6 +3203,38 @@ impl<P, D> AppStream for AppStreamClient<P, D>
     }
 
 
+    #[doc="<p>Deletes the directory configuration with the given parameters.</p>"]
+    fn delete_directory_config
+        (&self,
+         input: &DeleteDirectoryConfigRequest)
+         -> Result<DeleteDirectoryConfigResult, DeleteDirectoryConfigError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "PhotonAdminProxyService.DeleteDirectoryConfig");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDirectoryConfigResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDirectoryConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Deletes a fleet.</p>"]
     fn delete_fleet(&self,
                     input: &DeleteFleetRequest)
@@ -2696,6 +3294,39 @@ impl<P, D> AppStream for AppStreamClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Returns a list describing the specified directory configurations.</p>"]
+    fn describe_directory_configs
+        (&self,
+         input: &DescribeDirectoryConfigsRequest)
+         -> Result<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "PhotonAdminProxyService.DescribeDirectoryConfigs");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDirectoryConfigsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDirectoryConfigsError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
             }
         }
     }
@@ -2765,7 +3396,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
     }
 
 
-    #[doc="<p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. Pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>"]
+    #[doc="<p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. To retrieve the next set of items, pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>"]
     fn describe_sessions(&self,
                          input: &DescribeSessionsRequest)
                          -> Result<DescribeSessionsResult, DescribeSessionsError> {
@@ -2797,7 +3428,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
     }
 
 
-    #[doc="<p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. Pass the <code>nextToken</code> value in a subsequent call to this operation to retrieve the next set of items.</p>"]
+    #[doc="<p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. To retrieve the next set of items, pass the <code>nextToken</code> value in a subsequent call to this operation.</p>"]
     fn describe_stacks(&self,
                        input: &DescribeStacksRequest)
                        -> Result<DescribeStacksResult, DescribeStacksError> {
@@ -3009,6 +3640,38 @@ impl<P, D> AppStream for AppStreamClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(StopFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Updates the directory configuration with the given parameters.</p>"]
+    fn update_directory_config
+        (&self,
+         input: &UpdateDirectoryConfigRequest)
+         -> Result<UpdateDirectoryConfigResult, UpdateDirectoryConfigError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "PhotonAdminProxyService.UpdateDirectoryConfig");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateDirectoryConfigResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateDirectoryConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

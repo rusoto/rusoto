@@ -1878,7 +1878,7 @@ impl EnabledDeserializer {
 
     }
 }
-#[doc="<p>Contains information about the event destination to which the specified email sending events are published.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be either Amazon CloudWatch or Amazon Kinesis Firehose.</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch or Amazon Kinesis Firehose. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
+#[doc="<p>Contains information about the event destination to which the specified email sending events are published.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct EventDestination {
     #[doc="<p>An object that contains the names, default values, and sources of the dimensions associated with an Amazon CloudWatch event destination.</p>"]
@@ -1891,6 +1891,8 @@ pub struct EventDestination {
     pub matching_event_types: Vec<String>,
     #[doc="<p>The name of the event destination. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
     pub name: String,
+    #[doc="<p>An object that contains the topic ARN associated with an Amazon Simple Notification Service (Amazon SNS) event destination.</p>"]
+    pub sns_destination: Option<SNSDestination>,
 }
 
 struct EventDestinationDeserializer;
@@ -1935,6 +1937,11 @@ impl EventDestinationDeserializer {
                         "Name" => {
                             obj.name = try!(EventDestinationNameDeserializer::deserialize("Name",
                                                                                           stack));
+                        }
+                        "SNSDestination" => {
+                            obj.sns_destination =
+                                Some(try!(SNSDestinationDeserializer::deserialize("SNSDestination",
+                                                                                  stack)));
                         }
                         _ => skip_tree(stack),
                     }
@@ -1984,6 +1991,11 @@ impl EventDestinationSerializer {
                                         &format!("{}{}", prefix, "MatchingEventTypes"),
                                         &obj.matching_event_types);
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        if let Some(ref field_value) = obj.sns_destination {
+            SNSDestinationSerializer::serialize(params,
+                                                &format!("{}{}", prefix, "SNSDestination"),
+                                                field_value);
+        }
 
     }
 }
@@ -4021,7 +4033,7 @@ impl PutIdentityPolicyResponseDeserializer {
 #[doc="<p>Represents the raw data of the message.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct RawMessage {
-    #[doc="<p>The raw data of the message. The client must ensure that the message format complies with Internet email standards regarding email header fields, MIME types, MIME encoding, and base64 encoding.</p> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list.</p> <p>If you are using <code>SendRawEmail</code> with sending authorization, you can include X-headers in the raw message to specify the \"Source,\" \"From,\" and \"Return-Path\" addresses. For more information, see the documentation for <code>SendRawEmail</code>. </p> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html\">Amazon SES Developer Guide</a>. </p>"]
+    #[doc="<p>The raw data of the message. This data needs to base64-encoded if you are accessing Amazon SES directly through the HTTPS interface. If you are accessing Amazon SES using an AWS SDK, the SDK takes care of the base 64-encoding for you. In all cases, the client must ensure that the message format complies with Internet email standards regarding email header fields, MIME types, and MIME encoding.</p> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list.</p> <p>If you are using <code>SendRawEmail</code> with sending authorization, you can include X-headers in the raw message to specify the \"Source,\" \"From,\" and \"Return-Path\" addresses. For more information, see the documentation for <code>SendRawEmail</code>. </p> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html\">Amazon SES Developer Guide</a>. </p>"]
     pub data: Vec<u8>,
 }
 
@@ -5119,6 +5131,71 @@ impl SNSActionEncodingDeserializer {
 
     }
 }
+#[doc="<p>Contains the topic ARN associated with an Amazon Simple Notification Service (Amazon SNS) event destination.</p> <p>Event destinations, such as Amazon SNS, are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct SNSDestination {
+    #[doc="<p>The ARN of the Amazon SNS topic to which you want to publish email sending events. An example of an Amazon SNS topic ARN is arn:aws:sns:us-west-2:123456789012:MyTopic. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/http:/alpha-docs-aws.amazon.com/sns/latest/dg/CreateTopic.html\"> <i>Amazon SNS Developer Guide</i> </a>.</p>"]
+    pub topic_arn: String,
+}
+
+struct SNSDestinationDeserializer;
+impl SNSDestinationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SNSDestination, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = SNSDestination::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "TopicARN" => {
+                            obj.topic_arn =
+                                try!(AmazonResourceNameDeserializer::deserialize("TopicARN",
+                                                                                 stack));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+
+/// Serialize `SNSDestination` contents to a `SignedRequest`.
+struct SNSDestinationSerializer;
+impl SNSDestinationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SNSDestination) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "TopicARN"), &obj.topic_arn);
+
+    }
+}
+
 #[doc="<p>Represents a request to send a bounce message to the sender of an email you received through Amazon SES.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct SendBounceRequest {
@@ -5456,7 +5533,7 @@ pub struct SendRawEmailRequest {
     pub destinations: Option<Vec<String>>,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to specify a particular \"From\" address in the header of the raw email.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-FROM-ARN</code> in the raw message of the email. If you use both the <code>FromArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>FromArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html\">Amazon SES Developer Guide</a>.</p> </note>"]
     pub from_arn: Option<String>,
-    #[doc="<p>The raw text of the message. The client is responsible for ensuring the following:</p> <ul> <li> <p>Message must contain a header and a body, separated by a blank line.</p> </li> <li> <p>All required header fields must be present.</p> </li> <li> <p>Each part of a multipart MIME message must be formatted properly.</p> </li> <li> <p>MIME content types must be among those supported by Amazon SES. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>Must be base64-encoded.</p> </li> </ul>"]
+    #[doc="<p>The raw text of the message. The client is responsible for ensuring the following:</p> <ul> <li> <p>Message must contain a header and a body, separated by a blank line.</p> </li> <li> <p>All required header fields must be present.</p> </li> <li> <p>Each part of a multipart MIME message must be formatted properly.</p> </li> <li> <p>MIME content types must be among those supported by Amazon SES. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>Must be base64-encoded.</p> </li> <li> <p>Per <a href=\"https://tools.ietf.org/html/rfc5321#section-4.5.3.1.6\">RFC 5321</a>, the maximum length of each line of text, including the &lt;CRLF&gt;, must not exceed 1,000 characters.</p> </li> </ul>"]
     pub raw_message: RawMessage,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-RETURN-PATH-ARN</code> in the raw message of the email. If you use both the <code>ReturnPathArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>ReturnPathArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html\">Amazon SES Developer Guide</a>.</p> </note>"]
     pub return_path_arn: Option<String>,
@@ -6326,7 +6403,7 @@ impl VerifyDomainIdentityRequestSerializer {
 #[doc="<p>Returns a TXT record that you must publish to the DNS server of your domain to complete domain verification with Amazon SES.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct VerifyDomainIdentityResponse {
-    #[doc="<p>A TXT record that must be placed in the DNS settings for the domain, in order to complete domain verification.</p>"]
+    #[doc="<p>A TXT record that you must place in the DNS settings of the domain to complete domain verification with Amazon SES.</p> <p>As Amazon SES searches for the TXT record, the domain's verification status is \"Pending\". When Amazon SES detects the record, the domain's verification status changes to \"Success\". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to \"Failed.\" In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p>"]
     pub verification_token: String,
 }
 
@@ -6690,6 +6767,8 @@ pub enum CreateConfigurationSetEventDestinationError {
     InvalidCloudWatchDestination(String),
     ///<p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
     InvalidFirehoseDestination(String),
+    ///<p>Indicates that the Amazon Simple Notification Service (Amazon SNS) destination is invalid. See the error message for details.</p>
+    InvalidSNSDestination(String),
     ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -6716,6 +6795,7 @@ impl CreateConfigurationSetEventDestinationError {
                     "EventDestinationAlreadyExistsException" => CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(String::from(parsed_error.message)),
                     "InvalidCloudWatchDestinationException" => CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(String::from(parsed_error.message)),
                     "InvalidFirehoseDestinationException" => CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(String::from(parsed_error.message)),
+                    "InvalidSNSDestinationException" => CreateConfigurationSetEventDestinationError::InvalidSNSDestination(String::from(parsed_error.message)),
                     "LimitExceededException" => CreateConfigurationSetEventDestinationError::LimitExceeded(String::from(parsed_error.message)),
                     _ => CreateConfigurationSetEventDestinationError::Unknown(String::from(body)),
                 }
@@ -6760,6 +6840,7 @@ impl Error for CreateConfigurationSetEventDestinationError {
             CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(ref cause) => {
                 cause
             }
+            CreateConfigurationSetEventDestinationError::InvalidSNSDestination(ref cause) => cause,
             CreateConfigurationSetEventDestinationError::LimitExceeded(ref cause) => cause,
             CreateConfigurationSetEventDestinationError::Validation(ref cause) => cause,
             CreateConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),
@@ -9689,6 +9770,8 @@ pub enum UpdateConfigurationSetEventDestinationError {
     InvalidCloudWatchDestination(String),
     ///<p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
     InvalidFirehoseDestination(String),
+    ///<p>Indicates that the Amazon Simple Notification Service (Amazon SNS) destination is invalid. See the error message for details.</p>
+    InvalidSNSDestination(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -9713,6 +9796,7 @@ impl UpdateConfigurationSetEventDestinationError {
                     "EventDestinationDoesNotExistException" => UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(String::from(parsed_error.message)),
                     "InvalidCloudWatchDestinationException" => UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(String::from(parsed_error.message)),
                     "InvalidFirehoseDestinationException" => UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(String::from(parsed_error.message)),
+                    "InvalidSNSDestinationException" => UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(String::from(parsed_error.message)),
                     _ => UpdateConfigurationSetEventDestinationError::Unknown(String::from(body)),
                 }
             }
@@ -9756,6 +9840,7 @@ impl Error for UpdateConfigurationSetEventDestinationError {
             UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(ref cause) => {
                 cause
             }
+            UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(ref cause) => cause,
             UpdateConfigurationSetEventDestinationError::Validation(ref cause) => cause,
             UpdateConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),
             UpdateConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => {
@@ -10153,7 +10238,7 @@ pub trait Ses {
          -> Result<CreateConfigurationSetResponse, CreateConfigurationSetError>;
 
 
-    #[doc="<p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be either Amazon CloudWatch or Amazon Kinesis Firehose.</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    #[doc="<p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
     fn create_configuration_set_event_destination(&self, input: &CreateConfigurationSetEventDestinationRequest) -> Result<CreateConfigurationSetEventDestinationResponse, CreateConfigurationSetEventDestinationError>;
 
 
@@ -10281,7 +10366,7 @@ pub trait Ses {
                              -> Result<GetIdentityPoliciesResponse, GetIdentityPoliciesError>;
 
 
-    #[doc="<p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>"]
+    #[doc="<p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is \"Pending\" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to \"Success\". If the link is not clicked within 24 hours, the verification status changes to \"Failed.\" In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is \"Pending\" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to \"Success\". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to \"Failed.\" In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>"]
     fn get_identity_verification_attributes
         (&self,
          input: &GetIdentityVerificationAttributesRequest)
@@ -10354,11 +10439,11 @@ pub trait Ses {
                    -> Result<SendBounceResponse, SendBounceError>;
 
 
-    #[doc="<p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
+    #[doc="<p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
     fn send_email(&self, input: &SendEmailRequest) -> Result<SendEmailResponse, SendEmailError>;
 
 
-    #[doc="<p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email's \"Source,\" \"From,\" and \"Return-Path\" parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the \"From\" address and the \"Return Path\" address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
+    #[doc="<p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email's \"Source,\" \"From,\" and \"Return-Path\" parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the \"From\" address and the \"Return Path\" address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
     fn send_raw_email(&self,
                       input: &SendRawEmailRequest)
                       -> Result<SendRawEmailResponse, SendRawEmailError>;
@@ -10407,7 +10492,7 @@ pub trait Ses {
          -> Result<SetReceiptRulePositionResponse, SetReceiptRulePositionError>;
 
 
-    #[doc="<p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be either Amazon CloudWatch or Amazon Kinesis Firehose.</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch or Amazon Kinesis Firehose. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    #[doc="<p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
     fn update_configuration_set_event_destination(&self, input: &UpdateConfigurationSetEventDestinationRequest) -> Result<UpdateConfigurationSetEventDestinationResponse, UpdateConfigurationSetEventDestinationError>;
 
 
@@ -10564,7 +10649,7 @@ impl<P, D> Ses for SesClient<P, D>
     }
 
 
-    #[doc="<p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be either Amazon CloudWatch or Amazon Kinesis Firehose.</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    #[doc="<p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
 fn create_configuration_set_event_destination(&self, input: &CreateConfigurationSetEventDestinationRequest) -> Result<CreateConfigurationSetEventDestinationResponse, CreateConfigurationSetEventDestinationError>{
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -11497,7 +11582,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
     }
 
 
-    #[doc="<p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>"]
+    #[doc="<p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is \"Pending\" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to \"Success\". If the link is not clicked within 24 hours, the verification status changes to \"Failed.\" In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is \"Pending\" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to \"Success\". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to \"Failed.\" In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>"]
     fn get_identity_verification_attributes
         (&self,
          input: &GetIdentityVerificationAttributesRequest)
@@ -12064,7 +12149,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
     }
 
 
-    #[doc="<p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
+    #[doc="<p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
     fn send_email(&self, input: &SendEmailRequest) -> Result<SendEmailResponse, SendEmailError> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -12109,7 +12194,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
     }
 
 
-    #[doc="<p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email's \"Source,\" \"From,\" and \"Return-Path\" parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the \"From\" address and the \"Return Path\" address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
+    #[doc="<p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email's \"Source,\" \"From,\" and \"Return-Path\" parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the \"From\" address and the \"Return Path\" address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
     fn send_raw_email(&self,
                       input: &SendRawEmailRequest)
                       -> Result<SendRawEmailResponse, SendRawEmailError> {
@@ -12490,7 +12575,7 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
     }
 
 
-    #[doc="<p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be either Amazon CloudWatch or Amazon Kinesis Firehose.</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch or Amazon Kinesis Firehose. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    #[doc="<p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
 fn update_configuration_set_event_destination(&self, input: &UpdateConfigurationSetEventDestinationRequest) -> Result<UpdateConfigurationSetEventDestinationResponse, UpdateConfigurationSetEventDestinationError>{
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();

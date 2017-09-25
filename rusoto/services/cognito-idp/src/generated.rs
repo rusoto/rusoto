@@ -126,7 +126,7 @@ pub struct AdminCreateUserRequest {
 #[doc="<p>Represents the response from the server to the request to create the user.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AdminCreateUserResponse {
-    #[doc="<p>The user returned in the request to create a new user.</p>"]
+    #[doc="<p>The newly created user.</p>"]
     #[serde(rename="User")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub user: Option<UserType>,
@@ -160,6 +160,19 @@ pub struct AdminDeleteUserRequest {
     #[serde(rename="Username")]
     pub username: String,
 }
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct AdminDisableProviderForUserRequest {
+    #[doc="<p>The user to be disabled.</p>"]
+    #[serde(rename="User")]
+    pub user: ProviderUserIdentifierType,
+    #[doc="<p>The user pool ID for the user pool.</p>"]
+    #[serde(rename="UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct AdminDisableProviderForUserResponse;
 
 #[doc="<p>Represents the request to disable any user as an administrator.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -273,10 +286,10 @@ pub struct AdminGetUserResponse {
 #[doc="<p>Initiates the authorization request, as an administrator.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AdminInitiateAuthRequest {
-    #[doc="<p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRPA</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> </ul>"]
+    #[doc="<p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> </ul>"]
     #[serde(rename="AuthFlow")]
     pub auth_flow: String,
-    #[doc="<p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRPA</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>REFRESH_TOKEN</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>ADMIN_NO_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul>"]
+    #[doc="<p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRP_A</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>REFRESH_TOKEN</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>ADMIN_NO_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul>"]
     #[serde(rename="AuthParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub auth_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -312,6 +325,22 @@ pub struct AdminInitiateAuthResponse {
     #[serde(skip_serializing_if="Option::is_none")]
     pub session: Option<String>,
 }
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct AdminLinkProviderForUserRequest {
+    #[doc="<p>The existing user in the user pool to be linked to the external identity provider user account. Can be a native (Username + Password) Cognito User Pools user or a federated user (for example, a SAML or Facebook user). If the user doesn't exist, an exception is thrown. This is the user that is returned when the new user (with the linked identity provider attribute) signs in.</p> <p>The <code>ProviderAttributeValue</code> for the <code>DestinationUser</code> must match the username for the user in the user pool. The <code>ProviderAttributeName</code> will always be ignored.</p>"]
+    #[serde(rename="DestinationUser")]
+    pub destination_user: ProviderUserIdentifierType,
+    #[doc="<p>An external identity provider account for a user who does not currently exist yet in the user pool. This user must be a federated user (for example, a SAML or Facebook user), not another native user.</p> <p>If the <code>SourceUser</code> is a federated social identity provider user (Facebook, Google, or Login with Amazon), you must set the <code>ProviderAttributeName</code> to <code>Cognito_Subject</code>. For social identity providers, the <code>ProviderName</code> will be <code>Facebook</code>, <code>Google</code>, or <code>LoginWithAmazon</code>, and Cognito will automatically parse the Facebook, Google, and Login with Amazon tokens for <code>id</code>, <code>sub</code>, and <code>user_id</code>, respectively. The <code>ProviderAttributeValue</code> for the user must be the same value as the <code>id</code>, <code>sub</code>, or <code>user_id</code> value found in the social identity provider token.</p> <p/> <p>For SAML, the <code>ProviderAttributeName</code> can be any value that matches a claim in the SAML assertion. If you wish to link SAML users based on the subject of the SAML assertion, you should map the subject to a claim through the SAML identity provider and submit that claim name as the <code>ProviderAttributeName</code>. If you set <code>ProviderAttributeName</code> to <code>Cognito_Subject</code>, Cognito will automatically parse the default unique identifier found in the subject from the SAML token.</p>"]
+    #[serde(rename="SourceUser")]
+    pub source_user: ProviderUserIdentifierType,
+    #[doc="<p>The user pool ID for the user pool.</p>"]
+    #[serde(rename="UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct AdminLinkProviderForUserResponse;
 
 #[doc="<p>Represents the request to list devices, as an administrator.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -626,7 +655,7 @@ pub struct ConfirmDeviceResponse {
 #[doc="<p>The request representing the confirmation for a password reset.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ConfirmForgotPasswordRequest {
-    #[doc="<p>The ID of the client associated with the user pool.</p>"]
+    #[doc="<p>The app client ID of the app associated with the user pool.</p>"]
     #[serde(rename="ClientId")]
     pub client_id: String,
     #[doc="<p>The confirmation code sent by a user's request to retrieve a forgotten password. For more information, see <a href=\"API_ForgotPassword.html\">ForgotPassword</a> </p>"]
@@ -651,7 +680,7 @@ pub struct ConfirmForgotPasswordResponse;
 #[doc="<p>Represents the request to confirm registration of a user.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ConfirmSignUpRequest {
-    #[doc="<p>The ID of the client associated with the user pool.</p>"]
+    #[doc="<p>The ID of the app client associated with the user pool.</p>"]
     #[serde(rename="ClientId")]
     pub client_id: String,
     #[doc="<p>The confirmation code sent by a user's request to confirm registration.</p>"]
@@ -733,6 +762,30 @@ pub struct CreateIdentityProviderResponse {
     #[doc="<p>The newly created identity provider object.</p>"]
     #[serde(rename="IdentityProvider")]
     pub identity_provider: IdentityProviderType,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct CreateResourceServerRequest {
+    #[doc="<p>A unique resource server identifier for the resource server. This could be an HTTPS endpoint where the resource server is located. For example, <code>https://my-weather-api.example.com</code>.</p>"]
+    #[serde(rename="Identifier")]
+    pub identifier: String,
+    #[doc="<p>A friendly name for the resource server.</p>"]
+    #[serde(rename="Name")]
+    pub name: String,
+    #[doc="<p>A list of scopes. Each scope is map, where the keys are <code>name</code> and <code>description</code>.</p>"]
+    #[serde(rename="Scopes")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub scopes: Option<Vec<ResourceServerScopeType>>,
+    #[doc="<p>The user pool ID for the user pool.</p>"]
+    #[serde(rename="UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct CreateResourceServerResponse {
+    #[doc="<p>The newly created resource server.</p>"]
+    #[serde(rename="ResourceServer")]
+    pub resource_server: ResourceServerType,
 }
 
 #[doc="<p>Represents the request to create the user import job.</p>"]
@@ -905,6 +958,14 @@ pub struct CreateUserPoolRequest {
     #[serde(rename="UserPoolTags")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub user_pool_tags: Option<::std::collections::HashMap<String, String>>,
+    #[doc="<p>Specifies whether email addresses or phone numbers can be specified as usernames when a user signs up.</p>"]
+    #[serde(rename="UsernameAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub username_attributes: Option<Vec<String>>,
+    #[doc="<p>The template for the verification message that the user sees when the app requests permission to access the user's information.</p>"]
+    #[serde(rename="VerificationMessageTemplate")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub verification_message_template: Option<VerificationMessageTemplateType>,
 }
 
 #[doc="<p>Represents the response from the server for the request to create a user pool.</p>"]
@@ -936,6 +997,16 @@ pub struct DeleteIdentityProviderRequest {
     pub user_pool_id: String,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DeleteResourceServerRequest {
+    #[doc="<p>The identifier for the resource server.</p>"]
+    #[serde(rename="Identifier")]
+    pub identifier: String,
+    #[doc="<p>The user pool ID for the user pool that hosts the resource server.</p>"]
+    #[serde(rename="UserPoolId")]
+    pub user_pool_id: String,
+}
+
 #[doc="<p>Represents the request to delete user attributes.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteUserAttributesRequest {
@@ -954,7 +1025,7 @@ pub struct DeleteUserAttributesResponse;
 #[doc="<p>Represents the request to delete a user pool client.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteUserPoolClientRequest {
-    #[doc="<p>The ID of the client associated with the user pool.</p>"]
+    #[doc="<p>The app client ID of the app associated with the user pool.</p>"]
     #[serde(rename="ClientId")]
     pub client_id: String,
     #[doc="<p>The user pool ID for the user pool where you want to delete the client.</p>"]
@@ -1008,6 +1079,23 @@ pub struct DescribeIdentityProviderResponse {
     pub identity_provider: IdentityProviderType,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DescribeResourceServerRequest {
+    #[doc="<p>The identifier for the resource server</p>"]
+    #[serde(rename="Identifier")]
+    pub identifier: String,
+    #[doc="<p>The user pool ID for the user pool that hosts the resource server.</p>"]
+    #[serde(rename="UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DescribeResourceServerResponse {
+    #[doc="<p>The resource server.</p>"]
+    #[serde(rename="ResourceServer")]
+    pub resource_server: ResourceServerType,
+}
+
 #[doc="<p>Represents the request to describe the user import job.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeUserImportJobRequest {
@@ -1031,7 +1119,7 @@ pub struct DescribeUserImportJobResponse {
 #[doc="<p>Represents the request to describe a user pool client.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeUserPoolClientRequest {
-    #[doc="<p>The ID of the client associated with the user pool.</p>"]
+    #[doc="<p>The app client ID of the app associated with the user pool.</p>"]
     #[serde(rename="ClientId")]
     pub client_id: String,
     #[doc="<p>The user pool ID for the user pool you want to describe.</p>"]
@@ -1289,6 +1377,24 @@ pub struct GetIdentityProviderByIdentifierResponse {
     pub identity_provider: IdentityProviderType,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetUICustomizationRequest {
+    #[doc="<p>The client ID for the client app.</p>"]
+    #[serde(rename="ClientId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub client_id: Option<String>,
+    #[doc="<p>The user pool ID for the user pool.</p>"]
+    #[serde(rename="UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GetUICustomizationResponse {
+    #[doc="<p>The UI customization information.</p>"]
+    #[serde(rename="UICustomization")]
+    pub ui_customization: UICustomizationType,
+}
+
 #[doc="<p>Represents the request to get user attribute verification.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetUserAttributeVerificationCodeRequest {
@@ -1417,10 +1523,10 @@ pub struct IdentityProviderType {
 #[doc="<p>Initiates the authentication request.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct InitiateAuthRequest {
-    #[doc="<p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in USERNAME and SRPA and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>"]
+    #[doc="<p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>"]
     #[serde(rename="AuthFlow")]
     pub auth_flow: String,
-    #[doc="<p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRPA</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>REFRESH_TOKEN</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul>"]
+    #[doc="<p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRP_A</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>REFRESH_TOKEN</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul>"]
     #[serde(rename="AuthParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub auth_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1571,6 +1677,32 @@ pub struct ListIdentityProvidersResponse {
     #[doc="<p>A list of identity provider objects.</p>"]
     #[serde(rename="Providers")]
     pub providers: Vec<ProviderDescription>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListResourceServersRequest {
+    #[doc="<p>The maximum number of resource servers to return.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_results: Option<i64>,
+    #[doc="<p>A pagination token.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+    #[doc="<p>The user pool ID for the user pool.</p>"]
+    #[serde(rename="UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListResourceServersResponse {
+    #[doc="<p>A pagination token.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+    #[doc="<p>The resource servers.</p>"]
+    #[serde(rename="ResourceServers")]
+    pub resource_servers: Vec<ResourceServerType>,
 }
 
 #[doc="<p>Represents the request to list the user import jobs.</p>"]
@@ -1824,6 +1956,23 @@ pub struct ProviderDescription {
     pub provider_type: Option<String>,
 }
 
+#[doc="<p>A container for information about an identity provider for a user pool.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ProviderUserIdentifierType {
+    #[doc="<p>The name of the provider attribute to link to, for example, <code>NameID</code>.</p>"]
+    #[serde(rename="ProviderAttributeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub provider_attribute_name: Option<String>,
+    #[doc="<p>The value of the provider attribute to link to, for example, <code>xxxxx_account</code>.</p>"]
+    #[serde(rename="ProviderAttributeValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub provider_attribute_value: Option<String>,
+    #[doc="<p>The name of the provider, for example, Facebook, Google, or Login with Amazon.</p>"]
+    #[serde(rename="ProviderName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub provider_name: Option<String>,
+}
+
 #[doc="<p>Represents the request to resend the confirmation code.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ResendConfirmationCodeRequest {
@@ -1846,6 +1995,38 @@ pub struct ResendConfirmationCodeResponse {
     #[serde(rename="CodeDeliveryDetails")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub code_delivery_details: Option<CodeDeliveryDetailsType>,
+}
+
+#[doc="<p>A resource server scope.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct ResourceServerScopeType {
+    #[doc="<p>A description of the scope.</p>"]
+    #[serde(rename="ScopeDescription")]
+    pub scope_description: String,
+    #[doc="<p>The name of the scope.</p>"]
+    #[serde(rename="ScopeName")]
+    pub scope_name: String,
+}
+
+#[doc="<p>A container for information about a resource server for a user pool.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ResourceServerType {
+    #[doc="<p>The identifier for the resource server.</p>"]
+    #[serde(rename="Identifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub identifier: Option<String>,
+    #[doc="<p>The name of the resource server.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>A list of scopes that are defined for the resource server.</p>"]
+    #[serde(rename="Scopes")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub scopes: Option<Vec<ResourceServerScopeType>>,
+    #[doc="<p>The user pool ID for the user pool that hosts the resource server.</p>"]
+    #[serde(rename="UserPoolId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub user_pool_id: Option<String>,
 }
 
 #[doc="<p>The request to respond to an authentication challenge.</p>"]
@@ -1919,6 +2100,36 @@ pub struct SchemaAttributeType {
     #[serde(rename="StringAttributeConstraints")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub string_attribute_constraints: Option<StringAttributeConstraintsType>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct SetUICustomizationRequest {
+    #[doc="<p>The CSS values in the UI customization.</p>"]
+    #[serde(rename="CSS")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub css: Option<String>,
+    #[doc="<p>The client ID for the client app.</p>"]
+    #[serde(rename="ClientId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub client_id: Option<String>,
+    #[doc="<p>The uploaded logo image for the UI customization.</p>"]
+    #[serde(rename="ImageFile")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
+    pub image_file: Option<Vec<u8>>,
+    #[doc="<p>The user pool ID for the user pool.</p>"]
+    #[serde(rename="UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct SetUICustomizationResponse {
+    #[doc="<p>The UI customization information.</p>"]
+    #[serde(rename="UICustomization")]
+    pub ui_customization: UICustomizationType,
 }
 
 #[doc="<p>Represents the request to set user settings.</p>"]
@@ -2042,6 +2253,39 @@ pub struct StringAttributeConstraintsType {
     pub min_length: Option<String>,
 }
 
+#[doc="<p>A container for the UI customization information for a user pool's built-in app UI.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct UICustomizationType {
+    #[doc="<p>The CSS values in the UI customization.</p>"]
+    #[serde(rename="CSS")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub css: Option<String>,
+    #[doc="<p>The CSS version number.</p>"]
+    #[serde(rename="CSSVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub css_version: Option<String>,
+    #[doc="<p>The client ID for the client app.</p>"]
+    #[serde(rename="ClientId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub client_id: Option<String>,
+    #[doc="<p>The creation date for the UI customization.</p>"]
+    #[serde(rename="CreationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub creation_date: Option<f64>,
+    #[doc="<p>The logo image for the UI customization.</p>"]
+    #[serde(rename="ImageUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub image_url: Option<String>,
+    #[doc="<p>The last-modified date for the UI customization.</p>"]
+    #[serde(rename="LastModifiedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    #[doc="<p>The user pool ID for the user pool.</p>"]
+    #[serde(rename="UserPoolId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub user_pool_id: Option<String>,
+}
+
 #[doc="<p>Represents the request to update the device status.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateDeviceStatusRequest {
@@ -2120,6 +2364,30 @@ pub struct UpdateIdentityProviderResponse {
     pub identity_provider: IdentityProviderType,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct UpdateResourceServerRequest {
+    #[doc="<p>The identifier for the resource server.</p>"]
+    #[serde(rename="Identifier")]
+    pub identifier: String,
+    #[doc="<p>The name of the resource server.</p>"]
+    #[serde(rename="Name")]
+    pub name: String,
+    #[doc="<p>The scope values to be set for the resource server.</p>"]
+    #[serde(rename="Scopes")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub scopes: Option<Vec<ResourceServerScopeType>>,
+    #[doc="<p>The user pool ID for the user pool.</p>"]
+    #[serde(rename="UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct UpdateResourceServerResponse {
+    #[doc="<p>The resource server.</p>"]
+    #[serde(rename="ResourceServer")]
+    pub resource_server: ResourceServerType,
+}
+
 #[doc="<p>Represents the request to update user attributes.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateUserAttributesRequest {
@@ -2174,7 +2442,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename="ExplicitAuthFlows")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub explicit_auth_flows: Option<Vec<String>>,
-    #[doc="<p>A list ofallowed logout URLs for the identity providers.</p>"]
+    #[doc="<p>A list of allowed logout URLs for the identity providers.</p>"]
     #[serde(rename="LogoutURLs")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
@@ -2266,6 +2534,10 @@ pub struct UpdateUserPoolRequest {
     #[serde(rename="UserPoolTags")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub user_pool_tags: Option<::std::collections::HashMap<String, String>>,
+    #[doc="<p>The template for verification messages.</p>"]
+    #[serde(rename="VerificationMessageTemplate")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub verification_message_template: Option<VerificationMessageTemplateType>,
 }
 
 #[doc="<p>Represents the response from the server when you make a request to update the user pool.</p>"]
@@ -2346,7 +2618,7 @@ pub struct UserPoolClientDescription {
     pub user_pool_id: Option<String>,
 }
 
-#[doc="<p>A user pool of the client type.</p>"]
+#[doc="<p>Contains information about a user pool client.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UserPoolClientType {
     #[doc="<p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>"]
@@ -2393,7 +2665,7 @@ pub struct UserPoolClientType {
     #[serde(rename="LastModifiedDate")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>A list ofallowed logout URLs for the identity providers.</p>"]
+    #[doc="<p>A list of allowed logout URLs for the identity providers.</p>"]
     #[serde(rename="LogoutURLs")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
@@ -2552,6 +2824,14 @@ pub struct UserPoolType {
     #[serde(rename="UserPoolTags")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub user_pool_tags: Option<::std::collections::HashMap<String, String>>,
+    #[doc="<p>Specifies whether email addresses or phone numbers can be specified as usernames when a user signs up.</p>"]
+    #[serde(rename="UsernameAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub username_attributes: Option<Vec<String>>,
+    #[doc="<p>The template for verification messages.</p>"]
+    #[serde(rename="VerificationMessageTemplate")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub verification_message_template: Option<VerificationMessageTemplateType>,
 }
 
 #[doc="<p>The user type.</p>"]
@@ -2585,6 +2865,35 @@ pub struct UserType {
     #[serde(rename="Username")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub username: Option<String>,
+}
+
+#[doc="<p>The template for verification messages.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct VerificationMessageTemplateType {
+    #[doc="<p>The default email option.</p>"]
+    #[serde(rename="DefaultEmailOption")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub default_email_option: Option<String>,
+    #[doc="<p>The email message template.</p>"]
+    #[serde(rename="EmailMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub email_message: Option<String>,
+    #[doc="<p>The email message template for sending a confirmation link to the user.</p>"]
+    #[serde(rename="EmailMessageByLink")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub email_message_by_link: Option<String>,
+    #[doc="<p>The subject line for the email message template.</p>"]
+    #[serde(rename="EmailSubject")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub email_subject: Option<String>,
+    #[doc="<p>The subject line for the email message template for sending a confirmation link to the user.</p>"]
+    #[serde(rename="EmailSubjectByLink")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub email_subject_by_link: Option<String>,
+    #[doc="<p>The SMS message template.</p>"]
+    #[serde(rename="SmsMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub sms_message: Option<String>,
 }
 
 #[doc="<p>Represents the request to verify user attributes.</p>"]
@@ -3349,6 +3658,117 @@ impl Error for AdminDeleteUserAttributesError {
         }
     }
 }
+/// Errors returned by AdminDisableProviderForUser
+#[derive(Debug, PartialEq)]
+pub enum AdminDisableProviderForUserError {
+    ///<p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
+    AliasExists(String),
+    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    ///<p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    ///<p>This exception is thrown when a user is not found.</p>
+    UserNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl AdminDisableProviderForUserError {
+    pub fn from_body(body: &str) -> AdminDisableProviderForUserError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AliasExistsException" => {
+                        AdminDisableProviderForUserError::AliasExists(String::from(error_message))
+                    }
+                    "InternalErrorException" => {
+                        AdminDisableProviderForUserError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => AdminDisableProviderForUserError::InvalidParameter(String::from(error_message)),
+                    "NotAuthorizedException" => {
+                        AdminDisableProviderForUserError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => AdminDisableProviderForUserError::ResourceNotFound(String::from(error_message)),
+                    "TooManyRequestsException" => AdminDisableProviderForUserError::TooManyRequests(String::from(error_message)),
+                    "UserNotFoundException" => {
+                        AdminDisableProviderForUserError::UserNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AdminDisableProviderForUserError::Validation(error_message.to_string())
+                    }
+                    _ => AdminDisableProviderForUserError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AdminDisableProviderForUserError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AdminDisableProviderForUserError {
+    fn from(err: serde_json::error::Error) -> AdminDisableProviderForUserError {
+        AdminDisableProviderForUserError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AdminDisableProviderForUserError {
+    fn from(err: CredentialsError) -> AdminDisableProviderForUserError {
+        AdminDisableProviderForUserError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AdminDisableProviderForUserError {
+    fn from(err: HttpDispatchError) -> AdminDisableProviderForUserError {
+        AdminDisableProviderForUserError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AdminDisableProviderForUserError {
+    fn from(err: io::Error) -> AdminDisableProviderForUserError {
+        AdminDisableProviderForUserError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AdminDisableProviderForUserError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AdminDisableProviderForUserError {
+    fn description(&self) -> &str {
+        match *self {
+            AdminDisableProviderForUserError::AliasExists(ref cause) => cause,
+            AdminDisableProviderForUserError::InternalError(ref cause) => cause,
+            AdminDisableProviderForUserError::InvalidParameter(ref cause) => cause,
+            AdminDisableProviderForUserError::NotAuthorized(ref cause) => cause,
+            AdminDisableProviderForUserError::ResourceNotFound(ref cause) => cause,
+            AdminDisableProviderForUserError::TooManyRequests(ref cause) => cause,
+            AdminDisableProviderForUserError::UserNotFound(ref cause) => cause,
+            AdminDisableProviderForUserError::Validation(ref cause) => cause,
+            AdminDisableProviderForUserError::Credentials(ref err) => err.description(),
+            AdminDisableProviderForUserError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AdminDisableProviderForUserError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by AdminDisableUser
 #[derive(Debug, PartialEq)]
 pub enum AdminDisableUserError {
@@ -4057,6 +4477,123 @@ impl Error for AdminInitiateAuthError {
         }
     }
 }
+/// Errors returned by AdminLinkProviderForUser
+#[derive(Debug, PartialEq)]
+pub enum AdminLinkProviderForUserError {
+    ///<p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
+    AliasExists(String),
+    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    ///<p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    ///<p>This exception is thrown when a user is not found.</p>
+    UserNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl AdminLinkProviderForUserError {
+    pub fn from_body(body: &str) -> AdminLinkProviderForUserError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AliasExistsException" => {
+                        AdminLinkProviderForUserError::AliasExists(String::from(error_message))
+                    }
+                    "InternalErrorException" => {
+                        AdminLinkProviderForUserError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        AdminLinkProviderForUserError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        AdminLinkProviderForUserError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AdminLinkProviderForUserError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        AdminLinkProviderForUserError::TooManyRequests(String::from(error_message))
+                    }
+                    "UserNotFoundException" => {
+                        AdminLinkProviderForUserError::UserNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AdminLinkProviderForUserError::Validation(error_message.to_string())
+                    }
+                    _ => AdminLinkProviderForUserError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AdminLinkProviderForUserError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AdminLinkProviderForUserError {
+    fn from(err: serde_json::error::Error) -> AdminLinkProviderForUserError {
+        AdminLinkProviderForUserError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AdminLinkProviderForUserError {
+    fn from(err: CredentialsError) -> AdminLinkProviderForUserError {
+        AdminLinkProviderForUserError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AdminLinkProviderForUserError {
+    fn from(err: HttpDispatchError) -> AdminLinkProviderForUserError {
+        AdminLinkProviderForUserError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AdminLinkProviderForUserError {
+    fn from(err: io::Error) -> AdminLinkProviderForUserError {
+        AdminLinkProviderForUserError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AdminLinkProviderForUserError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AdminLinkProviderForUserError {
+    fn description(&self) -> &str {
+        match *self {
+            AdminLinkProviderForUserError::AliasExists(ref cause) => cause,
+            AdminLinkProviderForUserError::InternalError(ref cause) => cause,
+            AdminLinkProviderForUserError::InvalidParameter(ref cause) => cause,
+            AdminLinkProviderForUserError::NotAuthorized(ref cause) => cause,
+            AdminLinkProviderForUserError::ResourceNotFound(ref cause) => cause,
+            AdminLinkProviderForUserError::TooManyRequests(ref cause) => cause,
+            AdminLinkProviderForUserError::UserNotFound(ref cause) => cause,
+            AdminLinkProviderForUserError::Validation(ref cause) => cause,
+            AdminLinkProviderForUserError::Credentials(ref err) => err.description(),
+            AdminLinkProviderForUserError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AdminLinkProviderForUserError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by AdminListDevices
 #[derive(Debug, PartialEq)]
 pub enum AdminListDevicesError {
@@ -4391,10 +4928,16 @@ impl Error for AdminRemoveUserFromGroupError {
 pub enum AdminResetUserPasswordError {
     ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
+    ///<p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    InvalidEmailRoleAccessPolicy(String),
     ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
     ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
+    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    InvalidSmsRoleAccessPolicy(String),
+    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    InvalidSmsRoleTrustRelationship(String),
     ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
     ///<p>This exception is thrown when a user is not authorized.</p>
@@ -4436,10 +4979,13 @@ impl AdminResetUserPasswordError {
                     "InternalErrorException" => {
                         AdminResetUserPasswordError::InternalError(String::from(error_message))
                     }
+                    "InvalidEmailRoleAccessPolicyException" => AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(String::from(error_message)),
                     "InvalidLambdaResponseException" => AdminResetUserPasswordError::InvalidLambdaResponse(String::from(error_message)),
                     "InvalidParameterException" => {
                         AdminResetUserPasswordError::InvalidParameter(String::from(error_message))
                     }
+                    "InvalidSmsRoleAccessPolicyException" => AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(String::from(error_message)),
+                    "InvalidSmsRoleTrustRelationshipException" => AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
                     "LimitExceededException" => {
                         AdminResetUserPasswordError::LimitExceeded(String::from(error_message))
                     }
@@ -4499,8 +5045,11 @@ impl Error for AdminResetUserPasswordError {
     fn description(&self) -> &str {
         match *self {
             AdminResetUserPasswordError::InternalError(ref cause) => cause,
+            AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
             AdminResetUserPasswordError::InvalidLambdaResponse(ref cause) => cause,
             AdminResetUserPasswordError::InvalidParameter(ref cause) => cause,
+            AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
+            AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
             AdminResetUserPasswordError::LimitExceeded(ref cause) => cause,
             AdminResetUserPasswordError::NotAuthorized(ref cause) => cause,
             AdminResetUserPasswordError::ResourceNotFound(ref cause) => cause,
@@ -5960,6 +6509,117 @@ impl Error for CreateIdentityProviderError {
         }
     }
 }
+/// Errors returned by CreateResourceServer
+#[derive(Debug, PartialEq)]
+pub enum CreateResourceServerError {
+    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    LimitExceeded(String),
+    ///<p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl CreateResourceServerError {
+    pub fn from_body(body: &str) -> CreateResourceServerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        CreateResourceServerError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        CreateResourceServerError::InvalidParameter(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateResourceServerError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        CreateResourceServerError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CreateResourceServerError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        CreateResourceServerError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateResourceServerError::Validation(error_message.to_string())
+                    }
+                    _ => CreateResourceServerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateResourceServerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateResourceServerError {
+    fn from(err: serde_json::error::Error) -> CreateResourceServerError {
+        CreateResourceServerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateResourceServerError {
+    fn from(err: CredentialsError) -> CreateResourceServerError {
+        CreateResourceServerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateResourceServerError {
+    fn from(err: HttpDispatchError) -> CreateResourceServerError {
+        CreateResourceServerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateResourceServerError {
+    fn from(err: io::Error) -> CreateResourceServerError {
+        CreateResourceServerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateResourceServerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateResourceServerError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateResourceServerError::InternalError(ref cause) => cause,
+            CreateResourceServerError::InvalidParameter(ref cause) => cause,
+            CreateResourceServerError::LimitExceeded(ref cause) => cause,
+            CreateResourceServerError::NotAuthorized(ref cause) => cause,
+            CreateResourceServerError::ResourceNotFound(ref cause) => cause,
+            CreateResourceServerError::TooManyRequests(ref cause) => cause,
+            CreateResourceServerError::Validation(ref cause) => cause,
+            CreateResourceServerError::Credentials(ref err) => err.description(),
+            CreateResourceServerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateResourceServerError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateUserImportJob
 #[derive(Debug, PartialEq)]
 pub enum CreateUserImportJobError {
@@ -6634,6 +7294,111 @@ impl Error for DeleteIdentityProviderError {
         }
     }
 }
+/// Errors returned by DeleteResourceServer
+#[derive(Debug, PartialEq)]
+pub enum DeleteResourceServerError {
+    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    ///<p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DeleteResourceServerError {
+    pub fn from_body(body: &str) -> DeleteResourceServerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        DeleteResourceServerError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        DeleteResourceServerError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        DeleteResourceServerError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteResourceServerError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        DeleteResourceServerError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteResourceServerError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteResourceServerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteResourceServerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteResourceServerError {
+    fn from(err: serde_json::error::Error) -> DeleteResourceServerError {
+        DeleteResourceServerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteResourceServerError {
+    fn from(err: CredentialsError) -> DeleteResourceServerError {
+        DeleteResourceServerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteResourceServerError {
+    fn from(err: HttpDispatchError) -> DeleteResourceServerError {
+        DeleteResourceServerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteResourceServerError {
+    fn from(err: io::Error) -> DeleteResourceServerError {
+        DeleteResourceServerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteResourceServerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteResourceServerError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteResourceServerError::InternalError(ref cause) => cause,
+            DeleteResourceServerError::InvalidParameter(ref cause) => cause,
+            DeleteResourceServerError::NotAuthorized(ref cause) => cause,
+            DeleteResourceServerError::ResourceNotFound(ref cause) => cause,
+            DeleteResourceServerError::TooManyRequests(ref cause) => cause,
+            DeleteResourceServerError::Validation(ref cause) => cause,
+            DeleteResourceServerError::Credentials(ref err) => err.description(),
+            DeleteResourceServerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteResourceServerError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -7289,6 +8054,111 @@ impl Error for DescribeIdentityProviderError {
                 dispatch_error.description()
             }
             DescribeIdentityProviderError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeResourceServer
+#[derive(Debug, PartialEq)]
+pub enum DescribeResourceServerError {
+    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    ///<p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeResourceServerError {
+    pub fn from_body(body: &str) -> DescribeResourceServerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        DescribeResourceServerError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        DescribeResourceServerError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        DescribeResourceServerError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeResourceServerError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        DescribeResourceServerError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeResourceServerError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeResourceServerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeResourceServerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeResourceServerError {
+    fn from(err: serde_json::error::Error) -> DescribeResourceServerError {
+        DescribeResourceServerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeResourceServerError {
+    fn from(err: CredentialsError) -> DescribeResourceServerError {
+        DescribeResourceServerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeResourceServerError {
+    fn from(err: HttpDispatchError) -> DescribeResourceServerError {
+        DescribeResourceServerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeResourceServerError {
+    fn from(err: io::Error) -> DescribeResourceServerError {
+        DescribeResourceServerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeResourceServerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeResourceServerError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeResourceServerError::InternalError(ref cause) => cause,
+            DescribeResourceServerError::InvalidParameter(ref cause) => cause,
+            DescribeResourceServerError::NotAuthorized(ref cause) => cause,
+            DescribeResourceServerError::ResourceNotFound(ref cause) => cause,
+            DescribeResourceServerError::TooManyRequests(ref cause) => cause,
+            DescribeResourceServerError::Validation(ref cause) => cause,
+            DescribeResourceServerError::Credentials(ref err) => err.description(),
+            DescribeResourceServerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeResourceServerError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -8420,6 +9290,111 @@ impl Error for GetIdentityProviderByIdentifierError {
         }
     }
 }
+/// Errors returned by GetUICustomization
+#[derive(Debug, PartialEq)]
+pub enum GetUICustomizationError {
+    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    ///<p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetUICustomizationError {
+    pub fn from_body(body: &str) -> GetUICustomizationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        GetUICustomizationError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        GetUICustomizationError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        GetUICustomizationError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetUICustomizationError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        GetUICustomizationError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetUICustomizationError::Validation(error_message.to_string())
+                    }
+                    _ => GetUICustomizationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetUICustomizationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetUICustomizationError {
+    fn from(err: serde_json::error::Error) -> GetUICustomizationError {
+        GetUICustomizationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetUICustomizationError {
+    fn from(err: CredentialsError) -> GetUICustomizationError {
+        GetUICustomizationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetUICustomizationError {
+    fn from(err: HttpDispatchError) -> GetUICustomizationError {
+        GetUICustomizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetUICustomizationError {
+    fn from(err: io::Error) -> GetUICustomizationError {
+        GetUICustomizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetUICustomizationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetUICustomizationError {
+    fn description(&self) -> &str {
+        match *self {
+            GetUICustomizationError::InternalError(ref cause) => cause,
+            GetUICustomizationError::InvalidParameter(ref cause) => cause,
+            GetUICustomizationError::NotAuthorized(ref cause) => cause,
+            GetUICustomizationError::ResourceNotFound(ref cause) => cause,
+            GetUICustomizationError::TooManyRequests(ref cause) => cause,
+            GetUICustomizationError::Validation(ref cause) => cause,
+            GetUICustomizationError::Credentials(ref err) => err.description(),
+            GetUICustomizationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetUICustomizationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetUser
 #[derive(Debug, PartialEq)]
 pub enum GetUserError {
@@ -9273,6 +10248,111 @@ impl Error for ListIdentityProvidersError {
         }
     }
 }
+/// Errors returned by ListResourceServers
+#[derive(Debug, PartialEq)]
+pub enum ListResourceServersError {
+    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    ///<p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListResourceServersError {
+    pub fn from_body(body: &str) -> ListResourceServersError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        ListResourceServersError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        ListResourceServersError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        ListResourceServersError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListResourceServersError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        ListResourceServersError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListResourceServersError::Validation(error_message.to_string())
+                    }
+                    _ => ListResourceServersError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListResourceServersError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListResourceServersError {
+    fn from(err: serde_json::error::Error) -> ListResourceServersError {
+        ListResourceServersError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListResourceServersError {
+    fn from(err: CredentialsError) -> ListResourceServersError {
+        ListResourceServersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListResourceServersError {
+    fn from(err: HttpDispatchError) -> ListResourceServersError {
+        ListResourceServersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListResourceServersError {
+    fn from(err: io::Error) -> ListResourceServersError {
+        ListResourceServersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListResourceServersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListResourceServersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListResourceServersError::InternalError(ref cause) => cause,
+            ListResourceServersError::InvalidParameter(ref cause) => cause,
+            ListResourceServersError::NotAuthorized(ref cause) => cause,
+            ListResourceServersError::ResourceNotFound(ref cause) => cause,
+            ListResourceServersError::TooManyRequests(ref cause) => cause,
+            ListResourceServersError::Validation(ref cause) => cause,
+            ListResourceServersError::Credentials(ref err) => err.description(),
+            ListResourceServersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListResourceServersError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListUserImportJobs
 #[derive(Debug, PartialEq)]
 pub enum ListUserImportJobsError {
@@ -10108,6 +11188,111 @@ impl Error for RespondToAuthChallengeError {
         }
     }
 }
+/// Errors returned by SetUICustomization
+#[derive(Debug, PartialEq)]
+pub enum SetUICustomizationError {
+    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    ///<p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl SetUICustomizationError {
+    pub fn from_body(body: &str) -> SetUICustomizationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        SetUICustomizationError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        SetUICustomizationError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        SetUICustomizationError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        SetUICustomizationError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        SetUICustomizationError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        SetUICustomizationError::Validation(error_message.to_string())
+                    }
+                    _ => SetUICustomizationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SetUICustomizationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SetUICustomizationError {
+    fn from(err: serde_json::error::Error) -> SetUICustomizationError {
+        SetUICustomizationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SetUICustomizationError {
+    fn from(err: CredentialsError) -> SetUICustomizationError {
+        SetUICustomizationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetUICustomizationError {
+    fn from(err: HttpDispatchError) -> SetUICustomizationError {
+        SetUICustomizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetUICustomizationError {
+    fn from(err: io::Error) -> SetUICustomizationError {
+        SetUICustomizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SetUICustomizationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetUICustomizationError {
+    fn description(&self) -> &str {
+        match *self {
+            SetUICustomizationError::InternalError(ref cause) => cause,
+            SetUICustomizationError::InvalidParameter(ref cause) => cause,
+            SetUICustomizationError::NotAuthorized(ref cause) => cause,
+            SetUICustomizationError::ResourceNotFound(ref cause) => cause,
+            SetUICustomizationError::TooManyRequests(ref cause) => cause,
+            SetUICustomizationError::Validation(ref cause) => cause,
+            SetUICustomizationError::Credentials(ref err) => err.description(),
+            SetUICustomizationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetUICustomizationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SetUserSettings
 #[derive(Debug, PartialEq)]
 pub enum SetUserSettingsError {
@@ -10939,6 +12124,111 @@ impl Error for UpdateIdentityProviderError {
         }
     }
 }
+/// Errors returned by UpdateResourceServer
+#[derive(Debug, PartialEq)]
+pub enum UpdateResourceServerError {
+    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    ///<p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl UpdateResourceServerError {
+    pub fn from_body(body: &str) -> UpdateResourceServerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        UpdateResourceServerError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        UpdateResourceServerError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        UpdateResourceServerError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateResourceServerError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        UpdateResourceServerError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateResourceServerError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateResourceServerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateResourceServerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateResourceServerError {
+    fn from(err: serde_json::error::Error) -> UpdateResourceServerError {
+        UpdateResourceServerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateResourceServerError {
+    fn from(err: CredentialsError) -> UpdateResourceServerError {
+        UpdateResourceServerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateResourceServerError {
+    fn from(err: HttpDispatchError) -> UpdateResourceServerError {
+        UpdateResourceServerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateResourceServerError {
+    fn from(err: io::Error) -> UpdateResourceServerError {
+        UpdateResourceServerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateResourceServerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateResourceServerError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateResourceServerError::InternalError(ref cause) => cause,
+            UpdateResourceServerError::InvalidParameter(ref cause) => cause,
+            UpdateResourceServerError::NotAuthorized(ref cause) => cause,
+            UpdateResourceServerError::ResourceNotFound(ref cause) => cause,
+            UpdateResourceServerError::TooManyRequests(ref cause) => cause,
+            UpdateResourceServerError::Validation(ref cause) => cause,
+            UpdateResourceServerError::Credentials(ref err) => err.description(),
+            UpdateResourceServerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateResourceServerError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateUserAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserAttributesError {
@@ -11544,6 +12834,13 @@ pub trait CognitoIdentityProvider {
          -> Result<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError>;
 
 
+    #[doc="<p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>"]
+    fn admin_disable_provider_for_user
+        (&self,
+         input: &AdminDisableProviderForUserRequest)
+         -> Result<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError>;
+
+
     #[doc="<p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_disable_user(&self,
                           input: &AdminDisableUserRequest)
@@ -11578,6 +12875,13 @@ pub trait CognitoIdentityProvider {
     fn admin_initiate_auth(&self,
                            input: &AdminInitiateAuthRequest)
                            -> Result<AdminInitiateAuthResponse, AdminInitiateAuthError>;
+
+
+    #[doc="<p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href=\"API_AdminDisableProviderForUser.html\">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>"]
+    fn admin_link_provider_for_user
+        (&self,
+         input: &AdminLinkProviderForUserRequest)
+         -> Result<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError>;
 
 
     #[doc="<p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
@@ -11679,6 +12983,13 @@ pub trait CognitoIdentityProvider {
          -> Result<CreateIdentityProviderResponse, CreateIdentityProviderError>;
 
 
+    #[doc="<p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>"]
+    fn create_resource_server
+        (&self,
+         input: &CreateResourceServerRequest)
+         -> Result<CreateResourceServerResponse, CreateResourceServerError>;
+
+
     #[doc="<p>Creates the user import job.</p>"]
     fn create_user_import_job(&self,
                               input: &CreateUserImportJobRequest)
@@ -11715,7 +13026,13 @@ pub trait CognitoIdentityProvider {
                                 -> Result<(), DeleteIdentityProviderError>;
 
 
-    #[doc="<p>Allows a user to delete one's self.</p>"]
+    #[doc="<p>Deletes a resource server.</p>"]
+    fn delete_resource_server(&self,
+                              input: &DeleteResourceServerRequest)
+                              -> Result<(), DeleteResourceServerError>;
+
+
+    #[doc="<p>Allows a user to delete himself or herself.</p>"]
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError>;
 
 
@@ -11748,6 +13065,13 @@ pub trait CognitoIdentityProvider {
         (&self,
          input: &DescribeIdentityProviderRequest)
          -> Result<DescribeIdentityProviderResponse, DescribeIdentityProviderError>;
+
+
+    #[doc="<p>Describes a resource server.</p>"]
+    fn describe_resource_server
+        (&self,
+         input: &DescribeResourceServerRequest)
+         -> Result<DescribeResourceServerResponse, DescribeResourceServerError>;
 
 
     #[doc="<p>Describes the user import job.</p>"]
@@ -11808,6 +13132,12 @@ pub trait CognitoIdentityProvider {
          -> Result<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError>;
 
 
+    #[doc="<p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>"]
+    fn get_ui_customization(&self,
+                            input: &GetUICustomizationRequest)
+                            -> Result<GetUICustomizationResponse, GetUICustomizationError>;
+
+
     #[doc="<p>Gets the user attributes and metadata for a user.</p>"]
     fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError>;
 
@@ -11848,6 +13178,12 @@ pub trait CognitoIdentityProvider {
         (&self,
          input: &ListIdentityProvidersRequest)
          -> Result<ListIdentityProvidersResponse, ListIdentityProvidersError>;
+
+
+    #[doc="<p>Lists the resource servers for a user pool.</p>"]
+    fn list_resource_servers(&self,
+                             input: &ListResourceServersRequest)
+                             -> Result<ListResourceServersResponse, ListResourceServersError>;
 
 
     #[doc="<p>Lists the user import jobs.</p>"]
@@ -11892,6 +13228,12 @@ pub trait CognitoIdentityProvider {
          -> Result<RespondToAuthChallengeResponse, RespondToAuthChallengeError>;
 
 
+    #[doc="<p>Sets the UI customization information for a user pool's built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app's pages, and the service will throw an error.</p> </note>"]
+    fn set_ui_customization(&self,
+                            input: &SetUICustomizationRequest)
+                            -> Result<SetUICustomizationResponse, SetUICustomizationError>;
+
+
     #[doc="<p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>"]
     fn set_user_settings(&self,
                          input: &SetUserSettingsRequest)
@@ -11931,6 +13273,13 @@ pub trait CognitoIdentityProvider {
         (&self,
          input: &UpdateIdentityProviderRequest)
          -> Result<UpdateIdentityProviderResponse, UpdateIdentityProviderError>;
+
+
+    #[doc="<p>Updates the name and scopes of resource server. All other fields are read-only.</p>"]
+    fn update_resource_server
+        (&self,
+         input: &UpdateResourceServerRequest)
+         -> Result<UpdateResourceServerResponse, UpdateResourceServerError>;
 
 
     #[doc="<p>Allows a user to update a specific attribute (one at a time).</p>"]
@@ -12167,6 +13516,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     }
 
 
+    #[doc="<p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>"]
+    fn admin_disable_provider_for_user
+        (&self,
+         input: &AdminDisableProviderForUserRequest)
+         -> Result<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSCognitoIdentityProviderService.AdminDisableProviderForUser");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AdminDisableProviderForUserResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AdminDisableProviderForUserError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_disable_user(&self,
                           input: &AdminDisableUserRequest)
@@ -12352,6 +13734,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(AdminInitiateAuthError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href=\"API_AdminDisableProviderForUser.html\">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>"]
+    fn admin_link_provider_for_user
+        (&self,
+         input: &AdminLinkProviderForUserRequest)
+         -> Result<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSCognitoIdentityProviderService.AdminLinkProviderForUser");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AdminLinkProviderForUserResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AdminLinkProviderForUserError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
             }
         }
     }
@@ -12841,6 +14256,38 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     }
 
 
+    #[doc="<p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>"]
+    fn create_resource_server
+        (&self,
+         input: &CreateResourceServerRequest)
+         -> Result<CreateResourceServerResponse, CreateResourceServerError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSCognitoIdentityProviderService.CreateResourceServer");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateResourceServerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Creates the user import job.</p>"]
     fn create_user_import_job(&self,
                               input: &CreateUserImportJobRequest)
@@ -13021,7 +14468,34 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     }
 
 
-    #[doc="<p>Allows a user to delete one's self.</p>"]
+    #[doc="<p>Deletes a resource server.</p>"]
+    fn delete_resource_server(&self,
+                              input: &DeleteResourceServerRequest)
+                              -> Result<(), DeleteResourceServerError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSCognitoIdentityProviderService.DeleteResourceServer");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Allows a user to delete himself or herself.</p>"]
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -13190,6 +14664,38 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeIdentityProviderError::from_body(String::from_utf8_lossy(&body)
                                                                  .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Describes a resource server.</p>"]
+    fn describe_resource_server
+        (&self,
+         input: &DescribeResourceServerRequest)
+         -> Result<DescribeResourceServerResponse, DescribeResourceServerError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSCognitoIdentityProviderService.DescribeResourceServer");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeResourceServerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13509,6 +15015,37 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     }
 
 
+    #[doc="<p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>"]
+    fn get_ui_customization(&self,
+                            input: &GetUICustomizationRequest)
+                            -> Result<GetUICustomizationResponse, GetUICustomizationError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSCognitoIdentityProviderService.GetUICustomization");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetUICustomizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetUICustomizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Gets the user attributes and metadata for a user.</p>"]
     fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
@@ -13729,6 +15266,37 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ListIdentityProvidersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Lists the resource servers for a user pool.</p>"]
+    fn list_resource_servers(&self,
+                             input: &ListResourceServersRequest)
+                             -> Result<ListResourceServersResponse, ListResourceServersError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSCognitoIdentityProviderService.ListResourceServers");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListResourceServersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListResourceServersError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13957,6 +15525,37 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     }
 
 
+    #[doc="<p>Sets the UI customization information for a user pool's built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app's pages, and the service will throw an error.</p> </note>"]
+    fn set_ui_customization(&self,
+                            input: &SetUICustomizationRequest)
+                            -> Result<SetUICustomizationResponse, SetUICustomizationError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSCognitoIdentityProviderService.SetUICustomization");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SetUICustomizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetUICustomizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>"]
     fn set_user_settings(&self,
                          input: &SetUserSettingsRequest)
@@ -14172,6 +15771,38 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateIdentityProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Updates the name and scopes of resource server. All other fields are read-only.</p>"]
+    fn update_resource_server
+        (&self,
+         input: &UpdateResourceServerRequest)
+         -> Result<UpdateResourceServerResponse, UpdateResourceServerError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSCognitoIdentityProviderService.UpdateResourceServer");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateResourceServerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }

@@ -92,6 +92,14 @@ pub struct Association {
     #[serde(rename="AssociationId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
+    #[doc="<p>The association name.</p>"]
+    #[serde(rename="AssociationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_name: Option<String>,
+    #[doc="<p>The association version.</p>"]
+    #[serde(rename="AssociationVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_version: Option<String>,
     #[doc="<p>The version of the document used in the association.</p>"]
     #[serde(rename="DocumentVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -129,6 +137,14 @@ pub struct AssociationDescription {
     #[serde(rename="AssociationId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
+    #[doc="<p>The association name.</p>"]
+    #[serde(rename="AssociationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_name: Option<String>,
+    #[doc="<p>The association version.</p>"]
+    #[serde(rename="AssociationVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_version: Option<String>,
     #[doc="<p>The date when the association was made.</p>"]
     #[serde(rename="Date")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -227,6 +243,51 @@ pub struct AssociationStatus {
     #[doc="<p>The status.</p>"]
     #[serde(rename="Name")]
     pub name: String,
+}
+
+#[doc="<p>Information about the association version.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct AssociationVersionInfo {
+    #[doc="<p>The ID created by the system when the association was created.</p>"]
+    #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_id: Option<String>,
+    #[doc="<p>The name specified for the association version when the association version was created.</p>"]
+    #[serde(rename="AssociationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_name: Option<String>,
+    #[doc="<p>The association version.</p>"]
+    #[serde(rename="AssociationVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_version: Option<String>,
+    #[doc="<p>The date the association version was created.</p>"]
+    #[serde(rename="CreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub created_date: Option<f64>,
+    #[doc="<p>The version of an SSM document used when the association version was created.</p>"]
+    #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub document_version: Option<String>,
+    #[doc="<p>The name specified when the association was created.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>The location in Amazon S3 specified for the association when the association version was created.</p>"]
+    #[serde(rename="OutputLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub output_location: Option<InstanceAssociationOutputLocation>,
+    #[doc="<p>Parameters specified when the association version was created.</p>"]
+    #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    #[doc="<p>The cron or rate schedule specified for the association when the association version was created.</p>"]
+    #[serde(rename="ScheduleExpression")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub schedule_expression: Option<String>,
+    #[doc="<p>The targets specified for the association when the association version was created. </p>"]
+    #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub targets: Option<Vec<Target>>,
 }
 
 #[doc="<p>Detailed information about the current state of an individual Automation execution.</p>"]
@@ -551,6 +612,133 @@ pub struct CommandPlugin {
     pub status_details: Option<String>,
 }
 
+#[doc="<p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct ComplianceExecutionSummary {
+    #[doc="<p>An ID created by the system when <code>PutComplianceItems</code> was called. For example, <code>CommandID</code> is a valid execution ID. You can use this ID in subsequent calls.</p>"]
+    #[serde(rename="ExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub execution_id: Option<String>,
+    #[doc="<p>The time the execution ran as a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>"]
+    #[serde(rename="ExecutionTime")]
+    pub execution_time: f64,
+    #[doc="<p>The type of execution. For example, <code>Command</code> is a valid execution type.</p>"]
+    #[serde(rename="ExecutionType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub execution_type: Option<String>,
+}
+
+#[doc="<p>Information about the compliance as defined by the resource type. For example, for a patch resource type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ComplianceItem {
+    #[doc="<p>The compliance type. For example, Association (for a State Manager association), Patch, or Custom:<code>string</code> are all valid compliance types.</p>"]
+    #[serde(rename="ComplianceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub compliance_type: Option<String>,
+    #[doc="<p>A \"Key\": \"Value\" tag combination for the compliance item.</p>"]
+    #[serde(rename="Details")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub details: Option<::std::collections::HashMap<String, String>>,
+    #[doc="<p>A summary for the compliance item. The summary includes an execution ID, the execution type (for example, command), and the execution time.</p>"]
+    #[serde(rename="ExecutionSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub execution_summary: Option<ComplianceExecutionSummary>,
+    #[doc="<p>An ID for the compliance item. For example, if the compliance item is a Windows patch, the ID could be the number of the KB article. Here's an example: KB4010320.</p>"]
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    #[doc="<p>An ID for the resource. For a managed instance, this is the instance ID.</p>"]
+    #[serde(rename="ResourceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_id: Option<String>,
+    #[doc="<p>The type of resource. <code>ManagedInstance</code> is currently the only supported resource type.</p>"]
+    #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_type: Option<String>,
+    #[doc="<p>The severity of the compliance status. Severity can be one of the following: Critical, High, Medium, Low, Informational, Unspecified.</p>"]
+    #[serde(rename="Severity")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub severity: Option<String>,
+    #[doc="<p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status: Option<String>,
+    #[doc="<p>A title for the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch. Here's an example: Security Update for Active Directory Federation Services.</p>"]
+    #[serde(rename="Title")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub title: Option<String>,
+}
+
+#[doc="<p>Information about a compliance item.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ComplianceItemEntry {
+    #[doc="<p>A \"Key\": \"Value\" tag combination for the compliance item.</p>"]
+    #[serde(rename="Details")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub details: Option<::std::collections::HashMap<String, String>>,
+    #[doc="<p>The compliance item ID. For example, if the compliance item is a Windows patch, the ID could be the number of the KB article.</p>"]
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    #[doc="<p>The severity of the compliance status. Severity can be one of the following: Critical, High, Medium, Low, Informational, Unspecified.</p>"]
+    #[serde(rename="Severity")]
+    pub severity: String,
+    #[doc="<p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>"]
+    #[serde(rename="Status")]
+    pub status: String,
+    #[doc="<p>The title of the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch. Here's an example: Security Update for Active Directory Federation Services. </p>"]
+    #[serde(rename="Title")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub title: Option<String>,
+}
+
+#[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ComplianceStringFilter {
+    #[doc="<p>The name of the filter.</p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub key: Option<String>,
+    #[doc="<p>The type of comparison that should be performed for the value: Equal, NotEqual, BeginWith, LessThan, or GreaterThan.</p>"]
+    #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub type_: Option<String>,
+    #[doc="<p>The value for which to search.</p>"]
+    #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub values: Option<Vec<String>>,
+}
+
+#[doc="<p>A summary of compliance information by compliance type.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ComplianceSummaryItem {
+    #[doc="<p>The type of compliance item. For example, the compliance type can be Association, Patch, or Custom:string.</p>"]
+    #[serde(rename="ComplianceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub compliance_type: Option<String>,
+    #[doc="<p>A list of COMPLIANT items for the specified compliance type.</p>"]
+    #[serde(rename="CompliantSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub compliant_summary: Option<CompliantSummary>,
+    #[doc="<p>A list of NON_COMPLIANT items for the specified compliance type.</p>"]
+    #[serde(rename="NonCompliantSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub non_compliant_summary: Option<NonCompliantSummary>,
+}
+
+#[doc="<p>A summary of resources that are compliant. The summary is organized according to the resource count for each compliance type.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct CompliantSummary {
+    #[doc="<p>The total number of resources that are compliant.</p>"]
+    #[serde(rename="CompliantCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub compliant_count: Option<i64>,
+    #[doc="<p>A summary of the compliance severity by compliance type.</p>"]
+    #[serde(rename="SeveritySummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub severity_summary: Option<SeveritySummary>,
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateActivationRequest {
     #[doc="<p>The name of the registered, managed instance as it will appear in the Amazon EC2 console or when you use the AWS command line tools to list EC2 resources.</p>"]
@@ -596,6 +784,10 @@ pub struct CreateAssociationBatchRequest {
 #[doc="<p>Describes the association of a Systems Manager document and an instance.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAssociationBatchRequestEntry {
+    #[doc="<p>Specify a descriptive name for the association.</p>"]
+    #[serde(rename="AssociationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_name: Option<String>,
     #[doc="<p>The document version.</p>"]
     #[serde(rename="DocumentVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -639,6 +831,10 @@ pub struct CreateAssociationBatchResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateAssociationRequest {
+    #[doc="<p>Specify a descriptive name for the association.</p>"]
+    #[serde(rename="AssociationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_name: Option<String>,
     #[doc="<p>The document version you want to associate with the target(s). Can be a specific version or the default version.</p>"]
     #[serde(rename="DocumentVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -700,7 +896,7 @@ pub struct CreateDocumentResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateMaintenanceWindowRequest {
-    #[doc="<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>"]
+    #[doc="<p>Enables a Maintenance Window task to execute on managed instances, even if you have not registered those instances as targets. If enabled, then you must specify the unregistered instances (by instance ID) when you register a task with the Maintenance Window </p> <p>If you don't enable this option, then you must specify previously-registered targets when you register a task with the Maintenance Window. </p>"]
     #[serde(rename="AllowUnassociatedTargets")]
     pub allow_unassociated_targets: bool,
     #[doc="<p>User-provided idempotency token.</p>"]
@@ -710,6 +906,10 @@ pub struct CreateMaintenanceWindowRequest {
     #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
     #[serde(rename="Cutoff")]
     pub cutoff: i64,
+    #[doc="<p>An optional description for the Maintenance Window. We recommend specifying a description to help you organize your Maintenance Windows. </p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
     #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
     #[serde(rename="Duration")]
     pub duration: i64,
@@ -739,6 +939,10 @@ pub struct CreatePatchBaselineRequest {
     #[serde(rename="ApprovedPatches")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
+    #[doc="<p>Defines the compliance level for approved patches. This means that if an approved patch is reported as missing, this is the severity of the compliance violation. Valid compliance severity levels include the following: CRITICAL, HIGH, MEDIUM, LOW, INFORMATIONAL, UNSPECIFIED. The default value is UNSPECIFIED.</p>"]
+    #[serde(rename="ApprovedPatchesComplianceLevel")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub approved_patches_compliance_level: Option<String>,
     #[doc="<p>User-provided idempotency token.</p>"]
     #[serde(rename="ClientToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -754,6 +958,10 @@ pub struct CreatePatchBaselineRequest {
     #[doc="<p>The name of the patch baseline.</p>"]
     #[serde(rename="Name")]
     pub name: String,
+    #[doc="<p>Defines the operating system the patch baseline applies to. Supported operating systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX. The Default value is WINDOWS.</p>"]
+    #[serde(rename="OperatingSystem")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub operating_system: Option<String>,
     #[doc="<p>A list of explicitly rejected patches for the baseline.</p>"]
     #[serde(rename="RejectedPatches")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -767,6 +975,19 @@ pub struct CreatePatchBaselineResult {
     #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<String>,
 }
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct CreateResourceDataSyncRequest {
+    #[doc="<p>Amazon S3 configuration details for the sync.</p>"]
+    #[serde(rename="S3Destination")]
+    pub s3_destination: ResourceDataSyncS3Destination,
+    #[doc="<p>A name for the configuration.</p>"]
+    #[serde(rename="SyncName")]
+    pub sync_name: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct CreateResourceDataSyncResult;
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteActivationRequest {
@@ -867,6 +1088,16 @@ pub struct DeletePatchBaselineResult {
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
+pub struct DeleteResourceDataSyncRequest {
+    #[doc="<p>The name of the configuration to delete.</p>"]
+    #[serde(rename="SyncName")]
+    pub sync_name: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DeleteResourceDataSyncResult;
+
+#[derive(Default,Debug,Clone,Serialize)]
 pub struct DeregisterManagedInstanceRequest {
     #[doc="<p>The ID assigned to the managed instance when you registered it using the activation process. </p>"]
     #[serde(rename="InstanceId")]
@@ -900,6 +1131,10 @@ pub struct DeregisterPatchBaselineForPatchGroupResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeregisterTargetFromMaintenanceWindowRequest {
+    #[doc="<p>The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the Maintenance Window.</p>"]
+    #[serde(rename="Safe")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub safe: Option<bool>,
     #[doc="<p>The ID of the Maintenance Window the target should be removed from.</p>"]
     #[serde(rename="WindowId")]
     pub window_id: String,
@@ -989,6 +1224,10 @@ pub struct DescribeAssociationRequest {
     #[serde(rename="AssociationId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
+    #[doc="<p>Specify the association version to retrieve. To view the latest version, either specify <code>$LATEST</code> for this parameter, or omit this parameter. To view a list of all associations for an instance, use ListInstanceAssociations. To get a list of versions for a specific association, use ListAssociationVersions. </p>"]
+    #[serde(rename="AssociationVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_version: Option<String>,
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1586,6 +1825,10 @@ pub struct DescribePatchGroupStateResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribePatchGroupsRequest {
+    #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub filters: Option<Vec<PatchOrchestratorFilter>>,
     #[doc="<p>The maximum number of patch groups to return (per page).</p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1909,7 +2152,12 @@ pub struct GetCommandInvocationResult {
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
-pub struct GetDefaultPatchBaselineRequest;
+pub struct GetDefaultPatchBaselineRequest {
+    #[doc="<p>Returns the default patch baseline for the specified operating system.</p>"]
+    #[serde(rename="OperatingSystem")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub operating_system: Option<String>,
+}
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetDefaultPatchBaselineResult {
@@ -1917,6 +2165,10 @@ pub struct GetDefaultPatchBaselineResult {
     #[serde(rename="BaselineId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<String>,
+    #[doc="<p>The operating system for the returned patch baseline. </p>"]
+    #[serde(rename="OperatingSystem")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub operating_system: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1935,6 +2187,10 @@ pub struct GetDeployablePatchSnapshotForInstanceResult {
     #[serde(rename="InstanceId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
+    #[doc="<p>Returns the specific operating system (for example Windows Server 2012 or Amazon Linux 2015.09) on the instance for the specified patch snapshot.</p>"]
+    #[serde(rename="Product")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub product: Option<String>,
     #[doc="<p>A pre-signed Amazon S3 URL that can be used to download the patch snapshot.</p>"]
     #[serde(rename="SnapshotDownloadUrl")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2018,6 +2274,10 @@ pub struct GetInventorySchemaRequest {
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
+    #[doc="<p>Returns the sub-type schema for a specified inventory type.</p>"]
+    #[serde(rename="SubType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub sub_type: Option<bool>,
     #[doc="<p>The type of inventory item to return.</p>"]
     #[serde(rename="TypeName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2069,6 +2329,71 @@ pub struct GetMaintenanceWindowExecutionResult {
     #[serde(rename="WindowExecutionId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub window_execution_id: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetMaintenanceWindowExecutionTaskInvocationRequest {
+    #[doc="<p>The invocation ID to retrieve.</p>"]
+    #[serde(rename="InvocationId")]
+    pub invocation_id: String,
+    #[doc="<p>The ID of the specific task in the Maintenance Window task that should be retrieved. </p>"]
+    #[serde(rename="TaskId")]
+    pub task_id: String,
+    #[doc="<p>The ID of the Maintenance Window execution for which the task is a part.</p>"]
+    #[serde(rename="WindowExecutionId")]
+    pub window_execution_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
+    #[doc="<p>The time that the task finished executing on the target.</p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub end_time: Option<f64>,
+    #[doc="<p>The execution ID.</p>"]
+    #[serde(rename="ExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub execution_id: Option<String>,
+    #[doc="<p>The invocation ID.</p>"]
+    #[serde(rename="InvocationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub invocation_id: Option<String>,
+    #[doc="<p>User-provided value to be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window. </p>"]
+    #[serde(rename="OwnerInformation")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub owner_information: Option<String>,
+    #[doc="<p>The parameters used at the time that the task executed.</p>"]
+    #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parameters: Option<String>,
+    #[doc="<p>The time that the task started executing on the target.</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub start_time: Option<f64>,
+    #[doc="<p>The task status for an invocation.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status: Option<String>,
+    #[doc="<p>The details explaining the status. Details are only available for certain status values.</p>"]
+    #[serde(rename="StatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status_details: Option<String>,
+    #[doc="<p>The task execution ID.</p>"]
+    #[serde(rename="TaskExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_execution_id: Option<String>,
+    #[doc="<p>Retrieves the task type for a Maintenance Window. Task types include the following: LAMBDA, STEP_FUNCTION, AUTOMATION, RUN_COMMAND.</p>"]
+    #[serde(rename="TaskType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_type: Option<String>,
+    #[doc="<p>The Maintenance Window execution ID.</p>"]
+    #[serde(rename="WindowExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub window_execution_id: Option<String>,
+    #[doc="<p>The Maintenance Window target ID.</p>"]
+    #[serde(rename="WindowTargetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub window_target_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -2160,6 +2485,10 @@ pub struct GetMaintenanceWindowResult {
     #[serde(rename="Cutoff")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub cutoff: Option<i64>,
+    #[doc="<p>The description of the Maintenance Window.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
     #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
     #[serde(rename="Duration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2184,6 +2513,77 @@ pub struct GetMaintenanceWindowResult {
     #[serde(rename="WindowId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetMaintenanceWindowTaskRequest {
+    #[doc="<p>The Maintenance Window ID that includes the task to retrieve.</p>"]
+    #[serde(rename="WindowId")]
+    pub window_id: String,
+    #[doc="<p>The Maintenance Window task ID to retrieve.</p>"]
+    #[serde(rename="WindowTaskId")]
+    pub window_task_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GetMaintenanceWindowTaskResult {
+    #[doc="<p>The retrieved task description.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    #[doc="<p>The location in Amazon S3 where the task results are logged.</p>"]
+    #[serde(rename="LoggingInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub logging_info: Option<LoggingInfo>,
+    #[doc="<p>The maximum number of targets allowed to run this task in parallel.</p>"]
+    #[serde(rename="MaxConcurrency")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_concurrency: Option<String>,
+    #[doc="<p>The maximum number of errors allowed before the task stops being scheduled.</p>"]
+    #[serde(rename="MaxErrors")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_errors: Option<String>,
+    #[doc="<p>The retrieved task name.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>The priority of the task when it executes. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>"]
+    #[serde(rename="Priority")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub priority: Option<i64>,
+    #[doc="<p>The IAM service role to assume during task execution.</p>"]
+    #[serde(rename="ServiceRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub service_role_arn: Option<String>,
+    #[doc="<p>The targets where the task should execute.</p>"]
+    #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub targets: Option<Vec<Target>>,
+    #[doc="<p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the SSM Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>"]
+    #[serde(rename="TaskArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_arn: Option<String>,
+    #[doc="<p>The parameters to pass to the task when it executes.</p>"]
+    #[serde(rename="TaskInvocationParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
+    #[doc="<p>The parameters to pass to the task when it executes.</p>"]
+    #[serde(rename="TaskParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_parameters:
+        Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
+    #[doc="<p>The type of task to execute.</p>"]
+    #[serde(rename="TaskType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_type: Option<String>,
+    #[doc="<p>The retrieved Maintenance Window ID.</p>"]
+    #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub window_id: Option<String>,
+    #[doc="<p>The retrieved Maintenance Window task ID.</p>"]
+    #[serde(rename="WindowTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub window_task_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -2300,6 +2700,10 @@ pub struct GetParametersResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetPatchBaselineForPatchGroupRequest {
+    #[doc="<p>Returns he operating system rule specified for patch groups using the patch baseline.</p>"]
+    #[serde(rename="OperatingSystem")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub operating_system: Option<String>,
     #[doc="<p>The name of the patch group whose patch baseline should be retrieved.</p>"]
     #[serde(rename="PatchGroup")]
     pub patch_group: String,
@@ -2311,6 +2715,10 @@ pub struct GetPatchBaselineForPatchGroupResult {
     #[serde(rename="BaselineId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<String>,
+    #[doc="<p>The operating system rule specified for patch groups using the patch baseline.</p>"]
+    #[serde(rename="OperatingSystem")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub operating_system: Option<String>,
     #[doc="<p>The name of the patch group.</p>"]
     #[serde(rename="PatchGroup")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2334,6 +2742,10 @@ pub struct GetPatchBaselineResult {
     #[serde(rename="ApprovedPatches")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
+    #[doc="<p>Returns the specified compliance severity level for approved patches in the patch baseline.</p>"]
+    #[serde(rename="ApprovedPatchesComplianceLevel")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub approved_patches_compliance_level: Option<String>,
     #[doc="<p>The ID of the retrieved patch baseline.</p>"]
     #[serde(rename="BaselineId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2358,6 +2770,10 @@ pub struct GetPatchBaselineResult {
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
+    #[doc="<p>Returns the operating system specified for the patch baseline.</p>"]
+    #[serde(rename="OperatingSystem")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub operating_system: Option<String>,
     #[doc="<p>Patch groups included in the patch baseline.</p>"]
     #[serde(rename="PatchGroups")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2389,6 +2805,10 @@ pub struct InstanceAssociation {
     #[serde(rename="AssociationId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
+    #[doc="<p>Version information for the association on the instance.</p>"]
+    #[serde(rename="AssociationVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_version: Option<String>,
     #[doc="<p>The content of the association document for the instance(s).</p>"]
     #[serde(rename="Content")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2424,6 +2844,14 @@ pub struct InstanceAssociationStatusInfo {
     #[serde(rename="AssociationId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
+    #[doc="<p>The name of the association applied to the instance.</p>"]
+    #[serde(rename="AssociationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_name: Option<String>,
+    #[doc="<p>The version of the association applied to the instance.</p>"]
+    #[serde(rename="AssociationVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_version: Option<String>,
     #[doc="<p>Detailed status information about the instance association.</p>"]
     #[serde(rename="DetailedStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2659,6 +3087,10 @@ pub struct InventoryItem {
     #[serde(rename="ContentHash")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub content_hash: Option<String>,
+    #[doc="<p>A map of associated properties for a specified inventory type. For example, with this attribute, you can specify the <code>ExecutionId</code>, <code>ExecutionType</code>, <code>ComplianceType</code> properties of the <code>AWS:ComplianceItem</code> type.</p>"]
+    #[serde(rename="Context")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub context: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The schema version for the inventory item.</p>"]
     #[serde(rename="SchemaVersion")]
     pub schema_version: String,
@@ -2726,6 +3158,33 @@ pub struct InventoryResultItem {
     #[doc="<p>The name of the inventory result item type.</p>"]
     #[serde(rename="TypeName")]
     pub type_name: String,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListAssociationVersionsRequest {
+    #[doc="<p>The association ID for which you want to view all versions.</p>"]
+    #[serde(rename="AssociationId")]
+    pub association_id: String,
+    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_results: Option<i64>,
+    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListAssociationVersionsResult {
+    #[doc="<p>Information about all versions of the association for the specified association ID.</p>"]
+    #[serde(rename="AssociationVersions")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_versions: Option<Vec<AssociationVersionInfo>>,
+    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -2827,6 +3286,70 @@ pub struct ListCommandsResult {
     #[serde(skip_serializing_if="Option::is_none")]
     pub commands: Option<Vec<Command>>,
     #[doc="<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListComplianceItemsRequest {
+    #[doc="<p>One or more compliance filters. Use a filter to return a more specific list of results.</p>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub filters: Option<Vec<ComplianceStringFilter>>,
+    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_results: Option<i64>,
+    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+    #[doc="<p>The ID for the resources from which to get compliance information. Currently, you can only specify one resource ID.</p>"]
+    #[serde(rename="ResourceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_ids: Option<Vec<String>>,
+    #[doc="<p>The type of resource from which to get compliance information. Currently, the only supported resource type is <code>ManagedInstance</code>.</p>"]
+    #[serde(rename="ResourceTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_types: Option<Vec<String>>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListComplianceItemsResult {
+    #[doc="<p>A list of compliance information for the specified resource ID. </p>"]
+    #[serde(rename="ComplianceItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub compliance_items: Option<Vec<ComplianceItem>>,
+    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListComplianceSummariesRequest {
+    #[doc="<p>One or more compliance or inventory filters. Use a filter to return a more specific list of results.</p>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub filters: Option<Vec<ComplianceStringFilter>>,
+    #[doc="<p>The maximum number of items to return for this call. Currently, you can specify null or 50. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_results: Option<i64>,
+    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListComplianceSummariesResult {
+    #[doc="<p>A list of compliant and non-compliant summary counts based on compliance types. For example, this call returns State Manager associations, patches, or custom compliance types according to the filter criteria that you specified.</p>"]
+    #[serde(rename="ComplianceSummaryItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub compliance_summary_items: Option<Vec<ComplianceSummaryItem>>,
+    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
@@ -2938,6 +3461,58 @@ pub struct ListInventoryEntriesResult {
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
+pub struct ListResourceComplianceSummariesRequest {
+    #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub filters: Option<Vec<ComplianceStringFilter>>,
+    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_results: Option<i64>,
+    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListResourceComplianceSummariesResult {
+    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+    #[doc="<p>A summary count for specified or targeted managed instances. Summary count includes information about compliant and non-compliant State Manager associations, patch status, or custom items according to the filter criteria that you specify. </p>"]
+    #[serde(rename="ResourceComplianceSummaryItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_compliance_summary_items: Option<Vec<ResourceComplianceSummaryItem>>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListResourceDataSyncRequest {
+    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_results: Option<i64>,
+    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListResourceDataSyncResult {
+    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<String>,
+    #[doc="<p>A list of your current Resource Data Sync configurations and their statuses.</p>"]
+    #[serde(rename="ResourceDataSyncItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_data_sync_items: Option<Vec<ResourceDataSyncItem>>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
 pub struct ListTagsForResourceRequest {
     #[doc="<p>The resource ID for which you want to see a list of tags.</p>"]
     #[serde(rename="ResourceId")]
@@ -2968,6 +3543,19 @@ pub struct LoggingInfo {
     #[doc="<p>The region where the Amazon S3 bucket is located.</p>"]
     #[serde(rename="S3Region")]
     pub s3_region: String,
+}
+
+#[doc="<p>The parameters for an AUTOMATION task type.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct MaintenanceWindowAutomationParameters {
+    #[doc="<p>The version of an Automation document to use during task execution.</p>"]
+    #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub document_version: Option<String>,
+    #[doc="<p>The parameters for the AUTOMATION task.</p>"]
+    #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
 }
 
 #[doc="<p>Describes the information about an execution of a Maintenance Window. </p>"]
@@ -3075,6 +3663,10 @@ pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     #[serde(rename="TaskExecutionId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub task_execution_id: Option<String>,
+    #[doc="<p>The task type.</p>"]
+    #[serde(rename="TaskType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_type: Option<String>,
     #[doc="<p>The ID of the Maintenance Window execution that ran the task.</p>"]
     #[serde(rename="WindowExecutionId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3105,6 +3697,10 @@ pub struct MaintenanceWindowIdentity {
     #[serde(rename="Cutoff")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub cutoff: Option<i64>,
+    #[doc="<p>A description of the Maintenance Window.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
     #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
     #[serde(rename="Duration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3123,9 +3719,92 @@ pub struct MaintenanceWindowIdentity {
     pub window_id: Option<String>,
 }
 
+#[doc="<p>The parameters for a LAMBDA task type.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct MaintenanceWindowLambdaParameters {
+    #[doc="<p>Pass client-specific information to the Lambda function that you are invoking. You can then process the client information in your Lambda function as you choose through the context variable.</p>"]
+    #[serde(rename="ClientContext")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub client_context: Option<String>,
+    #[doc="<p>JSON to provide to your Lambda function as input.</p>"]
+    #[serde(rename="Payload")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
+    pub payload: Option<Vec<u8>>,
+    #[doc="<p>(Optional) Specify a Lambda function version or alias name. If you specify a function version, the action uses the qualified function ARN to invoke a specific Lambda function. If you specify an alias name, the action uses the alias ARN to invoke the Lambda function version to which the alias points.</p>"]
+    #[serde(rename="Qualifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub qualifier: Option<String>,
+}
+
+#[doc="<p>The parameters for a RUN_COMMAND task type.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct MaintenanceWindowRunCommandParameters {
+    #[doc="<p>Information about the command(s) to execute.</p>"]
+    #[serde(rename="Comment")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub comment: Option<String>,
+    #[doc="<p>The SHA-256 or SHA-1 hash created by the system when the document was created. SHA-1 hashes have been deprecated.</p>"]
+    #[serde(rename="DocumentHash")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub document_hash: Option<String>,
+    #[doc="<p>SHA-256 or SHA-1. SHA-1 hashes have been deprecated.</p>"]
+    #[serde(rename="DocumentHashType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub document_hash_type: Option<String>,
+    #[doc="<p>Configurations for sending notifications about command status changes on a per-instance basis.</p>"]
+    #[serde(rename="NotificationConfig")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub notification_config: Option<NotificationConfig>,
+    #[doc="<p>The name of the Amazon S3 bucket.</p>"]
+    #[serde(rename="OutputS3BucketName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub output_s3_bucket_name: Option<String>,
+    #[doc="<p>The Amazon S3 bucket subfolder.</p>"]
+    #[serde(rename="OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub output_s3_key_prefix: Option<String>,
+    #[doc="<p>The parameters for the RUN_COMMAND task execution.</p>"]
+    #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    #[doc="<p>The IAM service role to assume during task execution.</p>"]
+    #[serde(rename="ServiceRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub service_role_arn: Option<String>,
+    #[doc="<p>If this time is reached and the command has not already started executing, it doesn not execute.</p>"]
+    #[serde(rename="TimeoutSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub timeout_seconds: Option<i64>,
+}
+
+#[doc="<p>The parameters for the STEP_FUNCTION execution.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct MaintenanceWindowStepFunctionsParameters {
+    #[doc="<p>The inputs for the STEP_FUNCTION task.</p>"]
+    #[serde(rename="Input")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub input: Option<String>,
+    #[doc="<p>The name of the STEP_FUNCTION task.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+}
+
 #[doc="<p>The target registered with the Maintenance Window.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct MaintenanceWindowTarget {
+    #[doc="<p>A description of the target.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    #[doc="<p>The target name.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
     #[doc="<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>"]
     #[serde(rename="OwnerInformation")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3151,6 +3830,10 @@ pub struct MaintenanceWindowTarget {
 #[doc="<p>Information about a task defined for a Maintenance Window.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct MaintenanceWindowTask {
+    #[doc="<p>A description of the task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
     #[doc="<p>Information about an Amazon S3 bucket to write task-level logs to.</p>"]
     #[serde(rename="LoggingInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3163,7 +3846,11 @@ pub struct MaintenanceWindowTask {
     #[serde(rename="MaxErrors")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub max_errors: Option<String>,
-    #[doc="<p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>"]
+    #[doc="<p>The task name.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>The priority of the task in the Maintenance Window. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>"]
     #[serde(rename="Priority")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub priority: Option<i64>,
@@ -3175,7 +3862,7 @@ pub struct MaintenanceWindowTask {
     #[serde(rename="Targets")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    #[doc="<p>The ARN of the task to execute.</p>"]
+    #[doc="<p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the SSM document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>"]
     #[serde(rename="TaskArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub task_arn: Option<String>,
@@ -3184,7 +3871,7 @@ pub struct MaintenanceWindowTask {
     #[serde(skip_serializing_if="Option::is_none")]
     pub task_parameters:
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
-    #[doc="<p>The type of task.</p>"]
+    #[doc="<p>The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTION.</p>"]
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
@@ -3196,6 +3883,27 @@ pub struct MaintenanceWindowTask {
     #[serde(rename="WindowTaskId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub window_task_id: Option<String>,
+}
+
+#[doc="<p>The parameters for task execution.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct MaintenanceWindowTaskInvocationParameters {
+    #[doc="<p>The parameters for a AUTOMATION task type.</p>"]
+    #[serde(rename="Automation")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub automation: Option<MaintenanceWindowAutomationParameters>,
+    #[doc="<p>The parameters for a LAMBDA task type.</p>"]
+    #[serde(rename="Lambda")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub lambda: Option<MaintenanceWindowLambdaParameters>,
+    #[doc="<p>The parameters for a RUN_COMMAND task type.</p>"]
+    #[serde(rename="RunCommand")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub run_command: Option<MaintenanceWindowRunCommandParameters>,
+    #[doc="<p>The parameters for a STEP_FUNCTION task type.</p>"]
+    #[serde(rename="StepFunctions")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub step_functions: Option<MaintenanceWindowStepFunctionsParameters>,
 }
 
 #[doc="<p>Defines the values for a task parameter.</p>"]
@@ -3227,6 +3935,19 @@ pub struct ModifyDocumentPermissionRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ModifyDocumentPermissionResponse;
+
+#[doc="<p>A summary of resources that are not compliant. The summary is organized according to resource type.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct NonCompliantSummary {
+    #[doc="<p>The total number of compliance items that are not compliant.</p>"]
+    #[serde(rename="NonCompliantCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub non_compliant_count: Option<i64>,
+    #[doc="<p>A summary of the non-compliance severity by compliance type</p>"]
+    #[serde(rename="SeveritySummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub severity_summary: Option<SeveritySummary>,
+}
 
 #[doc="<p>Configurations for sending notifications.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
@@ -3431,10 +4152,14 @@ pub struct PatchBaselineIdentity {
     #[serde(rename="BaselineName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_name: Option<String>,
-    #[doc="<p>Whether this is the default baseline.</p>"]
+    #[doc="<p>Whether this is the default baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>"]
     #[serde(rename="DefaultBaseline")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub default_baseline: Option<bool>,
+    #[doc="<p>Defines the operating system the patch baseline applies to. Supported operating systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX. The Default value is WINDOWS. </p>"]
+    #[serde(rename="OperatingSystem")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub operating_system: Option<String>,
 }
 
 #[doc="<p>Information about the state of a patch on a particular instance as it relates to the patch baseline used to patch the instance.</p>"]
@@ -3443,10 +4168,10 @@ pub struct PatchComplianceData {
     #[doc="<p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>"]
     #[serde(rename="Classification")]
     pub classification: String,
-    #[doc="<p>The date/time the patch was installed on the instance.</p>"]
+    #[doc="<p>The date/time the patch was installed on the instance. Note that not all operating systems provide this level of information.</p>"]
     #[serde(rename="InstalledTime")]
     pub installed_time: f64,
-    #[doc="<p>The Microsoft Knowledge Base ID of the patch.</p>"]
+    #[doc="<p>The operating system-specific ID of the patch.</p>"]
     #[serde(rename="KBId")]
     pub kb_id: String,
     #[doc="<p>The severity of the patch (for example, Critical, Important, Moderate).</p>"]
@@ -3511,6 +4236,10 @@ pub struct PatchRule {
     #[doc="<p>The number of days after the release date of each patch matched by the rule the patch is marked as approved in the patch baseline.</p>"]
     #[serde(rename="ApproveAfterDays")]
     pub approve_after_days: i64,
+    #[doc="<p>A compliance severity level for all approved patches in a patch baseline. Valid compliance severity levels include the following: Unspecified, Critical, High, Medium, Low, and Informational.</p>"]
+    #[serde(rename="ComplianceLevel")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub compliance_level: Option<String>,
     #[doc="<p>The patch filter group that defines the criteria for the rule.</p>"]
     #[serde(rename="PatchFilterGroup")]
     pub patch_filter_group: PatchFilterGroup,
@@ -3531,11 +4260,41 @@ pub struct PatchStatus {
     #[serde(rename="ApprovalDate")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub approval_date: Option<f64>,
+    #[doc="<p>The compliance severity level for a patch.</p>"]
+    #[serde(rename="ComplianceLevel")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub compliance_level: Option<String>,
     #[doc="<p>The approval status of a patch (APPROVED, PENDING_APPROVAL, EXPLICIT_APPROVED, EXPLICIT_REJECTED).</p>"]
     #[serde(rename="DeploymentStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_status: Option<String>,
 }
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct PutComplianceItemsRequest {
+    #[doc="<p>Specify the compliance type. For example, specify Association (for a State Manager association), Patch, or Custom:<code>string</code>.</p>"]
+    #[serde(rename="ComplianceType")]
+    pub compliance_type: String,
+    #[doc="<p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>"]
+    #[serde(rename="ExecutionSummary")]
+    pub execution_summary: ComplianceExecutionSummary,
+    #[doc="<p>MD5 or SHA-256 content hash. The content hash is used to determine if existing information should be overwritten or ignored. If the content hashes match, the request to put compliance information is ignored.</p>"]
+    #[serde(rename="ItemContentHash")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub item_content_hash: Option<String>,
+    #[doc="<p>Information about the compliance as defined by the resource type. For example, for a patch compliance type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>"]
+    #[serde(rename="Items")]
+    pub items: Vec<ComplianceItemEntry>,
+    #[doc="<p>Specify an ID for this resource. For a managed instance, this is the instance ID.</p>"]
+    #[serde(rename="ResourceId")]
+    pub resource_id: String,
+    #[doc="<p>Specify the type of resource. <code>ManagedInstance</code> is currently the only supported resource type.</p>"]
+    #[serde(rename="ResourceType")]
+    pub resource_type: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct PutComplianceItemsResult;
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutInventoryRequest {
@@ -3625,6 +4384,14 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
     #[serde(rename="ClientToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
+    #[doc="<p>An optional description for the target.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    #[doc="<p>An optional name for the target.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
     #[doc="<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>"]
     #[serde(rename="OwnerInformation")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3654,6 +4421,10 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename="ClientToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
+    #[doc="<p>An optional description for the task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
     #[doc="<p>A structure containing information about an Amazon S3 bucket to write instance-level logs to. </p>"]
     #[serde(rename="LoggingInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3664,6 +4435,10 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[doc="<p>The maximum number of errors allowed before this task stops being scheduled.</p>"]
     #[serde(rename="MaxErrors")]
     pub max_errors: String,
+    #[doc="<p>An optional name for the task.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
     #[doc="<p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>"]
     #[serde(rename="Priority")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3677,6 +4452,10 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[doc="<p>The ARN of the task to execute </p>"]
     #[serde(rename="TaskArn")]
     pub task_arn: String,
+    #[doc="<p>The parameters that the task should use during execution. Populate only the fields that match the task type. All other fields should be empty. </p>"]
+    #[serde(rename="TaskInvocationParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
     #[doc="<p>The parameters that should be passed to the task when it is executed.</p>"]
     #[serde(rename="TaskParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3714,6 +4493,90 @@ pub struct RemoveTagsFromResourceRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RemoveTagsFromResourceResult;
 
+#[doc="<p>Compliance summary information for a specific resource. </p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ResourceComplianceSummaryItem {
+    #[doc="<p>The compliance type.</p>"]
+    #[serde(rename="ComplianceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub compliance_type: Option<String>,
+    #[doc="<p>A list of items that are compliant for the resource.</p>"]
+    #[serde(rename="CompliantSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub compliant_summary: Option<CompliantSummary>,
+    #[doc="<p>Information about the execution.</p>"]
+    #[serde(rename="ExecutionSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub execution_summary: Option<ComplianceExecutionSummary>,
+    #[doc="<p>A list of items that aren't compliant for the resource.</p>"]
+    #[serde(rename="NonCompliantSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub non_compliant_summary: Option<NonCompliantSummary>,
+    #[doc="<p>The highest severity item found for the resource. The resource is compliant for this item.</p>"]
+    #[serde(rename="OverallSeverity")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub overall_severity: Option<String>,
+    #[doc="<p>The resource ID.</p>"]
+    #[serde(rename="ResourceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_id: Option<String>,
+    #[doc="<p>The resource type.</p>"]
+    #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_type: Option<String>,
+    #[doc="<p>The compliance status for the resource.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[doc="<p>Information about a Resource Data Sync configuration, including its current status and last successful sync.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ResourceDataSyncItem {
+    #[doc="<p>The status reported by the last sync.</p>"]
+    #[serde(rename="LastStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub last_status: Option<String>,
+    #[doc="<p>The last time the sync operations returned a status of <code>SUCCESSFUL</code> (UTC).</p>"]
+    #[serde(rename="LastSuccessfulSyncTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub last_successful_sync_time: Option<f64>,
+    #[doc="<p>The last time the configuration attempted to sync (UTC).</p>"]
+    #[serde(rename="LastSyncTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub last_sync_time: Option<f64>,
+    #[doc="<p>Configuration information for the target Amazon S3 bucket.</p>"]
+    #[serde(rename="S3Destination")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub s3_destination: Option<ResourceDataSyncS3Destination>,
+    #[doc="<p>The date and time the configuration was created (UTC).</p>"]
+    #[serde(rename="SyncCreatedTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub sync_created_time: Option<f64>,
+    #[doc="<p>The name of the Resource Data Sync.</p>"]
+    #[serde(rename="SyncName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub sync_name: Option<String>,
+}
+
+#[doc="<p>Information about the target Amazon S3 bucket for the Resource Data Sync.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct ResourceDataSyncS3Destination {
+    #[doc="<p>The name of the Amazon S3 bucket where the aggregated data is stored.</p>"]
+    #[serde(rename="BucketName")]
+    pub bucket_name: String,
+    #[doc="<p>An Amazon S3 prefix for the bucket.</p>"]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub prefix: Option<String>,
+    #[doc="<p>The AWS Region with the Amazon S3 bucket targeted by the Resource Data Sync.</p>"]
+    #[serde(rename="Region")]
+    pub region: String,
+    #[doc="<p>A supported sync format. The following format is currently supported: JsonSerDe</p>"]
+    #[serde(rename="SyncFormat")]
+    pub sync_format: String,
+}
+
 #[doc="<p>The inventory item result attribute.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ResultAttribute {
@@ -3747,6 +4610,23 @@ pub struct S3OutputUrl {
     #[serde(skip_serializing_if="Option::is_none")]
     pub output_url: Option<String>,
 }
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct SendAutomationSignalRequest {
+    #[doc="<p>The unique identifier for an existing Automation execution that you want to send the signal to.</p>"]
+    #[serde(rename="AutomationExecutionId")]
+    pub automation_execution_id: String,
+    #[doc="<p>The data sent with the signal. The data schema depends on the type of signal used in the request. </p>"]
+    #[serde(rename="Payload")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub payload: Option<::std::collections::HashMap<String, Vec<String>>>,
+    #[doc="<p>The type of signal. Valid signal types include the following: Approve and Reject </p>"]
+    #[serde(rename="SignalType")]
+    pub signal_type: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct SendAutomationSignalResult;
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SendCommandRequest {
@@ -3817,6 +4697,35 @@ pub struct SendCommandResult {
     #[serde(rename="Command")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub command: Option<Command>,
+}
+
+#[doc="<p>The number of managed instances found for each patch severity level defined in the request filter.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct SeveritySummary {
+    #[doc="<p>The total number of resources or compliance items that have a severity level of critical. Critical severity is determined by the organization that published the compliance items.</p>"]
+    #[serde(rename="CriticalCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub critical_count: Option<i64>,
+    #[doc="<p>The total number of resources or compliance items that have a severity level of high. High severity is determined by the organization that published the compliance items.</p>"]
+    #[serde(rename="HighCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub high_count: Option<i64>,
+    #[doc="<p>The total number of resources or compliance items that have a severity level of informational. Informational severity is determined by the organization that published the compliance items.</p>"]
+    #[serde(rename="InformationalCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub informational_count: Option<i64>,
+    #[doc="<p>The total number of resources or compliance items that have a severity level of low. Low severity is determined by the organization that published the compliance items.</p>"]
+    #[serde(rename="LowCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub low_count: Option<i64>,
+    #[doc="<p>The total number of resources or compliance items that have a severity level of medium. Medium severity is determined by the organization that published the compliance items.</p>"]
+    #[serde(rename="MediumCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub medium_count: Option<i64>,
+    #[doc="<p>The total number of resources or compliance items that have a severity level of unspecified. Unspecified severity is determined by the organization that published the compliance items.</p>"]
+    #[serde(rename="UnspecifiedCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub unspecified_count: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -3930,6 +4839,14 @@ pub struct UpdateAssociationRequest {
     #[doc="<p>The ID of the association you want to update. </p>"]
     #[serde(rename="AssociationId")]
     pub association_id: String,
+    #[doc="<p>The name of the association that you want to update.</p>"]
+    #[serde(rename="AssociationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_name: Option<String>,
+    #[doc="<p>This parameter is provided for concurrency control purposes. You must specify the latest association version in the service. If you want to ensure that this request succeeds, either specify <code>$LATEST</code>, or omit this parameter.</p>"]
+    #[serde(rename="AssociationVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub association_version: Option<String>,
     #[doc="<p>The document version you want update for the association. </p>"]
     #[serde(rename="DocumentVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -4035,6 +4952,10 @@ pub struct UpdateMaintenanceWindowRequest {
     #[serde(rename="Cutoff")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub cutoff: Option<i64>,
+    #[doc="<p>An optional description for the update request.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
     #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
     #[serde(rename="Duration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -4047,6 +4968,10 @@ pub struct UpdateMaintenanceWindowRequest {
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
+    #[doc="<p>If True, then all fields that are required by the CreateMaintenanceWindow action are also required for this API request. Optional fields that are not specified are set to null. </p>"]
+    #[serde(rename="Replace")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub replace: Option<bool>,
     #[doc="<p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>"]
     #[serde(rename="Schedule")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -4066,6 +4991,10 @@ pub struct UpdateMaintenanceWindowResult {
     #[serde(rename="Cutoff")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub cutoff: Option<i64>,
+    #[doc="<p>An optional description of the update.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
     #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
     #[serde(rename="Duration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -4086,6 +5015,180 @@ pub struct UpdateMaintenanceWindowResult {
     #[serde(rename="WindowId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct UpdateMaintenanceWindowTargetRequest {
+    #[doc="<p>An optional description for the update.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    #[doc="<p>A name for the update.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>"]
+    #[serde(rename="OwnerInformation")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub owner_information: Option<String>,
+    #[doc="<p>If True, then all fields that are required by the RegisterTargetWithMaintenanceWindow action are also required for this API request. Optional fields that are not specified are set to null.</p>"]
+    #[serde(rename="Replace")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub replace: Option<bool>,
+    #[doc="<p>The targets to add or replace.</p>"]
+    #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub targets: Option<Vec<Target>>,
+    #[doc="<p>The Maintenance Window ID with which to modify the target.</p>"]
+    #[serde(rename="WindowId")]
+    pub window_id: String,
+    #[doc="<p>The target ID to modify.</p>"]
+    #[serde(rename="WindowTargetId")]
+    pub window_target_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct UpdateMaintenanceWindowTargetResult {
+    #[doc="<p>The updated description.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    #[doc="<p>The updated name.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>The updated owner.</p>"]
+    #[serde(rename="OwnerInformation")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub owner_information: Option<String>,
+    #[doc="<p>The updated targets.</p>"]
+    #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub targets: Option<Vec<Target>>,
+    #[doc="<p>The Maintenance Window ID specified in the update request.</p>"]
+    #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub window_id: Option<String>,
+    #[doc="<p>The target ID specified in the update request.</p>"]
+    #[serde(rename="WindowTargetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub window_target_id: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct UpdateMaintenanceWindowTaskRequest {
+    #[doc="<p>The new task description to specify.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    #[doc="<p>The new logging location in Amazon S3 to specify.</p>"]
+    #[serde(rename="LoggingInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub logging_info: Option<LoggingInfo>,
+    #[doc="<p>The new <code>MaxConcurrency</code> value you want to specify. <code>MaxConcurrency</code> is the number of targets that are allowed to run this task in parallel.</p>"]
+    #[serde(rename="MaxConcurrency")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_concurrency: Option<String>,
+    #[doc="<p>The new <code>MaxErrors</code> value to specify. <code>MaxErrors</code> is the maximum number of errors that are allowed before the task stops being scheduled.</p>"]
+    #[serde(rename="MaxErrors")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_errors: Option<String>,
+    #[doc="<p>The new task name to specify.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>The new task priority to specify. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>"]
+    #[serde(rename="Priority")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub priority: Option<i64>,
+    #[doc="<p>If True, then all fields that are required by the RegisterTaskWithMaintenanceWndow action are also required for this API request. Optional fields that are not specified are set to null.</p>"]
+    #[serde(rename="Replace")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub replace: Option<bool>,
+    #[doc="<p>The IAM service role ARN to modify. The system assumes this role during task execution. </p>"]
+    #[serde(rename="ServiceRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub service_role_arn: Option<String>,
+    #[doc="<p>The targets (either instances or tags) to modify. Instances are specified using Key=instanceids,Values=instanceID_1,instanceID_2. Tags are specified using Key=tag_name,Values=tag_value. </p>"]
+    #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub targets: Option<Vec<Target>>,
+    #[doc="<p>The task ARN to modify.</p>"]
+    #[serde(rename="TaskArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_arn: Option<String>,
+    #[doc="<p>The parameters that the task should use during execution. Populate only the fields that match the task type. All other fields should be empty.</p>"]
+    #[serde(rename="TaskInvocationParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
+    #[doc="<p>The parameters to modify. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>"]
+    #[serde(rename="TaskParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_parameters:
+        Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
+    #[doc="<p>The Maintenance Window ID that contains the task to modify.</p>"]
+    #[serde(rename="WindowId")]
+    pub window_id: String,
+    #[doc="<p>The task ID to modify.</p>"]
+    #[serde(rename="WindowTaskId")]
+    pub window_task_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct UpdateMaintenanceWindowTaskResult {
+    #[doc="<p>The updated task description.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    #[doc="<p>The updated logging information in Amazon S3.</p>"]
+    #[serde(rename="LoggingInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub logging_info: Option<LoggingInfo>,
+    #[doc="<p>The updated MaxConcurrency value.</p>"]
+    #[serde(rename="MaxConcurrency")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_concurrency: Option<String>,
+    #[doc="<p>The updated MaxErrors value.</p>"]
+    #[serde(rename="MaxErrors")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_errors: Option<String>,
+    #[doc="<p>The updated task name.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>The updated priority value.</p>"]
+    #[serde(rename="Priority")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub priority: Option<i64>,
+    #[doc="<p>The updated service role ARN value.</p>"]
+    #[serde(rename="ServiceRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub service_role_arn: Option<String>,
+    #[doc="<p>The updated target values.</p>"]
+    #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub targets: Option<Vec<Target>>,
+    #[doc="<p>The updated task ARN value.</p>"]
+    #[serde(rename="TaskArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_arn: Option<String>,
+    #[doc="<p>The updated parameter values.</p>"]
+    #[serde(rename="TaskInvocationParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
+    #[doc="<p>The updated parameter values.</p>"]
+    #[serde(rename="TaskParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub task_parameters:
+        Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
+    #[doc="<p>The ID of the Maintenance Window that was updated.</p>"]
+    #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub window_id: Option<String>,
+    #[doc="<p>The task ID of the Maintenance Window that was updated.</p>"]
+    #[serde(rename="WindowTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub window_task_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -4111,6 +5214,10 @@ pub struct UpdatePatchBaselineRequest {
     #[serde(rename="ApprovedPatches")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
+    #[doc="<p>Assigns a new compliance severity level to an existing patch baseline.</p>"]
+    #[serde(rename="ApprovedPatchesComplianceLevel")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub approved_patches_compliance_level: Option<String>,
     #[doc="<p>The ID of the patch baseline to update.</p>"]
     #[serde(rename="BaselineId")]
     pub baseline_id: String,
@@ -4142,6 +5249,10 @@ pub struct UpdatePatchBaselineResult {
     #[serde(rename="ApprovedPatches")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
+    #[doc="<p>The compliance severity level assigned to the patch baseline after the update completed.</p>"]
+    #[serde(rename="ApprovedPatchesComplianceLevel")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub approved_patches_compliance_level: Option<String>,
     #[doc="<p>The ID of the deleted patch baseline.</p>"]
     #[serde(rename="BaselineId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -4166,6 +5277,10 @@ pub struct UpdatePatchBaselineResult {
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
+    #[doc="<p>The operating system rule used by the updated patch baseline.</p>"]
+    #[serde(rename="OperatingSystem")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub operating_system: Option<String>,
     #[doc="<p>A list of explicitly rejected patches for the baseline.</p>"]
     #[serde(rename="RejectedPatches")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -4998,6 +6113,97 @@ impl Error for CreatePatchBaselineError {
         }
     }
 }
+/// Errors returned by CreateResourceDataSync
+#[derive(Debug, PartialEq)]
+pub enum CreateResourceDataSyncError {
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>A sync configuration with the same name already exists.</p>
+    ResourceDataSyncAlreadyExists(String),
+    ///<p>You have exceeded the allowed maximum sync configurations.</p>
+    ResourceDataSyncCountExceeded(String),
+    ///<p>The specified sync configuration is invalid.</p>
+    ResourceDataSyncInvalidConfiguration(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl CreateResourceDataSyncError {
+    pub fn from_body(body: &str) -> CreateResourceDataSyncError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => CreateResourceDataSyncError::InternalServerError(String::from(error_message)),
+                    "ResourceDataSyncAlreadyExistsException" => CreateResourceDataSyncError::ResourceDataSyncAlreadyExists(String::from(error_message)),
+                    "ResourceDataSyncCountExceededException" => CreateResourceDataSyncError::ResourceDataSyncCountExceeded(String::from(error_message)),
+                    "ResourceDataSyncInvalidConfigurationException" => CreateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(String::from(error_message)),
+                    "ValidationException" => {
+                        CreateResourceDataSyncError::Validation(error_message.to_string())
+                    }
+                    _ => CreateResourceDataSyncError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateResourceDataSyncError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateResourceDataSyncError {
+    fn from(err: serde_json::error::Error) -> CreateResourceDataSyncError {
+        CreateResourceDataSyncError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateResourceDataSyncError {
+    fn from(err: CredentialsError) -> CreateResourceDataSyncError {
+        CreateResourceDataSyncError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateResourceDataSyncError {
+    fn from(err: HttpDispatchError) -> CreateResourceDataSyncError {
+        CreateResourceDataSyncError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateResourceDataSyncError {
+    fn from(err: io::Error) -> CreateResourceDataSyncError {
+        CreateResourceDataSyncError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateResourceDataSyncError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateResourceDataSyncError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateResourceDataSyncError::InternalServerError(ref cause) => cause,
+            CreateResourceDataSyncError::ResourceDataSyncAlreadyExists(ref cause) => cause,
+            CreateResourceDataSyncError::ResourceDataSyncCountExceeded(ref cause) => cause,
+            CreateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(ref cause) => cause,
+            CreateResourceDataSyncError::Validation(ref cause) => cause,
+            CreateResourceDataSyncError::Credentials(ref err) => err.description(),
+            CreateResourceDataSyncError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateResourceDataSyncError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteActivation
 #[derive(Debug, PartialEq)]
 pub enum DeleteActivationError {
@@ -5621,6 +6827,89 @@ impl Error for DeletePatchBaselineError {
         }
     }
 }
+/// Errors returned by DeleteResourceDataSync
+#[derive(Debug, PartialEq)]
+pub enum DeleteResourceDataSyncError {
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>The specified sync name was not found.</p>
+    ResourceDataSyncNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DeleteResourceDataSyncError {
+    pub fn from_body(body: &str) -> DeleteResourceDataSyncError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => DeleteResourceDataSyncError::InternalServerError(String::from(error_message)),
+                    "ResourceDataSyncNotFoundException" => DeleteResourceDataSyncError::ResourceDataSyncNotFound(String::from(error_message)),
+                    "ValidationException" => {
+                        DeleteResourceDataSyncError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteResourceDataSyncError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteResourceDataSyncError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteResourceDataSyncError {
+    fn from(err: serde_json::error::Error) -> DeleteResourceDataSyncError {
+        DeleteResourceDataSyncError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteResourceDataSyncError {
+    fn from(err: CredentialsError) -> DeleteResourceDataSyncError {
+        DeleteResourceDataSyncError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteResourceDataSyncError {
+    fn from(err: HttpDispatchError) -> DeleteResourceDataSyncError {
+        DeleteResourceDataSyncError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteResourceDataSyncError {
+    fn from(err: io::Error) -> DeleteResourceDataSyncError {
+        DeleteResourceDataSyncError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteResourceDataSyncError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteResourceDataSyncError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteResourceDataSyncError::InternalServerError(ref cause) => cause,
+            DeleteResourceDataSyncError::ResourceDataSyncNotFound(ref cause) => cause,
+            DeleteResourceDataSyncError::Validation(ref cause) => cause,
+            DeleteResourceDataSyncError::Credentials(ref err) => err.description(),
+            DeleteResourceDataSyncError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteResourceDataSyncError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeregisterManagedInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterManagedInstanceError {
@@ -5795,6 +7084,8 @@ pub enum DeregisterTargetFromMaintenanceWindowError {
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
+    ///<p>You specified the <code>Safe</code> option for the DeregisterTargetFromMaintenanceWindow operation, but the target is still referenced in a task.</p>
+    TargetInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -5821,6 +7112,7 @@ impl DeregisterTargetFromMaintenanceWindowError {
                 match *error_type {
                     "DoesNotExistException" => DeregisterTargetFromMaintenanceWindowError::DoesNotExist(String::from(error_message)),
                     "InternalServerError" => DeregisterTargetFromMaintenanceWindowError::InternalServerError(String::from(error_message)),
+                    "TargetInUseException" => DeregisterTargetFromMaintenanceWindowError::TargetInUse(String::from(error_message)),
                     "ValidationException" => {
                         DeregisterTargetFromMaintenanceWindowError::Validation(error_message
                                                                                    .to_string())
@@ -5863,6 +7155,7 @@ impl Error for DeregisterTargetFromMaintenanceWindowError {
         match *self {
             DeregisterTargetFromMaintenanceWindowError::DoesNotExist(ref cause) => cause,
             DeregisterTargetFromMaintenanceWindowError::InternalServerError(ref cause) => cause,
+            DeregisterTargetFromMaintenanceWindowError::TargetInUse(ref cause) => cause,
             DeregisterTargetFromMaintenanceWindowError::Validation(ref cause) => cause,
             DeregisterTargetFromMaintenanceWindowError::Credentials(ref err) => err.description(),
             DeregisterTargetFromMaintenanceWindowError::HttpDispatch(ref dispatch_error) => {
@@ -6056,6 +7349,8 @@ pub enum DescribeAssociationError {
     AssociationDoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
+    ///<p>The version you specified is not valid. Use ListAssociationVersions to view all versions of an association according to the association ID. Or, use the <code>$LATEST</code> parameter to view the latest version of the association.</p>
+    InvalidAssociationVersion(String),
     ///<p>The specified document does not exist.</p>
     InvalidDocument(String),
     ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
@@ -6088,6 +7383,7 @@ impl DescribeAssociationError {
                     "InternalServerError" => {
                         DescribeAssociationError::InternalServerError(String::from(error_message))
                     }
+                    "InvalidAssociationVersion" => DescribeAssociationError::InvalidAssociationVersion(String::from(error_message)),
                     "InvalidDocument" => {
                         DescribeAssociationError::InvalidDocument(String::from(error_message))
                     }
@@ -6135,6 +7431,7 @@ impl Error for DescribeAssociationError {
         match *self {
             DescribeAssociationError::AssociationDoesNotExist(ref cause) => cause,
             DescribeAssociationError::InternalServerError(ref cause) => cause,
+            DescribeAssociationError::InvalidAssociationVersion(ref cause) => cause,
             DescribeAssociationError::InvalidDocument(ref cause) => cause,
             DescribeAssociationError::InvalidInstanceId(ref cause) => cause,
             DescribeAssociationError::Validation(ref cause) => cause,
@@ -6583,6 +7880,8 @@ pub enum DescribeEffectivePatchesForPatchBaselineError {
     InternalServerError(String),
     ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
+    ///<p>The operating systems you specified is not supported, or the operation is not supported for the operating system. Valid operating systems include: Windows, AmazonLinux, RedhatEnterpriseLinux, and Ubuntu.</p>
+    UnsupportedOperatingSystem(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -6610,6 +7909,7 @@ impl DescribeEffectivePatchesForPatchBaselineError {
                     "DoesNotExistException" => DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(String::from(error_message)),
                     "InternalServerError" => DescribeEffectivePatchesForPatchBaselineError::InternalServerError(String::from(error_message)),
                     "InvalidResourceId" => DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(String::from(error_message)),
+                    "UnsupportedOperatingSystem" => DescribeEffectivePatchesForPatchBaselineError::UnsupportedOperatingSystem(String::from(error_message)),
                     "ValidationException" => DescribeEffectivePatchesForPatchBaselineError::Validation(error_message.to_string()),
                     _ => DescribeEffectivePatchesForPatchBaselineError::Unknown(String::from(body)),
                 }
@@ -6650,6 +7950,7 @@ impl Error for DescribeEffectivePatchesForPatchBaselineError {
             DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(ref cause) => cause,
             DescribeEffectivePatchesForPatchBaselineError::InternalServerError(ref cause) => cause,
             DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(ref cause) => cause,
+            DescribeEffectivePatchesForPatchBaselineError::UnsupportedOperatingSystem(ref cause) => cause,
             DescribeEffectivePatchesForPatchBaselineError::Validation(ref cause) => cause,
             DescribeEffectivePatchesForPatchBaselineError::Credentials(ref err) => {
                 err.description()
@@ -8226,6 +9527,8 @@ impl Error for GetDefaultPatchBaselineError {
 pub enum GetDeployablePatchSnapshotForInstanceError {
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
+    ///<p>The operating systems you specified is not supported, or the operation is not supported for the operating system. Valid operating systems include: Windows, AmazonLinux, RedhatEnterpriseLinux, and Ubuntu.</p>
+    UnsupportedOperatingSystem(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -8251,6 +9554,7 @@ impl GetDeployablePatchSnapshotForInstanceError {
 
                 match *error_type {
                     "InternalServerError" => GetDeployablePatchSnapshotForInstanceError::InternalServerError(String::from(error_message)),
+                    "UnsupportedOperatingSystem" => GetDeployablePatchSnapshotForInstanceError::UnsupportedOperatingSystem(String::from(error_message)),
                     "ValidationException" => {
                         GetDeployablePatchSnapshotForInstanceError::Validation(error_message
                                                                                    .to_string())
@@ -8292,6 +9596,9 @@ impl Error for GetDeployablePatchSnapshotForInstanceError {
     fn description(&self) -> &str {
         match *self {
             GetDeployablePatchSnapshotForInstanceError::InternalServerError(ref cause) => cause,
+            GetDeployablePatchSnapshotForInstanceError::UnsupportedOperatingSystem(ref cause) => {
+                cause
+            }
             GetDeployablePatchSnapshotForInstanceError::Validation(ref cause) => cause,
             GetDeployablePatchSnapshotForInstanceError::Credentials(ref err) => err.description(),
             GetDeployablePatchSnapshotForInstanceError::HttpDispatch(ref dispatch_error) => {
@@ -8839,6 +10146,176 @@ impl Error for GetMaintenanceWindowExecutionTaskError {
                 dispatch_error.description()
             }
             GetMaintenanceWindowExecutionTaskError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetMaintenanceWindowExecutionTaskInvocation
+#[derive(Debug, PartialEq)]
+pub enum GetMaintenanceWindowExecutionTaskInvocationError {
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    DoesNotExist(String),
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetMaintenanceWindowExecutionTaskInvocationError {
+    pub fn from_body(body: &str) -> GetMaintenanceWindowExecutionTaskInvocationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DoesNotExistException" => GetMaintenanceWindowExecutionTaskInvocationError::DoesNotExist(String::from(error_message)),
+                    "InternalServerError" => GetMaintenanceWindowExecutionTaskInvocationError::InternalServerError(String::from(error_message)),
+                    "ValidationException" => GetMaintenanceWindowExecutionTaskInvocationError::Validation(error_message.to_string()),
+                    _ => GetMaintenanceWindowExecutionTaskInvocationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetMaintenanceWindowExecutionTaskInvocationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetMaintenanceWindowExecutionTaskInvocationError {
+    fn from(err: serde_json::error::Error) -> GetMaintenanceWindowExecutionTaskInvocationError {
+        GetMaintenanceWindowExecutionTaskInvocationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetMaintenanceWindowExecutionTaskInvocationError {
+    fn from(err: CredentialsError) -> GetMaintenanceWindowExecutionTaskInvocationError {
+        GetMaintenanceWindowExecutionTaskInvocationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetMaintenanceWindowExecutionTaskInvocationError {
+    fn from(err: HttpDispatchError) -> GetMaintenanceWindowExecutionTaskInvocationError {
+        GetMaintenanceWindowExecutionTaskInvocationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMaintenanceWindowExecutionTaskInvocationError {
+    fn from(err: io::Error) -> GetMaintenanceWindowExecutionTaskInvocationError {
+        GetMaintenanceWindowExecutionTaskInvocationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetMaintenanceWindowExecutionTaskInvocationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMaintenanceWindowExecutionTaskInvocationError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMaintenanceWindowExecutionTaskInvocationError::DoesNotExist(ref cause) => cause,
+            GetMaintenanceWindowExecutionTaskInvocationError::InternalServerError(ref cause) => {
+                cause
+            }
+            GetMaintenanceWindowExecutionTaskInvocationError::Validation(ref cause) => cause,
+            GetMaintenanceWindowExecutionTaskInvocationError::Credentials(ref err) => {
+                err.description()
+            }
+            GetMaintenanceWindowExecutionTaskInvocationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetMaintenanceWindowExecutionTaskInvocationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetMaintenanceWindowTask
+#[derive(Debug, PartialEq)]
+pub enum GetMaintenanceWindowTaskError {
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    DoesNotExist(String),
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetMaintenanceWindowTaskError {
+    pub fn from_body(body: &str) -> GetMaintenanceWindowTaskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DoesNotExistException" => {
+                        GetMaintenanceWindowTaskError::DoesNotExist(String::from(error_message))
+                    }
+                    "InternalServerError" => GetMaintenanceWindowTaskError::InternalServerError(String::from(error_message)),
+                    "ValidationException" => {
+                        GetMaintenanceWindowTaskError::Validation(error_message.to_string())
+                    }
+                    _ => GetMaintenanceWindowTaskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetMaintenanceWindowTaskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetMaintenanceWindowTaskError {
+    fn from(err: serde_json::error::Error) -> GetMaintenanceWindowTaskError {
+        GetMaintenanceWindowTaskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetMaintenanceWindowTaskError {
+    fn from(err: CredentialsError) -> GetMaintenanceWindowTaskError {
+        GetMaintenanceWindowTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetMaintenanceWindowTaskError {
+    fn from(err: HttpDispatchError) -> GetMaintenanceWindowTaskError {
+        GetMaintenanceWindowTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMaintenanceWindowTaskError {
+    fn from(err: io::Error) -> GetMaintenanceWindowTaskError {
+        GetMaintenanceWindowTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetMaintenanceWindowTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMaintenanceWindowTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMaintenanceWindowTaskError::DoesNotExist(ref cause) => cause,
+            GetMaintenanceWindowTaskError::InternalServerError(ref cause) => cause,
+            GetMaintenanceWindowTaskError::Validation(ref cause) => cause,
+            GetMaintenanceWindowTaskError::Credentials(ref err) => err.description(),
+            GetMaintenanceWindowTaskError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetMaintenanceWindowTaskError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -9394,6 +10871,95 @@ impl Error for GetPatchBaselineForPatchGroupError {
         }
     }
 }
+/// Errors returned by ListAssociationVersions
+#[derive(Debug, PartialEq)]
+pub enum ListAssociationVersionsError {
+    ///<p>The specified association does not exist.</p>
+    AssociationDoesNotExist(String),
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListAssociationVersionsError {
+    pub fn from_body(body: &str) -> ListAssociationVersionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AssociationDoesNotExist" => ListAssociationVersionsError::AssociationDoesNotExist(String::from(error_message)),
+                    "InternalServerError" => ListAssociationVersionsError::InternalServerError(String::from(error_message)),
+                    "InvalidNextToken" => {
+                        ListAssociationVersionsError::InvalidNextToken(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListAssociationVersionsError::Validation(error_message.to_string())
+                    }
+                    _ => ListAssociationVersionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListAssociationVersionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListAssociationVersionsError {
+    fn from(err: serde_json::error::Error) -> ListAssociationVersionsError {
+        ListAssociationVersionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListAssociationVersionsError {
+    fn from(err: CredentialsError) -> ListAssociationVersionsError {
+        ListAssociationVersionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListAssociationVersionsError {
+    fn from(err: HttpDispatchError) -> ListAssociationVersionsError {
+        ListAssociationVersionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAssociationVersionsError {
+    fn from(err: io::Error) -> ListAssociationVersionsError {
+        ListAssociationVersionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListAssociationVersionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAssociationVersionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListAssociationVersionsError::AssociationDoesNotExist(ref cause) => cause,
+            ListAssociationVersionsError::InternalServerError(ref cause) => cause,
+            ListAssociationVersionsError::InvalidNextToken(ref cause) => cause,
+            ListAssociationVersionsError::Validation(ref cause) => cause,
+            ListAssociationVersionsError::Credentials(ref err) => err.description(),
+            ListAssociationVersionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListAssociationVersionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListAssociations
 #[derive(Debug, PartialEq)]
 pub enum ListAssociationsError {
@@ -9682,6 +11248,202 @@ impl Error for ListCommandsError {
             ListCommandsError::Credentials(ref err) => err.description(),
             ListCommandsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListCommandsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListComplianceItems
+#[derive(Debug, PartialEq)]
+pub enum ListComplianceItemsError {
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    InvalidFilter(String),
+    ///<p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    InvalidResourceId(String),
+    ///<p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    InvalidResourceType(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListComplianceItemsError {
+    pub fn from_body(body: &str) -> ListComplianceItemsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        ListComplianceItemsError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidFilter" => {
+                        ListComplianceItemsError::InvalidFilter(String::from(error_message))
+                    }
+                    "InvalidNextToken" => {
+                        ListComplianceItemsError::InvalidNextToken(String::from(error_message))
+                    }
+                    "InvalidResourceId" => {
+                        ListComplianceItemsError::InvalidResourceId(String::from(error_message))
+                    }
+                    "InvalidResourceType" => {
+                        ListComplianceItemsError::InvalidResourceType(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListComplianceItemsError::Validation(error_message.to_string())
+                    }
+                    _ => ListComplianceItemsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListComplianceItemsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListComplianceItemsError {
+    fn from(err: serde_json::error::Error) -> ListComplianceItemsError {
+        ListComplianceItemsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListComplianceItemsError {
+    fn from(err: CredentialsError) -> ListComplianceItemsError {
+        ListComplianceItemsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListComplianceItemsError {
+    fn from(err: HttpDispatchError) -> ListComplianceItemsError {
+        ListComplianceItemsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListComplianceItemsError {
+    fn from(err: io::Error) -> ListComplianceItemsError {
+        ListComplianceItemsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListComplianceItemsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListComplianceItemsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListComplianceItemsError::InternalServerError(ref cause) => cause,
+            ListComplianceItemsError::InvalidFilter(ref cause) => cause,
+            ListComplianceItemsError::InvalidNextToken(ref cause) => cause,
+            ListComplianceItemsError::InvalidResourceId(ref cause) => cause,
+            ListComplianceItemsError::InvalidResourceType(ref cause) => cause,
+            ListComplianceItemsError::Validation(ref cause) => cause,
+            ListComplianceItemsError::Credentials(ref err) => err.description(),
+            ListComplianceItemsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListComplianceItemsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListComplianceSummaries
+#[derive(Debug, PartialEq)]
+pub enum ListComplianceSummariesError {
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    InvalidFilter(String),
+    ///<p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListComplianceSummariesError {
+    pub fn from_body(body: &str) -> ListComplianceSummariesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => ListComplianceSummariesError::InternalServerError(String::from(error_message)),
+                    "InvalidFilter" => {
+                        ListComplianceSummariesError::InvalidFilter(String::from(error_message))
+                    }
+                    "InvalidNextToken" => {
+                        ListComplianceSummariesError::InvalidNextToken(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListComplianceSummariesError::Validation(error_message.to_string())
+                    }
+                    _ => ListComplianceSummariesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListComplianceSummariesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListComplianceSummariesError {
+    fn from(err: serde_json::error::Error) -> ListComplianceSummariesError {
+        ListComplianceSummariesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListComplianceSummariesError {
+    fn from(err: CredentialsError) -> ListComplianceSummariesError {
+        ListComplianceSummariesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListComplianceSummariesError {
+    fn from(err: HttpDispatchError) -> ListComplianceSummariesError {
+        ListComplianceSummariesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListComplianceSummariesError {
+    fn from(err: io::Error) -> ListComplianceSummariesError {
+        ListComplianceSummariesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListComplianceSummariesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListComplianceSummariesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListComplianceSummariesError::InternalServerError(ref cause) => cause,
+            ListComplianceSummariesError::InvalidFilter(ref cause) => cause,
+            ListComplianceSummariesError::InvalidNextToken(ref cause) => cause,
+            ListComplianceSummariesError::Validation(ref cause) => cause,
+            ListComplianceSummariesError::Credentials(ref err) => err.description(),
+            ListComplianceSummariesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListComplianceSummariesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -9974,6 +11736,180 @@ impl Error for ListInventoryEntriesError {
         }
     }
 }
+/// Errors returned by ListResourceComplianceSummaries
+#[derive(Debug, PartialEq)]
+pub enum ListResourceComplianceSummariesError {
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    InvalidFilter(String),
+    ///<p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListResourceComplianceSummariesError {
+    pub fn from_body(body: &str) -> ListResourceComplianceSummariesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => ListResourceComplianceSummariesError::InternalServerError(String::from(error_message)),
+                    "InvalidFilter" => ListResourceComplianceSummariesError::InvalidFilter(String::from(error_message)),
+                    "InvalidNextToken" => ListResourceComplianceSummariesError::InvalidNextToken(String::from(error_message)),
+                    "ValidationException" => {
+                        ListResourceComplianceSummariesError::Validation(error_message.to_string())
+                    }
+                    _ => ListResourceComplianceSummariesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListResourceComplianceSummariesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListResourceComplianceSummariesError {
+    fn from(err: serde_json::error::Error) -> ListResourceComplianceSummariesError {
+        ListResourceComplianceSummariesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListResourceComplianceSummariesError {
+    fn from(err: CredentialsError) -> ListResourceComplianceSummariesError {
+        ListResourceComplianceSummariesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListResourceComplianceSummariesError {
+    fn from(err: HttpDispatchError) -> ListResourceComplianceSummariesError {
+        ListResourceComplianceSummariesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListResourceComplianceSummariesError {
+    fn from(err: io::Error) -> ListResourceComplianceSummariesError {
+        ListResourceComplianceSummariesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListResourceComplianceSummariesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListResourceComplianceSummariesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListResourceComplianceSummariesError::InternalServerError(ref cause) => cause,
+            ListResourceComplianceSummariesError::InvalidFilter(ref cause) => cause,
+            ListResourceComplianceSummariesError::InvalidNextToken(ref cause) => cause,
+            ListResourceComplianceSummariesError::Validation(ref cause) => cause,
+            ListResourceComplianceSummariesError::Credentials(ref err) => err.description(),
+            ListResourceComplianceSummariesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListResourceComplianceSummariesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListResourceDataSync
+#[derive(Debug, PartialEq)]
+pub enum ListResourceDataSyncError {
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListResourceDataSyncError {
+    pub fn from_body(body: &str) -> ListResourceDataSyncError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        ListResourceDataSyncError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidNextToken" => {
+                        ListResourceDataSyncError::InvalidNextToken(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListResourceDataSyncError::Validation(error_message.to_string())
+                    }
+                    _ => ListResourceDataSyncError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListResourceDataSyncError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListResourceDataSyncError {
+    fn from(err: serde_json::error::Error) -> ListResourceDataSyncError {
+        ListResourceDataSyncError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListResourceDataSyncError {
+    fn from(err: CredentialsError) -> ListResourceDataSyncError {
+        ListResourceDataSyncError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListResourceDataSyncError {
+    fn from(err: HttpDispatchError) -> ListResourceDataSyncError {
+        ListResourceDataSyncError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListResourceDataSyncError {
+    fn from(err: io::Error) -> ListResourceDataSyncError {
+        ListResourceDataSyncError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListResourceDataSyncError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListResourceDataSyncError {
+    fn description(&self) -> &str {
+        match *self {
+            ListResourceDataSyncError::InternalServerError(ref cause) => cause,
+            ListResourceDataSyncError::InvalidNextToken(ref cause) => cause,
+            ListResourceDataSyncError::Validation(ref cause) => cause,
+            ListResourceDataSyncError::Credentials(ref err) => err.description(),
+            ListResourceDataSyncError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListResourceDataSyncError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -10164,6 +12100,121 @@ impl Error for ModifyDocumentPermissionError {
         }
     }
 }
+/// Errors returned by PutComplianceItems
+#[derive(Debug, PartialEq)]
+pub enum PutComplianceItemsError {
+    ///<p>You specified too many custom compliance types. You can specify a maximum of 10 different types. </p>
+    ComplianceTypeCountLimitExceeded(String),
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>One or more content items is not valid.</p>
+    InvalidItemContent(String),
+    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    InvalidResourceId(String),
+    ///<p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    InvalidResourceType(String),
+    ///<p>The inventory item size has exceeded the size limit.</p>
+    ItemSizeLimitExceeded(String),
+    ///<p>The size of inventory data has exceeded the total size limit for the resource.</p>
+    TotalSizeLimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl PutComplianceItemsError {
+    pub fn from_body(body: &str) -> PutComplianceItemsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ComplianceTypeCountLimitExceededException" => PutComplianceItemsError::ComplianceTypeCountLimitExceeded(String::from(error_message)),
+                    "InternalServerError" => {
+                        PutComplianceItemsError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidItemContentException" => {
+                        PutComplianceItemsError::InvalidItemContent(String::from(error_message))
+                    }
+                    "InvalidResourceId" => {
+                        PutComplianceItemsError::InvalidResourceId(String::from(error_message))
+                    }
+                    "InvalidResourceType" => {
+                        PutComplianceItemsError::InvalidResourceType(String::from(error_message))
+                    }
+                    "ItemSizeLimitExceededException" => {
+                        PutComplianceItemsError::ItemSizeLimitExceeded(String::from(error_message))
+                    }
+                    "TotalSizeLimitExceededException" => {
+                        PutComplianceItemsError::TotalSizeLimitExceeded(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        PutComplianceItemsError::Validation(error_message.to_string())
+                    }
+                    _ => PutComplianceItemsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutComplianceItemsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutComplianceItemsError {
+    fn from(err: serde_json::error::Error) -> PutComplianceItemsError {
+        PutComplianceItemsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutComplianceItemsError {
+    fn from(err: CredentialsError) -> PutComplianceItemsError {
+        PutComplianceItemsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutComplianceItemsError {
+    fn from(err: HttpDispatchError) -> PutComplianceItemsError {
+        PutComplianceItemsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutComplianceItemsError {
+    fn from(err: io::Error) -> PutComplianceItemsError {
+        PutComplianceItemsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutComplianceItemsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutComplianceItemsError {
+    fn description(&self) -> &str {
+        match *self {
+            PutComplianceItemsError::ComplianceTypeCountLimitExceeded(ref cause) => cause,
+            PutComplianceItemsError::InternalServerError(ref cause) => cause,
+            PutComplianceItemsError::InvalidItemContent(ref cause) => cause,
+            PutComplianceItemsError::InvalidResourceId(ref cause) => cause,
+            PutComplianceItemsError::InvalidResourceType(ref cause) => cause,
+            PutComplianceItemsError::ItemSizeLimitExceeded(ref cause) => cause,
+            PutComplianceItemsError::TotalSizeLimitExceeded(ref cause) => cause,
+            PutComplianceItemsError::Validation(ref cause) => cause,
+            PutComplianceItemsError::Credentials(ref err) => err.description(),
+            PutComplianceItemsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutComplianceItemsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutInventory
 #[derive(Debug, PartialEq)]
 pub enum PutInventoryError {
@@ -10173,6 +12224,8 @@ pub enum PutInventoryError {
     InternalServerError(String),
     ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
+    ///<p>You specified invalid keys or values in the <code>Context</code> attribute for <code>InventoryItem</code>. Verify the keys and values, and try again.</p>
+    InvalidInventoryItemContext(String),
     ///<p>One or more content items is not valid.</p>
     InvalidItemContent(String),
     ///<p>The parameter type name is not valid.</p>
@@ -10181,8 +12234,12 @@ pub enum PutInventoryError {
     ItemContentMismatch(String),
     ///<p>The inventory item size has exceeded the size limit.</p>
     ItemSizeLimitExceeded(String),
+    ///<p>The sub-type count exceeded the limit for the inventory type.</p>
+    SubTypeCountLimitExceeded(String),
     ///<p>The size of inventory data has exceeded the total size limit for the resource.</p>
     TotalSizeLimitExceeded(String),
+    ///<p>The <code>Context</code> attribute that you specified for the <code>InventoryItem</code> is not allowed for this inventory type. You can only use the <code>Context</code> attribute with inventory types like <code>AWS:ComplianceItem</code>.</p>
+    UnsupportedInventoryItemContext(String),
     ///<p>Inventory item type schema version has to match supported versions in the service. Check output of GetInventorySchema to see the available schema version for each type.</p>
     UnsupportedInventorySchemaVersion(String),
     /// An error occurred dispatching the HTTP request
@@ -10216,6 +12273,9 @@ impl PutInventoryError {
                     "InvalidInstanceId" => {
                         PutInventoryError::InvalidInstanceId(String::from(error_message))
                     }
+                    "InvalidInventoryItemContextException" => {
+                        PutInventoryError::InvalidInventoryItemContext(String::from(error_message))
+                    }
                     "InvalidItemContentException" => {
                         PutInventoryError::InvalidItemContent(String::from(error_message))
                     }
@@ -10228,9 +12288,13 @@ impl PutInventoryError {
                     "ItemSizeLimitExceededException" => {
                         PutInventoryError::ItemSizeLimitExceeded(String::from(error_message))
                     }
+                    "SubTypeCountLimitExceededException" => {
+                        PutInventoryError::SubTypeCountLimitExceeded(String::from(error_message))
+                    }
                     "TotalSizeLimitExceededException" => {
                         PutInventoryError::TotalSizeLimitExceeded(String::from(error_message))
                     }
+                    "UnsupportedInventoryItemContextException" => PutInventoryError::UnsupportedInventoryItemContext(String::from(error_message)),
                     "UnsupportedInventorySchemaVersionException" => PutInventoryError::UnsupportedInventorySchemaVersion(String::from(error_message)),
                     "ValidationException" => {
                         PutInventoryError::Validation(error_message.to_string())
@@ -10274,11 +12338,14 @@ impl Error for PutInventoryError {
             PutInventoryError::CustomSchemaCountLimitExceeded(ref cause) => cause,
             PutInventoryError::InternalServerError(ref cause) => cause,
             PutInventoryError::InvalidInstanceId(ref cause) => cause,
+            PutInventoryError::InvalidInventoryItemContext(ref cause) => cause,
             PutInventoryError::InvalidItemContent(ref cause) => cause,
             PutInventoryError::InvalidTypeName(ref cause) => cause,
             PutInventoryError::ItemContentMismatch(ref cause) => cause,
             PutInventoryError::ItemSizeLimitExceeded(ref cause) => cause,
+            PutInventoryError::SubTypeCountLimitExceeded(ref cause) => cause,
             PutInventoryError::TotalSizeLimitExceeded(ref cause) => cause,
+            PutInventoryError::UnsupportedInventoryItemContext(ref cause) => cause,
             PutInventoryError::UnsupportedInventorySchemaVersion(ref cause) => cause,
             PutInventoryError::Validation(ref cause) => cause,
             PutInventoryError::Credentials(ref err) => err.description(),
@@ -10290,7 +12357,7 @@ impl Error for PutInventoryError {
 /// Errors returned by PutParameter
 #[derive(Debug, PartialEq)]
 pub enum PutParameterError {
-    ///<p>A hierarchy can have a maximum of five levels. For example:</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working-path.html">Develop a Parameter Hierarchy</a>. </p>
+    ///<p>A hierarchy can have a maximum of five levels. For example:</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p>
     HierarchyLevelLimitExceeded(String),
     ///<p>Parameter Store does not support changing a parameter type in a hierarchy. For example, you can't change a parameter from a String type to a SecureString type. You must create a new, unique parameter.</p>
     HierarchyTypeMismatch(String),
@@ -10702,6 +12769,8 @@ impl Error for RegisterTargetWithMaintenanceWindowError {
 pub enum RegisterTaskWithMaintenanceWindowError {
     ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
+    ///<p>You attempted to register a LAMBDA or STEP_FUNCTION task in a region where the corresponding service is not available. </p>
+    FeatureNotAvailable(String),
     ///<p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
     ///<p>An error occurred on the server side.</p>
@@ -10733,6 +12802,7 @@ impl RegisterTaskWithMaintenanceWindowError {
 
                 match *error_type {
                     "DoesNotExistException" => RegisterTaskWithMaintenanceWindowError::DoesNotExist(String::from(error_message)),
+                    "FeatureNotAvailableException" => RegisterTaskWithMaintenanceWindowError::FeatureNotAvailable(String::from(error_message)),
                     "IdempotentParameterMismatch" => RegisterTaskWithMaintenanceWindowError::IdempotentParameterMismatch(String::from(error_message)),
                     "InternalServerError" => RegisterTaskWithMaintenanceWindowError::InternalServerError(String::from(error_message)),
                     "ResourceLimitExceededException" => RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(String::from(error_message)),
@@ -10777,6 +12847,7 @@ impl Error for RegisterTaskWithMaintenanceWindowError {
     fn description(&self) -> &str {
         match *self {
             RegisterTaskWithMaintenanceWindowError::DoesNotExist(ref cause) => cause,
+            RegisterTaskWithMaintenanceWindowError::FeatureNotAvailable(ref cause) => cause,
             RegisterTaskWithMaintenanceWindowError::IdempotentParameterMismatch(ref cause) => cause,
             RegisterTaskWithMaintenanceWindowError::InternalServerError(ref cause) => cause,
             RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(ref cause) => cause,
@@ -10875,6 +12946,95 @@ impl Error for RemoveTagsFromResourceError {
                 dispatch_error.description()
             }
             RemoveTagsFromResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by SendAutomationSignal
+#[derive(Debug, PartialEq)]
+pub enum SendAutomationSignalError {
+    ///<p>There is no automation execution information for the requested automation execution ID.</p>
+    AutomationExecutionNotFound(String),
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>The signal is not valid for the current Automation execution.</p>
+    InvalidAutomationSignal(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl SendAutomationSignalError {
+    pub fn from_body(body: &str) -> SendAutomationSignalError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AutomationExecutionNotFoundException" => SendAutomationSignalError::AutomationExecutionNotFound(String::from(error_message)),
+                    "InternalServerError" => {
+                        SendAutomationSignalError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidAutomationSignalException" => SendAutomationSignalError::InvalidAutomationSignal(String::from(error_message)),
+                    "ValidationException" => {
+                        SendAutomationSignalError::Validation(error_message.to_string())
+                    }
+                    _ => SendAutomationSignalError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SendAutomationSignalError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SendAutomationSignalError {
+    fn from(err: serde_json::error::Error) -> SendAutomationSignalError {
+        SendAutomationSignalError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SendAutomationSignalError {
+    fn from(err: CredentialsError) -> SendAutomationSignalError {
+        SendAutomationSignalError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SendAutomationSignalError {
+    fn from(err: HttpDispatchError) -> SendAutomationSignalError {
+        SendAutomationSignalError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendAutomationSignalError {
+    fn from(err: io::Error) -> SendAutomationSignalError {
+        SendAutomationSignalError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SendAutomationSignalError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SendAutomationSignalError {
+    fn description(&self) -> &str {
+        match *self {
+            SendAutomationSignalError::AutomationExecutionNotFound(ref cause) => cause,
+            SendAutomationSignalError::InternalServerError(ref cause) => cause,
+            SendAutomationSignalError::InvalidAutomationSignal(ref cause) => cause,
+            SendAutomationSignalError::Validation(ref cause) => cause,
+            SendAutomationSignalError::Credentials(ref err) => err.description(),
+            SendAutomationSignalError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SendAutomationSignalError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -11192,8 +13352,12 @@ impl Error for StopAutomationExecutionError {
 pub enum UpdateAssociationError {
     ///<p>The specified association does not exist.</p>
     AssociationDoesNotExist(String),
+    ///<p>You have reached the maximum number versions allowed for an association. Each association has a limit of 1,000 versions. </p>
+    AssociationVersionLimitExceeded(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
+    ///<p>The version you specified is not valid. Use ListAssociationVersions to view all versions of an association according to the association ID. Or, use the <code>$LATEST</code> parameter to view the latest version of the association.</p>
+    InvalidAssociationVersion(String),
     ///<p>The specified document does not exist.</p>
     InvalidDocument(String),
     ///<p>The document version is not valid or does not exist.</p>
@@ -11237,9 +13401,11 @@ impl UpdateAssociationError {
                     "AssociationDoesNotExist" => {
                         UpdateAssociationError::AssociationDoesNotExist(String::from(error_message))
                     }
+                    "AssociationVersionLimitExceeded" => UpdateAssociationError::AssociationVersionLimitExceeded(String::from(error_message)),
                     "InternalServerError" => {
                         UpdateAssociationError::InternalServerError(String::from(error_message))
                     }
+                    "InvalidAssociationVersion" => UpdateAssociationError::InvalidAssociationVersion(String::from(error_message)),
                     "InvalidDocument" => {
                         UpdateAssociationError::InvalidDocument(String::from(error_message))
                     }
@@ -11304,7 +13470,9 @@ impl Error for UpdateAssociationError {
     fn description(&self) -> &str {
         match *self {
             UpdateAssociationError::AssociationDoesNotExist(ref cause) => cause,
+            UpdateAssociationError::AssociationVersionLimitExceeded(ref cause) => cause,
             UpdateAssociationError::InternalServerError(ref cause) => cause,
+            UpdateAssociationError::InvalidAssociationVersion(ref cause) => cause,
             UpdateAssociationError::InvalidDocument(ref cause) => cause,
             UpdateAssociationError::InvalidDocumentVersion(ref cause) => cause,
             UpdateAssociationError::InvalidOutputLocation(ref cause) => cause,
@@ -11722,6 +13890,174 @@ impl Error for UpdateMaintenanceWindowError {
         }
     }
 }
+/// Errors returned by UpdateMaintenanceWindowTarget
+#[derive(Debug, PartialEq)]
+pub enum UpdateMaintenanceWindowTargetError {
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    DoesNotExist(String),
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl UpdateMaintenanceWindowTargetError {
+    pub fn from_body(body: &str) -> UpdateMaintenanceWindowTargetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DoesNotExistException" => UpdateMaintenanceWindowTargetError::DoesNotExist(String::from(error_message)),
+                    "InternalServerError" => UpdateMaintenanceWindowTargetError::InternalServerError(String::from(error_message)),
+                    "ValidationException" => {
+                        UpdateMaintenanceWindowTargetError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateMaintenanceWindowTargetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateMaintenanceWindowTargetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateMaintenanceWindowTargetError {
+    fn from(err: serde_json::error::Error) -> UpdateMaintenanceWindowTargetError {
+        UpdateMaintenanceWindowTargetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateMaintenanceWindowTargetError {
+    fn from(err: CredentialsError) -> UpdateMaintenanceWindowTargetError {
+        UpdateMaintenanceWindowTargetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateMaintenanceWindowTargetError {
+    fn from(err: HttpDispatchError) -> UpdateMaintenanceWindowTargetError {
+        UpdateMaintenanceWindowTargetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateMaintenanceWindowTargetError {
+    fn from(err: io::Error) -> UpdateMaintenanceWindowTargetError {
+        UpdateMaintenanceWindowTargetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateMaintenanceWindowTargetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateMaintenanceWindowTargetError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateMaintenanceWindowTargetError::DoesNotExist(ref cause) => cause,
+            UpdateMaintenanceWindowTargetError::InternalServerError(ref cause) => cause,
+            UpdateMaintenanceWindowTargetError::Validation(ref cause) => cause,
+            UpdateMaintenanceWindowTargetError::Credentials(ref err) => err.description(),
+            UpdateMaintenanceWindowTargetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateMaintenanceWindowTargetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateMaintenanceWindowTask
+#[derive(Debug, PartialEq)]
+pub enum UpdateMaintenanceWindowTaskError {
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    DoesNotExist(String),
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl UpdateMaintenanceWindowTaskError {
+    pub fn from_body(body: &str) -> UpdateMaintenanceWindowTaskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DoesNotExistException" => {
+                        UpdateMaintenanceWindowTaskError::DoesNotExist(String::from(error_message))
+                    }
+                    "InternalServerError" => UpdateMaintenanceWindowTaskError::InternalServerError(String::from(error_message)),
+                    "ValidationException" => {
+                        UpdateMaintenanceWindowTaskError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateMaintenanceWindowTaskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateMaintenanceWindowTaskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateMaintenanceWindowTaskError {
+    fn from(err: serde_json::error::Error) -> UpdateMaintenanceWindowTaskError {
+        UpdateMaintenanceWindowTaskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateMaintenanceWindowTaskError {
+    fn from(err: CredentialsError) -> UpdateMaintenanceWindowTaskError {
+        UpdateMaintenanceWindowTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateMaintenanceWindowTaskError {
+    fn from(err: HttpDispatchError) -> UpdateMaintenanceWindowTaskError {
+        UpdateMaintenanceWindowTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateMaintenanceWindowTaskError {
+    fn from(err: io::Error) -> UpdateMaintenanceWindowTaskError {
+        UpdateMaintenanceWindowTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateMaintenanceWindowTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateMaintenanceWindowTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateMaintenanceWindowTaskError::DoesNotExist(ref cause) => cause,
+            UpdateMaintenanceWindowTaskError::InternalServerError(ref cause) => cause,
+            UpdateMaintenanceWindowTaskError::Validation(ref cause) => cause,
+            UpdateMaintenanceWindowTaskError::Credentials(ref err) => err.description(),
+            UpdateMaintenanceWindowTaskError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateMaintenanceWindowTaskError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateManagedInstanceRole
 #[derive(Debug, PartialEq)]
 pub enum UpdateManagedInstanceRoleError {
@@ -11944,6 +14280,13 @@ pub trait Ssm {
                              -> Result<CreatePatchBaselineResult, CreatePatchBaselineError>;
 
 
+    #[doc="<p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href=\"API_ListResourceDataSync.html\">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync\">Configuring Resource Data Sync for Inventory</a>.</p>"]
+    fn create_resource_data_sync
+        (&self,
+         input: &CreateResourceDataSyncRequest)
+         -> Result<CreateResourceDataSyncResult, CreateResourceDataSyncError>;
+
+
     #[doc="<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>"]
     fn delete_activation(&self,
                          input: &DeleteActivationRequest)
@@ -11975,7 +14318,7 @@ pub trait Ssm {
                         -> Result<DeleteParameterResult, DeleteParameterError>;
 
 
-    #[doc="<p>Delete a list of parameters.</p>"]
+    #[doc="<p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>"]
     fn delete_parameters(&self,
                          input: &DeleteParametersRequest)
                          -> Result<DeleteParametersResult, DeleteParametersError>;
@@ -11985,6 +14328,13 @@ pub trait Ssm {
     fn delete_patch_baseline(&self,
                              input: &DeletePatchBaselineRequest)
                              -> Result<DeletePatchBaselineResult, DeletePatchBaselineError>;
+
+
+    #[doc="<p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>"]
+    fn delete_resource_data_sync
+        (&self,
+         input: &DeleteResourceDataSyncRequest)
+         -> Result<DeleteResourceDataSyncResult, DeleteResourceDataSyncError>;
 
 
     #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>"]
@@ -12057,7 +14407,7 @@ pub trait Ssm {
     fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInstanceAssociationsRequest)  -> Result<DescribeEffectiveInstanceAssociationsResult, DescribeEffectiveInstanceAssociationsError>;
 
 
-    #[doc="<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline.</p>"]
+    #[doc="<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>"]
     fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectivePatchesForPatchBaselineRequest)  -> Result<DescribeEffectivePatchesForPatchBaselineResult, DescribeEffectivePatchesForPatchBaselineError>;
 
 
@@ -12102,7 +14452,7 @@ pub trait Ssm {
     fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanceWindowExecutionTasksRequest)  -> Result<DescribeMaintenanceWindowExecutionTasksResult, DescribeMaintenanceWindowExecutionTasksError>;
 
 
-    #[doc="<p>Lists the executions of a Maintenance Window (meaning, information about when the Maintenance Window was scheduled to be active and information about tasks registered and run with the Maintenance Window).</p>"]
+    #[doc="<p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>"]
     fn describe_maintenance_window_executions
         (&self,
          input: &DescribeMaintenanceWindowExecutionsRequest)
@@ -12131,7 +14481,7 @@ pub trait Ssm {
          -> Result<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError>;
 
 
-    #[doc="<p>Get information about a parameter.</p>"]
+    #[doc="<p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
     fn describe_parameters(&self,
                            input: &DescribeParametersRequest)
                            -> Result<DescribeParametersResult, DescribeParametersError>;
@@ -12170,13 +14520,14 @@ pub trait Ssm {
                               -> Result<GetCommandInvocationResult, GetCommandInvocationError>;
 
 
-    #[doc="<p>Retrieves the default patch baseline.</p>"]
+    #[doc="<p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>"]
     fn get_default_patch_baseline
-        (&self)
+        (&self,
+         input: &GetDefaultPatchBaselineRequest)
          -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError>;
 
 
-    #[doc="<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-ApplyPatchBaseline Systems Manager document. </p>"]
+    #[doc="<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>"]
     fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchSnapshotForInstanceRequest)  -> Result<GetDeployablePatchSnapshotForInstanceResult, GetDeployablePatchSnapshotForInstanceError>;
 
 
@@ -12218,6 +14569,17 @@ pub trait Ssm {
          -> Result<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>;
 
 
+    #[doc="<p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>"]
+    fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanceWindowExecutionTaskInvocationRequest)  -> Result<GetMaintenanceWindowExecutionTaskInvocationResult, GetMaintenanceWindowExecutionTaskInvocationError>;
+
+
+    #[doc="<p>Lists the tasks in a Maintenance Window.</p>"]
+    fn get_maintenance_window_task
+        (&self,
+         input: &GetMaintenanceWindowTaskRequest)
+         -> Result<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError>;
+
+
     #[doc="<p>Get information about a parameter by using the parameter name. </p>"]
     fn get_parameter(&self,
                      input: &GetParameterRequest)
@@ -12236,7 +14598,7 @@ pub trait Ssm {
                       -> Result<GetParametersResult, GetParametersError>;
 
 
-    #[doc="<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working-path.html\">Using Parameter Hierarchies</a>. </p>"]
+    #[doc="<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html\">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
     fn get_parameters_by_path(&self,
                               input: &GetParametersByPathRequest)
                               -> Result<GetParametersByPathResult, GetParametersByPathError>;
@@ -12253,6 +14615,13 @@ pub trait Ssm {
         (&self,
          input: &GetPatchBaselineForPatchGroupRequest)
          -> Result<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError>;
+
+
+    #[doc="<p>Retrieves all versions of an association for a specific association ID.</p>"]
+    fn list_association_versions
+        (&self,
+         input: &ListAssociationVersionsRequest)
+         -> Result<ListAssociationVersionsResult, ListAssociationVersionsError>;
 
 
     #[doc="<p>Lists the associations for the specified Systems Manager document or instance.</p>"]
@@ -12274,6 +14643,19 @@ pub trait Ssm {
                      -> Result<ListCommandsResult, ListCommandsError>;
 
 
+    #[doc="<p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>"]
+    fn list_compliance_items(&self,
+                             input: &ListComplianceItemsRequest)
+                             -> Result<ListComplianceItemsResult, ListComplianceItemsError>;
+
+
+    #[doc="<p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>"]
+    fn list_compliance_summaries
+        (&self,
+         input: &ListComplianceSummariesRequest)
+         -> Result<ListComplianceSummariesResult, ListComplianceSummariesError>;
+
+
     #[doc="<p>List all versions for a document.</p>"]
     fn list_document_versions(&self,
                               input: &ListDocumentVersionsRequest)
@@ -12292,6 +14674,19 @@ pub trait Ssm {
                               -> Result<ListInventoryEntriesResult, ListInventoryEntriesError>;
 
 
+    #[doc="<p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>"]
+    fn list_resource_compliance_summaries
+        (&self,
+         input: &ListResourceComplianceSummariesRequest)
+         -> Result<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError>;
+
+
+    #[doc="<p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>"]
+    fn list_resource_data_sync(&self,
+                               input: &ListResourceDataSyncRequest)
+                               -> Result<ListResourceDataSyncResult, ListResourceDataSyncError>;
+
+
     #[doc="<p>Returns a list of the tags assigned to the specified resource.</p>"]
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceRequest)
@@ -12303,6 +14698,12 @@ pub trait Ssm {
         (&self,
          input: &ModifyDocumentPermissionRequest)
          -> Result<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError>;
+
+
+    #[doc="<p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>"]
+    fn put_compliance_items(&self,
+                            input: &PutComplianceItemsRequest)
+                            -> Result<PutComplianceItemsResult, PutComplianceItemsError>;
 
 
     #[doc="<p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>"]
@@ -12354,6 +14755,12 @@ pub trait Ssm {
          -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
 
 
+    #[doc="<p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>"]
+    fn send_automation_signal(&self,
+                              input: &SendAutomationSignalRequest)
+                              -> Result<SendAutomationSignalResult, SendAutomationSignalError>;
+
+
     #[doc="<p>Executes commands on one or more managed instances.</p>"]
     fn send_command(&self,
                     input: &SendCommandRequest)
@@ -12374,7 +14781,7 @@ pub trait Ssm {
          -> Result<StopAutomationExecutionResult, StopAutomationExecutionError>;
 
 
-    #[doc="<p>Updates an association. You can only update the document version, schedule, parameters, and Amazon S3 output of an association.</p>"]
+    #[doc="<p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>"]
     fn update_association(&self,
                           input: &UpdateAssociationRequest)
                           -> Result<UpdateAssociationResult, UpdateAssociationError>;
@@ -12405,6 +14812,20 @@ pub trait Ssm {
         (&self,
          input: &UpdateMaintenanceWindowRequest)
          -> Result<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError>;
+
+
+    #[doc="<p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>"]
+    fn update_maintenance_window_target
+        (&self,
+         input: &UpdateMaintenanceWindowTargetRequest)
+         -> Result<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError>;
+
+
+    #[doc="<p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>"]
+    fn update_maintenance_window_task
+        (&self,
+         input: &UpdateMaintenanceWindowTaskRequest)
+         -> Result<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError>;
 
 
     #[doc="<p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>"]
@@ -12699,6 +15120,37 @@ impl<P, D> Ssm for SsmClient<P, D>
     }
 
 
+    #[doc="<p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href=\"API_ListResourceDataSync.html\">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync\">Configuring Resource Data Sync for Inventory</a>.</p>"]
+    fn create_resource_data_sync
+        (&self,
+         input: &CreateResourceDataSyncRequest)
+         -> Result<CreateResourceDataSyncResult, CreateResourceDataSyncError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.CreateResourceDataSync");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateResourceDataSyncResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateResourceDataSyncError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>"]
     fn delete_activation(&self,
                          input: &DeleteActivationRequest)
@@ -12859,7 +15311,7 @@ impl<P, D> Ssm for SsmClient<P, D>
     }
 
 
-    #[doc="<p>Delete a list of parameters.</p>"]
+    #[doc="<p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>"]
     fn delete_parameters(&self,
                          input: &DeleteParametersRequest)
                          -> Result<DeleteParametersResult, DeleteParametersError> {
@@ -12916,6 +15368,37 @@ impl<P, D> Ssm for SsmClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeletePatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>"]
+    fn delete_resource_data_sync
+        (&self,
+         input: &DeleteResourceDataSyncRequest)
+         -> Result<DeleteResourceDataSyncResult, DeleteResourceDataSyncError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.DeleteResourceDataSync");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteResourceDataSyncResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteResourceDataSyncError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -13265,7 +15748,7 @@ fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInst
     }
 
 
-    #[doc="<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline.</p>"]
+    #[doc="<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>"]
 fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectivePatchesForPatchBaselineRequest)  -> Result<DescribeEffectivePatchesForPatchBaselineResult, DescribeEffectivePatchesForPatchBaselineError>{
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -13510,7 +15993,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
     }
 
 
-    #[doc="<p>Lists the executions of a Maintenance Window (meaning, information about when the Maintenance Window was scheduled to be active and information about tasks registered and run with the Maintenance Window).</p>"]
+    #[doc="<p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>"]
     fn describe_maintenance_window_executions
         (&self,
          input: &DescribeMaintenanceWindowExecutionsRequest)
@@ -13638,7 +16121,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
     }
 
 
-    #[doc="<p>Get information about a parameter.</p>"]
+    #[doc="<p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
     fn describe_parameters(&self,
                            input: &DescribeParametersRequest)
                            -> Result<DescribeParametersResult, DescribeParametersError> {
@@ -13824,15 +16307,17 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
     }
 
 
-    #[doc="<p>Retrieves the default patch baseline.</p>"]
+    #[doc="<p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>"]
     fn get_default_patch_baseline
-        (&self)
+        (&self,
+         input: &GetDefaultPatchBaselineRequest)
          -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetDefaultPatchBaseline");
-        request.set_payload(Some(b"{}".to_vec()));
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -13854,7 +16339,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
     }
 
 
-    #[doc="<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-ApplyPatchBaseline Systems Manager document. </p>"]
+    #[doc="<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>"]
 fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchSnapshotForInstanceRequest)  -> Result<GetDeployablePatchSnapshotForInstanceResult, GetDeployablePatchSnapshotForInstanceError>{
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -14073,6 +16558,67 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
+    #[doc="<p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>"]
+fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanceWindowExecutionTaskInvocationRequest)  -> Result<GetMaintenanceWindowExecutionTaskInvocationResult, GetMaintenanceWindowExecutionTaskInvocationError>{
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AmazonSSM.GetMaintenanceWindowExecutionTaskInvocation");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskInvocationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetMaintenanceWindowExecutionTaskInvocationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Lists the tasks in a Maintenance Window.</p>"]
+    fn get_maintenance_window_task
+        (&self,
+         input: &GetMaintenanceWindowTaskRequest)
+         -> Result<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.GetMaintenanceWindowTask");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetMaintenanceWindowTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetMaintenanceWindowTaskError::from_body(String::from_utf8_lossy(&body)
+                                                                 .as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Get information about a parameter by using the parameter name. </p>"]
     fn get_parameter(&self,
                      input: &GetParameterRequest)
@@ -14167,7 +16713,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
-    #[doc="<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working-path.html\">Using Parameter Hierarchies</a>. </p>"]
+    #[doc="<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html\">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
     fn get_parameters_by_path(&self,
                               input: &GetParametersByPathRequest)
                               -> Result<GetParametersByPathResult, GetParametersByPathError> {
@@ -14256,6 +16802,38 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
                 try!(response.body.read_to_end(&mut body));
                 Err(GetPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&body)
                                                                       .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Retrieves all versions of an association for a specific association ID.</p>"]
+    fn list_association_versions
+        (&self,
+         input: &ListAssociationVersionsRequest)
+         -> Result<ListAssociationVersionsResult, ListAssociationVersionsError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.ListAssociationVersions");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListAssociationVersionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAssociationVersionsError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
             }
         }
     }
@@ -14356,6 +16934,68 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
+    #[doc="<p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>"]
+    fn list_compliance_items(&self,
+                             input: &ListComplianceItemsRequest)
+                             -> Result<ListComplianceItemsResult, ListComplianceItemsError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.ListComplianceItems");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListComplianceItemsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListComplianceItemsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>"]
+    fn list_compliance_summaries
+        (&self,
+         input: &ListComplianceSummariesRequest)
+         -> Result<ListComplianceSummariesResult, ListComplianceSummariesError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.ListComplianceSummaries");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListComplianceSummariesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListComplianceSummariesError::from_body(String::from_utf8_lossy(&body)
+                                                                .as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>List all versions for a document.</p>"]
     fn list_document_versions(&self,
                               input: &ListDocumentVersionsRequest)
@@ -14448,6 +17088,68 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
+    #[doc="<p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>"]
+    fn list_resource_compliance_summaries
+        (&self,
+         input: &ListResourceComplianceSummariesRequest)
+         -> Result<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.ListResourceComplianceSummaries");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListResourceComplianceSummariesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListResourceComplianceSummariesError::from_body(String::from_utf8_lossy(&body)
+                                                                        .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>"]
+    fn list_resource_data_sync(&self,
+                               input: &ListResourceDataSyncRequest)
+                               -> Result<ListResourceDataSyncResult, ListResourceDataSyncError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.ListResourceDataSync");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListResourceDataSyncResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListResourceDataSyncError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Returns a list of the tags assigned to the specified resource.</p>"]
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceRequest)
@@ -14505,6 +17207,38 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
                 try!(response.body.read_to_end(&mut body));
                 Err(ModifyDocumentPermissionError::from_body(String::from_utf8_lossy(&body)
                                                                  .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>"]
+    fn put_compliance_items(&self,
+                            input: &PutComplianceItemsRequest)
+                            -> Result<PutComplianceItemsResult, PutComplianceItemsError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.PutComplianceItems");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutComplianceItemsResult>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutComplianceItemsError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -14735,6 +17469,36 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
+    #[doc="<p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>"]
+    fn send_automation_signal(&self,
+                              input: &SendAutomationSignalRequest)
+                              -> Result<SendAutomationSignalResult, SendAutomationSignalError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.SendAutomationSignal");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SendAutomationSignalResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendAutomationSignalError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Executes commands on one or more managed instances.</p>"]
     fn send_command(&self,
                     input: &SendCommandRequest)
@@ -14831,7 +17595,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
-    #[doc="<p>Updates an association. You can only update the document version, schedule, parameters, and Amazon S3 output of an association.</p>"]
+    #[doc="<p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>"]
     fn update_association(&self,
                           input: &UpdateAssociationRequest)
                           -> Result<UpdateAssociationResult, UpdateAssociationError> {
@@ -14986,6 +17750,70 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateMaintenanceWindowError::from_body(String::from_utf8_lossy(&body)
                                                                 .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>"]
+    fn update_maintenance_window_target
+        (&self,
+         input: &UpdateMaintenanceWindowTargetRequest)
+         -> Result<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindowTarget");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateMaintenanceWindowTargetResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateMaintenanceWindowTargetError::from_body(String::from_utf8_lossy(&body)
+                                                                      .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>"]
+    fn update_maintenance_window_task
+        (&self,
+         input: &UpdateMaintenanceWindowTaskRequest)
+         -> Result<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindowTask");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateMaintenanceWindowTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateMaintenanceWindowTaskError::from_body(String::from_utf8_lossy(&body)
+                                                                    .as_ref()))
             }
         }
     }

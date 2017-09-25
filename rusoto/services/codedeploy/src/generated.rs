@@ -309,8 +309,7 @@ pub struct CreateDeploymentConfigInput {
     pub deployment_config_name: String,
     #[doc="<p>The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value.</p> <p>The type parameter takes either of the following values:</p> <ul> <li> <p>HOST_COUNT: The value parameter represents the minimum number of healthy instances as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The value parameter represents the minimum number of healthy instances as a percentage of the total number of instances in the deployment. If you specify FLEET_PERCENT, at the start of the deployment, AWS CodeDeploy converts the percentage to the equivalent number of instance and rounds up fractional instances.</p> </li> </ul> <p>The value parameter takes an integer.</p> <p>For example, to set a minimum of 95% healthy instance, specify a type of FLEET_PERCENT and a value of 95.</p>"]
     #[serde(rename="minimumHealthyHosts")]
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
+    pub minimum_healthy_hosts: MinimumHealthyHosts,
 }
 
 #[doc="<p>Represents the output of a CreateDeploymentConfig operation.</p>"]
@@ -355,18 +354,26 @@ pub struct CreateDeploymentGroupInput {
     #[serde(rename="deploymentStyle")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
-    #[doc="<p>The Amazon EC2 tags on which to filter. The deployment group will include EC2 instances with any of the specified tags.</p>"]
+    #[doc="<p>The Amazon EC2 tags on which to filter. The deployment group will include EC2 instances with any of the specified tags. Cannot be used in the same call as ec2TagSet.</p>"]
     #[serde(rename="ec2TagFilters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_tag_filters: Option<Vec<EC2TagFilter>>,
+    #[doc="<p>Information about groups of tags applied to EC2 instances. The deployment group will include only EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters.</p>"]
+    #[serde(rename="ec2TagSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub ec_2_tag_set: Option<EC2TagSet>,
     #[doc="<p>Information about the load balancer used in a deployment.</p>"]
     #[serde(rename="loadBalancerInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
-    #[doc="<p>The on-premises instance tags on which to filter. The deployment group will include on-premises instances with any of the specified tags.</p>"]
+    #[doc="<p>The on-premises instance tags on which to filter. The deployment group will include on-premises instances with any of the specified tags. Cannot be used in the same call as OnPremisesTagSet.</p>"]
     #[serde(rename="onPremisesInstanceTagFilters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub on_premises_instance_tag_filters: Option<Vec<TagFilter>>,
+    #[doc="<p>Information about groups of tags applied to on-premises instances. The deployment group will include only on-premises instances identified by all the tag groups. Cannot be used in the same call as onPremisesInstanceTagFilters.</p>"]
+    #[serde(rename="onPremisesTagSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub on_premises_tag_set: Option<OnPremisesTagSet>,
     #[doc="<p>A service role ARN that allows AWS CodeDeploy to act on the user's behalf when interacting with AWS services.</p>"]
     #[serde(rename="serviceRoleArn")]
     pub service_role_arn: String,
@@ -534,10 +541,14 @@ pub struct DeploymentGroupInfo {
     #[serde(rename="deploymentStyle")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
-    #[doc="<p>The Amazon EC2 tags on which to filter.</p>"]
+    #[doc="<p>The Amazon EC2 tags on which to filter. The deployment group includes EC2 instances with any of the specified tags.</p>"]
     #[serde(rename="ec2TagFilters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_tag_filters: Option<Vec<EC2TagFilter>>,
+    #[doc="<p>Information about groups of tags applied to an EC2 instance. The deployment group includes only EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters.</p>"]
+    #[serde(rename="ec2TagSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub ec_2_tag_set: Option<EC2TagSet>,
     #[doc="<p>Information about the most recent attempted deployment to the deployment group.</p>"]
     #[serde(rename="lastAttemptedDeployment")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -550,10 +561,14 @@ pub struct DeploymentGroupInfo {
     #[serde(rename="loadBalancerInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
-    #[doc="<p>The on-premises instance tags on which to filter.</p>"]
+    #[doc="<p>The on-premises instance tags on which to filter. The deployment group includes on-premises instances with any of the specified tags.</p>"]
     #[serde(rename="onPremisesInstanceTagFilters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub on_premises_instance_tag_filters: Option<Vec<TagFilter>>,
+    #[doc="<p>Information about groups of tags applied to an on-premises instance. The deployment group includes only on-premises instances identified by all the tag groups. Cannot be used in the same call as onPremisesInstanceTagFilters.</p>"]
+    #[serde(rename="onPremisesTagSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub on_premises_tag_set: Option<OnPremisesTagSet>,
     #[doc="<p>A service role ARN.</p>"]
     #[serde(rename="serviceRoleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -774,10 +789,19 @@ pub struct EC2TagFilter {
     pub value: Option<String>,
 }
 
-#[doc="<p>Information about a load balancer in Elastic Load Balancing to use in a deployment.</p>"]
+#[doc="<p>Information about groups of EC2 instance tags.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct EC2TagSet {
+    #[doc="<p>A list containing other lists of EC2 instance tag groups. In order for an instance to be included in the deployment group, it must be identified by all the tag groups in the list.</p>"]
+    #[serde(rename="ec2TagSetList")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub ec_2_tag_set_list: Option<Vec<Vec<EC2TagFilter>>>,
+}
+
+#[doc="<p>Information about a load balancer in Elastic Load Balancing to use in a deployment. Instances are registered directly with a load balancer, and traffic is routed to the load balancer.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ELBInfo {
-    #[doc="<p>For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.</p>"]
+    #[doc="<p>For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.</p>"]
     #[serde(rename="name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
@@ -1328,13 +1352,17 @@ pub struct ListOnPremisesInstancesOutput {
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Information about the load balancer used in a deployment.</p>"]
+#[doc="<p>Information about the Elastic Load Balancing load balancer or target group used in a deployment.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoadBalancerInfo {
-    #[doc="<p>An array containing information about the load balancer in Elastic Load Balancing to use in a deployment.</p>"]
+    #[doc="<p>An array containing information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p>"]
     #[serde(rename="elbInfoList")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub elb_info_list: Option<Vec<ELBInfo>>,
+    #[doc="<p>An array containing information about the target group to use for load balancing in a deployment. In Elastic Load Balancing, target groups are used with Application Load Balancers.</p>"]
+    #[serde(rename="targetGroupInfoList")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub target_group_info_list: Option<Vec<TargetGroupInfo>>,
 }
 
 #[doc="<p>Information about minimum healthy instance.</p>"]
@@ -1348,6 +1376,15 @@ pub struct MinimumHealthyHosts {
     #[serde(rename="value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<i64>,
+}
+
+#[doc="<p>Information about groups of on-premises instance tags.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct OnPremisesTagSet {
+    #[doc="<p>A list containing other lists of on-premises instance tag groups. In order for an instance to be included in the deployment group, it must be identified by all the tag groups in the list.</p>"]
+    #[serde(rename="onPremisesTagSetList")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub on_premises_tag_set_list: Option<Vec<Vec<TagFilter>>>,
 }
 
 #[doc="<p>Represents the input of a RegisterApplicationRevision operation.</p>"]
@@ -1527,6 +1564,15 @@ pub struct TagFilter {
     pub value: Option<String>,
 }
 
+#[doc="<p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct TargetGroupInfo {
+    #[doc="<p>For blue/green deployments, the name of the target group that instances in the original environment are deregistered from, and instances in the replacement environment registered with. For in-place deployments, the name of the target group that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes. </p>"]
+    #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+}
+
 #[doc="<p>Information about the instances to be used in the replacement environment in a blue/green deployment.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TargetInstances {
@@ -1534,7 +1580,11 @@ pub struct TargetInstances {
     #[serde(rename="autoScalingGroups")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_groups: Option<Vec<String>>,
-    #[doc="<p>The tag filter key, type, and value used to identify Amazon EC2 instances in a replacement environment for a blue/green deployment.</p>"]
+    #[doc="<p>Information about the groups of EC2 instance tags that an instance must be identified by in order for it to be included in the replacement environment for a blue/green deployment. Cannot be used in the same call as tagFilters.</p>"]
+    #[serde(rename="ec2TagSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub ec_2_tag_set: Option<EC2TagSet>,
+    #[doc="<p>The tag filter key, type, and value used to identify Amazon EC2 instances in a replacement environment for a blue/green deployment. Cannot be used in the same call as ec2TagSet.</p>"]
     #[serde(rename="tagFilters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub tag_filters: Option<Vec<EC2TagFilter>>,
@@ -1620,6 +1670,10 @@ pub struct UpdateDeploymentGroupInput {
     #[serde(rename="ec2TagFilters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_tag_filters: Option<Vec<EC2TagFilter>>,
+    #[doc="<p>Information about groups of tags applied to on-premises instances. The deployment group will include only EC2 instances identified by all the tag groups.</p>"]
+    #[serde(rename="ec2TagSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub ec_2_tag_set: Option<EC2TagSet>,
     #[doc="<p>Information about the load balancer used in a deployment.</p>"]
     #[serde(rename="loadBalancerInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1632,6 +1686,10 @@ pub struct UpdateDeploymentGroupInput {
     #[serde(rename="onPremisesInstanceTagFilters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub on_premises_instance_tag_filters: Option<Vec<TagFilter>>,
+    #[doc="<p>Information about an on-premises instance tag set. The deployment group will include only on-premises instances identified by all the tag groups.</p>"]
+    #[serde(rename="onPremisesTagSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub on_premises_tag_set: Option<OnPremisesTagSet>,
     #[doc="<p>A replacement ARN for the service role, if you want to change it.</p>"]
     #[serde(rename="serviceRoleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2813,10 +2871,14 @@ pub enum CreateDeploymentGroupError {
     InvalidDeploymentGroupName(String),
     ///<p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
     InvalidDeploymentStyle(String),
+    ///<p>A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but only one of these data types can be used in a single call.</p>
+    InvalidEC2TagCombination(String),
     ///<p>The tag was specified in an invalid format.</p>
     InvalidEC2Tag(String),
     ///<p>An invalid load balancer name, or no load balancer name, was specified.</p>
     InvalidLoadBalancerInfo(String),
+    ///<p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
+    InvalidOnPremisesTagCombination(String),
     ///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
     InvalidRole(String),
     ///<p>The specified tag was specified in an invalid format.</p>
@@ -2827,6 +2889,8 @@ pub enum CreateDeploymentGroupError {
     LifecycleHookLimitExceeded(String),
     ///<p>The role ID was not specified.</p>
     RoleRequired(String),
+    ///<p>The number of tag groups included in the tag set list exceeded the maximum allowed limit of 3.</p>
+    TagSetListLimitExceeded(String),
     ///<p>The maximum allowed number of triggers was exceeded.</p>
     TriggerTargetsLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -2872,10 +2936,12 @@ impl CreateDeploymentGroupError {
                     "InvalidDeploymentConfigNameException" => CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(error_message)),
                     "InvalidDeploymentGroupNameException" => CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
                     "InvalidDeploymentStyleException" => CreateDeploymentGroupError::InvalidDeploymentStyle(String::from(error_message)),
+                    "InvalidEC2TagCombinationException" => CreateDeploymentGroupError::InvalidEC2TagCombination(String::from(error_message)),
                     "InvalidEC2TagException" => {
                         CreateDeploymentGroupError::InvalidEC2Tag(String::from(error_message))
                     }
                     "InvalidLoadBalancerInfoException" => CreateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(error_message)),
+                    "InvalidOnPremisesTagCombinationException" => CreateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(error_message)),
                     "InvalidRoleException" => {
                         CreateDeploymentGroupError::InvalidRole(String::from(error_message))
                     }
@@ -2887,6 +2953,7 @@ impl CreateDeploymentGroupError {
                     "RoleRequiredException" => {
                         CreateDeploymentGroupError::RoleRequired(String::from(error_message))
                     }
+                    "TagSetListLimitExceededException" => CreateDeploymentGroupError::TagSetListLimitExceeded(String::from(error_message)),
                     "TriggerTargetsLimitExceededException" => CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(error_message)),
                     "ValidationException" => {
                         CreateDeploymentGroupError::Validation(error_message.to_string())
@@ -2942,13 +3009,16 @@ impl Error for CreateDeploymentGroupError {
             CreateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => cause,
             CreateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
             CreateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => cause,
+            CreateDeploymentGroupError::InvalidEC2TagCombination(ref cause) => cause,
             CreateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
             CreateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => cause,
+            CreateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => cause,
             CreateDeploymentGroupError::InvalidRole(ref cause) => cause,
             CreateDeploymentGroupError::InvalidTag(ref cause) => cause,
             CreateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
             CreateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,
             CreateDeploymentGroupError::RoleRequired(ref cause) => cause,
+            CreateDeploymentGroupError::TagSetListLimitExceeded(ref cause) => cause,
             CreateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,
             CreateDeploymentGroupError::Validation(ref cause) => cause,
             CreateDeploymentGroupError::Credentials(ref err) => err.description(),
@@ -5407,10 +5477,14 @@ pub enum UpdateDeploymentGroupError {
     InvalidDeploymentGroupName(String),
     ///<p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
     InvalidDeploymentStyle(String),
+    ///<p>A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but only one of these data types can be used in a single call.</p>
+    InvalidEC2TagCombination(String),
     ///<p>The tag was specified in an invalid format.</p>
     InvalidEC2Tag(String),
     ///<p>An invalid load balancer name, or no load balancer name, was specified.</p>
     InvalidLoadBalancerInfo(String),
+    ///<p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
+    InvalidOnPremisesTagCombination(String),
     ///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
     InvalidRole(String),
     ///<p>The specified tag was specified in an invalid format.</p>
@@ -5419,6 +5493,8 @@ pub enum UpdateDeploymentGroupError {
     InvalidTriggerConfig(String),
     ///<p>The limit for lifecycle hooks was exceeded.</p>
     LifecycleHookLimitExceeded(String),
+    ///<p>The number of tag groups included in the tag set list exceeded the maximum allowed limit of 3.</p>
+    TagSetListLimitExceeded(String),
     ///<p>The maximum allowed number of triggers was exceeded.</p>
     TriggerTargetsLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -5464,10 +5540,12 @@ impl UpdateDeploymentGroupError {
                     "InvalidDeploymentConfigNameException" => UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(error_message)),
                     "InvalidDeploymentGroupNameException" => UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
                     "InvalidDeploymentStyleException" => UpdateDeploymentGroupError::InvalidDeploymentStyle(String::from(error_message)),
+                    "InvalidEC2TagCombinationException" => UpdateDeploymentGroupError::InvalidEC2TagCombination(String::from(error_message)),
                     "InvalidEC2TagException" => {
                         UpdateDeploymentGroupError::InvalidEC2Tag(String::from(error_message))
                     }
                     "InvalidLoadBalancerInfoException" => UpdateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(error_message)),
+                    "InvalidOnPremisesTagCombinationException" => UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(error_message)),
                     "InvalidRoleException" => {
                         UpdateDeploymentGroupError::InvalidRole(String::from(error_message))
                     }
@@ -5476,6 +5554,7 @@ impl UpdateDeploymentGroupError {
                     }
                     "InvalidTriggerConfigException" => UpdateDeploymentGroupError::InvalidTriggerConfig(String::from(error_message)),
                     "LifecycleHookLimitExceededException" => UpdateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(error_message)),
+                    "TagSetListLimitExceededException" => UpdateDeploymentGroupError::TagSetListLimitExceeded(String::from(error_message)),
                     "TriggerTargetsLimitExceededException" => UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(error_message)),
                     "ValidationException" => {
                         UpdateDeploymentGroupError::Validation(error_message.to_string())
@@ -5531,12 +5610,15 @@ impl Error for UpdateDeploymentGroupError {
             UpdateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => cause,
+            UpdateDeploymentGroupError::InvalidEC2TagCombination(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => cause,
+            UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidRole(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidTag(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
             UpdateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,
+            UpdateDeploymentGroupError::TagSetListLimitExceeded(ref cause) => cause,
             UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,
             UpdateDeploymentGroupError::Validation(ref cause) => cause,
             UpdateDeploymentGroupError::Credentials(ref err) => err.description(),

@@ -156,7 +156,7 @@ pub struct CachediSCSIVolume {
     #[serde(rename="VolumeProgress")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub volume_progress: Option<f64>,
-    #[doc="<p>The size of the volume in bytes.</p>"]
+    #[doc="<p>The size, in bytes, of the volume capacity.</p>"]
     #[serde(rename="VolumeSizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub volume_size_in_bytes: Option<i64>,
@@ -381,7 +381,7 @@ pub struct CreateStorediSCSIVolumeInput {
     #[serde(rename="SnapshotId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
-    #[doc="<p>The name of the iSCSI target used by initiators to connect to the target and as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of arn:aws:storagegateway:us-east-1:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume. The target name must be unique across all volumes of a gateway.</p>"]
+    #[doc="<p>The name of the iSCSI target used by initiators to connect to the target and as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume. The target name must be unique across all volumes of a gateway.</p>"]
     #[serde(rename="TargetName")]
     pub target_name: String,
 }
@@ -409,7 +409,7 @@ pub struct CreateTapeWithBarcodeInput {
     #[doc="<p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tape with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>"]
     #[serde(rename="GatewayARN")]
     pub gateway_arn: String,
-    #[doc="<p>The barcode that you want to assign to the tape.</p>"]
+    #[doc="<p>The barcode that you want to assign to the tape.</p> <note> <p>Barcodes cannot be reused. This includes barcodes used for tapes that have been deleted.</p> </note>"]
     #[serde(rename="TapeBarcode")]
     pub tape_barcode: String,
     #[doc="<p>The size, in bytes, of the virtual tape that you want to create.</p> <note> <p>The size must be aligned by gigabyte (1024*1024*1024 byte).</p> </note>"]
@@ -503,6 +503,10 @@ pub struct DeleteFileShareInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the file share to be deleted. </p>"]
     #[serde(rename="FileShareARN")]
     pub file_share_arn: String,
+    #[doc="<p>If set to true, deletes a file share immediately and aborts all data uploads to AWS. Otherwise the file share is not deleted until all data is uploaded to AWS. This process aborts the data upload process and the file share enters the FORCE_DELETING status.</p>"]
+    #[serde(rename="ForceDelete")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub force_delete: Option<bool>,
 }
 
 #[doc="<p>DeleteFileShareOutput</p>"]
@@ -1608,7 +1612,7 @@ pub struct Tape {
     #[serde(rename="TapeStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub tape_status: Option<String>,
-    #[doc="<p>The size, in bytes, of data written to the virtual tape.</p> <note> <p>This value is not available for tapes created prior to May,13 2015.</p> </note>"]
+    #[doc="<p>The size, in bytes, of data written to the virtual tape.</p> <note> <p>This value is not available for tapes created prior to May 13, 2015.</p> </note>"]
     #[serde(rename="TapeUsedInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub tape_used_in_bytes: Option<i64>,
@@ -1648,7 +1652,7 @@ pub struct TapeArchive {
     #[serde(rename="TapeStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub tape_status: Option<String>,
-    #[doc="<p>The size, in bytes, of data written to the virtual tape.</p> <note> <p>This value is not available for tapes created prior to May,13 2015.</p> </note>"]
+    #[doc="<p>The size, in bytes, of data written to the virtual tape.</p> <note> <p>This value is not available for tapes created prior to May 13, 2015.</p> </note>"]
     #[serde(rename="TapeUsedInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub tape_used_in_bytes: Option<i64>,
@@ -1841,7 +1845,7 @@ pub struct UpdateNFSFileShareInput {
     #[serde(rename="NFSFileShareDefaults")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
-    #[doc="<p>Sets the write status of a file share: \"true\" if the write status is read-only, and otherwise \"false\".</p>"]
+    #[doc="<p>Sets the write status of a file share: \"true\" if the write status is read-only, otherwise \"false\".</p>"]
     #[serde(rename="ReadOnly")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub read_only: Option<bool>,
@@ -1938,7 +1942,7 @@ pub struct VolumeInfo {
     #[serde(rename="GatewayId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_id: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) for the storage volume. For example, the following is a valid ARN:</p> <p> <code>arn:aws:storagegateway:us-east-1:111122223333:gateway/sgw-12A3456B/volume/vol-1122AABB</code> </p> <p> Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens (-).</p>"]
+    #[doc="<p>The Amazon Resource Name (ARN) for the storage volume. For example, the following is a valid ARN:</p> <p> <code>arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/volume/vol-1122AABB</code> </p> <p> Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens (-).</p>"]
     #[serde(rename="VolumeARN")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<String>,
@@ -7313,7 +7317,7 @@ pub trait StorageGateway {
          -> Result<CreateStorediSCSIVolumeOutput, CreateStorediSCSIVolumeError>;
 
 
-    #[doc="<p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. This operation is only supported in the tape gateway architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note>"]
+    #[doc="<p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. A barcode is unique and can not be reused if it has already been used on a tape . This applies to barcodes used on deleted tapes. This operation is only supported in the tape gateway. architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note>"]
     fn create_tape_with_barcode
         (&self,
          input: &CreateTapeWithBarcodeInput)
@@ -7528,7 +7532,7 @@ pub trait StorageGateway {
                     -> Result<ListVolumesOutput, ListVolumesError>;
 
 
-    #[doc="<p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added or removed since the gateway last listed the bucket's contents and cached the results.</p>"]
+    #[doc="<p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results.</p>"]
     fn refresh_cache(&self,
                      input: &RefreshCacheInput)
                      -> Result<RefreshCacheOutput, RefreshCacheError>;
@@ -8037,7 +8041,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. This operation is only supported in the tape gateway architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note>"]
+    #[doc="<p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. A barcode is unique and can not be reused if it has already been used on a tape . This applies to barcodes used on deleted tapes. This operation is only supported in the tape gateway. architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note>"]
     fn create_tape_with_barcode
         (&self,
          input: &CreateTapeWithBarcodeInput)
@@ -9126,7 +9130,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added or removed since the gateway last listed the bucket's contents and cached the results.</p>"]
+    #[doc="<p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results.</p>"]
     fn refresh_cache(&self,
                      input: &RefreshCacheInput)
                      -> Result<RefreshCacheOutput, RefreshCacheError> {

@@ -96,6 +96,19 @@ pub struct AssociateProductWithPortfolioInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssociateProductWithPortfolioOutput;
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct AssociateTagOptionWithResourceInput {
+    #[doc="<p>The resource identifier.</p>"]
+    #[serde(rename="ResourceId")]
+    pub resource_id: String,
+    #[doc="<p>The TagOption identifier.</p>"]
+    #[serde(rename="TagOptionId")]
+    pub tag_option_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct AssociateTagOptionWithResourceOutput;
+
 #[doc="<p>Detailed constraint information.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ConstraintDetail {
@@ -324,6 +337,24 @@ pub struct CreateProvisioningArtifactOutput {
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
+pub struct CreateTagOptionInput {
+    #[doc="<p>The TagOption key.</p>"]
+    #[serde(rename="Key")]
+    pub key: String,
+    #[doc="<p>The TagOption value.</p>"]
+    #[serde(rename="Value")]
+    pub value: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct CreateTagOptionOutput {
+    #[doc="<p>The resulting detailed TagOption information.</p>"]
+    #[serde(rename="TagOptionDetail")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub tag_option_detail: Option<TagOptionDetail>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteConstraintInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -443,6 +474,10 @@ pub struct DescribePortfolioOutput {
     #[serde(rename="PortfolioDetail")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub portfolio_detail: Option<PortfolioDetail>,
+    #[doc="<p>TagOptions associated with the portfolio.</p>"]
+    #[serde(rename="TagOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub tag_options: Option<Vec<TagOptionDetail>>,
     #[doc="<p>Tags associated with the portfolio.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -470,6 +505,10 @@ pub struct DescribeProductAsAdminOutput {
     #[serde(rename="ProvisioningArtifactSummaries")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub provisioning_artifact_summaries: Option<Vec<ProvisioningArtifactSummary>>,
+    #[doc="<p>List of TagOptions associated with the product.</p>"]
+    #[serde(rename="TagOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub tag_options: Option<Vec<TagOptionDetail>>,
     #[doc="<p>Tags associated with the product.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -553,7 +592,7 @@ pub struct DescribeProvisioningArtifactInput {
     #[doc="<p>The identifier of the provisioning artifact. This is sometimes referred to as the product version.</p>"]
     #[serde(rename="ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
-    #[doc="<p>Selects verbose results. If set to true, the CloudFormation template is returned.</p>"]
+    #[doc="<p>Enable a verbose level of details for the provisioning artifact.</p>"]
     #[serde(rename="Verbose")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub verbose: Option<bool>,
@@ -603,6 +642,10 @@ pub struct DescribeProvisioningParametersOutput {
     #[serde(rename="ProvisioningArtifactParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub provisioning_artifact_parameters: Option<Vec<ProvisioningArtifactParameter>>,
+    #[doc="<p>List of TagOptions associated with the provisioned provisioning parameters.</p>"]
+    #[serde(rename="TagOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub tag_options: Option<Vec<TagOptionSummary>>,
     #[doc="<p>Any additional metadata specifically related to the provisioning of the product. For example, see the <code>Version</code> field of the CloudFormation template.</p>"]
     #[serde(rename="UsageInstructions")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -645,6 +688,21 @@ pub struct DescribeRecordOutput {
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
+pub struct DescribeTagOptionInput {
+    #[doc="<p>The identifier of the TagOption.</p>"]
+    #[serde(rename="Id")]
+    pub id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DescribeTagOptionOutput {
+    #[doc="<p>The resulting detailed TagOption information.</p>"]
+    #[serde(rename="TagOptionDetail")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub tag_option_detail: Option<TagOptionDetail>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
 pub struct DisassociatePrincipalFromPortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -677,6 +735,19 @@ pub struct DisassociateProductFromPortfolioInput {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DisassociateProductFromPortfolioOutput;
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DisassociateTagOptionFromResourceInput {
+    #[doc="<p>Identifier of the resource from which to disassociate the TagOption.</p>"]
+    #[serde(rename="ResourceId")]
+    pub resource_id: String,
+    #[doc="<p>Identifier of the TagOption to disassociate from the resource.</p>"]
+    #[serde(rename="TagOptionId")]
+    pub tag_option_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DisassociateTagOptionFromResourceOutput;
 
 #[doc="<p>Summary information about a path for a user to have access to a specified product.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -776,7 +847,7 @@ pub struct ListLaunchPathsInput {
     #[serde(rename="PageToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>The product identifier.. Identifies the product for which to retrieve <code>LaunchPathSummaries</code> information.</p>"]
+    #[doc="<p>The product identifier. Identifies the product for which to retrieve <code>LaunchPathSummaries</code> information.</p>"]
     #[serde(rename="ProductId")]
     pub product_id: String,
 }
@@ -976,6 +1047,82 @@ pub struct ListRecordHistorySearchFilter {
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListResourcesForTagOptionInput {
+    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
+    #[serde(rename="PageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub page_size: Option<i64>,
+    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
+    #[serde(rename="PageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub page_token: Option<String>,
+    #[doc="<p>Resource type.</p>"]
+    #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_type: Option<String>,
+    #[doc="<p>Identifier of the TagOption.</p>"]
+    #[serde(rename="TagOptionId")]
+    pub tag_option_id: String,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListResourcesForTagOptionOutput {
+    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
+    #[serde(rename="PageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub page_token: Option<String>,
+    #[doc="<p>The resulting detailed resource information.</p>"]
+    #[serde(rename="ResourceDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub resource_details: Option<Vec<ResourceDetail>>,
+}
+
+#[doc="<p>The ListTagOptions filters.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListTagOptionsFilters {
+    #[doc="<p>The ListTagOptionsFilters active state.</p>"]
+    #[serde(rename="Active")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub active: Option<bool>,
+    #[doc="<p>The ListTagOptionsFilters key.</p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub key: Option<String>,
+    #[doc="<p>The ListTagOptionsFilters value.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListTagOptionsInput {
+    #[doc="<p>The list of filters with which to limit search results. If no search filters are specified, the output is all TagOptions. </p>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub filters: Option<ListTagOptionsFilters>,
+    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
+    #[serde(rename="PageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub page_size: Option<i64>,
+    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
+    #[serde(rename="PageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListTagOptionsOutput {
+    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
+    #[serde(rename="PageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub page_token: Option<String>,
+    #[doc="<p>The resulting detailed TagOption information.</p>"]
+    #[serde(rename="TagOptionDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub tag_option_details: Option<Vec<TagOptionDetail>>,
 }
 
 #[doc="<p>The constraints that the administrator has put on the parameter.</p>"]
@@ -1292,22 +1439,22 @@ pub struct ProvisioningArtifactProperties {
     pub type_: Option<String>,
 }
 
-#[doc="<p>Summary information about a provisioning artifact.</p>"]
+#[doc="<p>Stores summary information about a provisioning artifact.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ProvisioningArtifactSummary {
     #[doc="<p>The UTC timestamp of the creation time.</p>"]
     #[serde(rename="CreatedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub created_time: Option<f64>,
-    #[doc="<p>The provisioning artifact description.</p>"]
+    #[doc="<p>The description of the provisioning artifact.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The provisioning artifact identifier.</p>"]
+    #[doc="<p>The identifier of the provisioning artifact.</p>"]
     #[serde(rename="Id")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The provisioning artifact name.</p>"]
+    #[doc="<p>The name of the provisioning artifact.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
@@ -1377,7 +1524,7 @@ pub struct RecordDetail {
     #[serde(rename="RecordType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub record_type: Option<String>,
-    #[doc="<p>The status of the ProvisionedProduct object.</p> <p> <code>CREATED</code> - Request created but the operation has not yet started.</p> <p> <code>IN_PROGRESS</code> - The requested operation is in-progress.</p> <p> <code>IN_PROGRESS_IN_ERROR</code> - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a roll-back.</p> <p> <code>SUCCEEDED</code> - The requested operation has successfully completed.</p> <p> <code>FAILED</code> - The requested operation has completed but has failed. Investigate using the error messages returned.</p>"]
+    #[doc="<p>The status of the ProvisionedProduct object.</p> <p> <code>CREATED</code> - Request created but the operation has not yet started.</p> <p> <code>IN_PROGRESS</code> - The requested operation is in-progress.</p> <p> <code>IN_PROGRESS_IN_ERROR</code> - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback.</p> <p> <code>SUCCEEDED</code> - The requested operation has successfully completed.</p> <p> <code>FAILED</code> - The requested operation has completed but has failed. Investigate using the error messages returned.</p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
@@ -1443,6 +1590,31 @@ pub struct RejectPortfolioShareInput {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RejectPortfolioShareOutput;
+
+#[doc="<p>Detailed resource information.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ResourceDetail {
+    #[doc="<p>ARN of the resource.</p>"]
+    #[serde(rename="ARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub arn: Option<String>,
+    #[doc="<p>Creation time of the resource.</p>"]
+    #[serde(rename="CreatedTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub created_time: Option<f64>,
+    #[doc="<p>Description of the resource.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    #[doc="<p>Identifier of the resource.</p>"]
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    #[doc="<p>Name of the resource.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+}
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ScanProvisionedProductsInput {
@@ -1569,7 +1741,7 @@ pub struct SearchProductsOutput {
     pub product_view_summaries: Option<Vec<ProductViewSummary>>,
 }
 
-#[doc="<p>Key/value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.</p>"]
+#[doc="<p>Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>The <code>ProvisioningArtifactParameter.TagKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>"]
@@ -1578,6 +1750,40 @@ pub struct Tag {
     #[doc="<p>The desired value for this key.</p>"]
     #[serde(rename="Value")]
     pub value: String,
+}
+
+#[doc="<p>The TagOption details.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct TagOptionDetail {
+    #[doc="<p>The TagOptionDetail active state.</p>"]
+    #[serde(rename="Active")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub active: Option<bool>,
+    #[doc="<p>The TagOptionDetail identifier.</p>"]
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    #[doc="<p>The TagOptionDetail key.</p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub key: Option<String>,
+    #[doc="<p>The TagOptionDetail value.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[doc="<p>The TagOption summary key-value pair.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct TagOptionSummary {
+    #[doc="<p>The TagOptionSummary key.</p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub key: Option<String>,
+    #[doc="<p>The TagOptionSummary value.</p>"]
+    #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub values: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1840,6 +2046,29 @@ pub struct UpdateProvisioningParameter {
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct UpdateTagOptionInput {
+    #[doc="<p>The updated active state.</p>"]
+    #[serde(rename="Active")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub active: Option<bool>,
+    #[doc="<p>The identifier of the constraint to update.</p>"]
+    #[serde(rename="Id")]
+    pub id: String,
+    #[doc="<p>The updated value.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct UpdateTagOptionOutput {
+    #[doc="<p>The resulting detailed TagOption information.</p>"]
+    #[serde(rename="TagOptionDetail")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub tag_option_detail: Option<TagOptionDetail>,
 }
 
 #[doc="<p>Additional information provided by the administrator.</p>"]
@@ -2122,6 +2351,105 @@ impl Error for AssociateProductWithPortfolioError {
         }
     }
 }
+/// Errors returned by AssociateTagOptionWithResource
+#[derive(Debug, PartialEq)]
+pub enum AssociateTagOptionWithResourceError {
+    ///<p>The specified resource is a duplicate.</p>
+    DuplicateResource(String),
+    ///<p>One or more parameters provided to the operation are invalid.</p>
+    InvalidParameters(String),
+    ///<p>An attempt was made to modify a resource that is in an invalid state. Inspect the resource you are using for this operation to ensure that all resource states are valid before retrying the operation.</p>
+    InvalidState(String),
+    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    LimitExceeded(String),
+    ///<p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl AssociateTagOptionWithResourceError {
+    pub fn from_body(body: &str) -> AssociateTagOptionWithResourceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DuplicateResourceException" => AssociateTagOptionWithResourceError::DuplicateResource(String::from(error_message)),
+                    "InvalidParametersException" => AssociateTagOptionWithResourceError::InvalidParameters(String::from(error_message)),
+                    "InvalidStateException" => AssociateTagOptionWithResourceError::InvalidState(String::from(error_message)),
+                    "LimitExceededException" => AssociateTagOptionWithResourceError::LimitExceeded(String::from(error_message)),
+                    "ResourceNotFoundException" => AssociateTagOptionWithResourceError::ResourceNotFound(String::from(error_message)),
+                    "TagOptionNotMigratedException" => AssociateTagOptionWithResourceError::TagOptionNotMigrated(String::from(error_message)),
+                    "ValidationException" => {
+                        AssociateTagOptionWithResourceError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateTagOptionWithResourceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateTagOptionWithResourceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateTagOptionWithResourceError {
+    fn from(err: serde_json::error::Error) -> AssociateTagOptionWithResourceError {
+        AssociateTagOptionWithResourceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateTagOptionWithResourceError {
+    fn from(err: CredentialsError) -> AssociateTagOptionWithResourceError {
+        AssociateTagOptionWithResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateTagOptionWithResourceError {
+    fn from(err: HttpDispatchError) -> AssociateTagOptionWithResourceError {
+        AssociateTagOptionWithResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateTagOptionWithResourceError {
+    fn from(err: io::Error) -> AssociateTagOptionWithResourceError {
+        AssociateTagOptionWithResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateTagOptionWithResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateTagOptionWithResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateTagOptionWithResourceError::DuplicateResource(ref cause) => cause,
+            AssociateTagOptionWithResourceError::InvalidParameters(ref cause) => cause,
+            AssociateTagOptionWithResourceError::InvalidState(ref cause) => cause,
+            AssociateTagOptionWithResourceError::LimitExceeded(ref cause) => cause,
+            AssociateTagOptionWithResourceError::ResourceNotFound(ref cause) => cause,
+            AssociateTagOptionWithResourceError::TagOptionNotMigrated(ref cause) => cause,
+            AssociateTagOptionWithResourceError::Validation(ref cause) => cause,
+            AssociateTagOptionWithResourceError::Credentials(ref err) => err.description(),
+            AssociateTagOptionWithResourceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateTagOptionWithResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateConstraint
 #[derive(Debug, PartialEq)]
 pub enum CreateConstraintError {
@@ -2226,6 +2554,8 @@ pub enum CreatePortfolioError {
     InvalidParameters(String),
     ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2255,6 +2585,9 @@ impl CreatePortfolioError {
                     }
                     "LimitExceededException" => {
                         CreatePortfolioError::LimitExceeded(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        CreatePortfolioError::TagOptionNotMigrated(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreatePortfolioError::Validation(error_message.to_string())
@@ -2297,6 +2630,7 @@ impl Error for CreatePortfolioError {
         match *self {
             CreatePortfolioError::InvalidParameters(ref cause) => cause,
             CreatePortfolioError::LimitExceeded(ref cause) => cause,
+            CreatePortfolioError::TagOptionNotMigrated(ref cause) => cause,
             CreatePortfolioError::Validation(ref cause) => cause,
             CreatePortfolioError::Credentials(ref err) => err.description(),
             CreatePortfolioError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2404,6 +2738,8 @@ pub enum CreateProductError {
     InvalidParameters(String),
     ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2433,6 +2769,9 @@ impl CreateProductError {
                     }
                     "LimitExceededException" => {
                         CreateProductError::LimitExceeded(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        CreateProductError::TagOptionNotMigrated(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateProductError::Validation(error_message.to_string())
@@ -2475,6 +2814,7 @@ impl Error for CreateProductError {
         match *self {
             CreateProductError::InvalidParameters(ref cause) => cause,
             CreateProductError::LimitExceeded(ref cause) => cause,
+            CreateProductError::TagOptionNotMigrated(ref cause) => cause,
             CreateProductError::Validation(ref cause) => cause,
             CreateProductError::Credentials(ref err) => err.description(),
             CreateProductError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2568,6 +2908,97 @@ impl Error for CreateProvisioningArtifactError {
                 dispatch_error.description()
             }
             CreateProvisioningArtifactError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateTagOption
+#[derive(Debug, PartialEq)]
+pub enum CreateTagOptionError {
+    ///<p>The specified resource is a duplicate.</p>
+    DuplicateResource(String),
+    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    LimitExceeded(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl CreateTagOptionError {
+    pub fn from_body(body: &str) -> CreateTagOptionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DuplicateResourceException" => {
+                        CreateTagOptionError::DuplicateResource(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateTagOptionError::LimitExceeded(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        CreateTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateTagOptionError::Validation(error_message.to_string())
+                    }
+                    _ => CreateTagOptionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateTagOptionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateTagOptionError {
+    fn from(err: serde_json::error::Error) -> CreateTagOptionError {
+        CreateTagOptionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateTagOptionError {
+    fn from(err: CredentialsError) -> CreateTagOptionError {
+        CreateTagOptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateTagOptionError {
+    fn from(err: HttpDispatchError) -> CreateTagOptionError {
+        CreateTagOptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateTagOptionError {
+    fn from(err: io::Error) -> CreateTagOptionError {
+        CreateTagOptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateTagOptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTagOptionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateTagOptionError::DuplicateResource(ref cause) => cause,
+            CreateTagOptionError::LimitExceeded(ref cause) => cause,
+            CreateTagOptionError::TagOptionNotMigrated(ref cause) => cause,
+            CreateTagOptionError::Validation(ref cause) => cause,
+            CreateTagOptionError::Credentials(ref err) => err.description(),
+            CreateTagOptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateTagOptionError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2665,6 +3096,8 @@ pub enum DeletePortfolioError {
     ResourceInUse(String),
     ///<p>The specified resource was not found.</p>
     ResourceNotFound(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2697,6 +3130,9 @@ impl DeletePortfolioError {
                     }
                     "ResourceNotFoundException" => {
                         DeletePortfolioError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        DeletePortfolioError::TagOptionNotMigrated(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeletePortfolioError::Validation(error_message.to_string())
@@ -2740,6 +3176,7 @@ impl Error for DeletePortfolioError {
             DeletePortfolioError::InvalidParameters(ref cause) => cause,
             DeletePortfolioError::ResourceInUse(ref cause) => cause,
             DeletePortfolioError::ResourceNotFound(ref cause) => cause,
+            DeletePortfolioError::TagOptionNotMigrated(ref cause) => cause,
             DeletePortfolioError::Validation(ref cause) => cause,
             DeletePortfolioError::Credentials(ref err) => err.description(),
             DeletePortfolioError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2837,6 +3274,8 @@ pub enum DeleteProductError {
     ResourceInUse(String),
     ///<p>The specified resource was not found.</p>
     ResourceNotFound(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2869,6 +3308,9 @@ impl DeleteProductError {
                     }
                     "ResourceNotFoundException" => {
                         DeleteProductError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        DeleteProductError::TagOptionNotMigrated(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeleteProductError::Validation(error_message.to_string())
@@ -2912,6 +3354,7 @@ impl Error for DeleteProductError {
             DeleteProductError::InvalidParameters(ref cause) => cause,
             DeleteProductError::ResourceInUse(ref cause) => cause,
             DeleteProductError::ResourceNotFound(ref cause) => cause,
+            DeleteProductError::TagOptionNotMigrated(ref cause) => cause,
             DeleteProductError::Validation(ref cause) => cause,
             DeleteProductError::Credentials(ref err) => err.description(),
             DeleteProductError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3743,6 +4186,93 @@ impl Error for DescribeRecordError {
         }
     }
 }
+/// Errors returned by DescribeTagOption
+#[derive(Debug, PartialEq)]
+pub enum DescribeTagOptionError {
+    ///<p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeTagOptionError {
+    pub fn from_body(body: &str) -> DescribeTagOptionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotFoundException" => {
+                        DescribeTagOptionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        DescribeTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeTagOptionError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeTagOptionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeTagOptionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeTagOptionError {
+    fn from(err: serde_json::error::Error) -> DescribeTagOptionError {
+        DescribeTagOptionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeTagOptionError {
+    fn from(err: CredentialsError) -> DescribeTagOptionError {
+        DescribeTagOptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeTagOptionError {
+    fn from(err: HttpDispatchError) -> DescribeTagOptionError {
+        DescribeTagOptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeTagOptionError {
+    fn from(err: io::Error) -> DescribeTagOptionError {
+        DescribeTagOptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeTagOptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeTagOptionError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeTagOptionError::ResourceNotFound(ref cause) => cause,
+            DescribeTagOptionError::TagOptionNotMigrated(ref cause) => cause,
+            DescribeTagOptionError::Validation(ref cause) => cause,
+            DescribeTagOptionError::Credentials(ref err) => err.description(),
+            DescribeTagOptionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeTagOptionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DisassociatePrincipalFromPortfolio
 #[derive(Debug, PartialEq)]
 pub enum DisassociatePrincipalFromPortfolioError {
@@ -3832,6 +4362,8 @@ impl Error for DisassociatePrincipalFromPortfolioError {
 pub enum DisassociateProductFromPortfolioError {
     ///<p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
+    ///<p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
+    ResourceInUse(String),
     ///<p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -3859,6 +4391,7 @@ impl DisassociateProductFromPortfolioError {
 
                 match *error_type {
                     "InvalidParametersException" => DisassociateProductFromPortfolioError::InvalidParameters(String::from(error_message)),
+                    "ResourceInUseException" => DisassociateProductFromPortfolioError::ResourceInUse(String::from(error_message)),
                     "ResourceNotFoundException" => DisassociateProductFromPortfolioError::ResourceNotFound(String::from(error_message)),
                     "ValidationException" => {
                         DisassociateProductFromPortfolioError::Validation(error_message.to_string())
@@ -3900,6 +4433,7 @@ impl Error for DisassociateProductFromPortfolioError {
     fn description(&self) -> &str {
         match *self {
             DisassociateProductFromPortfolioError::InvalidParameters(ref cause) => cause,
+            DisassociateProductFromPortfolioError::ResourceInUse(ref cause) => cause,
             DisassociateProductFromPortfolioError::ResourceNotFound(ref cause) => cause,
             DisassociateProductFromPortfolioError::Validation(ref cause) => cause,
             DisassociateProductFromPortfolioError::Credentials(ref err) => err.description(),
@@ -3907,6 +4441,90 @@ impl Error for DisassociateProductFromPortfolioError {
                 dispatch_error.description()
             }
             DisassociateProductFromPortfolioError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DisassociateTagOptionFromResource
+#[derive(Debug, PartialEq)]
+pub enum DisassociateTagOptionFromResourceError {
+    ///<p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DisassociateTagOptionFromResourceError {
+    pub fn from_body(body: &str) -> DisassociateTagOptionFromResourceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotFoundException" => DisassociateTagOptionFromResourceError::ResourceNotFound(String::from(error_message)),
+                    "TagOptionNotMigratedException" => DisassociateTagOptionFromResourceError::TagOptionNotMigrated(String::from(error_message)),
+                    "ValidationException" => {
+                        DisassociateTagOptionFromResourceError::Validation(error_message
+                                                                               .to_string())
+                    }
+                    _ => DisassociateTagOptionFromResourceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DisassociateTagOptionFromResourceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateTagOptionFromResourceError {
+    fn from(err: serde_json::error::Error) -> DisassociateTagOptionFromResourceError {
+        DisassociateTagOptionFromResourceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateTagOptionFromResourceError {
+    fn from(err: CredentialsError) -> DisassociateTagOptionFromResourceError {
+        DisassociateTagOptionFromResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateTagOptionFromResourceError {
+    fn from(err: HttpDispatchError) -> DisassociateTagOptionFromResourceError {
+        DisassociateTagOptionFromResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateTagOptionFromResourceError {
+    fn from(err: io::Error) -> DisassociateTagOptionFromResourceError {
+        DisassociateTagOptionFromResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisassociateTagOptionFromResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateTagOptionFromResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateTagOptionFromResourceError::ResourceNotFound(ref cause) => cause,
+            DisassociateTagOptionFromResourceError::TagOptionNotMigrated(ref cause) => cause,
+            DisassociateTagOptionFromResourceError::Validation(ref cause) => cause,
+            DisassociateTagOptionFromResourceError::Credentials(ref err) => err.description(),
+            DisassociateTagOptionFromResourceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateTagOptionFromResourceError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4649,6 +5267,178 @@ impl Error for ListRecordHistoryError {
         }
     }
 }
+/// Errors returned by ListResourcesForTagOption
+#[derive(Debug, PartialEq)]
+pub enum ListResourcesForTagOptionError {
+    ///<p>One or more parameters provided to the operation are invalid.</p>
+    InvalidParameters(String),
+    ///<p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListResourcesForTagOptionError {
+    pub fn from_body(body: &str) -> ListResourcesForTagOptionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParametersException" => ListResourcesForTagOptionError::InvalidParameters(String::from(error_message)),
+                    "ResourceNotFoundException" => ListResourcesForTagOptionError::ResourceNotFound(String::from(error_message)),
+                    "TagOptionNotMigratedException" => ListResourcesForTagOptionError::TagOptionNotMigrated(String::from(error_message)),
+                    "ValidationException" => {
+                        ListResourcesForTagOptionError::Validation(error_message.to_string())
+                    }
+                    _ => ListResourcesForTagOptionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListResourcesForTagOptionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListResourcesForTagOptionError {
+    fn from(err: serde_json::error::Error) -> ListResourcesForTagOptionError {
+        ListResourcesForTagOptionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListResourcesForTagOptionError {
+    fn from(err: CredentialsError) -> ListResourcesForTagOptionError {
+        ListResourcesForTagOptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListResourcesForTagOptionError {
+    fn from(err: HttpDispatchError) -> ListResourcesForTagOptionError {
+        ListResourcesForTagOptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListResourcesForTagOptionError {
+    fn from(err: io::Error) -> ListResourcesForTagOptionError {
+        ListResourcesForTagOptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListResourcesForTagOptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListResourcesForTagOptionError {
+    fn description(&self) -> &str {
+        match *self {
+            ListResourcesForTagOptionError::InvalidParameters(ref cause) => cause,
+            ListResourcesForTagOptionError::ResourceNotFound(ref cause) => cause,
+            ListResourcesForTagOptionError::TagOptionNotMigrated(ref cause) => cause,
+            ListResourcesForTagOptionError::Validation(ref cause) => cause,
+            ListResourcesForTagOptionError::Credentials(ref err) => err.description(),
+            ListResourcesForTagOptionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListResourcesForTagOptionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListTagOptions
+#[derive(Debug, PartialEq)]
+pub enum ListTagOptionsError {
+    ///<p>One or more parameters provided to the operation are invalid.</p>
+    InvalidParameters(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListTagOptionsError {
+    pub fn from_body(body: &str) -> ListTagOptionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParametersException" => {
+                        ListTagOptionsError::InvalidParameters(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        ListTagOptionsError::TagOptionNotMigrated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListTagOptionsError::Validation(error_message.to_string())
+                    }
+                    _ => ListTagOptionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListTagOptionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListTagOptionsError {
+    fn from(err: serde_json::error::Error) -> ListTagOptionsError {
+        ListTagOptionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListTagOptionsError {
+    fn from(err: CredentialsError) -> ListTagOptionsError {
+        ListTagOptionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTagOptionsError {
+    fn from(err: HttpDispatchError) -> ListTagOptionsError {
+        ListTagOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagOptionsError {
+    fn from(err: io::Error) -> ListTagOptionsError {
+        ListTagOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTagOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagOptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagOptionsError::InvalidParameters(ref cause) => cause,
+            ListTagOptionsError::TagOptionNotMigrated(ref cause) => cause,
+            ListTagOptionsError::Validation(ref cause) => cause,
+            ListTagOptionsError::Credentials(ref err) => err.description(),
+            ListTagOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListTagOptionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ProvisionProduct
 #[derive(Debug, PartialEq)]
 pub enum ProvisionProductError {
@@ -5241,6 +6031,8 @@ pub enum UpdatePortfolioError {
     LimitExceeded(String),
     ///<p>The specified resource was not found.</p>
     ResourceNotFound(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -5273,6 +6065,9 @@ impl UpdatePortfolioError {
                     }
                     "ResourceNotFoundException" => {
                         UpdatePortfolioError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        UpdatePortfolioError::TagOptionNotMigrated(String::from(error_message))
                     }
                     "ValidationException" => {
                         UpdatePortfolioError::Validation(error_message.to_string())
@@ -5316,6 +6111,7 @@ impl Error for UpdatePortfolioError {
             UpdatePortfolioError::InvalidParameters(ref cause) => cause,
             UpdatePortfolioError::LimitExceeded(ref cause) => cause,
             UpdatePortfolioError::ResourceNotFound(ref cause) => cause,
+            UpdatePortfolioError::TagOptionNotMigrated(ref cause) => cause,
             UpdatePortfolioError::Validation(ref cause) => cause,
             UpdatePortfolioError::Credentials(ref err) => err.description(),
             UpdatePortfolioError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -5330,6 +6126,8 @@ pub enum UpdateProductError {
     InvalidParameters(String),
     ///<p>The specified resource was not found.</p>
     ResourceNotFound(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -5359,6 +6157,9 @@ impl UpdateProductError {
                     }
                     "ResourceNotFoundException" => {
                         UpdateProductError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        UpdateProductError::TagOptionNotMigrated(String::from(error_message))
                     }
                     "ValidationException" => {
                         UpdateProductError::Validation(error_message.to_string())
@@ -5401,6 +6202,7 @@ impl Error for UpdateProductError {
         match *self {
             UpdateProductError::InvalidParameters(ref cause) => cause,
             UpdateProductError::ResourceNotFound(ref cause) => cause,
+            UpdateProductError::TagOptionNotMigrated(ref cause) => cause,
             UpdateProductError::Validation(ref cause) => cause,
             UpdateProductError::Credentials(ref err) => err.description(),
             UpdateProductError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -5576,6 +6378,103 @@ impl Error for UpdateProvisioningArtifactError {
         }
     }
 }
+/// Errors returned by UpdateTagOption
+#[derive(Debug, PartialEq)]
+pub enum UpdateTagOptionError {
+    ///<p>The specified resource is a duplicate.</p>
+    DuplicateResource(String),
+    ///<p>One or more parameters provided to the operation are invalid.</p>
+    InvalidParameters(String),
+    ///<p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl UpdateTagOptionError {
+    pub fn from_body(body: &str) -> UpdateTagOptionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DuplicateResourceException" => {
+                        UpdateTagOptionError::DuplicateResource(String::from(error_message))
+                    }
+                    "InvalidParametersException" => {
+                        UpdateTagOptionError::InvalidParameters(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateTagOptionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        UpdateTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateTagOptionError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateTagOptionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateTagOptionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateTagOptionError {
+    fn from(err: serde_json::error::Error) -> UpdateTagOptionError {
+        UpdateTagOptionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateTagOptionError {
+    fn from(err: CredentialsError) -> UpdateTagOptionError {
+        UpdateTagOptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateTagOptionError {
+    fn from(err: HttpDispatchError) -> UpdateTagOptionError {
+        UpdateTagOptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateTagOptionError {
+    fn from(err: io::Error) -> UpdateTagOptionError {
+        UpdateTagOptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateTagOptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateTagOptionError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateTagOptionError::DuplicateResource(ref cause) => cause,
+            UpdateTagOptionError::InvalidParameters(ref cause) => cause,
+            UpdateTagOptionError::ResourceNotFound(ref cause) => cause,
+            UpdateTagOptionError::TagOptionNotMigrated(ref cause) => cause,
+            UpdateTagOptionError::Validation(ref cause) => cause,
+            UpdateTagOptionError::Credentials(ref err) => err.description(),
+            UpdateTagOptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateTagOptionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS Service Catalog API. AWS Service Catalog clients implement this trait.
 pub trait ServiceCatalog {
     #[doc="<p>Accepts an offer to share a portfolio.</p>"]
@@ -5596,6 +6495,13 @@ pub trait ServiceCatalog {
         (&self,
          input: &AssociateProductWithPortfolioInput)
          -> Result<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
+
+
+    #[doc="<p>Associate a TagOption identifier with a resource identifier.</p>"]
+    fn associate_tag_option_with_resource
+        (&self,
+         input: &AssociateTagOptionWithResourceInput)
+         -> Result<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>;
 
 
     #[doc="<p>Creates a new constraint. For more information, see <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html\">Using Constraints</a>.</p>"]
@@ -5627,6 +6533,12 @@ pub trait ServiceCatalog {
         (&self,
          input: &CreateProvisioningArtifactInput)
          -> Result<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError>;
+
+
+    #[doc="<p>Create a new TagOption.</p>"]
+    fn create_tag_option(&self,
+                         input: &CreateTagOptionInput)
+                         -> Result<CreateTagOptionOutput, CreateTagOptionError>;
 
 
     #[doc="<p>Deletes the specified constraint.</p>"]
@@ -5705,7 +6617,7 @@ pub trait ServiceCatalog {
          -> Result<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError>;
 
 
-    #[doc="<p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p>"]
+    #[doc="<p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> \". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value \"<code>sc-tagoption-conflict-portfolioId-productId</code>\".</p>"]
     fn describe_provisioning_parameters
         (&self,
          input: &DescribeProvisioningParametersInput)
@@ -5716,6 +6628,12 @@ pub trait ServiceCatalog {
     fn describe_record(&self,
                        input: &DescribeRecordInput)
                        -> Result<DescribeRecordOutput, DescribeRecordError>;
+
+
+    #[doc="<p>Describes a TagOption.</p>"]
+    fn describe_tag_option(&self,
+                           input: &DescribeTagOptionInput)
+                           -> Result<DescribeTagOptionOutput, DescribeTagOptionError>;
 
 
     #[doc="<p>Disassociates a previously associated principal ARN from a specified portfolio.</p>"]
@@ -5731,6 +6649,13 @@ pub trait ServiceCatalog {
         (&self,
          input: &DisassociateProductFromPortfolioInput)
          -> Result<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>;
+
+
+    #[doc="<p>Disassociates a TagOption from a resource.</p>"]
+    fn disassociate_tag_option_from_resource
+        (&self,
+         input: &DisassociateTagOptionFromResourceInput)
+         -> Result<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>;
 
 
     #[doc="<p>Lists details of all portfolios for which sharing was accepted by this account.</p>"]
@@ -5792,7 +6717,20 @@ pub trait ServiceCatalog {
                            -> Result<ListRecordHistoryOutput, ListRecordHistoryError>;
 
 
-    #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
+    #[doc="<p>Lists resources associated with a TagOption.</p>"]
+    fn list_resources_for_tag_option
+        (&self,
+         input: &ListResourcesForTagOptionInput)
+         -> Result<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError>;
+
+
+    #[doc="<p>Lists detailed TagOptions information.</p>"]
+    fn list_tag_options(&self,
+                        input: &ListTagOptionsInput)
+                        -> Result<ListTagOptionsOutput, ListTagOptionsError>;
+
+
+    #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>\" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>"]
     fn provision_product(&self,
                          input: &ProvisionProductInput)
                          -> Result<ProvisionProductOutput, ProvisionProductError>;
@@ -5861,6 +6799,12 @@ pub trait ServiceCatalog {
         (&self,
          input: &UpdateProvisioningArtifactInput)
          -> Result<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError>;
+
+
+    #[doc="<p>Updates an existing TagOption.</p>"]
+    fn update_tag_option(&self,
+                         input: &UpdateTagOptionInput)
+                         -> Result<UpdateTagOptionOutput, UpdateTagOptionError>;
 }
 /// A client for the AWS Service Catalog API.
 pub struct ServiceCatalogClient<P, D>
@@ -5981,6 +6925,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
                 try!(response.body.read_to_end(&mut body));
                 Err(AssociateProductWithPortfolioError::from_body(String::from_utf8_lossy(&body)
                                                                       .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Associate a TagOption identifier with a resource identifier.</p>"]
+    fn associate_tag_option_with_resource
+        (&self,
+         input: &AssociateTagOptionWithResourceInput)
+         -> Result<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWS242ServiceCatalogService.AssociateTagOptionWithResource");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AssociateTagOptionWithResourceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateTagOptionWithResourceError::from_body(String::from_utf8_lossy(&body)
+                                                                       .as_ref()))
             }
         }
     }
@@ -6143,6 +7120,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
                                                                    .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Create a new TagOption.</p>"]
+    fn create_tag_option(&self,
+                         input: &CreateTagOptionInput)
+                         -> Result<CreateTagOptionOutput, CreateTagOptionError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWS242ServiceCatalogService.CreateTagOption");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateTagOptionOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTagOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6538,7 +7548,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     }
 
 
-    #[doc="<p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p>"]
+    #[doc="<p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> \". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value \"<code>sc-tagoption-conflict-portfolioId-productId</code>\".</p>"]
     fn describe_provisioning_parameters
         (&self,
          input: &DescribeProvisioningParametersInput)
@@ -6598,6 +7608,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeRecordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Describes a TagOption.</p>"]
+    fn describe_tag_option(&self,
+                           input: &DescribeTagOptionInput)
+                           -> Result<DescribeTagOptionOutput, DescribeTagOptionError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWS242ServiceCatalogService.DescribeTagOption");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeTagOptionOutput>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeTagOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6663,6 +7706,38 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DisassociateProductFromPortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Disassociates a TagOption from a resource.</p>"]
+    fn disassociate_tag_option_from_resource
+        (&self,
+         input: &DisassociateTagOptionFromResourceInput)
+         -> Result<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWS242ServiceCatalogService.DisassociateTagOptionFromResource");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DisassociateTagOptionFromResourceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateTagOptionFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
@@ -6962,7 +8037,72 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     }
 
 
-    #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
+    #[doc="<p>Lists resources associated with a TagOption.</p>"]
+    fn list_resources_for_tag_option
+        (&self,
+         input: &ListResourcesForTagOptionInput)
+         -> Result<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWS242ServiceCatalogService.ListResourcesForTagOption");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListResourcesForTagOptionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListResourcesForTagOptionError::from_body(String::from_utf8_lossy(&body)
+                                                                  .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Lists detailed TagOptions information.</p>"]
+    fn list_tag_options(&self,
+                        input: &ListTagOptionsInput)
+                        -> Result<ListTagOptionsOutput, ListTagOptionsError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWS242ServiceCatalogService.ListTagOptions");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagOptionsOutput>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>\" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>"]
     fn provision_product(&self,
                          input: &ProvisionProductInput)
                          -> Result<ProvisionProductOutput, ProvisionProductError> {
@@ -7315,6 +8455,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
                                                                    .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Updates an existing TagOption.</p>"]
+    fn update_tag_option(&self,
+                         input: &UpdateTagOptionInput)
+                         -> Result<UpdateTagOptionOutput, UpdateTagOptionError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWS242ServiceCatalogService.UpdateTagOption");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateTagOptionOutput>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                           .unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateTagOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
             }
         }
     }
