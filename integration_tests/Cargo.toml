@@ -27,6 +27,10 @@ path = "../rusoto/services/apigateway"
 optional = true
 path = "../rusoto/services/appstream"
 
+[dependencies.rusoto_athena]
+optional = true
+path = "../rusoto/services/athena"
+
 [dependencies.rusoto_autoscaling]
 optional = true
 path = "../rusoto/services/autoscaling"
@@ -343,6 +347,7 @@ all = [
 		"acm",
         "apigateway",
 		"appstream",
+		"athena",		
 	   	"autoscaling",
         "batch",
 	   	"cloudformation",
@@ -423,6 +428,7 @@ all = [
 acm = ["rusoto_acm"]
 apigateway = ["rusoto_apigateway"]
 appstream = ["rusoto_appstream"]
+athena = ["rusoto_athena"]
 autoscaling = ["rusoto_autoscaling"]
 batch = ["rusoto_batch"]
 cloudformation = ["rusoto_cloudformation"]
