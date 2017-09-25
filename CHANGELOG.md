@@ -5,6 +5,7 @@
 (Please put an entry here in each PR)
 - Added CHANGELOG
 - Updated CONTRIBUTING to explain PR process
+- Added Athena service
 
 ## [0.28.0] - 2017-08-25
 
