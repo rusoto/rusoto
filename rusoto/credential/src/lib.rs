@@ -5,9 +5,12 @@
 //! Types for loading and managing AWS access credentials for API requests.
 
 extern crate chrono;
-extern crate reqwest;
+extern crate futures;
+extern crate hyper;
+extern crate hyper_tls;
 extern crate regex;
 extern crate serde_json;
+extern crate tokio_core;
 
 pub use environment::EnvironmentProvider;
 pub use container::ContainerProvider;
@@ -23,14 +26,22 @@ mod profile;
 pub mod claims;
 
 use std::fmt;
+use std::time::Duration as StdDuration;
 use std::error::Error;
 use std::io::Error as IoError;
+use std::io::ErrorKind::{InvalidData, TimedOut};
 use std::sync::Mutex;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
 
 use chrono::{Duration, Utc, DateTime, ParseError};
+use futures::{Future, Stream};
+use futures::future::Either;
+use hyper::{Client, Uri};
+use hyper::error::UriError;
+use hyper_tls::HttpsConnector;
 use serde_json::{from_str as json_from_str, Value};
+use tokio_core::reactor::{Core, Timeout};
 
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles),
 /// expiration timestamp, and claims from federated login.
@@ -46,8 +57,16 @@ pub struct AwsCredentials {
 impl AwsCredentials {
     /// Create a new `AwsCredentials` from a key ID, secret key, optional access token, and expiry
     /// time.
-    pub fn new<K, S>(key:K, secret:S, token:Option<String>, expires_at:DateTime<Utc>)
-    -> AwsCredentials where K:Into<String>, S:Into<String> {
+    pub fn new<K, S>(
+        key: K,
+        secret: S,
+        token: Option<String>,
+        expires_at: DateTime<Utc>,
+    ) -> AwsCredentials
+    where
+        K: Into<String>,
+        S: Into<String>,
+    {
         AwsCredentials {
             key: key.into(),
             secret: secret.into(),
@@ -97,14 +116,15 @@ impl AwsCredentials {
 
 #[derive(Debug, PartialEq)]
 pub struct CredentialsError {
-    pub message: String
+    pub message: String,
 }
 
 impl CredentialsError {
-    pub fn new<S>(message: S) -> CredentialsError where S: Into<String>  {
-        CredentialsError {
-            message: message.into()
-        }
+    pub fn new<S>(message: S) -> CredentialsError
+    where
+        S: Into<String>,
+    {
+        CredentialsError { message: message.into() }
     }
 }
 
@@ -132,10 +152,24 @@ impl From<IoError> for CredentialsError {
     }
 }
 
+impl From<UriError> for CredentialsError {
+    fn from(err: UriError) -> CredentialsError {
+        CredentialsError::new(err.description())
+    }
+}
+
 /// A trait for types that produce `AwsCredentials`.
 pub trait ProvideAwsCredentials {
     /// Produce a new `AwsCredentials`.
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError>;
+}
+
+/// A Trait for types that produce `AwsCredentials` that can timeout.
+pub trait ProvideTimeoutableAwsCredentials {
+    fn credentials_with_timeout(
+        &self,
+        timeout: StdDuration,
+    ) -> Result<AwsCredentials, CredentialsError>;
 }
 
 /// Wrapper for `ProvideAwsCredentials` that caches the credentials returned by the
@@ -144,25 +178,28 @@ pub trait ProvideAwsCredentials {
 #[derive(Debug)]
 pub struct BaseAutoRefreshingProvider<P, T> {
     credentials_provider: P,
-    cached_credentials: T
+    cached_credentials: T,
 }
 
 /// Threadsafe `AutoRefreshingProvider` that locks cached credentials with a `Mutex`
 pub type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>;
 
-impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
+impl<P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
     pub fn with_mutex(provider: P) -> Result<AutoRefreshingProviderSync<P>, CredentialsError> {
         let creds = try!(provider.credentials());
         Ok(BaseAutoRefreshingProvider {
             credentials_provider: provider,
-            cached_credentials: Mutex::new(creds)
+            cached_credentials: Mutex::new(creds),
         })
     }
 }
 
-impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
+impl<P: ProvideAwsCredentials> ProvideAwsCredentials
+    for BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        let mut creds = self.cached_credentials.lock().expect("Failed to lock the cached credentials Mutex");
+        let mut creds = self.cached_credentials.lock().expect(
+            "Failed to lock the cached credentials Mutex",
+        );
         if creds.credentials_are_expired() {
             *creds = try!(self.credentials_provider.credentials());
         }
@@ -173,23 +210,40 @@ impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProv
 /// `!Sync` `AutoRefreshingProvider` that caches credentials in a `RefCell`
 pub type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
 
-impl <P: ProvideAwsCredentials> AutoRefreshingProvider<P> {
+impl<P: ProvideAwsCredentials> AutoRefreshingProvider<P> {
     pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
         let creds = try!(provider.credentials());
         Ok(BaseAutoRefreshingProvider {
             credentials_provider: provider,
-            cached_credentials: RefCell::new(creds)
+            cached_credentials: RefCell::new(creds),
         })
     }
 }
 
-impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>> {
+impl<P: ProvideAwsCredentials> ProvideAwsCredentials
+    for BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>> {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 
         let mut creds = self.cached_credentials.borrow_mut();
 
         if creds.credentials_are_expired() {
             *creds = try!(self.credentials_provider.credentials());
+        }
+
+        Ok(creds.clone())
+    }
+}
+
+impl<P: ProvideTimeoutableAwsCredentials> ProvideTimeoutableAwsCredentials
+    for BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>> {
+    fn credentials_with_timeout(
+        &self,
+        timeout: StdDuration,
+    ) -> Result<AwsCredentials, CredentialsError> {
+        let mut creds = self.cached_credentials.borrow_mut();
+
+        if creds.credentials_are_expired() {
+            *creds = try!(self.credentials_provider.credentials_with_timeout(timeout));
         }
 
         Ok(creds.clone())
@@ -208,7 +262,9 @@ pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
 
 impl DefaultCredentialsProvider {
     pub fn new() -> Result<DefaultCredentialsProvider, CredentialsError> {
-        Ok(try!(AutoRefreshingProvider::with_refcell(ChainProvider::new())))
+        Ok(try!(
+            AutoRefreshingProvider::with_refcell(ChainProvider::new())
+        ))
     }
 }
 
@@ -225,7 +281,9 @@ pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvid
 
 impl DefaultCredentialsProviderSync {
     pub fn new() -> Result<DefaultCredentialsProviderSync, CredentialsError> {
-        Ok(try!(AutoRefreshingProviderSync::with_mutex(ChainProvider::new())))
+        Ok(try!(
+            AutoRefreshingProviderSync::with_mutex(ChainProvider::new())
+        ))
     }
 }
 
@@ -246,33 +304,54 @@ pub struct ChainProvider {
 impl ProvideAwsCredentials for ChainProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 
-    EnvironmentProvider.credentials()
-        .or_else(|_| {
-            match self.profile_provider {
+        EnvironmentProvider
+            .credentials()
+            .or_else(|_| match self.profile_provider {
                 Some(ref provider) => provider.credentials(),
-                None => Err(CredentialsError::new(""))
-            }
-        })
-        .or_else(|_| ContainerProvider.credentials())
-        .or_else(|_| InstanceMetadataProvider.credentials())
-        .or_else(|_| Err(CredentialsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
+                None => Err(CredentialsError::new("")),
+            })
+            .or_else(|_| ContainerProvider.credentials())
+            .or_else(|_| InstanceMetadataProvider.credentials())
+            .or_else(|_| {
+                Err(CredentialsError::new(
+                    "Couldn't find AWS credentials in environment, credentials file, or IAM role.",
+                ))
+            })
+    }
+}
+
+impl ProvideTimeoutableAwsCredentials for ChainProvider {
+    fn credentials_with_timeout(
+        &self,
+        timeout: StdDuration,
+    ) -> Result<AwsCredentials, CredentialsError> {
+        EnvironmentProvider
+            .credentials()
+            .or_else(|_| match self.profile_provider {
+                Some(ref provider) => provider.credentials(),
+                None => Err(CredentialsError::new("")),
+            })
+            .or_else(|_| ContainerProvider.credentials_with_timeout(timeout))
+            .or_else(|_| {
+                InstanceMetadataProvider.credentials_with_timeout(timeout)
+            })
+            .or_else(|_| {
+                Err(CredentialsError::new(
+                    "Couldn't find AWS credentials in environment, credentials file, or IAM role.",
+                ))
+            })
     }
 }
 
 impl ChainProvider {
     /// Create a new `ChainProvider` using a `ProfileProvider` with the default settings.
     pub fn new() -> ChainProvider {
-        ChainProvider {
-            profile_provider: ProfileProvider::new().ok(),
-        }
+        ChainProvider { profile_provider: ProfileProvider::new().ok() }
     }
 
     /// Create a new `ChainProvider` using the provided `ProfileProvider`.
-    pub fn with_profile_provider(profile_provider: ProfileProvider)
-    -> ChainProvider {
-        ChainProvider {
-            profile_provider: Some(profile_provider),
-        }
+    pub fn with_profile_provider(profile_provider: ProfileProvider) -> ChainProvider {
+        ChainProvider { profile_provider: Some(profile_provider) }
     }
 }
 
@@ -282,10 +361,19 @@ fn in_ten_minutes() -> DateTime<Utc> {
 }
 
 /// Reduces Boilerplate on getting json values. Wraps `serde_json::Value.get(key)`.
-fn extract_string_value_from_json(json_object: &Value, key: &str) -> Result<String, CredentialsError> {
+fn extract_string_value_from_json(
+    json_object: &Value,
+    key: &str,
+) -> Result<String, CredentialsError> {
     match json_object.get(key) {
-        Some(v) => Ok(v.as_str().expect(&format!("{} value was not a string", key)).to_owned()),
-        None => Err(CredentialsError::new(format!("Couldn't find {} in response.", key))),
+        Some(v) => Ok(
+            v.as_str()
+                .expect(&format!("{} value was not a string", key))
+                .to_owned(),
+        ),
+        None => Err(CredentialsError::new(
+            format!("Couldn't find {} in response.", key),
+        )),
     }
 }
 
@@ -293,17 +381,103 @@ fn extract_string_value_from_json(json_object: &Value, key: &str) -> Result<Stri
 fn parse_credentials_from_aws_service(response: &str) -> Result<AwsCredentials, CredentialsError> {
     let json_object: Value = match json_from_str(response) {
         Ok(v) => v,
-        Err(_) => return Err(CredentialsError::new("Couldn't parse credentials response body.")),
+        Err(_) => {
+            return Err(CredentialsError::new(
+                "Couldn't parse credentials response body.",
+            ))
+        }
     };
 
     let access_key_id = try!(extract_string_value_from_json(&json_object, "AccessKeyId"));
-    let secret_access_key = try!(extract_string_value_from_json(&json_object, "SecretAccessKey"));
+    let secret_access_key = try!(extract_string_value_from_json(
+        &json_object,
+        "SecretAccessKey",
+    ));
     let token = try!(extract_string_value_from_json(&json_object, "Token"));
     let expiration = try!(extract_string_value_from_json(&json_object, "Expiration"));
 
     let expiration = try!(expiration.parse());
 
-    Ok(AwsCredentials::new(access_key_id, secret_access_key, Some(token), expiration))
+    Ok(AwsCredentials::new(
+        access_key_id,
+        secret_access_key,
+        Some(token),
+        expiration,
+    ))
+}
+
+/// Makes an Async Request with a timeout. Defaults to 30 seconds.
+fn make_request(
+    mut core: Core,
+    uri: Uri,
+    duration: Option<StdDuration>,
+) -> Result<String, hyper::Error> {
+
+    let handle = core.handle();
+    let potential_connector = HttpsConnector::new(4, &handle);
+
+    let connector = if let Ok(connect) = potential_connector {
+        connect
+    } else {
+        return Err(hyper::Error::Io(IoError::new(
+            std::io::ErrorKind::ConnectionRefused,
+            "Client could not configure TLS Method.",
+        )));
+    };
+    let hyper_client = Client::configure().connector(connector).build(&handle);
+
+    let frd_duration = duration.unwrap_or(StdDuration::from_secs(30));
+    let get = hyper_client.get(uri).and_then(
+        |res| if !res.status().is_success() {
+            Err(hyper::Error::Io(IoError::new(
+                InvalidData,
+                format!("Invalid Response Code: {}", res.status()),
+            )))
+        } else {
+            Ok(res.body().concat2().wait())
+        },
+    );
+    let timeout = Timeout::new(frd_duration, &handle);
+    if timeout.is_err() {
+        return Err(hyper::Error::Io(IoError::new(
+            std::io::ErrorKind::ConnectionRefused,
+            "Client could not configure Timeout.",
+        )));
+    }
+    let timeout = timeout.unwrap();
+
+    // We have to handle 4 cases in this block.
+    //   1. The request succeeded before the timeout.
+    //   2. The timeout occured before the request succeeded.
+    //   3. The request had an error before the timeout occured, or the request completed.
+    //   4. The timeout object had an error before the timeout occured, or the request completed.
+    let work = get.select2(timeout).then(|res| match res {
+        Ok(Either::A((got, _timeout))) => Ok(got),
+        Ok(Either::B((_timeout_error, _get))) => {
+            Err(hyper::Error::Io(
+                IoError::new(TimedOut, "Client timed out while connecting"),
+            ))
+        }
+        Err(Either::A((get_error, _timeout))) => Err(get_error),
+        Err(Either::B((timeout_error, _get))) => Err(From::from(timeout_error)),
+    });
+
+    let initial_response = core.run(work);
+    if initial_response.is_err() {
+        return Err(initial_response.err().unwrap());
+    }
+    let got = initial_response.unwrap();
+    if got.is_err() {
+        return Err(got.err().unwrap());
+    }
+    let got = got.unwrap();
+    let data = std::str::from_utf8(&got);
+    if data.is_err() {
+        return Err(hyper::Error::Io(
+            IoError::new(InvalidData, "Non UTF-8 Data returned"),
+        ));
+    }
+    Ok(data.unwrap().to_owned())
 }
 
 #[cfg(test)]
@@ -350,7 +524,9 @@ mod tests {
             result
         }
 
-        let response = read_file_to_string(Path::new("tests/sample-data/iam_task_credentials_sample_response"));
+        let response = read_file_to_string(Path::new(
+            "tests/sample-data/iam_task_credentials_sample_response",
+        ));
 
         let credentials = parse_credentials_from_aws_service(&response);
 
@@ -358,6 +534,9 @@ mod tests {
         let credentials = credentials.unwrap();
 
         assert_eq!(credentials.aws_access_key_id(), "AKIAIOSFODNN7EXAMPLE");
-        assert_eq!(credentials.aws_secret_access_key(), "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+        assert_eq!(
+            credentials.aws_secret_access_key(),
+            "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+        );
     }
 }

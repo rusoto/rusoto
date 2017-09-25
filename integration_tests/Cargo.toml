@@ -31,6 +31,10 @@ path = "../rusoto/services/application-autoscaling"
 optional = true
 path = "../rusoto/services/appstream"
 
+[dependencies.rusoto_athena]
+optional = true
+path = "../rusoto/services/athena"
+
 [dependencies.rusoto_autoscaling]
 optional = true
 path = "../rusoto/services/autoscaling"
@@ -331,6 +335,10 @@ path = "../rusoto/services/waf-regional"
 optional = true
 path = "../rusoto/services/workspaces"
 
+[dependencies.rusoto_xray]
+optional = true
+path = "../rusoto/services/xray"
+
 [dev-dependencies]
 env_logger = "0.4.0"
 hyper = "0.10.0"
@@ -344,6 +352,7 @@ all = [
         "apigateway",
 		"application-autoscaling",
 		"appstream",
+		"athena",		
 	   	"autoscaling",
         "batch",
 	   	"cloudformation",
@@ -418,12 +427,14 @@ all = [
 	   	"swf",
 	   	"waf",
 		"waf-regional",
-	   	"workspaces"
+	   	"workspaces",
+		"xray"
 	]
 acm = ["rusoto_acm"]
 apigateway = ["rusoto_apigateway"]
 application-autoscaling = ["rusoto_application_autoscaling"]
 appstream = ["rusoto_appstream"]
+athena = ["rusoto_athena"]
 autoscaling = ["rusoto_autoscaling"]
 batch = ["rusoto_batch"]
 cloudformation = ["rusoto_cloudformation"]
@@ -499,4 +510,5 @@ swf = ["rusoto_swf"]
 waf = ["rusoto_waf"]
 waf-regional = ["rusoto_waf_regional"]
 workspaces = ["rusoto_workspaces"]
+xray = ["rusoto_xray"]
 nightly-testing = ["rusoto_core/nightly-testing"]

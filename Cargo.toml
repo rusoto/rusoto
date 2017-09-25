@@ -82,7 +82,8 @@ members = [
     "rusoto/services/swf",
     "rusoto/services/waf",
     "rusoto/services/waf-regional",
-    "rusoto/services/workspaces"
+    "rusoto/services/workspaces",
+    "rusoto/services/xray"
 ]
 
 exclude = [
