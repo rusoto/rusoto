@@ -4,3 +4,4 @@ Cargo.lock
 testfile.zip
 *.pyc
 venv
+*.rs.bk
