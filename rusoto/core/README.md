@@ -37,7 +37,7 @@ On Linux, OpenSSL is required.
 
 ## Installation
 
-Rusoto Core is available on [crates.io](https://crates.io/crates/rusoto).
+Rusoto Core is available on [crates.io](https://crates.io/crates/rusoto_core).
 To use Rusoto in your Rust program built with Cargo, add it as a dependency in your Cargo.toml:
 
 ``` toml
@@ -59,7 +59,7 @@ For more information on Rusoto's use of AWS credentials such as priority and ref
 
 Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).
 Until reaching 1.0.0 the API is to be considered unstable.
-See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto) for current version.
+See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto_core) for current version.
 
 ## Releases
 
