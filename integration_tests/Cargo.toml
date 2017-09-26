@@ -23,6 +23,10 @@ path = "../rusoto/services/acm"
 optional = true
 path = "../rusoto/services/apigateway"
 
+[dependencies.rusoto_application_autoscaling]
+optional = true
+path = "../rusoto/services/application-autoscaling"
+
 [dependencies.rusoto_appstream]
 optional = true
 path = "../rusoto/services/appstream"
@@ -346,6 +350,7 @@ time = "0.1.37"
 all = [
 		"acm",
         "apigateway",
+		"application-autoscaling",
 		"appstream",
 		"athena",		
 	   	"autoscaling",
@@ -427,6 +432,7 @@ all = [
 	]
 acm = ["rusoto_acm"]
 apigateway = ["rusoto_apigateway"]
+application-autoscaling = ["rusoto_application_autoscaling"]
 appstream = ["rusoto_appstream"]
 athena = ["rusoto_athena"]
 autoscaling = ["rusoto_autoscaling"]

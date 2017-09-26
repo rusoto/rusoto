@@ -5,6 +5,7 @@
 (Please put an entry here in each PR)
 - Added CHANGELOG
 - Updated CONTRIBUTING to explain PR process
+- Added Application Autoscaling service
 - Added Athena service
 - Added X-Ray service
 - Updated Credentials crate to use hyper 0.11 (aka the Async IO Update).
