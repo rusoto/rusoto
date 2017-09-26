@@ -18,6 +18,7 @@ use hyper::status::StatusCode;
 use hyper::method::Method;
 use hyper::client::RedirectPolicy;
 use hyper::net::HttpsConnector;
+use hyper::client::pool::Pool;
 use hyper_native_tls::NativeTlsClient;
 
 use log::LogLevel::Debug;
@@ -174,7 +175,7 @@ pub fn default_tls_client() -> Result<Client, TlsError> {
         }
     };
     let connector = HttpsConnector::new(ssl);
-    let mut client = Client::with_connector(connector);
+    let mut client = Client::with_connector(Pool::with_connector(Default::default(), connector));
     client.set_redirect_policy(RedirectPolicy::FollowNone);
     Ok(client)
 }
