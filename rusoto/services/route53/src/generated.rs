@@ -255,6 +255,20 @@ pub struct AssociateVPCWithHostedZoneRequest {
     pub vpc: VPC,
 }
 
+pub struct AssociateVPCWithHostedZoneRequestSerializer;
+impl AssociateVPCWithHostedZoneRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &AssociateVPCWithHostedZoneRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+
+        if let Some(ref value) = obj.comment {
+            serialized += &AssociateVPCCommentSerializer::serialize("Comment", value);
+        }
+        serialized += &VPCSerializer::serialize("VPC", &obj.vpc);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type that contains the response information for the <code>AssociateVPCWithHostedZone</code> request.</p>"]
 #[derive(Default,Debug)]
 pub struct AssociateVPCWithHostedZoneResponse {
@@ -439,6 +453,16 @@ pub struct ChangeResourceRecordSetsRequest {
     pub hosted_zone_id: String,
 }
 
+pub struct ChangeResourceRecordSetsRequestSerializer;
+impl ChangeResourceRecordSetsRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &ChangeResourceRecordSetsRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+        serialized += &ChangeBatchSerializer::serialize("ChangeBatch", &obj.change_batch);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type containing the response for the request.</p>"]
 #[derive(Default,Debug)]
 pub struct ChangeResourceRecordSetsResponse {
@@ -516,6 +540,23 @@ pub struct ChangeTagsForResourceRequest {
     pub resource_type: String,
 }
 
+pub struct ChangeTagsForResourceRequestSerializer;
+impl ChangeTagsForResourceRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &ChangeTagsForResourceRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+
+        if let Some(ref value) = obj.add_tags {
+            serialized += &TagListSerializer::serialize("AddTags", value);
+        }
+
+        if let Some(ref value) = obj.remove_tag_keys {
+            serialized += &TagKeyListSerializer::serialize("RemoveTagKeys", value);
+        }
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>Empty response for the request.</p>"]
 #[derive(Default,Debug)]
 pub struct ChangeTagsForResourceResponse;
@@ -544,7 +585,7 @@ impl ChangesSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(ChangeSerializer::serialize(name, element));
+            parts.push(ChangeSerializer::serialize("Change", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -642,7 +683,7 @@ impl ChildHealthCheckListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(HealthCheckIdSerializer::serialize(name, element));
+            parts.push(HealthCheckIdSerializer::serialize("HealthCheckId", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -790,6 +831,19 @@ pub struct CreateHealthCheckRequest {
     pub health_check_config: HealthCheckConfig,
 }
 
+pub struct CreateHealthCheckRequestSerializer;
+impl CreateHealthCheckRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &CreateHealthCheckRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+        serialized += &HealthCheckNonceSerializer::serialize("CallerReference",
+                                                             &obj.caller_reference);
+        serialized += &HealthCheckConfigSerializer::serialize("HealthCheckConfig",
+                                                              &obj.health_check_config);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type containing the response information for the new health check.</p>"]
 #[derive(Default,Debug)]
 pub struct CreateHealthCheckResponse {
@@ -856,6 +910,29 @@ pub struct CreateHostedZoneRequest {
     pub vpc: Option<VPC>,
 }
 
+pub struct CreateHostedZoneRequestSerializer;
+impl CreateHostedZoneRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &CreateHostedZoneRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+        serialized += &NonceSerializer::serialize("CallerReference", &obj.caller_reference);
+
+        if let Some(ref value) = obj.delegation_set_id {
+            serialized += &ResourceIdSerializer::serialize("DelegationSetId", value);
+        }
+
+        if let Some(ref value) = obj.hosted_zone_config {
+            serialized += &HostedZoneConfigSerializer::serialize("HostedZoneConfig", value);
+        }
+        serialized += &DNSNameSerializer::serialize("Name", &obj.name);
+
+        if let Some(ref value) = obj.vpc {
+            serialized += &VPCSerializer::serialize("VPC", value);
+        }
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type containing the response information for the hosted zone.</p>"]
 #[derive(Default,Debug)]
 pub struct CreateHostedZoneResponse {
@@ -933,6 +1010,20 @@ pub struct CreateReusableDelegationSetRequest {
     pub hosted_zone_id: Option<String>,
 }
 
+pub struct CreateReusableDelegationSetRequestSerializer;
+impl CreateReusableDelegationSetRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &CreateReusableDelegationSetRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+        serialized += &NonceSerializer::serialize("CallerReference", &obj.caller_reference);
+
+        if let Some(ref value) = obj.hosted_zone_id {
+            serialized += &ResourceIdSerializer::serialize("HostedZoneId", value);
+        }
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[derive(Default,Debug)]
 pub struct CreateReusableDelegationSetResponse {
     #[doc="<p>A complex type that contains name server information.</p>"]
@@ -1000,6 +1091,22 @@ pub struct CreateTrafficPolicyInstanceRequest {
     pub traffic_policy_version: i64,
 }
 
+pub struct CreateTrafficPolicyInstanceRequestSerializer;
+impl CreateTrafficPolicyInstanceRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &CreateTrafficPolicyInstanceRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+        serialized += &ResourceIdSerializer::serialize("HostedZoneId", &obj.hosted_zone_id);
+        serialized += &DNSNameSerializer::serialize("Name", &obj.name);
+        serialized += &TTLSerializer::serialize("TTL", &obj.ttl);
+        serialized += &TrafficPolicyIdSerializer::serialize("TrafficPolicyId",
+                                                            &obj.traffic_policy_id);
+        serialized += &TrafficPolicyVersionSerializer::serialize("TrafficPolicyVersion",
+                                                                 &obj.traffic_policy_version);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type that contains the response information for the <code>CreateTrafficPolicyInstance</code> request.</p>"]
 #[derive(Default,Debug)]
 pub struct CreateTrafficPolicyInstanceResponse {
@@ -1064,6 +1171,21 @@ pub struct CreateTrafficPolicyRequest {
     pub name: String,
 }
 
+pub struct CreateTrafficPolicyRequestSerializer;
+impl CreateTrafficPolicyRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &CreateTrafficPolicyRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+
+        if let Some(ref value) = obj.comment {
+            serialized += &TrafficPolicyCommentSerializer::serialize("Comment", value);
+        }
+        serialized += &TrafficPolicyDocumentSerializer::serialize("Document", &obj.document);
+        serialized += &TrafficPolicyNameSerializer::serialize("Name", &obj.name);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type that contains the response information for the <code>CreateTrafficPolicy</code> request.</p>"]
 #[derive(Default,Debug)]
 pub struct CreateTrafficPolicyResponse {
@@ -1127,6 +1249,20 @@ pub struct CreateTrafficPolicyVersionRequest {
     pub id: String,
 }
 
+pub struct CreateTrafficPolicyVersionRequestSerializer;
+impl CreateTrafficPolicyVersionRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &CreateTrafficPolicyVersionRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+
+        if let Some(ref value) = obj.comment {
+            serialized += &TrafficPolicyCommentSerializer::serialize("Comment", value);
+        }
+        serialized += &TrafficPolicyDocumentSerializer::serialize("Document", &obj.document);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type that contains the response information for the <code>CreateTrafficPolicyVersion</code> request.</p>"]
 #[derive(Default,Debug)]
 pub struct CreateTrafficPolicyVersionResponse {
@@ -1189,6 +1325,19 @@ pub struct CreateVPCAssociationAuthorizationRequest {
     pub vpc: VPC,
 }
 
+pub struct CreateVPCAssociationAuthorizationRequestSerializer;
+impl CreateVPCAssociationAuthorizationRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str,
+                     obj: &CreateVPCAssociationAuthorizationRequest,
+                     xmlns: &str)
+                     -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+        serialized += &VPCSerializer::serialize("VPC", &obj.vpc);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type that contains the response information from a <code>CreateVPCAssociationAuthorization</code> request.</p>"]
 #[derive(Default,Debug)]
 pub struct CreateVPCAssociationAuthorizationResponse {
@@ -1605,6 +1754,19 @@ pub struct DeleteVPCAssociationAuthorizationRequest {
     pub vpc: VPC,
 }
 
+pub struct DeleteVPCAssociationAuthorizationRequestSerializer;
+impl DeleteVPCAssociationAuthorizationRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str,
+                     obj: &DeleteVPCAssociationAuthorizationRequest,
+                     xmlns: &str)
+                     -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+        serialized += &VPCSerializer::serialize("VPC", &obj.vpc);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>Empty response for the request.</p>"]
 #[derive(Default,Debug)]
 pub struct DeleteVPCAssociationAuthorizationResponse;
@@ -1757,6 +1919,23 @@ pub struct DisassociateVPCFromHostedZoneRequest {
     pub vpc: VPC,
 }
 
+pub struct DisassociateVPCFromHostedZoneRequestSerializer;
+impl DisassociateVPCFromHostedZoneRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str,
+                     obj: &DisassociateVPCFromHostedZoneRequest,
+                     xmlns: &str)
+                     -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+
+        if let Some(ref value) = obj.comment {
+            serialized += &DisassociateVPCCommentSerializer::serialize("Comment", value);
+        }
+        serialized += &VPCSerializer::serialize("VPC", &obj.vpc);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type that contains the response information for the disassociate request.</p>"]
 #[derive(Default,Debug)]
 pub struct DisassociateVPCFromHostedZoneResponse {
@@ -3477,7 +3656,7 @@ impl HealthCheckRegionListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(HealthCheckRegionSerializer::serialize(name, element));
+            parts.push(HealthCheckRegionSerializer::serialize("HealthCheckRegion", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -4533,6 +4712,16 @@ pub struct ListTagsForResourcesRequest {
     pub resource_type: String,
 }
 
+pub struct ListTagsForResourcesRequestSerializer;
+impl ListTagsForResourcesRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &ListTagsForResourcesRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+        serialized += &TagResourceIdListSerializer::serialize("ResourceIds", &obj.resource_ids);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type containing tags for the specified resources.</p>"]
 #[derive(Default,Debug)]
 pub struct ListTagsForResourcesResponse {
@@ -6000,7 +6189,7 @@ impl ResourceRecordsSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(ResourceRecordSerializer::serialize(name, element));
+            parts.push(ResourceRecordSerializer::serialize("ResourceRecord", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -6360,7 +6549,7 @@ impl TagKeyListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(TagKeySerializer::serialize(name, element));
+            parts.push(TagKeySerializer::serialize("TagKey", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -6416,7 +6605,7 @@ impl TagListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(TagSerializer::serialize(name, element));
+            parts.push(TagSerializer::serialize("Tag", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -6456,7 +6645,7 @@ impl TagResourceIdListSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(TagResourceIdSerializer::serialize(name, element));
+            parts.push(TagResourceIdSerializer::serialize("TagResourceId", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -7262,6 +7451,73 @@ pub struct UpdateHealthCheckRequest {
     pub search_string: Option<String>,
 }
 
+pub struct UpdateHealthCheckRequestSerializer;
+impl UpdateHealthCheckRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &UpdateHealthCheckRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+
+        if let Some(ref value) = obj.alarm_identifier {
+            serialized += &AlarmIdentifierSerializer::serialize("AlarmIdentifier", value);
+        }
+
+        if let Some(ref value) = obj.child_health_checks {
+            serialized += &ChildHealthCheckListSerializer::serialize("ChildHealthChecks", value);
+        }
+
+        if let Some(ref value) = obj.enable_sni {
+            serialized += &EnableSNISerializer::serialize("EnableSNI", value);
+        }
+
+        if let Some(ref value) = obj.failure_threshold {
+            serialized += &FailureThresholdSerializer::serialize("FailureThreshold", value);
+        }
+
+        if let Some(ref value) = obj.fully_qualified_domain_name {
+            serialized += &FullyQualifiedDomainNameSerializer::serialize("FullyQualifiedDomainName",
+                                                                         value);
+        }
+
+        if let Some(ref value) = obj.health_check_version {
+            serialized += &HealthCheckVersionSerializer::serialize("HealthCheckVersion", value);
+        }
+
+        if let Some(ref value) = obj.health_threshold {
+            serialized += &HealthThresholdSerializer::serialize("HealthThreshold", value);
+        }
+
+        if let Some(ref value) = obj.ip_address {
+            serialized += &IPAddressSerializer::serialize("IPAddress", value);
+        }
+
+        if let Some(ref value) = obj.insufficient_data_health_status {
+            serialized += &InsufficientDataHealthStatusSerializer::serialize("InsufficientDataHealthStatus",
+                                                                             value);
+        }
+
+        if let Some(ref value) = obj.inverted {
+            serialized += &InvertedSerializer::serialize("Inverted", value);
+        }
+
+        if let Some(ref value) = obj.port {
+            serialized += &PortSerializer::serialize("Port", value);
+        }
+
+        if let Some(ref value) = obj.regions {
+            serialized += &HealthCheckRegionListSerializer::serialize("Regions", value);
+        }
+
+        if let Some(ref value) = obj.resource_path {
+            serialized += &ResourcePathSerializer::serialize("ResourcePath", value);
+        }
+
+        if let Some(ref value) = obj.search_string {
+            serialized += &SearchStringSerializer::serialize("SearchString", value);
+        }
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[derive(Default,Debug)]
 pub struct UpdateHealthCheckResponse {
     pub health_check: HealthCheck,
@@ -7318,6 +7574,19 @@ pub struct UpdateHostedZoneCommentRequest {
     pub id: String,
 }
 
+pub struct UpdateHostedZoneCommentRequestSerializer;
+impl UpdateHostedZoneCommentRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &UpdateHostedZoneCommentRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+
+        if let Some(ref value) = obj.comment {
+            serialized += &ResourceDescriptionSerializer::serialize("Comment", value);
+        }
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type that contains the response to the <code>UpdateHostedZoneComment</code> request.</p>"]
 #[derive(Default,Debug)]
 pub struct UpdateHostedZoneCommentResponse {
@@ -7378,6 +7647,16 @@ pub struct UpdateTrafficPolicyCommentRequest {
     pub version: i64,
 }
 
+pub struct UpdateTrafficPolicyCommentRequestSerializer;
+impl UpdateTrafficPolicyCommentRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &UpdateTrafficPolicyCommentRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+        serialized += &TrafficPolicyCommentSerializer::serialize("Comment", &obj.comment);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type that contains the response information for the traffic policy.</p>"]
 #[derive(Default,Debug)]
 pub struct UpdateTrafficPolicyCommentResponse {
@@ -7442,6 +7721,20 @@ pub struct UpdateTrafficPolicyInstanceRequest {
     pub traffic_policy_version: i64,
 }
 
+pub struct UpdateTrafficPolicyInstanceRequestSerializer;
+impl UpdateTrafficPolicyInstanceRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize(name: &str, obj: &UpdateTrafficPolicyInstanceRequest, xmlns: &str) -> String {
+        let mut serialized = format!("<{name} xmlns=\"{xmlns}\">", name = name, xmlns = xmlns);
+        serialized += &TTLSerializer::serialize("TTL", &obj.ttl);
+        serialized += &TrafficPolicyIdSerializer::serialize("TrafficPolicyId",
+                                                            &obj.traffic_policy_id);
+        serialized += &TrafficPolicyVersionSerializer::serialize("TrafficPolicyVersion",
+                                                                 &obj.traffic_policy_version);
+        serialized += &format!("</{name}>", name = name);
+        serialized
+    }
+}
 #[doc="<p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>"]
 #[derive(Default,Debug)]
 pub struct UpdateTrafficPolicyInstanceResponse {
@@ -12070,7 +12363,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = AssociateVPCWithHostedZoneRequestSerializer::serialize("AssociateVPCWithHostedZoneRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12121,7 +12416,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = ChangeResourceRecordSetsRequestSerializer::serialize("ChangeResourceRecordSetsRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12173,7 +12470,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = ChangeTagsForResourceRequestSerializer::serialize("ChangeTagsForResourceRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12221,7 +12520,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = CreateHealthCheckRequestSerializer::serialize("CreateHealthCheckRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12272,7 +12573,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = CreateHostedZoneRequestSerializer::serialize("CreateHostedZoneRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12324,7 +12627,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = CreateReusableDelegationSetRequestSerializer::serialize("CreateReusableDelegationSetRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12374,7 +12679,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = CreateTrafficPolicyRequestSerializer::serialize("CreateTrafficPolicyRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12424,7 +12731,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = CreateTrafficPolicyInstanceRequestSerializer::serialize("CreateTrafficPolicyInstanceRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12475,7 +12784,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = CreateTrafficPolicyVersionRequestSerializer::serialize("CreateTrafficPolicyVersionRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12528,7 +12839,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = CreateVPCAssociationAuthorizationRequestSerializer::serialize("CreateVPCAssociationAuthorizationRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12830,7 +13143,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = DeleteVPCAssociationAuthorizationRequestSerializer::serialize("DeleteVPCAssociationAuthorizationRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -12880,7 +13195,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = DisassociateVPCFromHostedZoneRequestSerializer::serialize("DisassociateVPCFromHostedZoneRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -13998,7 +14315,9 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
+        let payload = ListTagsForResourcesRequestSerializer::serialize("ListTagsForResourcesRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -14463,7 +14782,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
 
+        let payload = UpdateHealthCheckRequestSerializer::serialize("UpdateHealthCheckRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -14514,7 +14835,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
 
+        let payload = UpdateHostedZoneCommentRequestSerializer::serialize("UpdateHostedZoneCommentRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -14566,7 +14889,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
 
+        let payload = UpdateTrafficPolicyCommentRequestSerializer::serialize("UpdateTrafficPolicyCommentRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -14616,7 +14941,9 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
 
+        let payload = UpdateTrafficPolicyInstanceRequestSerializer::serialize("UpdateTrafficPolicyInstanceRequest", &input, "https://route53.amazonaws.com/doc/2013-04-01/").into_bytes();
 
+        request.set_payload(Some(payload));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

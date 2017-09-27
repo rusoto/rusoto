@@ -264,7 +264,7 @@ impl AllowedHeadersSerializer {
     pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(AllowedHeaderSerializer::serialize(name, element));
+            parts.push(AllowedHeaderSerializer::serialize("AllowedHeader", element));
         }
         parts.join("")
     }
@@ -330,7 +330,7 @@ impl AllowedMethodsSerializer {
     pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(AllowedMethodSerializer::serialize(name, element));
+            parts.push(AllowedMethodSerializer::serialize("AllowedMethod", element));
         }
         parts.join("")
     }
@@ -396,7 +396,7 @@ impl AllowedOriginsSerializer {
     pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(AllowedOriginSerializer::serialize(name, element));
+            parts.push(AllowedOriginSerializer::serialize("AllowedOrigin", element));
         }
         parts.join("")
     }
@@ -1297,7 +1297,7 @@ impl CORSRulesSerializer {
     pub fn serialize(name: &str, obj: &Vec<CORSRule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(CORSRuleSerializer::serialize(name, element));
+            parts.push(CORSRuleSerializer::serialize("CORSRule", element));
         }
         parts.join("")
     }
@@ -1657,7 +1657,7 @@ impl CompletedPartListSerializer {
     pub fn serialize(name: &str, obj: &Vec<CompletedPart>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(CompletedPartSerializer::serialize(name, element));
+            parts.push(CompletedPartSerializer::serialize("CompletedPart", element));
         }
         parts.join("")
     }
@@ -3070,7 +3070,7 @@ impl EventListSerializer {
     pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(EventSerializer::serialize(name, element));
+            parts.push(EventSerializer::serialize("Event", element));
         }
         parts.join("")
     }
@@ -3186,7 +3186,7 @@ impl ExposeHeadersSerializer {
     pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(ExposeHeaderSerializer::serialize(name, element));
+            parts.push(ExposeHeaderSerializer::serialize("ExposeHeader", element));
         }
         parts.join("")
     }
@@ -3309,7 +3309,7 @@ impl FilterRuleListSerializer {
     pub fn serialize(name: &str, obj: &Vec<FilterRule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(FilterRuleSerializer::serialize(name, element));
+            parts.push(FilterRuleSerializer::serialize("FilterRule", element));
         }
         parts.join("")
     }
@@ -4643,7 +4643,7 @@ impl GrantsSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(GrantSerializer::serialize(name, element));
+            parts.push(GrantSerializer::serialize("Grant", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -5408,7 +5408,8 @@ impl InventoryOptionalFieldsSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(InventoryOptionalFieldSerializer::serialize(name, element));
+            parts.push(InventoryOptionalFieldSerializer::serialize("InventoryOptionalField",
+                                                                   element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -5822,7 +5823,7 @@ impl LambdaFunctionConfigurationListSerializer {
     pub fn serialize(name: &str, obj: &Vec<LambdaFunctionConfiguration>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(LambdaFunctionConfigurationSerializer::serialize(name, element));
+            parts.push(LambdaFunctionConfigurationSerializer::serialize("LambdaFunctionConfiguration", element));
         }
         parts.join("")
     }
@@ -6239,7 +6240,7 @@ impl LifecycleRulesSerializer {
     pub fn serialize(name: &str, obj: &Vec<LifecycleRule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(LifecycleRuleSerializer::serialize(name, element));
+            parts.push(LifecycleRuleSerializer::serialize("LifecycleRule", element));
         }
         parts.join("")
     }
@@ -8099,7 +8100,7 @@ impl NoncurrentVersionTransitionListSerializer {
     pub fn serialize(name: &str, obj: &Vec<NoncurrentVersionTransition>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(NoncurrentVersionTransitionSerializer::serialize(name, element));
+            parts.push(NoncurrentVersionTransitionSerializer::serialize("NoncurrentVersionTransition", element));
         }
         parts.join("")
     }
@@ -8452,7 +8453,7 @@ impl ObjectIdentifierListSerializer {
     pub fn serialize(name: &str, obj: &Vec<ObjectIdentifier>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(ObjectIdentifierSerializer::serialize(name, element));
+            parts.push(ObjectIdentifierSerializer::serialize("ObjectIdentifier", element));
         }
         parts.join("")
     }
@@ -9524,7 +9525,7 @@ impl QueueConfigurationListSerializer {
     pub fn serialize(name: &str, obj: &Vec<QueueConfiguration>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(QueueConfigurationSerializer::serialize(name, element));
+            parts.push(QueueConfigurationSerializer::serialize("QueueConfiguration", element));
         }
         parts.join("")
     }
@@ -9971,7 +9972,7 @@ impl ReplicationRulesSerializer {
     pub fn serialize(name: &str, obj: &Vec<ReplicationRule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(ReplicationRuleSerializer::serialize(name, element));
+            parts.push(ReplicationRuleSerializer::serialize("ReplicationRule", element));
         }
         parts.join("")
     }
@@ -10257,7 +10258,7 @@ impl RoutingRulesSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(RoutingRuleSerializer::serialize(name, element));
+            parts.push(RoutingRuleSerializer::serialize("RoutingRule", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -10414,7 +10415,7 @@ impl RulesSerializer {
     pub fn serialize(name: &str, obj: &Vec<Rule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(RuleSerializer::serialize(name, element));
+            parts.push(RuleSerializer::serialize("Rule", element));
         }
         parts.join("")
     }
@@ -10841,7 +10842,7 @@ impl TagSetSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(TagSerializer::serialize(name, element));
+            parts.push(TagSerializer::serialize("Tag", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -11010,7 +11011,7 @@ impl TargetGrantsSerializer {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
-            parts.push(TargetGrantSerializer::serialize(name, element));
+            parts.push(TargetGrantSerializer::serialize("TargetGrant", element));
         }
         parts.push(format!("</{}>", name));
         parts.join("")
@@ -11296,7 +11297,7 @@ impl TopicConfigurationListSerializer {
     pub fn serialize(name: &str, obj: &Vec<TopicConfiguration>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(TopicConfigurationSerializer::serialize(name, element));
+            parts.push(TopicConfigurationSerializer::serialize("TopicConfiguration", element));
         }
         parts.join("")
     }
@@ -11416,7 +11417,7 @@ impl TransitionListSerializer {
     pub fn serialize(name: &str, obj: &Vec<Transition>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
-            parts.push(TransitionSerializer::serialize(name, element));
+            parts.push(TransitionSerializer::serialize("Transition", element));
         }
         parts.join("")
     }

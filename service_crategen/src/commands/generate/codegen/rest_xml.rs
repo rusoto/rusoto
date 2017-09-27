@@ -124,7 +124,11 @@ impl GenerateProtocol for RestXmlGenerator {
 
     fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
         if name != "RestoreRequest" && name.ends_with("Request") {
-            return None;
+            if used_as_request_payload(shape) {
+                return Some(generate_request_payload_serializer(name, shape));
+            } else {
+                return None;
+            }
         }
 
         let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
@@ -172,7 +176,8 @@ fn generate_payload_serialization(service: &Service, operation: &Operation) -> O
         return None;
     }
 
-    let input_shape = service.get_shape(&operation.input.as_ref().unwrap().shape).unwrap();
+    let input = operation.input.as_ref().unwrap();
+    let input_shape = service.get_shape(&input.shape).unwrap();
 
     let mut parts: Vec<String> = Vec::new();
 
@@ -182,6 +187,14 @@ fn generate_payload_serialization(service: &Service, operation: &Operation) -> O
         parts.push(generate_payload_member_serialization(input_shape));
         parts.push(generate_service_specific_code(service, operation)
             .unwrap_or_else(|| "".to_owned()));
+        parts.push("request.set_payload(Some(payload));".to_owned());
+    } else if used_as_request_payload(input_shape) {
+        // In Route 53, no operation has "payload" parameter but some API actually requires
+        // payload. In that case, the payload should include members whose "location" parameter is
+        // missing.
+        let xmlns = input.xml_namespace.as_ref().unwrap();
+        parts.push(format!("let payload = {name}Serializer::serialize(\"{name}\", &input, \"{xmlns}\").into_bytes();", name = input.shape, xmlns = xmlns.uri));
+        parts.push(generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()));
         parts.push("request.set_payload(Some(payload));".to_owned());
     }
 
@@ -302,7 +315,7 @@ fn generate_list_serializer(shape: &Shape) -> String {
 
     serializer += &format!("
         for element in obj {{
-            parts.push({element_type}Serializer::serialize(name, element));
+            parts.push({element_type}Serializer::serialize(\"{element_type}\", element));
         }}",
                            element_type = element_type);
 
@@ -390,4 +403,37 @@ fn generate_complex_struct_field_serializer(shape: &Shape,
                 location_name = location_name,
                 field_name = generate_field_name(member_name))
     }
+}
+
+fn used_as_request_payload(shape: &Shape) -> bool {
+    if shape.payload.is_some() {
+        return false;
+    }
+    if let Some(ref members) = shape.members {
+        for member in members.values() {
+            if member.location.is_none() {
+                return true;
+            }
+        }
+    }
+    false
+}
+
+fn generate_request_payload_serializer(name: &str, shape: &Shape) -> String {
+    let mut parts = Vec::new();
+    parts.push(format!("pub struct {name}Serializer;", name = name));
+    parts.push(format!("impl {name}Serializer {{", name = name));
+    parts.push("#[allow(unused_variables, warnings)]".to_owned());
+    parts.push(format!("pub fn serialize(name: &str, obj: &{name}, xmlns: &str) -> String {{", name = name));
+    parts.push("let mut serialized = format!(\"<{name} xmlns=\\\"{xmlns}\\\">\", name=name, xmlns=xmlns);".to_owned());
+    for (member_name, member) in shape.members.as_ref().unwrap() {
+        if member.location.is_none() {
+            let location_name = member.location_name.as_ref().unwrap_or(member_name);
+            parts.push(generate_complex_struct_field_serializer(shape, member, location_name, member_name));
+        }
+    }
+    parts.push("serialized += &format!(\"</{name}>\", name=name);".to_owned());
+    parts.push("serialized".to_owned());
+    parts.push("}}".to_owned());
+    parts.join("\n")
 }
