@@ -14,7 +14,7 @@ use std::str;
 use ring::{digest, hmac};
 use time::Tm;
 use time::now_utc;
-use url::percent_encoding::{utf8_percent_encode, EncodeSet};
+use url::percent_encoding::{utf8_percent_encode, percent_decode, EncodeSet};
 use hex::ToHex;
 
 use param::Params;
@@ -348,11 +348,11 @@ fn build_canonical_query_string(params: &Params) -> String {
             output.push_str("&");
         }
 
-        output.push_str(&encode_uri_strict(key));
+        output.push_str(&encode_uri_strict(&key.replace("+", " ")));
         output.push_str("=");
 
-        if val.is_some() {
-            output.push_str(&encode_uri_strict(val.as_ref().unwrap()));
+        if let &Some(ref unwrapped_val) = val {
+            output.push_str(&encode_uri_strict(&unwrapped_val.replace("+", " ")));
         }
     }
 
@@ -399,12 +399,22 @@ impl EncodeSet for StrictPathEncodeSet {
 #[inline]
 #[doc(hidden)]
 pub fn encode_uri_path(uri: &str) -> String {
-    utf8_percent_encode(uri, StrictPathEncodeSet).collect::<String>()
+    utf8_percent_encode(&decode_uri(uri), StrictPathEncodeSet).collect::<String>()
 }
 
 #[inline]
 fn encode_uri_strict(uri: &str) -> String {
-    utf8_percent_encode(uri, StrictEncodeSet).collect::<String>()
+    utf8_percent_encode(&decode_uri(uri), StrictEncodeSet).collect::<String>()
+}
+
+#[inline]
+fn decode_uri(uri: &str) -> String {
+    let decoder = percent_decode(uri.as_bytes());
+    if let Ok(decoded) = decoder.decode_utf8() {
+        decoded.to_string()
+    } else {
+        uri.to_owned()
+    }
 }
 
 fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
@@ -492,9 +502,24 @@ mod tests {
         for code in start..end {
             params.insert("k".to_owned(), Some((code as char).to_string()));
             let enc = build_canonical_query_string(&params);
-            let expected = format!("k=%{:02X}", code);
+            let expected = if (code as char) == '+' {
+                "k=%20".to_owned()
+            } else {
+                format!("k=%{:02X}", code)
+            };
             assert_eq!(expected, enc);
         }
+    }
+    #[test]
+    fn query_string_encoding_outliers() {
+        let mut request = SignedRequest::new("GET",
+            "s3", &Region::UsEast1, "/pathwith%20already%20existing%20encoding and some not encoded values");
+        request.add_param("arg1%7B", "arg1%7B");
+        request.add_param("arg2%7B+%2B", "+%2B");
+        assert_eq!(super::build_canonical_query_string(&request.params),
+            "arg1%7B=arg1%7B&arg2%7B%20%2B=%20%2B");
+        assert_eq!(super::canonical_uri(&request.path),
+            "/pathwith%20already%20existing%20encoding%20and%20some%20not%20encoded%20values");
     }
     #[test]
     fn query_percent_encoded() {
