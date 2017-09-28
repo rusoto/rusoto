@@ -1,6 +1,7 @@
 #![cfg_attr(feature = "nightly-testing", feature(plugin))]
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
+#![deny(missing_docs)]
 
 //! Types for loading and managing AWS access credentials for API requests.
 
@@ -114,12 +115,20 @@ impl AwsCredentials {
     }
 }
 
+/// Represents an Error that has occured during the fetching Credentials Phase.
+///
+/// This generally is an error message from one of our underlying libraries, however
+/// we wrap it up with this type so we can export one single error type.
 #[derive(Debug, PartialEq)]
 pub struct CredentialsError {
+    /// The underlying error message for the credentials error.
     pub message: String,
 }
 
 impl CredentialsError {
+    /// Creates a new Credentials Error.
+    ///
+    /// * `message` - The Error message for this CredentialsError.
     pub fn new<S>(message: S) -> CredentialsError
     where
         S: Into<String>,
@@ -166,6 +175,9 @@ pub trait ProvideAwsCredentials {
 
 /// A Trait for types that produce `AwsCredentials` that can timeout.
 pub trait ProvideTimeoutableAwsCredentials {
+    /// Makes the provider fetch credentials with a specified timeout.
+    ///
+    /// * `timeout` - The Duration of time to wait for before timing out with an error.
     fn credentials_with_timeout(
         &self,
         timeout: StdDuration,
@@ -185,6 +197,7 @@ pub struct BaseAutoRefreshingProvider<P, T> {
 pub type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>;
 
 impl<P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
+    /// Grab a RefreshingProvider that locks it's credentials with a Mutex so it's thread safe.
     pub fn with_mutex(provider: P) -> Result<AutoRefreshingProviderSync<P>, CredentialsError> {
         let creds = try!(provider.credentials());
         Ok(BaseAutoRefreshingProvider {
@@ -211,6 +224,8 @@ impl<P: ProvideAwsCredentials> ProvideAwsCredentials
 pub type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
 
 impl<P: ProvideAwsCredentials> AutoRefreshingProvider<P> {
+    /// Grab a provider that locks it's credentials with a RefCell. If you're looking for
+    /// Thread Safety, take a look at AutoRefreshingProviderSync.
     pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
         let creds = try!(provider.credentials());
         Ok(BaseAutoRefreshingProvider {
@@ -261,6 +276,8 @@ impl<P: ProvideTimeoutableAwsCredentials> ProvideTimeoutableAwsCredentials
 pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
 
 impl DefaultCredentialsProvider {
+    /// Creates a new DefaultCredentials Provider. If you're looking for
+    /// Thread Safety look at DefaultCredentialsProviderSync.
     pub fn new() -> Result<DefaultCredentialsProvider, CredentialsError> {
         Ok(try!(
             AutoRefreshingProvider::with_refcell(ChainProvider::new())
@@ -280,6 +297,7 @@ impl DefaultCredentialsProvider {
 pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvider>;
 
 impl DefaultCredentialsProviderSync {
+    /// Creates a new Thread Safe Default Credentials Provider.
     pub fn new() -> Result<DefaultCredentialsProviderSync, CredentialsError> {
         Ok(try!(
             AutoRefreshingProviderSync::with_mutex(ChainProvider::new())
