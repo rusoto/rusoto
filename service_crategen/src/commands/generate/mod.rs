@@ -1,8 +1,11 @@
+extern crate stopwatch;
+
 use std::collections::BTreeMap;
 use std::fs::{self, OpenOptions};
 use std::io::{BufWriter, Write};
 use std::path::Path;
 
+use self::stopwatch::Stopwatch;
 use rayon::prelude::*;
 use rustfmt;
 use toml;
@@ -18,6 +21,7 @@ pub fn generate_services(services: BTreeMap<String, ServiceConfig>, out_dir: &Pa
     }
 
     services.par_iter().for_each(|(name, service_config)| {
+        let sw = Stopwatch::start_new();
         let service = {
             let service_definition = ServiceDefinition::load(name, &service_config.protocol_version)
                 .expect(&format!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name));
@@ -230,9 +234,11 @@ pub use custom::*;
                     .open(&custom_mod_file_path)
                     .expect("Unable to write mod.rs");
             }
+            println!("Service generation of {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
 
         {
+            let sw = Stopwatch::start_new();
             let src_dir = crate_dir.join("src");
             let gen_file_path = src_dir.join("generated.rs");
 
@@ -241,9 +247,11 @@ pub use custom::*;
                 error_on_line_overflow: false,
                 ..rustfmt::config::Config::default()
             });
+            println!("Rustfmt of {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
 
         {
+            let sw = Stopwatch::start_new();
             let test_resources_dir = crate_dir.join("test_resources");
 
             if !test_resources_dir.exists() {
@@ -281,6 +289,7 @@ pub use custom::*;
                     fs::copy(resource.full_path, test_error_resources_dir.join(&resource.file_name)).expect("Failed to copy test resource file");
                 }
             }
+            println!("Service test generation from botocore for {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
     });
 }
