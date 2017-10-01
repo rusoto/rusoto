@@ -15,21 +15,52 @@ use std::fmt::{Display, Error as FmtError, Formatter};
 /// `CnNorth1` is currently untested due to Rusoto maintainers not having access to AWS China.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum Region {
+    /// Server for North-East part of America
     ApNortheast1,
+
+    /// Alternate server for North-East America
     ApNortheast2,
+
+    /// Server for South America
     ApSouth1,
+
+    /// Server for South-East America
     ApSoutheast1,
+
+    /// Alternate server for South-East America
     ApSoutheast2,
+
+    /// Server for central America
     CaCentral1,
+
+    /// Server for central Europe
     EuCentral1,
+
+    /// Server for West Europe
     EuWest1,
+
+    /// Alternate server for West Europe
     EuWest2,
+
+    /// Server for South-East Europe
     SaEast1,
+
+    /// Server for East part of America
     UsEast1,
+
+    /// Alternate server for East part of America
     UsEast2,
+
+    /// Server for West part of America
     UsWest1,
+
+    /// Alternate North-East part of America
     UsWest2,
+
+    /// Server for North Canada
     CnNorth1,
+
+    /// Allows a custom host
     Custom(String)
 }
 
@@ -91,6 +122,7 @@ impl FromStr for Region {
 }
 
 impl ParseRegionError {
+    /// Parses a region given as a string literal into a type `Region'
     pub fn new(input: &str) -> Self {
         ParseRegionError { message: format!("Not a valid AWS region: {}", input) }
     }
