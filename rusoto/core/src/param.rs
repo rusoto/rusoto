@@ -11,6 +11,9 @@ pub type Params = BTreeMap<String, Option<String>>;
 /// Key:value pair for an service parameter.
 pub trait ServiceParams {
     /// Add a new paramater with a key and val
+    ///
+    /// * `key` - The key of the parameter to add.
+    /// * `val` - The value of the paramater to add.
     fn put<T: ToParam>(&mut self, key: &str, val: T);
     /// Add a new paramater with a key
     fn put_key(&mut self, key: &str);
@@ -28,7 +31,7 @@ impl ServiceParams for Params {
 
 /// Trait for implementing type to paramater conversion
 pub trait ToParam {
-    /// Convert self into String
+    /// Renders this paramater to a String
     fn to_param(&self) -> String;
 }
 

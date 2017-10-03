@@ -35,19 +35,18 @@ lazy_static! {
             env!("CARGO_PKG_VERSION"), RUST_VERSION, env::consts::OS).as_bytes().to_vec()];
 }
 
-/// Stores the response from a HTTP server.
+/// Stores the response from a HTTP request.
 pub struct HttpResponse {
     /// Status code of HTTP Request
     pub status: StatusCode,
     /// Contents of Response
     pub body: Box<Read>,
-    /// Headers stored as <key:content>
+    /// Headers stored as <key(string):value(string)>
     pub headers: HashMap<String, String>,
 }
 
 #[derive(Debug, PartialEq)]
 /// An error produced when invalid request types are sent.
-/// Valid examples are `GET`, `POST`, `PUT` etc.
 pub struct HttpDispatchError {
     message: String,
 }
@@ -78,7 +77,7 @@ impl From<IoError> for HttpDispatchError {
 
 ///Trait for implementing HTTP Request/Response
 pub trait DispatchSignedRequest {
-    /// Dispatch Request and return Response
+    /// Dispatch Request, and then return a Response
     fn dispatch(&self, request: &SignedRequest) -> Result<HttpResponse, HttpDispatchError>;
 }
 
