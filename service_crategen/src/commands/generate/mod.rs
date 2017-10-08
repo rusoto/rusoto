@@ -14,7 +14,6 @@ use toml;
 mod codegen;
 
 use cargo;
-use log::LogLevel::Debug;
 use ::{Service, ServiceConfig, ServiceDefinition};
 
 pub fn generate_services(services: BTreeMap<String, ServiceConfig>, out_dir: &Path) {
@@ -237,9 +236,7 @@ pub use custom::*;
                     .open(&custom_mod_file_path)
                     .expect("Unable to write mod.rs");
             }
-            if log_enabled!(Debug) {
-                debug!("Service generation of {} took {}ms", service.full_name(), sw.elapsed_ms());
-            }
+            debug!("Service generation of {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
 
         {
@@ -252,9 +249,7 @@ pub use custom::*;
                 error_on_line_overflow: false,
                 ..rustfmt::config::Config::default()
             });
-            if log_enabled!(Debug) {
-                println!("Rustfmt of {} took {}ms", service.full_name(), sw.elapsed_ms());
-            }
+            debug!("Rustfmt of {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
 
         {
@@ -296,9 +291,7 @@ pub use custom::*;
                     fs::copy(resource.full_path, test_error_resources_dir.join(&resource.file_name)).expect("Failed to copy test resource file");
                 }
             }
-            if log_enabled!(Debug) {
-                println!("Service test generation from botocore for {} took {}ms", service.full_name(), sw.elapsed_ms());
-            }
+            debug!("Service test generation from botocore for {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
     });
 }
