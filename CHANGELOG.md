@@ -12,6 +12,7 @@
 - Added Documentation to Credentials Crate.
 - Make Rusoto Core use HTTP Pools to re-use connections.
 - Fixed Edge Cases in URI Encoding of Rusoto (double query encoding, +'s in query strings).
+- Updated ring dependency
 
 ## [0.28.0] - 2017-08-25
 
