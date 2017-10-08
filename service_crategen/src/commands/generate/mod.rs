@@ -1,4 +1,5 @@
 extern crate stopwatch;
+extern crate env_logger;
 
 use std::collections::BTreeMap;
 use std::fs::{self, OpenOptions};
@@ -13,9 +14,14 @@ use toml;
 mod codegen;
 
 use cargo;
+use log::LogLevel::Debug;
 use ::{Service, ServiceConfig, ServiceDefinition};
 
 pub fn generate_services(services: BTreeMap<String, ServiceConfig>, out_dir: &Path) {
+    let _ = env_logger::init(); // This initializes the `env_logger`
+    if log_enabled!(Debug) {
+        debug!("\n\nwoohoo enabled");
+    }
     if !out_dir.exists() {
         fs::create_dir(out_dir).expect("Unable to create output directory");
     }
@@ -234,7 +240,9 @@ pub use custom::*;
                     .open(&custom_mod_file_path)
                     .expect("Unable to write mod.rs");
             }
-            println!("Service generation of {} took {}ms", service.full_name(), sw.elapsed_ms());
+            if log_enabled!(Debug) {
+                debug!("Service generation of {} took {}ms", service.full_name(), sw.elapsed_ms());
+            }
         }
 
         {
@@ -247,7 +255,9 @@ pub use custom::*;
                 error_on_line_overflow: false,
                 ..rustfmt::config::Config::default()
             });
-            println!("Rustfmt of {} took {}ms", service.full_name(), sw.elapsed_ms());
+            if log_enabled!(Debug) {
+                println!("Rustfmt of {} took {}ms", service.full_name(), sw.elapsed_ms());
+            }
         }
 
         {
@@ -289,7 +299,9 @@ pub use custom::*;
                     fs::copy(resource.full_path, test_error_resources_dir.join(&resource.file_name)).expect("Failed to copy test resource file");
                 }
             }
-            println!("Service test generation from botocore for {} took {}ms", service.full_name(), sw.elapsed_ms());
+            if log_enabled!(Debug) {
+                println!("Service test generation from botocore for {} took {}ms", service.full_name(), sw.elapsed_ms());
+            }
         }
     });
 }
