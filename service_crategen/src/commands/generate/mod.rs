@@ -17,7 +17,9 @@ use cargo;
 use ::{Service, ServiceConfig, ServiceDefinition};
 
 pub fn generate_services(services: BTreeMap<String, ServiceConfig>, out_dir: &Path) {
-    let _ = env_logger::init(); // This initializes the `env_logger`
+    if let Err(e) = env_logger::init() {
+        println!("Failed to initialize Logger: {:?}", e);
+    }
     if !out_dir.exists() {
         fs::create_dir(out_dir).expect("Unable to create output directory");
     }
