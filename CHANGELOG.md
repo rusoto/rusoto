@@ -13,6 +13,7 @@
 - Make Rusoto Core use HTTP Pools to re-use connections.
 - Fixed Edge Cases in URI Encoding of Rusoto (double query encoding, +'s in query strings).
 - Updated ring dependency
+- Added Elastic Filesystem service
 
 ## [0.28.0] - 2017-08-25
 
