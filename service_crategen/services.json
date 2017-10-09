@@ -34,12 +34,18 @@
     "coreVersion": "0.28.0",
     "protocolVersion": "2011-01-01",
     "baseTypeName": "Autoscaling"
-  },  
+  },
   "batch": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
     "protocolVersion": "2016-08-10",
     "baseTypeName": "Batch"
+  },
+  "clouddirectory": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2016-05-10",
+    "baseTypeName": "CloudDirectory"
   },
   "cloudformation": {
     "version": "0.28.0",

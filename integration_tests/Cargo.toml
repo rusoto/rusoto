@@ -43,6 +43,10 @@ path = "../rusoto/services/autoscaling"
 optional = true
 path = "../rusoto/services/batch"
 
+[dependencies.rusoto_clouddirectory]
+optional = true
+path = "../rusoto/services/clouddirectory"
+
 [dependencies.rusoto_cloudformation]
 optional = true
 path = "../rusoto/services/cloudformation"
@@ -355,6 +359,7 @@ all = [
 		"athena",		
 	   	"autoscaling",
         "batch",
+		"clouddirectory",
 	   	"cloudformation",
 	   	"cloudfront",
 	   	"cloudhsm",
@@ -437,6 +442,7 @@ appstream = ["rusoto_appstream"]
 athena = ["rusoto_athena"]
 autoscaling = ["rusoto_autoscaling"]
 batch = ["rusoto_batch"]
+clouddirectory = ["rusoto_clouddirectory"]
 cloudformation = ["rusoto_cloudformation"]
 cloudfront = ["rusoto_cloudfront"]
 cloudhsm = ["rusoto_cloudhsm"]
