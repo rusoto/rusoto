@@ -179,6 +179,10 @@ path = "../rusoto/services/gamelift"
 optional = true
 path = "../rusoto/services/glacier"
 
+[dependencies.rusoto_greengrass]
+optional = true
+path = "../rusoto/services/greengrass"
+
 [dependencies.rusoto_iam]
 optional = true
 path = "../rusoto/services/iam"
@@ -389,6 +393,7 @@ all = [
 	   	"firehose",
 		"gamelift",
 		"glacier",
+		"greengrass",
 	   	"iam",
 	   	"importexport",
 	   	"inspector",
@@ -471,6 +476,7 @@ events = ["rusoto_events"]
 firehose = ["rusoto_firehose"]
 gamelift = ["rusoto_gamelift"]
 glacier = ["rusoto_glacier"]
+greengrass = ["rusoto_greengrass"]
 iam = ["rusoto_iam"]
 importexport = ["rusoto_importexport"]
 inspector = ["rusoto_inspector"]
