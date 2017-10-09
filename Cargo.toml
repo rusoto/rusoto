@@ -8,6 +8,7 @@ members = [
     "rusoto/services/appstream",
     "rusoto/services/autoscaling",
     "rusoto/services/batch",
+    "rusoto/services/clouddirectory",
     "rusoto/services/cloudformation",
     "rusoto/services/cloudfront",
     "rusoto/services/cloudhsm",
