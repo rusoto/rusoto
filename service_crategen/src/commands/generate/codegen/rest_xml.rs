@@ -307,20 +307,21 @@ fn generate_list_serializer(shape: &Shape) -> String {
         _ => false,
     };
 
-    let element_type = &mutate_type_name(&shape.member_type()[..]);
+    let member = shape.member.as_ref().expect("Member shape undefined");
+    let element_type = &mutate_type_name(&member.shape);
     let mut serializer = "let mut parts: Vec<String> = Vec::new();".to_owned();
 
-    if !flattened {
+    if flattened {
+        serializer += &format!("
+            for element in obj {{
+                parts.push({element_type}Serializer::serialize(name, element));
+            }}", element_type = element_type);
+    } else {
         serializer += "parts.push(format!(\"<{}>\", name));";
-    }
-
-    serializer += &format!("
-        for element in obj {{
-            parts.push({element_type}Serializer::serialize(\"{element_type}\", element));
-        }}",
-                           element_type = element_type);
-
-    if !flattened {
+        serializer += &format!("
+            for element in obj {{
+                parts.push({element_type}Serializer::serialize(\"{location_name}\", element));
+            }}", element_type = element_type, location_name = member.location_name.as_ref().unwrap());
         serializer += "parts.push(format!(\"</{}>\", name));";
     }
 
