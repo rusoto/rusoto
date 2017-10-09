@@ -80,7 +80,7 @@ pub fn generate_uri_formatter(request_uri: &str,
         let input_shape = &service.get_shape(operation.input_shape()).unwrap();
         let uri_strings = generate_shape_member_uri_strings(input_shape);
 
-        if uri_strings.len() > 0 {
+        if !uri_strings.is_empty() {
             return Some(format!("let request_uri = format!(\"{request_uri}\", {uri_strings});",
                                 request_uri = generate_snake_case_uri(request_uri),
                                 uri_strings = uri_strings.join(", ")));
@@ -138,9 +138,9 @@ fn generate_static_param_strings(operation: &Operation) -> Vec<String> {
     // These need to get parsed out of the URI and added to the params map
     // with the other "queryparam" members
     if let Some(ref key) = maybe_params {
-        match key.find("=") {
+        match key.find('=') {
             Some(_) => {
-                let key_val_vec: Vec<&str> = key.split("=").collect();
+                let key_val_vec: Vec<&str> = key.split('=').collect();
                 static_params.push(format!("params.put(\"{}\", \"{}\");",
                                            key_val_vec[0],
                                            key_val_vec[1]))

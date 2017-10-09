@@ -16,7 +16,7 @@ mod codegen;
 use cargo;
 use ::{Service, ServiceConfig, ServiceDefinition};
 
-pub fn generate_services(services: BTreeMap<String, ServiceConfig>, out_dir: &Path) {
+pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &Path) {
     if let Err(e) = env_logger::init() {
         println!("Failed to initialize Logger: {:?}", e);
     }
@@ -29,7 +29,7 @@ pub fn generate_services(services: BTreeMap<String, ServiceConfig>, out_dir: &Pa
         let service = {
             let service_definition = ServiceDefinition::load(name, &service_config.protocol_version)
                 .expect(&format!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name));
-            Service::new(service_config.clone(), service_definition)
+            Service::new(service_config, service_definition)
         };
 
         let crate_dir = out_dir.join(&name);
@@ -55,12 +55,14 @@ pub fn generate_services(services: BTreeMap<String, ServiceConfig>, out_dir: &Pa
             format!("extern crate {};", safe_name)
         }).collect::<Vec<String>>().join("\n");
 
-        let mut cargo_manifest = OpenOptions::new()
+        let mut cargo_manifest = BufWriter::new(
+            OpenOptions::new()
             .write(true)
             .truncate(true)
             .create(true)
             .open(crate_dir.join("Cargo.toml"))
-            .expect("Unable to write Cargo.toml");
+            .expect("Unable to write Cargo.toml")
+        );
 
         let mut name_for_keyword = name.clone().to_string();
         if name_for_keyword.len() >= 20 {
@@ -83,8 +85,7 @@ pub fn generate_services(services: BTreeMap<String, ServiceConfig>, out_dir: &Pa
                 readme: Some("README.md".into()),
                 repository: Some("https://github.com/rusoto/rusoto".into()),
                 version: service_config.version.clone(),
-                homepage: Some("https://www.rusoto.org/".into()),
-                ..cargo::Metadata::default()
+                homepage: Some("https://www.rusoto.org/".into())
             },
             dependencies: service_dependencies,
             dev_dependencies: vec![
@@ -101,14 +102,16 @@ pub fn generate_services(services: BTreeMap<String, ServiceConfig>, out_dir: &Pa
 
         cargo_manifest.write_all(toml::to_string(&manifest).unwrap().as_bytes()).unwrap();
 
-        let mut readme_file = OpenOptions::new()
+        let mut readme_file = BufWriter::new(
+            OpenOptions::new()
             .write(true)
             .truncate(true)
             .create(true)
             .open(crate_dir.join("README.md"))
-            .expect("Unable to write README.md");
+            .expect("Unable to write README.md")
+        );
 
-        let readme = format!(r#"
+        writeln!(readme_file, r#"
 # Rusoto {short_name}
 Rust SDK for {aws_name}
 
@@ -157,9 +160,7 @@ See [LICENSE][license] for details.
         aws_name = service.full_name(),
         crate_name = crate_name,
         version = service_config.version
-        );
-
-        readme_file.write_all(readme.as_bytes()).unwrap();
+        ).expect("Couldn't write README for crate");
 
         {
             let src_dir = crate_dir.join("src");
@@ -170,14 +171,16 @@ See [LICENSE][license] for details.
 
             let lib_file_path = src_dir.join("lib.rs");
 
-            let mut lib_file = OpenOptions::new()
+            let mut lib_file = BufWriter::new(
+                OpenOptions::new()
                 .write(true)
                 .truncate(true)
                 .create(true)
                 .open(&lib_file_path)
-                .expect("Unable to write lib.rs");
+                .expect("Unable to write lib.rs")
+            );
 
-            let lib_file_contents = format!(r#"
+            writeln!(lib_file, r#"
 // =================================================================
 //
 //                           * WARNING *
@@ -206,20 +209,18 @@ pub use custom::*;
             client_name = service.client_type_name(),
             trait_name = service.service_type_name(),
             extern_crates = extern_crates
-            );
-
-            lib_file.write_all(lib_file_contents.as_bytes()).unwrap();
+            ).expect("Couldn't write library file");
 
             let gen_file_path = src_dir.join("generated.rs");
 
-            let gen_file = OpenOptions::new()
+            let mut gen_writer = BufWriter::new(
+                OpenOptions::new()
                 .create(true)
                 .write(true)
                 .truncate(true)
                 .open(&gen_file_path)
-                .expect("Unable to write generated.rs");
-
-            let mut gen_writer = BufWriter::new(gen_file);
+                .expect("Unable to write generated.rs")
+            );
 
             codegen::generate_source(&service, &mut gen_writer).unwrap();
 

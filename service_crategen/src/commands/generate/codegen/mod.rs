@@ -199,15 +199,14 @@ pub fn get_rust_type(service: &Service,
             ShapeType::Boolean => "bool".into(),
             ShapeType::Double => "f64".into(),
             ShapeType::Float => "f32".into(),
-            ShapeType::Integer => "i64".into(),
-            ShapeType::Long => "i64".into(),
+            ShapeType::Integer | ShapeType::Long => "i64".into(),
             ShapeType::String => "String".into(),
             ShapeType::Timestamp => for_timestamps.into(),
             ShapeType::List => {
                 format!("Vec<{}>",
                         get_rust_type(service,
                                       shape.member_type(),
-                                      service.get_shape(&shape.member_type()).unwrap(),
+                                      service.get_shape(shape.member_type()).unwrap(),
                                       false,
                                       for_timestamps))
             }
@@ -286,7 +285,7 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
             continue;
         }
 
-        let type_name = mutate_type_name(&name);
+        let type_name = mutate_type_name(name);
 
         let deserialized = deserialized_types.contains(&type_name);
         let serialized = serialized_types.contains(&type_name);
@@ -303,7 +302,7 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
             if type_name != "String" {
                 let generated = generate_struct(service,
                                                 &type_name,
-                                                &shape,
+                                                shape,
                                                 serialized,
                                                 deserialized,
                                                 protocol_generator);
@@ -311,7 +310,7 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
             }
         }
 
-        if is_streaming_shape(service, &name) {
+        if is_streaming_shape(service, name) {
             // Add a second type for streaming blobs, which are the only streaming type we can have
             writeln!(writer,
                      "pub struct {streaming_name}(Box<Read>);
@@ -341,14 +340,14 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
 
         if deserialized {
             if let Some(deserializer) =
-                protocol_generator.generate_deserializer(&type_name, &shape, service) {
+                protocol_generator.generate_deserializer(&type_name, shape, service) {
                 writeln!(writer, "{}", deserializer)?;
             }
         }
 
         if serialized {
             if let Some(serializer) =
-                protocol_generator.generate_serializer(&type_name, &shape, service) {
+                protocol_generator.generate_serializer(&type_name, shape, service) {
                 writeln!(writer, "{}", serializer)?;
             }
         }
@@ -430,7 +429,7 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
         let member_shape = service.shape_for_member(member).unwrap();
         let rs_type = get_rust_type(service,
                                     &member.shape,
-                                    &member_shape,
+                                    member_shape,
                                     member.streaming() && !is_input_shape(service, shape_name),
                                     protocol_generator.timestamp_type());
         let name = generate_field_name(member_name);

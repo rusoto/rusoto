@@ -26,7 +26,7 @@ pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Serv
 fn has_streaming_payload(shape: &Shape) -> bool {
     if let Some(ref payload) = shape.payload {
        if let Some(ref members) = shape.members {
-           if let Some(ref member) = members.get(payload) {
+           if let Some(member) = members.get(payload) {
                member.streaming == Some(true)
            } else {
                false
@@ -81,9 +81,9 @@ fn payload_body_parser(payload_type: ShapeType,
     };
 
     let response_body = match payload_type {
-        ShapeType::Blob if !streaming => format!("body"),
+        ShapeType::Blob if !streaming => "body".to_string(),
         ShapeType::Blob if streaming => format!("{}(response.body)", mutate_type_name_for_streaming(payload_member)),
-        _ => format!("String::from_utf8_lossy(&body).into_owned()"),
+        _ => "String::from_utf8_lossy(&body).into()".to_string(),
     };
 
     format!("
@@ -108,8 +108,8 @@ fn xml_body_parser(output_shape: &str,
         "let result;"
     };
 
-    let deserialize = match result_wrapper {
-        &Some(ref tag_name) => {
+    let deserialize = match *result_wrapper {
+        Some(ref tag_name) => {
             format!("try!(start_element(&actual_tag_name, &mut stack));
                      result = try!({output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack));
                      skip_tree(&mut stack);
@@ -117,7 +117,7 @@ fn xml_body_parser(output_shape: &str,
                     output_shape = output_shape,
                     tag_name = tag_name)
         }
-        &None => {
+        None => {
             format!("result = try!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));",
                     output_shape = output_shape)
         }
@@ -298,8 +298,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 fn generate_primitive_deserializer(shape: &Shape) -> String {
     let statement = match shape.shape_type {
         ShapeType::String | ShapeType::Timestamp => "try!(characters(stack))",
-        ShapeType::Integer => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        ShapeType::Long => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Integer | ShapeType::Long => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Double => "f64::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Float => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Blob => "try!(characters(stack)).into_bytes()",
@@ -420,7 +419,7 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
 fn generate_struct_field_parse_expression(shape: &Shape,
                                           member_name: &str,
                                           member: &Member,
-                                          location_name: &String)
+                                          location_name: &str)
                                           -> String {
     let expression = format!(
         "try!({name}Deserializer::deserialize(\"{location_name}\", stack))",

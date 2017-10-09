@@ -189,10 +189,7 @@ fn list_member_format(service: &Service, flattened: bool) -> String {
     match service.protocol() {
         "ec2" => "{}.{}".to_owned(),
         "query" => {
-            match flattened {
-                true => "{}.{}".to_owned(),
-                false => "{}.member.{}".to_owned(),
-            }
+            if flattened { "{}.{}".to_owned() } else { "{}.member.{}".to_owned() }
         },
         _ => panic!("Unsupported protocol"),
     }
