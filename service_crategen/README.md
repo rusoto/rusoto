@@ -38,3 +38,11 @@ $ cargo run -- check -c ./services.json
 ```
 
 If there are any missing or outdated services, they will be output in a formatted list along with useful information.
+
+## Crate generation timing
+
+To output timing information on crate generation, run with logging set to debug level:
+
+```bash
+$ RUST_LOG=rusoto_service_crategen=debug cargo run -- generate -c ./services.json -o ../rusoto/services
+```

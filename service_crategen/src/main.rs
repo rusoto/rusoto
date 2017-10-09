@@ -15,6 +15,9 @@ extern crate inflector;
 extern crate lazy_static;
 extern crate regex;
 extern crate hyper;
+#[macro_use]
+extern crate log;
+extern crate env_logger;
 
 mod botocore;
 mod cargo;
