@@ -65,6 +65,12 @@
     "protocolVersion": "2013-01-01",
     "baseTypeName": "CloudSearch"
   },
+  "cloudsearchdomain": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2013-01-01",
+    "baseTypeName": "CloudSearchDomain"
+  },
   "cloudtrail": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",

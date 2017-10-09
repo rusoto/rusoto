@@ -59,6 +59,10 @@ path = "../rusoto/services/cloudhsm"
 optional = true
 path = "../rusoto/services/cloudsearch"
 
+[dependencies.rusoto_cloudsearchdomain]
+optional = true
+path = "../rusoto/services/cloudsearchdomain"
+
 [dependencies.rusoto_cloudtrail]
 optional = true
 path = "../rusoto/services/cloudtrail"
@@ -359,6 +363,7 @@ all = [
 	   	"cloudfront",
 	   	"cloudhsm",
 	   	"cloudsearch",
+		"cloudsearchdomain",
 	   	"cloudtrail",
 	   	"cloudwatch",
 		"codebuild",
@@ -441,6 +446,7 @@ cloudformation = ["rusoto_cloudformation"]
 cloudfront = ["rusoto_cloudfront"]
 cloudhsm = ["rusoto_cloudhsm"]
 cloudsearch = ["rusoto_cloudsearch"]
+cloudsearchdomain = ["rusoto_cloudsearchdomain"]
 cloudtrail = ["rusoto_cloudtrail"]
 cloudwatch = ["rusoto_cloudwatch"]
 codebuild = ["rusoto_codebuild"]

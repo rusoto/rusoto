@@ -12,6 +12,7 @@ members = [
     "rusoto/services/cloudfront",
     "rusoto/services/cloudhsm",
     "rusoto/services/cloudsearch",
+    "rusoto/services/cloudsearchdomain",
     "rusoto/services/cloudtrail",
     "rusoto/services/cloudwatch",
     "rusoto/services/codebuild",
