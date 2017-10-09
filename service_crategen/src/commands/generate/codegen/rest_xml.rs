@@ -337,6 +337,7 @@ fn generate_list_serializer(shape: &Shape) -> String {
 }
 
 fn generate_map_serializer(_shape: &Shape) -> String {
+    // No rest-xml services use Map shape type currently.
     unreachable!()
 }
 
