@@ -17419,7 +17419,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
         let mut payload: Vec<u8>;
         if input.multipart_upload.is_some() {
-            payload = CompletedMultipartUploadSerializer::serialize("CompletedMultipartUpload",
+            payload = CompletedMultipartUploadSerializer::serialize("CompleteMultipartUpload",
                                                                     input
                                                                         .multipart_upload
                                                                         .as_ref()
@@ -20927,7 +20927,7 @@ impl<P, D> S3 for S3Client<P, D>
         let mut payload: Vec<u8>;
         if input.lifecycle_configuration.is_some() {
             payload =
-                BucketLifecycleConfigurationSerializer::serialize("BucketLifecycleConfiguration",
+                BucketLifecycleConfigurationSerializer::serialize("LifecycleConfiguration",
                                                                   input
                                                                       .lifecycle_configuration
                                                                       .as_ref()

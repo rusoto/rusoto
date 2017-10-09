@@ -242,12 +242,13 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
                 xml_type = payload_member.shape)
     } else {
         format!("if input.{payload_field}.is_some() {{
-                    payload = {xml_type}Serializer::serialize(\"{xml_type}\", input.{payload_field}.as_ref().unwrap()).into_bytes();
+                    payload = {xml_type}Serializer::serialize(\"{location_name}\", input.{payload_field}.as_ref().unwrap()).into_bytes();
                 }} else {{
                     payload = Vec::new();
                 }}",
                 payload_field = payload_field.to_snake_case(),
-                xml_type = payload_member.shape)
+                xml_type = payload_member.shape,
+                location_name = payload_member.location_name.as_ref().unwrap())
     }
 
 }
