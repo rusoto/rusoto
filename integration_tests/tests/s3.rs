@@ -229,7 +229,7 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
         }
 
         println!("read {} bytes", len);
-        body.extend_from_slice(&buf);
+        body.extend_from_slice(&buf[0..len]);
     }
 
     assert!(body.len() > 0);
