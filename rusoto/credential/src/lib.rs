@@ -507,16 +507,14 @@ mod tests {
     use super::*;
 
     #[test]
-    fn credential_chain_explicit_profile_provider() {
+    fn profile_provider_finds_right_credentials_in_file() {
         let profile_provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "foo",
         );
 
-        let chain = ChainProvider::with_profile_provider(profile_provider);
-
-        let credentials = chain.credentials().expect(
-            "Failed to get credentials from default provider chain with manual profile",
+        let credentials = profile_provider.credentials().expect(
+            "Failed to get credentials from profile provider using tests/sample-data/multiple_profile_credentials",
         );
 
         assert_eq!(credentials.aws_access_key_id(), "foo_access_key");
