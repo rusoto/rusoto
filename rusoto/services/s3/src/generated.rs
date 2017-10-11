@@ -19163,7 +19163,7 @@ impl<P, D> S3 for S3Client<P, D>
                 try!(response.body.read_to_end(&mut body));
 
                 let mut result = GetBucketPolicyOutput::default();
-                result.policy = Some(String::from_utf8_lossy(&body).into_owned());
+                result.policy = Some(String::from_utf8_lossy(&body).into());
 
 
                 Ok(result)
