@@ -8455,7 +8455,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8490,7 +8490,7 @@ impl<P, D> Iot for IotClient<P, D>
         request.add_header("x-amzn-iot-principal", &input.principal);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8525,7 +8525,7 @@ impl<P, D> Iot for IotClient<P, D>
         request.add_header("x-amzn-principal", &input.principal);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8570,7 +8570,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8610,7 +8610,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8661,7 +8661,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8708,7 +8708,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8758,7 +8758,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8803,7 +8803,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8849,7 +8849,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8894,7 +8894,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8928,7 +8928,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8973,7 +8973,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9004,7 +9004,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9039,7 +9039,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9072,7 +9072,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9121,7 +9121,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9166,7 +9166,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9210,7 +9210,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9245,7 +9245,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9291,7 +9291,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9337,7 +9337,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9379,7 +9379,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9423,7 +9423,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9468,7 +9468,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9513,7 +9513,7 @@ impl<P, D> Iot for IotClient<P, D>
         request.add_header("x-amzn-iot-principal", &input.principal);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9548,7 +9548,7 @@ impl<P, D> Iot for IotClient<P, D>
         request.add_header("x-amzn-principal", &input.principal);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9592,7 +9592,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9625,7 +9625,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9656,7 +9656,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9698,7 +9698,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9744,7 +9744,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9787,7 +9787,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9831,7 +9831,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9885,7 +9885,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9939,7 +9939,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9995,7 +9995,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10050,7 +10050,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10106,7 +10106,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10161,7 +10161,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10206,7 +10206,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10261,7 +10261,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10313,7 +10313,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10358,7 +10358,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10412,7 +10412,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10472,7 +10472,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10529,7 +10529,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10582,7 +10582,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10628,7 +10628,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10674,7 +10674,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10709,7 +10709,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10744,7 +10744,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10779,7 +10779,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10816,7 +10816,7 @@ impl<P, D> Iot for IotClient<P, D>
         params.put("targetAwsAccount", &input.target_aws_account);
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10868,7 +10868,7 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10904,7 +10904,7 @@ impl<P, D> Iot for IotClient<P, D>
         params.put("newStatus", &input.new_status);
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10938,7 +10938,7 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {

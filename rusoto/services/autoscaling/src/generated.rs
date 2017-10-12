@@ -12240,7 +12240,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         AttachInstancesQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12269,7 +12269,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         AttachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12316,7 +12316,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         AttachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12365,7 +12365,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         CompleteLifecycleActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12414,7 +12414,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         CreateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12442,7 +12442,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         CreateLaunchConfigurationTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12471,7 +12471,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         CreateOrUpdateTagsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12499,7 +12499,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeleteAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12527,7 +12527,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         LaunchConfigurationNameTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12556,7 +12556,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeleteLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12603,7 +12603,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeleteNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12630,7 +12630,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeletePolicyTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12658,7 +12658,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeleteScheduledActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12684,7 +12684,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeleteTagsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12712,7 +12712,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12759,7 +12759,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12809,7 +12809,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         AutoScalingGroupNamesTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12858,7 +12858,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeAutoScalingInstancesTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12907,7 +12907,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12954,7 +12954,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         LaunchConfigurationNamesTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13002,7 +13002,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13052,7 +13052,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeLifecycleHooksTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13101,7 +13101,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeLoadBalancerTargetGroupsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13148,7 +13148,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeLoadBalancersRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13196,7 +13196,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13245,7 +13245,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeNotificationConfigurationsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13291,7 +13291,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribePoliciesTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13338,7 +13338,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeScalingActivitiesTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13386,7 +13386,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13435,7 +13435,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeScheduledActionsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13481,7 +13481,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeTagsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13528,7 +13528,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13575,7 +13575,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DetachInstancesQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13623,7 +13623,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DetachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13670,7 +13670,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DetachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13718,7 +13718,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DisableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13747,7 +13747,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         EnableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13776,7 +13776,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         EnterStandbyQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13821,7 +13821,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         ExecutePolicyTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13849,7 +13849,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         ExitStandbyQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13896,7 +13896,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         PutLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13943,7 +13943,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         PutNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13972,7 +13972,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         PutScalingPolicyTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14019,7 +14019,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         PutScheduledUpdateGroupActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14049,7 +14049,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         RecordLifecycleActionHeartbeatTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14094,7 +14094,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14122,7 +14122,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         SetDesiredCapacityTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14150,7 +14150,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         SetInstanceHealthQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14179,7 +14179,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         SetInstanceProtectionQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14224,7 +14224,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14253,7 +14253,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         TerminateInstanceInAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14300,7 +14300,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         UpdateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {

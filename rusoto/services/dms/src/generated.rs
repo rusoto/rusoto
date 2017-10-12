@@ -5724,7 +5724,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5754,7 +5754,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5787,7 +5787,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5820,7 +5820,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5853,7 +5853,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5885,7 +5885,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5915,7 +5915,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5945,7 +5945,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5978,7 +5978,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6011,7 +6011,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6044,7 +6044,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6076,7 +6076,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6106,7 +6106,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
                            "AmazonDMSv20160101.DescribeAccountAttributes");
         request.set_payload(Some(b"{}".to_vec()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6137,7 +6137,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6167,7 +6167,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6198,7 +6198,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6228,7 +6228,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6259,7 +6259,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6292,7 +6292,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6323,7 +6323,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6354,7 +6354,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6386,7 +6386,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6419,7 +6419,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6452,7 +6452,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6485,7 +6485,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6516,7 +6516,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6549,7 +6549,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6580,7 +6580,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6610,7 +6610,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6640,7 +6640,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6673,7 +6673,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6706,7 +6706,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6739,7 +6739,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6771,7 +6771,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6801,7 +6801,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6833,7 +6833,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6866,7 +6866,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6897,7 +6897,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6927,7 +6927,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6957,7 +6957,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 

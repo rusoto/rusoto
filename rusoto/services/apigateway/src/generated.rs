@@ -14712,7 +14712,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -14758,7 +14758,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -14804,7 +14804,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -14850,7 +14850,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -14896,7 +14896,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -14944,7 +14944,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -14990,7 +14990,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15034,7 +15034,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15080,7 +15080,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15127,7 +15127,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15170,7 +15170,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15214,7 +15214,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15259,7 +15259,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15305,7 +15305,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15347,7 +15347,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15382,7 +15382,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15417,7 +15417,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15451,7 +15451,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15487,7 +15487,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15522,7 +15522,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15558,7 +15558,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15593,7 +15593,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15628,7 +15628,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15664,7 +15664,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15701,7 +15701,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15736,7 +15736,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15773,7 +15773,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15806,7 +15806,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15841,7 +15841,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15874,7 +15874,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15905,7 +15905,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15938,7 +15938,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -15972,7 +15972,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16007,7 +16007,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16042,7 +16042,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16078,7 +16078,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16112,7 +16112,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16155,7 +16155,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16201,7 +16201,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16259,7 +16259,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16305,7 +16305,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16357,7 +16357,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16403,7 +16403,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16455,7 +16455,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16500,7 +16500,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16551,7 +16551,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16603,7 +16603,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16655,7 +16655,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16701,7 +16701,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16762,7 +16762,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16808,7 +16808,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16862,7 +16862,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16908,7 +16908,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -16959,7 +16959,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17013,7 +17013,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17062,7 +17062,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17114,7 +17114,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17161,7 +17161,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17209,7 +17209,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17254,7 +17254,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17302,7 +17302,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17350,7 +17350,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17396,7 +17396,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17446,7 +17446,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17492,7 +17492,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17544,7 +17544,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17594,7 +17594,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17649,7 +17649,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17691,7 +17691,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17740,7 +17740,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17791,7 +17791,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17836,7 +17836,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17885,7 +17885,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17929,7 +17929,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -17976,7 +17976,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18031,7 +18031,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         params.put("startDate", &input.start_date);
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18074,7 +18074,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18120,7 +18120,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18175,7 +18175,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18229,7 +18229,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18280,7 +18280,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         params.put("mode", "import");
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18334,7 +18334,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18388,7 +18388,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         params.put("mode", "import");
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18435,7 +18435,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18483,7 +18483,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18532,7 +18532,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18578,7 +18578,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18627,7 +18627,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18682,7 +18682,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18730,7 +18730,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18778,7 +18778,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18821,7 +18821,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18864,7 +18864,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18911,7 +18911,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -18958,7 +18958,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19004,7 +19004,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19052,7 +19052,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19099,7 +19099,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19148,7 +19148,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19195,7 +19195,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19242,7 +19242,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19290,7 +19290,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19340,7 +19340,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19387,7 +19387,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19436,7 +19436,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19481,7 +19481,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19528,7 +19528,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19575,7 +19575,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19618,7 +19618,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19663,7 +19663,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19708,7 +19708,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -19754,7 +19754,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {

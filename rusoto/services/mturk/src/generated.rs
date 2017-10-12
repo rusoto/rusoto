@@ -5093,7 +5093,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5125,7 +5125,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5157,7 +5157,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5190,7 +5190,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5218,7 +5218,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5251,7 +5251,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5285,7 +5285,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5317,7 +5317,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5349,7 +5349,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5377,7 +5377,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5411,7 +5411,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5443,7 +5443,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5476,7 +5476,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5504,7 +5504,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
                            "MTurkRequesterServiceV20170117.GetAccountBalance");
         request.set_payload(Some(b"{}".to_vec()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5535,7 +5535,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5568,7 +5568,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5598,7 +5598,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5631,7 +5631,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5663,7 +5663,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5695,7 +5695,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5726,7 +5726,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5754,7 +5754,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5788,7 +5788,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5821,7 +5821,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5854,7 +5854,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5886,7 +5886,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5918,7 +5918,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5949,7 +5949,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -5983,7 +5983,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6014,7 +6014,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6047,7 +6047,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6081,7 +6081,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6110,7 +6110,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6144,7 +6144,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6177,7 +6177,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6209,7 +6209,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6240,7 +6240,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6272,7 +6272,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -6305,7 +6305,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 

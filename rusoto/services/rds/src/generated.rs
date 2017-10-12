@@ -24247,7 +24247,7 @@ impl<P, D> Rds for RdsClient<P, D>
         AddRoleToDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24276,7 +24276,7 @@ impl<P, D> Rds for RdsClient<P, D>
         AddSourceIdentifierToSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24322,7 +24322,7 @@ impl<P, D> Rds for RdsClient<P, D>
         AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24351,7 +24351,7 @@ impl<P, D> Rds for RdsClient<P, D>
         ApplyPendingMaintenanceActionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24399,7 +24399,7 @@ impl<P, D> Rds for RdsClient<P, D>
         AuthorizeDBSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24447,7 +24447,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CopyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24495,7 +24495,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CopyDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24542,7 +24542,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CopyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24589,7 +24589,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CopyDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24636,7 +24636,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CopyOptionGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24683,7 +24683,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24731,7 +24731,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24779,7 +24779,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24828,7 +24828,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateDBInstanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24876,7 +24876,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateDBInstanceReadReplicaMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24924,7 +24924,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -24973,7 +24973,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateDBSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25020,7 +25020,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25067,7 +25067,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25115,7 +25115,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25164,7 +25164,7 @@ impl<P, D> Rds for RdsClient<P, D>
         CreateOptionGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25211,7 +25211,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DeleteDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25258,7 +25258,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DeleteDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25288,7 +25288,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DeleteDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25337,7 +25337,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DeleteDBInstanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25384,7 +25384,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DeleteDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25412,7 +25412,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DeleteDBSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25440,7 +25440,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DeleteDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25487,7 +25487,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DeleteDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25516,7 +25516,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25565,7 +25565,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DeleteOptionGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25594,7 +25594,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeAccountAttributesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25642,7 +25642,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeCertificatesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25690,7 +25690,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25739,7 +25739,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25790,7 +25790,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBClusterSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25837,7 +25837,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25885,7 +25885,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBClustersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25933,7 +25933,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -25981,7 +25981,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBInstancesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26028,7 +26028,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBLogFilesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26076,7 +26076,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26124,7 +26124,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26172,7 +26172,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26221,7 +26221,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26268,7 +26268,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBSnapshotsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26315,7 +26315,7 @@ impl<P, D> Rds for RdsClient<P, D>
         DescribeDBSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26360,7 +26360,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeEngineDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26407,7 +26407,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26455,7 +26455,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26504,7 +26504,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26552,7 +26552,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26600,7 +26600,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeOptionGroupOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26648,7 +26648,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeOptionGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26696,7 +26696,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeOrderableDBInstanceOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26743,7 +26743,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribePendingMaintenanceActionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26792,7 +26792,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeReservedDBInstancesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26841,7 +26841,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeReservedDBInstancesOfferingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26887,7 +26887,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DescribeSourceRegionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26935,7 +26935,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         DownloadDBLogFilePortionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -26984,7 +26984,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         FailoverDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27031,7 +27031,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27078,7 +27078,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ModifyDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27126,7 +27126,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ModifyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27174,7 +27174,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ModifyDBClusterSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27220,7 +27220,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ModifyDBInstanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27268,7 +27268,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ModifyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27315,7 +27315,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ModifyDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27363,7 +27363,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ModifyDBSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27412,7 +27412,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ModifyDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27460,7 +27460,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27509,7 +27509,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         ModifyOptionGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27556,7 +27556,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         PromoteReadReplicaMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27604,7 +27604,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         PromoteReadReplicaDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27653,7 +27653,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         PurchaseReservedDBInstancesOfferingMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27699,7 +27699,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         RebootDBInstanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27746,7 +27746,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         RemoveRoleFromDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27773,7 +27773,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         RemoveSourceIdentifierFromSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27819,7 +27819,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27848,7 +27848,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         ResetDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27896,7 +27896,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         ResetDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27944,7 +27944,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         RestoreDBClusterFromS3MessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -27993,7 +27993,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         RestoreDBClusterFromSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -28041,7 +28041,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         RestoreDBClusterToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -28089,7 +28089,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         RestoreDBInstanceFromDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -28137,7 +28137,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         RestoreDBInstanceToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -28185,7 +28185,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         RevokeDBSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -28232,7 +28232,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         StartDBInstanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -28279,7 +28279,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         StopDBInstanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {

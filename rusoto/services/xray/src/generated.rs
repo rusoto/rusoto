@@ -1223,7 +1223,7 @@ impl<P, D> XRay for XRayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -1268,7 +1268,7 @@ impl<P, D> XRay for XRayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -1313,7 +1313,7 @@ impl<P, D> XRay for XRayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -1358,7 +1358,7 @@ impl<P, D> XRay for XRayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -1403,7 +1403,7 @@ impl<P, D> XRay for XRayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -1448,7 +1448,7 @@ impl<P, D> XRay for XRayClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {

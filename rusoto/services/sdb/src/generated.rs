@@ -2024,7 +2024,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         BatchDeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -2052,7 +2052,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         BatchPutAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -2078,7 +2078,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         CreateDomainRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -2106,7 +2106,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         DeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -2132,7 +2132,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -2160,7 +2160,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         DomainMetadataRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -2207,7 +2207,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         GetAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -2254,7 +2254,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         ListDomainsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -2299,7 +2299,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         PutAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -2325,7 +2325,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         SelectRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {

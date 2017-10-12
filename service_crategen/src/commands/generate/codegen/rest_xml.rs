@@ -41,7 +41,7 @@ impl GenerateProtocol for RestXmlGenerator {
                         {set_parameters}
                         {build_payload}
 
-                        request.sign(&try!(self.credentials_provider.credentials()));
+                        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
                         let mut response = try!(self.dispatcher.dispatch(&request));
 

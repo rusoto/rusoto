@@ -18638,7 +18638,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -18708,7 +18708,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -18908,7 +18908,7 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19036,7 +19036,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19176,7 +19176,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19259,7 +19259,7 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19296,7 +19296,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19331,7 +19331,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19368,7 +19368,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19403,7 +19403,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19439,7 +19439,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19474,7 +19474,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19509,7 +19509,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19545,7 +19545,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19580,7 +19580,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19624,7 +19624,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19689,7 +19689,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19758,7 +19758,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19813,7 +19813,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19863,7 +19863,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19916,7 +19916,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -19967,7 +19967,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20020,7 +20020,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20071,7 +20071,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20124,7 +20124,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20175,7 +20175,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20227,7 +20227,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20281,7 +20281,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20333,7 +20333,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20384,7 +20384,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20436,7 +20436,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20477,7 +20477,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20530,7 +20530,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20581,7 +20581,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20633,7 +20633,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20685,7 +20685,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20796,7 +20796,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -20964,7 +20964,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21021,7 +21021,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21079,7 +21079,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21118,7 +21118,7 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21194,7 +21194,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21363,7 +21363,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21417,7 +21417,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21471,7 +21471,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21518,7 +21518,7 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21587,7 +21587,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21657,7 +21657,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21726,7 +21726,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21801,7 +21801,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21859,7 +21859,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21928,7 +21928,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -21999,7 +21999,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22042,7 +22042,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22088,7 +22088,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22131,7 +22131,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22186,7 +22186,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22237,7 +22237,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22283,7 +22283,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22326,7 +22326,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22370,7 +22370,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22413,7 +22413,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22456,7 +22456,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22503,7 +22503,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22548,7 +22548,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22594,7 +22594,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22643,7 +22643,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22688,7 +22688,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22815,7 +22815,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -22952,7 +22952,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -23017,7 +23017,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -23089,7 +23089,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -23171,7 +23171,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -23315,7 +23315,7 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 

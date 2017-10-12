@@ -312,7 +312,7 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -347,7 +347,7 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 

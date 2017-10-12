@@ -10916,7 +10916,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -10978,7 +10978,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11045,7 +11045,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11109,7 +11109,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11170,7 +11170,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11235,7 +11235,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11295,7 +11295,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11331,7 +11331,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11367,7 +11367,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11403,7 +11403,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11453,7 +11453,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11504,7 +11504,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11557,7 +11557,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11610,7 +11610,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11660,7 +11660,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11714,7 +11714,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11775,7 +11775,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11830,7 +11830,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11889,7 +11889,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -11946,7 +11946,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -12004,7 +12004,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -12055,7 +12055,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -12111,7 +12111,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -12150,7 +12150,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -12194,7 +12194,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -12255,7 +12255,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -12320,7 +12320,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request.set_payload(Some(payload));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), false);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 

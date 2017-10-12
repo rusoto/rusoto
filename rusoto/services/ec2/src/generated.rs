@@ -60865,7 +60865,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AcceptReservedInstancesExchangeQuoteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -60909,7 +60909,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AcceptVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -60953,7 +60953,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AllocateAddressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -60997,7 +60997,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AllocateHostsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61041,7 +61041,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AssignIpv6AddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61086,7 +61086,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AssignPrivateIpAddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61115,7 +61115,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AssociateAddressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61160,7 +61160,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AssociateDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61189,7 +61189,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AssociateIamInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61233,7 +61233,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AssociateRouteTableRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61279,7 +61279,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AssociateSubnetCidrBlockRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61324,7 +61324,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AssociateVpcCidrBlockRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61367,7 +61367,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AttachClassicLinkVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61412,7 +61412,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AttachInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61441,7 +61441,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AttachNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61484,7 +61484,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AttachVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61528,7 +61528,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AttachVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61573,7 +61573,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AuthorizeSecurityGroupEgressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61602,7 +61602,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         AuthorizeSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61631,7 +61631,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         BundleInstanceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61675,7 +61675,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CancelBundleTaskRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61720,7 +61720,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CancelConversionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61748,7 +61748,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CancelExportTaskRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61776,7 +61776,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CancelImportTaskRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61822,7 +61822,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CancelReservedInstancesListingRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61867,7 +61867,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CancelSpotFleetRequestsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61912,7 +61912,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CancelSpotInstanceRequestsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61957,7 +61957,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         ConfirmProductInstanceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -61998,7 +61998,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CopyImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62042,7 +62042,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CopySnapshotRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62087,7 +62087,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateCustomerGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62130,7 +62130,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateDefaultVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62175,7 +62175,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62221,7 +62221,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateEgressOnlyInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62265,7 +62265,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateFlowLogsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62309,7 +62309,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateFpgaImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62353,7 +62353,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62398,7 +62398,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateInstanceExportTaskRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62443,7 +62443,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62484,7 +62484,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateKeyPairRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62527,7 +62527,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateNatGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62572,7 +62572,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateNetworkAclRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62617,7 +62617,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62646,7 +62646,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62690,7 +62690,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateNetworkInterfacePermissionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62733,7 +62733,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreatePlacementGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62762,7 +62762,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateReservedInstancesListingRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62806,7 +62806,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateRouteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62850,7 +62850,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateRouteTableRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62895,7 +62895,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateSecurityGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62940,7 +62940,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateSnapshotRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -62984,7 +62984,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63028,7 +63028,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateSubnetRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63070,7 +63070,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateTagsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63096,7 +63096,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63137,7 +63137,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63181,7 +63181,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateVpcEndpointRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63227,7 +63227,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63271,7 +63271,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63316,7 +63316,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateVpnConnectionRouteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63345,7 +63345,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         CreateVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63390,7 +63390,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteCustomerGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63418,7 +63418,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63447,7 +63447,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteEgressOnlyInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63491,7 +63491,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteFlowLogsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63535,7 +63535,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63561,7 +63561,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteKeyPairRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63589,7 +63589,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteNatGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63634,7 +63634,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteNetworkAclRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63662,7 +63662,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63690,7 +63690,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63719,7 +63719,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteNetworkInterfacePermissionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63762,7 +63762,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeletePlacementGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63788,7 +63788,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteRouteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63816,7 +63816,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteRouteTableRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63844,7 +63844,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteSecurityGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63870,7 +63870,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteSnapshotRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63898,7 +63898,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63925,7 +63925,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteSubnetRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63951,7 +63951,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteTagsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -63977,7 +63977,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64003,7 +64003,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64031,7 +64031,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteVpcEndpointsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64077,7 +64077,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64121,7 +64121,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64149,7 +64149,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteVpnConnectionRouteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64178,7 +64178,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeleteVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64204,7 +64204,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DeregisterImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64233,7 +64233,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeAccountAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64277,7 +64277,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeAddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64323,7 +64323,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeAvailabilityZonesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64367,7 +64367,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeBundleTasksRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64413,7 +64413,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeClassicLinkInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64458,7 +64458,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeConversionTasksRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64503,7 +64503,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeCustomerGatewaysRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64547,7 +64547,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64594,7 +64594,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeEgressOnlyInternetGatewaysRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64637,7 +64637,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeElasticGpusRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64682,7 +64682,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeExportTasksRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64727,7 +64727,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeFlowLogsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64772,7 +64772,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeFpgaImagesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64818,7 +64818,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeHostReservationOfferingsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64862,7 +64862,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeHostReservationsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64906,7 +64906,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         DescribeHostsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64948,7 +64948,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeIamInstanceProfileAssociationsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -64991,7 +64991,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeIdFormatRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65037,7 +65037,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeIdentityIdFormatRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65081,7 +65081,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeImageAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65125,7 +65125,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeImagesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65170,7 +65170,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeImportImageTasksRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65215,7 +65215,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeImportSnapshotTasksRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65259,7 +65259,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65305,7 +65305,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeInstanceStatusRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65348,7 +65348,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65394,7 +65394,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeInternetGatewaysRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65438,7 +65438,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeKeyPairsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65484,7 +65484,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeMovingAddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65528,7 +65528,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeNatGatewaysRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65573,7 +65573,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeNetworkAclsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65619,7 +65619,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65664,7 +65664,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeNetworkInterfacePermissionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65708,7 +65708,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeNetworkInterfacesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65753,7 +65753,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribePlacementGroupsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65797,7 +65797,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribePrefixListsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65842,7 +65842,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeRegionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65887,7 +65887,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65932,7 +65932,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         DescribeReservedInstancesListingsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -65973,7 +65973,7 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
         DescribeReservedInstancesModificationsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66018,7 +66018,7 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
         DescribeReservedInstancesOfferingsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66061,7 +66061,7 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
         DescribeRouteTablesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66104,7 +66104,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeScheduledInstanceAvailabilityRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66148,7 +66148,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66193,7 +66193,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSecurityGroupReferencesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66238,7 +66238,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSecurityGroupsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66282,7 +66282,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66326,7 +66326,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSnapshotsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66372,7 +66372,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66416,7 +66416,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSpotFleetInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66461,7 +66461,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSpotFleetRequestHistoryRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66506,7 +66506,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSpotFleetRequestsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66551,7 +66551,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSpotInstanceRequestsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66596,7 +66596,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSpotPriceHistoryRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66641,7 +66641,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeStaleSecurityGroupsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66685,7 +66685,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeSubnetsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66729,7 +66729,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeTagsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66774,7 +66774,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVolumeAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66818,7 +66818,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVolumeStatusRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66863,7 +66863,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVolumesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66908,7 +66908,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVolumesModificationsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66952,7 +66952,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVpcAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -66998,7 +66998,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67042,7 +67042,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67086,7 +67086,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVpcEndpointServicesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67130,7 +67130,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVpcEndpointsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67176,7 +67176,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVpcPeeringConnectionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67220,7 +67220,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVpcsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67265,7 +67265,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVpnConnectionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67308,7 +67308,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DescribeVpnGatewaysRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67353,7 +67353,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DetachClassicLinkVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67398,7 +67398,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DetachInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67426,7 +67426,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DetachNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67454,7 +67454,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DetachVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67498,7 +67498,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DetachVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67526,7 +67526,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DisableVgwRoutePropagationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67556,7 +67556,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DisableVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67600,7 +67600,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DisableVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67644,7 +67644,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DisassociateAddressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67673,7 +67673,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DisassociateIamInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67717,7 +67717,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DisassociateRouteTableRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67746,7 +67746,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DisassociateSubnetCidrBlockRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67791,7 +67791,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         DisassociateVpcCidrBlockRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67835,7 +67835,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         EnableVgwRoutePropagationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67862,7 +67862,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         EnableVolumeIORequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67890,7 +67890,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         EnableVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67936,7 +67936,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         EnableVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -67980,7 +67980,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         GetConsoleOutputRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68025,7 +68025,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         GetConsoleScreenshotRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68071,7 +68071,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         GetHostReservationPurchasePreviewRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68114,7 +68114,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         GetPasswordDataRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68159,7 +68159,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         GetReservedInstancesExchangeQuoteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68202,7 +68202,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ImportImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68246,7 +68246,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ImportInstanceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68290,7 +68290,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ImportKeyPairRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68334,7 +68334,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ImportSnapshotRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68378,7 +68378,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ImportVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68422,7 +68422,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyHostsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68464,7 +68464,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyIdFormatRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68492,7 +68492,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyIdentityIdFormatRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68520,7 +68520,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyImageAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68548,7 +68548,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68578,7 +68578,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyInstancePlacementRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68622,7 +68622,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68652,7 +68652,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68696,7 +68696,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifySnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68726,7 +68726,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifySpotFleetRequestRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68769,7 +68769,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifySubnetAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68797,7 +68797,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68841,7 +68841,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyVolumeAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68869,7 +68869,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyVpcAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68897,7 +68897,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyVpcEndpointRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68943,7 +68943,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ModifyVpcPeeringConnectionOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -68986,7 +68986,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         MonitorInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69031,7 +69031,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         MoveAddressToVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69077,7 +69077,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         PurchaseHostReservationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69122,7 +69122,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         PurchaseReservedInstancesOfferingRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69166,7 +69166,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         PurchaseScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69208,7 +69208,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         RebootInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69236,7 +69236,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         RegisterImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69281,7 +69281,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         RejectVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69323,7 +69323,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ReleaseAddressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69351,7 +69351,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ReleaseHostsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69397,7 +69397,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ReplaceIamInstanceProfileAssociationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69441,7 +69441,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ReplaceNetworkAclAssociationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69485,7 +69485,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ReplaceNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69511,7 +69511,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ReplaceRouteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69540,7 +69540,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ReplaceRouteTableAssociationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69584,7 +69584,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ReportInstanceStatusRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69612,7 +69612,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         RequestSpotFleetRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69657,7 +69657,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         RequestSpotInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69702,7 +69702,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ResetImageAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69730,7 +69730,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ResetInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69758,7 +69758,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ResetNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69787,7 +69787,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         ResetSnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69816,7 +69816,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         RestoreAddressToClassicRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69860,7 +69860,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         RevokeSecurityGroupEgressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69889,7 +69889,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         RevokeSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69916,7 +69916,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         RunInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -69961,7 +69961,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         RunScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -70004,7 +70004,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         StartInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -70048,7 +70048,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         StopInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -70092,7 +70092,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         TerminateInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -70138,7 +70138,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         UnassignIpv6AddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -70181,7 +70181,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         UnassignPrivateIpAddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -70210,7 +70210,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         UnmonitorInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {

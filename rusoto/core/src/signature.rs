@@ -187,6 +187,12 @@ impl SignedRequest {
     /// Signs the request using Amazon Signature version 4 to verify identity.
     /// Authorization header uses AWS4-HMAC-SHA256 for signing.
     pub fn sign(&mut self, creds: &AwsCredentials) {
+        self.sign_with_plus(creds, false)
+    }
+
+    /// Signs the request using Amazon Signature version 4 to verify identity.
+    /// Authorization header uses AWS4-HMAC-SHA256 for signing.
+    pub fn sign_with_plus(&mut self, creds: &AwsCredentials, should_treat_plus_literally: bool) {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
@@ -203,7 +209,7 @@ impl SignedRequest {
             self.add_header("X-Amz-Security-Token", token);
         }
 
-        self.canonical_query_string = build_canonical_query_string(&self.params);
+        self.canonical_query_string = build_canonical_query_string_with_plus(&self.params, should_treat_plus_literally);
 
         let date = now_utc();
         self.remove_header("x-amz-date");
@@ -383,6 +389,13 @@ fn canonical_uri(path: &str) -> String {
 ///
 /// Read more about it: [HERE](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing)
 fn build_canonical_query_string(params: &Params) -> String {
+    build_canonical_query_string_with_plus(params, false)
+}
+
+/// Canonicalizes query while iterating through the given parameters.
+///
+/// Read more about it: [HERE](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing)
+fn build_canonical_query_string_with_plus(params: &Params, should_treat_plus_literally: bool) -> String {
     if params.is_empty() {
         return String::new();
     }
@@ -392,8 +405,11 @@ fn build_canonical_query_string(params: &Params) -> String {
         if !output.is_empty() {
             output.push_str("&");
         }
-
-        output.push_str(&encode_uri_strict(&key.replace("+", " ")));
+        if should_treat_plus_literally {
+            output.push_str(&encode_uri_strict(&key));
+        } else {
+            output.push_str(&encode_uri_strict(&key.replace("+", " ")));
+        }
         output.push_str("=");
 
         if let &Some(ref unwrapped_val) = val {

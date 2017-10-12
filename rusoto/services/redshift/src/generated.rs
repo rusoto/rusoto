@@ -16363,7 +16363,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         AuthorizeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16410,7 +16410,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         AuthorizeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16459,7 +16459,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CopyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16506,7 +16506,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CreateClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16554,7 +16554,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CreateClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16602,7 +16602,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CreateClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16652,7 +16652,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CreateClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16700,7 +16700,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CreateClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16750,7 +16750,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16800,7 +16800,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CreateHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16850,7 +16850,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CreateHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16899,7 +16899,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CreateSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16946,7 +16946,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         CreateTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -16974,7 +16974,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DeleteClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17021,7 +17021,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DeleteClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17050,7 +17050,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DeleteClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17080,7 +17080,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DeleteClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17127,7 +17127,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DeleteClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17156,7 +17156,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17185,7 +17185,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DeleteHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17214,7 +17214,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DeleteHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17242,7 +17242,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DeleteSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17269,7 +17269,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DeleteTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17298,7 +17298,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17348,7 +17348,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17398,7 +17398,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeClusterSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17446,7 +17446,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17495,7 +17495,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeClusterSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17544,7 +17544,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeClusterVersionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17592,7 +17592,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeClustersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17640,7 +17640,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17687,7 +17687,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17736,7 +17736,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17784,7 +17784,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17832,7 +17832,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeHsmClientCertificatesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17881,7 +17881,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeHsmConfigurationsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17929,7 +17929,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeLoggingStatusMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -17977,7 +17977,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeOrderableClusterOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18027,7 +18027,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeReservedNodeOfferingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18076,7 +18076,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeReservedNodesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18123,7 +18123,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeResizeMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18171,7 +18171,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeSnapshotCopyGrantsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18220,7 +18220,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeTableRestoreStatusMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18268,7 +18268,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DescribeTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18315,7 +18315,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DisableLoggingMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18362,7 +18362,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         DisableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18409,7 +18409,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         EnableLoggingMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18456,7 +18456,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         EnableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18503,7 +18503,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         GetClusterCredentialsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18550,7 +18550,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         ModifyClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18598,7 +18598,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         ModifyClusterIamRolesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18646,7 +18646,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         ModifyClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18696,7 +18696,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         ModifyClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18746,7 +18746,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18796,7 +18796,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         ModifySnapshotCopyRetentionPeriodMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18843,7 +18843,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         PurchaseReservedNodeOfferingMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18890,7 +18890,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         RebootClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18938,7 +18938,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         ResetClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -18988,7 +18988,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         RestoreFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -19038,7 +19038,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         RestoreTableFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -19086,7 +19086,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         RevokeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -19132,7 +19132,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         RevokeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -19179,7 +19179,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         RotateEncryptionKeyMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {

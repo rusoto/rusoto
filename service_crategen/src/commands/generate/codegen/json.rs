@@ -39,7 +39,7 @@ impl GenerateProtocol for JsonGenerator {
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
                     let mut response = try!(self.dispatcher.dispatch(&request));
 

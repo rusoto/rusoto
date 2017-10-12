@@ -57,7 +57,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_headers}
                     {load_params}
 
-                    request.sign(&self.credentials_provider.credentials()?);
+                    request.sign_with_plus(&self.credentials_provider.credentials()?, true);
                     let mut response = self.dispatcher.dispatch(&request)?;
 
                     match response.status {{

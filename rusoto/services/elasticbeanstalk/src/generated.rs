@@ -12829,7 +12829,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         AbortEnvironmentUpdateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12858,7 +12858,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         ApplyEnvironmentManagedActionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12906,7 +12906,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         CheckDNSAvailabilityMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -12952,7 +12952,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         ComposeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13000,7 +13000,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         CreateApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13049,7 +13049,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         CreateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13097,7 +13097,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         CreateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13146,7 +13146,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         CreateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13194,7 +13194,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         CreatePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13241,7 +13241,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
 
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13287,7 +13287,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         DeleteApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13315,7 +13315,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         DeleteApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13344,7 +13344,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         DeleteConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13373,7 +13373,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         DeleteEnvironmentConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13403,7 +13403,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         DeletePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13451,7 +13451,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         DescribeApplicationVersionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13499,7 +13499,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         DescribeApplicationsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13548,7 +13548,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         DescribeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13598,7 +13598,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         DescribeConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13646,7 +13646,7 @@ impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
         DescribeEnvironmentHealthRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13695,7 +13695,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
                                                                             &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13742,7 +13742,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         DescribeEnvironmentManagedActionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13789,7 +13789,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         DescribeEnvironmentResourcesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13837,7 +13837,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         DescribeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13885,7 +13885,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13933,7 +13933,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         DescribeInstancesHealthRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -13983,7 +13983,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         DescribePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14032,7 +14032,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
 
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14079,7 +14079,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         ListPlatformVersionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14126,7 +14126,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         RebuildEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14154,7 +14154,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         RequestEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14182,7 +14182,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         RestartAppServerMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14211,7 +14211,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         RetrieveEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14258,7 +14258,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         SwapEnvironmentCNAMEsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14286,7 +14286,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         TerminateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14333,7 +14333,7 @@ fn describe_environment_managed_action_history(&self, input: &DescribeEnvironmen
         UpdateApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14379,7 +14379,7 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         UpdateApplicationResourceLifecycleMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14426,7 +14426,7 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         UpdateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14474,7 +14474,7 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         UpdateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14523,7 +14523,7 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         UpdateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
@@ -14571,7 +14571,7 @@ fn update_application_resource_lifecycle(&self, input: &UpdateApplicationResourc
         ValidateConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {

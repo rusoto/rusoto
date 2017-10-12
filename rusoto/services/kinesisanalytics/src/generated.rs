@@ -2496,7 +2496,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2527,7 +2527,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2559,7 +2559,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2592,7 +2592,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2623,7 +2623,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2654,7 +2654,7 @@ fn add_application_cloud_watch_logging_option(&self, input: &AddApplicationCloud
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2683,7 +2683,7 @@ fn delete_application_cloud_watch_logging_option(&self, input: &DeleteApplicatio
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2715,7 +2715,7 @@ fn delete_application_cloud_watch_logging_option(&self, input: &DeleteApplicatio
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2745,7 +2745,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2776,7 +2776,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2807,7 +2807,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2837,7 +2837,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2869,7 +2869,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2901,7 +2901,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -2934,7 +2934,7 @@ fn delete_application_reference_data_source(&self, input: &DeleteApplicationRefe
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
