@@ -242,12 +242,13 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
                 xml_type = payload_member.shape)
     } else {
         format!("if input.{payload_field}.is_some() {{
-                    payload = {xml_type}Serializer::serialize(\"{xml_type}\", input.{payload_field}.as_ref().unwrap()).into_bytes();
+                    payload = {xml_type}Serializer::serialize(\"{location_name}\", input.{payload_field}.as_ref().unwrap()).into_bytes();
                 }} else {{
                     payload = Vec::new();
                 }}",
                 payload_field = payload_field.to_snake_case(),
-                xml_type = payload_member.shape)
+                xml_type = payload_member.shape,
+                location_name = payload_member.location_name.as_ref().unwrap())
     }
 
 }
@@ -306,20 +307,21 @@ fn generate_list_serializer(shape: &Shape) -> String {
         _ => false,
     };
 
-    let element_type = &mutate_type_name(&shape.member_type()[..]);
+    let member = shape.member.as_ref().expect("Member shape undefined");
+    let element_type = &mutate_type_name(&member.shape);
     let mut serializer = "let mut parts: Vec<String> = Vec::new();".to_owned();
 
-    if !flattened {
+    if flattened {
+        serializer += &format!("
+            for element in obj {{
+                parts.push({element_type}Serializer::serialize(name, element));
+            }}", element_type = element_type);
+    } else {
         serializer += "parts.push(format!(\"<{}>\", name));";
-    }
-
-    serializer += &format!("
-        for element in obj {{
-            parts.push({element_type}Serializer::serialize(\"{element_type}\", element));
-        }}",
-                           element_type = element_type);
-
-    if !flattened {
+        serializer += &format!("
+            for element in obj {{
+                parts.push({element_type}Serializer::serialize(\"{location_name}\", element));
+            }}", element_type = element_type, location_name = member.location_name.as_ref().unwrap());
         serializer += "parts.push(format!(\"</{}>\", name));";
     }
 
