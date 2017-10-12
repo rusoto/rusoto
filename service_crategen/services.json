@@ -197,6 +197,12 @@
     "protocolVersion": "2010-12-01",
     "baseTypeName": "ElasticBeanstalk"
   },
+  "efs": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2015-02-01",
+    "baseTypeName": "Efs"
+  },
   "elastictranscoder": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",

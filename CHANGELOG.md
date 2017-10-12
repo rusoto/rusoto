@@ -14,6 +14,8 @@
 - Fixed Edge Cases in URI Encoding of Rusoto (double query encoding, +'s in query strings).
 - Updated ring dependency
 - Added GreenGrass service
+- Added Elastic Filesystem service
+- Fix broken links on the STS documentation
 
 ## [0.28.0] - 2017-08-25
 
