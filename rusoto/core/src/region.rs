@@ -16,21 +16,52 @@ use serde::{de, Serialize, Serializer, Deserialize, Deserializer};
 /// `CnNorth1` is currently untested due to Rusoto maintainers not having access to AWS China.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Region {
+    /// Region that covers North-East part of America
     ApNortheast1,
+
+    /// Region that covers North-East America
     ApNortheast2,
+
+    /// Region that covers South America
     ApSouth1,
+
+    /// Region that covers South-East America
     ApSoutheast1,
+
+    /// Region that covers South-East America
     ApSoutheast2,
+
+    /// Region that covers Central America
     CaCentral1,
+
+    /// Region that covers Central Europe
     EuCentral1,
+
+    /// Region that covers West Europe
     EuWest1,
+
+    /// Region that covers West Europe
     EuWest2,
+
+    /// Region that covers South-East Europe
     SaEast1,
+
+    /// Region that covers East part of America
     UsEast1,
+
+    /// Region that covers East part of America
     UsEast2,
+
+    /// Region that covers West part of America
     UsWest1,
+
+    /// Region that covers North-East part of America
     UsWest2,
+
+    /// Region that covers North Canada
     CnNorth1,
+
+    /// Specifies a custom region, such as a local Ceph target
     Custom(String)
 }
 
@@ -112,6 +143,7 @@ impl FromStr for Region {
 }
 
 impl ParseRegionError {
+    /// Parses a region given as a string literal into a type `Region'
     pub fn new(input: &str) -> Self {
         ParseRegionError { message: format!("Not a valid AWS region: {}", input) }
     }

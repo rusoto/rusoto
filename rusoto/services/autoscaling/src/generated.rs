@@ -540,7 +540,7 @@ impl AttachInstancesQuerySerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.instance_ids {
             InstanceIdsSerializer::serialize(params,
                                              &format!("{}{}", prefix, "InstanceIds"),
@@ -590,7 +590,7 @@ impl AttachLoadBalancerTargetGroupsTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         TargetGroupARNsSerializer::serialize(params,
                                              &format!("{}{}", prefix, "TargetGroupARNs"),
                                              &obj.target_group_ar_ns);
@@ -638,7 +638,7 @@ impl AttachLoadBalancersTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         LoadBalancerNamesSerializer::serialize(params,
                                                &format!("{}{}", prefix, "LoadBalancerNames"),
                                                &obj.load_balancer_names);
@@ -922,10 +922,11 @@ impl AutoScalingGroupNamesTypeSerializer {
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1475,16 +1476,18 @@ impl BlockDeviceMappingSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DeviceName"), &obj.device_name);
+        params.put(&format!("{}{}", prefix, "DeviceName"),
+                   &obj.device_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.ebs {
             EbsSerializer::serialize(params, &format!("{}{}", prefix, "Ebs"), field_value);
         }
         if let Some(ref field_value) = obj.no_device {
             params.put(&format!("{}{}", prefix, "NoDevice"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.virtual_name {
-            params.put(&format!("{}{}", prefix, "VirtualName"), &field_value);
+            params.put(&format!("{}{}", prefix, "VirtualName"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1644,18 +1647,19 @@ impl CompleteLifecycleActionTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.instance_id {
-            params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
+            params.put(&format!("{}{}", prefix, "InstanceId"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "LifecycleActionResult"),
-                   &obj.lifecycle_action_result);
+                   &obj.lifecycle_action_result.replace("+", "%2B"));
         if let Some(ref field_value) = obj.lifecycle_action_token {
             params.put(&format!("{}{}", prefix, "LifecycleActionToken"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "LifecycleHookName"),
-                   &obj.lifecycle_hook_name);
+                   &obj.lifecycle_hook_name.replace("+", "%2B"));
 
     }
 }
@@ -1724,7 +1728,7 @@ impl CreateAutoScalingGroupTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.availability_zones {
             AvailabilityZonesSerializer::serialize(params,
                                                    &format!("{}{}", prefix, "AvailabilityZones"),
@@ -1732,25 +1736,27 @@ impl CreateAutoScalingGroupTypeSerializer {
         }
         if let Some(ref field_value) = obj.default_cooldown {
             params.put(&format!("{}{}", prefix, "DefaultCooldown"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.desired_capacity {
             params.put(&format!("{}{}", prefix, "DesiredCapacity"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.health_check_grace_period {
             params.put(&format!("{}{}", prefix, "HealthCheckGracePeriod"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.health_check_type {
-            params.put(&format!("{}{}", prefix, "HealthCheckType"), &field_value);
+            params.put(&format!("{}{}", prefix, "HealthCheckType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.instance_id {
-            params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
+            params.put(&format!("{}{}", prefix, "InstanceId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.launch_configuration_name {
             params.put(&format!("{}{}", prefix, "LaunchConfigurationName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.load_balancer_names {
             LoadBalancerNamesSerializer::serialize(params,
@@ -1758,15 +1764,16 @@ impl CreateAutoScalingGroupTypeSerializer {
                                                    field_value);
         }
         params.put(&format!("{}{}", prefix, "MaxSize"),
-                   &obj.max_size.to_string());
+                   &obj.max_size.to_string().replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "MinSize"),
-                   &obj.min_size.to_string());
+                   &obj.min_size.to_string().replace("+", "%2B"));
         if let Some(ref field_value) = obj.new_instances_protected_from_scale_in {
             params.put(&format!("{}{}", prefix, "NewInstancesProtectedFromScaleIn"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.placement_group {
-            params.put(&format!("{}{}", prefix, "PlacementGroup"), &field_value);
+            params.put(&format!("{}{}", prefix, "PlacementGroup"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
@@ -1784,7 +1791,8 @@ impl CreateAutoScalingGroupTypeSerializer {
                                                      field_value);
         }
         if let Some(ref field_value) = obj.vpc_zone_identifier {
-            params.put(&format!("{}{}", prefix, "VPCZoneIdentifier"), &field_value);
+            params.put(&format!("{}{}", prefix, "VPCZoneIdentifier"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1843,7 +1851,7 @@ impl CreateLaunchConfigurationTypeSerializer {
 
         if let Some(ref field_value) = obj.associate_public_ip_address {
             params.put(&format!("{}{}", prefix, "AssociatePublicIpAddress"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.block_device_mappings {
             BlockDeviceMappingsSerializer::serialize(params,
@@ -1853,7 +1861,8 @@ impl CreateLaunchConfigurationTypeSerializer {
                                                      field_value);
         }
         if let Some(ref field_value) = obj.classic_link_vpc_id {
-            params.put(&format!("{}{}", prefix, "ClassicLinkVPCId"), &field_value);
+            params.put(&format!("{}{}", prefix, "ClassicLinkVPCId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.classic_link_vpc_security_groups {
             ClassicLinkVPCSecurityGroupsSerializer::serialize(params,
@@ -1864,16 +1873,19 @@ impl CreateLaunchConfigurationTypeSerializer {
         }
         if let Some(ref field_value) = obj.ebs_optimized {
             params.put(&format!("{}{}", prefix, "EbsOptimized"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.iam_instance_profile {
-            params.put(&format!("{}{}", prefix, "IamInstanceProfile"), &field_value);
+            params.put(&format!("{}{}", prefix, "IamInstanceProfile"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.image_id {
-            params.put(&format!("{}{}", prefix, "ImageId"), &field_value);
+            params.put(&format!("{}{}", prefix, "ImageId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.instance_id {
-            params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
+            params.put(&format!("{}{}", prefix, "InstanceId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.instance_monitoring {
             InstanceMonitoringSerializer::serialize(params,
@@ -1881,21 +1893,26 @@ impl CreateLaunchConfigurationTypeSerializer {
                                                     field_value);
         }
         if let Some(ref field_value) = obj.instance_type {
-            params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
+            params.put(&format!("{}{}", prefix, "InstanceType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.kernel_id {
-            params.put(&format!("{}{}", prefix, "KernelId"), &field_value);
+            params.put(&format!("{}{}", prefix, "KernelId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.key_name {
-            params.put(&format!("{}{}", prefix, "KeyName"), &field_value);
+            params.put(&format!("{}{}", prefix, "KeyName"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "LaunchConfigurationName"),
-                   &obj.launch_configuration_name);
+                   &obj.launch_configuration_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.placement_tenancy {
-            params.put(&format!("{}{}", prefix, "PlacementTenancy"), &field_value);
+            params.put(&format!("{}{}", prefix, "PlacementTenancy"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.ramdisk_id {
-            params.put(&format!("{}{}", prefix, "RamdiskId"), &field_value);
+            params.put(&format!("{}{}", prefix, "RamdiskId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.security_groups {
             SecurityGroupsSerializer::serialize(params,
@@ -1903,10 +1920,12 @@ impl CreateLaunchConfigurationTypeSerializer {
                                                 field_value);
         }
         if let Some(ref field_value) = obj.spot_price {
-            params.put(&format!("{}{}", prefix, "SpotPrice"), &field_value);
+            params.put(&format!("{}{}", prefix, "SpotPrice"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.user_data {
-            params.put(&format!("{}{}", prefix, "UserData"), &field_value);
+            params.put(&format!("{}{}", prefix, "UserData"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -2023,11 +2042,15 @@ impl CustomizedMetricSpecificationSerializer {
                                                   &format!("{}{}", prefix, "Dimensions"),
                                                   field_value);
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
-        params.put(&format!("{}{}", prefix, "Statistic"), &obj.statistic);
+        params.put(&format!("{}{}", prefix, "MetricName"),
+                   &obj.metric_name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Namespace"),
+                   &obj.namespace.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Statistic"),
+                   &obj.statistic.replace("+", "%2B"));
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -2053,10 +2076,10 @@ impl DeleteAutoScalingGroupTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.force_delete {
             params.put(&format!("{}{}", prefix, "ForceDelete"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -2102,9 +2125,9 @@ impl DeleteLifecycleHookTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "LifecycleHookName"),
-                   &obj.lifecycle_hook_name);
+                   &obj.lifecycle_hook_name.replace("+", "%2B"));
 
     }
 }
@@ -2129,8 +2152,9 @@ impl DeleteNotificationConfigurationTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
-        params.put(&format!("{}{}", prefix, "TopicARN"), &obj.topic_arn);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "TopicARN"),
+                   &obj.topic_arn.replace("+", "%2B"));
 
     }
 }
@@ -2156,9 +2180,10 @@ impl DeletePolicyTypeSerializer {
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
             params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "PolicyName"),
+                   &obj.policy_name.replace("+", "%2B"));
 
     }
 }
@@ -2183,9 +2208,9 @@ impl DeleteScheduledActionTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "ScheduledActionName"),
-                   &obj.scheduled_action_name);
+                   &obj.scheduled_action_name.replace("+", "%2B"));
 
     }
 }
@@ -2353,10 +2378,11 @@ impl DescribeAutoScalingInstancesTypeSerializer {
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -2530,7 +2556,7 @@ impl DescribeLifecycleHooksTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.lifecycle_hook_names {
             LifecycleHookNamesSerializer::serialize(params,
                                                     &format!("{}{}", prefix, "LifecycleHookNames"),
@@ -2562,13 +2588,14 @@ impl DescribeLoadBalancerTargetGroupsRequestSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -2651,13 +2678,14 @@ impl DescribeLoadBalancersRequestSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -2864,10 +2892,11 @@ impl DescribeNotificationConfigurationsTypeSerializer {
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -2900,14 +2929,15 @@ impl DescribePoliciesTypeSerializer {
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
             params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.policy_names {
             PolicyNamesSerializer::serialize(params,
@@ -2953,14 +2983,15 @@ impl DescribeScalingActivitiesTypeSerializer {
         }
         if let Some(ref field_value) = obj.auto_scaling_group_name {
             params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -2995,17 +3026,19 @@ impl DescribeScheduledActionsTypeSerializer {
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
             params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.end_time {
-            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
+            params.put(&format!("{}{}", prefix, "EndTime"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.scheduled_action_names {
             ScheduledActionNamesSerializer::serialize(params,
@@ -3015,7 +3048,8 @@ impl DescribeScheduledActionsTypeSerializer {
                                                       field_value);
         }
         if let Some(ref field_value) = obj.start_time {
-            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+            params.put(&format!("{}{}", prefix, "StartTime"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -3047,10 +3081,11 @@ impl DescribeTagsTypeSerializer {
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -3178,14 +3213,16 @@ impl DetachInstancesQuerySerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.instance_ids {
             InstanceIdsSerializer::serialize(params,
                                              &format!("{}{}", prefix, "InstanceIds"),
                                              field_value);
         }
         params.put(&format!("{}{}", prefix, "ShouldDecrementDesiredCapacity"),
-                   &obj.should_decrement_desired_capacity.to_string());
+                   &obj.should_decrement_desired_capacity
+                        .to_string()
+                        .replace("+", "%2B"));
 
     }
 }
@@ -3229,7 +3266,7 @@ impl DetachLoadBalancerTargetGroupsTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         TargetGroupARNsSerializer::serialize(params,
                                              &format!("{}{}", prefix, "TargetGroupARNs"),
                                              &obj.target_group_ar_ns);
@@ -3277,7 +3314,7 @@ impl DetachLoadBalancersTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         LoadBalancerNamesSerializer::serialize(params,
                                                &format!("{}{}", prefix, "LoadBalancerNames"),
                                                &obj.load_balancer_names);
@@ -3305,7 +3342,7 @@ impl DisableMetricsCollectionQuerySerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.metrics {
             MetricsSerializer::serialize(params, &format!("{}{}", prefix, "Metrics"), field_value);
         }
@@ -3418,24 +3455,27 @@ impl EbsSerializer {
 
         if let Some(ref field_value) = obj.delete_on_termination {
             params.put(&format!("{}{}", prefix, "DeleteOnTermination"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.encrypted {
             params.put(&format!("{}{}", prefix, "Encrypted"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.iops {
-            params.put(&format!("{}{}", prefix, "Iops"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Iops"),
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.snapshot_id {
-            params.put(&format!("{}{}", prefix, "SnapshotId"), &field_value);
+            params.put(&format!("{}{}", prefix, "SnapshotId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.volume_size {
             params.put(&format!("{}{}", prefix, "VolumeSize"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.volume_type {
-            params.put(&format!("{}{}", prefix, "VolumeType"), &field_value);
+            params.put(&format!("{}{}", prefix, "VolumeType"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -3477,8 +3517,9 @@ impl EnableMetricsCollectionQuerySerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
-        params.put(&format!("{}{}", prefix, "Granularity"), &obj.granularity);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Granularity"),
+                   &obj.granularity.replace("+", "%2B"));
         if let Some(ref field_value) = obj.metrics {
             MetricsSerializer::serialize(params, &format!("{}{}", prefix, "Metrics"), field_value);
         }
@@ -3655,14 +3696,16 @@ impl EnterStandbyQuerySerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.instance_ids {
             InstanceIdsSerializer::serialize(params,
                                              &format!("{}{}", prefix, "InstanceIds"),
                                              field_value);
         }
         params.put(&format!("{}{}", prefix, "ShouldDecrementDesiredCapacity"),
-                   &obj.should_decrement_desired_capacity.to_string());
+                   &obj.should_decrement_desired_capacity
+                        .to_string()
+                        .replace("+", "%2B"));
 
     }
 }
@@ -3708,21 +3751,22 @@ impl ExecutePolicyTypeSerializer {
 
         if let Some(ref field_value) = obj.auto_scaling_group_name {
             params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.breach_threshold {
             params.put(&format!("{}{}", prefix, "BreachThreshold"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.honor_cooldown {
             params.put(&format!("{}{}", prefix, "HonorCooldown"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.metric_value {
             params.put(&format!("{}{}", prefix, "MetricValue"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "PolicyName"),
+                   &obj.policy_name.replace("+", "%2B"));
 
     }
 }
@@ -3796,7 +3840,7 @@ impl ExitStandbyQuerySerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.instance_ids {
             InstanceIdsSerializer::serialize(params,
                                              &format!("{}{}", prefix, "InstanceIds"),
@@ -3826,7 +3870,8 @@ impl FilterSerializer {
         }
 
         if let Some(ref field_value) = obj.name {
-            params.put(&format!("{}{}", prefix, "Name"), &field_value);
+            params.put(&format!("{}{}", prefix, "Name"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.values {
             ValuesSerializer::serialize(params, &format!("{}{}", prefix, "Values"), field_value);
@@ -4048,7 +4093,7 @@ impl InstanceMonitoringSerializer {
 
         if let Some(ref field_value) = obj.enabled {
             params.put(&format!("{}{}", prefix, "Enabled"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -4296,7 +4341,7 @@ impl LaunchConfigurationNameTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "LaunchConfigurationName"),
-                   &obj.launch_configuration_name);
+                   &obj.launch_configuration_name.replace("+", "%2B"));
 
     }
 }
@@ -4343,10 +4388,11 @@ impl LaunchConfigurationNamesTypeSerializer {
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -5086,8 +5132,10 @@ impl MetricDimensionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Name"),
+                   &obj.name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Value"),
+                   &obj.value.replace("+", "%2B"));
 
     }
 }
@@ -5769,9 +5817,10 @@ impl PredefinedMetricSpecificationSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "PredefinedMetricType"),
-                   &obj.predefined_metric_type);
+                   &obj.predefined_metric_type.replace("+", "%2B"));
         if let Some(ref field_value) = obj.resource_label {
-            params.put(&format!("{}{}", prefix, "ResourceLabel"), &field_value);
+            params.put(&format!("{}{}", prefix, "ResourceLabel"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -6009,30 +6058,32 @@ impl PutLifecycleHookTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.default_result {
-            params.put(&format!("{}{}", prefix, "DefaultResult"), &field_value);
+            params.put(&format!("{}{}", prefix, "DefaultResult"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.heartbeat_timeout {
             params.put(&format!("{}{}", prefix, "HeartbeatTimeout"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "LifecycleHookName"),
-                   &obj.lifecycle_hook_name);
+                   &obj.lifecycle_hook_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.lifecycle_transition {
             params.put(&format!("{}{}", prefix, "LifecycleTransition"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.notification_metadata {
             params.put(&format!("{}{}", prefix, "NotificationMetadata"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.notification_target_arn {
             params.put(&format!("{}{}", prefix, "NotificationTargetARN"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
+            params.put(&format!("{}{}", prefix, "RoleARN"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -6060,13 +6111,14 @@ impl PutNotificationConfigurationTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         AutoScalingNotificationTypesSerializer::serialize(params,
                                                           &format!("{}{}",
                                                                   prefix,
                                                                   "NotificationTypes"),
                                                           &obj.notification_types);
-        params.put(&format!("{}{}", prefix, "TopicARN"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "TopicARN"),
+                   &obj.topic_arn.replace("+", "%2B"));
 
     }
 }
@@ -6111,37 +6163,40 @@ impl PutScalingPolicyTypeSerializer {
         }
 
         if let Some(ref field_value) = obj.adjustment_type {
-            params.put(&format!("{}{}", prefix, "AdjustmentType"), &field_value);
+            params.put(&format!("{}{}", prefix, "AdjustmentType"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.cooldown {
             params.put(&format!("{}{}", prefix, "Cooldown"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.estimated_instance_warmup {
             params.put(&format!("{}{}", prefix, "EstimatedInstanceWarmup"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.metric_aggregation_type {
             params.put(&format!("{}{}", prefix, "MetricAggregationType"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.min_adjustment_magnitude {
             params.put(&format!("{}{}", prefix, "MinAdjustmentMagnitude"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.min_adjustment_step {
             params.put(&format!("{}{}", prefix, "MinAdjustmentStep"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "PolicyName"),
+                   &obj.policy_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.policy_type {
-            params.put(&format!("{}{}", prefix, "PolicyType"), &field_value);
+            params.put(&format!("{}{}", prefix, "PolicyType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.scaling_adjustment {
             params.put(&format!("{}{}", prefix, "ScalingAdjustment"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.step_adjustments {
             StepAdjustmentsSerializer::serialize(params,
@@ -6193,32 +6248,36 @@ impl PutScheduledUpdateGroupActionTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.desired_capacity {
             params.put(&format!("{}{}", prefix, "DesiredCapacity"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.end_time {
-            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
+            params.put(&format!("{}{}", prefix, "EndTime"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_size {
             params.put(&format!("{}{}", prefix, "MaxSize"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.min_size {
             params.put(&format!("{}{}", prefix, "MinSize"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.recurrence {
-            params.put(&format!("{}{}", prefix, "Recurrence"), &field_value);
+            params.put(&format!("{}{}", prefix, "Recurrence"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ScheduledActionName"),
-                   &obj.scheduled_action_name);
+                   &obj.scheduled_action_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.start_time {
-            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+            params.put(&format!("{}{}", prefix, "StartTime"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.time {
-            params.put(&format!("{}{}", prefix, "Time"), &field_value);
+            params.put(&format!("{}{}", prefix, "Time"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -6269,16 +6328,17 @@ impl RecordLifecycleActionHeartbeatTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.instance_id {
-            params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
+            params.put(&format!("{}{}", prefix, "InstanceId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.lifecycle_action_token {
             params.put(&format!("{}{}", prefix, "LifecycleActionToken"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "LifecycleHookName"),
-                   &obj.lifecycle_hook_name);
+                   &obj.lifecycle_hook_name.replace("+", "%2B"));
 
     }
 }
@@ -6509,7 +6569,7 @@ impl ScalingProcessQuerySerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.scaling_processes {
             ProcessNamesSerializer::serialize(params,
                                               &format!("{}{}", prefix, "ScalingProcesses"),
@@ -6813,12 +6873,12 @@ impl SetDesiredCapacityTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "DesiredCapacity"),
-                   &obj.desired_capacity.to_string());
+                   &obj.desired_capacity.to_string().replace("+", "%2B"));
         if let Some(ref field_value) = obj.honor_cooldown {
             params.put(&format!("{}{}", prefix, "HonorCooldown"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -6845,11 +6905,13 @@ impl SetInstanceHealthQuerySerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "HealthStatus"), &obj.health_status);
-        params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
+        params.put(&format!("{}{}", prefix, "HealthStatus"),
+                   &obj.health_status.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "InstanceId"),
+                   &obj.instance_id.replace("+", "%2B"));
         if let Some(ref field_value) = obj.should_respect_grace_period {
             params.put(&format!("{}{}", prefix, "ShouldRespectGracePeriod"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -6897,12 +6959,12 @@ impl SetInstanceProtectionQuerySerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         InstanceIdsSerializer::serialize(params,
                                          &format!("{}{}", prefix, "InstanceIds"),
                                          &obj.instance_ids);
         params.put(&format!("{}{}", prefix, "ProtectedFromScaleIn"),
-                   &obj.protected_from_scale_in.to_string());
+                   &obj.protected_from_scale_in.to_string().replace("+", "%2B"));
 
     }
 }
@@ -6997,14 +7059,14 @@ impl StepAdjustmentSerializer {
 
         if let Some(ref field_value) = obj.metric_interval_lower_bound {
             params.put(&format!("{}{}", prefix, "MetricIntervalLowerBound"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.metric_interval_upper_bound {
             params.put(&format!("{}{}", prefix, "MetricIntervalUpperBound"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ScalingAdjustment"),
-                   &obj.scaling_adjustment.to_string());
+                   &obj.scaling_adjustment.to_string().replace("+", "%2B"));
 
     }
 }
@@ -7185,19 +7247,23 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
+        params.put(&format!("{}{}", prefix, "Key"),
+                   &obj.key.replace("+", "%2B"));
         if let Some(ref field_value) = obj.propagate_at_launch {
             params.put(&format!("{}{}", prefix, "PropagateAtLaunch"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.resource_id {
-            params.put(&format!("{}{}", prefix, "ResourceId"), &field_value);
+            params.put(&format!("{}{}", prefix, "ResourceId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.resource_type {
-            params.put(&format!("{}{}", prefix, "ResourceType"), &field_value);
+            params.put(&format!("{}{}", prefix, "ResourceType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -7553,7 +7619,7 @@ impl TargetTrackingConfigurationSerializer {
         }
         if let Some(ref field_value) = obj.disable_scale_in {
             params.put(&format!("{}{}", prefix, "DisableScaleIn"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.predefined_metric_specification {
             PredefinedMetricSpecificationSerializer::serialize(params,
@@ -7563,7 +7629,7 @@ impl TargetTrackingConfigurationSerializer {
                                                                field_value);
         }
         params.put(&format!("{}{}", prefix, "TargetValue"),
-                   &obj.target_value.to_string());
+                   &obj.target_value.to_string().replace("+", "%2B"));
 
     }
 }
@@ -7587,9 +7653,12 @@ impl TerminateInstanceInAutoScalingGroupTypeSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
+        params.put(&format!("{}{}", prefix, "InstanceId"),
+                   &obj.instance_id.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "ShouldDecrementDesiredCapacity"),
-                   &obj.should_decrement_desired_capacity.to_string());
+                   &obj.should_decrement_desired_capacity
+                        .to_string()
+                        .replace("+", "%2B"));
 
     }
 }
@@ -7704,7 +7773,7 @@ impl UpdateAutoScalingGroupTypeSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AutoScalingGroupName"),
-                   &obj.auto_scaling_group_name);
+                   &obj.auto_scaling_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.availability_zones {
             AvailabilityZonesSerializer::serialize(params,
                                                    &format!("{}{}", prefix, "AvailabilityZones"),
@@ -7712,37 +7781,39 @@ impl UpdateAutoScalingGroupTypeSerializer {
         }
         if let Some(ref field_value) = obj.default_cooldown {
             params.put(&format!("{}{}", prefix, "DefaultCooldown"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.desired_capacity {
             params.put(&format!("{}{}", prefix, "DesiredCapacity"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.health_check_grace_period {
             params.put(&format!("{}{}", prefix, "HealthCheckGracePeriod"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.health_check_type {
-            params.put(&format!("{}{}", prefix, "HealthCheckType"), &field_value);
+            params.put(&format!("{}{}", prefix, "HealthCheckType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.launch_configuration_name {
             params.put(&format!("{}{}", prefix, "LaunchConfigurationName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_size {
             params.put(&format!("{}{}", prefix, "MaxSize"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.min_size {
             params.put(&format!("{}{}", prefix, "MinSize"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.new_instances_protected_from_scale_in {
             params.put(&format!("{}{}", prefix, "NewInstancesProtectedFromScaleIn"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.placement_group {
-            params.put(&format!("{}{}", prefix, "PlacementGroup"), &field_value);
+            params.put(&format!("{}{}", prefix, "PlacementGroup"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.termination_policies {
             TerminationPoliciesSerializer::serialize(params,
@@ -7752,7 +7823,8 @@ impl UpdateAutoScalingGroupTypeSerializer {
                                                      field_value);
         }
         if let Some(ref field_value) = obj.vpc_zone_identifier {
-            params.put(&format!("{}{}", prefix, "VPCZoneIdentifier"), &field_value);
+            params.put(&format!("{}{}", prefix, "VPCZoneIdentifier"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }

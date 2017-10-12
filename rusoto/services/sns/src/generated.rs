@@ -93,8 +93,10 @@ impl AddPermissionInputSerializer {
         ActionsListSerializer::serialize(params,
                                          &format!("{}{}", prefix, "ActionName"),
                                          &obj.action_name);
-        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "Label"),
+                   &obj.label.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "TopicArn"),
+                   &obj.topic_arn.replace("+", "%2B"));
 
     }
 }
@@ -158,7 +160,8 @@ impl CheckIfPhoneNumberIsOptedOutInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "phoneNumber"), &obj.phone_number);
+        params.put(&format!("{}{}", prefix, "phoneNumber"),
+                   &obj.phone_number.replace("+", "%2B"));
 
     }
 }
@@ -236,10 +239,12 @@ impl ConfirmSubscriptionInputSerializer {
 
         if let Some(ref field_value) = obj.authenticate_on_unsubscribe {
             params.put(&format!("{}{}", prefix, "AuthenticateOnUnsubscribe"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "Token"), &obj.token);
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "Token"),
+                   &obj.token.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "TopicArn"),
+                   &obj.topic_arn.replace("+", "%2B"));
 
     }
 }
@@ -367,8 +372,10 @@ impl CreatePlatformApplicationInputSerializer {
         MapStringToStringSerializer::serialize(params,
                                                &format!("{}{}", prefix, "Attributes"),
                                                &obj.attributes);
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
-        params.put(&format!("{}{}", prefix, "Platform"), &obj.platform);
+        params.put(&format!("{}{}", prefix, "Name"),
+                   &obj.name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Platform"),
+                   &obj.platform.replace("+", "%2B"));
 
     }
 }
@@ -453,11 +460,13 @@ impl CreatePlatformEndpointInputSerializer {
                                                    field_value);
         }
         if let Some(ref field_value) = obj.custom_user_data {
-            params.put(&format!("{}{}", prefix, "CustomUserData"), &field_value);
+            params.put(&format!("{}{}", prefix, "CustomUserData"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "PlatformApplicationArn"),
-                   &obj.platform_application_arn);
-        params.put(&format!("{}{}", prefix, "Token"), &obj.token);
+                   &obj.platform_application_arn.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Token"),
+                   &obj.token.replace("+", "%2B"));
 
     }
 }
@@ -479,7 +488,8 @@ impl CreateTopicInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"),
+                   &obj.name.replace("+", "%2B"));
 
     }
 }
@@ -562,7 +572,8 @@ impl DeleteEndpointInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
+        params.put(&format!("{}{}", prefix, "EndpointArn"),
+                   &obj.endpoint_arn.replace("+", "%2B"));
 
     }
 }
@@ -585,7 +596,7 @@ impl DeletePlatformApplicationInputSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "PlatformApplicationArn"),
-                   &obj.platform_application_arn);
+                   &obj.platform_application_arn.replace("+", "%2B"));
 
     }
 }
@@ -606,7 +617,8 @@ impl DeleteTopicInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "TopicArn"),
+                   &obj.topic_arn.replace("+", "%2B"));
 
     }
 }
@@ -642,7 +654,8 @@ impl GetEndpointAttributesInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
+        params.put(&format!("{}{}", prefix, "EndpointArn"),
+                   &obj.endpoint_arn.replace("+", "%2B"));
 
     }
 }
@@ -715,7 +728,7 @@ impl GetPlatformApplicationAttributesInputSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "PlatformApplicationArn"),
-                   &obj.platform_application_arn);
+                   &obj.platform_application_arn.replace("+", "%2B"));
 
     }
 }
@@ -865,7 +878,7 @@ impl GetSubscriptionAttributesInputSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "SubscriptionArn"),
-                   &obj.subscription_arn);
+                   &obj.subscription_arn.replace("+", "%2B"));
 
     }
 }
@@ -936,7 +949,8 @@ impl GetTopicAttributesInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "TopicArn"),
+                   &obj.topic_arn.replace("+", "%2B"));
 
     }
 }
@@ -1011,10 +1025,11 @@ impl ListEndpointsByPlatformApplicationInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "PlatformApplicationArn"),
-                   &obj.platform_application_arn);
+                   &obj.platform_application_arn.replace("+", "%2B"));
 
     }
 }
@@ -1177,7 +1192,8 @@ impl ListPhoneNumbersOptedOutInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "nextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "nextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1258,7 +1274,8 @@ impl ListPlatformApplicationsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1351,9 +1368,11 @@ impl ListSubscriptionsByTopicInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "TopicArn"),
+                   &obj.topic_arn.replace("+", "%2B"));
 
     }
 }
@@ -1433,7 +1452,8 @@ impl ListSubscriptionsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1512,7 +1532,8 @@ impl ListTopicsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1652,11 +1673,15 @@ impl MessageAttributeValueSerializer {
 
         if let Some(ref field_value) = obj.binary_value {
             params.put(&format!("{}{}", prefix, "BinaryValue"),
-                       ::std::str::from_utf8(&field_value).unwrap());
+                       ::std::str::from_utf8(&field_value)
+                           .unwrap()
+                           .replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "DataType"), &obj.data_type);
+        params.put(&format!("{}{}", prefix, "DataType"),
+                   &obj.data_type.replace("+", "%2B"));
         if let Some(ref field_value) = obj.string_value {
-            params.put(&format!("{}{}", prefix, "StringValue"), &field_value);
+            params.put(&format!("{}{}", prefix, "StringValue"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1707,7 +1732,8 @@ impl OptInPhoneNumberInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "phoneNumber"), &obj.phone_number);
+        params.put(&format!("{}{}", prefix, "phoneNumber"),
+                   &obj.phone_number.replace("+", "%2B"));
 
     }
 }
@@ -1887,26 +1913,32 @@ impl PublishInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Message"), &obj.message);
+        params.put(&format!("{}{}", prefix, "Message"),
+                   &obj.message.replace("+", "%2B"));
         if let Some(ref field_value) = obj.message_attributes {
             MessageAttributeMapSerializer::serialize(params,
                                                      &format!("{}{}", prefix, "MessageAttributes"),
                                                      field_value);
         }
         if let Some(ref field_value) = obj.message_structure {
-            params.put(&format!("{}{}", prefix, "MessageStructure"), &field_value);
+            params.put(&format!("{}{}", prefix, "MessageStructure"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.phone_number {
-            params.put(&format!("{}{}", prefix, "PhoneNumber"), &field_value);
+            params.put(&format!("{}{}", prefix, "PhoneNumber"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.subject {
-            params.put(&format!("{}{}", prefix, "Subject"), &field_value);
+            params.put(&format!("{}{}", prefix, "Subject"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.target_arn {
-            params.put(&format!("{}{}", prefix, "TargetArn"), &field_value);
+            params.put(&format!("{}{}", prefix, "TargetArn"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
+            params.put(&format!("{}{}", prefix, "TopicArn"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1980,8 +2012,10 @@ impl RemovePermissionInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "Label"),
+                   &obj.label.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "TopicArn"),
+                   &obj.topic_arn.replace("+", "%2B"));
 
     }
 }
@@ -2008,7 +2042,8 @@ impl SetEndpointAttributesInputSerializer {
         MapStringToStringSerializer::serialize(params,
                                                &format!("{}{}", prefix, "Attributes"),
                                                &obj.attributes);
-        params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
+        params.put(&format!("{}{}", prefix, "EndpointArn"),
+                   &obj.endpoint_arn.replace("+", "%2B"));
 
     }
 }
@@ -2036,7 +2071,7 @@ impl SetPlatformApplicationAttributesInputSerializer {
                                                &format!("{}{}", prefix, "Attributes"),
                                                &obj.attributes);
         params.put(&format!("{}{}", prefix, "PlatformApplicationArn"),
-                   &obj.platform_application_arn);
+                   &obj.platform_application_arn.replace("+", "%2B"));
 
     }
 }
@@ -2107,12 +2142,13 @@ impl SetSubscriptionAttributesInputSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AttributeName"),
-                   &obj.attribute_name);
+                   &obj.attribute_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.attribute_value {
-            params.put(&format!("{}{}", prefix, "AttributeValue"), &field_value);
+            params.put(&format!("{}{}", prefix, "AttributeValue"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "SubscriptionArn"),
-                   &obj.subscription_arn);
+                   &obj.subscription_arn.replace("+", "%2B"));
 
     }
 }
@@ -2139,11 +2175,13 @@ impl SetTopicAttributesInputSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AttributeName"),
-                   &obj.attribute_name);
+                   &obj.attribute_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.attribute_value {
-            params.put(&format!("{}{}", prefix, "AttributeValue"), &field_value);
+            params.put(&format!("{}{}", prefix, "AttributeValue"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "TopicArn"),
+                   &obj.topic_arn.replace("+", "%2B"));
 
     }
 }
@@ -2184,10 +2222,13 @@ impl SubscribeInputSerializer {
         }
 
         if let Some(ref field_value) = obj.endpoint {
-            params.put(&format!("{}{}", prefix, "Endpoint"), &field_value);
+            params.put(&format!("{}{}", prefix, "Endpoint"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "Protocol"), &obj.protocol);
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "Protocol"),
+                   &obj.protocol.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "TopicArn"),
+                   &obj.topic_arn.replace("+", "%2B"));
 
     }
 }
@@ -2541,7 +2582,7 @@ impl UnsubscribeInputSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "SubscriptionArn"),
-                   &obj.subscription_arn);
+                   &obj.subscription_arn.replace("+", "%2B"));
 
     }
 }

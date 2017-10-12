@@ -783,23 +783,28 @@ impl DescribeAlarmHistoryInputSerializer {
         }
 
         if let Some(ref field_value) = obj.alarm_name {
-            params.put(&format!("{}{}", prefix, "AlarmName"), &field_value);
+            params.put(&format!("{}{}", prefix, "AlarmName"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.end_date {
-            params.put(&format!("{}{}", prefix, "EndDate"), &field_value);
+            params.put(&format!("{}{}", prefix, "EndDate"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.history_item_type {
-            params.put(&format!("{}{}", prefix, "HistoryItemType"), &field_value);
+            params.put(&format!("{}{}", prefix, "HistoryItemType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.start_date {
-            params.put(&format!("{}{}", prefix, "StartDate"), &field_value);
+            params.put(&format!("{}{}", prefix, "StartDate"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -894,18 +899,24 @@ impl DescribeAlarmsForMetricInputSerializer {
                                             field_value);
         }
         if let Some(ref field_value) = obj.extended_statistic {
-            params.put(&format!("{}{}", prefix, "ExtendedStatistic"), &field_value);
+            params.put(&format!("{}{}", prefix, "ExtendedStatistic"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
+        params.put(&format!("{}{}", prefix, "MetricName"),
+                   &obj.metric_name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Namespace"),
+                   &obj.namespace.replace("+", "%2B"));
         if let Some(ref field_value) = obj.period {
-            params.put(&format!("{}{}", prefix, "Period"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Period"),
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.statistic {
-            params.put(&format!("{}{}", prefix, "Statistic"), &field_value);
+            params.put(&format!("{}{}", prefix, "Statistic"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -987,10 +998,12 @@ impl DescribeAlarmsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.action_prefix {
-            params.put(&format!("{}{}", prefix, "ActionPrefix"), &field_value);
+            params.put(&format!("{}{}", prefix, "ActionPrefix"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.alarm_name_prefix {
-            params.put(&format!("{}{}", prefix, "AlarmNamePrefix"), &field_value);
+            params.put(&format!("{}{}", prefix, "AlarmNamePrefix"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.alarm_names {
             AlarmNamesSerializer::serialize(params,
@@ -999,13 +1012,15 @@ impl DescribeAlarmsInputSerializer {
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.state_value {
-            params.put(&format!("{}{}", prefix, "StateValue"), &field_value);
+            params.put(&format!("{}{}", prefix, "StateValue"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1130,8 +1145,10 @@ impl DimensionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Name"),
+                   &obj.name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Value"),
+                   &obj.value.replace("+", "%2B"));
 
     }
 }
@@ -1155,9 +1172,11 @@ impl DimensionFilterSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"),
+                   &obj.name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1373,7 +1392,8 @@ impl GetDashboardInputSerializer {
         }
 
         if let Some(ref field_value) = obj.dashboard_name {
-            params.put(&format!("{}{}", prefix, "DashboardName"), &field_value);
+            params.put(&format!("{}{}", prefix, "DashboardName"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1479,23 +1499,29 @@ impl GetMetricStatisticsInputSerializer {
                                             &format!("{}{}", prefix, "Dimensions"),
                                             field_value);
         }
-        params.put(&format!("{}{}", prefix, "EndTime"), &obj.end_time);
+        params.put(&format!("{}{}", prefix, "EndTime"),
+                   &obj.end_time.replace("+", "%2B"));
         if let Some(ref field_value) = obj.extended_statistics {
             ExtendedStatisticsSerializer::serialize(params,
                                                     &format!("{}{}", prefix, "ExtendedStatistics"),
                                                     field_value);
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
-        params.put(&format!("{}{}", prefix, "Period"), &obj.period.to_string());
-        params.put(&format!("{}{}", prefix, "StartTime"), &obj.start_time);
+        params.put(&format!("{}{}", prefix, "MetricName"),
+                   &obj.metric_name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Namespace"),
+                   &obj.namespace.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Period"),
+                   &obj.period.to_string().replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "StartTime"),
+                   &obj.start_time.replace("+", "%2B"));
         if let Some(ref field_value) = obj.statistics {
             StatisticsSerializer::serialize(params,
                                             &format!("{}{}", prefix, "Statistics"),
                                             field_value);
         }
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1631,10 +1657,11 @@ impl ListDashboardsInputSerializer {
 
         if let Some(ref field_value) = obj.dashboard_name_prefix {
             params.put(&format!("{}{}", prefix, "DashboardNamePrefix"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1723,13 +1750,16 @@ impl ListMetricsInputSerializer {
                                                   field_value);
         }
         if let Some(ref field_value) = obj.metric_name {
-            params.put(&format!("{}{}", prefix, "MetricName"), &field_value);
+            params.put(&format!("{}{}", prefix, "MetricName"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.namespace {
-            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
+            params.put(&format!("{}{}", prefix, "Namespace"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(&format!("{}{}", prefix, "NextToken"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -2153,7 +2183,8 @@ impl MetricDatumSerializer {
                                             &format!("{}{}", prefix, "Dimensions"),
                                             field_value);
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
+        params.put(&format!("{}{}", prefix, "MetricName"),
+                   &obj.metric_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.statistic_values {
             StatisticSetSerializer::serialize(params,
                                               &format!("{}{}", prefix, "StatisticValues"),
@@ -2161,16 +2192,19 @@ impl MetricDatumSerializer {
         }
         if let Some(ref field_value) = obj.storage_resolution {
             params.put(&format!("{}{}", prefix, "StorageResolution"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.timestamp {
-            params.put(&format!("{}{}", prefix, "Timestamp"), &field_value);
+            params.put(&format!("{}{}", prefix, "Timestamp"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Value"),
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -2306,10 +2340,12 @@ impl PutDashboardInputSerializer {
         }
 
         if let Some(ref field_value) = obj.dashboard_body {
-            params.put(&format!("{}{}", prefix, "DashboardBody"), &field_value);
+            params.put(&format!("{}{}", prefix, "DashboardBody"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.dashboard_name {
-            params.put(&format!("{}{}", prefix, "DashboardName"), &field_value);
+            params.put(&format!("{}{}", prefix, "DashboardName"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -2414,7 +2450,7 @@ impl PutMetricAlarmInputSerializer {
 
         if let Some(ref field_value) = obj.actions_enabled {
             params.put(&format!("{}{}", prefix, "ActionsEnabled"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.alarm_actions {
             ResourceListSerializer::serialize(params,
@@ -2422,11 +2458,13 @@ impl PutMetricAlarmInputSerializer {
                                               field_value);
         }
         if let Some(ref field_value) = obj.alarm_description {
-            params.put(&format!("{}{}", prefix, "AlarmDescription"), &field_value);
+            params.put(&format!("{}{}", prefix, "AlarmDescription"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "AlarmName"), &obj.alarm_name);
+        params.put(&format!("{}{}", prefix, "AlarmName"),
+                   &obj.alarm_name.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "ComparisonOperator"),
-                   &obj.comparison_operator);
+                   &obj.comparison_operator.replace("+", "%2B"));
         if let Some(ref field_value) = obj.dimensions {
             DimensionsSerializer::serialize(params,
                                             &format!("{}{}", prefix, "Dimensions"),
@@ -2434,36 +2472,43 @@ impl PutMetricAlarmInputSerializer {
         }
         if let Some(ref field_value) = obj.evaluate_low_sample_count_percentile {
             params.put(&format!("{}{}", prefix, "EvaluateLowSampleCountPercentile"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "EvaluationPeriods"),
-                   &obj.evaluation_periods.to_string());
+                   &obj.evaluation_periods.to_string().replace("+", "%2B"));
         if let Some(ref field_value) = obj.extended_statistic {
-            params.put(&format!("{}{}", prefix, "ExtendedStatistic"), &field_value);
+            params.put(&format!("{}{}", prefix, "ExtendedStatistic"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.insufficient_data_actions {
             ResourceListSerializer::serialize(params,
                                               &format!("{}{}", prefix, "InsufficientDataActions"),
                                               field_value);
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
+        params.put(&format!("{}{}", prefix, "MetricName"),
+                   &obj.metric_name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Namespace"),
+                   &obj.namespace.replace("+", "%2B"));
         if let Some(ref field_value) = obj.ok_actions {
             ResourceListSerializer::serialize(params,
                                               &format!("{}{}", prefix, "OKActions"),
                                               field_value);
         }
-        params.put(&format!("{}{}", prefix, "Period"), &obj.period.to_string());
+        params.put(&format!("{}{}", prefix, "Period"),
+                   &obj.period.to_string().replace("+", "%2B"));
         if let Some(ref field_value) = obj.statistic {
-            params.put(&format!("{}{}", prefix, "Statistic"), &field_value);
+            params.put(&format!("{}{}", prefix, "Statistic"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "Threshold"),
-                   &obj.threshold.to_string());
+                   &obj.threshold.to_string().replace("+", "%2B"));
         if let Some(ref field_value) = obj.treat_missing_data {
-            params.put(&format!("{}{}", prefix, "TreatMissingData"), &field_value);
+            params.put(&format!("{}{}", prefix, "TreatMissingData"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -2490,7 +2535,8 @@ impl PutMetricDataInputSerializer {
         MetricDataSerializer::serialize(params,
                                         &format!("{}{}", prefix, "MetricData"),
                                         &obj.metric_data);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
+        params.put(&format!("{}{}", prefix, "Namespace"),
+                   &obj.namespace.replace("+", "%2B"));
 
     }
 }
@@ -2584,12 +2630,16 @@ impl SetAlarmStateInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AlarmName"), &obj.alarm_name);
-        params.put(&format!("{}{}", prefix, "StateReason"), &obj.state_reason);
+        params.put(&format!("{}{}", prefix, "AlarmName"),
+                   &obj.alarm_name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "StateReason"),
+                   &obj.state_reason.replace("+", "%2B"));
         if let Some(ref field_value) = obj.state_reason_data {
-            params.put(&format!("{}{}", prefix, "StateReasonData"), &field_value);
+            params.put(&format!("{}{}", prefix, "StateReasonData"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "StateValue"), &obj.state_value);
+        params.put(&format!("{}{}", prefix, "StateValue"),
+                   &obj.state_value.replace("+", "%2B"));
 
     }
 }
@@ -2702,12 +2752,13 @@ impl StatisticSetSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "Maximum"),
-                   &obj.maximum.to_string());
+                   &obj.maximum.to_string().replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "Minimum"),
-                   &obj.minimum.to_string());
+                   &obj.minimum.to_string().replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "SampleCount"),
-                   &obj.sample_count.to_string());
-        params.put(&format!("{}{}", prefix, "Sum"), &obj.sum.to_string());
+                   &obj.sample_count.to_string().replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Sum"),
+                   &obj.sum.to_string().replace("+", "%2B"));
 
     }
 }
