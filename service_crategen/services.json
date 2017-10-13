@@ -251,6 +251,12 @@
     "protocolVersion": "2012-06-01",
     "baseTypeName": "Glacier"
   },
+  "greengrass": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2017-06-07",
+    "baseTypeName": "GreenGrass"
+  },
   "health": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",

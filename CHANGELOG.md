@@ -13,6 +13,7 @@
 - Make Rusoto Core use HTTP Pools to re-use connections.
 - Fixed Edge Cases in URI Encoding of Rusoto (double query encoding, +'s in query strings).
 - Updated ring dependency
+- Added GreenGrass service
 - Added Elastic Filesystem service
 - Fix broken links on the STS documentation
 - Use xml::EventWriter to serialize XML payload
