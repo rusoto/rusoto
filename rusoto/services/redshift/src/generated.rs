@@ -161,17 +161,18 @@ impl AuthorizeClusterSecurityGroupIngressMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cidrip {
-            params.put(&format!("{}{}", prefix, "CIDRIP"), &field_value);
+            params.put(&format!("{}{}", prefix, "CIDRIP"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ClusterSecurityGroupName"),
-                   &obj.cluster_security_group_name);
+                   &obj.cluster_security_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.ec2_security_group_name {
             params.put(&format!("{}{}", prefix, "EC2SecurityGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.ec2_security_group_owner_id {
             params.put(&format!("{}{}", prefix, "EC2SecurityGroupOwnerId"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -248,13 +249,13 @@ impl AuthorizeSnapshotAccessMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AccountWithRestoreAccess"),
-                   &obj.account_with_restore_access);
+                   &obj.account_with_restore_access.replace("+", "%2B"));
         if let Some(ref field_value) = obj.snapshot_cluster_identifier {
             params.put(&format!("{}{}", prefix, "SnapshotClusterIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "SnapshotIdentifier"),
-                   &obj.snapshot_identifier);
+                   &obj.snapshot_identifier.replace("+", "%2B"));
 
     }
 }
@@ -2190,12 +2191,12 @@ impl CopyClusterSnapshotMessageSerializer {
 
         if let Some(ref field_value) = obj.source_snapshot_cluster_identifier {
             params.put(&format!("{}{}", prefix, "SourceSnapshotClusterIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "SourceSnapshotIdentifier"),
-                   &obj.source_snapshot_identifier);
+                   &obj.source_snapshot_identifier.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "TargetSnapshotIdentifier"),
-                   &obj.target_snapshot_identifier);
+                   &obj.target_snapshot_identifier.replace("+", "%2B"));
 
     }
 }
@@ -2317,24 +2318,26 @@ impl CreateClusterMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.additional_info {
-            params.put(&format!("{}{}", prefix, "AdditionalInfo"), &field_value);
+            params.put(&format!("{}{}", prefix, "AdditionalInfo"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.allow_version_upgrade {
             params.put(&format!("{}{}", prefix, "AllowVersionUpgrade"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.automated_snapshot_retention_period {
             params.put(&format!("{}{}", prefix, "AutomatedSnapshotRetentionPeriod"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.availability_zone {
-            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+            params.put(&format!("{}{}", prefix, "AvailabilityZone"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         if let Some(ref field_value) = obj.cluster_parameter_group_name {
             params.put(&format!("{}{}", prefix, "ClusterParameterGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.cluster_security_groups {
             ClusterSecurityGroupNameListSerializer::serialize(params,
@@ -2345,35 +2348,39 @@ impl CreateClusterMessageSerializer {
         }
         if let Some(ref field_value) = obj.cluster_subnet_group_name {
             params.put(&format!("{}{}", prefix, "ClusterSubnetGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.cluster_type {
-            params.put(&format!("{}{}", prefix, "ClusterType"), &field_value);
+            params.put(&format!("{}{}", prefix, "ClusterType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.cluster_version {
-            params.put(&format!("{}{}", prefix, "ClusterVersion"), &field_value);
+            params.put(&format!("{}{}", prefix, "ClusterVersion"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.db_name {
-            params.put(&format!("{}{}", prefix, "DBName"), &field_value);
+            params.put(&format!("{}{}", prefix, "DBName"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.elastic_ip {
-            params.put(&format!("{}{}", prefix, "ElasticIp"), &field_value);
+            params.put(&format!("{}{}", prefix, "ElasticIp"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.encrypted {
             params.put(&format!("{}{}", prefix, "Encrypted"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.enhanced_vpc_routing {
             params.put(&format!("{}{}", prefix, "EnhancedVpcRouting"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(&format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.hsm_configuration_identifier {
             params.put(&format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.iam_roles {
             IamRoleArnListSerializer::serialize(params,
@@ -2381,27 +2388,30 @@ impl CreateClusterMessageSerializer {
                                                 field_value);
         }
         if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+            params.put(&format!("{}{}", prefix, "KmsKeyId"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "MasterUserPassword"),
-                   &obj.master_user_password);
+                   &obj.master_user_password.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "MasterUsername"),
-                   &obj.master_username);
-        params.put(&format!("{}{}", prefix, "NodeType"), &obj.node_type);
+                   &obj.master_username.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "NodeType"),
+                   &obj.node_type.replace("+", "%2B"));
         if let Some(ref field_value) = obj.number_of_nodes {
             params.put(&format!("{}{}", prefix, "NumberOfNodes"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Port"),
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(&format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.publicly_accessible {
             params.put(&format!("{}{}", prefix, "PubliclyAccessible"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
@@ -2440,11 +2450,12 @@ impl CreateClusterParameterGroupMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(&format!("{}{}", prefix, "Description"),
+                   &obj.description.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "ParameterGroupFamily"),
-                   &obj.parameter_group_family);
+                   &obj.parameter_group_family.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "ParameterGroupName"),
-                   &obj.parameter_group_name);
+                   &obj.parameter_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
@@ -2570,8 +2581,9 @@ impl CreateClusterSecurityGroupMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterSecurityGroupName"),
-                   &obj.cluster_security_group_name);
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+                   &obj.cluster_security_group_name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Description"),
+                   &obj.description.replace("+", "%2B"));
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
@@ -2650,9 +2662,9 @@ impl CreateClusterSnapshotMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "SnapshotIdentifier"),
-                   &obj.snapshot_identifier);
+                   &obj.snapshot_identifier.replace("+", "%2B"));
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
@@ -2731,8 +2743,9 @@ impl CreateClusterSubnetGroupMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterSubnetGroupName"),
-                   &obj.cluster_subnet_group_name);
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+                   &obj.cluster_subnet_group_name.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Description"),
+                   &obj.description.replace("+", "%2B"));
         SubnetIdentifierListSerializer::serialize(params,
                                                   &format!("{}{}", prefix, "SubnetIds"),
                                                   &obj.subnet_ids);
@@ -2824,7 +2837,7 @@ impl CreateEventSubscriptionMessageSerializer {
 
         if let Some(ref field_value) = obj.enabled {
             params.put(&format!("{}{}", prefix, "Enabled"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(params,
@@ -2832,19 +2845,22 @@ impl CreateEventSubscriptionMessageSerializer {
                                                      field_value);
         }
         if let Some(ref field_value) = obj.severity {
-            params.put(&format!("{}{}", prefix, "Severity"), &field_value);
+            params.put(&format!("{}{}", prefix, "Severity"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "SnsTopicArn"), &obj.sns_topic_arn);
+        params.put(&format!("{}{}", prefix, "SnsTopicArn"),
+                   &obj.sns_topic_arn.replace("+", "%2B"));
         if let Some(ref field_value) = obj.source_ids {
             SourceIdsListSerializer::serialize(params,
                                                &format!("{}{}", prefix, "SourceIds"),
                                                field_value);
         }
         if let Some(ref field_value) = obj.source_type {
-            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+            params.put(&format!("{}{}", prefix, "SourceType"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "SubscriptionName"),
-                   &obj.subscription_name);
+                   &obj.subscription_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
@@ -2920,7 +2936,7 @@ impl CreateHsmClientCertificateMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-                   &obj.hsm_client_certificate_identifier);
+                   &obj.hsm_client_certificate_identifier.replace("+", "%2B"));
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
@@ -3006,17 +3022,18 @@ impl CreateHsmConfigurationMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(&format!("{}{}", prefix, "Description"),
+                   &obj.description.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-                   &obj.hsm_configuration_identifier);
+                   &obj.hsm_configuration_identifier.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "HsmIpAddress"),
-                   &obj.hsm_ip_address);
+                   &obj.hsm_ip_address.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "HsmPartitionName"),
-                   &obj.hsm_partition_name);
+                   &obj.hsm_partition_name.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "HsmPartitionPassword"),
-                   &obj.hsm_partition_password);
+                   &obj.hsm_partition_password.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "HsmServerPublicCertificate"),
-                   &obj.hsm_server_public_certificate);
+                   &obj.hsm_server_public_certificate.replace("+", "%2B"));
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
@@ -3094,10 +3111,11 @@ impl CreateSnapshotCopyGrantMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+            params.put(&format!("{}{}", prefix, "KmsKeyId"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "SnapshotCopyGrantName"),
-                   &obj.snapshot_copy_grant_name);
+                   &obj.snapshot_copy_grant_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
@@ -3172,7 +3190,8 @@ impl CreateTagsMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
+        params.put(&format!("{}{}", prefix, "ResourceName"),
+                   &obj.resource_name.replace("+", "%2B"));
         TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
 
     }
@@ -3275,14 +3294,14 @@ impl DeleteClusterMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         if let Some(ref field_value) = obj.final_cluster_snapshot_identifier {
             params.put(&format!("{}{}", prefix, "FinalClusterSnapshotIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.skip_final_cluster_snapshot {
             params.put(&format!("{}{}", prefix, "SkipFinalClusterSnapshot"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -3306,7 +3325,7 @@ impl DeleteClusterParameterGroupMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ParameterGroupName"),
-                   &obj.parameter_group_name);
+                   &obj.parameter_group_name.replace("+", "%2B"));
 
     }
 }
@@ -3376,7 +3395,7 @@ impl DeleteClusterSecurityGroupMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterSecurityGroupName"),
-                   &obj.cluster_security_group_name);
+                   &obj.cluster_security_group_name.replace("+", "%2B"));
 
     }
 }
@@ -3402,10 +3421,10 @@ impl DeleteClusterSnapshotMessageSerializer {
 
         if let Some(ref field_value) = obj.snapshot_cluster_identifier {
             params.put(&format!("{}{}", prefix, "SnapshotClusterIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "SnapshotIdentifier"),
-                   &obj.snapshot_identifier);
+                   &obj.snapshot_identifier.replace("+", "%2B"));
 
     }
 }
@@ -3475,7 +3494,7 @@ impl DeleteClusterSubnetGroupMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterSubnetGroupName"),
-                   &obj.cluster_subnet_group_name);
+                   &obj.cluster_subnet_group_name.replace("+", "%2B"));
 
     }
 }
@@ -3498,7 +3517,7 @@ impl DeleteEventSubscriptionMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "SubscriptionName"),
-                   &obj.subscription_name);
+                   &obj.subscription_name.replace("+", "%2B"));
 
     }
 }
@@ -3521,7 +3540,7 @@ impl DeleteHsmClientCertificateMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-                   &obj.hsm_client_certificate_identifier);
+                   &obj.hsm_client_certificate_identifier.replace("+", "%2B"));
 
     }
 }
@@ -3544,7 +3563,7 @@ impl DeleteHsmConfigurationMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-                   &obj.hsm_configuration_identifier);
+                   &obj.hsm_configuration_identifier.replace("+", "%2B"));
 
     }
 }
@@ -3567,7 +3586,7 @@ impl DeleteSnapshotCopyGrantMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "SnapshotCopyGrantName"),
-                   &obj.snapshot_copy_grant_name);
+                   &obj.snapshot_copy_grant_name.replace("+", "%2B"));
 
     }
 }
@@ -3591,7 +3610,8 @@ impl DeleteTagsMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
+        params.put(&format!("{}{}", prefix, "ResourceName"),
+                   &obj.resource_name.replace("+", "%2B"));
         TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKeys"), &obj.tag_keys);
 
     }
@@ -3623,14 +3643,16 @@ impl DescribeClusterParameterGroupsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.parameter_group_name {
-            params.put(&format!("{}{}", prefix, "ParameterGroupName"), &field_value);
+            params.put(&format!("{}{}", prefix, "ParameterGroupName"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(params,
@@ -3670,16 +3692,18 @@ impl DescribeClusterParametersMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ParameterGroupName"),
-                   &obj.parameter_group_name);
+                   &obj.parameter_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.source {
-            params.put(&format!("{}{}", prefix, "Source"), &field_value);
+            params.put(&format!("{}{}", prefix, "Source"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -3712,14 +3736,15 @@ impl DescribeClusterSecurityGroupsMessageSerializer {
 
         if let Some(ref field_value) = obj.cluster_security_group_name {
             params.put(&format!("{}{}", prefix, "ClusterSecurityGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(params,
@@ -3771,29 +3796,36 @@ impl DescribeClusterSnapshotsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_identifier {
-            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.end_time {
-            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
+            params.put(&format!("{}{}", prefix, "EndTime"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.owner_account {
-            params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
+            params.put(&format!("{}{}", prefix, "OwnerAccount"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.snapshot_identifier {
-            params.put(&format!("{}{}", prefix, "SnapshotIdentifier"), &field_value);
+            params.put(&format!("{}{}", prefix, "SnapshotIdentifier"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.snapshot_type {
-            params.put(&format!("{}{}", prefix, "SnapshotType"), &field_value);
+            params.put(&format!("{}{}", prefix, "SnapshotType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.start_time {
-            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+            params.put(&format!("{}{}", prefix, "StartTime"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(params,
@@ -3836,14 +3868,15 @@ impl DescribeClusterSubnetGroupsMessageSerializer {
 
         if let Some(ref field_value) = obj.cluster_subnet_group_name {
             params.put(&format!("{}{}", prefix, "ClusterSubnetGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(params,
@@ -3884,17 +3917,19 @@ impl DescribeClusterVersionsMessageSerializer {
 
         if let Some(ref field_value) = obj.cluster_parameter_group_family {
             params.put(&format!("{}{}", prefix, "ClusterParameterGroupFamily"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.cluster_version {
-            params.put(&format!("{}{}", prefix, "ClusterVersion"), &field_value);
+            params.put(&format!("{}{}", prefix, "ClusterVersion"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -3926,14 +3961,16 @@ impl DescribeClustersMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_identifier {
-            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(params,
@@ -3971,14 +4008,15 @@ impl DescribeDefaultClusterParametersMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ParameterGroupFamily"),
-                   &obj.parameter_group_family);
+                   &obj.parameter_group_family.replace("+", "%2B"));
 
     }
 }
@@ -4048,7 +4086,8 @@ impl DescribeEventCategoriesMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.source_type {
-            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+            params.put(&format!("{}{}", prefix, "SourceType"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -4076,14 +4115,16 @@ impl DescribeEventSubscriptionsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.subscription_name {
-            params.put(&format!("{}{}", prefix, "SubscriptionName"), &field_value);
+            params.put(&format!("{}{}", prefix, "SubscriptionName"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -4120,26 +4161,31 @@ impl DescribeEventsMessageSerializer {
 
         if let Some(ref field_value) = obj.duration {
             params.put(&format!("{}{}", prefix, "Duration"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.end_time {
-            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
+            params.put(&format!("{}{}", prefix, "EndTime"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.source_identifier {
-            params.put(&format!("{}{}", prefix, "SourceIdentifier"), &field_value);
+            params.put(&format!("{}{}", prefix, "SourceIdentifier"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.source_type {
-            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+            params.put(&format!("{}{}", prefix, "SourceType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.start_time {
-            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+            params.put(&format!("{}{}", prefix, "StartTime"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -4172,14 +4218,15 @@ impl DescribeHsmClientCertificatesMessageSerializer {
 
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(&format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(params,
@@ -4222,14 +4269,15 @@ impl DescribeHsmConfigurationsMessageSerializer {
 
         if let Some(ref field_value) = obj.hsm_configuration_identifier {
             params.put(&format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(params,
@@ -4263,7 +4311,7 @@ impl DescribeLoggingStatusMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
 
     }
 }
@@ -4292,17 +4340,20 @@ impl DescribeOrderableClusterOptionsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_version {
-            params.put(&format!("{}{}", prefix, "ClusterVersion"), &field_value);
+            params.put(&format!("{}{}", prefix, "ClusterVersion"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.node_type {
-            params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
+            params.put(&format!("{}{}", prefix, "NodeType"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -4330,15 +4381,16 @@ impl DescribeReservedNodeOfferingsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.reserved_node_offering_id {
             params.put(&format!("{}{}", prefix, "ReservedNodeOfferingId"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -4366,14 +4418,16 @@ impl DescribeReservedNodesMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.reserved_node_id {
-            params.put(&format!("{}{}", prefix, "ReservedNodeId"), &field_value);
+            params.put(&format!("{}{}", prefix, "ReservedNodeId"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -4397,7 +4451,7 @@ impl DescribeResizeMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
 
     }
 }
@@ -4428,15 +4482,16 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.snapshot_copy_grant_name {
             params.put(&format!("{}{}", prefix, "SnapshotCopyGrantName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(params,
@@ -4476,18 +4531,20 @@ impl DescribeTableRestoreStatusMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_identifier {
-            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.table_restore_request_id {
             params.put(&format!("{}{}", prefix, "TableRestoreRequestId"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -4521,17 +4578,20 @@ impl DescribeTagsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.resource_name {
-            params.put(&format!("{}{}", prefix, "ResourceName"), &field_value);
+            params.put(&format!("{}{}", prefix, "ResourceName"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.resource_type {
-            params.put(&format!("{}{}", prefix, "ResourceType"), &field_value);
+            params.put(&format!("{}{}", prefix, "ResourceType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(params,
@@ -4565,7 +4625,7 @@ impl DisableLoggingMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
 
     }
 }
@@ -4588,7 +4648,7 @@ impl DisableSnapshotCopyMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
 
     }
 }
@@ -4854,11 +4914,13 @@ impl EnableLoggingMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "BucketName"), &obj.bucket_name);
+        params.put(&format!("{}{}", prefix, "BucketName"),
+                   &obj.bucket_name.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         if let Some(ref field_value) = obj.s3_key_prefix {
-            params.put(&format!("{}{}", prefix, "S3KeyPrefix"), &field_value);
+            params.put(&format!("{}{}", prefix, "S3KeyPrefix"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -4888,16 +4950,16 @@ impl EnableSnapshotCopyMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "DestinationRegion"),
-                   &obj.destination_region);
+                   &obj.destination_region.replace("+", "%2B"));
         if let Some(ref field_value) = obj.retention_period {
             params.put(&format!("{}{}", prefix, "RetentionPeriod"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.snapshot_copy_grant_name {
             params.put(&format!("{}{}", prefix, "SnapshotCopyGrantName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -5736,22 +5798,24 @@ impl GetClusterCredentialsMessageSerializer {
 
         if let Some(ref field_value) = obj.auto_create {
             params.put(&format!("{}{}", prefix, "AutoCreate"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         if let Some(ref field_value) = obj.db_groups {
             DbGroupListSerializer::serialize(params,
                                              &format!("{}{}", prefix, "DbGroups"),
                                              field_value);
         }
         if let Some(ref field_value) = obj.db_name {
-            params.put(&format!("{}{}", prefix, "DbName"), &field_value);
+            params.put(&format!("{}{}", prefix, "DbName"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "DbUser"), &obj.db_user);
+        params.put(&format!("{}{}", prefix, "DbUser"),
+                   &obj.db_user.replace("+", "%2B"));
         if let Some(ref field_value) = obj.duration_seconds {
             params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -6551,7 +6615,7 @@ impl ModifyClusterIamRolesMessageSerializer {
                                                 field_value);
         }
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         if let Some(ref field_value) = obj.remove_iam_roles {
             IamRoleArnListSerializer::serialize(params,
                                                 &format!("{}{}", prefix, "RemoveIamRoles"),
@@ -6661,17 +6725,17 @@ impl ModifyClusterMessageSerializer {
 
         if let Some(ref field_value) = obj.allow_version_upgrade {
             params.put(&format!("{}{}", prefix, "AllowVersionUpgrade"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.automated_snapshot_retention_period {
             params.put(&format!("{}{}", prefix, "AutomatedSnapshotRetentionPeriod"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         if let Some(ref field_value) = obj.cluster_parameter_group_name {
             params.put(&format!("{}{}", prefix, "ClusterParameterGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.cluster_security_groups {
             ClusterSecurityGroupNameListSerializer::serialize(params,
@@ -6681,47 +6745,52 @@ impl ModifyClusterMessageSerializer {
                                                               field_value);
         }
         if let Some(ref field_value) = obj.cluster_type {
-            params.put(&format!("{}{}", prefix, "ClusterType"), &field_value);
+            params.put(&format!("{}{}", prefix, "ClusterType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.cluster_version {
-            params.put(&format!("{}{}", prefix, "ClusterVersion"), &field_value);
+            params.put(&format!("{}{}", prefix, "ClusterVersion"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.elastic_ip {
-            params.put(&format!("{}{}", prefix, "ElasticIp"), &field_value);
+            params.put(&format!("{}{}", prefix, "ElasticIp"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.enhanced_vpc_routing {
             params.put(&format!("{}{}", prefix, "EnhancedVpcRouting"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(&format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.hsm_configuration_identifier {
             params.put(&format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.master_user_password {
-            params.put(&format!("{}{}", prefix, "MasterUserPassword"), &field_value);
+            params.put(&format!("{}{}", prefix, "MasterUserPassword"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.new_cluster_identifier {
             params.put(&format!("{}{}", prefix, "NewClusterIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.node_type {
-            params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
+            params.put(&format!("{}{}", prefix, "NodeType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.number_of_nodes {
             params.put(&format!("{}{}", prefix, "NumberOfNodes"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(&format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.publicly_accessible {
             params.put(&format!("{}{}", prefix, "PubliclyAccessible"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(params,
@@ -6754,7 +6823,7 @@ impl ModifyClusterParameterGroupMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ParameterGroupName"),
-                   &obj.parameter_group_name);
+                   &obj.parameter_group_name.replace("+", "%2B"));
         ParametersListSerializer::serialize(params,
                                             &format!("{}{}", prefix, "Parameters"),
                                             &obj.parameters);
@@ -6831,9 +6900,10 @@ impl ModifyClusterSubnetGroupMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterSubnetGroupName"),
-                   &obj.cluster_subnet_group_name);
+                   &obj.cluster_subnet_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(&format!("{}{}", prefix, "Description"),
+                       &field_value.replace("+", "%2B"));
         }
         SubnetIdentifierListSerializer::serialize(params,
                                                   &format!("{}{}", prefix, "SubnetIds"),
@@ -6921,7 +6991,7 @@ impl ModifyEventSubscriptionMessageSerializer {
 
         if let Some(ref field_value) = obj.enabled {
             params.put(&format!("{}{}", prefix, "Enabled"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(params,
@@ -6929,10 +6999,12 @@ impl ModifyEventSubscriptionMessageSerializer {
                                                      field_value);
         }
         if let Some(ref field_value) = obj.severity {
-            params.put(&format!("{}{}", prefix, "Severity"), &field_value);
+            params.put(&format!("{}{}", prefix, "Severity"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.sns_topic_arn {
-            params.put(&format!("{}{}", prefix, "SnsTopicArn"), &field_value);
+            params.put(&format!("{}{}", prefix, "SnsTopicArn"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.source_ids {
             SourceIdsListSerializer::serialize(params,
@@ -6940,10 +7012,11 @@ impl ModifyEventSubscriptionMessageSerializer {
                                                field_value);
         }
         if let Some(ref field_value) = obj.source_type {
-            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+            params.put(&format!("{}{}", prefix, "SourceType"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "SubscriptionName"),
-                   &obj.subscription_name);
+                   &obj.subscription_name.replace("+", "%2B"));
 
     }
 }
@@ -7016,9 +7089,9 @@ impl ModifySnapshotCopyRetentionPeriodMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "RetentionPeriod"),
-                   &obj.retention_period.to_string());
+                   &obj.retention_period.to_string().replace("+", "%2B"));
 
     }
 }
@@ -7346,33 +7419,40 @@ impl ParameterSerializer {
         }
 
         if let Some(ref field_value) = obj.allowed_values {
-            params.put(&format!("{}{}", prefix, "AllowedValues"), &field_value);
+            params.put(&format!("{}{}", prefix, "AllowedValues"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.apply_type {
-            params.put(&format!("{}{}", prefix, "ApplyType"), &field_value);
+            params.put(&format!("{}{}", prefix, "ApplyType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.data_type {
-            params.put(&format!("{}{}", prefix, "DataType"), &field_value);
+            params.put(&format!("{}{}", prefix, "DataType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(&format!("{}{}", prefix, "Description"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.is_modifiable {
             params.put(&format!("{}{}", prefix, "IsModifiable"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.minimum_engine_version {
             params.put(&format!("{}{}", prefix, "MinimumEngineVersion"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.parameter_name {
-            params.put(&format!("{}{}", prefix, "ParameterName"), &field_value);
+            params.put(&format!("{}{}", prefix, "ParameterName"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.parameter_value {
-            params.put(&format!("{}{}", prefix, "ParameterValue"), &field_value);
+            params.put(&format!("{}{}", prefix, "ParameterValue"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.source {
-            params.put(&format!("{}{}", prefix, "Source"), &field_value);
+            params.put(&format!("{}{}", prefix, "Source"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -7611,10 +7691,10 @@ impl PurchaseReservedNodeOfferingMessageSerializer {
 
         if let Some(ref field_value) = obj.node_count {
             params.put(&format!("{}{}", prefix, "NodeCount"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ReservedNodeOfferingId"),
-                   &obj.reserved_node_offering_id);
+                   &obj.reserved_node_offering_id.replace("+", "%2B"));
 
     }
 }
@@ -7686,7 +7766,7 @@ impl RebootClusterMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
 
     }
 }
@@ -8262,7 +8342,7 @@ impl ResetClusterParameterGroupMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ParameterGroupName"),
-                   &obj.parameter_group_name);
+                   &obj.parameter_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.parameters {
             ParametersListSerializer::serialize(params,
                                                 &format!("{}{}", prefix, "Parameters"),
@@ -8270,7 +8350,7 @@ impl ResetClusterParameterGroupMessageSerializer {
         }
         if let Some(ref field_value) = obj.reset_all_parameters {
             params.put(&format!("{}{}", prefix, "ResetAllParameters"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -8503,24 +8583,26 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.additional_info {
-            params.put(&format!("{}{}", prefix, "AdditionalInfo"), &field_value);
+            params.put(&format!("{}{}", prefix, "AdditionalInfo"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.allow_version_upgrade {
             params.put(&format!("{}{}", prefix, "AllowVersionUpgrade"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.automated_snapshot_retention_period {
             params.put(&format!("{}{}", prefix, "AutomatedSnapshotRetentionPeriod"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.availability_zone {
-            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+            params.put(&format!("{}{}", prefix, "AvailabilityZone"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         if let Some(ref field_value) = obj.cluster_parameter_group_name {
             params.put(&format!("{}{}", prefix, "ClusterParameterGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.cluster_security_groups {
             ClusterSecurityGroupNameListSerializer::serialize(params,
@@ -8531,22 +8613,23 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         }
         if let Some(ref field_value) = obj.cluster_subnet_group_name {
             params.put(&format!("{}{}", prefix, "ClusterSubnetGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.elastic_ip {
-            params.put(&format!("{}{}", prefix, "ElasticIp"), &field_value);
+            params.put(&format!("{}{}", prefix, "ElasticIp"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.enhanced_vpc_routing {
             params.put(&format!("{}{}", prefix, "EnhancedVpcRouting"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(&format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.hsm_configuration_identifier {
             params.put(&format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.iam_roles {
             IamRoleArnListSerializer::serialize(params,
@@ -8554,31 +8637,35 @@ impl RestoreFromClusterSnapshotMessageSerializer {
                                                 field_value);
         }
         if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+            params.put(&format!("{}{}", prefix, "KmsKeyId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.node_type {
-            params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
+            params.put(&format!("{}{}", prefix, "NodeType"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.owner_account {
-            params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
+            params.put(&format!("{}{}", prefix, "OwnerAccount"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
+            params.put(&format!("{}{}", prefix, "Port"),
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(&format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.publicly_accessible {
             params.put(&format!("{}{}", prefix, "PubliclyAccessible"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.snapshot_cluster_identifier {
             params.put(&format!("{}{}", prefix, "SnapshotClusterIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "SnapshotIdentifier"),
-                   &obj.snapshot_identifier);
+                   &obj.snapshot_identifier.replace("+", "%2B"));
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(params,
                                                         &format!("{}{}",
@@ -8754,23 +8841,26 @@ impl RestoreTableFromClusterSnapshotMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "NewTableName"),
-                   &obj.new_table_name);
+                   &obj.new_table_name.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "SnapshotIdentifier"),
-                   &obj.snapshot_identifier);
+                   &obj.snapshot_identifier.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "SourceDatabaseName"),
-                   &obj.source_database_name);
+                   &obj.source_database_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.source_schema_name {
-            params.put(&format!("{}{}", prefix, "SourceSchemaName"), &field_value);
+            params.put(&format!("{}{}", prefix, "SourceSchemaName"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "SourceTableName"),
-                   &obj.source_table_name);
+                   &obj.source_table_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.target_database_name {
-            params.put(&format!("{}{}", prefix, "TargetDatabaseName"), &field_value);
+            params.put(&format!("{}{}", prefix, "TargetDatabaseName"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.target_schema_name {
-            params.put(&format!("{}{}", prefix, "TargetSchemaName"), &field_value);
+            params.put(&format!("{}{}", prefix, "TargetSchemaName"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -8849,17 +8939,18 @@ impl RevokeClusterSecurityGroupIngressMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cidrip {
-            params.put(&format!("{}{}", prefix, "CIDRIP"), &field_value);
+            params.put(&format!("{}{}", prefix, "CIDRIP"),
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "ClusterSecurityGroupName"),
-                   &obj.cluster_security_group_name);
+                   &obj.cluster_security_group_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.ec2_security_group_name {
             params.put(&format!("{}{}", prefix, "EC2SecurityGroupName"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.ec2_security_group_owner_id {
             params.put(&format!("{}{}", prefix, "EC2SecurityGroupOwnerId"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -8936,13 +9027,13 @@ impl RevokeSnapshotAccessMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "AccountWithRestoreAccess"),
-                   &obj.account_with_restore_access);
+                   &obj.account_with_restore_access.replace("+", "%2B"));
         if let Some(ref field_value) = obj.snapshot_cluster_identifier {
             params.put(&format!("{}{}", prefix, "SnapshotClusterIdentifier"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         params.put(&format!("{}{}", prefix, "SnapshotIdentifier"),
-                   &obj.snapshot_identifier);
+                   &obj.snapshot_identifier.replace("+", "%2B"));
 
     }
 }
@@ -9012,7 +9103,7 @@ impl RotateEncryptionKeyMessageSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
-                   &obj.cluster_identifier);
+                   &obj.cluster_identifier.replace("+", "%2B"));
 
     }
 }
@@ -10087,10 +10178,12 @@ impl TagSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(&format!("{}{}", prefix, "Key"), &field_value);
+            params.put(&format!("{}{}", prefix, "Key"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }

@@ -151,6 +151,10 @@ path = "../rusoto/services/elasticache"
 optional = true
 path = "../rusoto/services/elasticbeanstalk"
 
+[dependencies.rusoto_efs]
+optional = true
+path = "../rusoto/services/efs"
+
 [dependencies.rusoto_elastictranscoder]
 optional = true
 path = "../rusoto/services/elastictranscoder"
@@ -182,6 +186,10 @@ path = "../rusoto/services/gamelift"
 [dependencies.rusoto_glacier]
 optional = true
 path = "../rusoto/services/glacier"
+
+[dependencies.rusoto_greengrass]
+optional = true
+path = "../rusoto/services/greengrass"
 
 [dependencies.rusoto_iam]
 optional = true
@@ -386,6 +394,7 @@ all = [
 	   	"ecs",
 	   	"elasticache",
 	   	"elasticbeanstalk",
+		"efs",
 	   	"elastictranscoder",
 	   	"elb",
 	   	"elbv2",
@@ -394,6 +403,7 @@ all = [
 	   	"firehose",
 		"gamelift",
 		"glacier",
+		"greengrass",
 	   	"iam",
 	   	"importexport",
 	   	"inspector",
@@ -469,6 +479,7 @@ ecr = ["rusoto_ecr"]
 ecs = ["rusoto_ecs"]
 elasticache = ["rusoto_elasticache"]
 elasticbeanstalk = ["rusoto_elasticbeanstalk"]
+efs = ["rusoto_efs"]
 elastictranscoder = ["rusoto_elastictranscoder"]
 elb = ["rusoto_elb"]
 elbv2 = ["rusoto_elbv2"]
@@ -477,6 +488,7 @@ events = ["rusoto_events"]
 firehose = ["rusoto_firehose"]
 gamelift = ["rusoto_gamelift"]
 glacier = ["rusoto_glacier"]
+greengrass = ["rusoto_greengrass"]
 iam = ["rusoto_iam"]
 importexport = ["rusoto_importexport"]
 inspector = ["rusoto_inspector"]

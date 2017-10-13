@@ -25,16 +25,27 @@ use credential::AwsCredentials;
 /// the Amazon Signature Version 4 signing process
 #[derive(Debug)]
 pub struct SignedRequest {
+    /// The HTTP Method
     pub method: String,
+    /// The AWS Service
     pub service: String,
+    /// The AWS Region
     pub region: Region,
+    /// The HTTP request path
     pub path: String,
+    /// The HTTP Request Headers
     pub headers: BTreeMap<String, Vec<Vec<u8>>>,
+    /// The HTTP request paramaters
     pub params: Params,
+    /// The HTTP/HTTPS protocol
     pub scheme: Option<String>,
+    /// The AWS hostname
     pub hostname: Option<String>,
+    /// The HTTP Content
     pub payload: Option<Vec<u8>>,
+    /// The Standardised query string
     pub canonical_query_string: String,
+    /// The Standardised URI
     pub canonical_uri: String,
 }
 
@@ -55,46 +66,62 @@ impl SignedRequest {
             canonical_uri: String::new(),
         }
     }
+
+    /// Sets the value of the "content-type" header.
     pub fn set_content_type(&mut self, content_type: String) {
         self.add_header("content-type", &content_type);
     }
 
+    /// Sets the target hostname
     pub fn set_hostname(&mut self, hostname: Option<String>) {
         self.hostname = hostname;
     }
 
+    /// Sets the target hostname using the current service type and region
+    ///
+    /// See the implementation of build_hostname to see how this is done
     pub fn set_endpoint_prefix(&mut self, endpoint_prefix: String) {
         self.hostname = Some(build_hostname(&endpoint_prefix, &self.region));
     }
 
+    /// Sets the new body (payload)
     pub fn set_payload(&mut self, payload: Option<Vec<u8>>) {
         self.payload = payload;
     }
 
+    /// Returns the current HTTP method
     pub fn method(&self) -> &str {
         &self.method
     }
 
+    /// Returns the current path
     pub fn path(&self) -> &str {
         &self.path
     }
 
+    /// Invokes `canonical_uri(path)` to return a canonical path
     pub fn canonical_path(&self) -> String {
         canonical_uri(&self.path)
     }
 
+    /// Returns the current canonical URI
     pub fn canonical_uri(&self) -> &str {
         &self.canonical_uri
     }
 
+    /// Returns the current query string
+    ///
+    /// Converts a paramater such as "example param": "examplekey" into "&example+param=examplekey"
     pub fn canonical_query_string(&self) -> &str {
         &self.canonical_query_string
     }
 
+    /// Returns the current headers
     pub fn headers(&self) -> &BTreeMap<String, Vec<Vec<u8>>> {
         &self.headers
     }
 
+    /// Returns the current http scheme (https or http)
     pub fn scheme(&self) -> String {
         match self.scheme {
             Some(ref p) => p.to_string(),
@@ -113,6 +140,7 @@ impl SignedRequest {
         }
     }
 
+    /// Converts hostname to String if it exists, else it invokes build_hostname()
     pub fn hostname(&self) -> String {
         // hostname may be already set by an endpoint prefix
         match self.hostname {
@@ -121,7 +149,7 @@ impl SignedRequest {
         }
     }
 
-    // If the key exists in headers, set it to blank/unoccupied:
+    /// If the key exists in headers, set it to blank/unoccupied:
     pub fn remove_header(&mut self, key: &str) {
         let key_lower = key.to_ascii_lowercase().to_string();
         self.headers.remove(&key_lower);
@@ -145,15 +173,19 @@ impl SignedRequest {
         }
     }
 
+    /// Adds parameter to the HTTP Request
     pub fn add_param<S>(&mut self, key: S, value: S)
         where S: Into<String> {
         self.params.insert(key.into(), Some(value.into()));
     }
 
+    /// Sets paramaters with a given variable of `Params` type
     pub fn set_params(&mut self, params: Params) {
         self.params = params;
     }
 
+    /// Signs the request using Amazon Signature version 4 to verify identity.
+    /// Authorization header uses AWS4-HMAC-SHA256 for signing.
     pub fn sign(&mut self, creds: &AwsCredentials) {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
@@ -243,6 +275,7 @@ impl SignedRequest {
     }
 }
 
+/// Convert payload from Char array to useable <payload, len> format.
 fn digest_payload(payload: &Option<Vec<u8>>) -> (String, usize) {
     let payload = payload.as_ref().unwrap();
     let digest = to_hexdigest(payload);
@@ -250,10 +283,12 @@ fn digest_payload(payload: &Option<Vec<u8>>) -> (String, usize) {
     (digest, len)
 }
 
+/// Takes message and signs it with signing_key
 fn signature(string_to_sign: &str, signing_key: &hmac::SigningKey) -> String {
     hmac::sign(signing_key, string_to_sign.as_bytes()).as_ref().to_hex().to_string()
 }
 
+/// Generates SigningKey using AWS secret, time, region keys and service keys.
 fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> hmac::SigningKey {
     let date_key = hmac::SigningKey::new(&digest::SHA256, format!("AWS4{}", secret).as_bytes());
     let date_hmac = hmac::sign(&date_key,
@@ -295,6 +330,9 @@ fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     signed
 }
 
+/// Canonicalizes headers into the AWS Canonical Form.
+///
+/// Read more about it: [HERE](http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html)
 fn canonical_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     let mut canonical = String::new();
 
@@ -310,6 +348,9 @@ fn canonical_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     canonical
 }
 
+/// Canonicalizes values into the AWS Canonical Form.
+///
+/// Read more about it: [HERE](http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html)
 fn canonical_values(values: &[Vec<u8>]) -> String {
     let mut st = String::new();
     for v in values {
@@ -330,6 +371,7 @@ fn skipped_headers(header: &str) -> bool {
     ["authorization", "content-length", "user-agent"].contains(&header)
 }
 
+/// Returns standardised URI
 fn canonical_uri(path: &str) -> String {
     match path {
         "" => "/".to_string(),
@@ -337,6 +379,9 @@ fn canonical_uri(path: &str) -> String {
     }
 }
 
+/// Canonicalizes query while iterating through the given paramaters
+///
+/// Read more about it: [HERE](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing)
 fn build_canonical_query_string(params: &Params) -> String {
     if params.is_empty() {
         return String::new();
@@ -369,6 +414,7 @@ fn build_canonical_query_string(params: &Params) -> String {
 // encoded as %20 (not using '+', as some encoding schemes do) and extended UTF-8
 // characters must be in the form %XY%ZA%BC
 #[derive(Clone)]
+/// This struct is used to maintain the strict URI encoding standard as proposed by RFC 3986
 pub struct StrictEncodeSet;
 
 impl EncodeSet for StrictEncodeSet {
@@ -386,6 +432,7 @@ impl EncodeSet for StrictEncodeSet {
 }
 
 #[derive(Clone)]
+/// This struct is used to maintain the URI path encoding
 pub struct StrictPathEncodeSet;
 
 impl EncodeSet for StrictPathEncodeSet {
@@ -426,6 +473,8 @@ fn remove_scheme_from_custom_hostname(hostname: &str) -> String {
     hostname.replace("http://", "").replace("https://", "")
 }
 
+/// Takes a `Region` enum and a service and formas a vaild DNS name.
+/// E.g. `Region::ApNortheast1` and `s3` produces `s3.ap-northeast-1.amazonaws.com.cn`
 fn build_hostname(service: &str, region: &Region) -> String {
     //iam has only 1 endpoint, other services have region-based endpoints
     match service {

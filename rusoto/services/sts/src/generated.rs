@@ -125,22 +125,27 @@ impl AssumeRoleRequestSerializer {
 
         if let Some(ref field_value) = obj.duration_seconds {
             params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.external_id {
-            params.put(&format!("{}{}", prefix, "ExternalId"), &field_value);
+            params.put(&format!("{}{}", prefix, "ExternalId"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"), &field_value);
+            params.put(&format!("{}{}", prefix, "Policy"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "RoleArn"), &obj.role_arn);
+        params.put(&format!("{}{}", prefix, "RoleArn"),
+                   &obj.role_arn.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "RoleSessionName"),
-                   &obj.role_session_name);
+                   &obj.role_session_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.serial_number {
-            params.put(&format!("{}{}", prefix, "SerialNumber"), &field_value);
+            params.put(&format!("{}{}", prefix, "SerialNumber"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.token_code {
-            params.put(&format!("{}{}", prefix, "TokenCode"), &field_value);
+            params.put(&format!("{}{}", prefix, "TokenCode"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -236,15 +241,18 @@ impl AssumeRoleWithSAMLRequestSerializer {
 
         if let Some(ref field_value) = obj.duration_seconds {
             params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"), &field_value);
+            params.put(&format!("{}{}", prefix, "Policy"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "PrincipalArn"), &obj.principal_arn);
-        params.put(&format!("{}{}", prefix, "RoleArn"), &obj.role_arn);
+        params.put(&format!("{}{}", prefix, "PrincipalArn"),
+                   &obj.principal_arn.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "RoleArn"),
+                   &obj.role_arn.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "SAMLAssertion"),
-                   &obj.saml_assertion);
+                   &obj.saml_assertion.replace("+", "%2B"));
 
     }
 }
@@ -373,19 +381,22 @@ impl AssumeRoleWithWebIdentityRequestSerializer {
 
         if let Some(ref field_value) = obj.duration_seconds {
             params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"), &field_value);
+            params.put(&format!("{}{}", prefix, "Policy"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.provider_id {
-            params.put(&format!("{}{}", prefix, "ProviderId"), &field_value);
+            params.put(&format!("{}{}", prefix, "ProviderId"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "RoleArn"), &obj.role_arn);
+        params.put(&format!("{}{}", prefix, "RoleArn"),
+                   &obj.role_arn.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "RoleSessionName"),
-                   &obj.role_session_name);
+                   &obj.role_session_name.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "WebIdentityToken"),
-                   &obj.web_identity_token);
+                   &obj.web_identity_token.replace("+", "%2B"));
 
     }
 }
@@ -657,7 +668,7 @@ impl DecodeAuthorizationMessageRequestSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "EncodedMessage"),
-                   &obj.encoded_message);
+                   &obj.encoded_message.replace("+", "%2B"));
 
     }
 }
@@ -896,11 +907,13 @@ impl GetFederationTokenRequestSerializer {
 
         if let Some(ref field_value) = obj.duration_seconds {
             params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"),
+                   &obj.name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"), &field_value);
+            params.put(&format!("{}{}", prefix, "Policy"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -992,13 +1005,15 @@ impl GetSessionTokenRequestSerializer {
 
         if let Some(ref field_value) = obj.duration_seconds {
             params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.serial_number {
-            params.put(&format!("{}{}", prefix, "SerialNumber"), &field_value);
+            params.put(&format!("{}{}", prefix, "SerialNumber"),
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.token_code {
-            params.put(&format!("{}{}", prefix, "TokenCode"), &field_value);
+            params.put(&format!("{}{}", prefix, "TokenCode"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
