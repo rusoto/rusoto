@@ -19,8 +19,8 @@ pub const DEFAULT_ROLE_DURATION_SECONDS: i32 = 900;
 
 /// Trait for conversions from STS Credentials to AWS Credentials.
 pub trait NewAwsCredsForStsCreds {
-    /// Creates an [AwsCredentials](../struct.AwsCredentials.html) from a [Credentials](struct.Credentials.html)
-    /// Returns a [CredentialsError](../struct.CredentialsError.html) in case of an error.
+    /// Creates an [AwsCredentials](../rusoto_credential/struct.AwsCredentials.html) from a [Credentials](struct.Credentials.html)
+    /// Returns a [CredentialsError](../rusoto_credential/struct.CredentialsError.html) in case of an error.
     fn new_for_credentials(sts_creds: ::Credentials) -> Result<AwsCredentials, CredentialsError>;
 }
 
@@ -84,7 +84,7 @@ impl<T> StsSessionCredentialsClient for T where T: Sts {
     }
 }
 
-/// [AwsCredentials](../struct.AwsCredentials.html) provider that calls
+/// [AwsCredentials](../rusoto_credential/struct.AwsCredentials.html) provider that calls
 /// `GetSessionToken` using the provided [StsClient](struct.StsClient.html).
 /// To use with MFA, pass in the MFA serial number then set the MFA code.
 /// You will need to ensure the provider has a valid code each time you
@@ -153,7 +153,7 @@ impl ProvideAwsCredentials for StsSessionCredentialsProvider {
     }
 }
 
-/// [AwsCredentials](../struct.AwsCredentials.html) provider that calls
+/// [AwsCredentials](../rusoto_credential/struct.AwsCredentials.html) provider that calls
 /// `AssumeRole` using the provided [StsClient](struct.StsClient.html).
 /// To use with MFA, pass in the MFA serial number then set the MFA code.
 /// You will need to ensure the provider has a valid code each time you
@@ -242,7 +242,7 @@ impl ProvideAwsCredentials for StsAssumeRoleSessionCredentialsProvider {
     }
 }
 
-/// [AwsCredentials](../struct.AwsCredentials.html) provider that calls
+/// [AwsCredentials](../rusoto_credential/struct.AwsCredentials.html) provider that calls
 /// `AssumeRoleWithWebIdentity` using the provided [StsClient](struct.StsClient.html).
 pub struct StsWebIdentityFederationSessionCredentialsProvider {
     sts_client: Box<StsSessionCredentialsClient>,
