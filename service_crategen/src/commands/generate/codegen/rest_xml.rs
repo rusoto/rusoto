@@ -89,10 +89,13 @@ impl GenerateProtocol for RestXmlGenerator {
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         let mut imports = "
             use std::str::{FromStr};
+            use std::io::Write;
             use xml::reader::ParserConfig;
             use rusoto_core::param::{Params, ServiceParams};
             use rusoto_core::signature::SignedRequest;
+            use xml;
             use xml::EventReader;
+            use xml::EventWriter;
             use xml::reader::XmlEvent;
             use rusoto_core::xmlerror::*;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
@@ -193,9 +196,10 @@ fn generate_payload_serialization(service: &Service, operation: &Operation) -> O
         // payload. In that case, the payload should include members whose "location" parameter is
         // missing.
         let xmlns = input.xml_namespace.as_ref().unwrap();
-        parts.push(format!("let payload = {name}Serializer::serialize(\"{name}\", &input, \"{xmlns}\").into_bytes();", name = input.shape, xmlns = xmlns.uri));
+        parts.push("let mut writer = EventWriter::new(Vec::new());".to_owned());
+        parts.push(format!("{name}Serializer::serialize(&mut writer, \"{name}\", &input, \"{xmlns}\");", name = input.shape, xmlns = xmlns.uri));
         parts.push(generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()));
-        parts.push("request.set_payload(Some(payload));".to_owned());
+        parts.push("request.set_payload(Some(writer.into_inner()));".to_owned());
     }
 
     Some(parts.join("\n"))
@@ -237,12 +241,14 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
     // otherwise serialize the object to XML and use that as the payload
     else if shape.required(payload_field) {
         // some payload types are not required members of their shape
-        format!("payload = {xml_type}Serializer::serialize(\"{xml_type}\", &input.{payload_field}).into_bytes();",
+        format!("let mut writer = EventWriter::new(Vec::new()); {xml_type}Serializer::serialize(&mut writer, \"{xml_type}\", &input.{payload_field}); payload = writer.into_inner();",
                 payload_field = payload_field.to_snake_case(),
                 xml_type = payload_member.shape)
     } else {
         format!("if input.{payload_field}.is_some() {{
-                    payload = {xml_type}Serializer::serialize(\"{location_name}\", input.{payload_field}.as_ref().unwrap()).into_bytes();
+                    let mut writer = EventWriter::new(Vec::new());
+                    {xml_type}Serializer::serialize(&mut writer, \"{location_name}\", input.{payload_field}.as_ref().unwrap());
+                    payload = writer.into_inner();
                 }} else {{
                     payload = Vec::new();
                 }}",
@@ -284,7 +290,7 @@ fn generate_serializer_body(shape: &Shape, service: &Service) -> String {
 fn generate_serializer_signature(name: &str) -> String {
     format!("
         #[allow(unused_variables, warnings)]
-        pub fn serialize(name: &str, obj: &{}) -> String",
+        pub fn serialize<W>(mut writer: &mut EventWriter<W>, name: &str, obj: &{}) -> Result<(), xml::writer::Error> where W: Write",
             name)
 }
 
@@ -293,10 +299,11 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
         ShapeType::Blob => "String::from_utf8(obj.to_vec()).expect(\"Not a UTF-8 string\")",
         _ => "obj.to_string()",
     };
-    format!("format!(\"<{{name}}>{{value}}</{{name}}>\",
-                name = name,
-                value = {value_str})",
-            value_str = value_str)
+    format!("
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value = {value_str})))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+        ", value_str = value_str)
 }
 
 fn generate_list_serializer(shape: &Shape) -> String {
@@ -309,32 +316,33 @@ fn generate_list_serializer(shape: &Shape) -> String {
 
     let member = shape.member.as_ref().expect("Member shape undefined");
     let element_type = &mutate_type_name(&member.shape);
-    let mut serializer = "let mut parts: Vec<String> = Vec::new();".to_owned();
+    let mut serializer = "".to_owned();
 
     if flattened {
         serializer += &format!("
             for element in obj {{
-                parts.push({element_type}Serializer::serialize(name, element));
+                {element_type}Serializer::serialize(writer, name, element)?;
             }}", element_type = element_type);
     } else {
-        serializer += "parts.push(format!(\"<{}>\", name));";
+        serializer += "writer.write(xml::writer::XmlEvent::start_element(name))?;";
         serializer += &format!("
             for element in obj {{
-                parts.push({element_type}Serializer::serialize(\"{location_name}\", element));
+                {element_type}Serializer::serialize(writer, \"{location_name}\", element)?;
             }}", element_type = element_type, location_name = member.location_name.as_ref().unwrap());
-        serializer += "parts.push(format!(\"</{}>\", name));";
+        serializer += "writer.write(xml::writer::XmlEvent::end_element())?;";
     }
 
-    serializer += "parts.join(\"\")";
+    serializer += "Ok(())";
     serializer
 }
 
 fn generate_map_serializer(_shape: &Shape) -> String {
-    "String::new()".to_string()
+    // No rest-xml services use Map shape type currently.
+    unreachable!()
 }
 
 fn generate_struct_serializer(shape: &Shape, service: &Service) -> String {
-    let mut serializer = "let mut serialized = format!(\"<{name}>\", name=name);".to_owned();
+    let mut serializer = "writer.write(xml::writer::XmlEvent::start_element(name))?;".to_owned();
 
     for (member_name, member) in shape.members.as_ref().unwrap().iter() {
         // look up member.shape in all_shapes.  use that shape.member.location_name
@@ -360,8 +368,7 @@ fn generate_struct_serializer(shape: &Shape, service: &Service) -> String {
         }
     }
 
-    serializer += "serialized += &format!(\"</{name}>\", name=name);";
-    serializer += "serialized";
+    serializer += "writer.write(xml::writer::XmlEvent::end_element())";
     serializer
 }
 
@@ -371,14 +378,18 @@ fn generate_primitive_struct_field_serializer(shape: &Shape,
                                               -> String {
     if shape.required(member_name) {
         format!(
-            "serialized += &format!(\"<{location_name}>{{value}}</{location_name}>\", value=obj.{field_name});",
+            "writer.write(xml::writer::XmlEvent::start_element(\"{location_name}\"))?;
+             writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value=obj.{field_name})))?;
+             writer.write(xml::writer::XmlEvent::end_element())?;",
             field_name = generate_field_name(member_name),
             location_name = location_name,
         )
     } else {
         format!(
             "if let Some(ref value) = obj.{field_name} {{
-                serialized += &format!(\"<{location_name}>{{value}}</{location_name}>\", value=value);
+                writer.write(xml::writer::XmlEvent::start_element(\"{location_name}\"))?;
+                writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value=value)));
+                writer.write(xml::writer::XmlEvent::end_element())?;
             }}",
             field_name = generate_field_name(member_name),
             location_name = location_name,
@@ -392,14 +403,14 @@ fn generate_complex_struct_field_serializer(shape: &Shape,
                                             member_name: &str)
                                             -> String {
     if shape.required(member_name) {
-        format!("serialized += &{xml_type}Serializer::serialize(\"{location_name}\", &obj.{field_name});",
+        format!("{xml_type}Serializer::serialize(&mut writer, \"{location_name}\", &obj.{field_name})?;",
                 xml_type = member.shape,
                 location_name = location_name,
                 field_name = generate_field_name(member_name))
     } else {
         format!("
             if let Some(ref value) = obj.{field_name} {{
-                serialized += &{xml_type}Serializer::serialize(\"{location_name}\", value);
+                &{xml_type}Serializer::serialize(&mut writer, \"{location_name}\", value)?;
             }}",
                 xml_type = member.shape,
                 location_name = location_name,
@@ -426,16 +437,15 @@ fn generate_request_payload_serializer(name: &str, shape: &Shape) -> String {
     parts.push(format!("pub struct {name}Serializer;", name = name));
     parts.push(format!("impl {name}Serializer {{", name = name));
     parts.push("#[allow(unused_variables, warnings)]".to_owned());
-    parts.push(format!("pub fn serialize(name: &str, obj: &{name}, xmlns: &str) -> String {{", name = name));
-    parts.push("let mut serialized = format!(\"<{name} xmlns=\\\"{xmlns}\\\">\", name=name, xmlns=xmlns);".to_owned());
+    parts.push(format!("pub fn serialize<W>(mut writer: &mut EventWriter<W>, name: &str, obj: &{name}, xmlns: &str) -> Result<(), xml::writer::Error> where W: Write {{", name = name));
+    parts.push("writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;".to_owned());
     for (member_name, member) in shape.members.as_ref().unwrap() {
         if member.location.is_none() {
             let location_name = member.location_name.as_ref().unwrap_or(member_name);
             parts.push(generate_complex_struct_field_serializer(shape, member, location_name, member_name));
         }
     }
-    parts.push("serialized += &format!(\"</{name}>\", name=name);".to_owned());
-    parts.push("serialized".to_owned());
+    parts.push("writer.write(xml::writer::XmlEvent::end_element())".to_owned());
     parts.push("}}".to_owned());
-    parts.join("\n")
+    parts.join("")
 }

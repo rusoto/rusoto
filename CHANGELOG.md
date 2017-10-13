@@ -15,6 +15,7 @@
 - Updated ring dependency
 - Added Elastic Filesystem service
 - Fix broken links on the STS documentation
+- Use xml::EventWriter to serialize XML payload
 
 ## [0.28.0] - 2017-08-25
 
