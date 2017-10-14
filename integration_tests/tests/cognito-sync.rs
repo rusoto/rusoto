@@ -13,5 +13,5 @@ fn should_list_identity_pool_usage() {
     let request = ListIdentityPoolUsageRequest::default();
 
     let result = client.list_identity_pool_usage(&request).unwrap();
-	println!("{:#?}", result);
+    println!("{:#?}", result);
 }
