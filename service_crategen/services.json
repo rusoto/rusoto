@@ -125,6 +125,12 @@
     "protocolVersion": "2016-04-18",
     "baseTypeName": "CognitoIdentityProvider"
   },
+  "cognito-sync": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2014-06-30",
+    "baseTypeName": "CognitoSync"
+  },
   "config": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
