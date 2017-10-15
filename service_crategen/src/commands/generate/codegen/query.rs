@@ -304,7 +304,7 @@ fn optional_primitive_field_serializer(service: &Service,
     let expression = serialize_primitive_expression(&member_shape.shape_type, "field_value");
 
     format!("if let Some(ref field_value) = obj.{field_name} {{
-                params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression});
+                params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression}.replace(\"+\", \"%2B\"));
             }}",
             field_name = generate_field_name(member_name),
             expression = expression,
@@ -320,7 +320,7 @@ fn required_primitive_field_serializer(service: &Service,
                                                     &format!("obj.{}",
                                                              generate_field_name(member_name)));
 
-    format!("params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression});",
+    format!("params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression}.replace(\"+\", \"%2B\"));",
             expression = expression,
             tag_name = member_location(service, member, member_name))
 }

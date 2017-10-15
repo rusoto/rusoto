@@ -51,6 +51,10 @@ path = "../rusoto/services/autoscaling"
 optional = true
 path = "../rusoto/services/batch"
 
+[dependencies.rusoto_clouddirectory]
+optional = true
+path = "../rusoto/services/clouddirectory"
+
 [dependencies.rusoto_cloudformation]
 optional = true
 path = "../rusoto/services/cloudformation"
@@ -66,6 +70,10 @@ path = "../rusoto/services/cloudhsm"
 [dependencies.rusoto_cloudsearch]
 optional = true
 path = "../rusoto/services/cloudsearch"
+
+[dependencies.rusoto_cloudsearchdomain]
+optional = true
+path = "../rusoto/services/cloudsearchdomain"
 
 [dependencies.rusoto_cloudtrail]
 optional = true
@@ -98,6 +106,10 @@ path = "../rusoto/services/cognito-identity"
 [dependencies.rusoto_cognito_idp]
 optional = true
 path = "../rusoto/services/cognito-idp"
+
+[dependencies.rusoto_cognito_sync]
+optional = true
+path = "../rusoto/services/cognito-sync"
 
 [dependencies.rusoto_config]
 optional = true
@@ -155,6 +167,10 @@ path = "../rusoto/services/elasticache"
 optional = true
 path = "../rusoto/services/elasticbeanstalk"
 
+[dependencies.rusoto_efs]
+optional = true
+path = "../rusoto/services/efs"
+
 [dependencies.rusoto_elastictranscoder]
 optional = true
 path = "../rusoto/services/elastictranscoder"
@@ -186,6 +202,10 @@ path = "../rusoto/services/gamelift"
 [dependencies.rusoto_glacier]
 optional = true
 path = "../rusoto/services/glacier"
+
+[dependencies.rusoto_greengrass]
+optional = true
+path = "../rusoto/services/greengrass"
 
 [dependencies.rusoto_iam]
 optional = true
@@ -363,10 +383,12 @@ all = [
 		"athena",
 	   	"autoscaling",
         "batch",
+		"clouddirectory",
 	   	"cloudformation",
 	   	"cloudfront",
 	   	"cloudhsm",
 	   	"cloudsearch",
+		"cloudsearchdomain",
 	   	"cloudtrail",
 	   	"cloudwatch",
 		"codebuild",
@@ -375,6 +397,7 @@ all = [
 	   	"codepipeline",
 	   	"cognito-identity",
 		"cognito-idp",
+		"cognito-sync",
 	   	"config",
 		"cur",
 	   	"datapipeline",
@@ -389,6 +412,7 @@ all = [
 	   	"ecs",
 	   	"elasticache",
 	   	"elasticbeanstalk",
+		"efs",
 	   	"elastictranscoder",
 	   	"elb",
 	   	"elbv2",
@@ -397,6 +421,7 @@ all = [
 	   	"firehose",
 		"gamelift",
 		"glacier",
+		"greengrass",
 	   	"iam",
 	   	"importexport",
 	   	"inspector",
@@ -445,10 +470,12 @@ appstream = ["rusoto_appstream"]
 athena = ["rusoto_athena"]
 autoscaling = ["rusoto_autoscaling"]
 batch = ["rusoto_batch"]
+clouddirectory = ["rusoto_clouddirectory"]
 cloudformation = ["rusoto_cloudformation"]
 cloudfront = ["rusoto_cloudfront"]
 cloudhsm = ["rusoto_cloudhsm"]
 cloudsearch = ["rusoto_cloudsearch"]
+cloudsearchdomain = ["rusoto_cloudsearchdomain"]
 cloudtrail = ["rusoto_cloudtrail"]
 cloudwatch = ["rusoto_cloudwatch"]
 codebuild = ["rusoto_codebuild"]
@@ -457,6 +484,7 @@ codedeploy = ["rusoto_codedeploy"]
 codepipeline = ["rusoto_codepipeline"]
 cognito-identity = ["rusoto_cognito_identity"]
 cognito-idp = ["rusoto_cognito_idp"]
+cognito-sync = ["rusoto_cognito_sync"]
 config = ["rusoto_config"]
 cur = ["rusoto_cur"]
 datapipeline = ["rusoto_datapipeline"]
@@ -471,6 +499,7 @@ ecr = ["rusoto_ecr"]
 ecs = ["rusoto_ecs"]
 elasticache = ["rusoto_elasticache"]
 elasticbeanstalk = ["rusoto_elasticbeanstalk"]
+efs = ["rusoto_efs"]
 elastictranscoder = ["rusoto_elastictranscoder"]
 elb = ["rusoto_elb"]
 elbv2 = ["rusoto_elbv2"]
@@ -479,6 +508,7 @@ events = ["rusoto_events"]
 firehose = ["rusoto_firehose"]
 gamelift = ["rusoto_gamelift"]
 glacier = ["rusoto_glacier"]
+greengrass = ["rusoto_greengrass"]
 iam = ["rusoto_iam"]
 importexport = ["rusoto_importexport"]
 inspector = ["rusoto_inspector"]

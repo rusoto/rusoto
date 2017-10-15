@@ -34,12 +34,18 @@
     "coreVersion": "0.28.0",
     "protocolVersion": "2011-01-01",
     "baseTypeName": "Autoscaling"
-  },  
+  },
   "batch": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
     "protocolVersion": "2016-08-10",
     "baseTypeName": "Batch"
+  },
+  "clouddirectory": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2016-05-10",
+    "baseTypeName": "CloudDirectory"
   },
   "cloudformation": {
     "version": "0.28.0",
@@ -64,6 +70,12 @@
     "coreVersion": "0.28.0",
     "protocolVersion": "2013-01-01",
     "baseTypeName": "CloudSearch"
+  },
+  "cloudsearchdomain": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2013-01-01",
+    "baseTypeName": "CloudSearchDomain"
   },
   "cloudtrail": {
     "version": "0.28.0",
@@ -112,6 +124,12 @@
     "coreVersion": "0.28.0",
     "protocolVersion": "2016-04-18",
     "baseTypeName": "CognitoIdentityProvider"
+  },
+  "cognito-sync": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2014-06-30",
+    "baseTypeName": "CognitoSync"
   },
   "config": {
     "version": "0.28.0",
@@ -197,6 +215,12 @@
     "protocolVersion": "2010-12-01",
     "baseTypeName": "ElasticBeanstalk"
   },
+  "efs": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2015-02-01",
+    "baseTypeName": "Efs"
+  },
   "elastictranscoder": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
@@ -244,6 +268,12 @@
     "coreVersion": "0.28.0",
     "protocolVersion": "2012-06-01",
     "baseTypeName": "Glacier"
+  },
+  "greengrass": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2017-06-07",
+    "baseTypeName": "GreenGrass"
   },
   "health": {
     "version": "0.28.0",

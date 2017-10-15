@@ -1,8 +1,10 @@
 #![cfg(feature = "xray")]
 
+extern crate time;
 extern crate rusoto_core;
 extern crate rusoto_xray;
 
+use time::get_time;
 use rusoto_xray::{XRay, XRayClient, GetServiceGraphRequest};
 use rusoto_core::{DefaultCredentialsProvider, Region};
 use rusoto_core::default_tls_client;
@@ -14,7 +16,7 @@ fn should_get_service_graph() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = XRayClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
-    let time: f64 = 1503868350.0; // time at the writing of this test
+    let time = (get_time().sec - 30) as f64; // 30 seconds in the past
 
     let request = GetServiceGraphRequest {
         start_time: time - 600.0,

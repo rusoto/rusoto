@@ -92,8 +92,10 @@ impl AddPermissionRequestSerializer {
         ActionNameListSerializer::serialize(params,
                                             &format!("{}{}", prefix, "Actions"),
                                             &obj.actions);
-        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "Label"),
+                   &obj.label.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
@@ -308,7 +310,8 @@ impl ChangeMessageVisibilityBatchRequestSerializer {
                                                                                   prefix,
                                                                                   "Entries"),
                                                                           &obj.entries);
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
@@ -334,12 +337,12 @@ impl ChangeMessageVisibilityBatchRequestEntrySerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "ReceiptHandle"),
-                   &obj.receipt_handle);
+                   &obj.receipt_handle.replace("+", "%2B"));
         if let Some(ref field_value) = obj.visibility_timeout {
             params.put(&format!("{}{}", prefix, "VisibilityTimeout"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -513,11 +516,12 @@ impl ChangeMessageVisibilityRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "ReceiptHandle"),
-                   &obj.receipt_handle);
+                   &obj.receipt_handle.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "VisibilityTimeout"),
-                   &obj.visibility_timeout.to_string());
+                   &obj.visibility_timeout.to_string().replace("+", "%2B"));
 
     }
 }
@@ -546,7 +550,8 @@ impl CreateQueueRequestSerializer {
                                                    &format!("{}{}", prefix, "Attribute"),
                                                    field_value);
         }
-        params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
+        params.put(&format!("{}{}", prefix, "QueueName"),
+                   &obj.queue_name.replace("+", "%2B"));
 
     }
 }
@@ -624,7 +629,8 @@ impl DeleteMessageBatchRequestSerializer {
                                                                         prefix,
                                                                         "Entries"),
                                                                 &obj.entries);
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
@@ -648,9 +654,9 @@ impl DeleteMessageBatchRequestEntrySerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "ReceiptHandle"),
-                   &obj.receipt_handle);
+                   &obj.receipt_handle.replace("+", "%2B"));
 
     }
 }
@@ -819,9 +825,10 @@ impl DeleteMessageRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
         params.put(&format!("{}{}", prefix, "ReceiptHandle"),
-                   &obj.receipt_handle);
+                   &obj.receipt_handle.replace("+", "%2B"));
 
     }
 }
@@ -843,7 +850,8 @@ impl DeleteQueueRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
@@ -872,7 +880,8 @@ impl GetQueueAttributesRequestSerializer {
                                                    &format!("{}{}", prefix, "AttributeNames"),
                                                    field_value);
         }
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
@@ -946,10 +955,11 @@ impl GetQueueUrlRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
+        params.put(&format!("{}{}", prefix, "QueueName"),
+                   &obj.queue_name.replace("+", "%2B"));
         if let Some(ref field_value) = obj.queue_owner_aws_account_id {
             params.put(&format!("{}{}", prefix, "QueueOwnerAWSAccountId"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1021,7 +1031,8 @@ impl ListDeadLetterSourceQueuesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
@@ -1094,7 +1105,8 @@ impl ListQueuesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.queue_name_prefix {
-            params.put(&format!("{}{}", prefix, "QueueNamePrefix"), &field_value);
+            params.put(&format!("{}{}", prefix, "QueueNamePrefix"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1339,16 +1351,20 @@ impl MessageAttributeValueSerializer {
         }
         if let Some(ref field_value) = obj.binary_value {
             params.put(&format!("{}{}", prefix, "BinaryValue"),
-                       ::std::str::from_utf8(&field_value).unwrap());
+                       ::std::str::from_utf8(&field_value)
+                           .unwrap()
+                           .replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "DataType"), &obj.data_type);
+        params.put(&format!("{}{}", prefix, "DataType"),
+                   &obj.data_type.replace("+", "%2B"));
         if let Some(ref field_value) = obj.string_list_values {
             StringListSerializer::serialize(params,
                                             &format!("{}{}", prefix, "StringListValue"),
                                             field_value);
         }
         if let Some(ref field_value) = obj.string_value {
-            params.put(&format!("{}{}", prefix, "StringValue"), &field_value);
+            params.put(&format!("{}{}", prefix, "StringValue"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1472,7 +1488,8 @@ impl PurgeQueueRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
@@ -1591,7 +1608,7 @@ impl ReceiveMessageRequestSerializer {
         }
         if let Some(ref field_value) = obj.max_number_of_messages {
             params.put(&format!("{}{}", prefix, "MaxNumberOfMessages"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.message_attribute_names {
             MessageAttributeNameListSerializer::serialize(params,
@@ -1600,18 +1617,19 @@ impl ReceiveMessageRequestSerializer {
                                                                   "MessageAttributeNames"),
                                                           field_value);
         }
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
         if let Some(ref field_value) = obj.receive_request_attempt_id {
             params.put(&format!("{}{}", prefix, "ReceiveRequestAttemptId"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.visibility_timeout {
             params.put(&format!("{}{}", prefix, "VisibilityTimeout"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.wait_time_seconds {
             params.put(&format!("{}{}", prefix, "WaitTimeSeconds"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
 
     }
@@ -1685,8 +1703,10 @@ impl RemovePermissionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "Label"),
+                   &obj.label.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
@@ -1713,7 +1733,8 @@ impl SendMessageBatchRequestSerializer {
         SendMessageBatchRequestEntryListSerializer::serialize(params,
                                                               &format!("{}{}", prefix, "Entries"),
                                                               &obj.entries);
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
@@ -1747,9 +1768,9 @@ impl SendMessageBatchRequestEntrySerializer {
 
         if let Some(ref field_value) = obj.delay_seconds {
             params.put(&format!("{}{}", prefix, "DelaySeconds"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id.replace("+", "%2B"));
         if let Some(ref field_value) = obj.message_attributes {
             MessageBodyAttributeMapSerializer::serialize(params,
                                                          &format!("{}{}",
@@ -1757,13 +1778,15 @@ impl SendMessageBatchRequestEntrySerializer {
                                                                  "MessageAttribute"),
                                                          field_value);
         }
-        params.put(&format!("{}{}", prefix, "MessageBody"), &obj.message_body);
+        params.put(&format!("{}{}", prefix, "MessageBody"),
+                   &obj.message_body.replace("+", "%2B"));
         if let Some(ref field_value) = obj.message_deduplication_id {
             params.put(&format!("{}{}", prefix, "MessageDeduplicationId"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.message_group_id {
-            params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
+            params.put(&format!("{}{}", prefix, "MessageGroupId"),
+                       &field_value.replace("+", "%2B"));
         }
 
     }
@@ -1969,7 +1992,7 @@ impl SendMessageRequestSerializer {
 
         if let Some(ref field_value) = obj.delay_seconds {
             params.put(&format!("{}{}", prefix, "DelaySeconds"),
-                       &field_value.to_string());
+                       &field_value.to_string().replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.message_attributes {
             MessageBodyAttributeMapSerializer::serialize(params,
@@ -1978,15 +2001,18 @@ impl SendMessageRequestSerializer {
                                                                  "MessageAttribute"),
                                                          field_value);
         }
-        params.put(&format!("{}{}", prefix, "MessageBody"), &obj.message_body);
+        params.put(&format!("{}{}", prefix, "MessageBody"),
+                   &obj.message_body.replace("+", "%2B"));
         if let Some(ref field_value) = obj.message_deduplication_id {
             params.put(&format!("{}{}", prefix, "MessageDeduplicationId"),
-                       &field_value);
+                       &field_value.replace("+", "%2B"));
         }
         if let Some(ref field_value) = obj.message_group_id {
-            params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
+            params.put(&format!("{}{}", prefix, "MessageGroupId"),
+                       &field_value.replace("+", "%2B"));
         }
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
@@ -2083,7 +2109,8 @@ impl SetQueueAttributesRequestSerializer {
         QueueAttributeMapSerializer::serialize(params,
                                                &format!("{}{}", prefix, "Attribute"),
                                                &obj.attributes);
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "QueueUrl"),
+                   &obj.queue_url.replace("+", "%2B"));
 
     }
 }
