@@ -11,13 +11,11 @@
 //
 // =================================================================
 
-//! AWS Greengrass seamlessly extends AWS onto physical devices so they can act locally on the data they generate, while still using the cloud for management, analytics, and durable storage. AWS Greengrass ensures your devices can respond quickly to local events and operate with intermittent connectivity. AWS Greengrass minimizes the cost of transmitting data to the cloud by allowing you to author AWS Lambda functions that execute locally.
+//! Defines service operations used by the GlueFrontendService
 //!
-//! If you're using the service, you're probably looking for [GreenGrassClient](struct.GreenGrassClient.html) and [GreenGrass](trait.GreenGrass.html).
+//! If you're using the service, you're probably looking for [GlueClient](struct.GlueClient.html) and [Glue](trait.Glue.html).
 
 extern crate hyper;
-#[macro_use]
-extern crate log;
 extern crate rusoto_core;
 extern crate serde;
 #[macro_use]
