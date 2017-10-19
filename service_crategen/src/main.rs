@@ -69,6 +69,6 @@ fn main() {
 
         let out_dir = Path::new(matches.value_of("out_dir").unwrap());
 
-        commands::generate::generate_services(service_configs, out_dir);
+        commands::generate::generate_services(&service_configs, out_dir); 
     }
 }

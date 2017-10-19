@@ -18,7 +18,7 @@ pub fn check(services: BTreeMap<String, ServiceConfig>) {
         }
     }
 
-    if missing.len() > 0 {
+    if !missing.is_empty() {
         println!();
         println!("Missing Services");
         println!("================");
@@ -28,7 +28,7 @@ pub fn check(services: BTreeMap<String, ServiceConfig>) {
         }
     }
 
-    if outdated.len() > 0 {
+    if !outdated.is_empty() {
         println!();
         println!("Outdated Services");
         println!("=================");

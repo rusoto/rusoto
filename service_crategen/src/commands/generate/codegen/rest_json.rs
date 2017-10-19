@@ -25,7 +25,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 {method_signature} -> \
                       Result<{output_type}, {error_type}>;
                 ",
-                     documentation = generate_documentation(operation).unwrap_or("".to_owned()),
+                     documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                      method_signature = generate_method_signature(operation, input_shape),
                      error_type = error_type_name(operation_name),
                      output_type = output_type)?
@@ -75,27 +75,27 @@ impl GenerateProtocol for RestJsonGenerator {
                     }}
                 }}
                 ",
-                documentation = generate_documentation(operation).unwrap_or("".to_owned()),
+                documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                 method_signature = generate_method_signature(operation, input_shape),
                 endpoint_prefix = service.signing_name(),
-                modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or("".to_owned()),
+                modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or_else(|| "".to_owned()),
                 http_method = operation.http.method,
                 error_type = error_type_name(operation_name),
                 status_code = http_code_to_status_code(operation.http.response_code),
                 parse_body = generate_body_parser(operation, service),
                 parse_status_code = generate_status_code_parser(operation, service),
                 output_type = output_type,
-                load_headers = rest_request_generator::generate_headers(service, operation).unwrap_or("".to_string()),
+                load_headers = rest_request_generator::generate_headers(service, operation).unwrap_or_else(|| "".to_string()),
                 parse_headers = rest_response_parser::generate_response_headers_parser(service, operation)
                     .unwrap_or_else(|| "".to_owned()),
                 request_uri_formatter = rest_request_generator::generate_uri_formatter(
                     &request_uri,
                     service,
                     operation
-                ).unwrap_or("".to_string()),
-                load_payload = generate_payload(service, &input_shape).unwrap_or("".to_string()),
-                load_params = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or("".to_string()),
-                set_headers = generate_headers(service).unwrap_or("".to_string()),
+                ).unwrap_or_else(|| "".to_string()),
+                load_payload = generate_payload(service, input_shape).unwrap_or_else(|| "".to_string()),
+                load_params = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or_else(|| "".to_string()),
+                set_headers = generate_headers(service).unwrap_or_else(|| "".to_string()),
             )?
         }
         Ok(())

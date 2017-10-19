@@ -5,13 +5,13 @@ use config::ServiceConfig;
 use botocore::{ServiceDefinition, Value, Member, Shape, ShapeType, Operation};
 
 #[derive(Debug)]
-pub struct Service {
-    config: ::ServiceConfig,
+pub struct Service<'a> {
+    config: &'a ::ServiceConfig,
     definition: ServiceDefinition
 }
 
-impl Service {
-    pub fn new(config: ServiceConfig, definition: ServiceDefinition) -> Self {
+impl <'b> Service <'b> {
+    pub fn new(config: &'b ServiceConfig, definition: ServiceDefinition) -> Self {
         Service {
             config: config,
             definition: definition
@@ -82,7 +82,7 @@ impl Service {
     }
 
     pub fn shape_type_for_member<'a>(&'a self, member: &Member) -> Option<ShapeType> {
-        self.definition.shapes.get(&member.shape).map(|ref shape| shape.shape_type)
+        self.definition.shapes.get(&member.shape).map(|shape| shape.shape_type)
     }
 
     pub fn signing_name(&self) -> String {
@@ -110,7 +110,7 @@ impl Service {
                 dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
                 dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
             },
-            "query" | "ec2" => {
+            "query" | "ec2" | "rest-xml" => {
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.6".into()));
             },
             "rest-json" => {
@@ -118,9 +118,6 @@ impl Service {
                 dependencies.insert("serde".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
                 dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
                 dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
-            },
-            "rest-xml" => {
-                dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.6".into()));
             },
             protocol => panic!("Unknown protocol {}", protocol),
         }

@@ -12,6 +12,14 @@ license = "MIT"
 repository = "https://github.com/rusoto/rusoto"
 homepage = "https://www.rusoto.org/"
 
+[profile.dev]
+codegen-units = 2
+debug = false
+
+[profile.test]
+codegen-units = 2
+debug = false
+
 [dependencies.rusoto_core]
 path = "../rusoto/core"
 
@@ -372,7 +380,7 @@ all = [
         "apigateway",
 		"application-autoscaling",
 		"appstream",
-		"athena",		
+		"athena",
 	   	"autoscaling",
         "batch",
 		"clouddirectory",

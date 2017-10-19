@@ -65,17 +65,17 @@ impl GenerateProtocol for RestXmlGenerator {
                      method_signature = generate_method_signature(operation_name, operation),
                      error_type = error_type_name(operation_name),
                      build_payload = generate_payload_serialization(service, operation)
-                         .unwrap_or("".to_string()),
+                         .unwrap_or_else(|| "".to_string()),
                      modify_uri = rest_request_generator::generate_uri_formatter(&request_uri,
                                                                                  service,
                                                                                  operation)
-                         .unwrap_or("".to_string()),
+                         .unwrap_or_else(|| "".to_string()),
                      set_headers = rest_request_generator::generate_headers(service, operation)
-                         .unwrap_or("".to_string()),
+                         .unwrap_or_else(|| "".to_string()),
                      set_parameters =
                          rest_request_generator::generate_params_loading_string(service,
                                                                                 operation)
-                             .unwrap_or("".to_string()),
+                             .unwrap_or_else(|| "".to_string()),
                      parse_non_payload =
                          rest_response_parser::generate_response_headers_parser(service,
                                                                                 operation)
