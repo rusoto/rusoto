@@ -448,6 +448,12 @@
     "protocolVersion": "2010-12-01",
     "baseTypeName": "Ses"
   },
+  "shield": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2016-06-02",
+    "baseTypeName": "Shield"
+  },
   "sms": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
