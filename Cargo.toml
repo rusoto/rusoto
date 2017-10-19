@@ -29,6 +29,7 @@ members = [
     "rusoto/services/dax",
     "rusoto/services/devicefarm",
     "rusoto/services/directconnect",
+    "rusoto/services/discovery",
     "rusoto/services/dms",
     "rusoto/services/ds",
     "rusoto/services/dynamodb",
