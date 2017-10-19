@@ -41,6 +41,12 @@
     "protocolVersion": "2016-08-10",
     "baseTypeName": "Batch"
   },
+  "budgets": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2016-10-20",
+    "baseTypeName": "Budgets"
+  },
   "clouddirectory": {
     "version": "0.29.0",
     "coreVersion": "0.29.0",

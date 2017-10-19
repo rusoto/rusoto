@@ -9,6 +9,7 @@ members = [
     "rusoto/services/athena",
     "rusoto/services/autoscaling",
     "rusoto/services/batch",
+    "rusoto/services/budgets",
     "rusoto/services/clouddirectory",
     "rusoto/services/cloudformation",
     "rusoto/services/cloudfront",
