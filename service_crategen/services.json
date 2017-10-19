@@ -377,6 +377,12 @@
     "protocolVersion": "2016-01-14",
     "baseTypeName": "MarketplaceMetering"
   },
+  "mgh": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2017-05-31",
+    "baseTypeName": "MigrationHub"
+  },
   "mturk": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
