@@ -123,6 +123,10 @@ path = "../rusoto/services/cur"
 optional = true
 path = "../rusoto/services/datapipeline"
 
+[dependencies.rusoto_dax]
+optional = true
+path = "../rusoto/services/dax"
+
 [dependencies.rusoto_devicefarm]
 optional = true
 path = "../rusoto/services/devicefarm"
@@ -401,6 +405,7 @@ all = [
 	   	"config",
 		"cur",
 	   	"datapipeline",
+		"dax",
 	   	"devicefarm",
 	   	"directconnect",
 		"dms",
@@ -488,6 +493,7 @@ cognito-sync = ["rusoto_cognito_sync"]
 config = ["rusoto_config"]
 cur = ["rusoto_cur"]
 datapipeline = ["rusoto_datapipeline"]
+dax = ["rusoto_dax"]
 devicefarm = ["rusoto_devicefarm"]
 directconnect = ["rusoto_directconnect"]
 dms = ["rusoto_dms"]
