@@ -17,7 +17,7 @@ base64 = "0.6"
 hex = "0.2"
 hyper = "0.10.0"
 md5 = "0.3.2"
-xml-rs = "0.6"
+xml-rs = "0.7"
 
 [dependencies.rusoto_core]
 version = "0.28.0"
