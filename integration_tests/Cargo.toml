@@ -363,6 +363,10 @@ path = "../rusoto/services/waf"
 optional = true
 path = "../rusoto/services/waf-regional"
 
+[dependencies.rusoto_workdocs]
+optional = true
+path = "../rusoto/services/workdocs"
+
 [dependencies.rusoto_workspaces]
 optional = true
 path = "../rusoto/services/workspaces"
@@ -465,6 +469,7 @@ all = [
 	   	"swf",
 	   	"waf",
 		"waf-regional",
+		"workdocs",
 	   	"workspaces",
 		"xray"
 	]
@@ -554,5 +559,6 @@ swf = ["rusoto_swf"]
 waf = ["rusoto_waf"]
 waf-regional = ["rusoto_waf_regional"]
 workspaces = ["rusoto_workspaces"]
+workdocs = ["rusoto_workdocs"]
 xray = ["rusoto_xray"]
 nightly-testing = ["rusoto_core/nightly-testing"]

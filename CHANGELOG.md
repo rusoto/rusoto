@@ -19,6 +19,7 @@
 - Added Elastic Filesystem service
 - Fix broken links on the STS documentation
 - Use xml::EventWriter to serialize XML payload
+- Added Workdocs service
 - Added Cognito Sync service
 - Added DynamoDB Accelerator
 

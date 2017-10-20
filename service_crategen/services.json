@@ -529,6 +529,12 @@
     "protocolVersion": "2016-11-28",
     "baseTypeName": "WAFRegional"
   },
+  "workdocs": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2016-05-01",
+    "baseTypeName": "Workdocs"
+  },
   "workspaces": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
