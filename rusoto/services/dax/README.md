@@ -1,6 +1,6 @@
 
-# Rusoto GreenGrass
-Rust SDK for AWS Greengrass
+# Rusoto DynamodbAccelerator
+Rust SDK for Amazon DynamoDB Accelerator (DAX)
 
 You may be looking for:
 
@@ -19,11 +19,11 @@ On Linux, OpenSSL is required.
 
 ## Installation
 
-To use `rusoto_greengrass` in your application, add it as a dependency in your `Cargo.toml`:
+To use `rusoto_dax` in your application, add it as a dependency in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rusoto_greengrass = "0.28.0"
+rusoto_dax = "0.28.0"
 ```
 
 ## Contributing

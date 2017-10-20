@@ -26,6 +26,7 @@ members = [
     "rusoto/services/config",
     "rusoto/services/cur",
     "rusoto/services/datapipeline",
+    "rusoto/services/dax",
     "rusoto/services/devicefarm",
     "rusoto/services/directconnect",
     "rusoto/services/dms",
