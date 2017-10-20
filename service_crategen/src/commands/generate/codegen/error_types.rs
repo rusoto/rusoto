@@ -25,7 +25,7 @@ pub trait GenerateErrorTypes {
         }
 
         for (operation_name, operation) in service.operations().iter() {
-            self.generate_error_type(writer, &operation_name, &operation, &error_documentation)?;
+            self.generate_error_type(writer, operation_name, operation, &error_documentation)?;
         }
         Ok(())
     }
@@ -75,13 +75,13 @@ pub trait GenerateErrorTypes {
                  operation = operation_name,
                  type_name = error_type_name(operation_name),
                  error_from_body_impl =
-                     self.generate_error_from_body_impl(&operation_name, operation),
-                 error_from_type_impl = self.generate_error_from_type_impl(&operation_name),
+                     self.generate_error_from_body_impl(operation_name, operation),
+                 error_from_type_impl = self.generate_error_from_type_impl(operation_name),
                  error_types = self.generate_error_enum_types(operation, error_documentation)
-                     .unwrap_or(String::from("")),
+                     .unwrap_or_else(|| String::from("")),
                  description_matchers =
                      self.generate_error_description_matchers(operation_name, operation)
-                         .unwrap_or(String::from("")))
+                         .unwrap_or_else(|| String::from("")))
     }
 
     /// generate an enum of all possible errors output by this operation

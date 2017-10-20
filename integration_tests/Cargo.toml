@@ -12,6 +12,14 @@ license = "MIT"
 repository = "https://github.com/rusoto/rusoto"
 homepage = "https://www.rusoto.org/"
 
+[profile.dev]
+codegen-units = 2
+debug = false
+
+[profile.test]
+codegen-units = 2
+debug = false
+
 [dependencies.rusoto_core]
 path = "../rusoto/core"
 
@@ -98,6 +106,10 @@ path = "../rusoto/services/cognito-identity"
 [dependencies.rusoto_cognito_idp]
 optional = true
 path = "../rusoto/services/cognito-idp"
+
+[dependencies.rusoto_cognito_sync]
+optional = true
+path = "../rusoto/services/cognito-sync"
 
 [dependencies.rusoto_config]
 optional = true
@@ -372,7 +384,7 @@ all = [
         "apigateway",
 		"application-autoscaling",
 		"appstream",
-		"athena",		
+		"athena",
 	   	"autoscaling",
         "batch",
 		"clouddirectory",
@@ -389,6 +401,7 @@ all = [
 	   	"codepipeline",
 	   	"cognito-identity",
 		"cognito-idp",
+		"cognito-sync",
 	   	"config",
 		"cur",
 	   	"datapipeline",
@@ -476,6 +489,7 @@ codedeploy = ["rusoto_codedeploy"]
 codepipeline = ["rusoto_codepipeline"]
 cognito-identity = ["rusoto_cognito_identity"]
 cognito-idp = ["rusoto_cognito_idp"]
+cognito-sync = ["rusoto_cognito_sync"]
 config = ["rusoto_config"]
 cur = ["rusoto_cur"]
 datapipeline = ["rusoto_datapipeline"]

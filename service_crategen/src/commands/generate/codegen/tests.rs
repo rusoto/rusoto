@@ -21,7 +21,7 @@ pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
                 {tests_body}
             }}
             ",
-             tests_body = generate_tests_body(service).unwrap_or("".to_string()))
+             tests_body = generate_tests_body(service).unwrap_or_else(|| "".to_string()))
 }
 
 fn generate_tests_body(service: &Service) -> Option<String> {
@@ -49,8 +49,8 @@ fn generate_tests_body(service: &Service) -> Option<String> {
 
             {error_tests}
             {valid_tests}",
-            error_tests = error_tests.unwrap_or("".to_string()),
-            valid_tests = valid_tests.unwrap_or("".to_string())))
+            error_tests = error_tests.unwrap_or_else(|| "".to_string()),
+            valid_tests = valid_tests.unwrap_or_else(|| "".to_string())))
     } else {
         None
     }
@@ -70,7 +70,7 @@ fn generate_response_tests(
         .collect();
 
     let test_bodies: Vec<String> = our_responses.into_iter()
-        .flat_map(|response| generate_response_parse_test(service, response, status_code, is_ok))
+        .flat_map(|response| generate_response_parse_test(service, &response, status_code, is_ok))
         .collect();
     
     if !test_bodies.is_empty() {
@@ -82,7 +82,7 @@ fn generate_response_tests(
 
 fn generate_response_parse_test(
     service: &Service,
-    response: Response,
+    response: &Response,
     status_code: i32,
     is_ok: bool,
 ) -> Option<String> {

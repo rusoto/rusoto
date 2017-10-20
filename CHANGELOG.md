@@ -20,6 +20,7 @@
 - Fix broken links on the STS documentation
 - Use xml::EventWriter to serialize XML payload
 - Added Workdocs service
+- Added Cognito Sync service
 
 ## [0.28.0] - 2017-08-25
 

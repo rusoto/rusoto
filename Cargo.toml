@@ -22,6 +22,7 @@ members = [
     "rusoto/services/codepipeline",
     "rusoto/services/cognito-identity",
     "rusoto/services/cognito-idp",
+    "rusoto/services/cognito-sync",
     "rusoto/services/config",
     "rusoto/services/cur",
     "rusoto/services/datapipeline",

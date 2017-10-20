@@ -16,7 +16,7 @@ impl GenerateProtocol for JsonGenerator {
                 {documentation}
                 {method_signature} -> Result<{output_type}, {error_type}>;
                 ",
-                documentation = generate_documentation(operation).unwrap_or("".to_owned()),
+                documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                 method_signature = generate_method_signature(service, operation),
                 error_type = error_type_name(operation_name),
                 output_type = output_type
@@ -55,12 +55,12 @@ impl GenerateProtocol for JsonGenerator {
                     }}
                 }}
                 ",
-                     documentation = generate_documentation(operation).unwrap_or("".to_owned()),
+                     documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                      method_signature = generate_method_signature(service, operation),
                      payload = generate_payload(service, operation),
                      signing_name = service.signing_name(),
                      modify_endpoint_prefix = generate_endpoint_modification(service)
-                         .unwrap_or("".to_owned()),
+                         .unwrap_or_else(|| "".to_owned()),
                      http_method = operation.http.method,
                      name = operation.name,
                      ok_response = generate_ok_response(operation, output_type),
@@ -113,7 +113,7 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
 }
 
 fn generate_method_signature(service: &Service, operation: &Operation) -> String {
-    if operation.input.is_some() && service.get_shape(operation.input_shape()).as_ref().and_then(|s| s.members.as_ref()).map(|m| m.len() > 0).unwrap_or(false) {
+    if operation.input.is_some() && service.get_shape(operation.input_shape()).as_ref().and_then(|s| s.members.as_ref()).map(|m| !m.is_empty()).unwrap_or(false) {
         format!("fn {method_name}(&self, input: &{input_type}) ",
                 input_type = operation.input_shape(),
                 method_name = operation.name.to_snake_case())
@@ -124,7 +124,7 @@ fn generate_method_signature(service: &Service, operation: &Operation) -> String
 }
 
 fn generate_payload(service: &Service, operation: &Operation) -> String {
-    if operation.input.is_some() && service.get_shape(operation.input_shape()).as_ref().and_then(|s| s.members.as_ref()).map(|m| m.len() > 0).unwrap_or(false) {
+    if operation.input.is_some() && service.get_shape(operation.input_shape()).as_ref().and_then(|s| s.members.as_ref()).map(|m| !m.is_empty()).unwrap_or(false) {
         "let encoded = serde_json::to_string(input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          "

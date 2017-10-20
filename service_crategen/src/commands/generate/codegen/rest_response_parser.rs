@@ -47,7 +47,7 @@ fn parse_multiple_headers(service: &Service,
     match member_shape.shape_type {
         ShapeType::Map => parse_headers_map(member_name, member, required),
         ShapeType::List => parse_headers_list(member_name, member, required),
-        shape_type @ _ => {
+        shape_type => {
             panic!("Unknown header shape type {:?} for {}",
                    shape_type,
                    member_name)
@@ -102,7 +102,7 @@ fn parse_single_header(service: &Service,
                  result.{field_name} = {primitive_parser};",
                 location_name = member.location_name.as_ref().unwrap(),
                 field_name = member_name.to_snake_case(),
-                primitive_parser = generate_header_primitive_parser(&member_shape))
+                primitive_parser = generate_header_primitive_parser(member_shape))
     } else {
         format!("if let Some({field_name}) = response.headers.get(\"{location_name}\") {{
                     let value = {field_name}.to_owned();
@@ -110,7 +110,7 @@ fn parse_single_header(service: &Service,
                   }};",
                 location_name = member.location_name.as_ref().unwrap(),
                 field_name = member_name.to_snake_case(),
-                primitive_parser = generate_header_primitive_parser(&member_shape))
+                primitive_parser = generate_header_primitive_parser(member_shape))
     }
 }
 
