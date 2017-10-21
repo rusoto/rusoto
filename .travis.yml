@@ -28,7 +28,7 @@ script:
         cd .. )
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
-      if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" ]]; then
         cargo doc --all --no-deps
       fi
 after_success:
