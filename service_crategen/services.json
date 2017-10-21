@@ -275,6 +275,12 @@
     "protocolVersion": "2012-06-01",
     "baseTypeName": "Glacier"
   },
+  "glue": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2017-03-31",
+    "baseTypeName": "Glue"
+  },
   "greengrass": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
