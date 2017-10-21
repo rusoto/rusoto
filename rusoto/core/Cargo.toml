@@ -34,7 +34,7 @@ hex = "0.2"
 serde = "1.0.2"
 time = "0.1.35"
 url = "1.2.0"
-xml-rs = "0.6"
+xml-rs = "0.7"
 
 [dependencies.rusoto_credential]
 path = "../credential"
