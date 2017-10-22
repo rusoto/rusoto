@@ -77,6 +77,7 @@ members = [
     "rusoto/services/sdb",
     "rusoto/services/servicecatalog",
     "rusoto/services/ses",
+    "rusoto/services/shield",
     "rusoto/services/sms",
     "rusoto/services/snowball",
     "rusoto/services/sns",

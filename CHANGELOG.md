@@ -21,6 +21,7 @@
 - Use xml::EventWriter to serialize XML payload
 - Added Workdocs service
 - Added Cognito Sync service
+- Added Shield service
 - Added Glue service
 - Added DynamoDB Accelerator
 
