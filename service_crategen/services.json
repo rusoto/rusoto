@@ -149,6 +149,12 @@
     "protocolVersion": "2012-10-29",
     "baseTypeName": "DataPipeline"
   },
+  "dax": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2017-04-19",
+    "baseTypeName": "DynamodbAccelerator"
+  },
   "devicefarm": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
@@ -268,6 +274,12 @@
     "coreVersion": "0.28.0",
     "protocolVersion": "2012-06-01",
     "baseTypeName": "Glacier"
+  },
+  "glue": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2017-03-31",
+    "baseTypeName": "Glue"
   },
   "greengrass": {
     "version": "0.28.0",
@@ -528,6 +540,12 @@
     "coreVersion": "0.28.0",
     "protocolVersion": "2016-11-28",
     "baseTypeName": "WAFRegional"
+  },
+  "workdocs": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2016-05-01",
+    "baseTypeName": "Workdocs"
   },
   "workspaces": {
     "version": "0.28.0",

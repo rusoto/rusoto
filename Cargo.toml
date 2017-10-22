@@ -26,6 +26,7 @@ members = [
     "rusoto/services/config",
     "rusoto/services/cur",
     "rusoto/services/datapipeline",
+    "rusoto/services/dax",
     "rusoto/services/devicefarm",
     "rusoto/services/directconnect",
     "rusoto/services/dms",
@@ -46,6 +47,7 @@ members = [
     "rusoto/services/firehose",
     "rusoto/services/gamelift",
     "rusoto/services/glacier",
+    "rusoto/services/glue",
     "rusoto/services/greengrass",
     "rusoto/services/health",
     "rusoto/services/iam",
@@ -88,6 +90,7 @@ members = [
     "rusoto/services/swf",
     "rusoto/services/waf",
     "rusoto/services/waf-regional",
+    "rusoto/services/workdocs",
     "rusoto/services/workspaces",
     "rusoto/services/xray"
 ]

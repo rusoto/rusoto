@@ -123,6 +123,10 @@ path = "../rusoto/services/cur"
 optional = true
 path = "../rusoto/services/datapipeline"
 
+[dependencies.rusoto_dax]
+optional = true
+path = "../rusoto/services/dax"
+
 [dependencies.rusoto_devicefarm]
 optional = true
 path = "../rusoto/services/devicefarm"
@@ -202,6 +206,10 @@ path = "../rusoto/services/gamelift"
 [dependencies.rusoto_glacier]
 optional = true
 path = "../rusoto/services/glacier"
+
+[dependencies.rusoto_glue]
+optional = true
+path = "../rusoto/services/glue"
 
 [dependencies.rusoto_greengrass]
 optional = true
@@ -363,6 +371,10 @@ path = "../rusoto/services/waf"
 optional = true
 path = "../rusoto/services/waf-regional"
 
+[dependencies.rusoto_workdocs]
+optional = true
+path = "../rusoto/services/workdocs"
+
 [dependencies.rusoto_workspaces]
 optional = true
 path = "../rusoto/services/workspaces"
@@ -405,6 +417,7 @@ all = [
 	   	"config",
 		"cur",
 	   	"datapipeline",
+		"dax",
 	   	"devicefarm",
 	   	"directconnect",
 		"dms",
@@ -425,6 +438,7 @@ all = [
 	   	"firehose",
 		"gamelift",
 		"glacier",
+		"glue",
 		"greengrass",
 	   	"iam",
 	   	"importexport",
@@ -465,6 +479,7 @@ all = [
 	   	"swf",
 	   	"waf",
 		"waf-regional",
+		"workdocs",
 	   	"workspaces",
 		"xray"
 	]
@@ -493,6 +508,7 @@ cognito-sync = ["rusoto_cognito_sync"]
 config = ["rusoto_config"]
 cur = ["rusoto_cur"]
 datapipeline = ["rusoto_datapipeline"]
+dax = ["rusoto_dax"]
 devicefarm = ["rusoto_devicefarm"]
 directconnect = ["rusoto_directconnect"]
 dms = ["rusoto_dms"]
@@ -513,6 +529,7 @@ events = ["rusoto_events"]
 firehose = ["rusoto_firehose"]
 gamelift = ["rusoto_gamelift"]
 glacier = ["rusoto_glacier"]
+glue = ["rusoto_glue"]
 greengrass = ["rusoto_greengrass"]
 iam = ["rusoto_iam"]
 importexport = ["rusoto_importexport"]
@@ -554,5 +571,6 @@ swf = ["rusoto_swf"]
 waf = ["rusoto_waf"]
 waf-regional = ["rusoto_waf_regional"]
 workspaces = ["rusoto_workspaces"]
+workdocs = ["rusoto_workdocs"]
 xray = ["rusoto_xray"]
 nightly-testing = ["rusoto_core/nightly-testing"]
