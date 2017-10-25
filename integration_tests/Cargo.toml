@@ -135,6 +135,10 @@ path = "../rusoto/services/devicefarm"
 optional = true
 path = "../rusoto/services/directconnect"
 
+[dependencies.rusoto_discovery]
+optional = true
+path = "../rusoto/services/discovery"
+
 [dependencies.rusoto_dms]
 optional = true
 path = "../rusoto/services/dms"
@@ -420,6 +424,7 @@ all = [
 		"dax",
 	   	"devicefarm",
 	   	"directconnect",
+		"discovery",
 		"dms",
 	   	"ds",
 	   	"dynamodb",
@@ -511,6 +516,7 @@ datapipeline = ["rusoto_datapipeline"]
 dax = ["rusoto_dax"]
 devicefarm = ["rusoto_devicefarm"]
 directconnect = ["rusoto_directconnect"]
+discovery = ["rusoto_discovery"]
 dms = ["rusoto_dms"]
 ds = ["rusoto_ds"]
 dynamodb = ["rusoto_dynamodb"]

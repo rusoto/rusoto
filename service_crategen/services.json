@@ -167,6 +167,12 @@
     "protocolVersion": "2012-10-25",
     "baseTypeName": "DirectConnect"
   },
+  "discovery": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2015-11-01",
+    "baseTypeName": "Discovery"
+  },
   "dms": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",

@@ -24,6 +24,7 @@
 - Added Shield service
 - Added Glue service
 - Added DynamoDB Accelerator
+- Added Discovery service
 
 ## [0.28.0] - 2017-08-25
 

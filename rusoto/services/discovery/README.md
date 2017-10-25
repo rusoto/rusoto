@@ -1,6 +1,6 @@
 
-# Rusoto Workdocs
-Rust SDK for Amazon WorkDocs
+# Rusoto Discovery
+Rust SDK for AWS Application Discovery Service
 
 You may be looking for:
 
@@ -19,11 +19,11 @@ On Linux, OpenSSL is required.
 
 ## Installation
 
-To use `rusoto_workdocs` in your application, add it as a dependency in your `Cargo.toml`:
+To use `rusoto_discovery` in your application, add it as a dependency in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rusoto_workdocs = "0.28.0"
+rusoto_discovery = "0.28.0"
 ```
 
 ## Contributing
