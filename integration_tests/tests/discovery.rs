@@ -9,6 +9,10 @@ use rusoto_discovery::{Discovery, DiscoveryClient, DescribeTagsRequest, ListConf
 use rusoto_core::{DefaultCredentialsProvider, Region};
 use rusoto_core::default_tls_client;
 
+
+// These tests require the calling AWS account to be whitelisted.
+// See http://docs.aws.amazon.com/application-discovery/latest/userguide/console_walkthrough.html
+// For now we'll accept the error message returned if the account is not whitelisted.
 #[test]
 fn should_describe_tags() {
     let _ = env_logger::init();
@@ -16,7 +20,6 @@ fn should_describe_tags() {
     let client = DiscoveryClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
     let request = DescribeTagsRequest::default();
 
-    // The AWS CLI also returns this error:
     match client.describe_tags(&request) {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => assert!(format!("{}", e).contains("is not whitelisted to access")),
@@ -33,7 +36,6 @@ fn should_list_configurations() {
         ..Default::default()
     };
 
-    // The AWS CLI also returns this error:
     match client.list_configurations(&request) {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => assert!(format!("{}", e).contains("is not whitelisted to access")),
