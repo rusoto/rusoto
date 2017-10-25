@@ -16,9 +16,11 @@ fn should_describe_tags() {
     let client = DiscoveryClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
     let request = DescribeTagsRequest::default();
 
-    // Getting an access denied error
-    let response = client.describe_tags(&request).unwrap();
-    println!("Response: {:?}", response);
+    // The AWS CLI also returns this error:
+    match client.describe_tags(&request) {
+        Ok(response) => println!("Response: {:?}", response),
+        Err(e) => assert!(format!("{}", e).contains("is not whitelisted to access")),
+    }
 }
 
 #[test]
@@ -31,7 +33,9 @@ fn should_list_configurations() {
         ..Default::default()
     };
 
-    // Getting an access denied error
-    let response = client.list_configurations(&request).unwrap();
-    println!("Response: {:?}", response);
+    // The AWS CLI also returns this error:
+    match client.list_configurations(&request) {
+        Ok(response) => println!("Response: {:?}", response),
+        Err(e) => assert!(format!("{}", e).contains("is not whitelisted to access")),
+    }
 }
