@@ -26,6 +26,7 @@
 - Added DynamoDB Accelerator
 - Added Discovery service
 - Added CodeStar service
+- Added Migration Hub service
 
 ## [0.28.0] - 2017-08-25
 
