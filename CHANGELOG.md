@@ -25,6 +25,7 @@
 - Added Glue service
 - Added DynamoDB Accelerator
 - Added Discovery service
+- Added CodeStar service
 
 ## [0.28.0] - 2017-08-25
 
