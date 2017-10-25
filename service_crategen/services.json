@@ -113,6 +113,12 @@
     "protocolVersion": "2015-07-09",
     "baseTypeName": "CodePipeline"
   },
+  "codestar": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2017-04-19",
+    "baseTypeName": "CodeStar"
+  },
   "cognito-identity": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",
