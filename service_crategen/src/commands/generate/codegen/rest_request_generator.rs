@@ -261,3 +261,21 @@ pub fn parse_query_string(uri: &str) -> (String, Option<String>) {
         _ => panic!("Unknown uri structure {}", uri),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn uri_snakeification_works() {
+        let basic = "application-id";
+        assert_eq!("application_id", generate_snake_case_uri(&basic));
+
+        let simple_uri = "/v1/apps/{application-id}";
+        assert_eq!("/v1/apps/{application_id}", generate_snake_case_uri(&simple_uri));
+
+        let two_items_uri = "/v1/apps/{application-id}/endpoints/{endpoint-id}";
+        assert_eq!("/v1/apps/{application_id}/endpoints/{endpoint_id}", generate_snake_case_uri(&two_items_uri));
+    }
+
+}

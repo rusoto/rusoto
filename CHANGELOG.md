@@ -30,6 +30,7 @@
 - Added CodeStar service
 - Added Migration Hub service
 - Added Marketplace Entitlement service
+- Added Pinpoint service
 
 ## [0.28.0] - 2017-08-25
 
