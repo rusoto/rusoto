@@ -470,11 +470,8 @@ all = [
 	   	"logs",
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
-<<<<<<< HEAD
-		"mgh",
-=======
 		"marketplace-entitlement",
->>>>>>> 943845c04... Adds Marketplace Entitlement service.
+		"mgh",
 		"mturk",
 	   	"opsworks",
 		"opsworkscm",
@@ -568,11 +565,8 @@ lightsail = ["rusoto_lightsail"]
 logs = ["rusoto_logs"]
 machinelearning = ["rusoto_machinelearning"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
-<<<<<<< HEAD
-mgh = ["rusoto_mgh"]
-=======
 marketplace-entitlement = ["rusoto_marketplace_entitlement"]
->>>>>>> 943845c04... Adds Marketplace Entitlement service.
+mgh = ["rusoto_mgh"]
 mturk = ["rusoto_mturk"]
 opsworks = ["rusoto_opsworks"]
 opsworkscm = ["rusoto_opsworkscm"]
