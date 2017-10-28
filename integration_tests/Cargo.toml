@@ -271,7 +271,7 @@ path = "../rusoto/services/machinelearning"
 optional = true
 path = "../rusoto/services/marketplacecommerceanalytics"
 
-[dependencies.rusoto_marketplace-entitlement]
+[dependencies.rusoto_marketplace_entitlement]
 optional = true
 path = "../rusoto/services/marketplace-entitlement"
 
