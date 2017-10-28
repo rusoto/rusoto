@@ -3,7 +3,7 @@
 extern crate rusoto_core;
 extern crate rusoto_pinpoint;
 
-use rusoto_polly::{Pinpoint, PinpointClient, DescribeAppsRequest};
+use rusoto_pinpoint::{Pinpoint, PinpointClient, DescribeAppsRequest};
 use rusoto_core::{DefaultCredentialsProvider, Region, default_tls_client};
 
 #[test]
