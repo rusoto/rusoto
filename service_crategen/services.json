@@ -377,6 +377,12 @@
     "protocolVersion": "2015-07-01",
     "baseTypeName": "MarketplaceCommerceAnalytics"
   },
+  "marketplace-entitlement": {
+    "version": "0.28.0",
+    "coreVersion": "0.28.0",
+    "protocolVersion": "2017-01-11",
+    "baseTypeName": "MarketplaceEntitlement"
+  },
   "meteringmarketplace": {
     "version": "0.28.0",
     "coreVersion": "0.28.0",

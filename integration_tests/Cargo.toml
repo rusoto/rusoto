@@ -271,6 +271,10 @@ path = "../rusoto/services/machinelearning"
 optional = true
 path = "../rusoto/services/marketplacecommerceanalytics"
 
+[dependencies.rusoto_marketplace_entitlement]
+optional = true
+path = "../rusoto/services/marketplace-entitlement"
+
 [dependencies.rusoto_mgh]
 optional = true
 path = "../rusoto/services/mgh"
@@ -466,6 +470,7 @@ all = [
 	   	"logs",
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
+		"marketplace-entitlement",
 		"mgh",
 		"mturk",
 	   	"opsworks",
@@ -560,6 +565,7 @@ lightsail = ["rusoto_lightsail"]
 logs = ["rusoto_logs"]
 machinelearning = ["rusoto_machinelearning"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
+marketplace-entitlement = ["rusoto_marketplace_entitlement"]
 mgh = ["rusoto_mgh"]
 mturk = ["rusoto_mturk"]
 opsworks = ["rusoto_opsworks"]

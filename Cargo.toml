@@ -63,6 +63,7 @@ members = [
     "rusoto/services/logs",
     "rusoto/services/machinelearning",
     "rusoto/services/marketplacecommerceanalytics",
+    "rusoto/services/marketplace-entitlement",
     "rusoto/services/meteringmarketplace",
     "rusoto/services/mgh",
     "rusoto/services/mturk",
