@@ -413,7 +413,11 @@ fn build_canonical_query_string_with_plus(params: &Params, should_treat_plus_lit
         output.push_str("=");
 
         if let &Some(ref unwrapped_val) = val {
-            output.push_str(&encode_uri_strict(&unwrapped_val.replace("+", " ")));
+            if should_treat_plus_literally {
+                output.push_str(&encode_uri_strict(&unwrapped_val));
+            } else {
+                output.push_str(&encode_uri_strict(&unwrapped_val.replace("+", " ")));
+            }
         }
     }
 
