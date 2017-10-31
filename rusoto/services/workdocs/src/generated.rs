@@ -5991,7 +5991,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6029,7 +6029,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6079,7 +6079,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6130,7 +6130,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6184,7 +6184,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6232,7 +6232,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6281,7 +6281,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6328,7 +6328,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6379,7 +6379,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6425,7 +6425,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6462,7 +6462,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6512,7 +6512,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6558,7 +6558,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6592,7 +6592,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6629,7 +6629,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6675,7 +6675,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6721,7 +6721,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6756,7 +6756,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6811,7 +6811,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6867,7 +6867,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6929,7 +6929,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -6999,7 +6999,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7054,7 +7054,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7112,7 +7112,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7165,7 +7165,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7240,7 +7240,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7284,7 +7284,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         request.add_header("Authentication", &input.authentication_token);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7336,7 +7336,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7394,7 +7394,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7450,7 +7450,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7499,7 +7499,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7557,7 +7557,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7606,7 +7606,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7656,7 +7656,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7699,7 +7699,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7736,7 +7736,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7775,7 +7775,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7810,7 +7810,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -7847,7 +7847,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
