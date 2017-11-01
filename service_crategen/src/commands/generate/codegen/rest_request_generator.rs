@@ -154,14 +154,13 @@ fn generate_static_param_strings(operation: &Operation) -> Vec<String> {
 
 fn generate_snake_case_uri(request_uri: &str) -> String {
     lazy_static! {
-        static ref URI_ARGS_REGEX: Regex = Regex::new(r"\{([\w\d]+)\}").unwrap();
+        static ref URI_ARGS_REGEX: Regex = Regex::new(r"\{\w+\-\w+\}").unwrap();
     }
-
-    URI_ARGS_REGEX.replace_all(request_uri, |caps: &Captures| {
-            format!("{{{}}}",
-                    caps.get(1).map(|c| Inflector::to_snake_case(c.as_str())).unwrap())
-        })
-        .to_string()
+    let mut snake: String = request_uri.to_string().clone();
+    for caps in URI_ARGS_REGEX.captures_iter(request_uri) {
+        snake = snake.replace(caps.get(0).unwrap().as_str(), &caps.get(0).unwrap().as_str().replace("-", "_"));
+    }
+    snake
 }
 
 fn generate_shape_member_param_strings(service: &Service, shape: &Shape) -> Vec<String> {
@@ -269,13 +268,13 @@ mod tests {
     #[test]
     fn uri_snakeification_works() {
         let basic = "application-id";
-        assert_eq!("application_id", generate_snake_case_uri(&basic));
+        assert_eq!("application-id", generate_snake_case_uri(&basic));
 
         let simple_uri = "/v1/apps/{application-id}";
         assert_eq!("/v1/apps/{application_id}", generate_snake_case_uri(&simple_uri));
 
-        let two_items_uri = "/v1/apps/{application-id}/endpoints/{endpoint-id}";
-        assert_eq!("/v1/apps/{application_id}/endpoints/{endpoint_id}", generate_snake_case_uri(&two_items_uri));
+        let two_items_uri = "/v1/ap-ps/{application-id}/endpoints/{endpoint-id}";
+        assert_eq!("/v1/ap-ps/{application_id}/endpoints/{endpoint_id}", generate_snake_case_uri(&two_items_uri));
     }
 
 }
