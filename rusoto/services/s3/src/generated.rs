@@ -1000,6 +1000,12 @@ impl ::std::ops::DerefMut for StreamingBody {
     }
 }
 
+impl ::std::io::Read for StreamingBody {
+    fn read(&mut self, buf: &mut [u8]) -> ::std::io::Result<usize> {
+        self.0.read(buf)
+    }
+}
+
 pub struct BodySerializer;
 impl BodySerializer {
     #[allow(unused_variables, warnings)]

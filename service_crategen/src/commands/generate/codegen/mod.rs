@@ -333,6 +333,12 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
                          fn deref_mut(&mut self) -> &mut Box<Read> {{
                              &mut self.0
                          }}
+                     }}
+
+                     impl ::std::io::Read for {streaming_name} {{
+                         fn read(&mut self, buf: &mut [u8]) -> ::std::io::Result<usize> {{
+                             self.0.read(buf)
+                         }}
                      }}",
                      name = type_name,
                      streaming_name = mutate_type_name_for_streaming(&type_name))?;
