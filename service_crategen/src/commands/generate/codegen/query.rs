@@ -38,7 +38,7 @@ impl GenerateProtocol for QueryGenerator {
                     {serialize_input}
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
                     let mut response = try!(self.dispatcher.dispatch(&request));
                     match response.status {{
                         StatusCode::Ok => {{

@@ -13037,7 +13037,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13094,7 +13094,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13152,7 +13152,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13206,7 +13206,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13263,7 +13263,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13321,7 +13321,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13377,7 +13377,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13433,7 +13433,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13490,7 +13490,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13549,7 +13549,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13598,7 +13598,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13648,7 +13648,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13699,7 +13699,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13750,7 +13750,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13799,7 +13799,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13857,7 +13857,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13913,7 +13913,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -13960,7 +13960,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14009,7 +14009,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14069,7 +14069,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14120,7 +14120,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14170,7 +14170,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14220,7 +14220,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14271,7 +14271,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14319,7 +14319,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14368,7 +14368,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14419,7 +14419,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14470,7 +14470,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14521,7 +14521,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14571,7 +14571,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14633,7 +14633,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14690,7 +14690,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14750,7 +14750,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14811,7 +14811,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14874,7 +14874,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14930,7 +14930,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -14981,7 +14981,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15037,7 +15037,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15092,7 +15092,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15154,7 +15154,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15212,7 +15212,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15277,7 +15277,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15333,7 +15333,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15391,7 +15391,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15452,7 +15452,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15508,7 +15508,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15565,7 +15565,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15623,7 +15623,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
@@ -15679,7 +15679,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 

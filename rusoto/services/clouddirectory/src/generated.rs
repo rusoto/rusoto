@@ -10131,7 +10131,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10176,7 +10176,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10221,7 +10221,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10269,7 +10269,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         }
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10314,7 +10314,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10359,7 +10359,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10406,7 +10406,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10451,7 +10451,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10496,7 +10496,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10541,7 +10541,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10586,7 +10586,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10631,7 +10631,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10676,7 +10676,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10722,7 +10722,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10766,7 +10766,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10811,7 +10811,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10856,7 +10856,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10900,7 +10900,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10946,7 +10946,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10991,7 +10991,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11036,7 +11036,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11081,7 +11081,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11126,7 +11126,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11159,7 +11159,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11203,7 +11203,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11247,7 +11247,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11290,7 +11290,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11340,7 +11340,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11384,7 +11384,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11430,7 +11430,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11478,7 +11478,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11528,7 +11528,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11574,7 +11574,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11621,7 +11621,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11666,7 +11666,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11711,7 +11711,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11757,7 +11757,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11805,7 +11805,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11855,7 +11855,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11904,7 +11904,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -11950,7 +11950,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12000,7 +12000,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12049,7 +12049,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12095,7 +12095,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12146,7 +12146,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12193,7 +12193,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12240,7 +12240,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12286,7 +12286,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12334,7 +12334,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12381,7 +12381,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12426,7 +12426,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.development_schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12471,7 +12471,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12517,7 +12517,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12563,7 +12563,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12608,7 +12608,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12653,7 +12653,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12699,7 +12699,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12745,7 +12745,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -12791,7 +12791,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {

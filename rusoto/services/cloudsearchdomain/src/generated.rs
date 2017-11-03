@@ -670,7 +670,7 @@ impl<P, D> CloudSearchDomain for CloudSearchDomainClient<P, D>
         params.put("format", "sdk&pretty");
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -719,7 +719,7 @@ impl<P, D> CloudSearchDomain for CloudSearchDomainClient<P, D>
         params.put("format", "sdk&pretty");
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -766,7 +766,7 @@ impl<P, D> CloudSearchDomain for CloudSearchDomainClient<P, D>
         params.put("format", "sdk");
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
