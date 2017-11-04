@@ -23,7 +23,7 @@ To use `rusoto_snowball` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_snowball = "0.28.0"
+rusoto_snowball = "0.29.0"
 ```
 
 ## Contributing

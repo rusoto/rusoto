@@ -23,7 +23,7 @@ To use `rusoto_route53` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_route53 = "0.28.0"
+rusoto_route53 = "0.29.0"
 ```
 
 ## Contributing

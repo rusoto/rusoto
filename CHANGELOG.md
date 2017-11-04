@@ -1,8 +1,10 @@
 # Rusoto changes
 
 ## [Unreleased]
-
 (Please put an entry here in each PR)
+
+## [0.29.0] - 2017-11-02
+
 - Added CHANGELOG
 - Updated CONTRIBUTING to explain PR process
 - Added Application Autoscaling service

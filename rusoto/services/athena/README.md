@@ -23,7 +23,7 @@ To use `rusoto_athena` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_athena = "0.28.0"
+rusoto_athena = "0.29.0"
 ```
 
 ## Contributing

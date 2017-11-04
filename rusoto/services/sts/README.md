@@ -23,7 +23,7 @@ To use `rusoto_sts` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_sts = "0.28.0"
+rusoto_sts = "0.29.0"
 ```
 
 ## Contributing
