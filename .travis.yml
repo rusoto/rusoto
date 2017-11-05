@@ -45,7 +45,7 @@ script:
       ( cd service_crategen && \
         cargo run -- generate -c ./services.json -o ../rusoto/services && \
         cd .. )
-  - echo "Running Rusoto tests" && cargo update && cargo test --lib --all -v
+  - echo "Running Rusoto tests" && cargo update && cargo test --lib --all
   - |
       echo "Building integration tests" &&
         ( cd integration_tests && \
