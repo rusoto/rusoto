@@ -8,7 +8,7 @@ extern crate log;
 
 use hyper::Client;
 use std::fs::File;
-use std::io::Read;
+use std::io::{Read, BufReader};
 use time::get_time;
 
 use rusoto_core::{DefaultCredentialsProvider, Region};
@@ -64,6 +64,7 @@ fn test_all_the_things() {
 
     // GET the object
     test_get_object(&client, &test_bucket, &filename);
+    test_get_object_bufreader(&client, &test_bucket, &filename);
     test_get_object_range(&client, &test_bucket, &filename);
     // copy the object to change its settings
     test_copy_object(&client, &test_bucket, &filename);
@@ -84,6 +85,7 @@ fn test_all_the_things() {
                                   &binary_filename,
                                   &"tests/sample-data/binary-file");
     test_get_object(&client, &test_bucket, &binary_filename);
+    test_get_object_bufreader(&client, &test_bucket, &binary_filename);
 
     // paging test requires three items in the bucket, put another item there:
     // PUT an object (no_credentials is an arbitrary choice)
@@ -231,6 +233,22 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
         println!("read {} bytes", len);
         body.extend_from_slice(&buf[0..len]);
     }
+
+    assert!(body.len() > 0);
+}
+
+fn test_get_object_bufreader(client: &TestClient, bucket: &str, filename: &str) {
+    let get_req = GetObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+
+    let result = client.get_object(&get_req).expect("Couldn't GET object");
+    println!("get object result: {:#?}", result);
+
+    let stream = BufReader::new(result.body.unwrap());
+    let body = stream.bytes().collect::<Result<Vec<u8>, _>>().unwrap();
 
     assert!(body.len() > 0);
 }
